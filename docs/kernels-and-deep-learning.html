@@ -21,33 +21,34 @@
 <div class="book">
 <nav class="toc">
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
-<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
-<div class="part">I · Foundations</div>
-<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">2. The Kernel Trick</a>
-<div class="part">II · Supervised Learning</div>
-<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
-<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">I · The Idea</div>
+<a href="introduction.html">1. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<div class="part">II · Learning with a Fixed Kernel</div>
+<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
 <a href="support-vector-machines.html">5. Support Vector Machines</a>
-<div class="part">III · Unsupervised Learning</div>
-<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
-<div class="part">IV · The Theory of the Space</div>
-<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
-<div class="part">V · The Kernel Jungle</div>
-<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">9. Kernels for Sequences</a>
-<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
-<div class="part">VI · Distributions</div>
-<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
-<div class="part">VII · Frontiers</div>
-<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<div class="part">III · Discovering Structure</div>
+<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Geometry of the Space</div>
+<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · Designing Kernels for Data</div>
+<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">10. Kernels for Sequences</a>
+<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<div class="part">VI · Kernels and Distributions</div>
+<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Scaling and the Modern View</div>
 <a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="kernels-and-deep-learning.html" class="here">14. Deep Learning from a Kernel Point of View</a>
+<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html" class="here">15. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <main><div class="page">
-<h1><span class="chno">Chapter 14 · VII · Frontiers</span>Deep Learning from a Kernel Point of View</h1>
+<h1><span class="chno">Chapter 15 · VII · Scaling and the Modern View</span>Deep Learning from a Kernel Point of View</h1>
 
 <p class="lead">Deep neural networks and kernel machines are usually told as rival stories: one learns a hierarchy of features from data, the other fixes an infinite-dimensional feature map in advance and learns only a linear function on top of it. This chapter argues that the two are far closer than the rivalry suggests. We will see that the infinite-width limit of a randomly initialized network is a kernel (the random-feature kernel of Neal), that the trajectory of gradient descent on a very wide network is described by another kernel (the neural tangent kernel of Jacot, Gabriel, and Hongler), and that a whole convolutional architecture, pooling and all, can be built as an explicit map into a reproducing kernel Hilbert space so that a convolutional network becomes a single linear function in that space. Once a deep network lives in an RKHS, the RKHS norm becomes a common currency: the very same quantity controls the smoothness of the representation, its stability to deformations of the input, and the generalization of the trained model. We develop this program on images through convolutional kernel networks, then transport it to graphs and to biological sequences, where the same three-move recipe (extract local patterns, embed them with a kernel, pool) yields models that are trained end to end yet retain the interpretability and the regularization theory of kernels.</p>
 
@@ -589,7 +590,7 @@ Almost everything in this chapter postdates the two standard kernel-methods text
 <li ><span class="bib-authors">Mairal, J.</span> <span class="bib-year">(2016)</span> <span class="bib-title">End-to-end kernel learning with supervised convolutional kernel networks</span>. <span class="bib-venue">NeurIPS 29.</span></li>
 <li ><span class="bib-authors">Bietti, A. and Mairal, J.</span> <span class="bib-year">(2019)</span> <span class="bib-title">Group invariance, stability to deformations, and complexity of deep convolutional representations</span>. <span class="bib-venue">Journal of Machine Learning Research 20(25), 1-49.</span></li>
 <li ><span class="bib-authors">Chen, D., Jacob, L., and Mairal, J.</span> <span class="bib-year">(2020)</span> <span class="bib-title">Convolutional kernel networks for graph-structured data</span>. <span class="bib-venue">ICML.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="large-scale-kernels.html"><span class="dir">previous</span>13. Large-Scale Kernel Machines</a>
+<a href="multiple-kernel-learning.html"><span class="dir">previous</span>14. Multiple Kernel Learning</a>
 </div>
 </div></main>
 </div>

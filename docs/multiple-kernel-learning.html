@@ -21,33 +21,34 @@
 <div class="book">
 <nav class="toc">
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
-<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
-<div class="part">I · Foundations</div>
-<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">2. The Kernel Trick</a>
-<div class="part">II · Supervised Learning</div>
-<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
-<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">I · The Idea</div>
+<a href="introduction.html">1. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<div class="part">II · Learning with a Fixed Kernel</div>
+<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
 <a href="support-vector-machines.html">5. Support Vector Machines</a>
-<div class="part">III · Unsupervised Learning</div>
-<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
-<div class="part">IV · The Theory of the Space</div>
-<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
-<div class="part">V · The Kernel Jungle</div>
-<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">9. Kernels for Sequences</a>
-<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
-<div class="part">VI · Distributions</div>
-<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
-<div class="part">VII · Frontiers</div>
-<a href="multiple-kernel-learning.html" class="here">12. Multiple Kernel Learning</a>
+<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<div class="part">III · Discovering Structure</div>
+<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Geometry of the Space</div>
+<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · Designing Kernels for Data</div>
+<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">10. Kernels for Sequences</a>
+<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<div class="part">VI · Kernels and Distributions</div>
+<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Scaling and the Modern View</div>
 <a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+<a href="multiple-kernel-learning.html" class="here">14. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html">15. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <main><div class="page">
-<h1><span class="chno">Chapter 12 · VII · Frontiers</span>Multiple Kernel Learning</h1>
+<h1><span class="chno">Chapter 14 · VII · Scaling and the Modern View</span>Multiple Kernel Learning</h1>
 
 <p class="lead">Every method in this book so far has taken the kernel as given. We fixed a positive definite kernel \(K\), formed its Gram matrix, and let a representer argument reduce learning to linear algebra on that matrix. But where does \(K\) come from? In practice we almost never have one obviously correct kernel. We have a menu: linear, polynomial, and Gaussian kernels with a range of bandwidths on the same feature vectors, or genuinely different kernels built from genuinely different views of the same objects, a protein described at once by its sequence, its three-dimensional structure, and its mass spectrometry profile. This chapter is about what to do with such a menu. The simplest answer, adding the kernels together, turns out to be exactly concatenating their feature spaces, and it already gives a principled way to fuse heterogeneous data. The more ambitious answer is to let the data choose. We will see that the value of the learning problem is a convex function of the kernel, so we can search a convex set of candidate kernels by convex optimization. Learning a convex combination \(K_\eta = \sum_i \eta_i K_i\) jointly with the classifier is Multiple Kernel Learning (Lanckriet et al., 2004); the problem is jointly convex in the weights and the classifier, and, read correctly, it is a sparsity-inducing group lasso in disguise.</p>
 
@@ -457,8 +458,8 @@ Multiple Kernel Learning is younger than the two standard kernel-methods textboo
 <li ><span class="bib-authors">Gönen, M. and Alpaydın, E.</span> <span class="bib-year">(2011)</span> <span class="bib-title">Multiple kernel learning algorithms</span>. <span class="bib-venue">Journal of Machine Learning Research 12, 2211-2268.</span></li>
 <li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li>
 <li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="kernel-mean-embeddings.html"><span class="dir">previous</span>11. Mean Embeddings, MMD, and Characteristic Kernels</a>
-<a style="text-align:right" href="large-scale-kernels.html"><span class="dir">next</span>13. Large-Scale Kernel Machines</a>
+<a href="large-scale-kernels.html"><span class="dir">previous</span>13. Large-Scale Kernel Machines</a>
+<a style="text-align:right" href="kernels-and-deep-learning.html"><span class="dir">next</span>15. Deep Learning from a Kernel Point of View</a>
 </div>
 </div></main>
 </div>

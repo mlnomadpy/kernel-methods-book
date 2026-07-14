@@ -1,0 +1,61 @@
+<h1>Introduction: Learning by Comparison</h1>
+<p class="lead">Almost every kernel method is one idea worn many ways: if you can say how similar two examples are, you can learn from them. This short chapter states that idea, unpacks the three viewpoints that the rest of the book develops in turn, and lays out the path from here to deep networks.</p>
+
+<h2 id="the-promise">The promise: patterns are relations</h2>
+
+<p>Suppose you are handed a thousand molecules and told which inhibit a target, or a stack of images to sort into cats and dogs, or a genome to scan for genes. What these tasks share is not their raw data, which could hardly be more different, but their shape: in each case you are looking for a <em>pattern</em>, a regularity that lets you say something about an example you have not seen. Shawe-Taylor and Cristianini (2004) make this the organizing idea of the whole field, pattern analysis, the search for stable relations in data. A classifier is a pattern that separates two groups; a regression is a pattern that ties inputs to a number; a clustering is a pattern of proximity; a correlation is a pattern shared between two views of the same objects.</p>
+
+<p>The difficulty is that the data themselves rarely arrive as tidy vectors on which such patterns are visible. A molecule is a graph, a protein is a string, an image is a grid of pixels whose interesting structure lives in no single coordinate. The traditional response is feature engineering: hand-build a map from raw data into a vector space where the pattern shows. Kernel methods make a quieter, more powerful bargain. They ask for one thing only.</p>
+
+<div class="box def"><span class="box-title">The single ingredient</span>
+<p>A <strong>kernel</strong> is a function \(k(x,x')\) that scores how similar two examples \(x\) and \(x'\) are. Give a kernel method nothing but the table of pairwise scores on your data, the \(n\times n\) <strong>Gram matrix</strong> \(K_{ij}=k(x_i,x_j)\), and it will find the pattern. The examples may be vectors, strings, graphs, distributions, or anything at all; the algorithm never sees them, only their comparisons.</p></div>
+
+<p>The Gram matrix is the interface between your data and every algorithm in this book. Below it is drawn for twelve points on a line: slide the kernel's bandwidth and watch the table of similarities reshape, the only channel through which a kernel method perceives its world.</p>
+
+<figure class="viz" data-widget="gram-heatmap"></figure>
+
+<h2 id="three-views">Three views of the same object</h2>
+
+<p>Why should comparing examples be enough to learn from them? The three sources this book draws on answer the question from three angles, and the answers are the same theorem seen from three sides. Understanding all three is the fastest route to fluency, so the book is built to develop each in its own part.</p>
+
+<h3 id="view-geometry">The geometric view: a kernel is an inner product</h3>
+
+<p>The first answer is that a valid kernel is never merely a similarity score; it is secretly a <em>dot product</em> in some space of features. Whenever \(k\) is <em>positive definite</em>, there is a map \(\Phi\) sending each example into a (possibly infinite-dimensional) inner-product space, its <em>feature space</em>, such that</p>
+$$ k(x,x') \;=\; \langle \Phi(x),\, \Phi(x')\rangle. $$
+<p>Comparing with \(k\) is thus doing geometry, measuring angles and lengths, in a space you never have to build. Distances, projections, and separating planes all become available through the kernel alone. This is the view of Part I, and its precise form, the reproducing kernel Hilbert space, is where the book begins.</p>
+
+<h3 id="view-regularization">The regularization view: the norm is smoothness</h3>
+
+<p>The second answer, developed at length by Schölkopf and Smola (2002), is that the feature space is not just any inner-product space but a space of <em>functions</em>, and its norm measures how wildly a function wiggles. Learning is then a tug of war written as</p>
+$$ \min_{f}\; \underbrace{\frac1n\sum_{i=1}^n \ell\big(y_i, f(x_i)\big)}_{\text{fit the data}} \;+\; \underbrace{\lambda\,\lVert f\rVert^2}_{\text{stay smooth}}, $$
+<p>fit the training data, but pay for roughness. The kernel decides what "rough" means, and the penalty is what keeps the fit from memorizing noise. This regularized-risk template is the engine of Part II, and the reason kernel methods generalize rather than merely interpolate.</p>
+
+<h3 id="view-modularity">The modular view: kernel plus algorithm</h3>
+
+<p>The third answer, the pedagogical heart of Shawe-Taylor and Cristianini, is a clean separation of concerns. A kernel method has two independent halves: a <em>kernel</em> that encodes what the data are and how they compare, and an <em>algorithm</em> that consumes a Gram matrix and returns a pattern. Because the algorithm only ever touches the matrix, the two halves mix and match freely.</p>
+
+<div class="box rmk"><span class="box-title">The two-part recipe</span>
+<p>Any pattern-analysis task decomposes as <strong>a kernel</strong> (choose or design it for your data type) plus <strong>an algorithm</strong> (ridge regression, an SVM, PCA, a two-sample test, ...). Swap the kernel and the same algorithm now works on strings or graphs; swap the algorithm and the same kernel now clusters instead of classifies. This modularity is why one small theory covers so much ground, and why the book can treat algorithms (Parts II and III) separately from the kernels that feed them (Part V).</p></div>
+
+<h2 id="the-solve">The one obstacle: the solve</h2>
+
+<p>There is a price for working through the Gram matrix, and naming it early explains the shape of the later chapters. The classical way to fit a kernel machine is to solve a linear system, or a quadratic program, over the whole \(n\times n\) matrix at once. That matrix costs \(n^2\) memory to store and its solve costs on the order of \(n^3\) time, and neither exponent has an \(n\) you can escape, because the method is defined over all pairs of examples together. For a few thousand examples this is nothing; for a few million it is a wall. Much of the modern subject, and all of Part VII, is about walking through that wall while keeping the kernel, whether by approximating the matrix, learning the kernel, or recognizing that a deep network was a kernel machine all along.</p>
+
+<h2 id="roadmap">How to read this book</h2>
+
+<p>The parts follow the arc idea, space, algorithms, data, distributions, scale. Each can be read on its own once Part I is in hand, but the order below is the intended path.</p>
+
+<ul>
+<li><strong>Part I, The Idea.</strong> Positive definite kernels, the reproducing kernel Hilbert space they generate, the kernel trick, and the representer theorem that collapses an infinite-dimensional search to \(n\) numbers.</li>
+<li><strong>Part II, Learning with a Fixed Kernel.</strong> Kernel ridge regression and the support vector machine as one recipe under two losses, followed by the statistical theory that bounds what an RKHS ball can learn.</li>
+<li><strong>Part III, Discovering Structure.</strong> The unsupervised side: kernel PCA, kernel clustering, and canonical correlation analysis, each reading only the Gram matrix.</li>
+<li><strong>Part IV, The Geometry of the Space.</strong> Mercer's theorem, the spectrum of a kernel as a scale of smoothness, and the convergence rates that eigenvalue decay implies.</li>
+<li><strong>Part V, Designing Kernels for Data.</strong> Building kernels: for vectors by symmetry and probability, and for sequences and graphs, where the kernel is the only bridge to everything in Parts II through IV.</li>
+<li><strong>Part VI, Kernels and Distributions.</strong> Embedding whole probability distributions into the RKHS, the maximum mean discrepancy, and the kernels that make the embedding lossless.</li>
+<li><strong>Part VII, Scaling and the Modern View.</strong> Large-scale kernel machines, learning the kernel itself, and deep networks read through the lens of kernels.</li>
+</ul>
+
+<p>A note on the mathematics: the book assumes comfort with linear algebra and probability, states results precisely, and gives the proofs the sources give, with the longest deferred to expandable blocks. Boxed environments mark definitions, theorems, and examples; interactive figures, which compute the real kernel arithmetic live, appear where a picture teaches faster than a paragraph. Every chapter ends with pointers into the three standard references, whose full details are in the <a href="bibliography.html">bibliography</a>. With the single idea in hand, comparison as the basis of learning, we can begin.</p>
+
+<div class="box rmk"><span class="box-title">Further reading</span>
+<p>The three sources this book synthesizes are complementary points of entry. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, opens with the pattern-analysis framing and the modular kernel-plus-algorithm view used above. Schölkopf and Smola (2002), <em>Learning with Kernels</em>, develops the regularization and support-vector viewpoint in depth. The lecture course of Mairal and Vert, <em>Machine Learning with Kernel Methods</em>, gives the broadest modern survey, including the kernel families, distribution embeddings, and deep-learning connections of the later parts.</p></div>

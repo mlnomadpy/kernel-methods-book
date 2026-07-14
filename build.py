@@ -160,6 +160,8 @@ def main():
     items, n = [], 0
     for part in BOOK["parts"]:
         items.append(f'<div class="part">{html.escape(part["part"])}</div>')
+        if part.get("intro"):
+            items.append(f'<p class="part-intro">{html.escape(part["intro"])}</p>')
         for ch in part["chapters"]:
             n += 1
             items.append(f'<li><span class="n">{n}</span><a href="{ch["slug"]}.html">{html.escape(ch["title"])}</a></li>')

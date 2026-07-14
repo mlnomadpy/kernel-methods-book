@@ -21,33 +21,34 @@
 <div class="book">
 <nav class="toc">
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
-<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
-<div class="part">I · Foundations</div>
-<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">2. The Kernel Trick</a>
-<div class="part">II · Supervised Learning</div>
-<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
-<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">I · The Idea</div>
+<a href="introduction.html">1. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<div class="part">II · Learning with a Fixed Kernel</div>
+<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
 <a href="support-vector-machines.html">5. Support Vector Machines</a>
-<div class="part">III · Unsupervised Learning</div>
-<a href="unsupervised-kernel-methods.html" class="here">6. Kernel PCA, Clustering, and CCA</a>
-<div class="part">IV · The Theory of the Space</div>
-<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
-<div class="part">V · The Kernel Jungle</div>
-<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">9. Kernels for Sequences</a>
-<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
-<div class="part">VI · Distributions</div>
-<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
-<div class="part">VII · Frontiers</div>
-<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<div class="part">III · Discovering Structure</div>
+<a href="unsupervised-kernel-methods.html" class="here">7. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Geometry of the Space</div>
+<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · Designing Kernels for Data</div>
+<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">10. Kernels for Sequences</a>
+<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<div class="part">VI · Kernels and Distributions</div>
+<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Scaling and the Modern View</div>
 <a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html">15. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <main><div class="page">
-<h1><span class="chno">Chapter 6 · III · Unsupervised Learning</span>Kernel PCA, Clustering, and CCA</h1>
+<h1><span class="chno">Chapter 7 · III · Discovering Structure</span>Kernel PCA, Clustering, and CCA</h1>
 
 <p class="lead">The previous chapters built kernel versions of supervised methods: given labels, we learned functions in an RKHS by regularized empirical risk minimization. But much of data analysis happens before any label is available. We want to see the shape of a dataset, compress it to a few informative coordinates, group similar points together, or relate two different views of the same objects. This chapter carries the kernel program into that unsupervised territory. The pattern will feel familiar by now: take a classical linear method built from inner products, restate it as an optimization over functions in an RKHS, invoke a representer argument to reduce it to a finite-dimensional problem on the Gram matrix, and solve that problem with linear algebra. Applied to principal component analysis this yields kernel PCA, an eigendecomposition of the centered Gram matrix. Applied to K-means it yields kernel K-means and, through a spectral relaxation of the same combinatorial objective, the family of spectral clustering algorithms. Applied to canonical correlation analysis it yields kernel CCA, where we will meet an instructive failure: without regularization the kernelized problem is vacuous, and fixing it teaches us something about overfitting in infinite dimensions.</p>
 
@@ -487,8 +488,8 @@ For a book-length treatment of the methods in this chapter, Schölkopf and Smola
 <li ><span class="bib-authors">Bach, F. R. and Jordan, M. I.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Kernel independent component analysis</span>. <span class="bib-venue">Journal of Machine Learning Research 3, 1-48.</span></li>
 <li ><span class="bib-authors">Gong, Y., Ke, Q., Isard, M., and Lazebnik, S.</span> <span class="bib-year">(2014)</span> <span class="bib-title">A multi-view embedding space for modeling internet images, tags, and their semantics</span>. <span class="bib-venue">International Journal of Computer Vision 106(2), 210-233.</span></li>
 <li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="support-vector-machines.html"><span class="dir">previous</span>5. Support Vector Machines</a>
-<a style="text-align:right" href="mercer-and-rates.html"><span class="dir">next</span>7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<a href="learning-theory.html"><span class="dir">previous</span>6. Learning Theory in RKHS Balls</a>
+<a style="text-align:right" href="mercer-and-rates.html"><span class="dir">next</span>8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
 </div>
 </div></main>
 </div>

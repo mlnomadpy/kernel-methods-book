@@ -21,33 +21,34 @@
 <div class="book">
 <nav class="toc">
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
-<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
-<div class="part">I · Foundations</div>
-<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">2. The Kernel Trick</a>
-<div class="part">II · Supervised Learning</div>
-<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
-<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">I · The Idea</div>
+<a href="introduction.html">1. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<div class="part">II · Learning with a Fixed Kernel</div>
+<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
 <a href="support-vector-machines.html">5. Support Vector Machines</a>
-<div class="part">III · Unsupervised Learning</div>
-<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
-<div class="part">IV · The Theory of the Space</div>
-<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
-<div class="part">V · The Kernel Jungle</div>
-<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">9. Kernels for Sequences</a>
-<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
-<div class="part">VI · Distributions</div>
-<a href="kernel-mean-embeddings.html" class="here">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
-<div class="part">VII · Frontiers</div>
-<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<div class="part">III · Discovering Structure</div>
+<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Geometry of the Space</div>
+<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · Designing Kernels for Data</div>
+<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">10. Kernels for Sequences</a>
+<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<div class="part">VI · Kernels and Distributions</div>
+<a href="kernel-mean-embeddings.html" class="here">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Scaling and the Modern View</div>
 <a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html">15. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <main><div class="page">
-<h1><span class="chno">Chapter 11 · VI · Distributions</span>Mean Embeddings, MMD, and Characteristic Kernels</h1>
+<h1><span class="chno">Chapter 12 · VI · Kernels and Distributions</span>Mean Embeddings, MMD, and Characteristic Kernels</h1>
 
 <p class="lead">Everything so far has used kernels to represent single points: a feature map sends each \(x\) to \(K_x\) in an RKHS, and the kernel measures the similarity between two points. This chapter lifts that idea one level up, from points to whole probability distributions. We attach to each distribution \(P\) a single vector in the RKHS, its mean embedding \(\mu_P\), and then compare distributions by comparing their embeddings. The distance between two embeddings is the Maximum Mean Discrepancy (MMD), a quantity we can estimate from samples alone, use as the statistic of a two-sample test, and even minimize to train a generative model. The whole construction rests on one delicate question: when does the embedding lose no information, so that \(\mu_P = \mu_Q\) forces \(P = Q\)? Kernels with that property are called characteristic, and the last third of the chapter is devoted to identifying them.</p>
 
@@ -438,8 +439,8 @@ Unlike most of this book, the material in this chapter largely postdates the two
 <li ><span class="bib-authors">Fukumizu, K., Gretton, A., Sun, X., and Schölkopf, B.</span> <span class="bib-year">(2008)</span> <span class="bib-title">Kernel measures of conditional dependence</span>. <span class="bib-venue">NeurIPS 20, 489-496.</span></li>
 <li ><span class="bib-authors">Muandet, K., Fukumizu, K., Sriperumbudur, B., and Schölkopf, B.</span> <span class="bib-year">(2017)</span> <span class="bib-title">Kernel mean embedding of distributions: a review and beyond</span>. <span class="bib-venue">Foundations and Trends in Machine Learning 10(1-2), 1-141.</span></li>
 <li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="graph-kernels.html"><span class="dir">previous</span>10. Kernels for and on Graphs</a>
-<a style="text-align:right" href="multiple-kernel-learning.html"><span class="dir">next</span>12. Multiple Kernel Learning</a>
+<a href="graph-kernels.html"><span class="dir">previous</span>11. Kernels for and on Graphs</a>
+<a style="text-align:right" href="large-scale-kernels.html"><span class="dir">next</span>13. Large-Scale Kernel Machines</a>
 </div>
 </div></main>
 </div>

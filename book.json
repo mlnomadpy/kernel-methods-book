@@ -1,37 +1,43 @@
 {
   "title": "Machine Learning with Kernel Methods",
-  "subtitle": "A book-form companion to the Mairal–Vert course",
-  "source": "Based on the lecture slides of Julien Mairal and Jean-Philippe Vert, \"Machine Learning with Kernel Methods\" (kernel-learning.github.io). All results and their attributions follow the course; the prose explanations are this book's.",
+  "subtitle": "A book-form synthesis of the kernel-methods literature",
+  "source": "This book synthesizes three standard sources: the lecture course \"Machine Learning with Kernel Methods\" by Julien Mairal and Jean-Philippe Vert (kernel-learning.github.io), and the textbooks \"Learning with Kernels\" by Bernhard Schölkopf and Alexander Smola (2002) and \"Kernel Methods for Pattern Analysis\" by John Shawe-Taylor and Nello Cristianini (2004). All results and their attributions follow these sources; the connecting prose, the pedagogical arc, and the interactive figures are this book's.",
   "parts": [
     {
-      "part": "I · Foundations",
+      "part": "I · The Idea",
+      "intro": "Kernel methods rest on one move: compare examples with a similarity function, and a surprising amount of learning follows. This part builds the idea from the ground up, from the definition of a valid similarity to the space it secretly defines and the theorem that makes computation possible.",
       "chapters": [
+        {"src": "ch00", "slug": "introduction", "title": "Introduction: Learning by Comparison"},
         {"src": "ch01", "slug": "kernels-and-rkhs", "title": "Positive Definite Kernels and RKHS"},
-        {"src": "ch02", "slug": "kernel-tricks", "title": "The Kernel Trick"}
+        {"src": "ch02", "slug": "kernel-tricks", "title": "The Kernel Trick and the Representer Theorem"}
       ]
     },
     {
-      "part": "II · Supervised Learning",
+      "part": "II · Learning with a Fixed Kernel",
+      "intro": "Fix a kernel and a supervised task. This part derives the two workhorse algorithms, kernel ridge regression and the support vector machine, as one recipe under two loss functions, then bounds what they can learn with the statistical theory of RKHS balls.",
       "chapters": [
         {"src": "ch03", "slug": "kernel-ridge-and-friends", "title": "Kernel Ridge Regression and Smooth Losses"},
-        {"src": "ch04", "slug": "learning-theory", "title": "Learning Theory in RKHS Balls"},
-        {"src": "ch05", "slug": "support-vector-machines", "title": "Support Vector Machines"}
+        {"src": "ch05", "slug": "support-vector-machines", "title": "Support Vector Machines"},
+        {"src": "ch04", "slug": "learning-theory", "title": "Learning Theory in RKHS Balls"}
       ]
     },
     {
-      "part": "III · Unsupervised Learning",
+      "part": "III · Discovering Structure",
+      "intro": "The same Gram matrix that drives supervised learning also drives the unsupervised kind. Kernel PCA, clustering, and canonical correlation analysis are the classical structure-finding algorithms, each rewritten to see only the kernel.",
       "chapters": [
         {"src": "ch06", "slug": "unsupervised-kernel-methods", "title": "Kernel PCA, Clustering, and CCA"}
       ]
     },
     {
-      "part": "IV · The Theory of the Space",
+      "part": "IV · The Geometry of the Space",
+      "intro": "Why did any of it work? This part opens the RKHS with Mercer's theorem, reads its spectrum as a measure of smoothness, and turns eigenvalue decay into concrete rates of convergence.",
       "chapters": [
         {"src": "ch07", "slug": "mercer-and-rates", "title": "Mercer's Theorem, Spectra, and Rates"}
       ]
     },
     {
-      "part": "V · The Kernel Jungle",
+      "part": "V · Designing Kernels for Data",
+      "intro": "Everything so far assumed a kernel was handed to you. This part builds them: for vectors by symmetry and probability, and for the structured data, sequences and graphs, where the kernel is the only bridge to the RKHS toolbox.",
       "chapters": [
         {"src": "ch08", "slug": "kernel-families", "title": "Translation-Invariant, Semigroup, and Probabilistic Kernels"},
         {"src": "ch09", "slug": "string-kernels", "title": "Kernels for Sequences"},
@@ -39,16 +45,18 @@
       ]
     },
     {
-      "part": "VI · Distributions",
+      "part": "VI · Kernels and Distributions",
+      "intro": "A kernel can embed not just a point but an entire probability distribution. This part builds the mean embedding, measures distributions by the distance between embeddings, and asks which kernels lose no information in the process.",
       "chapters": [
         {"src": "ch11", "slug": "kernel-mean-embeddings", "title": "Mean Embeddings, MMD, and Characteristic Kernels"}
       ]
     },
     {
-      "part": "VII · Frontiers",
+      "part": "VII · Scaling and the Modern View",
+      "intro": "The exact solve does not survive a million examples, and the kernel need not be fixed or shallow. This part removes the quadratic wall, learns the kernel itself, and closes by reading deep networks as kernel machines.",
       "chapters": [
-        {"src": "ch12", "slug": "multiple-kernel-learning", "title": "Multiple Kernel Learning"},
         {"src": "ch13", "slug": "large-scale-kernels", "title": "Large-Scale Kernel Machines"},
+        {"src": "ch12", "slug": "multiple-kernel-learning", "title": "Multiple Kernel Learning"},
         {"src": "ch14", "slug": "kernels-and-deep-learning", "title": "Deep Learning from a Kernel Point of View"}
       ]
     }
