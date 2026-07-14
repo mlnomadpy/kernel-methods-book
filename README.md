@@ -1,4 +1,4 @@
-# The Physics of Kernel Learning
+# Kernels: The Geometry of Learning
 
 A book-form synthesis of the kernel-methods literature, drawing on the lecture
 course **"Machine Learning with Kernel Methods"** by **Julien Mairal and Jean-Philippe Vert**
