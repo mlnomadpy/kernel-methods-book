@@ -47,6 +47,9 @@ def toc_html(current_slug=None):
             n += 1
             cls = ' class="here"' if ch["slug"] == current_slug else ""
             rows.append(f'<a href="{ch["slug"]}.html"{cls}>{n}. {html.escape(ch["title"])}</a>')
+    rows.append('<div class="part">End matter</div>')
+    bcls = ' class="here"' if current_slug == "bibliography" else ""
+    rows.append(f'<a href="bibliography.html"{bcls}>Bibliography</a>')
     return "\n".join(rows)
 
 
@@ -59,6 +62,7 @@ def page(title, toc, body, desc=""):
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(desc)}">
 <link rel="stylesheet" href="assets/book.css">
+<link rel="stylesheet" href="assets/viz.css">
 {KATEX}
 </head>
 <body>
@@ -70,14 +74,60 @@ def page(title, toc, body, desc=""):
 {body}
 </div></main>
 </div>
+<script defer src="assets/viz.js"></script>
 </body>
 </html>
 """
 
 
+# ---- bibliography --------------------------------------------------------
+def load_bib():
+    p = os.path.join(ROOT, "bibliography.json")
+    return json.load(open(p)) if os.path.exists(p) else {}
+
+
+def fmt_ref(key, r):
+    """One formatted bibliography entry, anchored at #<key>."""
+    parts = []
+    if r.get("authors"):
+        parts.append(f'<span class="bib-authors">{html.escape(r["authors"])}</span>')
+    if r.get("year"):
+        parts.append(f'<span class="bib-year">({html.escape(str(r["year"]))})</span>')
+    if r.get("title"):
+        parts.append(f'<span class="bib-title">{html.escape(r["title"])}</span>.')
+    if r.get("venue"):
+        parts.append(f'<span class="bib-venue">{html.escape(r["venue"])}.</span>')
+    if r.get("url"):
+        u = html.escape(r["url"])
+        parts.append(f'<a href="{u}">{u}</a>')
+    return f'<li id="{html.escape(key)}">' + " ".join(parts) + "</li>"
+
+
+def chapter_refs_html(src, bib):
+    """The 'References' section appended to a chapter, from chapters/refs/<src>.json."""
+    p = os.path.join(ROOT, "chapters", "refs", f"{src}.json")
+    if not os.path.exists(p):
+        return ""
+    keys = json.load(open(p))
+    rows = []
+    for k in keys:
+        if k in bib:
+            rows.append(fmt_ref(k, bib[k]).replace(f'id="{k}"', ''))
+        else:
+            rows.append(f"<li>{html.escape(k)} (missing from bibliography.json)</li>")
+    if not rows:
+        return ""
+    return ('<section class="chapter-refs"><h2 id="references">References</h2>'
+            '<ul class="bib-list">' + "\n".join(rows)
+            + '</ul><p class="hint">Full details, with every work cited across the book, are in the '
+            '<a href="bibliography.html">bibliography</a>.</p></section>')
+
+
 def main():
     os.makedirs(os.path.join(OUT, "assets"), exist_ok=True)
-    shutil.copy(os.path.join(ROOT, "assets", "book.css"), os.path.join(OUT, "assets", "book.css"))
+    for a in ("book.css", "viz.css", "viz.js"):
+        shutil.copy(os.path.join(ROOT, "assets", a), os.path.join(OUT, "assets", a))
+    bib = load_bib()
 
     chs = chapters_flat()
     missing = []
@@ -93,6 +143,7 @@ def main():
             f'<h1><span class="chno">Chapter {i + 1} · {html.escape(ch["part"])}</span>',
             body, count=1,
         )
+        body += chapter_refs_html(ch["src"], bib)
         nav = ['<div class="chnav">']
         if i > 0:
             nav.append(f'<a href="{chs[i-1]["slug"]}.html"><span class="dir">previous</span>{i}. {html.escape(chs[i-1]["title"])}</a>')
@@ -123,7 +174,29 @@ def main():
     open(os.path.join(OUT, "index.html"), "w").write(
         page(BOOK["title"], toc_html(), cover, desc=BOOK["subtitle"]))
 
-    print(f"built {len(chs) - len(missing)}/{len(chs)} chapters + cover -> docs/")
+    # bibliography page: every entry, alphabetical by author then year
+    def sortkey(kv):
+        r = kv[1]
+        return (str(r.get("authors", "zzz")).lower(), str(r.get("year", "")))
+    entries = sorted(bib.items(), key=sortkey)
+    blist = "\n".join(fmt_ref(k, r) for k, r in entries)
+    bibbody = f"""<h1><span class="chno">End matter</span>Bibliography</h1>
+<p class="lead">Every work cited across the book, {len(entries)} entries. The chapters that
+draw on the Mairal and Vert lecture course follow its attributions; the additional
+entries are standard primary sources for the results discussed.</p>
+<p>The organizing source is the lecture course itself:</p>
+<ul class="bib-list"><li><span class="bib-authors">Mairal, J. and Vert, J.-P.</span>
+<span class="bib-title">Machine Learning with Kernel Methods</span>. Lecture slides,
+<a href="https://kernel-learning.github.io/">kernel-learning.github.io</a>.</li></ul>
+<h2 id="all">All references</h2>
+<ul class="bib-list">
+{blist}
+</ul>"""
+    open(os.path.join(OUT, "bibliography.html"), "w").write(
+        page(f'Bibliography · {BOOK["title"]}', toc_html("bibliography"), bibbody,
+             desc="Bibliography for " + BOOK["title"]))
+
+    print(f"built {len(chs) - len(missing)}/{len(chs)} chapters + cover + bibliography ({len(entries)} refs) -> docs/")
     if missing:
         print("missing bodies:", ", ".join(missing))
 
