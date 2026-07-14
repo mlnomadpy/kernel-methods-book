@@ -511,6 +511,37 @@ in the geometry of \(\mathcal{H}\).
 </p>
 
 <p>
+Schölkopf and Smola (2002) organize this scale bookkeeping around a single definition, worth
+importing here because it explains the target margin of \(1\) we simply postulated at the
+start. Give a labelled point its signed distance to the boundary.
+</p>
+
+<div class="box def"><span class="box-title">Definition (geometric margin)</span>
+For a hyperplane \(\{x : \langle w, x\rangle + b = 0\}\), the <em>geometric margin</em> of a
+labelled point \((x,y)\) is
+$$
+\frac{y\big(\langle w, x\rangle + b\big)}{\|w\|},
+$$
+the Euclidean distance from \(x\) to the boundary, signed to be positive exactly when \(x\) is
+correctly classified. The geometric margin of a training sample is the minimum of this
+quantity over its points.
+</div>
+
+<p>
+A hyperplane is unchanged when \(w\) and \(b\) are scaled by a common positive constant, so the
+pair \((w,b)\) carries one unit of redundant freedom, a "gauge" in the physicists' phrase.
+Schölkopf and Smola remove it by calling the pair <em>canonical</em> with respect to the
+sample when \(\min_i \lvert \langle w, x_i\rangle + b\rvert = 1\), that is, when the point
+closest to the boundary sits at output value exactly \(1\). For a canonical hyperplane the
+geometric margin of the closest point is precisely \(1/\|w\|\), so the full band between
+\(f = +1\) and \(f = -1\) has width \(2/\|w\|\), matching the walk computed above. Fixing the
+target margin at \(1\) and letting \(\|w\|\) float, our convention since the definition of the
+hinge loss, is therefore not a loss-function quirk but the choice of a canonical
+representative, and it is exactly what turns \(\|w\|\) itself into a geometric quantity, the
+inverse margin.
+</p>
+
+<p>
 The reason a wide band is worth wanting is robustness. A point that sits a full margin width
 from the boundary can be perturbed by any displacement smaller than that width without
 crossing to the wrong side, so a large geometric margin is a quantitative promise that small
@@ -519,6 +550,58 @@ prediction. This is the geometric shadow of the statistical fact, placed by Vapn
 inside learning theory, that the margin controls generalization: the objective is not merely
 fitting the training labels but fitting them with room to spare.
 </p>
+
+<h3 id="margin-generalization">Why a wide margin generalizes</h3>
+
+<p>
+The robustness argument is the geometric shadow of a genuine generalization guarantee, and it
+is worth stating one such bound precisely so that "the margin controls generalization" acquires
+content beyond intuition. Schölkopf and Smola (2002) record the following, whose striking
+feature is that it never mentions the dimension of the feature space.
+</p>
+
+<div class="box thm"><span class="box-title">Theorem (margin error bound, Schölkopf and Smola 2002)</span>
+Fix \(\rho \gt 0\) and consider linear classifiers \(x \mapsto \operatorname{sgn}\langle w, x\rangle\)
+with \(\|w\| \le \Lambda\), applied to data with \(\|x\| \le R\). Let the <em>margin error</em>
+be the fraction of training points whose margin \(y_i \langle w, x_i\rangle\) falls below
+\(\rho\). Then for every data distribution, with probability at least \(1-\delta\) over a
+sample of size \(n\), the probability that a fresh point is misclassified is at most
+$$
+(\text{margin error}) \;+\; \sqrt{\frac{c}{n}\left(\frac{R^2\Lambda^2}{\rho^2}\,\ln^2 n
+\;+\; \ln\frac{1}{\delta}\right)},
+$$
+for a universal constant \(c\).
+</div>
+
+<p>
+Read the two terms together. The first is the training performance graded at confidence level
+\(\rho\); the second is a complexity penalty that shrinks as the margin \(\rho\) grows relative
+to the data radius \(R\) and the weight norm \(\Lambda\). A machine that separates the sample
+with a wide margin pays a small penalty even though the bound has said nothing about how many
+parameters it has, which is precisely why controlling \(\|w\|\), and hence the inverse margin,
+is a legitimate stand-in for controlling dimension. The bound also explains the otherwise
+mysterious restriction \(\|x\| \le R\): only the ratio \(R/\rho\) of radius to margin appears,
+so a margin is meaningful only once the scale of the inputs is pinned.
+</p>
+
+<p>
+Shawe-Taylor and Cristianini (2004) carry the same style of analysis through to the soft-margin
+machine we actually solve, where a few points are allowed to violate the margin. Writing
+\(\gamma\) for the achieved geometric margin and \(\xi\) for the vector of margin slacks
+\(\xi_i = (\gamma - y_i f(x_i))_+\), their bound for the box-constrained (or "1-norm soft
+margin") SVM has the schematic form
+$$
+\frac{\|\xi\|_1}{n\,\gamma} \;+\; \frac{4}{n\,\gamma}\sqrt{\operatorname{tr}(K)}
+\;+\; 3\sqrt{\frac{\ln(2/\delta)}{2n}},
+$$
+with \(K\) the Gram matrix. The first term is the total margin violation per unit margin, the
+empirical price of the outliers the machine chose to tolerate; the second is again a
+margin-scaled complexity term, now driven by \(\operatorname{tr}(K) = \sum_i K(x_i,x_i)\) in
+place of \(R^2\). Minimizing the soft-margin objective is, in this light, a direct attempt to
+keep the sum of these terms small: shrink the slacks while holding the margin wide.
+</p>
+
+<h3 id="worked-example">A worked two-point example</h3>
 
 <p>
 A two-point example makes every one of these quantities concrete.
@@ -628,6 +711,63 @@ software packages. Large \(C\) means weak regularization (a hard, narrow margin)
 \(C\) means strong regularization (a soft, wide margin).
 </div>
 
+<h3 id="nu-svm">The \(\nu\)-SVM</h3>
+
+<p>
+Both \(C\) and \(\lambda\) share an awkward property: they are raw prices with no natural
+scale, so a value that regularizes one dataset well can be far off for another, and there is no
+a priori way to choose one. Schölkopf, Smola, Williamson, and Bartlett (2000) proposed a
+reparameterization, the <em>\(\nu\)-SVM</em>, that trades the price for a parameter
+\(\nu \in (0,1]\) with a directly interpretable meaning. Instead of a fixed target margin of
+\(1\), the \(\nu\)-SVM promotes the margin to a variable \(\rho \ge 0\) to be maximized, and
+charges for points that fall short of it:
+$$
+\min_{f \in \mathcal{H},\; \rho \ge 0,\; \xi \ge 0}\;
+\frac{1}{2}\|f\|_{\mathcal{H}}^2 \;-\; \nu\rho \;+\; \frac{1}{n}\sum_{i=1}^n \xi_i
+\qquad \text{subject to} \qquad y_i f(x_i) \ge \rho - \xi_i.
+$$
+Here \(\rho\) locates the margin (the band is now \(f = \pm\rho\) rather than \(f = \pm 1\)),
+the reward \(-\nu\rho\) presses to widen it, and the slacks \(\xi_i\) absorb the points that
+cannot keep up. Carrying the same Lagrangian steps through, the dual is once more a
+box-constrained quadratic program, now with two extra scalar constraints:
+$$
+\max_{\mu \in \mathbb{R}^n}\;
+-\frac{1}{2}\sum_{i,j=1}^n \mu_i \mu_j\, y_i y_j\, K(x_i,x_j)
+\qquad \text{subject to} \qquad
+0 \le \mu_i \le \frac{1}{n}, \;\; \sum_{i} \mu_i y_i = 0, \;\; \sum_{i} \mu_i \ge \nu.
+$$
+The box \(0 \le \mu_i \le 1/n\) is exactly the one we met in the dual of the ordinary SVM (the
+prices \(\mu\) of the margin constraints); what is new is that the linear term
+\(\mu^\top \mathbf{1}\) has left the objective and reappeared as the constraint
+\(\sum_i \mu_i \ge \nu\), while the equality \(\sum_i \mu_i y_i = 0\) is the footprint of the
+offset \(b\) that the \(\nu\)-formulation carries.
+</p>
+
+<div class="box prop"><span class="box-title">Proposition (the \(\nu\)-property, Schölkopf, Smola, Williamson, and Bartlett 2000)</span>
+At a solution of the \(\nu\)-SVM with \(\rho \gt 0\):
+<ul>
+<li>\(\nu\) is an upper bound on the fraction of <em>margin errors</em>, the points with
+\(\xi_i \gt 0\) (those inside the band or misclassified);</li>
+<li>\(\nu\) is a lower bound on the fraction of support vectors;</li>
+<li>under mild non-degeneracy of the data-generating distribution, both fractions converge to
+\(\nu\) as \(n \to \infty\).</li>
+</ul>
+</div>
+
+<p>
+The first two claims are a short counting argument on the constraints, and they are worth
+seeing because they pin the connection between the top of the box and the outliers that the
+\(C\)-SVM only hinted at. At the optimum the constraint \(\sum_i \mu_i \ge \nu\) is tight
+whenever \(\rho \gt 0\), so \(\sum_i \mu_i = \nu\). A margin error has its price pinned to the
+ceiling, \(\mu_i = 1/n\), so if \(n_{\text{err}}\) points are margin errors then
+\(n_{\text{err}}/n \le \sum_i \mu_i = \nu\); a support vector merely has \(\mu_i \gt 0\), so
+\(\nu = \sum_i \mu_i \le n_{\text{SV}}/n\). The user therefore sets, before training, a ceiling
+on the tolerated margin errors and a floor on the number of support vectors, both far more
+legible than a bare value of \(C\). The same reading sharpens the earlier remark that the box
+cap controls robustness: the points pinned at the top of the box are exactly the margin errors,
+and \(\nu\) is the dial that bounds how many of them there may be.
+</p>
+
 <h3 id="two-svm">The 2-SVM</h3>
 
 <div class="box rmk"><span class="box-title">Remark (2-SVM)</span>
@@ -666,8 +806,12 @@ parabola-on-an-interval argument, sorts the training points into three regimes:
 margin, and coefficients at the bound on or beyond it. The nonzero-coefficient points, the
 support vectors, are all the machine remembers, which is what makes both training and
 prediction fast. The \(C\)-SVM is the same machine reparameterized with
-\(C = 1/(2n\lambda)\), and the 2-SVM, built on the squared hinge, is again the same
-machine with kernel \(K + n\lambda I\) and \(C = +\infty\).
+\(C = 1/(2n\lambda)\); the \(\nu\)-SVM trades that price for a parameter \(\nu\) that upper
+bounds the fraction of margin errors and lower bounds the fraction of support vectors; and the
+2-SVM, built on the squared hinge, is again the same machine with kernel \(K + n\lambda I\) and
+\(C = +\infty\). The wide margin these machines seek is not an aesthetic preference but a
+quantity that provably controls generalization, through margin-based bounds that never invoke
+the dimension of the feature space.
 </p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>

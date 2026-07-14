@@ -89,6 +89,12 @@ Equivalently, a kernel \(K\) is p.d. if and only if, for any \(N \in \mathbb{N}\
 
 <p>Note the slightly unfortunate but standard terminology: a positive definite <em>kernel</em> produces positive <em>semidefinite</em> matrices; the quadratic form is allowed to vanish on nonzero coefficient vectors.</p>
 
+<div class="box rmk"><span class="box-title">Remark (terminology and history)</span>
+The word <em>kernel</em> predates machine learning by decades. As Schölkopf and Smola (2002) recall, it entered mathematics through the theory of integral operators studied by Hilbert and others, where a function \(K\) is the kernel of the operator
+$$(T_K f)(x) = \int K(x, x')\, f(x')\, dx'.$$
+The same object travels under many names across communities: reproducing kernel, Mercer kernel, admissible kernel, support vector kernel, nonnegative definite kernel, and, in statistics, covariance function. Schölkopf and Smola also caution that the name "positive definite kernel" sits slightly awry with matrix theory, where "definite" is often reserved for the strict case in which the quadratic form vanishes only for the zero coefficient vector. Our kernels are merely "semidefinite" in that stricter sense, which is exactly why their Gram matrices are p.s.d. rather than p.d.
+</div>
+
 <p>What does the inequality actually demand? It is best read as a promise about squared lengths. If the kernel were secretly an inner product, \(K(x_i, x_j) = \langle \Phi(x_i), \Phi(x_j) \rangle\), then the double sum would telescope into \(\big\lVert \sum_i a_i \Phi(x_i) \big\rVert^2\), which can never be negative. Positive definiteness is exactly the algebraic shadow of that geometric fact: it is the one condition, stated without ever naming a feature map \(\Phi\), that guarantees a \(\Phi\) can be found. Aronszajn's theorem below turns the promise into a construction; for now, the condition is the entrance ticket.</p>
 
 <p>Concretely, positive definiteness is something one can watch: choose a handful of points, form their Gram matrix, and check whether that matrix is positive semidefinite. The next figure does this live for points on a line, and lets you see how the choice of kernel and its bandwidth reshape the entries and the eigenvalues of the matrix.</p>
@@ -150,6 +156,12 @@ $$
 
 <p>The squared inner product is therefore p.d. on \(\mathbb{R}^2\) by the embedding lemma, and it lets linear machinery capture quadratic structure: a function that is linear in \(\Phi(x)\) is a quadratic function of \(x\). Geometrically, a curved boundary in the plane, such as an ellipse, becomes a hyperplane in the three-dimensional feature space.</p>
 
+<p>The feature map that realizes a kernel is far from unique. Schölkopf and Smola (2002) make this vivid for the polynomial kernel by exhibiting two different maps that produce the same kernel. One lists the <em>ordered</em> products of coordinates, \([x]_{j_1} [x]_{j_2} \cdots [x]_{j_d}\), landing in a space of dimension \(N^d\); the other keeps only the distinct <em>unordered</em> monomials and compensates for their multiplicities by weighting each with the square root of the number of orderings that generate it. In the plane at degree two the second map is exactly the \(\Phi(x) = (x_1^2, \sqrt{2}\, x_1 x_2, x_2^2)\) above, the \(\sqrt{2}\) being the square root of the two orderings of the product \(x_1 x_2\). Both maps compute \(\langle x, x' \rangle_{\mathbb{R}^2}^2\), so a single kernel lives at once in feature spaces of different dimensions. What the kernel pins down is the geometry, not the coordinates.</p>
+
+<div class="box rmk"><span class="box-title">Remark (why the \(\sqrt{2}\)?)</span>
+Those square-root-of-multiplicity weights are not cosmetic. Schölkopf and Smola (2002) observe that they are precisely what makes the feature map commute with rotations: up to an overall scale, the homogeneous kernel \(\langle x, x' \rangle^d\) is the only kernel whose degree-\(d\) monomial feature map is invariant under orthogonal transformations of the input space. So the natural weighting of the monomials is forced by the demand that relabeling the coordinate axes, an operation that changes nothing about the data, must not change the geometry the kernel induces.
+</div>
+
 <div class="box ex"><span class="box-title">Exercise</span>
 Show that \(K(x, x') = \langle x, x' \rangle_{\mathbb{R}^p}^d\) is p.d. on \(\mathcal{X} = \mathbb{R}^p\) for any \(d \in \mathbb{N}\). (A one-line proof will be available once we know that products of p.d. kernels are p.d.; a direct proof expands the power into monomial features, generalizing the computation above.)
 </div>
@@ -198,6 +210,18 @@ $$\Phi(x_i) = \begin{pmatrix} \sqrt{\lambda_1}\, [u_1]_i \\ \vdots \\ \sqrt{\lam
 <h3 id="general-case-history">The general case: a short history</h3>
 
 <p>For infinite \(\mathcal{X}\) the result was established in stages: Mercer (1909) proved it for \(\mathcal{X} = [a, b] \subset \mathbb{R}\), and more generally for \(\mathcal{X}\) compact, with \(K\) continuous; Kolmogorov (1941) for \(\mathcal{X}\) countable; and Aronszajn (1944, 1950) in the general case. We will go through the proof of the general case by introducing the concept at the heart of this course, the reproducing kernel Hilbert space, which provides a canonical choice of \(\mathcal{H}\) valid without any restriction on \(\mathcal{X}\) or on \(K\).</p>
+
+<p>Mercer's special case deserves a closer look, because it produces the embedding by a route that is the exact continuous analogue of the finite spectral construction: eigenvectors are replaced by eigenfunctions. Both Schölkopf and Smola (2002) and Shawe-Taylor and Cristianini (2004) develop it, and it is the standard way to see a kernel as a weighted sum of feature coordinates.</p>
+
+<div class="box thm"><span class="box-title">Theorem (Mercer, 1909)</span>
+Let \(\mathcal{X}\) be a compact subset of \(\mathbb{R}^n\) and let \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) be continuous and symmetric, with a positive integral operator, that is,
+$$\int_{\mathcal{X} \times \mathcal{X}} K(x, x')\, f(x)\, f(x')\, dx\, dx' \ge 0 \quad \text{for all } f \in L^2(\mathcal{X}).$$
+Then \(K\) admits a uniformly convergent expansion
+$$K(x, x') = \sum_{j=1}^{\infty} \phi_j(x)\, \phi_j(x'),$$
+where the functions \((\phi_j)_{j \ge 1}\) are orthonormal in \(L^2(\mathcal{X})\); equivalently \(\phi_j = \sqrt{\mu_j}\, \psi_j\) for the eigenvalues \(\mu_j \ge 0\) and orthonormal eigenfunctions \(\psi_j\) of the operator.
+</div>
+
+<p>The expansion is the promised embedding: the map \(x \mapsto (\phi_1(x), \phi_2(x), \dots)\) into the sequence space \(\ell^2\) realizes \(K\) as an inner product, exactly as the map \(x_i \mapsto (\sqrt{\lambda_l}\, [u_l]_i)_l\) did in the finite case, with the eigenfunctions \(\psi_j\) now playing the role of the principal axes \(u_l\) and the eigenvalues \(\mu_j\) the role of the \(\lambda_l\). This is the Mercer route to the feature space. Its price is the hypotheses it needs, compactness of \(\mathcal{X}\), continuity of \(K\), and a reference measure; the RKHS route developed below reaches the same conclusion while asking for none of them.</p>
 
 <h2 id="reproducing-kernel-hilbert-spaces">Reproducing kernel Hilbert spaces</h2>
 
@@ -454,6 +478,10 @@ $$K(x, y) = e^{-\frac{1}{2\alpha^2}(x - y)^2},$$
 
 <p>is the kernel behind the bump picture that opened the RKHS section: its canonical feature map sends each point \(x\) to the Gaussian function \(K_x\) centered at \(x\). It is indeed p.d.; the proof is a two-line application of the combination rules of the next section, so we present it in the worked quiz below. Its RKHS contains far more than the Gaussian bumps themselves, and its precise description is postponed to later parts of the course; what matters already is that the general theory guarantees this space exists, is unique, and satisfies \(f(x) = \langle f, K_x \rangle_{\mathcal{H}}\) for all its members.</p>
 
+<div class="box rmk"><span class="box-title">Remark (geometry of the Gaussian embedding)</span>
+Schölkopf and Smola (2002) record three facts about this feature map that are worth keeping in mind. First, since \(K(x, x) = 1\) for every \(x\), each point maps to a unit-length element of \(\mathcal{H}\): the Gaussian embedding sends all of \(\mathcal{X}\) to the unit sphere of the RKHS. Second, since \(K(x, x') \gt 0\) for all \(x, x'\), the cosine of the angle between any two images, \(\langle \Phi(x), \Phi(x') \rangle_{\mathcal{H}}\), is strictly positive, so the images all sit within a single orthant, subtending pairwise angles below \(\pi/2\). Third, pulling the other way, for any finite set of distinct points the Gaussian Gram matrix has full rank, so the images \(\Phi(x_1), \dots, \Phi(x_m)\) are always linearly independent. A Gaussian kernel on an infinite domain therefore has an infinite-dimensional RKHS: no finite feature space can reproduce it. The apparent tension, images confined to a patch of a sphere yet never linearly dependent, is resolved by the rapid decay of the eigenvalues, which stacks ever more dimensions into an ever thinner shell.
+</div>
+
 <h2 id="combining-kernels">Combining kernels: the cone of p.d. kernels</h2>
 
 <p>Checking the definition of positive definiteness directly is painful for all but the simplest kernels. In practice one builds complicated kernels from simple ones, using stability properties of the class of p.d. kernels.</p>
@@ -484,6 +512,12 @@ $$
 = \langle z_i, z_j \rangle_{\mathbb{R}^{n^2}},
 $$
 where \(z_i = \mathrm{vec}(x_i y_i^\top)\). The matrix \(\mathbf{K}\) is therefore a Gram matrix of the vectors \(z_1, \dots, z_n\), hence p.s.d., and since the points were arbitrary, \(K = K_1 K_2\) is a p.d. kernel. <span class="qed">\(\square\)</span>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (normalisation, and a decomposition)</span>
+Two consequences of the closure rules recur often enough to deserve names. Shawe-Taylor and Cristianini (2004) call the first <em>normalisation</em>. Writing \(g(x) = K(x, x)^{1/2}\), the normalised kernel
+$$\tilde{K}(x, x') = \frac{K(x, x')}{K(x, x)^{1/2}\, K(x', x')^{1/2}}$$
+is the product of \(K\) with the separable kernel \((x, x') \mapsto g(x)^{-1} g(x')^{-1}\), hence p.d. by the product rule; it is the kernel of the feature map \(x \mapsto \Phi(x) / \lVert \Phi(x) \rVert_{\mathcal{H}}\), the embedded points pushed onto the unit sphere, and its diagonal is identically \(1\), the very property that made the Gaussian images unit vectors. Read backwards, the same identity is a <em>decomposition</em>: every kernel factors as the product of its normalisation and the rank-one kernel \(g(x)\, g(x')\), which Shawe-Taylor and Cristianini call the Schur-product form of the kernel.
 </div>
 
 <p>A first payoff: the exercise on polynomial kernels is now immediate, since \(\langle x, x' \rangle^d\) is a \(d\)-fold product of the linear kernel with itself. A second, more spectacular payoff combines products, sums and limits.</p>

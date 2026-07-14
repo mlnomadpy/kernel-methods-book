@@ -319,6 +319,28 @@ $$
 On a finite set with counting measure this is exactly multiplication by the kernel matrix: if \(\mathcal X = \{t_1, \ldots, t_m\}\) and \(\nu\) is the counting measure, then \((L_K f)(x_i) = \sum_j K(x_i, t_j)\, f(t_j)\) is the \(i\)-th entry of the matrix-vector product \(\mathbf K \mathbf f\). Reading the integral operator as the kernel matrix with the sum replaced by an integral is the right mental picture: the eigenfunctions of \(L_K\) are the continuous analogue of the eigenvectors of the Gram matrix, and the eigenvalues \(\lambda_k\) that Mercer's theorem is about are the continuous analogue of the Gram matrix eigenvalues. This correspondence between the finite matrix and the operator is the foundation of the operator-theoretic approach to learning theory (Cucker and Smale, 2002; Steinwart and Christmann, 2008).
 </p>
 
+<div class="box prop"><span class="box-title">Proposition (discrete Mercer: the Gram matrix eigendecomposition)</span>
+<p>
+Let \(\mathcal X = \{x_1, \ldots, x_m\}\) be finite. The kernel is then the Gram matrix \(\mathbf K = \left( K(x_i, x_j) \right)_{ij}\), which is symmetric and positive semidefinite. The spectral theorem for symmetric matrices diagonalizes it as
+</p>
+$$
+\mathbf K = \mathbf U \boldsymbol\Lambda \mathbf U^\top = \sum_{k=1}^{m} \lambda_k\, u_k u_k^\top,
+\qquad \lambda_1 \geq \cdots \geq \lambda_m \geq 0,
+$$
+<p>
+with orthonormal eigenvectors \(u_1, \ldots, u_m\). Equivalently \(\mathbf K = \mathbf B^\top \mathbf B\) with \(\mathbf B = \boldsymbol\Lambda^{1/2} \mathbf U^\top\) (Shawe-Taylor and Cristianini, 2004), and reading off the columns of \(\mathbf B\) exhibits an explicit feature map
+</p>
+$$
+\Phi(x_i) = \left( \sqrt{\lambda_k}\, [u_k]_i \right)_{k=1}^{m},
+\qquad
+K(x_i, x_j) = \left\langle \Phi(x_i), \Phi(x_j) \right\rangle .
+$$
+</div>
+
+<p>
+This is nothing but Mercer's expansion with the sum truncated at \(m\): each eigenvector coordinate \([u_k]_i\) plays the role of the eigenfunction value \(\psi_k(x_i)\), so the eigenfunctions of \(L_K\) are the continuous limit of Gram-matrix eigenvectors sampled at the data (Schölkopf and Smola, 2002; Shawe-Taylor and Cristianini, 2004). The whole of Mercer's theory is the claim that this elementary finite factorization survives the passage to an infinite compact \(\mathcal X\), once continuity and compactness supply the discreteness of the spectrum that finite dimension gave for free.
+</p>
+
 <p>
 Before formalizing, it helps to look at the finite object the operator generalizes. The figure below assembles the Gram matrix \(\mathbf K = \left( K(x_i, x_j) \right)_{ij}\) of a handful of points and displays both its heatmap and its spectrum; the eigenvalues shown there are exactly the finite-sample stand-ins for the \(\lambda_k\) of \(L_K\) that the rest of the chapter studies, and widening or narrowing the kernel reshapes them just as it will reshape the operator's spectrum.
 </p>
@@ -475,6 +497,19 @@ where the convergence is absolute for each \(x, t \in \mathcal X\), and uniform 
 Two features of the statement carry the pedagogical weight. The first is that a single list of numbers \((\lambda_k)\) and functions \((\psi_k)\) simultaneously diagonalizes the operator \(L_K\) and reconstructs the kernel \(K\) itself: the spectrum is not an auxiliary computation but a complete description of the kernel. The second is the strength of the convergence. An equality that held only in \(L^2_\nu\) would reconstruct \(K\) merely up to sets of measure zero, which is useless for a kernel we must evaluate at arbitrary individual points; uniform convergence of continuous partial sums guarantees instead that the series equals \(K(x,t)\) at every single pair \((x,t)\), and, as the corollary below shows, that the induced feature map is continuous. This is the precise sense in which Mercer's theorem upgrades the abstract existence of a feature space to an explicit coordinate system valid point by point.
 </p>
 
+<div class="box rmk"><span class="box-title">Remark (Mercer's theorem as the continuous face of positive definiteness)</span>
+<p>
+Shawe-Taylor and Cristianini (2004) state the theorem in a slightly different but equivalent form worth recording, because it exposes what the hypothesis of positive definiteness is really doing. Let \(\mathcal X\) be a compact subset of \(\mathbb R^n\), let \(K\) be continuous and symmetric, and call its integral operator \(L_K\) <em>positive</em> when
+</p>
+$$
+\iint_{\mathcal X \times \mathcal X} K(x,z)\, f(x)\, f(z)\, dx\, dz \;\geq\; 0
+\qquad \text{for all } f \in L^2(\mathcal X) .
+$$
+<p>
+Then \(K\) admits a uniformly convergent expansion \(K(x,z) = \sum_{j} \phi_j(x)\, \phi_j(z)\) with \(\langle \phi_i, \phi_j\rangle_{L^2} = \delta_{ij}\) and \(\sum_j \| \phi_j \|^2_{L^2} \lt \infty\); the \(\phi_j = \sqrt{\lambda_j}\,\psi_j\) simply fold the eigenvalue into the eigenfunction, so this is exactly our expansion rewritten. The content of their proof is a single equivalence: positivity of the operator holds if and only if every finite Gram submatrix is positive semidefinite. One direction is the delicate one. If some submatrix on points \(x_1, \ldots, x_\ell\) had \(\sum_{i,j} K(x_i, x_j)\, \alpha_i \alpha_j = \varepsilon \lt 0\), place narrow Gaussian bumps of masses \(\alpha_i\) at the \(x_i\); as their width shrinks to zero the double integral above converges to \(\varepsilon \lt 0\), contradicting positivity. Mercer's theorem is therefore an equivalent reformulation of the finitely positive semidefinite property, the very property that defines a kernel: the uniform expansion and the positive Gram matrices are two faces of one condition.
+</p>
+</div>
+
 <p>
 The proof is constructive and follows Mercer's original 1909 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of the first chapter, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
 </p>
@@ -607,6 +642,22 @@ $$
 <p>
 which tends to zero as \(t \to x\) by continuity of \(K\).
 <span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (effective dimension: the mapped data lie in a shrinking box)</span>
+<p>
+The feature map \(\Phi(x) = \left( \sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}\) confines the data to a very particular region of \(\ell^2\). Its \(k\)-th coordinate never leaves the interval \(\left[ -\sqrt{l_k},\, \sqrt{l_k} \right]\) with \(l_k = \sup_{x \in \mathcal X} \lambda_k\, \psi_k(x)^2\), so \(\Phi(\mathcal X)\) sits inside an axis-parallel box with side lengths \(2 \sqrt{l_k}\). Whenever the eigenfunctions are uniformly bounded, \(\sup_x \psi_k(x)^2 \leq C\), the sides shrink as fast as the spectrum, \(l_k \leq C\, \lambda_k\) (Schölkopf and Smola, 2002). Although the feature space is infinite-dimensional, the mapped data therefore occupy only a thin, rapidly narrowing sliver of it.
+</p>
+<p>
+This carries an immediate quantitative reading. Uniform convergence of the Mercer series means that for any \(\varepsilon \gt 0\) there is a finite \(n = n(\varepsilon)\) with
+</p>
+$$
+\left\lvert K(x,t) - \left\langle \Phi_n(x), \Phi_n(t) \right\rangle \right\rvert \lt \varepsilon,
+\qquad \Phi_n(x) = \left( \sqrt{\lambda_1}\, \psi_1(x), \ldots, \sqrt{\lambda_n}\, \psi_n(x) \right),
+$$
+<p>
+for all \(x, t \in \mathcal X\): the feature space is finite-dimensional up to any prescribed accuracy, and the number of coordinates that genuinely matter, the <em>effective dimension</em>, is set by how fast \(\lambda_k \to 0\). The same tail of the spectrum resurfaces at the end of the chapter as the quantity \(\sum_{i \gt J} \lambda_i\) that controls the variance of kernel ridge regression.
 </p>
 </div>
 
@@ -755,6 +806,12 @@ The verification is left as an exercise, by summing the geometric series of cosi
 <p>
 Keep these two families in mind. At the end of the chapter, polynomial versus exponential decay of the spectrum will translate directly into slow versus fast convergence rates for kernel ridge regression.
 </p>
+
+<div class="box rmk"><span class="box-title">Remark (choosing a kernel is choosing a spectral filter)</span>
+<p>
+The periodic examples make vivid a reading of Mercer's theorem due to Shawe-Taylor and Cristianini (2004). Here the Fourier coefficients \(\hat\kappa_{2n}\) are, up to the factor \(\sqrt 2\), the eigenvalues, so prescribing the kernel is the same as prescribing a weight on each frequency pair \(\psi_{2n-1}, \psi_{2n}\). A coefficient that vanishes deletes that frequency from the feature space outright; a small coefficient keeps the feature but gives it little say in the fitted function; a large coefficient lets that frequency dominate. Choosing a kernel is thus choosing a filter with a prescribed spectral characteristic, governing how much each frequency may influence the learned function, which is the same bookkeeping as the RKHS norm \(\sum_k a_k^2 / \lambda_k\) taxing a coordinate in inverse proportion to its eigenvalue. The Bernoulli and geometric spectra above are two such filters: a gentle polynomial roll-off and a sharp exponential cutoff.
+</p>
+</div>
 
 <h2 id="example-the-sphere">Worked example 2: dot-product kernels on the sphere \(S^{d-1}\)</h2>
 
