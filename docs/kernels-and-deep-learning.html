@@ -42,35 +42,37 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
 </div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">0 · Preliminaries</div>
+<a href="preliminaries.html">1. Mathematical Preliminaries</a>
 <div class="part">I · The Idea</div>
-<a href="introduction.html">1. Introduction: Learning by Comparison</a>
-<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<a href="introduction.html">2. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">3. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">4. The Kernel Trick and the Representer Theorem</a>
 <div class="part">II · Learning with a Fixed Kernel</div>
-<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
-<a href="support-vector-machines.html">5. Support Vector Machines</a>
-<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<a href="kernel-ridge-and-friends.html">5. Kernel Ridge Regression and Smooth Losses</a>
+<a href="support-vector-machines.html">6. Support Vector Machines</a>
+<a href="learning-theory.html">7. Learning Theory in RKHS Balls</a>
 <div class="part">III · Discovering Structure</div>
-<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<a href="unsupervised-kernel-methods.html">8. Kernel PCA, Clustering, and CCA</a>
 <div class="part">IV · The Geometry of the Space</div>
-<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<a href="mercer-and-rates.html">9. Mercer&#x27;s Theorem, Spectra, and Rates</a>
 <div class="part">V · Designing Kernels for Data</div>
-<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">10. Kernels for Sequences</a>
-<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<a href="kernel-families.html">10. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">11. Kernels for Sequences</a>
+<a href="graph-kernels.html">12. Kernels for and on Graphs</a>
 <div class="part">VI · Kernels and Distributions</div>
-<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<a href="kernel-mean-embeddings.html">13. Mean Embeddings, MMD, and Characteristic Kernels</a>
 <div class="part">VII · Scaling and the Modern View</div>
-<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
-<a href="kernels-and-deep-learning.html" class="here">15. Deep Learning from a Kernel Point of View</a>
+<a href="large-scale-kernels.html">14. Large-Scale Kernel Machines</a>
+<a href="multiple-kernel-learning.html">15. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html" class="here">16. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <div class="scrim" id="scrim"></div>
 <main id="main"><div class="page">
-<h1><span class="chno">Chapter 15 · VII · Scaling and the Modern View</span>Deep Learning from a Kernel Point of View</h1>
+<h1><span class="chno">Chapter 15 &middot; VII · Scaling and the Modern View</span>Deep Learning from a Kernel Point of View</h1>
 
 <p class="lead">Deep neural networks and kernel machines are usually told as rival stories: one learns a hierarchy of features from data, the other fixes an infinite-dimensional feature map in advance and learns only a linear function on top of it. This chapter argues that the two are far closer than the rivalry suggests. We will see that the infinite-width limit of a randomly initialized network is a kernel (the random-feature kernel of Neal), that the trajectory of gradient descent on a very wide network is described by another kernel (the neural tangent kernel of Jacot, Gabriel, and Hongler), and that a whole convolutional architecture, pooling and all, can be built as an explicit map into a reproducing kernel Hilbert space so that a convolutional network becomes a single linear function in that space. Once a deep network lives in an RKHS, the RKHS norm becomes a common currency: the very same quantity controls the smoothness of the representation, its stability to deformations of the input, and the generalization of the trained model. We develop this program on images through convolutional kernel networks, then transport it to graphs and to biological sequences, where the same three-move recipe (extract local patterns, embed them with a kernel, pool) yields models that are trained end to end yet retain the interpretability and the regularization theory of kernels.</p>
 

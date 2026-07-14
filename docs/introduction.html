@@ -24,7 +24,7 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   ],throwOnError:false});"></script>
 
 </head>
-<body data-prev="index.html" data-next="kernels-and-rkhs.html">
+<body data-prev="preliminaries.html" data-next="kernels-and-rkhs.html">
 <a class="skip" href="#main">Skip to content</a>
 <div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
 <header class="topbar">
@@ -42,35 +42,37 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
 </div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">0 · Preliminaries</div>
+<a href="preliminaries.html">1. Mathematical Preliminaries</a>
 <div class="part">I · The Idea</div>
-<a href="introduction.html" class="here">1. Introduction: Learning by Comparison</a>
-<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<a href="introduction.html" class="here">2. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">3. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">4. The Kernel Trick and the Representer Theorem</a>
 <div class="part">II · Learning with a Fixed Kernel</div>
-<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
-<a href="support-vector-machines.html">5. Support Vector Machines</a>
-<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<a href="kernel-ridge-and-friends.html">5. Kernel Ridge Regression and Smooth Losses</a>
+<a href="support-vector-machines.html">6. Support Vector Machines</a>
+<a href="learning-theory.html">7. Learning Theory in RKHS Balls</a>
 <div class="part">III · Discovering Structure</div>
-<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<a href="unsupervised-kernel-methods.html">8. Kernel PCA, Clustering, and CCA</a>
 <div class="part">IV · The Geometry of the Space</div>
-<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<a href="mercer-and-rates.html">9. Mercer&#x27;s Theorem, Spectra, and Rates</a>
 <div class="part">V · Designing Kernels for Data</div>
-<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">10. Kernels for Sequences</a>
-<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<a href="kernel-families.html">10. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">11. Kernels for Sequences</a>
+<a href="graph-kernels.html">12. Kernels for and on Graphs</a>
 <div class="part">VI · Kernels and Distributions</div>
-<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<a href="kernel-mean-embeddings.html">13. Mean Embeddings, MMD, and Characteristic Kernels</a>
 <div class="part">VII · Scaling and the Modern View</div>
-<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
-<a href="kernels-and-deep-learning.html">15. Deep Learning from a Kernel Point of View</a>
+<a href="large-scale-kernels.html">14. Large-Scale Kernel Machines</a>
+<a href="multiple-kernel-learning.html">15. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html">16. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <div class="scrim" id="scrim"></div>
 <main id="main"><div class="page">
-<h1><span class="chno">Chapter 1 · I · The Idea</span>Introduction: Learning by Comparison</h1>
+<h1><span class="chno">Chapter 1 &middot; I · The Idea</span>Introduction: Learning by Comparison</h1>
 <p class="lead">Almost every kernel method is one idea worn many ways: if you can say how similar two examples are, you can learn from them. This short chapter states that idea, unpacks the three viewpoints that the rest of the book develops in turn, and lays out the path from here to deep networks.</p>
 
 <h2 id="the-promise">The promise: patterns are relations</h2>
@@ -144,7 +146,7 @@ $$ \min_{f}\; \underbrace{\frac1n\sum_{i=1}^n \ell\big(y_i, f(x_i)\big)}_{\text{
 </ol>
 </section>
 <nav class="chnav" aria-label="Chapter navigation">
-<a class="nav-card prev" href="index.html"><span class="dir">&larr; Previous</span><span class="nav-title">Contents</span></a>
+<a class="nav-card prev" href="preliminaries.html"><span class="dir">&larr; Previous</span><span class="nav-title">Preliminaries</span></a>
 <a class="nav-card next" href="kernels-and-rkhs.html"><span class="dir">Next &rarr;</span><span class="nav-title">2. Positive Definite Kernels and RKHS</span></a>
 </nav>
 </div><aside class="onpage"><div class="onpage-title">On this page</div>

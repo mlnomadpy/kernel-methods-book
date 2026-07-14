@@ -4,6 +4,13 @@
   "source": "This book synthesizes three standard sources: the lecture course \"Machine Learning with Kernel Methods\" by Julien Mairal and Jean-Philippe Vert (kernel-learning.github.io), and the textbooks \"Learning with Kernels\" by Bernhard Schölkopf and Alexander Smola (2002) and \"Kernel Methods for Pattern Analysis\" by John Shawe-Taylor and Nello Cristianini (2004). All results and their attributions follow these sources; the connecting prose, the pedagogical arc, and the interactive figures are this book's.",
   "parts": [
     {
+      "part": "0 · Preliminaries",
+      "intro": "A self-contained reference for the mathematics the book leans on, drawn from linear algebra, analysis and Hilbert spaces, probability, optimization, and functional analysis. Read it front to back for a refresher, or dip in when a later chapter cites a result by name.",
+      "chapters": [
+        {"src": "ch-prelim", "slug": "preliminaries", "title": "Mathematical Preliminaries"}
+      ]
+    },
+    {
       "part": "I · The Idea",
       "intro": "Kernel methods rest on one move: compare examples with a similarity function, and a surprising amount of learning follows. This part builds the idea from the ground up, from the definition of a valid similarity to the space it secretly defines and the theorem that makes computation possible.",
       "chapters": [

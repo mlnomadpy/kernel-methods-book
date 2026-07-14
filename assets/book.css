@@ -201,8 +201,16 @@ kbd {
   opacity: 0; transition: opacity 0.18s ease;
 }
 
-main { flex: 1; min-width: 0; padding: 46px 34px 90px; }
-.page { max-width: 46rem; margin: 0 auto; }
+/* main is a 3-track grid: [left gutter | 46rem reading column | right gutter].
+ * The on-page rail lives in the right gutter, so it can never overlap the text;
+ * it is shown only when the gutter is wide enough (see the 1500px breakpoint). */
+main {
+  flex: 1; min-width: 0; padding: 46px 34px 90px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 46rem) minmax(0, 1fr);
+  column-gap: 2rem; align-items: start;
+}
+.page { grid-column: 2; min-width: 0; max-width: 46rem; }
 
 /* ── responsive shell ────────────────────────────────────────────────── */
 @media (max-width: 900px) {
@@ -221,7 +229,8 @@ main { flex: 1; min-width: 0; padding: 46px 34px 90px; }
   body.drawer-open nav.toc { transform: none; box-shadow: var(--shadow); }
   body.drawer-open .scrim { display: block; opacity: 1; }
   body.drawer-open { overflow: hidden; }
-  main { padding: 22px 18px 70px; }
+  main { display: block; padding: 22px 18px 70px; }
+  .page { max-width: none; }
 }
 
 /* ── typography ──────────────────────────────────────────────────────── */
@@ -427,11 +436,11 @@ a.cite:hover { border-bottom-style: solid; background: var(--accent-soft); borde
 #cite-card.show { opacity: 1; transform: translateY(0); }
 #cite-card .cc-hint { display: block; margin-top: 6px; font-family: var(--sans); font-size: 11px; color: var(--faint); }
 
-/* ── on-page section rail ────────────────────────────────────────────── */
+/* ── on-page section rail (right gutter of the grid) ─────────────────── */
 aside.onpage {
-  position: fixed; top: 70px;
-  right: max(18px, calc(50vw - 46rem / 2 - 252px));
-  width: 202px; max-height: calc(100vh - 130px); overflow-y: auto;
+  grid-column: 3; justify-self: start;
+  position: sticky; top: 84px;
+  width: min(196px, 100%); max-height: calc(100vh - 120px); overflow-y: auto;
   font-family: var(--sans); font-size: 12px; line-height: 1.45;
   scrollbar-width: thin;
 }
@@ -443,7 +452,8 @@ aside.onpage a { display: block; color: var(--muted); padding: 2.5px 0 2.5px 11p
 aside.onpage a.l3 { padding-left: 23px; font-size: 11.5px; }
 aside.onpage a:hover { color: var(--accent); text-decoration: none; }
 aside.onpage a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
-@media (max-width: 1380px) { aside.onpage { display: none; } }
+/* only show the rail when the right gutter is genuinely wide enough for it */
+@media (max-width: 1500px) { aside.onpage { display: none; } }
 
 /* ── search ──────────────────────────────────────────────────────────── */
 .search-overlay {
@@ -565,3 +575,39 @@ details.ex-hint .hint-body { font-size: 0.95em; color: var(--muted); border-left
   a { color: inherit; }
   a.cite { border-bottom: none; }
 }
+
+/* ── responsive hardening ────────────────────────────────────────────── */
+/* nothing in the reading column may overflow its track */
+.page { overflow-wrap: break-word; }
+.page img, .page svg, .page canvas, .page video { max-width: 100%; height: auto; }
+.katex-display > .katex { max-width: 100%; }
+/* long inline code / URLs wrap rather than push the column wide */
+.page code { overflow-wrap: anywhere; }
+
+/* the interactive figures: controls wrap and stay usable on narrow screens */
+.viz .viz-controls { flex-wrap: wrap; }
+.viz .viz-controls input[type=range] { max-width: 46vw; }
+
+/* mid-width band (tablet / small laptop): tighten the reading gutters */
+@media (min-width: 901px) and (max-width: 1120px) {
+  main { padding: 40px 26px 84px; column-gap: 1rem; }
+  nav.toc { width: 258px; flex-basis: 258px; }
+}
+
+/* very small phones */
+@media (max-width: 400px) {
+  main { padding: 18px 14px 64px; }
+  .topbar { padding: 7px 8px; }
+  .cover .attribution { padding: 11px 14px; }
+  .backtop { right: 12px; bottom: 12px; }
+}
+
+/* coarse-pointer devices get larger tap targets and no hover-only reveals */
+@media (hover: none) {
+  .hanchor { opacity: 0.55; }
+  .tb-btn, .tool-btn { min-height: 40px; }
+  .nav-card:hover { transform: none; }
+}
+
+/* keep the sticky top bar from hiding an anchored heading on mobile */
+@media (max-width: 900px) { h2, h3 { scroll-margin-top: 64px; } }

@@ -42,35 +42,37 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
 </div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">0 · Preliminaries</div>
+<a href="preliminaries.html">1. Mathematical Preliminaries</a>
 <div class="part">I · The Idea</div>
-<a href="introduction.html">1. Introduction: Learning by Comparison</a>
-<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
-<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<a href="introduction.html">2. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">3. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">4. The Kernel Trick and the Representer Theorem</a>
 <div class="part">II · Learning with a Fixed Kernel</div>
-<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
-<a href="support-vector-machines.html">5. Support Vector Machines</a>
-<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<a href="kernel-ridge-and-friends.html">5. Kernel Ridge Regression and Smooth Losses</a>
+<a href="support-vector-machines.html">6. Support Vector Machines</a>
+<a href="learning-theory.html">7. Learning Theory in RKHS Balls</a>
 <div class="part">III · Discovering Structure</div>
-<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<a href="unsupervised-kernel-methods.html">8. Kernel PCA, Clustering, and CCA</a>
 <div class="part">IV · The Geometry of the Space</div>
-<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<a href="mercer-and-rates.html">9. Mercer&#x27;s Theorem, Spectra, and Rates</a>
 <div class="part">V · Designing Kernels for Data</div>
-<a href="kernel-families.html" class="here">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
-<a href="string-kernels.html">10. Kernels for Sequences</a>
-<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<a href="kernel-families.html" class="here">10. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">11. Kernels for Sequences</a>
+<a href="graph-kernels.html">12. Kernels for and on Graphs</a>
 <div class="part">VI · Kernels and Distributions</div>
-<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<a href="kernel-mean-embeddings.html">13. Mean Embeddings, MMD, and Characteristic Kernels</a>
 <div class="part">VII · Scaling and the Modern View</div>
-<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
-<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
-<a href="kernels-and-deep-learning.html">15. Deep Learning from a Kernel Point of View</a>
+<a href="large-scale-kernels.html">14. Large-Scale Kernel Machines</a>
+<a href="multiple-kernel-learning.html">15. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html">16. Deep Learning from a Kernel Point of View</a>
 <div class="part">End matter</div>
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
 <div class="scrim" id="scrim"></div>
 <main id="main"><div class="page">
-<h1><span class="chno">Chapter 9 · V · Designing Kernels for Data</span>Translation-Invariant, Semigroup, and Probabilistic Kernels</h1>
+<h1><span class="chno">Chapter 9 &middot; V · Designing Kernels for Data</span>Translation-Invariant, Semigroup, and Probabilistic Kernels</h1>
 
 <p class="lead">The Green and Mercer constructions of the previous chapters build a kernel from a differential operator or from an eigenexpansion. This chapter follows three further roads into the kernel jungle. The first exploits symmetry: when a kernel depends only on the difference of its arguments, the Fourier transform diagonalizes everything, and positive definiteness becomes a statement about a positive spectral measure (Herglotz on the integers, Bochner on the line). The second road generalizes that algebra from groups to semigroups, where the exponential is replaced by a semicharacter and integral representations still hold. The third road builds kernels directly out of probabilistic models of the data: the Fisher kernel, the mutual information kernel, and the marginalized kernel. In each case the goal is the same, to encode prior knowledge about the structure of the data into an inner product, and by the end we will have a toolbox rather than a single best kernel.</p>
 

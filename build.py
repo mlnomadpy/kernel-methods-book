@@ -329,23 +329,25 @@ def main():
         body, nc = link_citations(body, chkeys, bib)
         ncites += nc
         onpage = onpage_nav(body)
-        index_chapter(body, i + 1, ch)
+        # front-matter Preliminaries is unnumbered (index 0); real chapters keep 1..15
+        is_prelim = ch["src"] == "ch-prelim"
+        num = i  # 0-based; Preliminaries=0, Introduction=1, ...
+        def label(k):
+            return "Preliminaries" if chs[k]["src"] == "ch-prelim" else f'{k}. {html.escape(chs[k]["title"])}'
+        index_chapter(body, "Preliminaries" if is_prelim else num, ch)
         # chapter number header injected before the first h1 content
-        body = re.sub(
-            r"<h1>",
-            f'<h1><span class="chno">Chapter {i + 1} · {html.escape(ch["part"])}</span>',
-            body, count=1,
-        )
+        chno = "Preliminaries" if is_prelim else f'Chapter {num} &middot; {html.escape(ch["part"])}'
+        body = re.sub(r"<h1>", f'<h1><span class="chno">{chno}</span>', body, count=1)
         body += chapter_refs_html(ch["src"], bib)
         prev_href = f'{chs[i-1]["slug"]}.html' if i > 0 else "index.html"
         next_href = f'{chs[i+1]["slug"]}.html' if i < len(chs) - 1 else ""
         nav = ['<nav class="chnav" aria-label="Chapter navigation">']
         if i > 0:
-            nav.append(f'<a class="nav-card prev" href="{prev_href}"><span class="dir">&larr; Previous</span><span class="nav-title">{i}. {html.escape(chs[i-1]["title"])}</span></a>')
+            nav.append(f'<a class="nav-card prev" href="{prev_href}"><span class="dir">&larr; Previous</span><span class="nav-title">{label(i-1)}</span></a>')
         else:
             nav.append(f'<a class="nav-card prev" href="index.html"><span class="dir">&larr; Previous</span><span class="nav-title">Contents</span></a>')
         if next_href:
-            nav.append(f'<a class="nav-card next" href="{next_href}"><span class="dir">Next &rarr;</span><span class="nav-title">{i + 2}. {html.escape(chs[i+1]["title"])}</span></a>')
+            nav.append(f'<a class="nav-card next" href="{next_href}"><span class="dir">Next &rarr;</span><span class="nav-title">{label(i+1)}</span></a>')
         else:
             nav.append('<a class="nav-card next" href="bibliography.html"><span class="dir">Next &rarr;</span><span class="nav-title">Bibliography</span></a>')
         nav.append("</nav>")
@@ -354,15 +356,16 @@ def main():
                    prev_href=prev_href, next_href=next_href or "bibliography.html")
         open(os.path.join(OUT, f'{ch["slug"]}.html'), "w").write(out)
 
-    # cover
-    items, n = [], 0
+    # cover (numbering matches the chapters: Preliminaries unnumbered, then 1..15)
+    items, gi = [], 0
     for part in BOOK["parts"]:
         items.append(f'<div class="part">{html.escape(part["part"])}</div>')
         if part.get("intro"):
             items.append(f'<p class="part-intro">{html.escape(part["intro"])}</p>')
         for ch in part["chapters"]:
-            n += 1
-            items.append(f'<li><span class="n">{n}</span><a href="{ch["slug"]}.html">{html.escape(ch["title"])}</a></li>')
+            marker = "&middot;" if ch["src"] == "ch-prelim" else str(gi)
+            items.append(f'<li><span class="n">{marker}</span><a href="{ch["slug"]}.html">{html.escape(ch["title"])}</a></li>')
+            gi += 1
     # the signature: a real Gaussian Gram matrix, K_ij = exp(-(i-j)^2 / 2 sigma^2)
     N, sigma = 13, 3.1
     gcells = "".join(
