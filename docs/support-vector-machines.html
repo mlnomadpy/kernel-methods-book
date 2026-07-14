@@ -128,17 +128,17 @@ the geometric interpretation below, it is precisely what makes the SVM a
 </p>
 
 <p>
-Historically the pieces arrived in almost the reverse of this logical order. Boser, Guyon,
-and Vapnik (1992) introduced the maximum-margin classifier together with the kernel trick
+Historically the pieces arrived in almost the reverse of this logical order. <a class="cite" href="bibliography.html#boser1992" data-ref="Boser, B. E., Guyon, I. M., and Vapnik, V. N. (1992) A training algorithm for optimal margin classifiers. COLT.">Boser, Guyon,
+and Vapnik (1992)</a> introduced the maximum-margin classifier together with the kernel trick
 that lets it operate in a high-dimensional feature space while touching the data only
-through inner products. Cortes and Vapnik (1995) added the slack variables that let the
+through inner products. <a class="cite" href="bibliography.html#cortes1995" data-ref="Cortes, C. and Vapnik, V. (1995) Support-vector networks. Machine Learning 20(3), 273-297.">Cortes and Vapnik (1995)</a> added the slack variables that let the
 machine tolerate points which cannot be separated cleanly, producing the soft-margin SVM
-that we actually solve here. Vapnik (1995) set the whole construction inside statistical
+that we actually solve here. <a class="cite" href="bibliography.html#vapnik1995" data-ref="Vapnik, V. N. (1995) The Nature of Statistical Learning Theory. Springer.">Vapnik (1995)</a> set the whole construction inside statistical
 learning theory, which explains why maximizing a margin is a sound way to control
 generalization and not merely an aesthetic preference. The RKHS-and-hinge-loss
 presentation used in this chapter, which recasts the SVM as one instance of the
-regularized empirical risk recipe, is the modern synthesis expounded by Schölkopf and
-Smola (2002).
+regularized empirical risk recipe, is the modern synthesis expounded by <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and
+Smola (2002)</a>.
 </p>
 
 <h2 id="primal-problem">The primal problem</h2>
@@ -561,7 +561,7 @@ in the geometry of \(\mathcal{H}\).
 </p>
 
 <p>
-Schölkopf and Smola (2002) organize this scale bookkeeping around a single definition, worth
+<a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> organize this scale bookkeeping around a single definition, worth
 importing here because it explains the target margin of \(1\) we simply postulated at the
 start. Give a labelled point its signed distance to the boundary.
 </p>
@@ -596,7 +596,7 @@ The reason a wide band is worth wanting is robustness. A point that sits a full 
 from the boundary can be perturbed by any displacement smaller than that width without
 crossing to the wrong side, so a large geometric margin is a quantitative promise that small
 changes in the input, or the arrival of a nearby unseen test point, will not flip the
-prediction. This is the geometric shadow of the statistical fact, placed by Vapnik (1995)
+prediction. This is the geometric shadow of the statistical fact, placed by <a class="cite" href="bibliography.html#vapnik1995" data-ref="Vapnik, V. N. (1995) The Nature of Statistical Learning Theory. Springer.">Vapnik (1995)</a>
 inside learning theory, that the margin controls generalization: the objective is not merely
 fitting the training labels but fitting them with room to spare.
 </p>
@@ -606,7 +606,7 @@ fitting the training labels but fitting them with room to spare.
 <p>
 The robustness argument is the geometric shadow of a genuine generalization guarantee, and it
 is worth stating one such bound precisely so that "the margin controls generalization" acquires
-content beyond intuition. Schölkopf and Smola (2002) record the following, whose striking
+content beyond intuition. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> record the following, whose striking
 feature is that it never mentions the dimension of the feature space.
 </p>
 
@@ -635,7 +635,7 @@ so a margin is meaningful only once the scale of the inputs is pinned.
 </p>
 
 <p>
-Shawe-Taylor and Cristianini (2004) carry the same style of analysis through to the soft-margin
+<a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> carry the same style of analysis through to the soft-margin
 machine we actually solve, where a few points are allowed to violate the margin. Writing
 \(\gamma\) for the achieved geometric margin and \(\xi\) for the vector of margin slacks
 \(\xi_i = (\gamma - y_i f(x_i))_+\), their bound for the box-constrained (or "1-norm soft
@@ -718,7 +718,7 @@ follow.
 methods exploit this by optimizing over small working sets of coordinates at a time,
 which is what makes SVM solvers scale far beyond what a generic \(2n\)-dimensional QP
 solver on the primal could handle. The best known such method is sequential minimal
-optimization (Platt 1998), which shrinks the working set all the way down to two
+optimization <a class="cite" href="bibliography.html#platt1998" data-ref="Platt, J. C. (1998) Sequential minimal optimization: a fast algorithm for training support vector machines. Microsoft Research Technical Report MSR-TR-98-14.">(Platt 1998)</a>, which shrinks the working set all the way down to two
 coordinates at a time and solves each tiny subproblem in closed form.
 </li>
 <li>
@@ -766,7 +766,7 @@ software packages. Large \(C\) means weak regularization (a hard, narrow margin)
 <p>
 Both \(C\) and \(\lambda\) share an awkward property: they are raw prices with no natural
 scale, so a value that regularizes one dataset well can be far off for another, and there is no
-a priori way to choose one. Schölkopf, Smola, Williamson, and Bartlett (2000) proposed a
+a priori way to choose one. <a class="cite" href="bibliography.html#scholkopf2000nu" data-ref="Schölkopf, B., Smola, A. J., Williamson, R. C., and Bartlett, P. L. (2000) New support vector algorithms. Neural Computation 12(5), 1207-1245.">Schölkopf, Smola, Williamson, and Bartlett (2000)</a> proposed a
 reparameterization, the <em>\(\nu\)-SVM</em>, that trades the price for a parameter
 \(\nu \in (0,1]\) with a directly interpretable meaning. Instead of a fixed target margin of
 \(1\), the \(\nu\)-SVM promotes the margin to a variable \(\rho \ge 0\) to be maximized, and
@@ -865,11 +865,11 @@ the dimension of the feature space.
 </p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-The support vector machine is treated at book length in two standard references. Schölkopf
-and Smola (2002), <em>Learning with Kernels</em>, develops pattern-recognition SVMs in its
+The support vector machine is treated at book length in two standard references. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf
+and Smola (2002)</a>, <em>Learning with Kernels</em>, develops pattern-recognition SVMs in its
 chapter 7 and gives its optimization chapters over to the quadratic programs and
 decomposition algorithms that solve them in practice, which makes it the natural place to
-go deeper on the primal-dual machinery sketched here. Shawe-Taylor and Cristianini (2004),
+go deeper on the primal-dual machinery sketched here. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>,
 <em>Kernel Methods for Pattern Analysis</em>, presents support vector machines in its
 chapter 7 with an emphasis on the margin-based statistical analysis that justifies the
 construction. Both books situate the SVM inside the same broad RKHS and regularization
@@ -885,8 +885,32 @@ framework used throughout this chapter.
 <a href="kernel-ridge-and-friends.html"><span class="dir">previous</span>4. Kernel Ridge Regression and Smooth Losses</a>
 <a style="text-align:right" href="learning-theory.html"><span class="dir">next</span>6. Learning Theory in RKHS Balls</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#hinge-loss-and-large-margin">From margins to the hinge loss</a>
+<a class="l2" href="#primal-problem">The primal problem</a>
+<a class="l3" href="#finite-dimensional-reformulation">Reduction to finite dimension</a>
+<a class="l3" href="#slack-variables">Slack variables and smooth constraints</a>
+<a class="l2" href="#lagrangian-duality">Lagrangian duality and the dual problem</a>
+<a class="l3" href="#lagrangian">The Lagrangian</a>
+<a class="l3" href="#minimizing-in-alpha">Minimizing over \alpha</a>
+<a class="l3" href="#minimizing-in-xi">Minimizing over \xi</a>
+<a class="l3" href="#dual-function">The dual function</a>
+<a class="l3" href="#eliminating-nu">Eliminating \nu</a>
+<a class="l3" href="#dual-in-alpha">Back to the primal: the dual in terms of \alpha</a>
+<a class="l2" href="#complementary-slackness">Complementary slackness and the KKT conditions</a>
+<a class="l3" href="#kkt-analysis">Reading off the three regimes</a>
+<a class="l3" href="#without-kkt">The same conclusions without KKT</a>
+<a class="l2" href="#geometric-interpretation">Geometric interpretation</a>
+<a class="l3" href="#margin-generalization">Why a wide margin generalizes</a>
+<a class="l3" href="#worked-example">A worked two-point example</a>
+<a class="l2" href="#support-vectors">Support vectors</a>
+<a class="l2" href="#practical-remarks">Practical remarks and variants</a>
+<a class="l3" href="#c-svm">The C-SVM parameterization</a>
+<a class="l3" href="#nu-svm">The \nu-SVM</a>
+<a class="l3" href="#two-svm">The 2-SVM</a>
+<a class="l2" href="#summary">Summary</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

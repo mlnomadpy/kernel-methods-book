@@ -114,7 +114,7 @@ $$
 $$
 f_\theta(\mathbf{x}) = \frac{1}{\sqrt{m}} \sum_{i=1}^m v_i \, \sigma(\mathbf{w}_i^\top \mathbf{x}) ,
 $$
-<p>and ask what happens as the width \(m \to \infty\). There are two natural ways to let it grow, and each produces a kernel. In the first, due to Neal (1996) and revived by Rahimi and Recht (2007) under the name random features, we <em>freeze</em> the hidden weights at their random initialization \(\mathbf{w}_i \sim \mathcal{N}(0, I)\) and train only the output weights \(\theta = (v_i)_i\). The network is then linear in its parameters, a linear model over the random features \(\mathbf{x} \mapsto \sigma(\mathbf{w}_i^\top \mathbf{x})\), and by the law of large numbers the associated kernel converges to an expectation over the weight distribution.</p>
+<p>and ask what happens as the width \(m \to \infty\). There are two natural ways to let it grow, and each produces a kernel. In the first, due to <a class="cite" href="bibliography.html#neal1996" data-ref="Neal, R. M. (1996) Bayesian Learning for Neural Networks. Springer, Lecture Notes in Statistics 118.">Neal (1996)</a> and revived by <a class="cite" href="bibliography.html#rahimi2007" data-ref="Rahimi, A. and Recht, B. (2007) Random features for large-scale kernel machines. NeurIPS 20.">Rahimi and Recht (2007)</a> under the name random features, we <em>freeze</em> the hidden weights at their random initialization \(\mathbf{w}_i \sim \mathcal{N}(0, I)\) and train only the output weights \(\theta = (v_i)_i\). The network is then linear in its parameters, a linear model over the random features \(\mathbf{x} \mapsto \sigma(\mathbf{w}_i^\top \mathbf{x})\), and by the law of large numbers the associated kernel converges to an expectation over the weight distribution.</p>
 
 <div class="box def"><span class="box-title">Definition (random feature kernel)</span>
 With hidden weights drawn as \(\mathbf{w} \sim \mathcal{N}(0, I)\), the random feature kernel is
@@ -166,7 +166,7 @@ $$
 
 <h2 id="neural-tangent-kernels">Neural tangent kernels: the trajectory of gradient descent</h2>
 
-<p>Freezing the hidden layer is a strong assumption, and the more interesting question is what happens when we train <em>all</em> the parameters \(\theta = (v_i, \mathbf{w}_i)_i\) by gradient descent from an initialization \(\theta_0 \sim \mathcal{N}(0, I)\). The remarkable discovery of Jacot, Gabriel, and Hongler (2018) is that in the infinite-width limit this is again governed by a kernel, though a different one. The mechanism is what Chizat, Oyallon, and Bach (2019) call <em>lazy training</em>: when \(m\) is large, the parameters barely move, \(\theta\) stays close to \(\theta_0\) throughout training, and the network is well approximated by its first-order Taylor expansion around initialization,</p>
+<p>Freezing the hidden layer is a strong assumption, and the more interesting question is what happens when we train <em>all</em> the parameters \(\theta = (v_i, \mathbf{w}_i)_i\) by gradient descent from an initialization \(\theta_0 \sim \mathcal{N}(0, I)\). The remarkable discovery of <a class="cite" href="bibliography.html#jacot2018" data-ref="Jacot, A., Gabriel, F., and Hongler, C. (2018) Neural tangent kernel: convergence and generalization in neural networks. NeurIPS 31.">Jacot, Gabriel, and Hongler (2018)</a> is that in the infinite-width limit this is again governed by a kernel, though a different one. The mechanism is what <a class="cite" href="bibliography.html#chizat2019" data-ref="Chizat, L., Oyallon, E., and Bach, F. (2019) On lazy training in differentiable programming. NeurIPS 32.">Chizat, Oyallon, and Bach (2019)</a> call <em>lazy training</em>: when \(m\) is large, the parameters barely move, \(\theta\) stays close to \(\theta_0\) throughout training, and the network is well approximated by its first-order Taylor expansion around initialization,</p>
 $$
 f_\theta(\mathbf{x}) \approx f_{\theta_0}(\mathbf{x}) + \big\langle \theta - \theta_0, \, \nabla_\theta f_\theta(\mathbf{x})\big|_{\theta = \theta_0} \big\rangle .
 $$
@@ -222,7 +222,7 @@ $$
 
 <h2 id="ckn-overview">Convolutional kernel networks</h2>
 
-<p>We now scale this idea up from a single layer to a whole convolutional architecture. Mairal (2016) shows it is possible to design a functional space \(\mathcal{H}\), an RKHS, in which deep convolutional networks live: for a network</p>
+<p>We now scale this idea up from a single layer to a whole convolutional architecture. <a class="cite" href="bibliography.html#mairal2016" data-ref="Mairal, J. (2016) End-to-end kernel learning with supervised convolutional kernel networks. NeurIPS 29.">Mairal (2016)</a> shows it is possible to design a functional space \(\mathcal{H}\), an RKHS, in which deep convolutional networks live: for a network</p>
 $$
 f(\mathbf{x}) = \sigma_k\!\left( A_k \sigma_{k-1}\!\left( A_{k-1} \cdots \sigma_2(A_2 \sigma_1(A_1 \mathbf{x})) \cdots \right) \right) = \langle f, \Phi(\mathbf{x}) \rangle_\mathcal{H} ,
 $$
@@ -576,7 +576,7 @@ $$
 <p>On protein fold classification (SCOP 2.06; Hou et al., 2017), using informative sequence features such as PSSM profiles, secondary structure, and solvent accessibility, these models are competitive with or better than deep baselines at a fraction of the parameters. A CKN with 512 filters (843k parameters) reaches about 84% top-1 and 94% top-5 accuracy, and the recurrent RKN with 512 filters matches its parameter budget while improving to about 85% top-1 and 95% top-5, with a marked gain on the hardest fold-level stratum, where gap tolerance matters most (Chen et al., 2019a).</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-Almost everything in this chapter postdates the two standard kernel-methods textbooks, so it is not covered by either of them and the primary literature is the place to go. For the neural tangent kernel and the sense in which wide networks train like kernel machines, the original reference is Jacot, Gabriel, and Hongler (2018), with the lazy-training mechanism isolated by Chizat, Oyallon, and Bach (2019). For convolutional kernel networks and the idea of designing an RKHS in which a whole convolutional network lives as a single linear functional, learned end to end through the anchor points, see Mairal (2016). For the analysis of what that representation guarantees, the invariance and stability of deep convolutional representations to translations and to smooth deformations, the reference is Bietti and Mairal (2019). The random-feature side traces back to Neal (1996) for the Gaussian-process view and to Cho and Saul (2009) for the arc-cosine kernels, while the graph and sequence constructions are developed by Chen, Jacob, and Mairal (2020) and the works cited there.
+Almost everything in this chapter postdates the two standard kernel-methods textbooks, so it is not covered by either of them and the primary literature is the place to go. For the neural tangent kernel and the sense in which wide networks train like kernel machines, the original reference is <a class="cite" href="bibliography.html#jacot2018" data-ref="Jacot, A., Gabriel, F., and Hongler, C. (2018) Neural tangent kernel: convergence and generalization in neural networks. NeurIPS 31.">Jacot, Gabriel, and Hongler (2018)</a>, with the lazy-training mechanism isolated by <a class="cite" href="bibliography.html#chizat2019" data-ref="Chizat, L., Oyallon, E., and Bach, F. (2019) On lazy training in differentiable programming. NeurIPS 32.">Chizat, Oyallon, and Bach (2019)</a>. For convolutional kernel networks and the idea of designing an RKHS in which a whole convolutional network lives as a single linear functional, learned end to end through the anchor points, see <a class="cite" href="bibliography.html#mairal2016" data-ref="Mairal, J. (2016) End-to-end kernel learning with supervised convolutional kernel networks. NeurIPS 29.">Mairal (2016)</a>. For the analysis of what that representation guarantees, the invariance and stability of deep convolutional representations to translations and to smooth deformations, the reference is <a class="cite" href="bibliography.html#bietti2019" data-ref="Bietti, A. and Mairal, J. (2019) Group invariance, stability to deformations, and complexity of deep convolutional representations. Journal of Machine Learning Research 20(25), 1-49.">Bietti and Mairal (2019)</a>. The random-feature side traces back to <a class="cite" href="bibliography.html#neal1996" data-ref="Neal, R. M. (1996) Bayesian Learning for Neural Networks. Springer, Lecture Notes in Statistics 118.">Neal (1996)</a> for the Gaussian-process view and to <a class="cite" href="bibliography.html#cho2009" data-ref="Cho, Y. and Saul, L. K. (2009) Kernel methods for deep learning. NeurIPS 22.">Cho and Saul (2009)</a> for the arc-cosine kernels, while the graph and sequence constructions are developed by <a class="cite" href="bibliography.html#chen2020" data-ref="Chen, D., Jacob, L., and Mairal, J. (2020) Convolutional kernel networks for graph-structured data. ICML.">Chen, Jacob, and Mairal (2020)</a> and the works cited there.
 </div>
 
 <h2 id="conclusion">Conclusion</h2>
@@ -592,8 +592,42 @@ Almost everything in this chapter postdates the two standard kernel-methods text
 <li ><span class="bib-authors">Chen, D., Jacob, L., and Mairal, J.</span> <span class="bib-year">(2020)</span> <span class="bib-title">Convolutional kernel networks for graph-structured data</span>. <span class="bib-venue">ICML.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
 <a href="multiple-kernel-learning.html"><span class="dir">previous</span>14. Multiple Kernel Learning</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#motivation">What it means to do deep learning with kernels</a>
+<a class="l2" href="#deep-kernel-machines">Deep kernel machines and dot-product kernels</a>
+<a class="l3" href="#dot-product-catalog">A catalog of dot-product kernels</a>
+<a class="l2" href="#random-feature-kernels">Random feature kernels: the infinite-width limit</a>
+<a class="l2" href="#neural-tangent-kernels">Neural tangent kernels: the trajectory of gradient descent</a>
+<a class="l2" href="#nystrom-and-end-to-end">The Nyström bridge and end-to-end learning</a>
+<a class="l2" href="#ckn-overview">Convolutional kernel networks</a>
+<a class="l2" href="#rkhs-continuous-signals">Constructing the RKHS for continuous signals</a>
+<a class="l3" href="#patch-extraction">Patch extraction P_k</a>
+<a class="l3" href="#nonlinear-mapping">Nonlinear mapping M_k</a>
+<a class="l3" href="#pooling">Pooling A_k</a>
+<a class="l3" href="#multilayer-representation">The multilayer representation and the CKN kernel</a>
+<a class="l2" href="#ckn-vs-cnn">Convolutional kernel networks in practice</a>
+<a class="l2" href="#stability">Deep learning and stability to deformations</a>
+<a class="l3" href="#smooth-homogeneous">Smooth homogeneous activations</a>
+<a class="l3" href="#deformation-definition">Deformations and the notion of stability</a>
+<a class="l3" href="#translation-invariance">Warmup: translation invariance</a>
+<a class="l3" href="#deformation-stability">Stability to deformations</a>
+<a class="l3" href="#beyond-translation">Invariance to other groups</a>
+<a class="l2" href="#discretization">Discretization and signal preservation</a>
+<a class="l2" href="#rkhs-content">What the patch RKHS contains, and CNNs inside it</a>
+<a class="l3" href="#generalization">Link with generalization</a>
+<a class="l2" href="#graphs">Application to graphs: graph convolutional kernel networks</a>
+<a class="l3" href="#relaxed-path-kernel">From the path kernel to its relaxation</a>
+<a class="l3" href="#one-layer-gckn">One layer of GCKN</a>
+<a class="l3" href="#multilayer-gckn">Stacking layers</a>
+<a class="l3" href="#gckn-scalable">Scalable approximation</a>
+<a class="l3" href="#gckn-vs-gnn">GCKN versus GNN</a>
+<a class="l3" href="#gckn-experiments">Experiments and interpretation</a>
+<a class="l2" href="#sequences">Application to biological sequences</a>
+<a class="l3" href="#ckn-sequences">A convolutional kernel network for sequences</a>
+<a class="l3" href="#rkn">Gapped k-mers and recurrent kernel networks</a>
+<a class="l2" href="#conclusion">Conclusion</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

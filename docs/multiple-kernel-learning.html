@@ -50,7 +50,7 @@
 <main><div class="page">
 <h1><span class="chno">Chapter 14 · VII · Scaling and the Modern View</span>Multiple Kernel Learning</h1>
 
-<p class="lead">Every method in this book so far has taken the kernel as given. We fixed a positive definite kernel \(K\), formed its Gram matrix, and let a representer argument reduce learning to linear algebra on that matrix. But where does \(K\) come from? In practice we almost never have one obviously correct kernel. We have a menu: linear, polynomial, and Gaussian kernels with a range of bandwidths on the same feature vectors, or genuinely different kernels built from genuinely different views of the same objects, a protein described at once by its sequence, its three-dimensional structure, and its mass spectrometry profile. This chapter is about what to do with such a menu. The simplest answer, adding the kernels together, turns out to be exactly concatenating their feature spaces, and it already gives a principled way to fuse heterogeneous data. The more ambitious answer is to let the data choose. We will see that the value of the learning problem is a convex function of the kernel, so we can search a convex set of candidate kernels by convex optimization. Learning a convex combination \(K_\eta = \sum_i \eta_i K_i\) jointly with the classifier is Multiple Kernel Learning (Lanckriet et al., 2004); the problem is jointly convex in the weights and the classifier, and, read correctly, it is a sparsity-inducing group lasso in disguise.</p>
+<p class="lead">Every method in this book so far has taken the kernel as given. We fixed a positive definite kernel \(K\), formed its Gram matrix, and let a representer argument reduce learning to linear algebra on that matrix. But where does \(K\) come from? In practice we almost never have one obviously correct kernel. We have a menu: linear, polynomial, and Gaussian kernels with a range of bandwidths on the same feature vectors, or genuinely different kernels built from genuinely different views of the same objects, a protein described at once by its sequence, its three-dimensional structure, and its mass spectrometry profile. This chapter is about what to do with such a menu. The simplest answer, adding the kernels together, turns out to be exactly concatenating their feature spaces, and it already gives a principled way to fuse heterogeneous data. The more ambitious answer is to let the data choose. We will see that the value of the learning problem is a convex function of the kernel, so we can search a convex set of candidate kernels by convex optimization. Learning a convex combination \(K_\eta = \sum_i \eta_i K_i\) jointly with the classifier is Multiple Kernel Learning <a class="cite" href="bibliography.html#lanckriet2004" data-ref="Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I. (2004) Learning the kernel matrix with semidefinite programming. Journal of Machine Learning Research 5, 27-72.">(Lanckriet et al., 2004)</a>; the problem is jointly convex in the weights and the classifier, and, read correctly, it is a sparsity-inducing group lasso in disguise.</p>
 
 <h2 id="motivation">Choosing or combining kernels</h2>
 
@@ -131,7 +131,7 @@ $$
 
 <h3 id="data-integration-example">Example: data integration in bioinformatics</h3>
 
-<p>Yamanishi, Vert, and Kanehisa (2004), in their study of protein network inference from multiple genomic data, give a clean illustration of integration by the sum kernel. The goal is to reconstruct, for the yeast <em>Saccharomyces cerevisiae</em>, the network whose vertices are proteins and whose edges join proteins that interact, and to do so from heterogeneous genomic measurements. They cast the network inference as a supervised problem built on a variant of kernel canonical correlation analysis, using a gold-standard partial network as the target.</p>
+<p><a class="cite" href="bibliography.html#yamanishi2004" data-ref="Yamanishi, Y., Vert, J.-P., and Kanehisa, M. (2004) Protein network inference from multiple genomic data: a supervised approach. Bioinformatics 20(Suppl 1), i363-i370.">Yamanishi, Vert, and Kanehisa (2004)</a>, in their study of protein network inference from multiple genomic data, give a clean illustration of integration by the sum kernel. The goal is to reconstruct, for the yeast <em>Saccharomyces cerevisiae</em>, the network whose vertices are proteins and whose edges join proteins that interact, and to do so from heterogeneous genomic measurements. They cast the network inference as a supervised problem built on a variant of kernel canonical correlation analysis, using a gold-standard partial network as the target.</p>
 
 <p>Four widely available data sources are each turned into a kernel: gene expression, represented by a Gaussian RBF kernel \(K_{\mathrm{exp}}\); protein interactions measured by yeast two-hybrid systems, represented by a diffusion kernel \(K_{\mathrm{ppi}}\); protein localization in the cell, a linear kernel \(K_{\mathrm{loc}}\); and phylogenetic profiles, a linear kernel \(K_{\mathrm{phy}}\). All kernels are normalized to one on the diagonal and centered in feature space. The experiment compares learning from each source alone against learning from the integrated kernel
 $$
@@ -268,7 +268,7 @@ For each fixed \(\boldsymbol{\gamma}\), the term \(-R^\ast(-2\lambda\boldsymbol{
 
 <h3 id="mkl-definition">Multiple Kernel Learning</h3>
 
-<p>Lanckriet et al. (2004) take the candidate set to be the convex combinations of \(M\) given base kernels. Writing \(\Sigma_M\) for the probability simplex,</p>
+<p><a class="cite" href="bibliography.html#lanckriet2004" data-ref="Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I. (2004) Learning the kernel matrix with semidefinite programming. Journal of Machine Learning Research 5, 27-72.">Lanckriet et al. (2004)</a> take the candidate set to be the convex combinations of \(M\) given base kernels. Writing \(\Sigma_M\) for the probability simplex,</p>
 $$
 K_\eta = \sum_{i=1}^M \eta_i K_i , \qquad \eta \in \Sigma_M = \left\{ \eta_i \ge 0, \; \sum_{i=1}^M \eta_i = 1 \right\} ,
 $$
@@ -313,11 +313,11 @@ returning both a weight vector \(\eta \in \Sigma_M\) and the predictor trained w
 
 <h3 id="image-classification-example">Example: image classification</h3>
 
-<p>Harchaoui and Bach (2007) apply the same idea to natural image classification on the COREL14 dataset, 1400 natural images in 14 classes. Here the base kernels are different structured kernels on images represented as graphs or histograms: a kernel between color histograms (H), a walk kernel (W), a subtree kernel (TW), and a weighted subtree kernel (wTW). MKL (M) combines them. The combination attains the lowest test error of all, below every individual kernel, illustrating that even when the candidate kernels are elaborate structured objects rather than simple bandwidth variants, learning their combination pays off.</p>
+<p><a class="cite" href="bibliography.html#harchaoui2007" data-ref="Harchaoui, Z. and Bach, F. (2007) Image classification with segmentation graph kernels. IEEE Conference on Computer Vision and Pattern Recognition (CVPR).">Harchaoui and Bach (2007)</a> apply the same idea to natural image classification on the COREL14 dataset, 1400 natural images in 14 classes. Here the base kernels are different structured kernels on images represented as graphs or histograms: a kernel between color histograms (H), a walk kernel (W), a subtree kernel (TW), and a weighted subtree kernel (wTW). MKL (M) combines them. The combination attains the lowest test error of all, below every individual kernel, illustrating that even when the candidate kernels are elaborate structured objects rather than simple bandwidth variants, learning their combination pays off.</p>
 
 <h2 id="mkl-group-lasso">MKL is a group lasso</h2>
 
-<p>The name "Multiple Kernel Learning" and the picture of a weighted average of kernels suggest the method is essentially about averaging. That picture is misleading. Bach et al. (2004) show that eliminating the weights turns MKL into a penalized risk minimization with a sparsity-inducing penalty, which explains both why it selects among kernels and why it differs from the plain sum kernel.</p>
+<p>The name "Multiple Kernel Learning" and the picture of a weighted average of kernels suggest the method is essentially about averaging. That picture is misleading. <a class="cite" href="bibliography.html#bach2004" data-ref="Bach, F. R., Lanckriet, G. R. G., and Jordan, M. I. (2004) Multiple kernel learning, conic duality, and the SMO algorithm. Proceedings of the 21st International Conference on Machine Learning (ICML), 6-13.">Bach et al. (2004)</a> show that eliminating the weights turns MKL into a penalized risk minimization with a sparsity-inducing penalty, which explains both why it selects among kernels and why it differs from the plain sum kernel.</p>
 
 <div class="box thm"><span class="box-title">Theorem (MKL as a mixed-norm problem)</span>
 With \(K_\eta = \sum_{i=1}^M \eta_i K_i\) and \(\eta \in \Sigma_M\), the solution \(f^\ast\) of
@@ -397,7 +397,7 @@ $$
 
 <h3 id="simplemkl">The simpleMKL algorithm</h3>
 
-<p>The joint convexity guarantees a global optimum exists; simpleMKL (Rakotomamonjy et al., 2008) is a clean way to reach it that reuses any existing single-kernel solver as a black box. The idea is to optimize the weights in the outer loop and delegate the predictor to the inner loop. We want to minimize over \(\eta \in \Sigma_M\),</p>
+<p>The joint convexity guarantees a global optimum exists; simpleMKL <a class="cite" href="bibliography.html#rakotomamonjy2008" data-ref="Rakotomamonjy, A., Bach, F. R., Canu, S., and Grandvalet, Y. (2008) SimpleMKL. Journal of Machine Learning Research 9, 2491-2521.">(Rakotomamonjy et al., 2008)</a> is a clean way to reach it that reuses any existing single-kernel solver as a black box. The idea is to optimize the weights in the outer loop and delegate the predictor to the inner loop. We want to minimize over \(\eta \in \Sigma_M\),</p>
 $$
 \min_{\eta \in \Sigma_M} \; J(K_\eta) = \min_{\eta \in \Sigma_M} \; \max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; \big\{ - R^\ast(-2\lambda \boldsymbol{\gamma}) - \lambda \, \boldsymbol{\gamma}^\top K_\eta \boldsymbol{\gamma} \big\} .
 $$
@@ -427,7 +427,7 @@ $$
 
 <h3 id="lp-extensions">Beyond the simplex: the \(\ell_r\) extension</h3>
 
-<p>The simplex constraint \(\sum_i \eta_i = 1\) is one choice among many, and it is the one that produces the sparse, group-lasso behavior. Micchelli and Pontil (2005) generalize it by constraining a different norm of the weight vector. For a parameter \(r \gt 0\), take</p>
+<p>The simplex constraint \(\sum_i \eta_i = 1\) is one choice among many, and it is the one that produces the sparse, group-lasso behavior. <a class="cite" href="bibliography.html#micchelli2005" data-ref="Micchelli, C. A. and Pontil, M. (2005) Learning the kernel function via regularization. Journal of Machine Learning Research 6, 1099-1125.">Micchelli and Pontil (2005)</a> generalize it by constraining a different norm of the weight vector. For a parameter \(r \gt 0\), take</p>
 $$
 K_\eta = \sum_{i=1}^M \eta_i K_i , \qquad \eta \in \Sigma_M^r = \left\{ \eta_i \ge 0, \; \sum_{i=1}^M \eta_i^r = 1 \right\} .
 $$
@@ -446,7 +446,7 @@ $$
 <p>The penalty is now a mixed norm with exponent \(\frac{2r}{r+1}\) on the per-block RKHS norms. The proof mirrors the group-lasso derivation, replacing the Cauchy-Schwarz step by the corresponding Hölder inequality on \(\Sigma_M^r\). Setting \(r = 1\) recovers the standard MKL problem with its \(\ell_1\) block penalty and its kernel selection; letting \(r\) grow relaxes the sparsity toward the dense, ridge-like behavior of the plain sum kernel. The parameter \(r\) is thus a dial between selecting a few kernels and averaging over all of them, and where to set it is itself a modeling choice, one more instance of the theme this chapter began with: the more of the kernel we are willing to learn, the fewer decisions we have to make by hand.</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-Multiple Kernel Learning is younger than the two standard kernel-methods textbooks, so it appears in neither in the form given here. Schölkopf and Smola (2002) and Shawe-Taylor and Cristianini (2004) both predate the semidefinite-programming formulation of Lanckriet et al. (2004) and the group-lasso reading of Bach et al. (2004). Shawe-Taylor and Cristianini (2004) is nonetheless the right place to read the basics of combining and manipulating kernels, closure under sums and products and the feature-space view that this chapter builds on. For MKL proper, the standard entry point is the survey of Gönen and Alpaydın (2011), Multiple Kernel Learning Algorithms, which catalogues the formulations, the optimization strategies including simpleMKL, and the empirical record of dozens of methods on a common footing. The primary sources for the results proved above are Lanckriet et al. (2004) for the convexity of \(J(K)\) and the semidefinite program, Bach et al. (2004) for the group-lasso equivalence, Rakotomamonjy et al. (2008) for simpleMKL, and Micchelli and Pontil (2005) for the \(\ell_r\) generalization.
+Multiple Kernel Learning is younger than the two standard kernel-methods textbooks, so it appears in neither in the form given here. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> and <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> both predate the semidefinite-programming formulation of <a class="cite" href="bibliography.html#lanckriet2004" data-ref="Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I. (2004) Learning the kernel matrix with semidefinite programming. Journal of Machine Learning Research 5, 27-72.">Lanckriet et al. (2004)</a> and the group-lasso reading of <a class="cite" href="bibliography.html#bach2004" data-ref="Bach, F. R., Lanckriet, G. R. G., and Jordan, M. I. (2004) Multiple kernel learning, conic duality, and the SMO algorithm. Proceedings of the 21st International Conference on Machine Learning (ICML), 6-13.">Bach et al. (2004)</a>. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> is nonetheless the right place to read the basics of combining and manipulating kernels, closure under sums and products and the feature-space view that this chapter builds on. For MKL proper, the standard entry point is the survey of Gönen and Alpaydın (2011), Multiple Kernel Learning Algorithms, which catalogues the formulations, the optimization strategies including simpleMKL, and the empirical record of dozens of methods on a common footing. The primary sources for the results proved above are <a class="cite" href="bibliography.html#lanckriet2004" data-ref="Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I. (2004) Learning the kernel matrix with semidefinite programming. Journal of Machine Learning Research 5, 27-72.">Lanckriet et al. (2004)</a> for the convexity of \(J(K)\) and the semidefinite program, <a class="cite" href="bibliography.html#bach2004" data-ref="Bach, F. R., Lanckriet, G. R. G., and Jordan, M. I. (2004) Multiple kernel learning, conic duality, and the SMO algorithm. Proceedings of the 21st International Conference on Machine Learning (ICML), 6-13.">Bach et al. (2004)</a> for the group-lasso equivalence, <a class="cite" href="bibliography.html#rakotomamonjy2008" data-ref="Rakotomamonjy, A., Bach, F. R., Canu, S., and Grandvalet, Y. (2008) SimpleMKL. Journal of Machine Learning Research 9, 2491-2521.">Rakotomamonjy et al. (2008)</a> for simpleMKL, and <a class="cite" href="bibliography.html#micchelli2005" data-ref="Micchelli, C. A. and Pontil, M. (2005) Learning the kernel function via regularization. Journal of Machine Learning Research 6, 1099-1125.">Micchelli and Pontil (2005)</a> for the \(\ell_r\) generalization.
 </div>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Learning the kernel matrix with semidefinite programming</span>. <span class="bib-venue">Journal of Machine Learning Research 5, 27-72.</span></li>
 <li ><span class="bib-authors">Lanckriet, G. R. G., De Bie, T., Cristianini, N., Jordan, M. I., and Noble, W. S.</span> <span class="bib-year">(2004)</span> <span class="bib-title">A statistical framework for genomic data fusion</span>. <span class="bib-venue">Bioinformatics 20(16), 2626-2635.</span></li>
@@ -461,8 +461,27 @@ Multiple Kernel Learning is younger than the two standard kernel-methods textboo
 <a href="large-scale-kernels.html"><span class="dir">previous</span>13. Large-Scale Kernel Machines</a>
 <a style="text-align:right" href="kernels-and-deep-learning.html"><span class="dir">next</span>15. Deep Learning from a Kernel Point of View</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#motivation">Choosing or combining kernels</a>
+<a class="l3" href="#one-kernel-setting">The setting: learning with one kernel</a>
+<a class="l2" href="#sum-kernel">The sum kernel</a>
+<a class="l3" href="#sum-concatenation">Summing kernels is concatenating features</a>
+<a class="l3" href="#data-integration-example">Example: data integration in bioinformatics</a>
+<a class="l3" href="#sum-functional">The sum kernel from the functional side</a>
+<a class="l2" href="#weighted-sum-kernel">The weighted sum kernel</a>
+<a class="l2" href="#learning-the-kernel">Learning the kernel</a>
+<a class="l3" href="#j-of-k">The value of the problem is convex in the kernel</a>
+<a class="l3" href="#mkl-definition">Multiple Kernel Learning</a>
+<a class="l3" href="#protein-annotation-example">Example: genomic data fusion for protein annotation</a>
+<a class="l3" href="#image-classification-example">Example: image classification</a>
+<a class="l2" href="#mkl-group-lasso">MKL is a group lasso</a>
+<a class="l3" href="#sum-vs-mkl">Sum kernel versus MKL, side by side</a>
+<a class="l3" href="#ridge-vs-lasso">Example: ridge versus lasso regression</a>
+<a class="l2" href="#algorithm-and-extensions">Algorithm and extensions</a>
+<a class="l3" href="#simplemkl">The simpleMKL algorithm</a>
+<a class="l3" href="#lp-extensions">Beyond the simplex: the \ell_r extension</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

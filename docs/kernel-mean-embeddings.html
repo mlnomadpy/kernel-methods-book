@@ -426,7 +426,7 @@ $$ \operatorname{supp}(\Lambda) = \mathbb R^d. $$
 <p>Two examples close the discussion. The Gaussian kernel \(K(x,y) = e^{-\frac{\sigma^2}{2}\|x-y\|^2}\) has spectral measure \(\Lambda\) with density \(w \mapsto (1/\sqrt{2\pi\sigma^2})^d\, e^{-\frac{1}{2\sigma^2}\|w\|^2}\), a Gaussian on \(\mathbb R^d\). Its support is all of \(\mathbb R^d\), so the Gaussian kernel is characteristic. By contrast, the sinc kernel \(\kappa(z) = z^{-1}\sin(z)\) has spectral measure equal to the uniform distribution on \([-1, 1]\), whose support is bounded; because it misses the high frequencies, \(K(x,y) = \kappa(x-y)\) is <em>not</em> characteristic.</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-Unlike most of this book, the material in this chapter largely postdates the two standard textbooks, so the primary sources are journal articles rather than monograph chapters. The mean embedding and the maximum mean discrepancy were introduced by Smola, Gretton, Song, and Schölkopf (2007), and the definitive treatment of the two-sample test, including the asymptotic null distribution and the permutation calibration used here, is Gretton, Borgwardt, Rasch, Schölkopf, and Smola (2012). The theory of characteristic kernels and the equivalence with universality and full spectral support is developed by Steinwart (2001) for universality and by Sriperumbudur, Gretton, Fukumizu, Schölkopf, and Lanckriet (2010) for the characteristic property and its metrics on probability measures; the dependence-detection applications mentioned in the summary trace to Fukumizu, Gretton, Sun, and Schölkopf (2008). For a single comprehensive entry point that unifies embeddings, MMD, characteristic kernels, and their applications, the survey by Muandet, Fukumizu, Sriperumbudur, and Schölkopf (2017), Kernel Mean Embedding of Distributions: A Review and Beyond, is the standard reference. The underlying RKHS machinery, reproducing property, feature maps, and the kernel trick that all of the above build on, is presented in the textbook of Shawe-Taylor and Cristianini (2004).
+Unlike most of this book, the material in this chapter largely postdates the two standard textbooks, so the primary sources are journal articles rather than monograph chapters. The mean embedding and the maximum mean discrepancy were introduced by <a class="cite" href="bibliography.html#smola2007" data-ref="Smola, A., Gretton, A., Song, L., and Schölkopf, B. (2007) A Hilbert space embedding for distributions. Algorithmic Learning Theory (ALT), Lecture Notes in Computer Science 4754, Springer, 13-31.">Smola, Gretton, Song, and Schölkopf (2007)</a>, and the definitive treatment of the two-sample test, including the asymptotic null distribution and the permutation calibration used here, is <a class="cite" href="bibliography.html#gretton2012" data-ref="Gretton, A., Borgwardt, K. M., Rasch, M. J., Schölkopf, B., and Smola, A. (2012) A kernel two-sample test. Journal of Machine Learning Research 13, 723-773.">Gretton, Borgwardt, Rasch, Schölkopf, and Smola (2012)</a>. The theory of characteristic kernels and the equivalence with universality and full spectral support is developed by <a class="cite" href="bibliography.html#steinwart2001" data-ref="Steinwart, I. (2001) On the influence of the kernel on the consistency of support vector machines. Journal of Machine Learning Research 2, 67-93.">Steinwart (2001)</a> for universality and by <a class="cite" href="bibliography.html#sriperumbudur2010" data-ref="Sriperumbudur, B. K., Gretton, A., Fukumizu, K., Schölkopf, B., and Lanckriet, G. (2010) Hilbert space embeddings and metrics on probability measures. Journal of Machine Learning Research 11, 1517-1561.">Sriperumbudur, Gretton, Fukumizu, Schölkopf, and Lanckriet (2010)</a> for the characteristic property and its metrics on probability measures; the dependence-detection applications mentioned in the summary trace to <a class="cite" href="bibliography.html#fukumizu2008" data-ref="Fukumizu, K., Gretton, A., Sun, X., and Schölkopf, B. (2008) Kernel measures of conditional dependence. NeurIPS 20, 489-496.">Fukumizu, Gretton, Sun, and Schölkopf (2008)</a>. For a single comprehensive entry point that unifies embeddings, MMD, characteristic kernels, and their applications, the survey by <a class="cite" href="bibliography.html#muandet2017" data-ref="Muandet, K., Fukumizu, K., Sriperumbudur, B., and Schölkopf, B. (2017) Kernel mean embedding of distributions: a review and beyond. Foundations and Trends in Machine Learning 10(1-2), 1-141.">Muandet, Fukumizu, Sriperumbudur, and Schölkopf (2017)</a>, Kernel Mean Embedding of Distributions: A Review and Beyond, is the standard reference. The underlying RKHS machinery, reproducing property, feature maps, and the kernel trick that all of the above build on, is presented in the textbook of <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>.
 </div>
 
 <h2 id="summary">Summary</h2>
@@ -442,8 +442,26 @@ Unlike most of this book, the material in this chapter largely postdates the two
 <a href="graph-kernels.html"><span class="dir">previous</span>11. Kernels for and on Graphs</a>
 <a style="text-align:right" href="large-scale-kernels.html"><span class="dir">next</span>13. Large-Scale Kernel Machines</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#comparing-distributions">Comparing two distributions from samples</a>
+<a class="l2" href="#kernel-mean-embedding">The kernel mean embedding</a>
+<a class="l3" href="#existence-of-embeddings">Existence of the mean embedding</a>
+<a class="l2" href="#maximum-mean-discrepancy">The Maximum Mean Discrepancy</a>
+<a class="l3" href="#empirical-mmd">Estimating the MMD from samples</a>
+<a class="l2" href="#mmd-as-ipm">MMD as an integral probability metric</a>
+<a class="l2" href="#two-sample-test">A two-sample test using the MMD</a>
+<a class="l3" href="#threshold-and-permutation">The threshold and the permutation test</a>
+<a class="l2" href="#generative-models">Learning generative models with MMD</a>
+<a class="l3" href="#gan-connection">The adversarial view and the GAN connection</a>
+<a class="l2" href="#characteristic-kernels">Characteristic kernels</a>
+<a class="l2" href="#universality">Characteristic kernels via universality</a>
+<a class="l3" href="#stone-weierstrass">Stone–Weierstrass and a general criterion</a>
+<a class="l3" href="#taylor-construction">Universality from a Taylor series</a>
+<a class="l3" href="#fourier-construction">Universality from a Fourier series</a>
+<a class="l2" href="#fourier-transform">Characteristic kernels via the Fourier transform</a>
+<a class="l2" href="#summary">Summary</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

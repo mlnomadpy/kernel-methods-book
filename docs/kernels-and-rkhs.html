@@ -90,7 +90,7 @@ Equivalently, a kernel \(K\) is p.d. if and only if, for any \(N \in \mathbb{N}\
 <p>Note the slightly unfortunate but standard terminology: a positive definite <em>kernel</em> produces positive <em>semidefinite</em> matrices; the quadratic form is allowed to vanish on nonzero coefficient vectors.</p>
 
 <div class="box rmk"><span class="box-title">Remark (terminology and history)</span>
-The word <em>kernel</em> predates machine learning by decades. As Schölkopf and Smola (2002) recall, it entered mathematics through the theory of integral operators studied by Hilbert and others, where a function \(K\) is the kernel of the operator
+The word <em>kernel</em> predates machine learning by decades. As <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> recall, it entered mathematics through the theory of integral operators studied by Hilbert and others, where a function \(K\) is the kernel of the operator
 $$(T_K f)(x) = \int K(x, x')\, f(x')\, dx'.$$
 The same object travels under many names across communities: reproducing kernel, Mercer kernel, admissible kernel, support vector kernel, nonnegative definite kernel, and, in statistics, covariance function. Schölkopf and Smola also caution that the name "positive definite kernel" sits slightly awry with matrix theory, where "definite" is often reserved for the strict case in which the quadratic form vanishes only for the zero coefficient vector. Our kernels are merely "semidefinite" in that stricter sense, which is exactly why their Gram matrices are p.s.d. rather than p.d.
 </div>
@@ -156,10 +156,10 @@ $$
 
 <p>The squared inner product is therefore p.d. on \(\mathbb{R}^2\) by the embedding lemma, and it lets linear machinery capture quadratic structure: a function that is linear in \(\Phi(x)\) is a quadratic function of \(x\). Geometrically, a curved boundary in the plane, such as an ellipse, becomes a hyperplane in the three-dimensional feature space.</p>
 
-<p>The feature map that realizes a kernel is far from unique. Schölkopf and Smola (2002) make this vivid for the polynomial kernel by exhibiting two different maps that produce the same kernel. One lists the <em>ordered</em> products of coordinates, \([x]_{j_1} [x]_{j_2} \cdots [x]_{j_d}\), landing in a space of dimension \(N^d\); the other keeps only the distinct <em>unordered</em> monomials and compensates for their multiplicities by weighting each with the square root of the number of orderings that generate it. In the plane at degree two the second map is exactly the \(\Phi(x) = (x_1^2, \sqrt{2}\, x_1 x_2, x_2^2)\) above, the \(\sqrt{2}\) being the square root of the two orderings of the product \(x_1 x_2\). Both maps compute \(\langle x, x' \rangle_{\mathbb{R}^2}^2\), so a single kernel lives at once in feature spaces of different dimensions. What the kernel pins down is the geometry, not the coordinates.</p>
+<p>The feature map that realizes a kernel is far from unique. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> make this vivid for the polynomial kernel by exhibiting two different maps that produce the same kernel. One lists the <em>ordered</em> products of coordinates, \([x]_{j_1} [x]_{j_2} \cdots [x]_{j_d}\), landing in a space of dimension \(N^d\); the other keeps only the distinct <em>unordered</em> monomials and compensates for their multiplicities by weighting each with the square root of the number of orderings that generate it. In the plane at degree two the second map is exactly the \(\Phi(x) = (x_1^2, \sqrt{2}\, x_1 x_2, x_2^2)\) above, the \(\sqrt{2}\) being the square root of the two orderings of the product \(x_1 x_2\). Both maps compute \(\langle x, x' \rangle_{\mathbb{R}^2}^2\), so a single kernel lives at once in feature spaces of different dimensions. What the kernel pins down is the geometry, not the coordinates.</p>
 
 <div class="box rmk"><span class="box-title">Remark (why the \(\sqrt{2}\)?)</span>
-Those square-root-of-multiplicity weights are not cosmetic. Schölkopf and Smola (2002) observe that they are precisely what makes the feature map commute with rotations: up to an overall scale, the homogeneous kernel \(\langle x, x' \rangle^d\) is the only kernel whose degree-\(d\) monomial feature map is invariant under orthogonal transformations of the input space. So the natural weighting of the monomials is forced by the demand that relabeling the coordinate axes, an operation that changes nothing about the data, must not change the geometry the kernel induces.
+Those square-root-of-multiplicity weights are not cosmetic. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> observe that they are precisely what makes the feature map commute with rotations: up to an overall scale, the homogeneous kernel \(\langle x, x' \rangle^d\) is the only kernel whose degree-\(d\) monomial feature map is invariant under orthogonal transformations of the input space. So the natural weighting of the monomials is forced by the demand that relabeling the coordinate axes, an operation that changes nothing about the data, must not change the geometry the kernel induces.
 </div>
 
 <div class="box ex"><span class="box-title">Exercise</span>
@@ -170,7 +170,7 @@ Show that \(K(x, x') = \langle x, x' \rangle_{\mathbb{R}^p}^d\) is p.d. on \(\ma
 
 <p>The embedding lemma produced p.d. kernels from feature maps. The converse question is the deep one: given a p.d. kernel, defined only by its algebraic properties, is it secretly an inner product after some embedding? The answer is yes, always, provided we allow the target space to be an infinite-dimensional generalization of Euclidean space.</p>
 
-<div class="box thm"><span class="box-title">Theorem (Aronszajn, 1950)</span>
+<div class="box thm"><span class="box-title">Theorem <a class="cite" href="bibliography.html#aronszajn1950" data-ref="Aronszajn, N. (1950) Theory of reproducing kernels. Transactions of the American Mathematical Society 68(3), 337-404.">(Aronszajn, 1950)</a></span>
 \(K\) is a p.d. kernel on the set \(\mathcal{X}\) if and only if there exists a Hilbert space \(\mathcal{H}\) and a mapping
 $$\Phi : \mathcal{X} \to \mathcal{H}$$
 such that, for any \(x, x'\) in \(\mathcal{X}\):
@@ -209,11 +209,11 @@ $$\Phi(x_i) = \begin{pmatrix} \sqrt{\lambda_1}\, [u_1]_i \\ \vdots \\ \sqrt{\lam
 
 <h3 id="general-case-history">The general case: a short history</h3>
 
-<p>For infinite \(\mathcal{X}\) the result was established in stages: Mercer (1909) proved it for \(\mathcal{X} = [a, b] \subset \mathbb{R}\), and more generally for \(\mathcal{X}\) compact, with \(K\) continuous; Kolmogorov (1941) for \(\mathcal{X}\) countable; and Aronszajn (1944, 1950) in the general case. We will go through the proof of the general case by introducing the concept at the heart of this course, the reproducing kernel Hilbert space, which provides a canonical choice of \(\mathcal{H}\) valid without any restriction on \(\mathcal{X}\) or on \(K\).</p>
+<p>For infinite \(\mathcal{X}\) the result was established in stages: <a class="cite" href="bibliography.html#mercer1909" data-ref="Mercer, J. (1909) Functions of positive and negative type, and their connection with the theory of integral equations. Philosophical Transactions of the Royal Society A 209, 415-446.">Mercer (1909)</a> proved it for \(\mathcal{X} = [a, b] \subset \mathbb{R}\), and more generally for \(\mathcal{X}\) compact, with \(K\) continuous; <a class="cite" href="bibliography.html#kolmogorov1941" data-ref="Kolmogorov, A. N. (1941) Stationary sequences in Hilbert space. Bulletin of Moscow State University, Mathematics 2(6), 1-40.">Kolmogorov (1941)</a> for \(\mathcal{X}\) countable; and Aronszajn (1944, 1950) in the general case. We will go through the proof of the general case by introducing the concept at the heart of this course, the reproducing kernel Hilbert space, which provides a canonical choice of \(\mathcal{H}\) valid without any restriction on \(\mathcal{X}\) or on \(K\).</p>
 
-<p>Mercer's special case deserves a closer look, because it produces the embedding by a route that is the exact continuous analogue of the finite spectral construction: eigenvectors are replaced by eigenfunctions. Both Schölkopf and Smola (2002) and Shawe-Taylor and Cristianini (2004) develop it, and it is the standard way to see a kernel as a weighted sum of feature coordinates.</p>
+<p>Mercer's special case deserves a closer look, because it produces the embedding by a route that is the exact continuous analogue of the finite spectral construction: eigenvectors are replaced by eigenfunctions. Both <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> and <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> develop it, and it is the standard way to see a kernel as a weighted sum of feature coordinates.</p>
 
-<div class="box thm"><span class="box-title">Theorem (Mercer, 1909)</span>
+<div class="box thm"><span class="box-title">Theorem <a class="cite" href="bibliography.html#mercer1909" data-ref="Mercer, J. (1909) Functions of positive and negative type, and their connection with the theory of integral equations. Philosophical Transactions of the Royal Society A 209, 415-446.">(Mercer, 1909)</a></span>
 Let \(\mathcal{X}\) be a compact subset of \(\mathbb{R}^n\) and let \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) be continuous and symmetric, with a positive integral operator, that is,
 $$\int_{\mathcal{X} \times \mathcal{X}} K(x, x')\, f(x)\, f(x')\, dx\, dx' \ge 0 \quad \text{for all } f \in L^2(\mathcal{X}).$$
 Then \(K\) admits a uniformly convergent expansion
@@ -479,7 +479,7 @@ $$K(x, y) = e^{-\frac{1}{2\alpha^2}(x - y)^2},$$
 <p>is the kernel behind the bump picture that opened the RKHS section: its canonical feature map sends each point \(x\) to the Gaussian function \(K_x\) centered at \(x\). It is indeed p.d.; the proof is a two-line application of the combination rules of the next section, so we present it in the worked quiz below. Its RKHS contains far more than the Gaussian bumps themselves, and its precise description is postponed to later parts of the course; what matters already is that the general theory guarantees this space exists, is unique, and satisfies \(f(x) = \langle f, K_x \rangle_{\mathcal{H}}\) for all its members.</p>
 
 <div class="box rmk"><span class="box-title">Remark (geometry of the Gaussian embedding)</span>
-Schölkopf and Smola (2002) record three facts about this feature map that are worth keeping in mind. First, since \(K(x, x) = 1\) for every \(x\), each point maps to a unit-length element of \(\mathcal{H}\): the Gaussian embedding sends all of \(\mathcal{X}\) to the unit sphere of the RKHS. Second, since \(K(x, x') \gt 0\) for all \(x, x'\), the cosine of the angle between any two images, \(\langle \Phi(x), \Phi(x') \rangle_{\mathcal{H}}\), is strictly positive, so the images all sit within a single orthant, subtending pairwise angles below \(\pi/2\). Third, pulling the other way, for any finite set of distinct points the Gaussian Gram matrix has full rank, so the images \(\Phi(x_1), \dots, \Phi(x_m)\) are always linearly independent. A Gaussian kernel on an infinite domain therefore has an infinite-dimensional RKHS: no finite feature space can reproduce it. The apparent tension, images confined to a patch of a sphere yet never linearly dependent, is resolved by the rapid decay of the eigenvalues, which stacks ever more dimensions into an ever thinner shell.
+<a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> record three facts about this feature map that are worth keeping in mind. First, since \(K(x, x) = 1\) for every \(x\), each point maps to a unit-length element of \(\mathcal{H}\): the Gaussian embedding sends all of \(\mathcal{X}\) to the unit sphere of the RKHS. Second, since \(K(x, x') \gt 0\) for all \(x, x'\), the cosine of the angle between any two images, \(\langle \Phi(x), \Phi(x') \rangle_{\mathcal{H}}\), is strictly positive, so the images all sit within a single orthant, subtending pairwise angles below \(\pi/2\). Third, pulling the other way, for any finite set of distinct points the Gaussian Gram matrix has full rank, so the images \(\Phi(x_1), \dots, \Phi(x_m)\) are always linearly independent. A Gaussian kernel on an infinite domain therefore has an infinite-dimensional RKHS: no finite feature space can reproduce it. The apparent tension, images confined to a patch of a sphere yet never linearly dependent, is resolved by the rapid decay of the eigenvalues, which stacks ever more dimensions into an ever thinner shell.
 </div>
 
 <h2 id="combining-kernels">Combining kernels: the cone of p.d. kernels</h2>
@@ -515,7 +515,7 @@ where \(z_i = \mathrm{vec}(x_i y_i^\top)\). The matrix \(\mathbf{K}\) is therefo
 </div>
 
 <div class="box rmk"><span class="box-title">Remark (normalisation, and a decomposition)</span>
-Two consequences of the closure rules recur often enough to deserve names. Shawe-Taylor and Cristianini (2004) call the first <em>normalisation</em>. Writing \(g(x) = K(x, x)^{1/2}\), the normalised kernel
+Two consequences of the closure rules recur often enough to deserve names. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> call the first <em>normalisation</em>. Writing \(g(x) = K(x, x)^{1/2}\), the normalised kernel
 $$\tilde{K}(x, x') = \frac{K(x, x')}{K(x, x)^{1/2}\, K(x', x')^{1/2}}$$
 is the product of \(K\) with the separable kernel \((x, x') \mapsto g(x)^{-1} g(x')^{-1}\), hence p.d. by the product rule; it is the kernel of the feature map \(x \mapsto \Phi(x) / \lVert \Phi(x) \rVert_{\mathcal{H}}\), the embedded points pushed onto the unit sphere, and its diagonal is identically \(1\), the very property that made the Gaussian images unit vectors. Read backwards, the same identity is a <em>decomposition</em>: every kernel factors as the product of its normalisation and the rank-one kernel \(g(x)\, g(x')\), which Shawe-Taylor and Cristianini call the Schur-product form of the kernel.
 </div>
@@ -653,10 +653,10 @@ Small norm \(\Longrightarrow\) slow variations. Penalizing \(\lVert f \rVert_{\m
 <li>The norm of a function in the RKHS is related to its degree of smoothness with respect to the metric defined by the kernel on \(\mathcal{X}\), which is why it serves as a regularizer.</li>
 </ul>
 
-<p>We will now see applications of kernels and RKHS in statistics, before coming back to the problem of choosing, and eventually designing, the kernel. Readers who want the same foundations developed at book length, with many further examples, will find them in the standard monographs of Schölkopf and Smola (2002) and of Shawe-Taylor and Cristianini (2004).</p>
+<p>We will now see applications of kernels and RKHS in statistics, before coming back to the problem of choosing, and eventually designing, the kernel. Readers who want the same foundations developed at book length, with many further examples, will find them in the standard monographs of <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> and of <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>.</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-<p>The reproducing-kernel foundations of this chapter are developed at book length by Schölkopf and Smola (2002), <em>Learning with Kernels</em>, whose chapter 2 introduces positive definite kernels, the reproducing kernel Hilbert space, and the basic constructions, and by Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, whose chapters 2 and 3 build the Gram matrix, the feature-space viewpoint, and the properties of kernels. The original source for the correspondence between positive definite kernels and Hilbert spaces of functions is Aronszajn (1950).</p></div>
+<p>The reproducing-kernel foundations of this chapter are developed at book length by <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, <em>Learning with Kernels</em>, whose chapter 2 introduces positive definite kernels, the reproducing kernel Hilbert space, and the basic constructions, and by <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>, <em>Kernel Methods for Pattern Analysis</em>, whose chapters 2 and 3 build the Gram matrix, the feature-space viewpoint, and the properties of kernels. The original source for the correspondence between positive definite kernels and Hilbert spaces of functions is <a class="cite" href="bibliography.html#aronszajn1950" data-ref="Aronszajn, N. (1950) Theory of reproducing kernels. Transactions of the American Mathematical Society 68(3), 337-404.">Aronszajn (1950)</a>.</p></div>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Aronszajn, N.</span> <span class="bib-year">(1950)</span> <span class="bib-title">Theory of reproducing kernels</span>. <span class="bib-venue">Transactions of the American Mathematical Society 68(3), 337-404.</span></li>
 <li ><span class="bib-authors">Mercer, J.</span> <span class="bib-year">(1909)</span> <span class="bib-title">Functions of positive and negative type, and their connection with the theory of integral equations</span>. <span class="bib-venue">Philosophical Transactions of the Royal Society A 209, 415-446.</span></li>
 <li ><span class="bib-authors">Kolmogorov, A. N.</span> <span class="bib-year">(1941)</span> <span class="bib-title">Stationary sequences in Hilbert space</span>. <span class="bib-venue">Bulletin of Moscow State University, Mathematics 2(6), 1-40.</span></li>
@@ -665,8 +665,37 @@ Small norm \(\Longrightarrow\) slow variations. Penalizing \(\lVert f \rVert_{\m
 <a href="introduction.html"><span class="dir">previous</span>1. Introduction: Learning by Comparison</a>
 <a style="text-align:right" href="kernel-tricks.html"><span class="dir">next</span>3. The Kernel Trick and the Representer Theorem</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#why-pairwise-comparisons">Why pairwise comparisons?</a>
+<a class="l2" href="#positive-definite-kernels">Positive definite kernels</a>
+<a class="l3" href="#the-simplest-pd-kernels">The simplest p.d. kernels</a>
+<a class="l3" href="#a-first-nonlinear-example">A first nonlinear example: the polynomial kernel</a>
+<a class="l2" href="#kernels-as-inner-products">Kernels as inner products: Aronszajn&#x27;s theorem</a>
+<a class="l3" href="#hilbert-spaces">In case of need: Hilbert spaces</a>
+<a class="l3" href="#proof-finite-case">Proof of the converse: the finite case</a>
+<a class="l3" href="#general-case-history">The general case: a short history</a>
+<a class="l2" href="#reproducing-kernel-hilbert-spaces">Reproducing kernel Hilbert spaces</a>
+<a class="l3" href="#mapping-points-to-functions">Mapping data points to functions</a>
+<a class="l3" href="#rkhs-definition">Definition and the reproducing property</a>
+<a class="l3" href="#continuity-of-evaluation">An equivalent definition: continuous evaluation</a>
+<a class="l3" href="#uniqueness">Uniqueness of the kernel and of the space</a>
+<a class="l2" href="#pd-equals-reproducing">The equivalence: positive definite equals reproducing</a>
+<a class="l3" href="#back-to-aronszajn">Application: back to Aronszajn&#x27;s theorem</a>
+<a class="l2" href="#examples-of-rkhs">Examples: kernels and their RKHS</a>
+<a class="l3" href="#rkhs-linear-kernel">The linear kernel</a>
+<a class="l3" href="#rkhs-polynomial-kernel">The polynomial kernel of degree two</a>
+<a class="l3" href="#gaussian-kernel-example">The Gaussian kernel</a>
+<a class="l2" href="#combining-kernels">Combining kernels: the cone of p.d. kernels</a>
+<a class="l2" href="#a-kernel-quiz">Worked examples: a kernel quiz</a>
+<a class="l3" href="#quiz-series-and-products">Series, exponentials and separable factors (1, 2, 3, 5)</a>
+<a class="l3" href="#quiz-trigonometric">Trigonometric kernels (6, 7)</a>
+<a class="l3" href="#quiz-min-max">Minima and maxima (8, 9, 10)</a>
+<a class="l3" href="#quiz-arithmetic">Arithmetic kernels (11, 12, 13)</a>
+<a class="l3" href="#quiz-log">A cautionary counterexample (4)</a>
+<a class="l2" href="#smoothness-functional">The RKHS norm as a smoothness functional</a>
+<a class="l2" href="#summary">Summary</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

@@ -224,7 +224,7 @@ $$
 \mathbf{w}_t \leftarrow \mathbf{w}_{t-1} - \frac{\gamma}{L n} \sum_{i=1}^n \mathbf{y}_i^t , \qquad
 \mathbf{y}_i^t = \begin{cases} \nabla f_i(\mathbf{w}_{t-1}) & \text{if } i = i_t, \\[2pt] \mathbf{y}_i^{t-1} & \text{otherwise,} \end{cases}
 $$
-<p>where \(i_t\) is drawn at random. Only one new gradient is computed per iteration, and the running sum is maintained incrementally, so the per-iteration cost is that of a single \(\nabla f_i\). As the iterates settle, the stored gradients grow accurate and their average converges to the true full gradient, so the effective noise vanishes and fast convergence sets in. Related methods include SAGA (Defazio, Bach, and Lacoste-Julien, 2014), SVRG (Johnson and Zhang, 2013), SDCA (Shalev-Shwartz and Zhang, 2013), and MISO (Mairal, 2015). None of this is free: the variance is not so much removed as paid for with a different resource. SAG buys it with memory, storing one gradient vector per example at a cost of \(O(np)\); SVRG (Johnson and Zhang, 2013) instead spends occasional extra computation, periodically recomputing a full-batch gradient to anchor its corrections and holding no per-example table. The choice between them is usually a choice between spare memory and spare compute.</p>
+<p>where \(i_t\) is drawn at random. Only one new gradient is computed per iteration, and the running sum is maintained incrementally, so the per-iteration cost is that of a single \(\nabla f_i\). As the iterates settle, the stored gradients grow accurate and their average converges to the true full gradient, so the effective noise vanishes and fast convergence sets in. Related methods include SAGA (Defazio, Bach, and Lacoste-Julien, 2014), SVRG <a class="cite" href="bibliography.html#johnson2013" data-ref="Johnson, R. and Zhang, T. (2013) Accelerating stochastic gradient descent using predictive variance reduction. NeurIPS 26.">(Johnson and Zhang, 2013)</a>, SDCA (Shalev-Shwartz and Zhang, 2013), and MISO (Mairal, 2015). None of this is free: the variance is not so much removed as paid for with a different resource. SAG buys it with memory, storing one gradient vector per example at a cost of \(O(np)\); SVRG <a class="cite" href="bibliography.html#johnson2013" data-ref="Johnson, R. and Zhang, T. (2013) Accelerating stochastic gradient descent using predictive variance reduction. NeurIPS 26.">(Johnson and Zhang, 2013)</a> instead spends occasional extra computation, periodically recomputing a full-batch gradient to anchor its corrections and holding no per-example table. The choice between them is usually a choice between spare memory and spare compute.</p>
 
 <p>Most of these can be read as SGD with a variance-reduced gradient estimator. They take a step \(\mathbf{w}_t \leftarrow \mathbf{w}_{t-1} - \eta_t \mathbf{g}_t\) with \(\mathbb{E}[\mathbf{g}_t \mid \mathbf{w}_{t-1}] = \nabla f(\mathbf{w}_{t-1})\), exactly as SGD does, but \(\mathbf{g}_t\) has lower variance because it corrects the one-sample gradient using stored information (this is explicit in SVRG). The payoff is a rate of the form</p>
 $$
@@ -247,7 +247,7 @@ $$
 
 <p>For problems too large for that, the answer was to never look at the whole matrix at once. Decomposition rests on a structural fact about the SVM: only the support vectors, the points with \(\alpha_i \gt 0\), enter the final predictor, and they are usually a small fraction of the data. If one knew the support set in advance, one could discard everything else and solve a small problem. Chunking approximates that oracle iteratively (Scholkopf and Smola, 2002): start from an arbitrary working subset that fits in memory, solve the QP restricted to it, keep the support vectors, discard the rest, and refill the working set with the points that most violate the optimality (KKT) conditions, repeating until no violations remain. Subset-selection methods generalize the idea, at each round optimizing only a small working set, chosen as the variables that contribute most to the duality gap.</p>
 
-<p>Pushed to its limit, decomposition shrinks the working set to just two variables, which is Sequential Minimal Optimization (Platt, 1998). With two coupled multipliers and the single equality constraint \(\mathbf{y}^\top\boldsymbol{\alpha}=0\), the restricted problem has one genuine degree of freedom and can be solved <em>analytically</em>, by clipping the unconstrained optimum to the box \([L, H]\), so no inner QP solver is needed at all. Each step touches only two columns of the kernel, and no part of \(Q\) need ever be stored, which is what made kernel SVMs trainable on large datasets in the years before the approximation methods of this chapter. Two practical devices, common to all these solvers, are worth naming: caching a fraction of the kernel rows (an LRU cache holding roughly a tenth of \(K\) already reaches an 80 to 90 percent hit rate, since the same non-bound multipliers are revisited many times), and warm-starting, the reuse of the current solution when a hyperparameter such as \(C\) or the kernel width changes only slightly (Scholkopf and Smola, 2002).</p>
+<p>Pushed to its limit, decomposition shrinks the working set to just two variables, which is Sequential Minimal Optimization <a class="cite" href="bibliography.html#platt1998" data-ref="Platt, J. C. (1998) Sequential minimal optimization: a fast algorithm for training support vector machines. Microsoft Research Technical Report MSR-TR-98-14.">(Platt, 1998)</a>. With two coupled multipliers and the single equality constraint \(\mathbf{y}^\top\boldsymbol{\alpha}=0\), the restricted problem has one genuine degree of freedom and can be solved <em>analytically</em>, by clipping the unconstrained optimum to the box \([L, H]\), so no inner QP solver is needed at all. Each step touches only two columns of the kernel, and no part of \(Q\) need ever be stored, which is what made kernel SVMs trainable on large datasets in the years before the approximation methods of this chapter. Two practical devices, common to all these solvers, are worth naming: caching a fraction of the kernel rows (an LRU cache holding roughly a tenth of \(K\) already reaches an 80 to 90 percent hit rate, since the same non-bound multipliers are revisited many times), and warm-starting, the reuse of the current solution when a hyperparameter such as \(C\) or the kernel width changes only slightly (Scholkopf and Smola, 2002).</p>
 
 <p>These methods share one commitment that the rest of the chapter abandons: they keep the kernel <em>exact</em>. Every entry they touch is a true \(K(\mathbf{x}_i, \mathbf{x}_j)\), and the working matrices, though never all resident at once, are cut from the same \(O(n^2)\) cloth. They defeat the memory wall by refusing to build all of it simultaneously, not by making it smaller. The two families we turn to now take the opposite route: they replace \(K\) itself by a genuinely low-rank or explicitly finite-dimensional surrogate. The first of them descends, as the next section makes plain, directly from a reduced-set idea born in this same decomposition literature.</p>
 
@@ -387,7 +387,7 @@ Every variant produces a low-rank factorization \(K \approx L L^\top\) of the ke
 
 <h2 id="rff">Random Fourier features</h2>
 
-<p>Nystrom builds its feature map from the data. Random Fourier features (Rahimi and Recht, 2007) build one from the kernel alone, sampling it out of the kernel's own Fourier transform, independently of any training set. The construction applies to shift-invariant kernels and, like Nystrom, ends by turning the kernel machine into a linear model; but it removes the cost differently, and it leaves the RKHS behind.</p>
+<p>Nystrom builds its feature map from the data. Random Fourier features <a class="cite" href="bibliography.html#rahimi2007" data-ref="Rahimi, A. and Recht, B. (2007) Random features for large-scale kernel machines. NeurIPS 20.">(Rahimi and Recht, 2007)</a> build one from the kernel alone, sampling it out of the kernel's own Fourier transform, independently of any training set. The construction applies to shift-invariant kernels and, like Nystrom, ends by turning the kernel machine into a linear model; but it removes the cost differently, and it leaves the RKHS behind.</p>
 
 <h3 id="bochner">From Bochner's theorem to a random feature</h3>
 
@@ -438,7 +438,7 @@ $$
 
 <h3 id="rff-guarantee">The approximation guarantee</h3>
 
-<div class="box thm"><span class="box-title">Theorem (Rahimi and Recht, 2007)</span>
+<div class="box thm"><span class="box-title">Theorem <a class="cite" href="bibliography.html#rahimi2007" data-ref="Rahimi, A. and Recht, B. (2007) Random features for large-scale kernel machines. NeurIPS 20.">(Rahimi and Recht, 2007)</a></span>
 Let \(K(\mathbf{x},\mathbf{y}) = \kappa(\mathbf{x}-\mathbf{y})\) be a shift-invariant kernel on \(\mathbb{R}^d\) with \(\kappa(0)=1\), and let \(\psi\) be the random Fourier feature map above. On any compact set \(\mathcal{X} \subset \mathbb{R}^d\), for every \(\varepsilon \gt 0\),
 $$
 \mathbb{P}\!\left[\ \sup_{\mathbf{x},\mathbf{y} \in \mathcal{X}} \big| \kappa(\mathbf{x}-\mathbf{y}) - \langle \psi(\mathbf{x}), \psi(\mathbf{y}) \rangle_{\mathbb{R}^p} \big| \geq \varepsilon \ \right] \leq 2^8 \left( \frac{\sigma_q \operatorname{diam}(\mathcal{X})}{\varepsilon} \right)^2 e^{-\frac{p \varepsilon^2}{4(d+2)}} ,
@@ -474,7 +474,7 @@ Both replace the kernel by a \(p\)-dimensional feature map and reduce a kernel m
 </div>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-The optimization machinery behind large-scale kernel machines, decomposition and working-set solvers for the support vector machine, and the day-to-day practice of training these models at scale, is developed at length by Scholkopf and Smola (2002) in <em>Learning with Kernels</em>, chapters 10 and 11, which remain a good entry point to the implementation and optimization side of the subject. That book predates the two approximation families that organize this chapter. The random-features idea was introduced later, by Rahimi and Recht (2007), and the modern statistical analysis of both Nystrom and random-feature approximations, which quantifies how few landmarks or features already match the generalization of the exact kernel estimator, belongs to a still later line of work exemplified by Rudi and Rosasco (2017). For those sharper guarantees one has to look past the textbook to the research literature.
+The optimization machinery behind large-scale kernel machines, decomposition and working-set solvers for the support vector machine, and the day-to-day practice of training these models at scale, is developed at length by Scholkopf and Smola (2002) in <em>Learning with Kernels</em>, chapters 10 and 11, which remain a good entry point to the implementation and optimization side of the subject. That book predates the two approximation families that organize this chapter. The random-features idea was introduced later, by <a class="cite" href="bibliography.html#rahimi2007" data-ref="Rahimi, A. and Recht, B. (2007) Random features for large-scale kernel machines. NeurIPS 20.">Rahimi and Recht (2007)</a>, and the modern statistical analysis of both Nystrom and random-feature approximations, which quantifies how few landmarks or features already match the generalization of the exact kernel estimator, belongs to a still later line of work exemplified by <a class="cite" href="bibliography.html#rudi2017" data-ref="Rudi, A. and Rosasco, L. (2017) Generalization properties of learning with random features. NeurIPS 30.">Rudi and Rosasco (2017)</a>. For those sharper guarantees one has to look past the textbook to the research literature.
 </div>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Rahimi, A. and Recht, B.</span> <span class="bib-year">(2007)</span> <span class="bib-title">Random features for large-scale kernel machines</span>. <span class="bib-venue">NeurIPS 20.</span></li>
 <li ><span class="bib-authors">Williams, C. K. I. and Seeger, M.</span> <span class="bib-year">(2001)</span> <span class="bib-title">Using the Nyström method to speed up kernel machines</span>. <span class="bib-venue">NeurIPS 13.</span></li>
@@ -488,8 +488,26 @@ The optimization machinery behind large-scale kernel machines, decomposition and
 <a href="kernel-mean-embeddings.html"><span class="dir">previous</span>12. Mean Embeddings, MMD, and Characteristic Kernels</a>
 <a style="text-align:right" href="multiple-kernel-learning.html"><span class="dir">next</span>14. Multiple Kernel Learning</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#the-scaling-problem">The scaling problem</a>
+<a class="l2" href="#interlude-linear">Interlude: large-scale learning with linear models</a>
+<a class="l3" href="#why-convexity">Why convexity, and two inequalities</a>
+<a class="l3" href="#gradient-descent">Gradient descent and its rate</a>
+<a class="l3" href="#sgd">Stochastic gradient descent</a>
+<a class="l3" href="#incremental">Randomized incremental methods for finite sums</a>
+<a class="l2" href="#decomposition">Before approximation: decomposition and interior-point solvers</a>
+<a class="l2" href="#nystrom">The Nystrom approximation</a>
+<a class="l3" href="#nystrom-principle">The principle: projection onto a small subspace</a>
+<a class="l3" href="#nystrom-kpca">Choosing the anchors by kernel PCA</a>
+<a class="l3" href="#nystrom-sampling">Choosing the anchors by random sampling</a>
+<a class="l3" href="#nystrom-greedy">Greedy and K-means anchors</a>
+<a class="l2" href="#rff">Random Fourier features</a>
+<a class="l3" href="#bochner">From Bochner&#x27;s theorem to a random feature</a>
+<a class="l3" href="#rff-map">The random feature map</a>
+<a class="l3" href="#rff-guarantee">The approximation guarantee</a>
+<a class="l3" href="#rff-linear">Reduction to a linear model</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

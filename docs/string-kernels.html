@@ -156,7 +156,7 @@ by a dictionary \(\mathcal{D}\) of terms, whose coordinate for term \(t\) is the
 frequency \(\mathrm{tf}(t,d)\) with which \(t\) occurs in \(d\). Word order and
 punctuation are discarded, so a phrase such as "bread winner" breaks into its
 constituents. This is the vector space model of Salton and colleagues (1975), and
-as Shawe-Taylor and Cristianini (2004) observe, reading it as a feature map turns
+as <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> observe, reading it as a feature map turns
 the whole information-retrieval toolbox into a kernel method.</p>
 
 <div class="box def"><span class="box-title">Definition (bag-of-words kernel)</span>
@@ -193,9 +193,9 @@ be injected through a term proximity matrix \(P\) with \(P_{tt'} \gt 0\) when
 \(\tilde{K}(d,d') = \Phi(d)\, P P^\top \Phi(d')^\top\), which represents each
 document by the less sparse vector \(\Phi(d)P\) that fires on every term close to
 those it contains. The most useful \(P\) is learned: <em>latent semantic
-indexing</em> (Deerwester et al., 1990) takes \(P\) from the leading singular
+indexing</em> <a class="cite" href="bibliography.html#deerwester1990" data-ref="Deerwester, S., Dumais, S. T., Furnas, G. W., Landauer, T. K., and Harshman, R. (1990) Indexing by latent semantic analysis. Journal of the American Society for Information Science 41(6), 391-407.">(Deerwester et al., 1990)</a> takes \(P\) from the leading singular
 vectors of the term-document matrix, so terms that co-occur across the corpus
-collapse onto shared latent concepts. Shawe-Taylor and Cristianini (2004) note
+collapse onto shared latent concepts. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> note
 that this is precisely kernel PCA in the bag-of-words feature space, and its dual
 form, the <em>latent semantic kernel</em>, evaluates the concept projection from
 document inner products alone, so it layers on top of any base text kernel.</p>
@@ -216,12 +216,12 @@ $$ \Phi(x) \;=\; \bigl( \Phi_u(x) \bigr)_{u \in \mathcal{A}^k},
 
 <ul>
 <li>the number of occurrences of \(u\) in \(x\), without gaps, gives the
-<em>spectrum kernel</em> (Leslie et al., 2002);</li>
+<em>spectrum kernel</em> <a class="cite" href="bibliography.html#leslie2002" data-ref="Leslie, C., Eskin, E., and Noble, W. S. (2002) The spectrum kernel: a string kernel for SVM protein classification. Pacific Symposium on Biocomputing 7, 564-575.">(Leslie et al., 2002)</a>;</li>
 <li>the number of occurrences of \(u\) up to \(m\) mismatches, without gaps, gives
 the <em>mismatch kernel</em> (Leslie et al., 2004);</li>
 <li>the number of occurrences of \(u\) allowing gaps, each occurrence weighted by
 an exponentially decaying factor of the gap length, gives the <em>substring
-kernel</em> (Lodhi et al., 2002).</li>
+kernel</em> <a class="cite" href="bibliography.html#lodhi2002" data-ref="Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C. (2002) Text classification using string kernels. Journal of Machine Learning Research 2, 419-444.">(Lodhi et al., 2002)</a>.</li>
 </ul>
 
 <h3 id="spectrum-kernel">The spectrum kernel</h3>
@@ -389,7 +389,7 @@ bookkeeping we already hold. The rest of this subsection turns that single
 observation into a table.</p>
 
 <p>Enumerating index sequences is hopeless: there are on the order of \(|x|^k\) of
-them. The way out, due to Lodhi et al. (2002), is to introduce an auxiliary
+them. The way out, due to <a class="cite" href="bibliography.html#lodhi2002" data-ref="Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C. (2002) Text classification using string kernels. Journal of Machine Learning Research 2, 419-444.">Lodhi et al. (2002)</a>, is to introduce an auxiliary
 feature in which the span is measured not to the last selected letter but to the
 <em>end of the string</em>. Alongside</p>
 
@@ -542,7 +542,7 @@ The single shared gap-free \(2\)-mer \(\texttt{ca}\) has span \(2\), so
 \((\lambda^2)^2 = \lambda^4\), exactly what the tables return.
 </div>
 
-<p>Shawe-Taylor and Cristianini (2004) note one alternative worth keeping in mind:
+<p><a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> note one alternative worth keeping in mind:
 when only a bounded number \(m\) of gaps is permitted, the kernel can be evaluated
 with a <em>trie</em> instead of the dynamic program, at cost
 \(O\bigl((|x| + |x'|)\,(k+m)^m\bigr)\), which wins over the \(O(k\,|x|\,|x'|)\)
@@ -576,7 +576,7 @@ structure they encode transfers to the kernel machine.</p>
 <h3 id="p-kernels">P-kernels and conditional independence</h3>
 
 <p>Before the individual constructions, it pays to name the umbrella they live
-under. Haussler (1999) asked when a probability distribution is itself a kernel: if
+under. <a class="cite" href="bibliography.html#haussler1999" data-ref="Haussler, D. (1999) Convolution kernels on discrete structures. Technical Report UCSC-CRL-99-10, UC Santa Cruz.">Haussler (1999)</a> asked when a probability distribution is itself a kernel: if
 a symmetric joint distribution \(P(x,z)\) over pairs from \(\mathcal{X}\) has a
 positive semidefinite matrix \(\bigl(P(x_i,x_j)\bigr)_{i,j}\) on every finite
 sample, then \(K(x,z) = P(x,z)\) is a valid kernel.</p>
@@ -615,7 +615,7 @@ marginal is a non-negative combination of these, again p.d.
 engine behind the marginalized and generative kernels below: the model index
 \(m\) plays the role of the latent variable, and integrating a valid complete-data
 kernel over independent draws of the hidden layer can never destroy positive
-definiteness. Watkins (2000) developed the same conditional-independence idea
+definiteness. <a class="cite" href="bibliography.html#watkins2000" data-ref="Watkins, C. (2000) Dynamic alignment kernels. Advances in Large Margin Classifiers, MIT Press, 39-50.">Watkins (2000)</a> developed the same conditional-independence idea
 independently, including its application to hidden Markov models.</p>
 
 <h3 id="context-tree">Context-tree models and the context-tree kernel</h3>
@@ -731,7 +731,7 @@ probability</em> of the two strings directly: if a hidden model can emit both
 \(s\) and \(t\), then
 $$ K(s,t) = \sum_{h} P(s \mid h)\, P(t \mid h)\, P(h) $$
 is a P-kernel by conditional independence, evaluated by dynamic programming.
-Shawe-Taylor and Cristianini (2004) isolate two cases worth stating.</p>
+<a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> isolate two cases worth stating.</p>
 
 <p>First take \(s\) and \(t\) of equal length \(n\), emitted symbol by symbol from
 a hidden state path \(h = h_1 \dots h_n\) that follows a first-order Markov chain,
@@ -757,8 +757,8 @@ $$ \kappa_{i,j,a}(s,t) = \sum_{b \in A} P_M(a \mid b)
    \Bigl[\, P\bigl((s_i,\varepsilon) \mid a\bigr)\, \kappa_{i-1,j,b}
    + P\bigl((\varepsilon,t_j) \mid a\bigr)\, \kappa_{i,j-1,b}
    + P\bigl((s_i,t_j) \mid a\bigr)\, \kappa_{i-1,j-1,b} \,\Bigr], $$
-and \(K(s,t) = \sum_{a \in A} \kappa_{|s|,|t|,a}(s,t)\). This is the Durbin et al.
-(1998) forward algorithm read as a kernel, the probabilistic sibling of the local
+and \(K(s,t) = \sum_{a \in A} \kappa_{|s|,|t|,a}(s,t)\). This is the <a class="cite" href="bibliography.html#durbin1998" data-ref="Durbin, R., Eddy, S. R., Krogh, A., and Mitchison, G. (1998) Biological Sequence Analysis: Probabilistic Models of Proteins and Nucleic Acids. Cambridge University Press.">Durbin et al.
+(1998)</a> forward algorithm read as a kernel, the probabilistic sibling of the local
 alignment kernel of the next section: both sum a score over all alignments, but the
 pair HMM sums a genuine probability and so is a P-kernel, positive definite with no
 convolution argument needed.</p>
@@ -816,7 +816,7 @@ covariance of the scores, which amounts to whitening them.
 <p>The construction is not as foreign to the rest of the chapter as it looks. Take
 the generative model to be a Markov chain over \(k\)-mers, with parameters
 \(a_{u \to \sigma}\) governing the transition from a length-\(k\) context \(u\) to
-the next symbol \(\sigma\). Shawe-Taylor and Cristianini (2004) compute the Fisher
+the next symbol \(\sigma\). <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> compute the Fisher
 score at the flat setting where every transition is equally likely, and find that
 the coordinate for \(u \to \sigma\) is
 $$ g(\theta_0, s)_{u \to \sigma}
@@ -877,7 +877,7 @@ $$ \mathrm{SW}_{S,g}(x,y) = \max_{\pi \in \Pi(x,y)} s_{S,g}(\pi). $$
 
 <p>It is symmetric, and it is the workhorse of sequence comparison, but a
 maximum over alignments is <em>not</em> positive definite, so it cannot be used
-as a kernel. The fix of Saigo et al. (2004) is to replace the maximum by a
+as a kernel. The fix of <a class="cite" href="bibliography.html#saigo2004" data-ref="Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T. (2004) Protein homology detection using string alignment kernels. Bioinformatics 20(11), 1682-1689.">Saigo et al. (2004)</a> is to replace the maximum by a
 Boltzmann-weighted sum over <em>all</em> alignments, softening the hard optimum
 into a smooth aggregate.</p>
 
@@ -1150,7 +1150,7 @@ the remote homologs in between cannot be found by naive sequence matching. The
 SCOP database organizes proteins hierarchically into families (close homologs),
 superfamilies (remote homologs), and folds, giving a ground truth.</p>
 
-<p>The benchmark of Saigo et al. (2004) asks a classifier to recognize the
+<p>The benchmark of <a class="cite" href="bibliography.html#saigo2004" data-ref="Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T. (2004) Protein homology detection using string alignment kernels. Bioinformatics 20(11), 1682-1689.">Saigo et al. (2004)</a> asks a classifier to recognize the
 correct superfamily: for a target, positive training examples are drawn from the
 same superfamily but different families, negatives from other superfamilies, and
 the test measures whether new sequences are assigned the right superfamily, a
@@ -1184,19 +1184,19 @@ confined to proteins; the same kernels classify natural language, time series,
 and any other data that arrives as a string.</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-The textbook treatment closest to this chapter is Shawe-Taylor and Cristianini
-(2004), Kernel Methods for Pattern Analysis, whose chapter 11 develops kernels
+The textbook treatment closest to this chapter is <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini
+(2004)</a>, Kernel Methods for Pattern Analysis, whose chapter 11 develops kernels
 for text and strings, including the spectrum and gap-weighted subsequence
 kernels and their dynamic programs, in complementary detail. Scholkopf and Smola
 (2002), Learning with Kernels, is the standard reference for the general theory
 of kernels and support vector machines used throughout, though it predates most
 of the string-kernel work surveyed here and so says little about sequences
 specifically. For the individual constructions, the original papers remain the
-best sources: Leslie, Eskin, and Noble (2002) for the spectrum kernel, Lodhi et
-al. (2002) for the subsequence kernel, Haussler (1999) for convolution kernels,
-Jaakkola, Diekhans, and Haussler (2000) for the Fisher kernel on proteins,
-Cuturi et al. (2005) for context-tree and mutual-information kernels, and Saigo
-et al. (2004) for the local alignment kernel.
+best sources: <a class="cite" href="bibliography.html#leslie2002" data-ref="Leslie, C., Eskin, E., and Noble, W. S. (2002) The spectrum kernel: a string kernel for SVM protein classification. Pacific Symposium on Biocomputing 7, 564-575.">Leslie, Eskin, and Noble (2002)</a> for the spectrum kernel, <a class="cite" href="bibliography.html#lodhi2002" data-ref="Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C. (2002) Text classification using string kernels. Journal of Machine Learning Research 2, 419-444.">Lodhi et
+al. (2002)</a> for the subsequence kernel, <a class="cite" href="bibliography.html#haussler1999" data-ref="Haussler, D. (1999) Convolution kernels on discrete structures. Technical Report UCSC-CRL-99-10, UC Santa Cruz.">Haussler (1999)</a> for convolution kernels,
+<a class="cite" href="bibliography.html#jaakkola2000" data-ref="Jaakkola, T., Diekhans, M., and Haussler, D. (2000) A discriminative framework for detecting remote protein homologies. Journal of Computational Biology 7(1-2), 95-114.">Jaakkola, Diekhans, and Haussler (2000)</a> for the Fisher kernel on proteins,
+<a class="cite" href="bibliography.html#cuturi2005" data-ref="Cuturi, M., Fukumizu, K., and Vert, J.-P. (2005) Semigroup kernels on measures. Journal of Machine Learning Research 6, 1169-1198.">Cuturi et al. (2005)</a> for context-tree and mutual-information kernels, and <a class="cite" href="bibliography.html#saigo2004" data-ref="Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T. (2004) Protein homology detection using string alignment kernels. Bioinformatics 20(11), 1682-1689.">Saigo
+et al. (2004)</a> for the local alignment kernel.
 </div>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Jaakkola, T., Diekhans, M., and Haussler, D.</span> <span class="bib-year">(2000)</span> <span class="bib-title">A discriminative framework for detecting remote protein homologies</span>. <span class="bib-venue">Journal of Computational Biology 7(1-2), 95-114.</span></li>
 <li ><span class="bib-authors">Leslie, C., Eskin, E., and Noble, W. S.</span> <span class="bib-year">(2002)</span> <span class="bib-title">The spectrum kernel: a string kernel for SVM protein classification</span>. <span class="bib-venue">Pacific Symposium on Biocomputing 7, 564-575.</span></li>
@@ -1213,8 +1213,32 @@ et al. (2004) for the local alignment kernel.
 <a href="kernel-families.html"><span class="dir">previous</span>9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
 <a style="text-align:right" href="graph-kernels.html"><span class="dir">next</span>11. Kernels for and on Graphs</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#motivation">Why sequences, and why kernels</a>
+<a class="l2" href="#vector-embeddings">Supervised classification by vector embedding</a>
+<a class="l3" href="#physico-chemical">Physico-chemical embeddings</a>
+<a class="l3" href="#vector-space-text">The vector space model and text kernels</a>
+<a class="l2" href="#substring-indexation">Substring indexation and the spectrum kernel</a>
+<a class="l3" href="#spectrum-kernel">The spectrum kernel</a>
+<a class="l2" href="#substring-kernel">The substring kernel and its dynamic program</a>
+<a class="l3" href="#substring-def">Definition</a>
+<a class="l3" href="#substring-dp">Computing the kernel by dynamic programming</a>
+<a class="l3" href="#dictionary">Dictionary-based indexation</a>
+<a class="l2" href="#generative-kernels">Kernels from generative models</a>
+<a class="l3" href="#p-kernels">P-kernels and conditional independence</a>
+<a class="l3" href="#context-tree">Context-tree models and the context-tree kernel</a>
+<a class="l3" href="#marginalized">Marginalized kernels</a>
+<a class="l3" href="#hmm-kernels">Fixed-length and pair hidden Markov model kernels</a>
+<a class="l3" href="#scfg">Stochastic context-free grammars for RNA</a>
+<a class="l3" href="#fisher-kernel">The Fisher kernel</a>
+<a class="l2" href="#local-alignment">The local alignment kernel</a>
+<a class="l3" href="#smith-waterman">From Smith-Waterman to a kernel</a>
+<a class="l3" href="#la-pd-proof">The local alignment kernel is positive definite</a>
+<a class="l3" href="#la-computation">Computing the LA kernel by dynamic programming</a>
+<a class="l2" href="#remote-homology">Application: remote homology detection</a>
+<a class="l2" href="#summary">Summary</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

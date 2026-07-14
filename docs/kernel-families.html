@@ -158,7 +158,7 @@ a superposition of pure waves, one for each frequency \(\omega\), each weighted 
 
 <p>A concrete pass-fail test makes the criterion vivid. Take the single cosine \(\varphi(t)=\cos(\omega_0 t)\): its spectral measure is the pair of atoms \(\tfrac12(\delta_{\omega_0}+\delta_{-\omega_0})\), both nonnegative, so \(\varphi\) is positive definite, as completing the square in the sum \(\sum_{i,j}z_i\bar z_j\cos(\omega_0(x_i-x_j))\) confirms directly. Now take the box \(\varphi(t)=\mathbf{1}_{[-1,1]}(t)\), which looks harmless and even resembles a similarity that stays high for nearby points and drops for far ones. Its Fourier transform is \(\hat\varphi(\omega)=2\sin(\omega)/\omega\), which is negative on \((\pi,2\pi)\) and infinitely often beyond. Bochner's criterion is violated, so the box is not a kernel, and one can indeed exhibit a few points whose Gram matrix has a negative eigenvalue. The lesson is that the plausible-looking profile in the space variable is the wrong thing to inspect: the sign of its transform in the frequency variable is what decides admissibility.</p>
 
-<p>This picture is not merely intuition, it is an algorithm. When \(\mu\) is a probability measure the integral above is an expectation, so we can approximate it by drawing frequencies \(\omega_1,\dots,\omega_D\) from \(\mu\) and averaging the matching cosines: the Gaussian kernel appears as the average of a handful of random cosine features and sharpens toward the true kernel as \(D\) grows. That is precisely the random Fourier feature construction of Rahimi and Recht (2007), which is nothing but Monte Carlo sampling from the Bochner measure, and the widget below shows the average tightening onto the target as more features are drawn.</p>
+<p>This picture is not merely intuition, it is an algorithm. When \(\mu\) is a probability measure the integral above is an expectation, so we can approximate it by drawing frequencies \(\omega_1,\dots,\omega_D\) from \(\mu\) and averaging the matching cosines: the Gaussian kernel appears as the average of a handful of random cosine features and sharpens toward the true kernel as \(D\) grows. That is precisely the random Fourier feature construction of <a class="cite" href="bibliography.html#rahimi2007" data-ref="Rahimi, A. and Recht, B. (2007) Random features for large-scale kernel machines. NeurIPS 20.">Rahimi and Recht (2007)</a>, which is nothing but Monte Carlo sampling from the Bochner measure, and the widget below shows the average tightening onto the target as more features are drawn.</p>
 
 <figure class="viz" data-widget="rff-converge"></figure>
 
@@ -299,7 +299,7 @@ the space of functions whose spectrum is contained in \([-\Omega,\Omega]\). The 
 
 <h2 id="cpd-kernels">Conditionally positive definite kernels</h2>
 
-<p>Bochner's theorem draws the boundary of the positive definite translation-invariant kernels, but that boundary is not the edge of the useful world. The Gaussian and Laplace profiles above are all nonnegative and decreasing, yet some of the most natural dissimilarity profiles on \(\mathbb{R}^d\), the plain squared distance among them, fail positive definiteness while still generating a perfectly good geometry. The resolution, following Schölkopf and Smola (2002), is to relax the quadratic-form condition on one subspace and to read the kernel not as a dot product but as a squared distance.</p>
+<p>Bochner's theorem draws the boundary of the positive definite translation-invariant kernels, but that boundary is not the edge of the useful world. The Gaussian and Laplace profiles above are all nonnegative and decreasing, yet some of the most natural dissimilarity profiles on \(\mathbb{R}^d\), the plain squared distance among them, fail positive definiteness while still generating a perfectly good geometry. The resolution, following <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, is to relax the quadratic-form condition on one subspace and to read the kernel not as a dot product but as a squared distance.</p>
 
 <div class="box def"><span class="box-title">Definition (conditionally positive definite kernel)</span>
 <p>A symmetric kernel \(k\) is conditionally positive definite if
@@ -314,12 +314,12 @@ $$\|\Phi(x)-\Phi(x')\|^2=-\,k(x,x'),$$
 so that positive definite kernels represent inner products while conditionally positive definite ones represent the distances arising from norms. The prototype is the negative squared Euclidean distance \(k(x,x')=-\|x-x'\|^2\), which is conditionally positive definite but positive definite nowhere.</p>
 
 <div class="box thm"><span class="box-title">Theorem (positive definite exponentials)</span>
-<p>A kernel \(k\) is conditionally positive definite if and only if \(\exp(t\,k)\) is positive definite for every \(t\gt 0\) (Schölkopf and Smola 2002).</p>
+<p>A kernel \(k\) is conditionally positive definite if and only if \(\exp(t\,k)\) is positive definite for every \(t\gt 0\) <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">(Schölkopf and Smola 2002)</a>.</p>
 </div>
 
 <p>This one equivalence organizes a whole shelf of the kernels met above. Take \(k(x,x')=-\|x-x'\|^2\), conditionally positive definite as just noted; the theorem makes \(\exp(-t\|x-x'\|^2)\) positive definite for every \(t\gt 0\), so the Gaussian kernel is simply the exponential of a conditionally positive definite generator, a cleaner certificate than evaluating Bochner's integral. The same reading recovers the exponential and Laplace kernels of the half-line as exponentials of conditionally positive definite generators, and it explains why these families are infinitely divisible, their \(n\)-th roots being kernels again.</p>
 
-<p>Beyond the exponential family sit conditionally positive definite kernels of higher order, graded by how large a polynomial subspace the zero-sum constraint must annihilate. Three are standard (Schölkopf and Smola 2002): the inverse multiquadric \((\|x-x'\|^2+c^2)^{-1/2}\), which is in fact already positive definite (order zero); the multiquadric \((\|x-x'\|^2+c^2)^{1/2}\), conditionally positive definite of order one, which unlike a genuine similarity need not be positive anywhere; and the thin plate spline \(\|x-x'\|^{2n}\ln\|x-x'\|\) of order \(n\). A convenient test underlies these examples: \(h(\|x-x'\|^2)\) is conditionally positive definite of order \(q\) exactly when \(h\) is completely monotonic of order \(q\), meaning \((-1)^m h^{(m)}\ge 0\) for all \(m\ge q\). These are the working kernels of scattered-data interpolation, and they show that the admissible profiles reach well past the Bochner class once the origin is allowed to drift.</p>
+<p>Beyond the exponential family sit conditionally positive definite kernels of higher order, graded by how large a polynomial subspace the zero-sum constraint must annihilate. Three are standard <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">(Schölkopf and Smola 2002)</a>: the inverse multiquadric \((\|x-x'\|^2+c^2)^{-1/2}\), which is in fact already positive definite (order zero); the multiquadric \((\|x-x'\|^2+c^2)^{1/2}\), conditionally positive definite of order one, which unlike a genuine similarity need not be positive anywhere; and the thin plate spline \(\|x-x'\|^{2n}\ln\|x-x'\|\) of order \(n\). A convenient test underlies these examples: \(h(\|x-x'\|^2)\) is conditionally positive definite of order \(q\) exactly when \(h\) is completely monotonic of order \(q\), meaning \((-1)^m h^{(m)}\ge 0\) for all \(m\ge q\). These are the working kernels of scattered-data interpolation, and they show that the admissible profiles reach well past the Bochner class once the origin is allowed to drift.</p>
 
 <h2 id="semigroups">Generalization to semigroups</h2>
 
@@ -387,7 +387,7 @@ where \(\mu\) is a Radon measure with compact support on \(S^\ast\) (respectivel
 <p>For a fixed absolute value \(\alpha\), the set \(P_1^\alpha\) of \(\alpha\)-bounded positive definite functions with \(\varphi(0)=1\) is a compact convex set, and its extreme points are exactly the \(\alpha\)-bounded semicharacters. If \(\varphi\) is positive definite and exponentially bounded, then \(\varphi(0)^{-1}\varphi\in P_1^\alpha\) for a suitable \(\alpha\). By the Krein-Milman theorem there is a Radon probability measure on \(P_1^\alpha\) whose barycentre is \(\varphi(0)^{-1}\varphi\), and this measure is supported on the extreme points, the semicharacters. <span class="qed">\(\square\)</span></p>
 </div>
 
-<p>Two remarks. The result fails without the exponential-boundedness restriction on the semicharacters. And in the special case of an abelian group with \(s^\ast=-s\) it reduces to Bochner's theorem for discrete abelian groups (Rudin 1962), confirming that this is the correct generalization.</p>
+<p>Two remarks. The result fails without the exponential-boundedness restriction on the semicharacters. And in the special case of an abelian group with \(s^\ast=-s\) it reduces to Bochner's theorem for discrete abelian groups <a class="cite" href="bibliography.html#rudin1962" data-ref="Rudin, W. (1962) Fourier Analysis on Groups. Interscience Publishers (Wiley).">(Rudin 1962)</a>, confirming that this is the correct generalization.</p>
 
 <h3 id="semigroup-ex-rplus">Example: the half-line \((\mathbb{R}_+,+,\mathrm{Id})\)</h3>
 
@@ -403,7 +403,7 @@ The first term is the Laplace transform of \(\mu\). Continuity removes the atom 
 
 <h3 id="semigroup-ex-measures">Example: kernels for finite measures</h3>
 
-<p>The motivating application, following Cuturi, Fukumizu, and Vert (2005), is comparing bags of points: sets of points of a space \(\mathcal U\), with repeats allowed. A finite-length string described by its \(k\)-mers is exactly such a bag. We want a positive definite kernel between two bags that depends only on their union, that is, that respects the additive structure of merging bags.</p>
+<p>The motivating application, following <a class="cite" href="bibliography.html#cuturi2005" data-ref="Cuturi, M., Fukumizu, K., and Vert, J.-P. (2005) Semigroup kernels on measures. Journal of Machine Learning Research 6, 1169-1198.">Cuturi, Fukumizu, and Vert (2005)</a>, is comparing bags of points: sets of points of a space \(\mathcal U\), with repeats allowed. A finite-length string described by its \(k\)-mers is exactly such a bag. We want a positive definite kernel between two bags that depends only on their union, that is, that respects the additive structure of merging bags.</p>
 
 <p>Represent a bag as a finite measure on \(\mathcal U\),
 $$x=\sum_i a_i\,\delta_{x_i},$$
@@ -451,7 +451,7 @@ and the kernel is read off from how the model explains each data point.</p>
 
 <h3 id="fisher-kernel">The Fisher kernel</h3>
 
-<p>The Fisher kernel of Jaakkola, Diekhans, and Haussler (2000) turns a fitted model into a feature map by asking, for each example, in which direction of parameter space the model would have to move to explain it better. That direction is the gradient of the log-likelihood.</p>
+<p>The Fisher kernel of <a class="cite" href="bibliography.html#jaakkola2000" data-ref="Jaakkola, T., Diekhans, M., and Haussler, D. (2000) A discriminative framework for detecting remote protein homologies. Journal of Computational Biology 7(1-2), 95-114.">Jaakkola, Diekhans, and Haussler (2000)</a> turns a fitted model into a feature map by asking, for each example, in which direction of parameter space the model would have to move to explain it better. That direction is the gradient of the log-likelihood.</p>
 
 <div class="box def"><span class="box-title">Definition (Fisher kernel)</span>
 <p>Fix a parameter \(\theta_0\in\Theta\), for instance the maximum-likelihood estimate on a training set. For each example \(x\), compute the Fisher score vector
@@ -470,7 +470,7 @@ $$\Phi_\theta(x)=\frac{\partial}{\partial\theta}\big[x\log\theta+(1-x)\log(1-\th
 and the Fisher information is \(I(\theta)=1/(\theta(1-\theta))\), so the whitened Fisher vector collapses to the single number \(\phi_\theta(x)=(x-\theta)/\sqrt{\theta(1-\theta)}\). A success and a failure land on opposite sides of zero and so receive a negative kernel value, while two successes receive a positive one: the model's lone coordinate already sorts examples by whether they would push \(\theta\) up or down. Notice too that at the maximum-likelihood estimate \(\theta_0=\hat\theta\) the scores average to zero over the training set, which is exactly the property that makes \(I(\theta_0)\) a genuine covariance and the whitening meaningful.</p>
 
 <div class="box prop"><span class="box-title">Properties</span>
-<p>The Fisher score describes how each parameter contributes to generating a particular example, which gives the kernel a clear interpretation. Two theoretical guarantees are worth stating. A kernel classifier using the Fisher kernel derived from a model that contains the label as a latent variable is asymptotically at least as good as the MAP labelling based on that model (Jaakkola and Haussler 1999). And a variant, the Tangent of Posterior kernel of Tsuda et al. (2002), can improve over the direct posterior classification by correcting for estimation error in the parameter.</p>
+<p>The Fisher score describes how each parameter contributes to generating a particular example, which gives the kernel a clear interpretation. Two theoretical guarantees are worth stating. A kernel classifier using the Fisher kernel derived from a model that contains the label as a latent variable is asymptotically at least as good as the MAP labelling based on that model <a class="cite" href="bibliography.html#jaakkola1999" data-ref="Jaakkola, T. and Haussler, D. (1999) Exploiting generative models in discriminative classifiers. NeurIPS 11.">(Jaakkola and Haussler 1999)</a>. And a variant, the Tangent of Posterior kernel of <a class="cite" href="bibliography.html#tsuda2002tp" data-ref="Tsuda, K., Kawanabe, M., Rätsch, G., Sonnenburg, S., and Müller, K.-R. (2002) A new discriminative kernel from probabilistic models. Neural Computation 14(10), 2397-2414.">Tsuda et al. (2002)</a>, can improve over the direct posterior classification by correcting for estimation error in the parameter.</p>
 </div>
 
 <div class="box lem"><span class="box-title">Lemma (invariance under reparametrization)</span>
@@ -507,7 +507,7 @@ with \(\hat\mu=\frac1n\sum_i x_i\) and \(\hat\sigma=\frac1n\sum_i(x_i-\hat\mu)^2
 
 <h3 id="visual-words">Application: aggregation of visual words</h3>
 
-<p>Before deep learning, the dominant image representation was built from local descriptors, and the Fisher kernel provided the best way to pool them. The pipeline has three stages. In the patch extraction stage, an image is described as a set of patches \(x_1,\dots,x_n\) at interest points, encoded by descriptors such as SIFT, HOG, LBP, color histograms, or later convolutional features. In the coding stage, the set of patches is mapped to a single high-dimensional vector \(\phi(x_i)\). In the pooling stage, the codes are aggregated, for instance by sum pooling \(\phi(x_1,\dots,x_n)=\sum_i\phi(x_i)\). Fisher vectors with a Gaussian mixture model (Perronnin and Dance 2007) are a simple and effective instance of this recipe.</p>
+<p>Before deep learning, the dominant image representation was built from local descriptors, and the Fisher kernel provided the best way to pool them. The pipeline has three stages. In the patch extraction stage, an image is described as a set of patches \(x_1,\dots,x_n\) at interest points, encoded by descriptors such as SIFT, HOG, LBP, color histograms, or later convolutional features. In the coding stage, the set of patches is mapped to a single high-dimensional vector \(\phi(x_i)\). In the pooling stage, the codes are aggregated, for instance by sum pooling \(\phi(x_1,\dots,x_n)=\sum_i\phi(x_i)\). Fisher vectors with a Gaussian mixture model <a class="cite" href="bibliography.html#perronnin2007" data-ref="Perronnin, F. and Dance, C. (2007) Fisher kernels on visual vocabularies for image categorization. CVPR.">(Perronnin and Dance 2007)</a> are a simple and effective instance of this recipe.</p>
 
 <p>Let \(\theta=(\pi_j,\mu_j,\Sigma_j)_{j=1,\dots,k}\) parametrize a GMM with \(k\) Gaussian components,
 $$P_\theta(x)=\sum_{j=1}^k\pi_j\,\mathcal N(x;\mu_j,\Sigma_j).$$
@@ -546,7 +546,7 @@ Bayes' rule is therefore implemented by a trivial linear classifier on the Fishe
 
 <h3 id="mutual-information-kernel">Mutual information kernels</h3>
 
-<p>The Fisher kernel linearizes the model at a single point \(\theta_0\). A complementary idea, due to Seeger (2002), keeps the whole parameter space and integrates the models against a prior, so that two examples are similar when many models assign high likelihood to both.</p>
+<p>The Fisher kernel linearizes the model at a single point \(\theta_0\). A complementary idea, due to <a class="cite" href="bibliography.html#seeger2002" data-ref="Seeger, M. (2002) Covariance kernels from Bayesian generative models. NeurIPS 14.">Seeger (2002)</a>, keeps the whole parameter space and integrates the models against a prior, so that two examples are similar when many models assign high likelihood to both.</p>
 
 <div class="box def"><span class="box-title">Definition (mutual information kernel)</span>
 <p>Choose a prior \(w(d\theta)\) on the measurable set \(\Theta\). The mutual information kernel is
@@ -568,7 +568,7 @@ The kernel averages the joint likelihood of the two strings over all coin biases
 
 <h3 id="marginalized-kernel">Marginalized kernels</h3>
 
-<p>Often the natural kernel lives not on the observed data but on a completed version of it that includes a hidden variable: an alignment, a state path, a parse tree. If we knew the hidden variable we would use a kernel on the complete data; since we do not, we average over its posterior. This is the marginalized kernel of Tsuda, Kin, and Asai (2002).</p>
+<p>Often the natural kernel lives not on the observed data but on a completed version of it that includes a hidden variable: an alignment, a state path, a parse tree. If we knew the hidden variable we would use a kernel on the complete data; since we do not, we average over its posterior. This is the marginalized kernel of <a class="cite" href="bibliography.html#tsuda2002" data-ref="Tsuda, K., Kin, T., and Asai, K. (2002) Marginalized kernels for biological sequences. Bioinformatics 18(Suppl 1), S268-S275.">Tsuda, Kin, and Asai (2002)</a>.</p>
 
 <div class="box def"><span class="box-title">Definition (marginalized kernel)</span>
 <p>For observed data \(x\in\mathcal X\), let a latent variable \(y\in\mathcal Y\) be attached through a conditional probability \(P_x(dy)\). Let \(K_{\mathcal Z}\) be a kernel on the complete data \(z=(x,y)\). Then
@@ -590,7 +590,7 @@ The right-hand side is an inner product of the two averaged feature vectors \(\b
 
 <h2 id="kernel-algebra">The algebra of kernel construction</h2>
 
-<p>The three roads of this chapter each end at a family of kernels, but in practice a kernel is rarely used bare. More often it is assembled: two similarities are added, a similarity on one factor is multiplied by a similarity on another, a base kernel is normalized or reshaped to fit a domain. What makes this safe is that positive definiteness survives a short list of operations, so the admissible kernels form not a scattered collection but an algebra closed under the natural ways of combining them. We collect the operations that the constructions above have been quietly using, following Schölkopf and Smola (2002) and Shawe-Taylor and Cristianini (2004).</p>
+<p>The three roads of this chapter each end at a family of kernels, but in practice a kernel is rarely used bare. More often it is assembled: two similarities are added, a similarity on one factor is multiplied by a similarity on another, a base kernel is normalized or reshaped to fit a domain. What makes this safe is that positive definiteness survives a short list of operations, so the admissible kernels form not a scattered collection but an algebra closed under the natural ways of combining them. We collect the operations that the constructions above have been quietly using, following <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a> and <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>.</p>
 
 <div class="box prop"><span class="box-title">Closure properties of positive definite kernels</span>
 <p>Let \(k_1,k_2\) be positive definite kernels. Then each of the following is positive definite:
@@ -606,7 +606,7 @@ The right-hand side is an inner product of the two averaged feature vectors \(\b
 <div class="box proof">
 <p>It suffices to show that the entrywise (Hadamard) product of two positive semidefinite Gram matrices \(K_1,K_2\) is positive semidefinite. Let \((V_1,\dots,V_m)\) and \((W_1,\dots,W_m)\) be independent mean-zero Gaussian random vectors with covariance matrices \(K_1\) and \(K_2\). The product vector \((V_1 W_1,\dots,V_m W_m)\) then has covariance
 $$\mathbb{E}\big[V_i W_i\,V_j W_j\big]=\mathbb{E}[V_i V_j]\,\mathbb{E}[W_i W_j]=(K_1)_{ij}\,(K_2)_{ij},$$
-by independence of the two vectors. Hence the entrywise product \(K_1\circ K_2\) is itself a covariance matrix and therefore positive semidefinite (Schölkopf and Smola 2002). <span class="qed">\(\square\)</span></p>
+by independence of the two vectors. Hence the entrywise product \(K_1\circ K_2\) is itself a covariance matrix and therefore positive semidefinite <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">(Schölkopf and Smola 2002)</a>. <span class="qed">\(\square\)</span></p>
 </div>
 </details>
 
@@ -614,14 +614,14 @@ by independence of the two vectors. Hence the entrywise product \(K_1\circ K_2\)
 
 <p>The direct sum and the tensor product are the two extremes of how far a kernel lets features interact: the direct sum keeps each factor separate, while the tensor product couples every factor with every other. The ANOVA kernels fill the gap between them. Given base kernels \(k^{(1)},\dots,k^{(N)}\), one per attribute, the ANOVA kernel of order \(D\) sums the tensor products over all size-\(D\) subsets of distinct attributes,
 $$k_D(x,x')=\sum_{1\le i_1\lt i_2\lt\cdots\lt i_D\le N}\ \prod_{j=1}^{D}k^{(i_j)}\big(x_{i_j},x'_{i_j}\big),$$
-so that \(D=1\) recovers the direct sum and \(D=N\) the full tensor product, with intermediate \(D\) selecting exactly the interactions of order \(D\) (Schölkopf and Smola 2002). The name ANOVA, for analysis of variance, records the origin of the underlying decomposition. Because the sum runs over distinct indices, a naive evaluation would cost \(\binom{N}{D}\) terms, but a dynamic-programming recursion in \(D\) and \(N\) brings it down to \(O(ND)\) (Shawe-Taylor and Cristianini 2004), and the whole construction is a special case of the convolution kernels for structured objects of Haussler (1999).</p>
+so that \(D=1\) recovers the direct sum and \(D=N\) the full tensor product, with intermediate \(D\) selecting exactly the interactions of order \(D\) <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">(Schölkopf and Smola 2002)</a>. The name ANOVA, for analysis of variance, records the origin of the underlying decomposition. Because the sum runs over distinct indices, a naive evaluation would cost \(\binom{N}{D}\) terms, but a dynamic-programming recursion in \(D\) and \(N\) brings it down to \(O(ND)\) <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">(Shawe-Taylor and Cristianini 2004)</a>, and the whole construction is a special case of the convolution kernels for structured objects of <a class="cite" href="bibliography.html#haussler1999" data-ref="Haussler, D. (1999) Convolution kernels on discrete structures. Technical Report UCSC-CRL-99-10, UC Santa Cruz.">Haussler (1999)</a>.</p>
 
 <p>A final operation is cosmetic but ubiquitous: normalization. Given any kernel \(k\), the normalized kernel
 $$\tilde k(x,x')=\frac{k(x,x')}{\sqrt{k(x,x)\,k(x',x')}}$$
-is again positive definite and sends every point to the unit sphere of feature space, since \(\tilde k(x,x)=1\), so the similarity now reads as a cosine between feature vectors. The Gaussian kernel is already normalized in this sense, because \(k(x,x)=1\); for an unnormalized kernel such as a polynomial, the rescaling removes the dependence on the raw magnitudes of the feature vectors and often makes the kernel behave far better (Shawe-Taylor and Cristianini 2004).</p>
+is again positive definite and sends every point to the unit sphere of feature space, since \(\tilde k(x,x)=1\), so the similarity now reads as a cosine between feature vectors. The Gaussian kernel is already normalized in this sense, because \(k(x,x)=1\); for an unnormalized kernel such as a polynomial, the rescaling removes the dependence on the raw magnitudes of the feature vectors and often makes the kernel behave far better <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">(Shawe-Taylor and Cristianini 2004)</a>.</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-<p>The constructions of this chapter are developed at length in two standard references. Schölkopf and Smola (2002), <em>Learning with Kernels</em>, devote their chapter 13 to the design of kernels and lay the groundwork for positive definite kernels and their properties in chapter 2. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, survey the basic kernels and the principles of kernel design in their chapter 9. Both give complementary derivations of the translation-invariant and probabilistic-model kernels discussed here, together with many further worked examples.</p>
+<p>The constructions of this chapter are developed at length in two standard references. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, <em>Learning with Kernels</em>, devote their chapter 13 to the design of kernels and lay the groundwork for positive definite kernels and their properties in chapter 2. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>, <em>Kernel Methods for Pattern Analysis</em>, survey the basic kernels and the principles of kernel design in their chapter 9. Both give complementary derivations of the translation-invariant and probabilistic-model kernels discussed here, together with many further worked examples.</p>
 </div>
 
 <h2 id="summary">Summary</h2>
@@ -646,8 +646,35 @@ is again positive definite and sends every point to the unit sphere of feature s
 <a href="mercer-and-rates.html"><span class="dir">previous</span>8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
 <a style="text-align:right" href="string-kernels.html"><span class="dir">next</span>10. Kernels for Sequences</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#ti-kernels-z">Translation-invariant kernels on the integers</a>
+<a class="l3" href="#fs-torus">The Fourier-Stieltjes transform on the torus</a>
+<a class="l3" href="#ti-examples-z">Two examples</a>
+<a class="l3" href="#herglotz-proof">Proof of Herglotz&#x27;s theorem</a>
+<a class="l2" href="#ti-kernels-rd">Translation-invariant kernels on \mathbb{R}^d</a>
+<a class="l3" href="#fs-rd">The Fourier-Stieltjes transform on \mathbb{R}^d</a>
+<a class="l3" href="#bochner-proof">Proof of Bochner&#x27;s theorem</a>
+<a class="l2" href="#rkhs-ti">The RKHS of a translation-invariant kernel</a>
+<a class="l3" href="#ti-rkhs-examples">Reading off the smoothness class</a>
+<a class="l3" href="#recap-families">A recap on the Green, Mercer, and Bochner families</a>
+<a class="l2" href="#cpd-kernels">Conditionally positive definite kernels</a>
+<a class="l2" href="#semigroups">Generalization to semigroups</a>
+<a class="l3" href="#semicharacters">Semicharacters</a>
+<a class="l3" href="#integral-representation">Integral representation of positive definite functions</a>
+<a class="l3" href="#semigroup-ex-rplus">Example: the half-line (\mathbb{R}_+,+,\mathrm{Id})</a>
+<a class="l3" href="#semigroup-ex-measures">Example: kernels for finite measures</a>
+<a class="l2" href="#prob-model-kernels">Kernels from probabilistic models</a>
+<a class="l3" href="#fisher-kernel">The Fisher kernel</a>
+<a class="l3" href="#fisher-gaussian">A worked example: a Gaussian data model</a>
+<a class="l3" href="#visual-words">Application: aggregation of visual words</a>
+<a class="l3" href="#fisher-generative-classification">Relation to classification with generative models</a>
+<a class="l3" href="#mutual-information-kernel">Mutual information kernels</a>
+<a class="l3" href="#marginalized-kernel">Marginalized kernels</a>
+<a class="l2" href="#kernel-algebra">The algebra of kernel construction</a>
+<a class="l3" href="#anova-normalisation">Interpolating with ANOVA kernels, and normalization</a>
+<a class="l2" href="#summary">Summary</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

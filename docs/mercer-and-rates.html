@@ -259,7 +259,7 @@ Green functions explain, on a case-by-case basis, why particular RKHS norms are 
 <h3 id="mercer-kernels">Mercer kernels</h3>
 
 <p>
-When \(\mathcal X\) is finite, a positive definite kernel is just a positive semidefinite matrix, and the spectral decomposition of that matrix produces an explicit feature map: \(K(x,t) = \sum_k \lambda_k \psi_k(x)\psi_k(t)\) with \(\lambda_k \geq 0\). Mercer's theory generalizes exactly this factorization from finite sets to compact metric spaces. Historically it also provided the first proof, due to Mercer (1909), that a positive definite kernel on a non-finite set is an inner product.
+When \(\mathcal X\) is finite, a positive definite kernel is just a positive semidefinite matrix, and the spectral decomposition of that matrix produces an explicit feature map: \(K(x,t) = \sum_k \lambda_k \psi_k(x)\psi_k(t)\) with \(\lambda_k \geq 0\). Mercer's theory generalizes exactly this factorization from finite sets to compact metric spaces. Historically it also provided the first proof, due to <a class="cite" href="bibliography.html#mercer1909" data-ref="Mercer, J. (1909) Functions of positive and negative type, and their connection with the theory of integral equations. Philosophical Transactions of the Royal Society A 209, 415-446.">Mercer (1909)</a>, that a positive definite kernel on a non-finite set is an inner product.
 </p>
 
 <div class="box def"><span class="box-title">Definition (Mercer kernel)</span>
@@ -328,7 +328,7 @@ $$
 \qquad \lambda_1 \geq \cdots \geq \lambda_m \geq 0,
 $$
 <p>
-with orthonormal eigenvectors \(u_1, \ldots, u_m\). Equivalently \(\mathbf K = \mathbf B^\top \mathbf B\) with \(\mathbf B = \boldsymbol\Lambda^{1/2} \mathbf U^\top\) (Shawe-Taylor and Cristianini, 2004), and reading off the columns of \(\mathbf B\) exhibits an explicit feature map
+with orthonormal eigenvectors \(u_1, \ldots, u_m\). Equivalently \(\mathbf K = \mathbf B^\top \mathbf B\) with \(\mathbf B = \boldsymbol\Lambda^{1/2} \mathbf U^\top\) <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">(Shawe-Taylor and Cristianini, 2004)</a>, and reading off the columns of \(\mathbf B\) exhibits an explicit feature map
 </p>
 $$
 \Phi(x_i) = \left( \sqrt{\lambda_k}\, [u_k]_i \right)_{k=1}^{m},
@@ -499,7 +499,7 @@ Two features of the statement carry the pedagogical weight. The first is that a 
 
 <div class="box rmk"><span class="box-title">Remark (Mercer's theorem as the continuous face of positive definiteness)</span>
 <p>
-Shawe-Taylor and Cristianini (2004) state the theorem in a slightly different but equivalent form worth recording, because it exposes what the hypothesis of positive definiteness is really doing. Let \(\mathcal X\) be a compact subset of \(\mathbb R^n\), let \(K\) be continuous and symmetric, and call its integral operator \(L_K\) <em>positive</em> when
+<a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> state the theorem in a slightly different but equivalent form worth recording, because it exposes what the hypothesis of positive definiteness is really doing. Let \(\mathcal X\) be a compact subset of \(\mathbb R^n\), let \(K\) be continuous and symmetric, and call its integral operator \(L_K\) <em>positive</em> when
 </p>
 $$
 \iint_{\mathcal X \times \mathcal X} K(x,z)\, f(x)\, f(z)\, dx\, dz \;\geq\; 0
@@ -647,7 +647,7 @@ which tends to zero as \(t \to x\) by continuity of \(K\).
 
 <div class="box rmk"><span class="box-title">Remark (effective dimension: the mapped data lie in a shrinking box)</span>
 <p>
-The feature map \(\Phi(x) = \left( \sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}\) confines the data to a very particular region of \(\ell^2\). Its \(k\)-th coordinate never leaves the interval \(\left[ -\sqrt{l_k},\, \sqrt{l_k} \right]\) with \(l_k = \sup_{x \in \mathcal X} \lambda_k\, \psi_k(x)^2\), so \(\Phi(\mathcal X)\) sits inside an axis-parallel box with side lengths \(2 \sqrt{l_k}\). Whenever the eigenfunctions are uniformly bounded, \(\sup_x \psi_k(x)^2 \leq C\), the sides shrink as fast as the spectrum, \(l_k \leq C\, \lambda_k\) (Schölkopf and Smola, 2002). Although the feature space is infinite-dimensional, the mapped data therefore occupy only a thin, rapidly narrowing sliver of it.
+The feature map \(\Phi(x) = \left( \sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}\) confines the data to a very particular region of \(\ell^2\). Its \(k\)-th coordinate never leaves the interval \(\left[ -\sqrt{l_k},\, \sqrt{l_k} \right]\) with \(l_k = \sup_{x \in \mathcal X} \lambda_k\, \psi_k(x)^2\), so \(\Phi(\mathcal X)\) sits inside an axis-parallel box with side lengths \(2 \sqrt{l_k}\). Whenever the eigenfunctions are uniformly bounded, \(\sup_x \psi_k(x)^2 \leq C\), the sides shrink as fast as the spectrum, \(l_k \leq C\, \lambda_k\) <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">(Schölkopf and Smola, 2002)</a>. Although the feature space is infinite-dimensional, the mapped data therefore occupy only a thin, rapidly narrowing sliver of it.
 </p>
 <p>
 This carries an immediate quantitative reading. Uniform convergence of the Mercer series means that for any \(\varepsilon \gt 0\) there is a finite \(n = n(\varepsilon)\) with
@@ -664,7 +664,7 @@ for all \(x, t \in \mathcal X\): the feature space is finite-dimensional up to a
 <h3 id="scope-and-limits">Scope and limits of the construction</h3>
 
 <p>
-Three remarks put the theorem in perspective. First, this proof extends the proof valid when \(\mathcal X\) is finite, and it is constructive: Mercer (1909) exhibits the feature map rather than merely proving its existence. Second, the eigensystem (the \(\lambda_k\) and \(\psi_k\)) depends on the choice of the measure \(d\nu(x)\); different measures lead to different feature spaces for the same kernel on the same space \(\mathcal X\). The kernel is intrinsic, its spectral coordinates are not. Third, compactness and continuity are genuinely required. For \(\mathcal X = \mathbb{R}^d\), the eigenvalue problem
+Three remarks put the theorem in perspective. First, this proof extends the proof valid when \(\mathcal X\) is finite, and it is constructive: <a class="cite" href="bibliography.html#mercer1909" data-ref="Mercer, J. (1909) Functions of positive and negative type, and their connection with the theory of integral equations. Philosophical Transactions of the Royal Society A 209, 415-446.">Mercer (1909)</a> exhibits the feature map rather than merely proving its existence. Second, the eigensystem (the \(\lambda_k\) and \(\psi_k\)) depends on the choice of the measure \(d\nu(x)\); different measures lead to different feature spaces for the same kernel on the same space \(\mathcal X\). The kernel is intrinsic, its spectral coordinates are not. Third, compactness and continuity are genuinely required. For \(\mathcal X = \mathbb{R}^d\), the eigenvalue problem
 </p>
 
 $$
@@ -809,7 +809,7 @@ Keep these two families in mind. At the end of the chapter, polynomial versus ex
 
 <div class="box rmk"><span class="box-title">Remark (choosing a kernel is choosing a spectral filter)</span>
 <p>
-The periodic examples make vivid a reading of Mercer's theorem due to Shawe-Taylor and Cristianini (2004). Here the Fourier coefficients \(\hat\kappa_{2n}\) are, up to the factor \(\sqrt 2\), the eigenvalues, so prescribing the kernel is the same as prescribing a weight on each frequency pair \(\psi_{2n-1}, \psi_{2n}\). A coefficient that vanishes deletes that frequency from the feature space outright; a small coefficient keeps the feature but gives it little say in the fitted function; a large coefficient lets that frequency dominate. Choosing a kernel is thus choosing a filter with a prescribed spectral characteristic, governing how much each frequency may influence the learned function, which is the same bookkeeping as the RKHS norm \(\sum_k a_k^2 / \lambda_k\) taxing a coordinate in inverse proportion to its eigenvalue. The Bernoulli and geometric spectra above are two such filters: a gentle polynomial roll-off and a sharp exponential cutoff.
+The periodic examples make vivid a reading of Mercer's theorem due to <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>. Here the Fourier coefficients \(\hat\kappa_{2n}\) are, up to the factor \(\sqrt 2\), the eigenvalues, so prescribing the kernel is the same as prescribing a weight on each frequency pair \(\psi_{2n-1}, \psi_{2n}\). A coefficient that vanishes deletes that frequency from the feature space outright; a small coefficient keeps the feature but gives it little say in the fitted function; a large coefficient lets that frequency dominate. Choosing a kernel is thus choosing a filter with a prescribed spectral characteristic, governing how much each frequency may influence the learned function, which is the same bookkeeping as the RKHS norm \(\sum_k a_k^2 / \lambda_k\) taxing a coordinate in inverse proportion to its eigenvalue. The Bernoulli and geometric spectra above are two such filters: a gentle polynomial roll-off and a sharp exponential cutoff.
 </p>
 </div>
 
@@ -1513,7 +1513,7 @@ Taking \(\lambda = n^{-1}\) and summing these inequalities gives the result.
 <ul>
 <li>The same rates hold for the exact quantities \(B_\lambda + V_\lambda\), without the substitution \(\Phi_n^\top\Phi_n = nT\); see Dicker et al. (2015, Corollaries 1 to 4), whose proof we followed and adapted. The constants hidden in the big-\(O\) notation depend only on the kernel \(K\) and the measure \(d\nu(x)\).</li>
 <li>These rates are minimax optimal (Caponnetto and De Vito, 2007): no estimator can uniformly improve on them over the corresponding classes of target functions.</li>
-<li>The polynomial case connects back to classical nonparametric statistics. For \(s = 2q\), the ball of the RKHS sits inside \(L^2_\nu(\mathcal X)\) as a Sobolev-type class of functions that are \(q - 1\) times differentiable with absolutely continuous derivatives and \(\| f^{(q)} \|_{L^2_\nu(\mathcal X)} \lt +\infty\), as the periodic Sobolev example made explicit with eigenvalues \(n^{-2\beta}\) and \(q = \beta\). The rate \(n^{-\frac{s}{s+1}} = n^{-\frac{2q}{2q+1}}\) is then exactly the standard optimal convergence rate of nonparametric regression (Tsybakov, 2009).</li>
+<li>The polynomial case connects back to classical nonparametric statistics. For \(s = 2q\), the ball of the RKHS sits inside \(L^2_\nu(\mathcal X)\) as a Sobolev-type class of functions that are \(q - 1\) times differentiable with absolutely continuous derivatives and \(\| f^{(q)} \|_{L^2_\nu(\mathcal X)} \lt +\infty\), as the periodic Sobolev example made explicit with eigenvalues \(n^{-2\beta}\) and \(q = \beta\). The rate \(n^{-\frac{s}{s+1}} = n^{-\frac{2q}{2q+1}}\) is then exactly the standard optimal convergence rate of nonparametric regression <a class="cite" href="bibliography.html#tsybakov2009" data-ref="Tsybakov, A. B. (2009) Introduction to Nonparametric Estimation. Springer, Springer Series in Statistics.">(Tsybakov, 2009)</a>.</li>
 <li>Under additional assumptions on \(f^*\), for instance requiring not only \(\sum_{i\geq 1}(\beta^*_i)^2 \lt \infty\) but also \(\sum_{i \geq 1} i^{\tau} (\beta^*_i)^2 \lt \infty\) for some \(\tau \gt 0\), or \(\beta^*_i = 0\) for \(i \gt J\), one obtains faster convergence rates, which are again minimax optimal for the class of functions considered. In this sense KRR is <em>adaptive</em>: the same estimator, with a properly tuned \(\lambda\), achieves the optimal rate over a range of regularity classes (Caponnetto and De Vito, 2007; Dicker et al., 2015).</li>
 </ul>
 
@@ -1529,10 +1529,10 @@ The simplest instance already displays the whole mechanism. Call a kernel \(K : 
 
 <div class="box rmk"><span class="box-title">Further reading</span>
 <p>
-The spectral picture of this chapter is developed at book length in two standard references. Schölkopf and Smola (2002), <em>Learning with Kernels</em>, treat Mercer's theorem, the integral operator, and the eigenfunction feature map in their Chapter 2, with the functional-analytic prerequisites, the spectral theorem, and the proof of Mercer's expansion collected in the mathematical appendix; their exposition is the natural complement to the operator vocabulary introduced here. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, cover the same ground from the properties-of-kernels angle in their Chapter 3, including Mercer's theorem and the eigen-decomposition of the Gram matrix as the finite shadow of the integral operator, and they are especially good on the data-driven, empirical version of the spectrum that our figure previews.
+The spectral picture of this chapter is developed at book length in two standard references. <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, <em>Learning with Kernels</em>, treat Mercer's theorem, the integral operator, and the eigenfunction feature map in their Chapter 2, with the functional-analytic prerequisites, the spectral theorem, and the proof of Mercer's expansion collected in the mathematical appendix; their exposition is the natural complement to the operator vocabulary introduced here. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>, <em>Kernel Methods for Pattern Analysis</em>, cover the same ground from the properties-of-kernels angle in their Chapter 3, including Mercer's theorem and the eigen-decomposition of the Gram matrix as the finite shadow of the integral operator, and they are especially good on the data-driven, empirical version of the spectrum that our figure previews.
 </p>
 <p>
-For the statistical half of the chapter, the convergence rates of kernel ridge regression, the comprehensive reference is Steinwart and Christmann (2008), <em>Support Vector Machines</em>, whose treatment of integral operators, effective dimension, and the interplay between eigenvalue decay and learning rates places the results of the final section in their full generality. The reader who wants the sharpest and most complete rate theory should read it alongside the primary sources cited in the text, Cucker and Smale (2002), Caponnetto and De Vito (2007), Bach (2013), and Tsybakov (2009).
+For the statistical half of the chapter, the convergence rates of kernel ridge regression, the comprehensive reference is <a class="cite" href="bibliography.html#steinwart2008" data-ref="Steinwart, I. and Christmann, A. (2008) Support Vector Machines. Springer.">Steinwart and Christmann (2008)</a>, <em>Support Vector Machines</em>, whose treatment of integral operators, effective dimension, and the interplay between eigenvalue decay and learning rates places the results of the final section in their full generality. The reader who wants the sharpest and most complete rate theory should read it alongside the primary sources cited in the text, <a class="cite" href="bibliography.html#cuckersmale2002" data-ref="Cucker, F. and Smale, S. (2002) On the mathematical foundations of learning. Bulletin of the American Mathematical Society 39(1), 1-49.">Cucker and Smale (2002)</a>, Caponnetto and De Vito (2007), <a class="cite" href="bibliography.html#bach2013" data-ref="Bach, F. (2013) Sharp analysis of low-rank kernel matrix approximations. Proceedings of the 26th Annual Conference on Learning Theory (COLT), PMLR 30, 185-209.">Bach (2013)</a>, and <a class="cite" href="bibliography.html#tsybakov2009" data-ref="Tsybakov, A. B. (2009) Introduction to Nonparametric Estimation. Springer, Springer Series in Statistics.">Tsybakov (2009)</a>.
 </p>
 </div>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Mercer, J.</span> <span class="bib-year">(1909)</span> <span class="bib-title">Functions of positive and negative type, and their connection with the theory of integral equations</span>. <span class="bib-venue">Philosophical Transactions of the Royal Society A 209, 415-446.</span></li>
@@ -1547,8 +1547,40 @@ For the statistical half of the chapter, the convergence rates of kernel ridge r
 <a href="unsupervised-kernel-methods.html"><span class="dir">previous</span>7. Kernel PCA, Clustering, and CCA</a>
 <a style="text-align:right" href="kernel-families.html"><span class="dir">next</span>9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
 </div>
-</div></main>
+</div><aside class="onpage"><div class="onpage-title">On this page</div>
+<a class="l2" href="#from-smoothness-to-kernels">From smoothness functionals to kernels</a>
+<a class="l3" href="#the-min-kernel-on-the-unit-interval">A first example: the min kernel on [0,1]</a>
+<a class="l3" href="#green-functions">Green functions of differential operators</a>
+<a class="l2" href="#the-integral-operator">Mercer kernels and their integral operator</a>
+<a class="l3" href="#mercer-kernels">Mercer kernels</a>
+<a class="l3" href="#compact-operators">Compact, self-adjoint, positive operators</a>
+<a class="l3" href="#the-integral-operator-lemma">The integral operator of a kernel</a>
+<a class="l3" href="#spectral-decomposition">Spectral decomposition of the operator</a>
+<a class="l2" href="#mercers-theorem">Mercer&#x27;s theorem</a>
+<a class="l3" href="#mercer-feature-map">Mercer kernels as inner products in \ell^2</a>
+<a class="l3" href="#scope-and-limits">Scope and limits of the construction</a>
+<a class="l2" href="#example-the-unit-interval">Worked example 1: periodic kernels on [0,1]</a>
+<a class="l3" href="#fourier-eigenfunctions">Fourier eigenfunctions</a>
+<a class="l3" href="#polynomial-decay-example">Polynomial decay of eigenvalues: Bernoulli kernels</a>
+<a class="l3" href="#exponential-decay-example">Exponential decay of eigenvalues</a>
+<a class="l2" href="#example-the-sphere">Worked example 2: dot-product kernels on the sphere S^{d-1}</a>
+<a class="l3" href="#spherical-harmonics">Spherical harmonics</a>
+<a class="l3" href="#funk-hecke">The Funk-Hecke theorem</a>
+<a class="l3" href="#a-worked-quadratic-kernel">A fully worked case: the quadratic kernel on the circle</a>
+<a class="l2" href="#rkhs-from-the-spectrum">The RKHS built from the spectrum</a>
+<a class="l3" href="#geometry-of-the-rkhs">The geometry of the RKHS</a>
+<a class="l3" href="#sobolev-example">Example: Sobolev spaces of periodic functions</a>
+<a class="l2" href="#krr-rates">Convergence rates of kernel ridge regression</a>
+<a class="l3" href="#the-isometry">The isometry between \mathcal H and L^2_\nu(\mathcal X)</a>
+<a class="l3" href="#the-model">KRR and the statistical model</a>
+<a class="l3" href="#bias-variance-decomposition">The bias-variance decomposition of the excess MSE</a>
+<a class="l3" href="#the-effective-approximation">A simplification: replacing \Phi_n^\top \Phi_n by n T</a>
+<a class="l3" href="#bounds-on-bias-and-variance">Upper bounds on bias and variance</a>
+<a class="l3" href="#rates-corollary">Rates of convergence</a>
+<a class="l3" href="#optimality-remarks">Optimality and adaptivity</a>
+<a class="l2" href="#beyond-compactness">Beyond compactness: an outlook</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>

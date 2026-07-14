@@ -53,7 +53,22 @@ def toc_html(current_slug=None):
     return "\n".join(rows)
 
 
-def page(title, toc, body, desc=""):
+def onpage_nav(body):
+    """Build the 'On this page' rail from the chapter's <h2 id> / <h3 id> headings."""
+    heads = re.findall(r'<h([23])\s+id="([^"]+)"[^>]*>(.*?)</h[23]>', body, re.S)
+    if len(heads) < 2:
+        return ""
+    rows = ['<div class="onpage-title">On this page</div>']
+    for lvl, hid, txt in heads:
+        # strip any inline tags / math delimiters from the label
+        label = re.sub(r'<[^>]+>', '', txt)
+        label = label.replace('\\(', '').replace('\\)', '').strip()
+        cls = "l3" if lvl == "3" else "l2"
+        rows.append(f'<a class="{cls}" href="#{hid}">{html.escape(label)}</a>')
+    return '<aside class="onpage">' + "\n".join(rows) + '</aside>'
+
+
+def page(title, toc, body, desc="", onpage=""):
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -72,9 +87,10 @@ def page(title, toc, body, desc=""):
 </nav>
 <main><div class="page">
 {body}
-</div></main>
+</div>{onpage}</main>
 </div>
 <script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
 </body>
 </html>
 """
@@ -103,6 +119,71 @@ def fmt_ref(key, r):
     return f'<li id="{html.escape(key)}">' + " ".join(parts) + "</li>"
 
 
+def _surnames(authors):
+    """Pull surnames out of a formatted author string like
+    'Schölkopf, B. and Smola, A. J.' -> ['Schölkopf', 'Smola']."""
+    return re.findall(r"([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'\-]+),\s+(?:[A-Z]\.[- ]?)+", authors)
+
+
+def _cite_patterns(surnames, year):
+    """Regexes matching the in-prose citation forms for a work, longest first."""
+    y = str(year)
+    esc = [re.escape(s) for s in surnames]
+    pats = []
+    if len(esc) >= 3:
+        mid = r",?\s+".join(esc[:-1])
+        pats.append(rf"{mid},?\s+and\s+{esc[-1]}\s+\({y}\)")
+        pats.append(rf"\(\s*{mid},?\s+and\s+{esc[-1]},?\s+{y}\s*\)")
+    if len(esc) >= 2:
+        pats.append(rf"{esc[0]}\s+and\s+{esc[1]}\s+\({y}\)")
+        pats.append(rf"\(\s*{esc[0]}\s+and\s+{esc[1]},?\s+{y}\s*\)")
+    if esc:
+        pats.append(rf"{esc[0]}\s+et\s+al\.?\s*\({y}\)")
+        pats.append(rf"\(\s*{esc[0]}\s+et\s+al\.?,?\s+{y}\s*\)")
+        pats.append(rf"{esc[0]}\s+\({y}\)")
+        pats.append(rf"\(\s*{esc[0]},?\s+{y}\s*\)")
+    return pats
+
+
+def _ref_tooltip(r):
+    bits = []
+    if r.get("authors"):
+        bits.append(r["authors"])
+    if r.get("year"):
+        bits.append(f"({r['year']})")
+    if r.get("title"):
+        bits.append(r["title"] + ".")
+    if r.get("venue"):
+        bits.append(r["venue"] + ".")
+    return " ".join(bits)
+
+
+def link_citations(body, keys, bib):
+    """Turn in-prose 'Author (Year)' mentions of this chapter's cited works into
+    hover-card links to the bibliography. Placeholder-based so links never nest."""
+    stash = {}
+    # order keys so multi-author (more specific) patterns run first
+    ordered = sorted(keys, key=lambda k: -len(_surnames(bib.get(k, {}).get("authors", ""))))
+    for k in ordered:
+        r = bib.get(k)
+        if not r:
+            continue
+        surn = _surnames(r.get("authors", ""))
+        if not surn or not r.get("year"):
+            continue
+        tip = html.escape(_ref_tooltip(r), quote=True)
+        for pat in _cite_patterns(surn, r["year"]):
+            def repl(m):
+                tok = f"\x00C{len(stash)}\x00"
+                stash[tok] = (f'<a class="cite" href="bibliography.html#{k}" '
+                              f'data-ref="{tip}">{m.group(0)}</a>')
+                return tok
+            body = re.sub(pat, repl, body)
+    for tok, link in stash.items():
+        body = body.replace(tok, link)
+    return body, len(stash)
+
+
 def chapter_refs_html(src, bib):
     """The 'References' section appended to a chapter, from chapters/refs/<src>.json."""
     p = os.path.join(ROOT, "chapters", "refs", f"{src}.json")
@@ -125,18 +206,25 @@ def chapter_refs_html(src, bib):
 
 def main():
     os.makedirs(os.path.join(OUT, "assets"), exist_ok=True)
-    for a in ("book.css", "viz.css", "viz.js"):
+    for a in ("book.css", "viz.css", "viz.js", "nav.js"):
         shutil.copy(os.path.join(ROOT, "assets", a), os.path.join(OUT, "assets", a))
     bib = load_bib()
 
     chs = chapters_flat()
     missing = []
+    ncites = 0
     for i, ch in enumerate(chs):
         src = os.path.join(ROOT, "chapters", "src", f"{ch['src']}.body.html")
         if not os.path.exists(src):
             missing.append(ch["src"])
             continue
         body = open(src).read()
+        # link in-prose citations to the bibliography (before the refs list is appended)
+        keyfile = os.path.join(ROOT, "chapters", "refs", f"{ch['src']}.json")
+        chkeys = json.load(open(keyfile)) if os.path.exists(keyfile) else []
+        body, nc = link_citations(body, chkeys, bib)
+        ncites += nc
+        onpage = onpage_nav(body)
         # chapter number header injected before the first h1 content
         body = re.sub(
             r"<h1>",
@@ -153,7 +241,7 @@ def main():
             nav.append(f'<a style="text-align:right" href="{chs[i+1]["slug"]}.html"><span class="dir">next</span>{i + 2}. {html.escape(chs[i+1]["title"])}</a>')
         nav.append("</div>")
         out = page(f'{ch["title"]} · {BOOK["title"]}', toc_html(ch["slug"]), body + "\n".join(nav),
-                   desc=f'{ch["title"]}, from {BOOK["title"]}.')
+                   desc=f'{ch["title"]}, from {BOOK["title"]}.', onpage=onpage)
         open(os.path.join(OUT, f'{ch["slug"]}.html'), "w").write(out)
 
     # cover
@@ -199,6 +287,7 @@ entries are standard primary sources for the results discussed.</p>
              desc="Bibliography for " + BOOK["title"]))
 
     print(f"built {len(chs) - len(missing)}/{len(chs)} chapters + cover + bibliography ({len(entries)} refs) -> docs/")
+    print(f"linked {ncites} in-prose citations to the bibliography")
     if missing:
         print("missing bodies:", ", ".join(missing))
 
