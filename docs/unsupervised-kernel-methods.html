@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kernel PCA, Clustering, and CCA · Machine Learning with Kernel Methods</title>
 <meta name="description" content="Kernel PCA, Clustering, and CCA, from Machine Learning with Kernel Methods.">
+
+<script>(function(){try{var t=localStorage.getItem('bk-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/book.css">
 <link rel="stylesheet" href="assets/viz.css">
 
@@ -17,9 +24,22 @@
   ],throwOnError:false});"></script>
 
 </head>
-<body>
+<body data-prev="learning-theory.html" data-next="mercer-and-rates.html">
+<a class="skip" href="#main">Skip to content</a>
+<div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
+<header class="topbar">
+<button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="tb-title" href="index.html">Kernel Methods</a>
+<span class="tb-spacer"></span>
+<button type="button" class="tb-btn search-open" aria-label="Search the book"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg></button>
+<button type="button" class="tb-btn theme-btn" aria-label="Toggle color theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</header>
 <div class="book">
-<nav class="toc">
+<nav class="toc" id="toc" aria-label="Table of contents">
+<div class="toc-tools">
+<button type="button" class="tool-btn search-open" aria-label="Search the book"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><span>Search</span><kbd>/</kbd></button>
+<button type="button" class="tool-btn theme-btn" aria-label="Toggle color theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
 <div class="part">I · The Idea</div>
@@ -48,7 +68,8 @@
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
-<main><div class="page">
+<div class="scrim" id="scrim"></div>
+<main id="main"><div class="page">
 <h1><span class="chno">Chapter 7 · III · Discovering Structure</span>Kernel PCA, Clustering, and CCA</h1>
 
 <p class="lead">The previous chapters built kernel versions of supervised methods: given labels, we learned functions in an RKHS by regularized empirical risk minimization. But much of data analysis happens before any label is available. We want to see the shape of a dataset, compress it to a few informative coordinates, group similar points together, or relate two different views of the same objects. This chapter carries the kernel program into that unsupervised territory. The pattern will feel familiar by now: take a classical linear method built from inner products, restate it as an optimization over functions in an RKHS, invoke a representer argument to reduce it to a finite-dimensional problem on the Gram matrix, and solve that problem with linear algebra. Applied to principal component analysis this yields kernel PCA, an eigendecomposition of the centered Gram matrix. Applied to K-means it yields kernel K-means and, through a spectral relaxation of the same combinatorial objective, the family of spectral clustering algorithms. Applied to canonical correlation analysis it yields kernel CCA, where we will meet an instructive failure: without regularization the kernelized problem is vacuous, and fixing it teaches us something about overfitting in infinite dimensions.</p>
@@ -560,10 +581,10 @@ $$
 <li ><span class="bib-authors">Bach, F. R. and Jordan, M. I.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Kernel independent component analysis</span>. <span class="bib-venue">Journal of Machine Learning Research 3, 1-48.</span></li>
 <li ><span class="bib-authors">Gong, Y., Ke, Q., Isard, M., and Lazebnik, S.</span> <span class="bib-year">(2014)</span> <span class="bib-title">A multi-view embedding space for modeling internet images, tags, and their semantics</span>. <span class="bib-venue">International Journal of Computer Vision 106(2), 210-233.</span></li>
 <li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
-<li ><span class="bib-authors">Williams, C. K. I.</span> <span class="bib-year">(2002)</span> <span class="bib-title">On a connection between kernel PCA and metric multidimensional scaling</span>. <span class="bib-venue">Machine Learning 46(1-3), 11-19.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="learning-theory.html"><span class="dir">previous</span>6. Learning Theory in RKHS Balls</a>
-<a style="text-align:right" href="mercer-and-rates.html"><span class="dir">next</span>8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
-</div>
+<li ><span class="bib-authors">Williams, C. K. I.</span> <span class="bib-year">(2002)</span> <span class="bib-title">On a connection between kernel PCA and metric multidimensional scaling</span>. <span class="bib-venue">Machine Learning 46(1-3), 11-19.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><nav class="chnav" aria-label="Chapter navigation">
+<a class="nav-card prev" href="learning-theory.html"><span class="dir">&larr; Previous</span><span class="nav-title">6. Learning Theory in RKHS Balls</span></a>
+<a class="nav-card next" href="mercer-and-rates.html"><span class="dir">Next &rarr;</span><span class="nav-title">8. Mercer&#x27;s Theorem, Spectra, and Rates</span></a>
+</nav>
 </div><aside class="onpage"><div class="onpage-title">On this page</div>
 <a class="l2" href="#principal-component-analysis">Principal component analysis</a>
 <a class="l3" href="#pca-formalization">Formalization</a>
@@ -592,6 +613,16 @@ $$
 <a class="l3" href="#cca-covariance-family">Variance, covariance, and correlation as one family</a>
 <a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
+
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search the book">
+    <input id="search-input" type="search" placeholder="Search the book&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="search-results" id="search-results"></ul>
+    <div class="search-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate &nbsp; <kbd>Enter</kbd> open &nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg></button>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
 </body>

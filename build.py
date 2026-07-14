@@ -8,6 +8,7 @@ Usage: python3 build.py
 
 import html
 import json
+import math
 import os
 import re
 import shutil
@@ -24,6 +25,28 @@ KATEX = """
     {left:'$$',right:'$$',display:true},
     {left:'\\\\(',right:'\\\\)',display:false}
   ],throwOnError:false});"></script>
+"""
+
+FONTS = """
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+"""
+
+# set the persisted theme before first paint so there is no flash
+THEME_BOOT = """
+<script>(function(){try{var t=localStorage.getItem('bk-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+"""
+
+SEARCH_OVERLAY = """
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search the book">
+    <input id="search-input" type="search" placeholder="Search the book&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="search-results" id="search-results"></ul>
+    <div class="search-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate &nbsp; <kbd>Enter</kbd> open &nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
 """
 
 
@@ -105,7 +128,11 @@ def onpage_nav(body):
     return '<aside class="onpage">' + "\n".join(rows) + '</aside>'
 
 
-def page(title, toc, body, desc="", onpage=""):
+def page(title, toc, body, desc="", onpage="", prev_href="", next_href=""):
+    toolbar = """<div class="toc-tools">
+<button type="button" class="tool-btn search-open" aria-label="Search the book"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><span>Search</span><kbd>/</kbd></button>
+<button type="button" class="tool-btn theme-btn" aria-label="Toggle color theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</div>"""
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -113,19 +140,32 @@ def page(title, toc, body, desc="", onpage=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(desc)}">
-<link rel="stylesheet" href="assets/book.css">
+{THEME_BOOT}{FONTS}<link rel="stylesheet" href="assets/book.css">
 <link rel="stylesheet" href="assets/viz.css">
 {KATEX}
 </head>
-<body>
+<body data-prev="{html.escape(prev_href)}" data-next="{html.escape(next_href)}">
+<a class="skip" href="#main">Skip to content</a>
+<div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
+<header class="topbar">
+<button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="tb-title" href="index.html">Kernel Methods</a>
+<span class="tb-spacer"></span>
+<button type="button" class="tb-btn search-open" aria-label="Search the book"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg></button>
+<button type="button" class="tb-btn theme-btn" aria-label="Toggle color theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</header>
 <div class="book">
-<nav class="toc">
+<nav class="toc" id="toc" aria-label="Table of contents">
+{toolbar}
 {toc}
 </nav>
-<main><div class="page">
+<div class="scrim" id="scrim"></div>
+<main id="main"><div class="page">
 {body}
 </div>{onpage}</main>
 </div>
+{SEARCH_OVERLAY}
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg></button>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
 </body>
@@ -250,6 +290,33 @@ def main():
     chs = chapters_flat()
     missing = []
     ncites = 0
+    search_index = []
+
+    def plain(t, limit=230):
+        t = re.sub(r"\$\$.*?\$\$", " ", t, flags=re.S)
+        t = re.sub(r"\\\(.*?\\\)", " ", t, flags=re.S)
+        t = re.sub(r"<[^>]+>", " ", t)
+        t = html.unescape(t)
+        t = re.sub(r"\s+", " ", t).strip()
+        return t[:limit]
+
+    def index_chapter(body, num, ch):
+        # one entry per h2/h3 section, plus the chapter lead
+        heads = list(re.finditer(r'<h([23])\s+id="([^"]+)"[^>]*>(.*?)</h[23]>', body, re.S))
+        lead = re.search(r'<p class="lead">(.*?)</p>', body, re.S)
+        search_index.append({
+            "h": f'{num}. {ch["title"]}', "c": ch["part"],
+            "u": f'{ch["slug"]}.html', "x": plain(lead.group(1)) if lead else "",
+        })
+        for k, m in enumerate(heads):
+            end = heads[k + 1].start() if k + 1 < len(heads) else len(body)
+            label = plain(m.group(3), 90)
+            search_index.append({
+                "h": label, "c": f'{num}. {ch["title"]}',
+                "u": f'{ch["slug"]}.html#{m.group(2)}',
+                "x": plain(body[m.end():end]),
+            })
+
     for i, ch in enumerate(chs):
         src = os.path.join(ROOT, "chapters", "src", f"{ch['src']}.body.html")
         if not os.path.exists(src):
@@ -262,6 +329,7 @@ def main():
         body, nc = link_citations(body, chkeys, bib)
         ncites += nc
         onpage = onpage_nav(body)
+        index_chapter(body, i + 1, ch)
         # chapter number header injected before the first h1 content
         body = re.sub(
             r"<h1>",
@@ -269,16 +337,21 @@ def main():
             body, count=1,
         )
         body += chapter_refs_html(ch["src"], bib)
-        nav = ['<div class="chnav">']
+        prev_href = f'{chs[i-1]["slug"]}.html' if i > 0 else "index.html"
+        next_href = f'{chs[i+1]["slug"]}.html' if i < len(chs) - 1 else ""
+        nav = ['<nav class="chnav" aria-label="Chapter navigation">']
         if i > 0:
-            nav.append(f'<a href="{chs[i-1]["slug"]}.html"><span class="dir">previous</span>{i}. {html.escape(chs[i-1]["title"])}</a>')
+            nav.append(f'<a class="nav-card prev" href="{prev_href}"><span class="dir">&larr; Previous</span><span class="nav-title">{i}. {html.escape(chs[i-1]["title"])}</span></a>')
         else:
-            nav.append(f'<a href="index.html"><span class="dir">previous</span>Contents</a>')
-        if i < len(chs) - 1:
-            nav.append(f'<a style="text-align:right" href="{chs[i+1]["slug"]}.html"><span class="dir">next</span>{i + 2}. {html.escape(chs[i+1]["title"])}</a>')
-        nav.append("</div>")
+            nav.append(f'<a class="nav-card prev" href="index.html"><span class="dir">&larr; Previous</span><span class="nav-title">Contents</span></a>')
+        if next_href:
+            nav.append(f'<a class="nav-card next" href="{next_href}"><span class="dir">Next &rarr;</span><span class="nav-title">{i + 2}. {html.escape(chs[i+1]["title"])}</span></a>')
+        else:
+            nav.append('<a class="nav-card next" href="bibliography.html"><span class="dir">Next &rarr;</span><span class="nav-title">Bibliography</span></a>')
+        nav.append("</nav>")
         out = page(f'{ch["title"]} · {BOOK["title"]}', toc_html(ch["slug"]), body + "\n".join(nav),
-                   desc=f'{ch["title"]}, from {BOOK["title"]}.', onpage=onpage)
+                   desc=f'{ch["title"]}, from {BOOK["title"]}.', onpage=onpage,
+                   prev_href=prev_href, next_href=next_href or "bibliography.html")
         open(os.path.join(OUT, f'{ch["slug"]}.html'), "w").write(out)
 
     # cover
@@ -290,10 +363,23 @@ def main():
         for ch in part["chapters"]:
             n += 1
             items.append(f'<li><span class="n">{n}</span><a href="{ch["slug"]}.html">{html.escape(ch["title"])}</a></li>')
+    # the signature: a real Gaussian Gram matrix, K_ij = exp(-(i-j)^2 / 2 sigma^2)
+    N, sigma = 13, 3.1
+    gcells = "".join(
+        f'<i style="--o:{math.exp(-((i - j) ** 2) / (2 * sigma * sigma)):.2f}"></i>'
+        for i in range(N) for j in range(N)
+    )
+    gram_hero = (f'<div class="gram-wrap"><div class="gram-hero" style="--n:{N}" aria-hidden="true">{gcells}</div>'
+                 '<span class="gram-cap">\\(K_{ij}=e^{-(i-j)^2/2\\sigma^2}\\), the object this book is about</span></div>')
     cover = f"""<div class="cover">
+<div class="cover-hero">
+<div class="cover-lead">
 <h1>{html.escape(BOOK["title"])}</h1>
 <p class="subtitle">{html.escape(BOOK["subtitle"])}</p>
 <p class="attribution">{html.escape(BOOK["source"])}</p>
+</div>
+{gram_hero}
+</div>
 <ol class="contents">
 {chr(10).join(items)}
 </ol>
@@ -330,8 +416,16 @@ entries are standard primary sources for the results discussed.</p>
             page(f'Notation & Glossary · {BOOK["title"]}', toc_html("glossary"), gbody,
                  desc="Notation and glossary for " + BOOK["title"]))
 
+    # end-matter entries so search reaches everything
+    search_index.append({"h": "Notation and Glossary", "c": "End matter", "u": "glossary.html",
+                         "x": "Symbols and terms used across the book, cross-linked to the chapters that introduce them."})
+    search_index.append({"h": "Bibliography", "c": "End matter", "u": "bibliography.html",
+                         "x": f"Every work cited across the book, {len(entries)} entries."})
+    json.dump(search_index, open(os.path.join(OUT, "search-index.json"), "w"))
+
     print(f"built {len(chs) - len(missing)}/{len(chs)} chapters + cover + bibliography ({len(entries)} refs) -> docs/")
     print(f"linked {ncites} in-prose citations to the bibliography")
+    print(f"search index: {len(search_index)} entries")
     if missing:
         print("missing bodies:", ", ".join(missing))
 

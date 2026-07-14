@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bibliography · Machine Learning with Kernel Methods</title>
 <meta name="description" content="Bibliography for Machine Learning with Kernel Methods">
+
+<script>(function(){try{var t=localStorage.getItem('bk-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/book.css">
 <link rel="stylesheet" href="assets/viz.css">
 
@@ -17,9 +24,22 @@
   ],throwOnError:false});"></script>
 
 </head>
-<body>
+<body data-prev="" data-next="">
+<a class="skip" href="#main">Skip to content</a>
+<div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
+<header class="topbar">
+<button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="tb-title" href="index.html">Kernel Methods</a>
+<span class="tb-spacer"></span>
+<button type="button" class="tb-btn search-open" aria-label="Search the book"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg></button>
+<button type="button" class="tb-btn theme-btn" aria-label="Toggle color theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</header>
 <div class="book">
-<nav class="toc">
+<nav class="toc" id="toc" aria-label="Table of contents">
+<div class="toc-tools">
+<button type="button" class="tool-btn search-open" aria-label="Search the book"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><span>Search</span><kbd>/</kbd></button>
+<button type="button" class="tool-btn theme-btn" aria-label="Toggle color theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
 <div class="part">I · The Idea</div>
@@ -48,9 +68,10 @@
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html" class="here">Bibliography</a>
 </nav>
-<main><div class="page">
+<div class="scrim" id="scrim"></div>
+<main id="main"><div class="page">
 <h1><span class="chno">End matter</span>Bibliography</h1>
-<p class="lead">Every work cited across the book, 95 entries. The chapters that
+<p class="lead">Every work cited across the book, 99 entries. The chapters that
 draw on the Mairal and Vert lecture course follow its attributions; the additional
 entries are standard primary sources for the results discussed.</p>
 <p>The organizing source is the lecture course itself:</p>
@@ -65,6 +86,7 @@ entries are standard primary sources for the results discussed.</p>
 <li id="bach2004"><span class="bib-authors">Bach, F. R., Lanckriet, G. R. G., and Jordan, M. I.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Multiple kernel learning, conic duality, and the SMO algorithm</span>. <span class="bib-venue">Proceedings of the 21st International Conference on Machine Learning (ICML), 6-13.</span></li>
 <li id="bartlett2002"><span class="bib-authors">Bartlett, P. L. and Mendelson, S.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Rademacher and Gaussian complexities: risk bounds and structural results</span>. <span class="bib-venue">Journal of Machine Learning Research 3, 463-482.</span></li>
 <li id="bartlett2006"><span class="bib-authors">Bartlett, P. L., Jordan, M. I., and McAuliffe, J. D.</span> <span class="bib-year">(2006)</span> <span class="bib-title">Convexity, classification, and risk bounds</span>. <span class="bib-venue">Journal of the American Statistical Association 101(473), 138-156.</span></li>
+<li id="bengio2006local"><span class="bib-authors">Bengio, Y., Delalleau, O., and Le Roux, N.</span> <span class="bib-year">(2006)</span> <span class="bib-title">The curse of highly variable functions for local kernel machines</span>. <span class="bib-venue">NeurIPS 18.</span></li>
 <li id="berg1984"><span class="bib-authors">Berg, C., Christensen, J. P. R., and Ressel, P.</span> <span class="bib-year">(1984)</span> <span class="bib-title">Harmonic Analysis on Semigroups: Theory of Positive Definite and Related Functions</span>. <span class="bib-venue">Springer, Graduate Texts in Mathematics 100.</span></li>
 <li id="bietti2019"><span class="bib-authors">Bietti, A. and Mairal, J.</span> <span class="bib-year">(2019)</span> <span class="bib-title">Group invariance, stability to deformations, and complexity of deep convolutional representations</span>. <span class="bib-venue">Journal of Machine Learning Research 20(25), 1-49.</span></li>
 <li id="bochner1933"><span class="bib-authors">Bochner, S.</span> <span class="bib-year">(1933)</span> <span class="bib-title">Monotone Funktionen, Stieltjessche Integrale und harmonische Analyse</span>. <span class="bib-venue">Mathematische Annalen 108, 378-410.</span></li>
@@ -74,6 +96,7 @@ entries are standard primary sources for the results discussed.</p>
 <li id="bottou2010"><span class="bib-authors">Bottou, L.</span> <span class="bib-year">(2010)</span> <span class="bib-title">Large-scale machine learning with stochastic gradient descent</span>. <span class="bib-venue">Proceedings of COMPSTAT 2010, 177-186.</span></li>
 <li id="boucheron2005"><span class="bib-authors">Boucheron, S., Bousquet, O., and Lugosi, G.</span> <span class="bib-year">(2005)</span> <span class="bib-title">Theory of classification: a survey of some recent advances</span>. <span class="bib-venue">ESAIM: Probability and Statistics 9, 323-375.</span></li>
 <li id="boyd2004"><span class="bib-authors">Boyd, S. and Vandenberghe, L.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Convex Optimization</span>. <span class="bib-venue">Cambridge University Press.</span></li>
+<li id="broomhead1988"><span class="bib-authors">Broomhead, D. S. and Lowe, D.</span> <span class="bib-year">(1988)</span> <span class="bib-title">Multivariable functional interpolation and adaptive networks</span>. <span class="bib-venue">Complex Systems 2, 321-355.</span></li>
 <li id="caponnetto2007"><span class="bib-authors">Caponnetto, A. and De Vito, E.</span> <span class="bib-year">(2007)</span> <span class="bib-title">Optimal rates for the regularized least-squares algorithm</span>. <span class="bib-venue">Foundations of Computational Mathematics 7(3), 331-368.</span></li>
 <li id="chen2020"><span class="bib-authors">Chen, D., Jacob, L., and Mairal, J.</span> <span class="bib-year">(2020)</span> <span class="bib-title">Convolutional kernel networks for graph-structured data</span>. <span class="bib-venue">ICML.</span></li>
 <li id="chizat2019"><span class="bib-authors">Chizat, L., Oyallon, E., and Bach, F.</span> <span class="bib-year">(2019)</span> <span class="bib-title">On lazy training in differentiable programming</span>. <span class="bib-venue">NeurIPS 32.</span></li>
@@ -88,6 +111,7 @@ entries are standard primary sources for the results discussed.</p>
 <li id="drineas2005"><span class="bib-authors">Drineas, P. and Mahoney, M. W.</span> <span class="bib-year">(2005)</span> <span class="bib-title">On the Nyström method for approximating a Gram matrix for improved kernel-based learning</span>. <span class="bib-venue">Journal of Machine Learning Research 6, 2153-2175.</span></li>
 <li id="durbin1998"><span class="bib-authors">Durbin, R., Eddy, S. R., Krogh, A., and Mitchison, G.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Biological Sequence Analysis: Probabilistic Models of Proteins and Nucleic Acids</span>. <span class="bib-venue">Cambridge University Press.</span></li>
 <li id="fukumizu2008"><span class="bib-authors">Fukumizu, K., Gretton, A., Sun, X., and Schölkopf, B.</span> <span class="bib-year">(2008)</span> <span class="bib-title">Kernel measures of conditional dependence</span>. <span class="bib-venue">NeurIPS 20, 489-496.</span></li>
+<li id="glorot2010"><span class="bib-authors">Glorot, X. and Bengio, Y.</span> <span class="bib-year">(2010)</span> <span class="bib-title">Understanding the difficulty of training deep feedforward neural networks</span>. <span class="bib-venue">AISTATS.</span></li>
 <li id="gong2014"><span class="bib-authors">Gong, Y., Ke, Q., Isard, M., and Lazebnik, S.</span> <span class="bib-year">(2014)</span> <span class="bib-title">A multi-view embedding space for modeling internet images, tags, and their semantics</span>. <span class="bib-venue">International Journal of Computer Vision 106(2), 210-233.</span></li>
 <li id="green1984"><span class="bib-authors">Green, P. J.</span> <span class="bib-year">(1984)</span> <span class="bib-title">Iteratively reweighted least squares for maximum likelihood estimation, and some robust and resistant alternatives</span>. <span class="bib-venue">Journal of the Royal Statistical Society, Series B 46(2), 149-192.</span></li>
 <li id="gretton2012"><span class="bib-authors">Gretton, A., Borgwardt, K. M., Rasch, M. J., Schölkopf, B., and Smola, A.</span> <span class="bib-year">(2012)</span> <span class="bib-title">A kernel two-sample test</span>. <span class="bib-venue">Journal of Machine Learning Research 13, 723-773.</span></li>
@@ -116,6 +140,7 @@ entries are standard primary sources for the results discussed.</p>
 <li id="mercer1909"><span class="bib-authors">Mercer, J.</span> <span class="bib-year">(1909)</span> <span class="bib-title">Functions of positive and negative type, and their connection with the theory of integral equations</span>. <span class="bib-venue">Philosophical Transactions of the Royal Society A 209, 415-446.</span></li>
 <li id="micchelli2005"><span class="bib-authors">Micchelli, C. A. and Pontil, M.</span> <span class="bib-year">(2005)</span> <span class="bib-title">Learning the kernel function via regularization</span>. <span class="bib-venue">Journal of Machine Learning Research 6, 1099-1125.</span></li>
 <li id="mika1999"><span class="bib-authors">Mika, S., Schölkopf, B., Smola, A., Müller, K.-R., Scholz, M., and Rätsch, G.</span> <span class="bib-year">(1999)</span> <span class="bib-title">Kernel PCA and de-noising in feature spaces</span>. <span class="bib-venue">Advances in Neural Information Processing Systems 11, 536-542.</span></li>
+<li id="montufar2014"><span class="bib-authors">Montufar, G., Pascanu, R., Cho, K., and Bengio, Y.</span> <span class="bib-year">(2014)</span> <span class="bib-title">On the number of linear regions of deep neural networks</span>. <span class="bib-venue">NeurIPS 27.</span></li>
 <li id="muandet2017"><span class="bib-authors">Muandet, K., Fukumizu, K., Sriperumbudur, B., and Schölkopf, B.</span> <span class="bib-year">(2017)</span> <span class="bib-title">Kernel mean embedding of distributions: a review and beyond</span>. <span class="bib-venue">Foundations and Trends in Machine Learning 10(1-2), 1-141.</span></li>
 <li id="neal1996"><span class="bib-authors">Neal, R. M.</span> <span class="bib-year">(1996)</span> <span class="bib-title">Bayesian Learning for Neural Networks</span>. <span class="bib-venue">Springer, Lecture Notes in Statistics 118.</span></li>
 <li id="ng2002"><span class="bib-authors">Ng, A. Y., Jordan, M. I., and Weiss, Y.</span> <span class="bib-year">(2002)</span> <span class="bib-title">On spectral clustering: analysis and an algorithm</span>. <span class="bib-venue">Advances in Neural Information Processing Systems 14, 849-856.</span></li>
@@ -157,6 +182,16 @@ entries are standard primary sources for the results discussed.</p>
 </ul>
 </div></main>
 </div>
+
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search the book">
+    <input id="search-input" type="search" placeholder="Search the book&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="search-results" id="search-results"></ul>
+    <div class="search-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate &nbsp; <kbd>Enter</kbd> open &nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg></button>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
 </body>

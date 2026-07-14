@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Large-Scale Kernel Machines · Machine Learning with Kernel Methods</title>
 <meta name="description" content="Large-Scale Kernel Machines, from Machine Learning with Kernel Methods.">
+
+<script>(function(){try{var t=localStorage.getItem('bk-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/book.css">
 <link rel="stylesheet" href="assets/viz.css">
 
@@ -17,9 +24,22 @@
   ],throwOnError:false});"></script>
 
 </head>
-<body>
+<body data-prev="kernel-mean-embeddings.html" data-next="multiple-kernel-learning.html">
+<a class="skip" href="#main">Skip to content</a>
+<div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
+<header class="topbar">
+<button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="tb-title" href="index.html">Kernel Methods</a>
+<span class="tb-spacer"></span>
+<button type="button" class="tb-btn search-open" aria-label="Search the book"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg></button>
+<button type="button" class="tb-btn theme-btn" aria-label="Toggle color theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</header>
 <div class="book">
-<nav class="toc">
+<nav class="toc" id="toc" aria-label="Table of contents">
+<div class="toc-tools">
+<button type="button" class="tool-btn search-open" aria-label="Search the book"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><span>Search</span><kbd>/</kbd></button>
+<button type="button" class="tool-btn theme-btn" aria-label="Toggle color theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
 <div class="part">I · The Idea</div>
@@ -48,7 +68,8 @@
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
-<main><div class="page">
+<div class="scrim" id="scrim"></div>
+<main id="main"><div class="page">
 <h1><span class="chno">Chapter 13 · VII · Scaling and the Modern View</span>Large-Scale Kernel Machines</h1>
 
 <p class="lead">Every kernel method we have built so far shares a hidden liability: it is expensive. The representer theorem turns a search over functions into a search over \(n\) coefficients, but the price of that convenience is the \(n \times n\) Gram matrix. Forming it costs \(O(n^2)\) kernel evaluations and \(O(n^2)\) memory, and the linear systems at the heart of kernel ridge regression, Gaussian processes, and the SVM cost \(O(n^3)\) to solve exactly. For \(n\) in the tens of thousands this is already uncomfortable; for \(n\) in the millions it is impossible. This chapter is about breaking that wall. We first take an interlude into optimization, because the escape route for very large problems is almost always to stop solving linear systems and start descending gradients, and the algorithms that do this well for large finite sums (stochastic gradient descent and its variance-reduced cousins) deserve to be understood on their own terms. We then return to kernels with two families of approximation, each of which removes a different part of the cost. The Nystrom method replaces the Gram matrix by a low-rank surrogate built from a small subset of points, killing the \(O(n^2)\) storage and the \(O(n^3)\) solve. Random Fourier features go further still: they build an explicit, finite-dimensional feature map whose inner products approximate the kernel, so that a kernel machine becomes an ordinary linear model that any large-scale linear solver can handle. Both turn an intractable kernel problem into a tractable linear one; they differ in how, and in what they give up.</p>
@@ -512,10 +533,10 @@ The optimization machinery behind large-scale kernel machines, decomposition and
 <li ><span class="bib-authors">Johnson, R. and Zhang, T.</span> <span class="bib-year">(2013)</span> <span class="bib-title">Accelerating stochastic gradient descent using predictive variance reduction</span>. <span class="bib-venue">NeurIPS 26.</span></li>
 <li ><span class="bib-authors">Rudi, A. and Rosasco, L.</span> <span class="bib-year">(2017)</span> <span class="bib-title">Generalization properties of learning with random features</span>. <span class="bib-venue">NeurIPS 30.</span></li>
 <li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
-<li ><span class="bib-authors">Platt, J. C.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Sequential minimal optimization: a fast algorithm for training support vector machines</span>. <span class="bib-venue">Microsoft Research Technical Report MSR-TR-98-14.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="kernel-mean-embeddings.html"><span class="dir">previous</span>12. Mean Embeddings, MMD, and Characteristic Kernels</a>
-<a style="text-align:right" href="multiple-kernel-learning.html"><span class="dir">next</span>14. Multiple Kernel Learning</a>
-</div>
+<li ><span class="bib-authors">Platt, J. C.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Sequential minimal optimization: a fast algorithm for training support vector machines</span>. <span class="bib-venue">Microsoft Research Technical Report MSR-TR-98-14.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><nav class="chnav" aria-label="Chapter navigation">
+<a class="nav-card prev" href="kernel-mean-embeddings.html"><span class="dir">&larr; Previous</span><span class="nav-title">12. Mean Embeddings, MMD, and Characteristic Kernels</span></a>
+<a class="nav-card next" href="multiple-kernel-learning.html"><span class="dir">Next &rarr;</span><span class="nav-title">14. Multiple Kernel Learning</span></a>
+</nav>
 </div><aside class="onpage"><div class="onpage-title">On this page</div>
 <a class="l2" href="#the-scaling-problem">The scaling problem</a>
 <a class="l2" href="#interlude-linear">Interlude: large-scale learning with linear models</a>
@@ -536,6 +557,16 @@ The optimization machinery behind large-scale kernel machines, decomposition and
 <a class="l3" href="#rff-linear">Reduction to a linear model</a>
 <a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
+
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search the book">
+    <input id="search-input" type="search" placeholder="Search the book&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="search-results" id="search-results"></ul>
+    <div class="search-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate &nbsp; <kbd>Enter</kbd> open &nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg></button>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
 </body>

@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Learning Theory in RKHS Balls · Machine Learning with Kernel Methods</title>
 <meta name="description" content="Learning Theory in RKHS Balls, from Machine Learning with Kernel Methods.">
+
+<script>(function(){try{var t=localStorage.getItem('bk-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/book.css">
 <link rel="stylesheet" href="assets/viz.css">
 
@@ -17,9 +24,22 @@
   ],throwOnError:false});"></script>
 
 </head>
-<body>
+<body data-prev="support-vector-machines.html" data-next="unsupervised-kernel-methods.html">
+<a class="skip" href="#main">Skip to content</a>
+<div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
+<header class="topbar">
+<button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="tb-title" href="index.html">Kernel Methods</a>
+<span class="tb-spacer"></span>
+<button type="button" class="tb-btn search-open" aria-label="Search the book"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg></button>
+<button type="button" class="tb-btn theme-btn" aria-label="Toggle color theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</header>
 <div class="book">
-<nav class="toc">
+<nav class="toc" id="toc" aria-label="Table of contents">
+<div class="toc-tools">
+<button type="button" class="tool-btn search-open" aria-label="Search the book"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><span>Search</span><kbd>/</kbd></button>
+<button type="button" class="tool-btn theme-btn" aria-label="Toggle color theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
 <div class="part">I · The Idea</div>
@@ -48,7 +68,8 @@
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
-<main><div class="page">
+<div class="scrim" id="scrim"></div>
+<main id="main"><div class="page">
 <h1><span class="chno">Chapter 6 · II · Learning with a Fixed Kernel</span>Learning Theory in RKHS Balls</h1>
 
 <p class="lead">The previous chapters replaced the intractable 0/1 classification error with a convex surrogate, the \(\varphi\)-risk, and replaced arbitrary measurable functions with functions in a reproducing kernel Hilbert space. This chapter justifies both moves. First we prove a calibration theorem of Bartlett et al. (2003): minimizing a well-chosen convex \(\varphi\)-risk automatically minimizes the classification error. Then we develop the statistical side: Rademacher complexity as a measure of the capacity of a function class, a basic learning bound for empirical risk minimization with Lipschitz losses, and an explicit capacity bound for balls of an RKHS whose proof is three lines of Hilbert space geometry. The chapter closes the circle by showing, via Lagrangian duality, that empirical risk minimization over an RKHS ball is exactly the penalized problem \(\min_f \frac{1}{n}\sum_i \varphi(y_i f(x_i)) + \lambda \lVert f\rVert_{\mathcal H}^2\) that our algorithms actually solve. A self-contained interlude on convex duality supplies the tools and will be reused when we derive support vector machines.</p>
@@ -429,10 +450,10 @@ so that the uniform deviation concentrates around its expectation at the rate \(
 <li ><span class="bib-authors">Boyd, S. and Vandenberghe, L.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Convex Optimization</span>. <span class="bib-venue">Cambridge University Press.</span></li>
 <li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
 <li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li>
-<li ><span class="bib-authors">Steinwart, I. and Christmann, A.</span> <span class="bib-year">(2008)</span> <span class="bib-title">Support Vector Machines</span>. <span class="bib-venue">Springer.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="support-vector-machines.html"><span class="dir">previous</span>5. Support Vector Machines</a>
-<a style="text-align:right" href="unsupervised-kernel-methods.html"><span class="dir">next</span>7. Kernel PCA, Clustering, and CCA</a>
-</div>
+<li ><span class="bib-authors">Steinwart, I. and Christmann, A.</span> <span class="bib-year">(2008)</span> <span class="bib-title">Support Vector Machines</span>. <span class="bib-venue">Springer.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><nav class="chnav" aria-label="Chapter navigation">
+<a class="nav-card prev" href="support-vector-machines.html"><span class="dir">&larr; Previous</span><span class="nav-title">5. Support Vector Machines</span></a>
+<a class="nav-card next" href="unsupervised-kernel-methods.html"><span class="dir">Next &rarr;</span><span class="nav-title">7. Kernel PCA, Clustering, and CCA</span></a>
+</nav>
 </div><aside class="onpage"><div class="onpage-title">On this page</div>
 <a class="l2" href="#surrogate-losses">From the 0/1 loss to convex surrogates</a>
 <a class="l2" href="#calibration">Calibration: a small \varphi-risk ensures a small 0/1 risk</a>
@@ -449,6 +470,16 @@ so that the uniform deviation concentrates around its expectation at the rate \(
 <a class="l2" href="#towards-support-vector-machines">Looking ahead: support vector machines</a>
 <a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
+
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search the book">
+    <input id="search-input" type="search" placeholder="Search the book&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="search-results" id="search-results"></ul>
+    <div class="search-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate &nbsp; <kbd>Enter</kbd> open &nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg></button>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
 </body>

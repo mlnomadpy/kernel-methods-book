@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kernels for and on Graphs · Machine Learning with Kernel Methods</title>
 <meta name="description" content="Kernels for and on Graphs, from Machine Learning with Kernel Methods.">
+
+<script>(function(){try{var t=localStorage.getItem('bk-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/book.css">
 <link rel="stylesheet" href="assets/viz.css">
 
@@ -17,9 +24,22 @@
   ],throwOnError:false});"></script>
 
 </head>
-<body>
+<body data-prev="string-kernels.html" data-next="kernel-mean-embeddings.html">
+<a class="skip" href="#main">Skip to content</a>
+<div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
+<header class="topbar">
+<button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="tb-title" href="index.html">Kernel Methods</a>
+<span class="tb-spacer"></span>
+<button type="button" class="tb-btn search-open" aria-label="Search the book"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg></button>
+<button type="button" class="tb-btn theme-btn" aria-label="Toggle color theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</header>
 <div class="book">
-<nav class="toc">
+<nav class="toc" id="toc" aria-label="Table of contents">
+<div class="toc-tools">
+<button type="button" class="tool-btn search-open" aria-label="Search the book"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg><span>Search</span><kbd>/</kbd></button>
+<button type="button" class="tool-btn theme-btn" aria-label="Toggle color theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+</div>
 <div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
 <div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
 <div class="part">I · The Idea</div>
@@ -48,7 +68,8 @@
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
 </nav>
-<main><div class="page">
+<div class="scrim" id="scrim"></div>
+<main id="main"><div class="page">
 <h1><span class="chno">Chapter 11 · V · Designing Kernels for Data</span>Kernels for and on Graphs</h1>
 
 <p class="lead">Graphs appear in machine learning in two very different roles, and the word alone hides the difference. Sometimes each data point <em>is</em> a graph: a molecule, an image parsed into regions, a program's call structure, and we want a kernel that compares two whole graphs. Sometimes there is a single fixed graph, an interaction network or a discretized domain, and each data point is one of its <em>nodes</em>: we want a kernel that compares two vertices of the same graph. These are genuinely separate problems with separate mathematics, so this chapter keeps them apart. The first half builds kernels <em>between</em> graphs and runs headlong into computational hardness: the most expressive comparisons are NP-hard, and the art is to trade a little expressiveness for tractability by counting walks and subtrees instead of subgraphs. The second half builds kernels <em>on</em> a graph from the graph Laplacian, and finds a clean answer, the diffusion kernel, that is the discrete cousin of the Gaussian and that we will read off directly from a discrete harmonic analysis.</p>
@@ -539,10 +560,10 @@ and state the exact condition on \(\Lambda_t\) under which the infinite sum conv
 <li ><span class="bib-authors">Smola, A. J. and Kondor, R.</span> <span class="bib-year">(2003)</span> <span class="bib-title">Kernels and regularization on graphs</span>. <span class="bib-venue">Learning Theory and Kernel Machines (COLT/Kernel Workshop), LNCS 2777, 144-158.</span></li>
 <li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li>
 <li ><span class="bib-authors">Haussler, D.</span> <span class="bib-year">(1999)</span> <span class="bib-title">Convolution kernels on discrete structures</span>. <span class="bib-venue">Technical Report UCSC-CRL-99-10, UC Santa Cruz.</span></li>
-<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
-<a href="string-kernels.html"><span class="dir">previous</span>10. Kernels for Sequences</a>
-<a style="text-align:right" href="kernel-mean-embeddings.html"><span class="dir">next</span>12. Mean Embeddings, MMD, and Characteristic Kernels</a>
-</div>
+<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><nav class="chnav" aria-label="Chapter navigation">
+<a class="nav-card prev" href="string-kernels.html"><span class="dir">&larr; Previous</span><span class="nav-title">10. Kernels for Sequences</span></a>
+<a class="nav-card next" href="kernel-mean-embeddings.html"><span class="dir">Next &rarr;</span><span class="nav-title">12. Mean Embeddings, MMD, and Characteristic Kernels</span></a>
+</nav>
 </div><aside class="onpage"><div class="onpage-title">On this page</div>
 <a class="l2" href="#kernels-between-graphs">Part A: Kernels between graphs</a>
 <a class="l3" href="#explicit-features">Explicit features: indexing by substructures</a>
@@ -560,6 +581,16 @@ and state the exact condition on \(\Lambda_t\) under which the infinite sum conv
 <a class="l3" href="#graph-kernel-on-applications">Applications</a>
 <a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
+
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-box" role="dialog" aria-label="Search the book">
+    <input id="search-input" type="search" placeholder="Search the book&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="search-results" id="search-results"></ul>
+    <div class="search-hint"><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate &nbsp; <kbd>Enter</kbd> open &nbsp; <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"/></svg></button>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
 </body>
