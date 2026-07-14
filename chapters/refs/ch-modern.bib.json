@@ -1,0 +1,218 @@
+{
+ "belkin2019dd": {
+  "authors": "Belkin, M., Hsu, D., Ma, S., and Mandal, S.",
+  "year": 2019,
+  "title": "Reconciling modern machine-learning practice and the classical bias-variance trade-off",
+  "venue": "Proceedings of the National Academy of Sciences 116(32), 15849-15854"
+ },
+ "belkin2018understand": {
+  "authors": "Belkin, M., Ma, S., and Mandal, S.",
+  "year": 2018,
+  "title": "To understand deep learning we need to understand kernel learning",
+  "venue": "ICML"
+ },
+ "liang2020interpolate": {
+  "authors": "Liang, T. and Rakhlin, A.",
+  "year": 2020,
+  "title": "Just interpolate: kernel ridgeless regression can generalize",
+  "venue": "Annals of Statistics 48(3), 1329-1347"
+ },
+ "bartlett2020benign": {
+  "authors": "Bartlett, P. L., Long, P. M., Lugosi, G., and Tsigler, A.",
+  "year": 2020,
+  "title": "Benign overfitting in linear regression",
+  "venue": "Proceedings of the National Academy of Sciences 117(48), 30063-30070"
+ },
+ "neal1996": {
+  "authors": "Neal, R. M.",
+  "year": 1996,
+  "title": "Bayesian Learning for Neural Networks",
+  "venue": "Springer, Lecture Notes in Statistics 118"
+ },
+ "lee2018nngp": {
+  "authors": "Lee, J., Bahri, Y., Novak, R., Schoenholz, S. S., Pennington, J., and Sohl-Dickstein, J.",
+  "year": 2018,
+  "title": "Deep neural networks as Gaussian processes",
+  "venue": "ICLR"
+ },
+ "matthews2018": {
+  "authors": "Matthews, A. G. de G., Rowland, M., Hron, J., Turner, R. E., and Ghahramani, Z.",
+  "year": 2018,
+  "title": "Gaussian process behaviour in wide deep neural networks",
+  "venue": "ICLR"
+ },
+ "jacot2018": {
+  "authors": "Jacot, A., Gabriel, F., and Hongler, C.",
+  "year": 2018,
+  "title": "Neural tangent kernel: convergence and generalization in neural networks",
+  "venue": "NeurIPS 31"
+ },
+ "arora2019cntk": {
+  "authors": "Arora, S., Du, S. S., Hu, W., Li, Z., Salakhutdinov, R., and Wang, R.",
+  "year": 2019,
+  "title": "On exact computation with an infinitely wide neural net",
+  "venue": "NeurIPS 32"
+ },
+ "yang2019tp": {
+  "authors": "Yang, G.",
+  "year": 2019,
+  "title": "Tensor programs I: wide feedforward or recurrent neural networks of any architecture are Gaussian processes",
+  "venue": "NeurIPS 32"
+ },
+ "chizat2018meanfield": {
+  "authors": "Chizat, L. and Bach, F.",
+  "year": 2018,
+  "title": "On the global convergence of gradient descent for over-parameterized models using optimal transport",
+  "venue": "NeurIPS 31"
+ },
+ "mei2018meanfield": {
+  "authors": "Mei, S., Montanari, A., and Nguyen, P.-M.",
+  "year": 2018,
+  "title": "A mean field view of the landscape of two-layer neural networks",
+  "venue": "Proceedings of the National Academy of Sciences 115(33), E7665-E7671"
+ },
+ "bach2017barron": {
+  "authors": "Bach, F.",
+  "year": 2017,
+  "title": "Breaking the curse of dimensionality with convex neural networks",
+  "venue": "Journal of Machine Learning Research 18(19), 1-53"
+ },
+ "rudi2017falkon": {
+  "authors": "Rudi, A., Carratino, L., and Rosasco, L.",
+  "year": 2017,
+  "title": "FALKON: an optimal large scale kernel method",
+  "venue": "NeurIPS 30"
+ },
+ "ma2017eigenpro": {
+  "authors": "Ma, S. and Belkin, M.",
+  "year": 2017,
+  "title": "Diving into the shallows: a computational perspective on large-scale shallow learning (EigenPro)",
+  "venue": "NeurIPS 30"
+ },
+ "le2013fastfood": {
+  "authors": "Le, Q., Sarl\u00f3s, T., and Smola, A.",
+  "year": 2013,
+  "title": "Fastfood: approximating kernel expansions in loglinear time",
+  "venue": "ICML"
+ },
+ "yu2016orf": {
+  "authors": "Yu, F. X., Suresh, A. T., Choromanski, K., Holtmann-Rice, D., and Kumar, S.",
+  "year": 2016,
+  "title": "Orthogonal random features",
+  "venue": "NeurIPS 29"
+ },
+ "bach2017quadrature": {
+  "authors": "Bach, F.",
+  "year": 2017,
+  "title": "On the equivalence between kernel quadrature rules and random feature expansions",
+  "venue": "Journal of Machine Learning Research 18(21), 1-38"
+ },
+ "muandet2017": {
+  "authors": "Muandet, K., Fukumizu, K., Sriperumbudur, B., and Sch\u00f6lkopf, B.",
+  "year": 2017,
+  "title": "Kernel mean embedding of distributions: a review and beyond",
+  "venue": "Foundations and Trends in Machine Learning 10(1-2), 1-141"
+ },
+ "chwialkowski2016ksd": {
+  "authors": "Chwialkowski, K., Strathmann, H., and Gretton, A.",
+  "year": 2016,
+  "title": "A kernel test of goodness of fit",
+  "venue": "ICML"
+ },
+ "liu2016ksd": {
+  "authors": "Liu, Q., Lee, J. D., and Jordan, M. I.",
+  "year": 2016,
+  "title": "A kernelized Stein discrepancy for goodness-of-fit tests",
+  "venue": "ICML"
+ },
+ "liu2016svgd": {
+  "authors": "Liu, Q. and Wang, D.",
+  "year": 2016,
+  "title": "Stein variational gradient descent: a general purpose Bayesian inference algorithm",
+  "venue": "NeurIPS 29"
+ },
+ "song2013cme": {
+  "authors": "Song, L., Fukumizu, K., and Gretton, A.",
+  "year": 2013,
+  "title": "Kernel embeddings of conditional distributions",
+  "venue": "IEEE Signal Processing Magazine 30(4), 98-111"
+ },
+ "szabo2016dr": {
+  "authors": "Szab\u00f3, Z., Sriperumbudur, B. K., P\u00f3czos, B., and Gretton, A.",
+  "year": 2016,
+  "title": "Learning theory for distribution regression",
+  "venue": "Journal of Machine Learning Research 17(152), 1-40"
+ },
+ "feydy2019sinkhorn": {
+  "authors": "Feydy, J., S\u00e9journ\u00e9, T., Vialard, F.-X., Amari, S., Trouv\u00e9, A., and Peyr\u00e9, G.",
+  "year": 2019,
+  "title": "Interpolating between optimal transport and MMD using Sinkhorn divergences",
+  "venue": "AISTATS"
+ },
+ "tsai2019transformer": {
+  "authors": "Tsai, Y.-H. H., Bai, S., Yamada, M., Morency, L.-P., and Salakhutdinov, R.",
+  "year": 2019,
+  "title": "Transformer dissection: a unified understanding of transformer's attention via the lens of kernel",
+  "venue": "EMNLP"
+ },
+ "katharopoulos2020": {
+  "authors": "Katharopoulos, A., Vyas, A., Pappas, N., and Fleuret, F.",
+  "year": 2020,
+  "title": "Transformers are RNNs: fast autoregressive transformers with linear attention",
+  "venue": "ICML"
+ },
+ "choromanski2021performer": {
+  "authors": "Choromanski, K., Likhosherstov, V., Dohan, D., Song, X., et al.",
+  "year": 2021,
+  "title": "Rethinking attention with Performers",
+  "venue": "ICLR"
+ },
+ "borovitskiy2020matern": {
+  "authors": "Borovitskiy, V., Terenin, A., Mostowsky, P., and Deisenroth, M. P.",
+  "year": 2020,
+  "title": "Mat\u00e9rn Gaussian processes on Riemannian manifolds",
+  "venue": "NeurIPS 33"
+ },
+ "borovitskiy2021graph": {
+  "authors": "Borovitskiy, V., Azangulov, I., Terenin, A., Mostowsky, P., Deisenroth, M. P., and Durrande, N.",
+  "year": 2021,
+  "title": "Mat\u00e9rn Gaussian processes on graphs",
+  "venue": "AISTATS"
+ },
+ "li2020fno": {
+  "authors": "Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., and Anandkumar, A.",
+  "year": 2020,
+  "title": "Fourier neural operator for parametric partial differential equations",
+  "venue": "ICLR 2021"
+ },
+ "titsias2009svgp": {
+  "authors": "Titsias, M.",
+  "year": 2009,
+  "title": "Variational learning of inducing variables in sparse Gaussian processes",
+  "venue": "AISTATS"
+ },
+ "hensman2013bigdata": {
+  "authors": "Hensman, J., Fusi, N., and Lawrence, N. D.",
+  "year": 2013,
+  "title": "Gaussian processes for big data",
+  "venue": "UAI"
+ },
+ "damianou2013deepgp": {
+  "authors": "Damianou, A. and Lawrence, N. D.",
+  "year": 2013,
+  "title": "Deep Gaussian processes",
+  "venue": "AISTATS"
+ },
+ "wilson2016dkl": {
+  "authors": "Wilson, A. G., Hu, Z., Salakhutdinov, R., and Xing, E. P.",
+  "year": 2016,
+  "title": "Deep kernel learning",
+  "venue": "AISTATS"
+ },
+ "zhang2009rkbs": {
+  "authors": "Zhang, H., Xu, Y., and Zhang, J.",
+  "year": 2009,
+  "title": "Reproducing kernel Banach spaces for machine learning",
+  "venue": "Journal of Machine Learning Research 10, 2741-2775"
+ }
+}

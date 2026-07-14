@@ -66,6 +66,13 @@
         {"src": "ch12", "slug": "multiple-kernel-learning", "title": "Multiple Kernel Learning"},
         {"src": "ch14", "slug": "kernels-and-deep-learning", "title": "Deep Learning from a Kernel Point of View"}
       ]
+    },
+    {
+      "part": "VIII · Kernels Now",
+      "intro": "The two standard textbooks close around 2004, before the deep-learning era rewrote what kernels are for. This part is a guide to what the literature produced after them: the interpolation revolution that revised the book's own theory of generalization, the infinite-width limits that made deep networks kernel machines, kernels that finally scale to millions of points, distributions and attention read through the RKHS, and the frontier where kernels give way to feature learning.",
+      "chapters": [
+        {"src": "ch-modern", "slug": "kernels-now", "title": "Kernels in the Modern World"}
+      ]
     }
   ]
 }

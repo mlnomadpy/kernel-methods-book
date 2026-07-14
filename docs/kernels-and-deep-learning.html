@@ -24,7 +24,7 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   ],throwOnError:false});"></script>
 
 </head>
-<body data-prev="multiple-kernel-learning.html" data-next="bibliography.html">
+<body data-prev="multiple-kernel-learning.html" data-next="kernels-now.html">
 <a class="skip" href="#main">Skip to content</a>
 <div class="gram-progress" id="gram-progress" aria-hidden="true"></div>
 <header class="topbar">
@@ -66,6 +66,8 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
 <a href="large-scale-kernels.html">14. Large-Scale Kernel Machines</a>
 <a href="multiple-kernel-learning.html">15. Multiple Kernel Learning</a>
 <a href="kernels-and-deep-learning.html" class="here">16. Deep Learning from a Kernel Point of View</a>
+<div class="part">VIII · Kernels Now</div>
+<a href="kernels-now.html">17. Kernels in the Modern World</a>
 <div class="part">End matter</div>
 <a href="glossary.html">Notation &amp; Glossary</a>
 <a href="bibliography.html">Bibliography</a>
@@ -629,7 +631,7 @@ $$ \frac{\partial \phi_c(x)}{\partial c} = \frac{x - c}{\sigma^2}\, \phi_c(x), $
 <p>These failures share one root, and it is the same duality this book has celebrated from the start. A kernel is a <em>fixed</em> similarity, an inner product in a feature space you do not get to reshape. That is exactly what you want in the <em>last</em> layer, the readout, where the representer theorem applies, the problem stays convex, and the fixed geometry is the source of the guarantees in Parts II through IV. A hidden layer has the opposite job: it must <em>learn a representation</em>, which means transporting its nonlinearity's sensitive region to wherever the data actually is. A rectifier's sensitive region is a hyperplane whose gradient is constant on the active side, so gradient descent moves it freely; a Gaussian's sensitive region is a small fixed ball whose gradient vanishes the moment the ball is in the wrong place, so gradient descent cannot move it there. The neural tangent kernel view of this chapter says the same thing from the other end: in the wide, lazy regime the features do not move at all, and for a Gaussian layer that immobility is not a limit reached only at infinite width but the operating condition at every width, imposed by the vanishing signal.</p>
 
 <div class="box rmk"><span class="box-title">The modern reading</span>
-<p>None of this says kernels and deep learning are incompatible; the whole chapter argues the reverse. It says that the naive substitution, a fixed local kernel dropped in where a rectifier goes, asks the kernel to do the one thing a fixed kernel cannot, learn its own geometry. The convolutional kernel networks of this chapter succeed as deep kernel machines precisely because they do not make that substitution: they keep the kernel as a fixed, well-conditioned local embedding and learn a small set of anchor points through the Nyström projection, so the representation is shaped by end-to-end training while the kernel supplies the geometry. The lesson is not that the kernel neuron was a bad idea but that a hidden unit must be able to move its own attention, and a fixed bump cannot.</p></div>
+<p>None of this says kernels and deep learning are incompatible; the whole chapter argues the reverse. It says that the naive substitution, a fixed local kernel dropped in where a rectifier goes, asks the kernel to do the one thing a fixed kernel cannot, learn its own geometry. The convolutional kernel networks of this chapter succeed as deep kernel machines precisely because they do not make that substitution: they keep the kernel as a fixed, well-conditioned local embedding and learn a small set of anchor points through the Nyström projection, so the representation is shaped by end-to-end training while the kernel supplies the geometry. The lesson is not that the kernel neuron was a bad idea but that a hidden unit must be able to move its own attention, and a fixed bump cannot. The theoretical statement of this gap, the mean-field limit in which hidden units do move and the larger-than-RKHS function space they explore, is the subject of the next chapter, <a href="kernels-now.html">Kernels in the Modern World</a>.</p></div>
 
 <h2 id="conclusion">Conclusion</h2>
 
@@ -680,7 +682,7 @@ Identify which term comes from the output weights and which from the hidden weig
 <li ><span class="bib-authors">Glorot, X. and Bengio, Y.</span> <span class="bib-year">(2010)</span> <span class="bib-title">Understanding the difficulty of training deep feedforward neural networks</span>. <span class="bib-venue">AISTATS.</span></li>
 <li ><span class="bib-authors">Montufar, G., Pascanu, R., Cho, K., and Bengio, Y.</span> <span class="bib-year">(2014)</span> <span class="bib-title">On the number of linear regions of deep neural networks</span>. <span class="bib-venue">NeurIPS 27.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><nav class="chnav" aria-label="Chapter navigation">
 <a class="nav-card prev" href="multiple-kernel-learning.html"><span class="dir">&larr; Previous</span><span class="nav-title">14. Multiple Kernel Learning</span></a>
-<a class="nav-card next" href="bibliography.html"><span class="dir">Next &rarr;</span><span class="nav-title">Bibliography</span></a>
+<a class="nav-card next" href="kernels-now.html"><span class="dir">Next &rarr;</span><span class="nav-title">16. Kernels in the Modern World</span></a>
 </nav>
 </div><aside class="onpage"><div class="onpage-title">On this page</div>
 <a class="l2" href="#motivation">What it means to do deep learning with kernels</a>
