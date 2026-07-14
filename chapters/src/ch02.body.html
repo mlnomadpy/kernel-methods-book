@@ -36,7 +36,13 @@ $$
 
 <p><strong>Second purpose: fix a geometry you do not like.</strong> Even when \(\mathcal{X} = \mathbb{R}^p\) already is a vector space, its Euclidean structure may be the wrong one for the task. We can then lift the data to a higher-dimensional space with nicer properties, such as linear separability or a clearer clustering structure. The classic two-dimensional illustration: data \((x_1, x_2)\) that are separated by a circle of radius \(R\) in the plane, hence not linearly separable there, become linearly separable after the map \((x_1, x_2) \mapsto (x_1^2, x_2^2)\), because the circle \(x_1^2 + x_2^2 = R^2\) turns into a straight line in the new coordinates. The linear form \(f(x) = \langle \Phi(x), f \rangle_{\mathcal{H}}\) in \(\mathcal{H}\) then corresponds to a nonlinear model back in \(\mathcal{X}\).</p>
 
-<p>All of this raises an obvious objection: the feature space may be huge, even infinite-dimensional, so how could we ever compute in it? Two theoretical results underpin the family of algorithms known collectively as kernel methods and answer this objection. The kernel trick rests on the representation of p.d. kernels as inner products; the representer theorem rests on properties of the regularization functional defined by the RKHS norm. We take them in turn.</p>
+<p>It helps to see the arithmetic once. Consider the map \(\Phi(x) = (x_1, x_2, x_1^2 + x_2^2)\) that appends to each plane point the squared radius on which it sits. Two classes separated by a circle, an inner blob inside a surrounding ring, cannot be told apart by any straight line in the plane. But after the lift the ring is pushed up along the new third axis while the inner blob stays low, so a single flat plane, which is nothing but a threshold on \(x_1^2 + x_2^2\), slices them apart. That plane is a linear predictor in \(\mathcal{H}\) and a circle back in \(\mathcal{X}\). The inner product in the lifted space works out to \(\langle \Phi(x), \Phi(x') \rangle = x_1 x_1' + x_2 x_2' + (x_1^2 + x_2^2)(x_1'^2 + x_2'^2)\), a formula written entirely in the original coordinates: we never had to store the extra coordinate to make use of it. That last observation, that the inner product in the enlarged space is a closed-form function of the raw inputs, is exactly the economy the next section turns into a general principle.</p>
+
+<p>The figure below lets you raise the lift by hand and watch the separating plane, which no line in the plane could match, appear as the two rings pull apart along the new dimension.</p>
+
+<figure class="viz" data-widget="feature-lift"></figure>
+
+<p>All of this raises an obvious objection: the feature space may be huge, even infinite-dimensional, so how could we ever compute in it? Two theoretical results underpin the family of algorithms known collectively as kernel methods, whose standard book-length treatment is Sch&ouml;lkopf and Smola (2002), and together they answer this objection. The kernel trick rests on the representation of p.d. kernels as inner products; the representer theorem rests on properties of the regularization functional defined by the RKHS norm. We take them in turn.</p>
 
 <h2 id="the-kernel-trick">The kernel trick</h2>
 
@@ -49,6 +55,8 @@ $$
 <p>The proof is trivial, because the kernel <em>is</em> exactly the inner product in the feature space: by the Aronszajn (1950) theorem of Chapter 1, \(K(x, x') = \langle \Phi(x), \Phi(x') \rangle_{\mathcal{H}}\). If an algorithm never looks at coordinates of its input vectors and only ever asks for inner products between pairs of them, then feeding it the values \(K(x_i, x_j)\) is indistinguishable, from the algorithm's point of view, from running it on the vectors \(\Phi(x_1), \dots, \Phi(x_n)\) themselves.</p>
 
 <p>Despite its triviality, the trick has huge practical applications, and one conceptual consequence worth stating explicitly: vectors in the feature space are only ever manipulated <em>implicitly</em>, through pairwise inner products. We never write down \(\Phi(x)\), we never need to, and in many cases we could not even if we wanted to. The rest of this section makes this concrete through three worked examples: computing distances, comparing a point to a set, and centering data, all in the feature space, all without ever leaving the world of kernel evaluations.</p>
+
+<p>Read operationally, the proposition is a test followed by a procedure. The test: does the algorithm ever inspect a coordinate of an input vector, or does it only ever ask for numbers of the form \(\langle x_i, x_j \rangle\)? If only the latter, the procedure is to compute the \(n \times n\) matrix of kernel values \(K(x_i, x_j)\) once, then feed those numbers to the algorithm wherever it expected inner products. The code of the algorithm does not change; only the meaning of the numbers it consumes does. Nearest-neighbor classification is the fastest illustration: it needs only distances between points, and we are about to see that distances are assembled from kernel values, so it kernelizes for free.</p>
 
 <h3 id="distances-in-the-feature-space">Example 1: distances in the feature space</h3>
 
@@ -136,6 +144,10 @@ $$
 
 <p>Many classical data-analysis procedures, principal component analysis first among them, begin with the instruction "center the data". Our third example shows that this too survives the move to an implicit feature space.</p>
 
+<p>Everything in this example operates on a single object, the Gram matrix of kernel values, so it is worth seeing how that matrix answers to the choice of kernel and bandwidth before we start transforming it.</p>
+
+<figure class="viz" data-widget="gram-heatmap"></figure>
+
 <div class="box def"><span class="box-title">Problem (centered Gram matrix)</span>
 <p>Let \(S = (x_1, \dots, x_n)\) be a finite set of points in \(\mathcal{X}\) endowed with a p.d. kernel \(K\), and let \(\mathbf{K}\) be their \(n \times n\) Gram matrix, \([\mathbf{K}]_{ij} = K(x_i, x_j)\). Let \(\mu = \frac{1}{n} \sum_{i=1}^{n} \Phi(x_i)\) be the barycenter, and let \(u_i = \Phi(x_i) - \mu\), for \(i = 1, \dots, n\), be the centered data in \(\mathcal{H}\). How can we compute the centered Gram matrix \([\mathbf{K}^c]_{ij} = \langle u_i, u_j \rangle_{\mathcal{H}}\)?</p>
 </div>
@@ -155,6 +167,8 @@ $$
 $$
 \mathbf{K}^c = \mathbf{K} - U\mathbf{K} - \mathbf{K}U + U\mathbf{K}U = (I - U)\, \mathbf{K}\, (I - U).
 $$
+
+<p>A quick way to remember the operator: \(I - U\) is the familiar mean-subtracting projection, the very matrix that centers ordinary data in \(\mathbb{R}^n\). Sandwiching \(\mathbf{K}\) between two copies of it centers the feature vectors on both sides of the inner product at once, which is why the row mean, the column mean, and the grand mean all appear together in the entrywise formula. The consistency check is immediate: if the data were already centered in the feature space then \(\mu = 0\), every mean would vanish, and \(\mathbf{K}^c\) would collapse back to \(\mathbf{K}\).</p>
 
 <p>Centering in the feature space is thus a fixed, data-independent linear operation on the Gram matrix. We will use this formula verbatim when we kernelize PCA later in the book.</p>
 
@@ -201,6 +215,8 @@ $$
 $$
 <p>In other words, the solution lives in a finite-dimensional subspace: \(f \in \mathrm{Span}(K_{x_1}, \dots, K_{x_n})\).</p>
 </div>
+
+<p>Before the hypotheses, the plain reading. We set out to search an infinite-dimensional space of functions, and the theorem tells us the size of that search was an illusion: whatever the winning function turns out to be, it can be written as a weighted sum of the \(n\) kernel functions \(K_{x_i} = K(x_i, \cdot)\) planted one at each training point, with a single weight \(\alpha_i\) per point. Learning an unknown function over \(\mathcal{H}\) has quietly become learning \(n\) numbers. The smallest case makes the mechanism visible. With a single training point \(x_1\), any candidate \(f\) splits into a part pointing along \(K_{x_1}\), which alone fixes the value \(f(x_1)\), and a part orthogonal to it, which leaves \(f(x_1)\) untouched yet still adds to \(\lVert f \rVert_{\mathcal{H}}\); since the objective rewards a smaller norm, it deletes the orthogonal part outright, and the solution is the lone bump \(f = \alpha_1 K_{x_1}\).</p>
 
 <p>Note how weak the hypotheses are. The theorem asks nothing of the first \(n\) arguments of \(\Psi\): the data-fit term need not be convex, differentiable, or even continuous. All that matters is that the objective strictly prefers a smaller RKHS norm when the values at the data points are held fixed. The regularized empirical risk above is the special case \(\Psi(t_1, \dots, t_n, u) = \frac{1}{n}\sum_i \ell(y_i, t_i) + \lambda u^2\). The result in this generality is due to Kimeldorf and Wahba (1971) for the quadratic case, with the general form popularized by Sch&ouml;lkopf, Herbrich, and Smola (2001).</p>
 
@@ -276,6 +292,8 @@ $$
 $$
 \min_{\alpha \in \mathbb{R}^n} \; \Psi\big([\mathbf{K}\alpha]_1, \dots, [\mathbf{K}\alpha]_n,\; \alpha^\top \mathbf{K} \alpha\big).
 $$
+
+<p>It is worth pausing on what was and was not assumed. We never needed a formula for \(\Psi\); we needed only that the objective sees \(f\) through its \(n\) values at the training points and through its norm, and both of those turned into functions of \(\alpha\) and \(\mathbf{K}\). When the loss is nice enough the finite problem even has a closed form. Take the squared loss \(\ell(y, t) = (y - t)^2\) with regularizer \(\lambda \lVert f \rVert_{\mathcal{H}}^2\): the objective becomes \(\frac{1}{n}\lVert y - \mathbf{K}\alpha \rVert^2 + \lambda\, \alpha^\top \mathbf{K}\alpha\), a convex quadratic in \(\alpha\) whose gradient vanishes at the solution of the linear system \((\mathbf{K} + n\lambda I)\,\alpha = y\). That is kernel ridge regression, the subject of the next chapter, already dropping out of the recipe.</p>
 
 <p>This problem can usually be solved analytically or by numerical methods; the following chapters work through many examples, kernel ridge regression and the support vector machine chief among them. An infinite-dimensional variational problem has become a finite-dimensional one whose data are exactly the \(n \times n\) Gram matrix: once again, the algorithm touches the data only through pairwise kernel evaluations.</p>
 

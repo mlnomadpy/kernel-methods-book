@@ -59,7 +59,10 @@ $$
 $$
 <p>The representer theorem tells us that the minimizer has the form \(f(\mathbf{x}) = \sum_{i=1}^n \alpha_i K(\mathbf{x}_i, \mathbf{x})\), and the problem reduces to a finite-dimensional one in the coefficient vector \(\boldsymbol{\alpha} \in \mathbb{R}^n\), written entirely in terms of the Gram matrix \(K \in \mathbb{R}^{n \times n}\) with entries \([K]_{ij} = K(\mathbf{x}_i, \mathbf{x}_j)\). For the square loss this is the linear system \((K + n\lambda I)\boldsymbol{\alpha} = \mathbf{y}\), and the solution costs \(O(n^3)\) arithmetic and, before that, \(O(n^2)\) kernel evaluations merely to build \(K\), which then occupies \(O(n^2)\) memory.</p>
 
-<p>These three numbers, \(O(n^2)\) evaluations, \(O(n^2)\) memory, and \(O(n^3)\) solve, are the wall. They are the reason a method that is elegant on a thousand points becomes hopeless on a million. Every technique in this chapter is best read as an attack on one or more of them. It is useful to keep asking, of each approximation: which of the three costs does this remove, and what does it cost me in accuracy or generality in return?</p>
+<p>These three numbers, \(O(n^2)\) evaluations, \(O(n^2)\) memory, and \(O(n^3)\) solve, are the wall. It helps to attach units to them. At \(n = 10^4\) the Gram matrix has \(10^8\) entries, roughly a gigabyte in double precision, and the cubic solve is \(10^{12}\) operations: uncomfortable but survivable. At \(n = 10^6\) the same matrix would need \(10^{12}\) entries, on the order of eight terabytes, and the solve would be \(10^{18}\) operations. The matrix no longer fits in memory, and even writing it down is out of reach, quite apart from inverting it. This is why a method that is elegant on a thousand points becomes hopeless on a million: the costs do not grow gently, they grow with the square and the cube. Every technique in this chapter is best read as an attack on one or more of these three numbers. It is useful to keep asking, of each approximation: which of the three costs does this remove, and what does it cost me in accuracy or generality in return?</p>
+
+<p>The object at the centre of all three costs is the Gram matrix itself, so it is worth looking at directly before we start dismantling it. The next figure builds \(K\) live for a handful of points on a line: as you add points the matrix grows in both directions at once, which is the \(O(n^2)\) memory made visible, and the bandwidth of the kernel controls how quickly off-diagonal entries decay, which is what later lets a low-rank surrogate stand in for the whole thing.</p>
+<figure class="viz" data-widget="gram-heatmap"></figure>
 
 <p>The first idea does not touch the kernel at all. It observes that the finite-dimensional problem in \(\boldsymbol{\alpha}\) is, structurally, a large-scale <em>linear</em> learning problem, a sum of \(n\) terms to be minimized, and that the machine-learning community has excellent tools for exactly that. So we begin by studying those tools in the clean setting of linear models, and only afterwards ask how they, together with cheap feature maps, rescue kernels.</p>
 
@@ -188,6 +191,8 @@ $$
 $$
 <p>where \(\mathbf{x} \mapsto \ell(\mathbf{x}, \mathbf{w})\) is differentiable (everything below extends to nonsmooth losses using subgradients). We cannot compute \(\nabla f\) because we cannot integrate over the data distribution, but a single sample gives an unbiased estimate of it. This is the whole idea of stochastic gradient descent.</p>
 
+<p>The finite sum \(\tfrac{1}{n}\sum_i f_i(\mathbf{w})\) is the same object in disguise: it is the expectation of \(f_I(\mathbf{w})\) when the index \(I\) is drawn uniformly from \(\{1, \ldots, n\}\), so its gradient is the average of the \(n\) per-example gradients. Batch gradient descent evaluates that average exactly, paying for all \(n\) terms to learn the single direction it will step in. The observation behind SGD is that we do not need the exact average to make progress, only its direction on average: a single randomly chosen \(\nabla f_i(\mathbf{w})\) already points downhill in expectation, because its expectation over the random draw is precisely \(\nabla f(\mathbf{w})\). We are trading an exact gradient for a cheap unbiased guess of it, and betting that many quick guesses outrun a few exact computations. The cost this removes is the per-iteration one: the price of a step drops from \(n\) gradient evaluations to a single one, and stops growing with the dataset entirely.</p>
+
 <div class="box def"><span class="box-title">Algorithm (stochastic gradient descent)</span>
 At iteration \(t\):
 <pre><code>1. Draw one example x_t at random (from the data or the stream).
@@ -205,18 +210,20 @@ $$
 
 <h3 id="incremental">Randomized incremental methods for finite sums</h3>
 
+<p>It is worth being precise about why SGD's noise never goes away, because that is exactly what the next methods repair. Even when we sit at the optimum \(\mathbf{w}^\star\), the full gradient \(\nabla f(\mathbf{w}^\star)\) is zero only as an <em>average</em>: the individual gradients \(\nabla f_i(\mathbf{w}^\star)\) generally are not zero, they merely cancel in aggregate. A one-sample estimate picks out one of these nonzero vectors at random, so its variance does not shrink as we approach the solution. To keep this irreducible jitter from throwing the iterate back out, SGD must shrink its step size toward zero, and shrinking steps are what drag the rate down to \(O(1/t)\). The escape is to build a gradient estimate whose variance <em>does</em> vanish as \(\mathbf{w} \to \mathbf{w}^\star\), so that constant step sizes become safe again and the fast geometric rate returns.</p>
+
 <p>SGD paid for its cheap steps with a slow rate, because its gradient estimate, though unbiased, is noisy, and the noise never goes away. But the true objective of interest here is a <em>finite</em> sum,</p>
 $$
 \min_{\mathbf{w} \in \mathbb{R}^p} \ \frac{1}{n} \sum_{i=1}^n f_i(\mathbf{w}) ,
 $$
-<p>and a finite sum offers something a stream does not: we can remember. A family of randomized incremental methods exploits this to get the best of both worlds, a per-iteration cost like SGD's yet a linear convergence rate like the batch method's, for strongly convex problems. The prototype is the stochastic average gradient, SAG (Schmidt, Le Roux, and Bach, 2016).</p>
+<p>and a finite sum offers something a stream does not: we can remember. A family of randomized incremental methods exploits this to get the best of both worlds, a per-iteration cost like SGD's yet a linear convergence rate like the batch method's, for strongly convex problems. The prototype is the stochastic average gradient, SAG (Schmidt, Le Roux, and Bach, 2017).</p>
 
 <p>SAG keeps in memory one stored gradient \(\mathbf{y}_i\) per example and, at each step, refreshes exactly one of them while stepping along the average of all \(n\) stored gradients:</p>
 $$
 \mathbf{w}_t \leftarrow \mathbf{w}_{t-1} - \frac{\gamma}{L n} \sum_{i=1}^n \mathbf{y}_i^t , \qquad
 \mathbf{y}_i^t = \begin{cases} \nabla f_i(\mathbf{w}_{t-1}) & \text{if } i = i_t, \\[2pt] \mathbf{y}_i^{t-1} & \text{otherwise,} \end{cases}
 $$
-<p>where \(i_t\) is drawn at random. Only one new gradient is computed per iteration, and the running sum is maintained incrementally, so the per-iteration cost is that of a single \(\nabla f_i\). As the iterates settle, the stored gradients grow accurate and their average converges to the true full gradient, so the effective noise vanishes and fast convergence sets in. Related methods include SAGA (Defazio, Bach, and Lacoste-Julien, 2014), SVRG (Xiao and Zhang, 2014), SDCA (Shalev-Shwartz and Zhang, 2015), and MISO (Mairal, 2015).</p>
+<p>where \(i_t\) is drawn at random. Only one new gradient is computed per iteration, and the running sum is maintained incrementally, so the per-iteration cost is that of a single \(\nabla f_i\). As the iterates settle, the stored gradients grow accurate and their average converges to the true full gradient, so the effective noise vanishes and fast convergence sets in. Related methods include SAGA (Defazio, Bach, and Lacoste-Julien, 2014), SVRG (Johnson and Zhang, 2013), SDCA (Shalev-Shwartz and Zhang, 2013), and MISO (Mairal, 2015).</p>
 
 <p>Most of these can be read as SGD with a variance-reduced gradient estimator. They take a step \(\mathbf{w}_t \leftarrow \mathbf{w}_{t-1} - \eta_t \mathbf{g}_t\) with \(\mathbb{E}[\mathbf{g}_t \mid \mathbf{w}_{t-1}] = \nabla f(\mathbf{w}_{t-1})\), exactly as SGD does, but \(\mathbf{g}_t\) has lower variance because it corrects the one-sample gradient using stored information (this is explicit in SVRG). The payoff is a rate of the form</p>
 $$
@@ -240,7 +247,7 @@ $$
 $$
 \Pi_{\mathcal{F}}[\mathbf{x}] := \arg\min_{f \in \mathcal{F}} \lVert \varphi(\mathbf{x}) - f \rVert_{\mathcal{H}}^2 .
 $$
-<p>Once every point sits in a \(p\)-dimensional subspace, all inner products, and hence the whole kernel matrix, are captured by \(p\) coordinates per point. The rank of the approximated geometry is at most \(p\), which is what breaks the wall. It remains to compute the projection explicitly and to choose the anchors well.</p>
+<p>Once every point sits in a \(p\)-dimensional subspace, all inner products, and hence the whole kernel matrix, are captured by \(p\) coordinates per point. The rank of the approximated geometry is at most \(p\), which is what breaks the wall. Why should so drastic a collapse cost little? Because the Gram matrices of smooth kernels are, in practice, nearly low rank already: their eigenvalues decay quickly, so most of the geometry of the data lives in a subspace of modest dimension and only a thin tail is discarded when we project. Nystrom bets on that decay. Notice which of the three costs this removes. Instead of an \(n \times n\) matrix we will store \(n\) vectors of length \(p\), so the \(O(n^2)\) memory becomes \(O(pn)\); instead of an \(O(n^3)\) dense solve we will solve a linear problem in \(p\) dimensions. The \(O(n^2)\) kernel evaluations are also avoided, since we only ever evaluate the kernel between data points and the handful of anchors. It remains to compute the projection explicitly and to choose the anchors well.</p>
 
 <p>Write a candidate element of \(\mathcal{F}\) as \(\sum_{j=1}^p \beta_j f_j\). The projection coefficients solve</p>
 $$
@@ -372,6 +379,8 @@ $$
 $$
 <p>and the density is \(q(\mathbf{w}) = \tfrac{1}{(2\pi)^d}\hat{\kappa}(\mathbf{w})\). It is a genuine probability density: nonnegative because \(K\) is p.d., real-valued because \(\kappa\) is even and real, and integrating to \(1\) because \(\kappa(0) = 1\).</p>
 
+<p>It is worth pausing on what Bochner's theorem has bought us, because the whole method rests on it. The kernel, an object that seemed to require comparing two points through an inner product in some vast feature space, is now written as a plain average over random frequencies \(\mathbf{w}\): each frequency contributes a simple oscillation \(e^{i\mathbf{w}^\top(\mathbf{x}-\mathbf{y})}\), and the kernel is what those oscillations average out to under \(q\). The spread of \(q\) is set by the kernel's bandwidth: a wide, smooth kernel corresponds to low frequencies, a narrow, wiggly kernel to high ones. Approximating the kernel therefore reduces to a task we know how to cost: draw a manageable number of frequencies from \(q\) and average their contributions. That is the maneuver that will remove the \(O(n^2)\) and \(O(n^3)\) costs, and unlike Nystrom it reads the frequencies off the kernel itself, never touching the data.</p>
+
 <p>This integral already exhibits the kernel as an expectation of a product, \(e^{i\mathbf{w}^\top\mathbf{x}} \cdot \overline{e^{i\mathbf{w}^\top\mathbf{y}}}\), which is the seed of a feature map. To get a real feature we peel off the imaginary part. Because \(\kappa\) is real,</p>
 $$
 \begin{aligned}
@@ -401,6 +410,9 @@ $$
 \langle \psi(\mathbf{x}), \psi(\mathbf{y}) \rangle_{\mathbb{R}^p} = \frac{2}{p} \sum_{j=1}^p \cos(\mathbf{w}_j^\top\mathbf{x}+b_j)\cos(\mathbf{w}_j^\top\mathbf{y}+b_j) = \frac{1}{p}\sum_{j=1}^p \sqrt{2}\cos(\mathbf{w}_j^\top\mathbf{x}+b_j)\,\sqrt{2}\cos(\mathbf{w}_j^\top\mathbf{y}+b_j) ,
 $$
 <p>which is the empirical average of \(p\) independent copies of the random feature whose expectation is exactly \(\kappa(\mathbf{x}-\mathbf{y})\). So the feature dot product is an unbiased estimator of the kernel, and the only question is how fast it concentrates as \(p\) grows.</p>
+
+<p>The figure below makes that concentration visible: it plots the Gaussian kernel against its random Fourier feature estimate as a function of the gap \(\mathbf{x}-\mathbf{y}\), so you can raise the feature count \(D\) and watch the finite average settle onto the exact kernel that Bochner's theorem promises it targets, with the running RMSE to the true kernel reported as you go.</p>
+<figure class="viz" data-widget="rff-converge"></figure>
 
 <h3 id="rff-guarantee">The approximation guarantee</h3>
 

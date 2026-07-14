@@ -98,6 +98,16 @@ sits on the wrong side. This "flat then linear" shape is exactly what will later
 solution sparse.
 </p>
 
+<p>
+Why the threshold \(1\), rather than some other positive number? It is purely a matter of
+scale. Rescaling \(f\) by a positive constant rescales the whole margin picture with it, so
+demanding a target margin of \(1\) while letting the regularizer decide how large \(f\) may
+grow is equivalent to fixing the size of \(f\) and letting the margin float. We adopt the
+first convention because it keeps the loss fixed and pushes all the tuning into a single
+regularization parameter. The geometric section below cashes out what "margin \(1\)" means
+as an actual distance in space.
+</p>
+
 <div class="box def"><span class="box-title">Definition (support vector machine)</span>
 Given a positive definite kernel \(K\) on \(\mathcal{X}\) with RKHS \(\mathcal{H}\), the
 <em>support vector machine</em> (SVM) is the large-margin classifier obtained by solving
@@ -114,6 +124,20 @@ with the squared loss traded for the hinge loss. The regularization term
 \(\lambda \|f\|_{\mathcal{H}}^2\) controls the smoothness of \(f\), and, as we will see in
 the geometric interpretation below, it is precisely what makes the SVM a
 <em>large-margin</em> classifier.
+</p>
+
+<p>
+Historically the pieces arrived in almost the reverse of this logical order. Boser, Guyon,
+and Vapnik (1992) introduced the maximum-margin classifier together with the kernel trick
+that lets it operate in a high-dimensional feature space while touching the data only
+through inner products. Cortes and Vapnik (1995) added the slack variables that let the
+machine tolerate points which cannot be separated cleanly, producing the soft-margin SVM
+that we actually solve here. Vapnik (1995) set the whole construction inside statistical
+learning theory, which explains why maximizing a margin is a sound way to control
+generalization and not merely an aesthetic preference. The RKHS-and-hinge-loss
+presentation used in this chapter, which recasts the SVM as one instance of the
+regularized empirical risk recipe, is the modern synthesis expounded by Schölkopf and
+Smola (2002).
 </p>
 
 <h2 id="primal-problem">The primal problem</h2>
@@ -153,8 +177,11 @@ $$
 \qquad \text{subject to} \qquad
 \xi_i \ge \varphi_{\text{hinge}}\big(y_i[K\alpha]_i\big),
 $$
-because at the optimum each \(\xi_i\) is pushed down onto the loss it dominates. The
-objective is now smooth (linear plus quadratic), but the constraints still carry the
+because at the optimum each \(\xi_i\) is pushed down onto the loss it dominates. This is the
+<em>epigraph trick</em>: minimizing a function is the same as minimizing a fresh variable
+constrained to lie above the function's graph, and since nothing in the objective rewards a
+large \(\xi_i\), the minimizer squeezes each slack down until it rests exactly on the hinge.
+The objective is now smooth (linear plus quadratic), but the constraints still carry the
 hinge. Fortunately a hinge constraint splits into two linear ones: for any
 \(u, v \in \mathbb{R}\),
 $$
@@ -199,7 +226,15 @@ solution, leads to much faster specialized algorithms.
 
 <p>
 Duality trades the constrained primal for an unconstrained inner minimization weighted by
-multipliers. Introduce Lagrange multipliers \(\mu \in \mathbb{R}^n\) for the margin
+multipliers. The multipliers are worth a word of interpretation before the algebra: think
+of each one as a <em>price</em> charged for violating its constraint. Once the constraints
+are folded into the objective at these prices, the primal variables are set free to roam,
+but every unit by which a point dips below its margin requirement now costs \(\mu_i\), and
+every unit of negative slack costs \(\nu_i\). If the prices are chosen well, the
+freely-optimizing variables have no incentive to break any constraint, and the penalized
+problem returns the same value as the constrained one. Finding those best prices is the
+dual problem, and, as we confirm at the end of this section, its payoff is a far simpler
+feasible set. Introduce Lagrange multipliers \(\mu \in \mathbb{R}^n\) for the margin
 constraints \(y_i[K\alpha]_i + \xi_i - 1 \ge 0\) and \(\nu \in \mathbb{R}^n\) for the
 positivity constraints \(\xi_i \ge 0\). The Lagrangian of the problem is
 $$
@@ -242,6 +277,16 @@ $$
 evaluate the infimum.)
 </p>
 
+<p>
+It is worth reading this relation forward rather than treating it as a bookkeeping step.
+It says the optimal \(\alpha\) is nothing but the vector of signed multipliers, rescaled by
+\(2\lambda\). In other words the coefficients of the kernel expansion and the dual prices
+are the same objects up to the label \(y_i\) and a constant. Everything the optimality
+analysis will later say about support vectors is, at bottom, a statement about which of
+these prices are nonzero, so it pays to keep the identification
+\(\alpha_i = y_i\mu_i / 2\lambda\) in view.
+</p>
+
 <h3 id="minimizing-in-xi">Minimizing over \(\xi\)</h3>
 
 <p>
@@ -276,7 +321,11 @@ q(\mu, \nu) = \inf_{\alpha \in \mathbb{R}^n,\, \xi \in \mathbb{R}^n} L(\alpha, \
 \end{cases}
 $$
 The dual problem is to maximize \(q(\mu,\nu)\) subject to \(\mu \ge 0\) and
-\(\nu \ge 0\) (the multipliers of inequality constraints must be nonnegative).
+\(\nu \ge 0\) (the multipliers of inequality constraints must be nonnegative). The quadratic
+form appearing in \(q\) is \(\mu^\top \mathrm{diag}(y)\, K\, \mathrm{diag}(y)\, \mu\), the
+Gram matrix reweighted by the labels; since \(K\) is positive semidefinite this form is too,
+so \(q\) is concave and we are maximizing a concave function over a convex set, exactly the
+well-posed shape a dual problem should have.
 </p>
 
 <h3 id="eliminating-nu">Eliminating \(\nu\)</h3>
@@ -341,8 +390,16 @@ the SVM.
 <p>
 The Karush-Kuhn-Tucker conditions state that at the optimum, each multiplier and its
 constraint cannot both be "active on the wrong side": the product of each multiplier with
-its constraint value vanishes. For our two families of constraints, the complementary
-slackness conditions read, for \(i = 1,\dots,n\),
+its constraint value vanishes. The price metaphor makes this an either/or. A multiplier is
+the price the optimum pays to hold a constraint down; if a constraint is slack, meaning it
+holds with strict inequality and room to spare, then relaxing it a little buys nothing, so
+its price must be zero. Read the other way, a nonzero price can attach only to a constraint
+that is exactly tight. Thus for each point either its margin constraint binds, with
+\(y_i f(x_i) + \xi_i = 1\), or the price \(\mu_i\) on that constraint is zero; and
+independently, either the slack \(\xi_i\) is zero or the price \(\nu_i\) guarding
+\(\xi_i \ge 0\) is zero. The three regimes worked out below are simply the consistent ways
+of setting these two either/or switches. For our two families of constraints, the
+complementary slackness conditions read, for \(i = 1,\dots,n\),
 $$
 \begin{cases}
 \mu_i \big[ y_i f(x_i) + \xi_i - 1 \big] = 0, \\
@@ -457,14 +514,24 @@ the wrong side of the boundary altogether (\(y_i f(x_i) \le 1\)).</li>
 The picture also explains the name "large-margin classifier". Consider the linear kernel
 on \(\mathbb{R}^d\), so that \(f(x) = \langle w, x \rangle\) with
 \(\|f\|_{\mathcal{H}} = \|w\|\). The two hyperplanes \(f(x) = +1\) and \(f(x) = -1\) are
-parallel, at Euclidean distance \(2 / \|w\|\) from each other. Points incur no hinge loss
-precisely when they lie beyond their side of this band. Minimizing the hinge loss plus
+parallel, at Euclidean distance \(2 / \|w\|\) from each other. To see where that distance
+comes from, walk from the hyperplane \(\langle w, x\rangle = -1\) toward
+\(\langle w, x\rangle = +1\) along the unit normal direction \(w / \|w\|\). Along that walk
+the value \(\langle w, x\rangle\) increases at rate \(\|w\|\) per unit of length, since a
+step of length \(t\) in direction \(w/\|w\|\) raises the inner product by
+\(t\,\langle w, w/\|w\|\rangle = t\,\|w\|\). Covering the gap of \(2\) in the value of \(f\)
+therefore takes a walk of length \(2 / \|w\|\), which is the width of the band. Points incur
+no hinge loss precisely when they lie beyond their side of this band. Minimizing the hinge loss plus
 \(\lambda \|w\|^2\) therefore trades off two desiderata: keep the training points out of
 the band (small loss) while making the band as wide as possible (small \(\|w\|\), i.e.
 large geometric margin \(2/\|w\|\)). In an RKHS the same picture holds with \(f\) in place
 of \(w\): the regularizer \(\|f\|_{\mathcal{H}}^2\) is the inverse squared margin measured
 in the geometry of \(\mathcal{H}\).
 </p>
+
+<p>Nothing conveys this trade-off as directly as moving the points yourself and watching the boundary respond.</p>
+
+<figure class="viz" data-widget="svm-margin"></figure>
 
 <h2 id="support-vectors">Support vectors</h2>
 
@@ -492,7 +559,9 @@ follow.
 <strong>Fast training.</strong> The solution is sparse in \(\alpha\). Decomposition
 methods exploit this by optimizing over small working sets of coordinates at a time,
 which is what makes SVM solvers scale far beyond what a generic \(2n\)-dimensional QP
-solver on the primal could handle.
+solver on the primal could handle. The best known such method is sequential minimal
+optimization (Platt 1998), which shrinks the working set all the way down to two
+coordinates at a time and solves each tiny subproblem in closed form.
 </li>
 <li>
 <strong>Fast prediction.</strong> Classifying a new point requires kernel evaluations
@@ -575,7 +644,11 @@ prediction fast. The \(C\)-SVM is the same machine reparameterized with
 \(C = 1/(2n\lambda)\), and the 2-SVM, built on the squared hinge, is again the same
 machine with kernel \(K + n\lambda I\) and \(C = +\infty\).
 </p>
-<div class="chnav">
+<section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Boser, B. E., Guyon, I. M., and Vapnik, V. N.</span> <span class="bib-year">(1992)</span> <span class="bib-title">A training algorithm for optimal margin classifiers</span>. <span class="bib-venue">COLT.</span></li>
+<li ><span class="bib-authors">Cortes, C. and Vapnik, V.</span> <span class="bib-year">(1995)</span> <span class="bib-title">Support-vector networks</span>. <span class="bib-venue">Machine Learning 20(3), 273-297.</span></li>
+<li ><span class="bib-authors">Vapnik, V. N.</span> <span class="bib-year">(1995)</span> <span class="bib-title">The Nature of Statistical Learning Theory</span>. <span class="bib-venue">Springer.</span></li>
+<li ><span class="bib-authors">Platt, J. C.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Sequential minimal optimization: a fast algorithm for training support vector machines</span>. <span class="bib-venue">Microsoft Research Technical Report MSR-TR-98-14.</span></li>
+<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
 <a href="learning-theory.html"><span class="dir">previous</span>4. Learning Theory in RKHS Balls</a>
 <a style="text-align:right" href="unsupervised-kernel-methods.html"><span class="dir">next</span>6. Kernel PCA, Clustering, and CCA</a>
 </div>

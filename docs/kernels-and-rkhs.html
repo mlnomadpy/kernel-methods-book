@@ -88,6 +88,11 @@ Equivalently, a kernel \(K\) is p.d. if and only if, for any \(N \in \mathbb{N}\
 
 <p>Note the slightly unfortunate but standard terminology: a positive definite <em>kernel</em> produces positive <em>semidefinite</em> matrices; the quadratic form is allowed to vanish on nonzero coefficient vectors.</p>
 
+<p>What does the inequality actually demand? It is best read as a promise about squared lengths. If the kernel were secretly an inner product, \(K(x_i, x_j) = \langle \Phi(x_i), \Phi(x_j) \rangle\), then the double sum would telescope into \(\big\lVert \sum_i a_i \Phi(x_i) \big\rVert^2\), which can never be negative. Positive definiteness is exactly the algebraic shadow of that geometric fact: it is the one condition, stated without ever naming a feature map \(\Phi\), that guarantees a \(\Phi\) can be found. Aronszajn's theorem below turns the promise into a construction; for now, the condition is the entrance ticket.</p>
+
+<p>Concretely, positive definiteness is something one can watch: choose a handful of points, form their Gram matrix, and check whether that matrix is positive semidefinite. The next figure does this live for points on a line, and lets you see how the choice of kernel and its bandwidth reshape the entries and the eigenvalues of the matrix.</p>
+<figure class="viz" data-widget="gram-heatmap"></figure>
+
 <h3 id="the-simplest-pd-kernels">The simplest p.d. kernels</h3>
 
 <p>The definition is best absorbed through three foundational examples, in increasing generality.</p>
@@ -171,7 +176,9 @@ $$\lim_{N \to +\infty} \; \sup_{n, m \ge N} \lVert f_n - f_m \rVert_{\mathcal{H}
 A <em>Hilbert space</em> is a pre-Hilbert space that is complete for the norm \(\lVert \cdot \rVert_{\mathcal{H}}\): every Cauchy sequence in \(\mathcal{H}\) converges in \(\mathcal{H}\).
 </div>
 
-<p>Completeness is not a technical luxury. It is necessary to keep the good convergence properties of Euclidean spaces in an infinite-dimensional context; without it, limits that "should" exist may fall outside the space, and basic tools such as orthogonal projections and the Riesz representation theorem fail.</p>
+<p>In one sentence: a Hilbert space is Euclidean geometry, with its lengths, angles and projections, that survives the passage to infinitely many dimensions. The inner product supplies the geometry, and completeness is the safety net.</p>
+
+<p>Completeness is not a technical luxury. It is necessary to keep the good convergence properties of Euclidean spaces in an infinite-dimensional context; without it, limits that "should" exist may fall outside the space, and basic tools such as orthogonal projections and the Riesz representation theorem fail. The rational numbers are the cautionary analogy: a sequence of rationals can march steadily toward \(\sqrt{2}\) yet have no rational limit, and a space of functions can misbehave in the same way unless we complete it, which is exactly the final step of the RKHS construction below.</p>
 
 <h3 id="proof-finite-case">Proof of the converse: the finite case</h3>
 
@@ -184,6 +191,8 @@ with
 $$\Phi(x_i) = \begin{pmatrix} \sqrt{\lambda_1}\, [u_1]_i \\ \vdots \\ \sqrt{\lambda_N}\, [u_N]_i \end{pmatrix}.$$
 <span class="qed">\(\square\)</span>
 </div>
+
+<p>It is worth reading off what this proof actually did, because the idea recurs in a more abstract guise for infinite \(\mathcal{X}\). The feature map is nothing but the square root of the kernel matrix, taken through its eigenbasis: the coordinates of \(\Phi(x_i)\) are the entries of the \(i\)-th data point along each principal axis \(u_l\), rescaled by \(\sqrt{\lambda_l}\). Directions with large eigenvalue stretch the embedding, directions with zero eigenvalue collapse it. The nonnegativity of the eigenvalues, which is precisely positive semidefiniteness, is exactly what makes those square roots real, and hence what makes the embedding possible at all.</p>
 
 <h3 id="general-case-history">The general case: a short history</h3>
 
@@ -216,6 +225,8 @@ $$f(x) = \langle f, K_x \rangle_{\mathcal{H}}.$$</li>
 If a r.k. exists, then \(\mathcal{H}\) is called a <em>reproducing kernel Hilbert space</em> (RKHS).
 </div>
 
+<p>The second condition is the whole point, so it is worth saying in words. It asserts that evaluating a function \(f\) at a point \(x\), an operation that looks nothing like an inner product, is in fact the inner product of \(f\) against one special function, the kernel section \(K_x\). Reading a function's value at \(x\) becomes measuring its overlap with the bump sitting at \(x\). The kernel therefore plays a double role: each \(K_x\) is at once a member of the space \(\mathcal{H}\) (a function we can evaluate elsewhere) and the probe that reports the value of any other member at \(x\). That single identity is what will let us turn nonlinear learning in \(\mathcal{X}\) into linear algebra in \(\mathcal{H}\).</p>
+
 <p>Why do we care? Because the RKHS gives us a simple recipe to do machine learning:</p>
 
 <ul>
@@ -239,6 +250,8 @@ The Hilbert space \(\mathcal{H} \subset \mathbb{R}^{\mathcal{X}}\) is a RKHS if 
 $$F : \mathcal{H} \to \mathbb{R}, \qquad f \mapsto f(x)$$
 is continuous.
 </div>
+
+<p>In plain terms, the theorem says that the RKHS property is not really about kernels at all: a Hilbert space of functions is an RKHS precisely when knowing that two functions are close in norm already tells us their values are close at every point. The kernel is then a byproduct, handed to us by the Riesz representation theorem as the vector that represents the evaluation functional. This is a reassuring characterization, because it lets us recognize an RKHS from the intrinsic behavior of the space, without having to exhibit the kernel first.</p>
 
 <div class="box cor"><span class="box-title">Corollary (norm convergence implies pointwise convergence)</span>
 Convergence in a RKHS implies pointwise convergence: if \((f_n)_{n \in \mathbb{N}}\) converges to \(f\) in \(\mathcal{H}\), then \((f_n(x))_{n \in \mathbb{N}}\) converges to \(f(x)\) for any \(x \in \mathcal{X}\).
@@ -591,6 +604,9 @@ $$d_K(x, x') := \lVert K_x - K_{x'} \rVert_{\mathcal{H}} = \big( K(x, x) - 2 K(x
 Small norm \(\Longrightarrow\) slow variations. Penalizing \(\lVert f \rVert_{\mathcal{H}}^2\) in the empirical risk is a smoothness penalty, with smoothness measured in the metric \(d_K\) that the kernel itself defines.
 </div>
 
+<p>This is the interpretation that makes the learning objective of the RKHS section trustworthy: raising the penalty weight \(\lambda\) forces \(\lVert f \rVert_{\mathcal{H}}\) down, and a smaller norm buys a flatter, more slowly varying predictor. The figure below fits a kernel model to points you can drag, and lets you turn both the kernel bandwidth and the ridge weight \(\lambda\); watch the fitted function stiffen into a smooth curve as \(\lambda\) grows, and relax toward interpolation as \(\lambda\) shrinks.</p>
+<figure class="viz" data-widget="kernel-lab"></figure>
+
 <h2 id="summary">Summary</h2>
 
 <p>The chapter can be compressed into four statements, each of which the sequel uses constantly.</p>
@@ -602,8 +618,12 @@ Small norm \(\Longrightarrow\) slow variations. Penalizing \(\lVert f \rVert_{\m
 <li>The norm of a function in the RKHS is related to its degree of smoothness with respect to the metric defined by the kernel on \(\mathcal{X}\), which is why it serves as a regularizer.</li>
 </ul>
 
-<p>We will now see applications of kernels and RKHS in statistics, before coming back to the problem of choosing, and eventually designing, the kernel.</p>
-<div class="chnav">
+<p>We will now see applications of kernels and RKHS in statistics, before coming back to the problem of choosing, and eventually designing, the kernel. Readers who want the same foundations developed at book length, with many further examples, will find them in the standard monographs of Schölkopf and Smola (2002) and of Shawe-Taylor and Cristianini (2004).</p>
+<section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Aronszajn, N.</span> <span class="bib-year">(1950)</span> <span class="bib-title">Theory of reproducing kernels</span>. <span class="bib-venue">Transactions of the American Mathematical Society 68(3), 337-404.</span></li>
+<li ><span class="bib-authors">Mercer, J.</span> <span class="bib-year">(1909)</span> <span class="bib-title">Functions of positive and negative type, and their connection with the theory of integral equations</span>. <span class="bib-venue">Philosophical Transactions of the Royal Society A 209, 415-446.</span></li>
+<li ><span class="bib-authors">Kolmogorov, A. N.</span> <span class="bib-year">(1941)</span> <span class="bib-title">Stationary sequences in Hilbert space</span>. <span class="bib-venue">Bulletin of Moscow State University, Mathematics 2(6), 1-40.</span></li>
+<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
+<li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
 <a href="index.html"><span class="dir">previous</span>Contents</a>
 <a style="text-align:right" href="kernel-tricks.html"><span class="dir">next</span>2. The Kernel Trick</a>
 </div>

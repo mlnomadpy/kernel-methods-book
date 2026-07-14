@@ -97,7 +97,7 @@ are the successive eigenvectors of \(X^\top X\), ranked by decreasing eigenvalue
 
 <h2 id="kernel-pca">Kernel PCA</h2>
 
-<p>Classical PCA can only find linear structure, and it only applies to data living in \(\mathbb{R}^d\). Both restrictions disappear if we replay the derivation in an RKHS. Let \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) be data points in a set \(\mathcal{X}\), let \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) be a positive definite kernel with RKHS \(\mathcal{H}\), and let \(\varphi : \mathcal{X} \to \mathcal{H}\) denote the corresponding embedding \(\varphi(\mathbf{x}) = K(\mathbf{x}, \cdot)\).</p>
+<p>Classical PCA can only find linear structure, and it only applies to data living in \(\mathbb{R}^d\). Both restrictions disappear if we replay the derivation in an RKHS, the observation that turned PCA into a nonlinear method (Schölkopf, Smola, and Müller, 1998). Let \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) be data points in a set \(\mathcal{X}\), let \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) be a positive definite kernel with RKHS \(\mathcal{H}\), and let \(\varphi : \mathcal{X} \to \mathcal{H}\) denote the corresponding embedding \(\varphi(\mathbf{x}) = K(\mathbf{x}, \cdot)\).</p>
 
 <h3 id="kpca-formalization">Formalization in the RKHS</h3>
 
@@ -199,6 +199,12 @@ and the vector of projections of the \(n\) data points onto the \(i\)-th directi
   4. The projections of the points onto the i-th component are given by K alpha_i.
 </code></pre>
 
+<p>It is worth pausing on what this spectrum means, because it is the whole content of the method. The centered Gram matrix records, in its entry \((i,j)\), how similar points \(i\) and \(j\) look through the kernel, and kernel PCA does nothing more than diagonalize it. Its leading eigenvector is the pattern the kernel's similarities most agree on, the weighting of the points whose mutual similarities reinforce one another most strongly, which is exactly the direction of greatest spread in feature space. Successive eigenvectors pick up progressively weaker patterns, each orthogonal to the ones before, and the eigenvalue \(\Delta_i\) reports how much variance the \(i\)-th component captures. The two facts that make the method usable both live in this matrix. The coefficients \(\boldsymbol{\alpha}_i = \mathbf{u}_i / \sqrt{\Delta_i}\) rescale each eigenvector so that the corresponding direction \(f_i\) has unit RKHS norm, and the projections \(K\boldsymbol{\alpha}_i = \sqrt{\Delta_i}\,\mathbf{u}_i\) are just the eigenvector again, stretched by \(\sqrt{\Delta_i}\): plotting the top two of them against each other is the kernel-PCA scatter that reveals nonlinear structure a linear projection would miss.</p>
+
+<p>The kernel's bandwidth controls this entire picture. Widen it and distant points begin to look alike, the matrix fills in, and the variance concentrates into a few dominant components; narrow it and every point resembles only itself, the matrix drifts toward the identity, and the spectrum flattens until no small set of components can summarize the data. The heatmap below is exactly the matrix kernel PCA diagonalizes, and it lets you watch the bandwidth reshape the spectrum that the eigenproblem then reads off.</p>
+
+<figure class="viz" data-widget="gram-heatmap"></figure>
+
 <div class="box rmk"><span class="box-title">Remark (centering the Gram matrix)</span>
 The derivation assumed \(\frac{1}{n} \sum_i \varphi(\mathbf{x}_i) = 0\). We cannot center the embedded points directly, since we never compute them, but we can center the kernel matrix: replacing each \(\varphi(\mathbf{x}_i)\) by \(\varphi(\mathbf{x}_i) - \frac{1}{n}\sum_j \varphi(\mathbf{x}_j)\) changes the Gram matrix into
 $$
@@ -219,7 +225,7 @@ In this formulation we diagonalize the \(n \times n\) centered kernel Gram matri
 $$
 P_k \varphi(\mathbf{x}) = \sum_{i=1}^k \langle \varphi(\mathbf{x}), f_i \rangle_{\mathcal{H}} \, f_i \ \in \mathcal{H} ,
 $$
-<p>and read off an input \(\mathbf{z} \in \mathcal{X}\) that this reconstruction represents. The trouble is that \(P_k \varphi(\mathbf{x})\) is a general element of \(\mathcal{H}\), and there is in general no \(\mathbf{z}\) at all whose embedding equals it: the set of genuine embeddings \(\{\varphi(\mathbf{z}) : \mathbf{z} \in \mathcal{X}\}\) is a thin, curved surface inside \(\mathcal{H}\), and a projection lands off it. An exact pre-image need not exist.</p>
+<p>and read off an input \(\mathbf{z} \in \mathcal{X}\) that this reconstruction represents. The reason one would want this is that the projection cleans the point up: discarding the low-variance components throws away the directions in which noise tends to live, so \(P_k \varphi(\mathbf{x})\) is a denoised version of \(\varphi(\mathbf{x})\), and its pre-image is the actual input, the image or the signal, that this cleaned-up feature vector stands for. The trouble is that \(P_k \varphi(\mathbf{x})\) is a general element of \(\mathcal{H}\), and there is in general no \(\mathbf{z}\) at all whose embedding equals it: the set of genuine embeddings \(\{\varphi(\mathbf{z}) : \mathbf{z} \in \mathcal{X}\}\) is a thin, curved surface inside the ambient space \(\mathcal{H}\), and projecting onto a linear subspace almost always lands just off it. An exact pre-image need not exist.</p>
 
 <p>What one does instead is settle for an approximate pre-image, the input whose embedding is closest to the target reconstruction:</p>
 $$
@@ -259,6 +265,8 @@ $$
 $$
 \min_{\substack{\boldsymbol{\mu}_j \in \mathcal{H},\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu}_{s_i} \rVert_{\mathcal{H}}^2 .
 $$
+<p>It helps to picture what this buys us. Ordinary K-means splits \(\mathbb{R}^p\) into cells with flat boundaries, the point being assigned to whichever centroid is nearest, so it can only recover clusters that are roughly convex blobs; two interlocking rings or a small cluster wrapped inside a larger one defeat it. Running the same algorithm on \(\varphi(\mathbf{x})\) draws those same flat boundaries in feature space, but a flat boundary in \(\mathcal{H}\) pulls back to a curved boundary in \(\mathcal{X}\), bent to follow the geometry the kernel encodes. The nonlinearity comes for free from the feature map; the algorithm itself is unchanged.</p>
+
 <p>The alternating scheme goes through unchanged, but we must check that both steps can be carried out using kernel values alone, since we never see the vectors \(\varphi(\mathbf{x}_i)\). The centroid update is what makes this work, and it rests on a small fact about centers of mass.</p>
 
 <div class="box prop"><span class="box-title">Proposition (the center of mass minimizes total dispersion)</span>
@@ -324,7 +332,7 @@ $$
 $$
 </div>
 
-<p>The objective is now transparent: reward partitions whose clusters have high total internal similarity, normalized by cluster size. This is a hard combinatorial optimization problem, since it ranges over all assignments of \(n\) points to \(k\) clusters. There are two standard ways to attack it. The first is the greedy alternating descent we just derived, kernel K-means itself. The second is to relax the combinatorial constraint into a continuous one that can be solved exactly, which leads to spectral clustering.</p>
+<p>The objective is now transparent: reward partitions whose clusters have high total internal similarity, normalized by cluster size. This is a hard combinatorial optimization problem, since it ranges over all assignments of \(n\) points to \(k\) clusters. There are two standard ways to attack it. The first is the greedy alternating descent we just derived, kernel K-means itself. The second is to relax the combinatorial constraint into a continuous one that can be solved exactly, which leads to spectral clustering. That these are not two unrelated algorithms but two attacks on one objective, and that this same trace maximization underlies the classical graph-cut criteria as well, was made explicit by Dhillon, Guan, and Kulis (2004).</p>
 
 <h2 id="spectral-clustering">Spectral clustering</h2>
 
@@ -356,6 +364,8 @@ $$
 \max_{Z \in \mathbb{R}^{n \times k}} \ \operatorname{trace}\!\big( Z^\top K Z \big) \quad \text{s.t.} \quad Z^\top Z = I .
 $$
 
+<p>The point of the move is a change in the kind of problem we face. The original maximization ranges over assignments, a discrete set of exponentially many partitions with no calculus to exploit and generally no efficient way to find the best member. The relaxed one ranges over a continuous set, the matrices with orthonormal columns, on which the objective is a smooth quadratic form with a known global maximizer. We trade the guarantee that the answer is a genuine partition for the ability to solve the resulting problem exactly, and we recover a partition at the end by rounding.</p>
+
 <div class="box prop"><span class="box-title">Proposition (solution of the relaxed problem)</span>
 A solution \(Z^\star\) of
 $$
@@ -370,7 +380,7 @@ is given by the \(n \times k\) matrix whose columns are the eigenvectors of \(K\
 
 <p>The relaxed solution \(Z^\star\) is a real matrix, not a valid assignment matrix, so we must round it back. The slides list several ways to do this, reflecting that the rounding is a design choice rather than a theorem.</p>
 
-<p>A first, direct answer uses the shape the original constraints would have imposed: with \((\star)\) in force each row of \(A\) has a single nonzero entry, so we simply read off, for each row of \(Z^\star\), the index of its largest entry and assign the point to that cluster. A second, more robust and by far the most common answer normalizes each row of \(Z^\star\) to unit \(\ell_2\) norm and then runs ordinary K-means on the \(n\) rows, treating each row as a \(k\)-dimensional feature vector for its point. This last procedure, eigendecompose the (kernel or affinity) matrix, take the top \(k\) eigenvectors, normalize the rows, and cluster them, is what is usually meant by <em>spectral clustering</em>. Other variants differ in normalization and in how many eigenvectors are used, but all share the same skeleton: relax to an eigenproblem, solve it exactly, and round.</p>
+<p>A first, direct answer uses the shape the original constraints would have imposed: with \((\star)\) in force each row of \(A\) has a single nonzero entry, so we simply read off, for each row of \(Z^\star\), the index of its largest entry and assign the point to that cluster. A second, more robust and by far the most common answer normalizes each row of \(Z^\star\) to unit \(\ell_2\) norm and then runs ordinary K-means on the \(n\) rows, treating each row as a \(k\)-dimensional feature vector for its point. The reason this is more than a heuristic is that the top eigenvectors give each point a short coordinate, and when the data really do fall into \(k\) well-separated groups these coordinates are nearly constant within a group, so the rows collect into \(k\) tight clusters that even plain K-means resolves cleanly; this is the observation behind the algorithm of Ng, Jordan, and Weiss (2002). This last procedure, eigendecompose the (kernel or affinity) matrix, take the top \(k\) eigenvectors, normalize the rows, and cluster them, is what is usually meant by <em>spectral clustering</em>. Other variants differ in normalization and in how many eigenvectors are used, but all share the same skeleton: relax to an eigenproblem, solve it exactly, and round.</p>
 
 <h2 id="kernel-cca">Kernel canonical correlation analysis</h2>
 
@@ -448,7 +458,7 @@ $$
 $$
 (1 - \tau)\, \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau \, \underbrace{\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}}_{\lVert f_a \rVert_{\mathcal{H}_a}^2} = 1 ,
 $$
-<p>and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau \in [0, 1]\) interpolates between the raw, degenerate problem at \(\tau = 0\) and a pure norm penalty at \(\tau = 1\). The added term makes the constraint matrices strictly positive definite, curing the numerical instability, and it forbids the wild, wiggly directions responsible for spurious correlations, curing the overfitting. The regularized problem is again a generalized eigenvalue problem, now well posed.</p>
+<p>and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau \in [0, 1]\) interpolates between the raw, degenerate problem at \(\tau = 0\) and a pure norm penalty at \(\tau = 1\). The added term makes the constraint matrices strictly positive definite, curing the numerical instability, and it forbids the wild, wiggly directions responsible for spurious correlations, curing the overfitting. Reading the penalty this way, as a preference for directions of small RKHS norm and therefore for smooth, slowly varying functions, is what ties the fix back to the regularization that ran through the supervised chapters: there we penalized \(\lVert f \rVert_{\mathcal{H}}\) to keep a fitted function from chasing noise, and here we do the same to keep a canonical direction from manufacturing correlation. The regularized problem is again a generalized eigenvalue problem, now well posed; this form of kernel CCA, together with its use as a kernel measure of dependence, is due to Bach and Jordan (2002).</p>
 
 <p>Kernel CCA in this regularized form is a practical tool for learning shared representations across modalities. A representative application is finding a joint latent representation of images and their text tags, aligning the visual and textual views of a collection so that the two can be compared or retrieved against each other (Gong and Lazebnik, 2014).</p><div class="chnav">
 <a href="support-vector-machines.html"><span class="dir">previous</span>5. Support Vector Machines</a>

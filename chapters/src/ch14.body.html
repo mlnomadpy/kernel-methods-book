@@ -34,6 +34,8 @@ Let \(\mathcal{X} = \mathbb{S}\) be the unit sphere of a Hilbert space \(\mathca
 
 <p>The condition is intuitive in light of earlier chapters: a Taylor series with non-negative coefficients is a non-negative combination of the powers \(u \mapsto u^i\), and each power \(u^i = (\mathbf{x}^\top \mathbf{y})^i\) is the kernel of a tensor-power feature map, hence positive definite; positive definiteness is preserved under non-negative sums and pointwise limits. Requiring it for all \(\mathcal{H}_0\), including infinite-dimensional ones, is what forces the coefficients to be non-negative rather than merely making a specific Gram matrix work.</p>
 
+<p>It is worth pausing on why the sphere is the right stage for this construction. A dot-product kernel reads only the angle between two normalized inputs, so composing kernels means composing maps between angles: the first layer turns the raw similarity \(\mathbf{x}^\top \mathbf{x}'\) into a new one \(\kappa_1(\mathbf{x}^\top \mathbf{x}')\), the second reshapes that similarity again through \(\kappa_2\), and so on. Each layer bends the geometry of the sphere, pulling some pairs of directions closer in feature space and pushing others apart, exactly as a layer of a neural network reshapes its representations. Depth, in this picture, is repeated reshaping of angular similarity, and Schoenberg's condition is the guarantee that no reshaping in the chain can ever destroy positive definiteness. This is the first appearance of the chapter's throughline: a deep architecture is a map into an RKHS, and here we are simply stacking such maps.</p>
+
 <h3 id="dot-product-catalog">A catalog of dot-product kernels</h3>
 
 <p>Writing \(\mathbf{z}, \mathbf{z}'\) for points on the sphere, the kernels that recur in deep-network analysis are the following.</p>
@@ -71,6 +73,12 @@ K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N
 $$
 </div>
 
+<p>Two readings of the same object help here. Statistically, \(K_{\mathrm{RF}}\) is an expectation, and a width-\(m\) network computes an empirical average of \(m\) independent draws of the feature product \(\sigma(\mathbf{w}^\top \mathbf{x})\,\sigma(\mathbf{w}^\top \mathbf{y})\). By the law of large numbers that average converges to \(K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y})\) as \(m\) grows, with a fluctuation that shrinks like \(1/\sqrt{m}\). Architecturally, this says that a wide random hidden layer <em>is</em> a Monte Carlo estimate of a kernel: every neuron contributes one sample, and widening the layer refines the estimate. This is the precise sense in which an infinitely wide random network and a kernel machine are the same object, and it is worth watching the estimate settle.</p>
+
+<p>The figure plots a kernel against the estimate a finite bank of random features produces, so you can raise the number of features \(D\) and watch the Monte Carlo estimate converge onto its infinite-width limit.</p>
+
+<figure class="viz" data-widget="rff-converge"></figure>
+
 <p>This is the population inner product of the random features, and the finite network approximates it with \(m\) Monte Carlo samples. Chapter 8 met such integral representations for translation-invariant kernels, where the features were random Fourier modes. The point here is that they are available for many dot-product kernels too. Cho and Saul (2009b) give the family</p>
 $$
 k_n(\mathbf{x}, \mathbf{y}) = \frac{1}{\pi} \lVert \mathbf{x} \rVert^n \, \lVert \mathbf{y} \rVert^n \, J_n(\theta) ,
@@ -101,6 +109,8 @@ $$
 k_1(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \operatorname{ReLU}(\mathbf{w}^\top \mathbf{x}) \, \operatorname{ReLU}(\mathbf{w}^\top \mathbf{y}) \right] .
 $$
 <p>A layer of infinitely many random ReLU neurons computes, in expectation, the degree-1 arc-cosine kernel. This identity is one of the fundamental tools for analyzing ReLU networks, and it makes the arc-cosine kernel the canonical dot-product kernel of the deep-learning era.</p>
+
+<p>There is a vivid geometric reading behind these formulas. Draw a random hyperplane through the origin with normal \(\mathbf{w} \sim \mathcal{N}(0, I)\). The degree-0 arc-cosine kernel measures the probability that \(\mathbf{x}\) and \(\mathbf{y}\) land on the same side of it, and this depends only on the angle \(\theta\) between them: the closer their directions, the fewer random hyperplanes fall between them, and indeed \(J_0(\theta) = \pi - \theta\) decreases linearly as the angle opens from \(0\) to \(\pi\). Raising the degree to \(n = 1\) keeps this same counting of sign agreements but weights each agreement by how strongly both points activate the neuron, which is exactly what a random ReLU unit does. The angle, not the raw coordinates, is the only thing these kernels ever see, matching the invariance a rectified neuron has to rotations of its weight vector and giving a concrete geometric meaning to what it means to embed data by a random layer.</p>
 
 <h2 id="neural-tangent-kernels">Neural tangent kernels: the trajectory of gradient descent</h2>
 

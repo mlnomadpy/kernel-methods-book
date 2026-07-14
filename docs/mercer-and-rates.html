@@ -50,7 +50,7 @@
 <h1><span class="chno">Chapter 7 · IV · The Theory of the Space</span>Mercer's Theorem, Spectra, and Rates</h1>
 
 <p class="lead">
-The kernel is the one place in a kernel method where prior knowledge about the problem enters: choosing a kernel means choosing which functions the RKHS norm considers simple. This chapter makes that choice quantitative. We first show, on a hand-computed example and then through Green functions, that RKHS norms are smoothness functionals. We then develop the spectral theory of kernels on compact spaces: the integral operator of a kernel, its diagonalization, Mercer's theorem of 1905 with its full proof, and the explicit construction of the RKHS from eigenfunctions and eigenvalues. Two worked examples, periodic kernels on the unit interval and dot-product kernels on the sphere, make the spectra concrete. The payoff comes at the end: the eigenvalue decay of the kernel governs the statistical performance of kernel ridge regression, and we prove convergence rates for polynomially decaying, exponentially decaying, and finite-rank spectra.
+The kernel is the one place in a kernel method where prior knowledge about the problem enters: choosing a kernel means choosing which functions the RKHS norm considers simple. This chapter makes that choice quantitative. We first show, on a hand-computed example and then through Green functions, that RKHS norms are smoothness functionals. We then develop the spectral theory of kernels on compact spaces: the integral operator of a kernel, its diagonalization, Mercer's theorem of 1909 with its full proof, and the explicit construction of the RKHS from eigenfunctions and eigenvalues. Two worked examples, periodic kernels on the unit interval and dot-product kernels on the sphere, make the spectra concrete. The payoff comes at the end: the eigenvalue decay of the kernel governs the statistical performance of kernel ridge regression, and we prove convergence rates for polynomially decaying, exponentially decaying, and finite-rank spectra.
 </p>
 
 <h2 id="from-smoothness-to-kernels">From smoothness functionals to kernels</h2>
@@ -258,7 +258,7 @@ Green functions explain, on a case-by-case basis, why particular RKHS norms are 
 <h3 id="mercer-kernels">Mercer kernels</h3>
 
 <p>
-When \(\mathcal X\) is finite, a positive definite kernel is just a positive semidefinite matrix, and the spectral decomposition of that matrix produces an explicit feature map: \(K(x,t) = \sum_k \lambda_k \psi_k(x)\psi_k(t)\) with \(\lambda_k \geq 0\). Mercer's theory generalizes exactly this factorization from finite sets to compact metric spaces. Historically it also provided the first proof, due to Mercer (1905), that a positive definite kernel on a non-finite set is an inner product.
+When \(\mathcal X\) is finite, a positive definite kernel is just a positive semidefinite matrix, and the spectral decomposition of that matrix produces an explicit feature map: \(K(x,t) = \sum_k \lambda_k \psi_k(x)\psi_k(t)\) with \(\lambda_k \geq 0\). Mercer's theory generalizes exactly this factorization from finite sets to compact metric spaces. Historically it also provided the first proof, due to Mercer (1909), that a positive definite kernel on a non-finite set is an inner product.
 </p>
 
 <div class="box def"><span class="box-title">Definition (Mercer kernel)</span>
@@ -307,7 +307,16 @@ $$
 $$
 
 <p>
-On a finite set with counting measure this is exactly multiplication by the kernel matrix. The following lemma transfers all the good properties of that matrix to \(L_K\).
+On a finite set with counting measure this is exactly multiplication by the kernel matrix: if \(\mathcal X = \{t_1, \ldots, t_m\}\) and \(\nu\) is the counting measure, then \((L_K f)(x_i) = \sum_j K(x_i, t_j)\, f(t_j)\) is the \(i\)-th entry of the matrix-vector product \(\mathbf K \mathbf f\). Reading the integral operator as the kernel matrix with the sum replaced by an integral is the right mental picture: the eigenfunctions of \(L_K\) are the continuous analogue of the eigenvectors of the Gram matrix, and the eigenvalues \(\lambda_k\) that Mercer's theorem is about are the continuous analogue of the Gram matrix eigenvalues. This correspondence between the finite matrix and the operator is the foundation of the operator-theoretic approach to learning theory (Cucker and Smale, 2002; Steinwart and Christmann, 2008).
+</p>
+
+<p>
+Before formalizing, it helps to look at the finite object the operator generalizes. The figure below assembles the Gram matrix \(\mathbf K = \left( K(x_i, x_j) \right)_{ij}\) of a handful of points and displays both its heatmap and its spectrum; the eigenvalues shown there are exactly the finite-sample stand-ins for the \(\lambda_k\) of \(L_K\) that the rest of the chapter studies, and widening or narrowing the kernel reshapes them just as it will reshape the operator's spectrum.
+</p>
+<figure class="viz" data-widget="gram-heatmap"></figure>
+
+<p>
+The following lemma transfers all the good properties of that matrix to \(L_K\): symmetry of \(K\) becomes self-adjointness of the operator, positive definiteness becomes positivity, and, crucially, continuity of \(K\) on a compact space buys <em>compactness</em> of \(L_K\), the property that will let us diagonalize it exactly as one diagonalizes a symmetric matrix.
 </p>
 
 <div class="box lem"><span class="box-title">Lemma (properties of \(L_K\))</span>
@@ -434,6 +443,10 @@ and \(L_K\) maps \(L^2_\nu(\mathcal X)\) into continuous functions (Step 1 of th
 <h2 id="mercers-theorem">Mercer's theorem</h2>
 
 <p>
+In plain terms, the theorem below says that a continuous positive definite kernel on a compact space can be written as an infinite sum of separable rank-one pieces \(\lambda_k\, \psi_k(x)\, \psi_k(t)\), one per eigenvalue, and that this sum converges not merely in an averaged \(L^2\) sense but pointwise and even uniformly. It is the exact infinite-dimensional counterpart of diagonalizing a symmetric positive semidefinite matrix as \(\mathbf K = \sum_k \lambda_k\, u_k u_k^\top\): the eigenvectors \(u_k\) become eigenfunctions \(\psi_k\), the finite sum becomes a series, and everything the kernel knows is stored in the two lists \((\lambda_k)\) and \((\psi_k)\).
+</p>
+
+<p>
 We can now state the main result. One hypothesis deserves emphasis: the measure \(\nu\) must be <em>nondegenerate</em>, meaning \(\nu(U) \gt 0\) for every nonempty open set \(U \subset \mathcal X\). Nondegeneracy is what lets us upgrade an equality in \(L^2_\nu\) to an equality at every point: a continuous function whose \(L^2_\nu\) norm vanishes must vanish identically, since otherwise it would be bounded away from zero on some open set of positive measure.
 </p>
 
@@ -450,7 +463,7 @@ where the convergence is absolute for each \(x, t \in \mathcal X\), and uniform 
 </div>
 
 <p>
-The proof is constructive and follows Mercer's original 1905 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of the first chapter, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
+The proof is constructive and follows Mercer's original 1909 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of the first chapter, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
 </p>
 
 <details class="proof-details"><summary>Proof (six steps)</summary>
@@ -587,7 +600,7 @@ which tends to zero as \(t \to x\) by continuity of \(K\).
 <h3 id="scope-and-limits">Scope and limits of the construction</h3>
 
 <p>
-Three remarks put the theorem in perspective. First, this proof extends the proof valid when \(\mathcal X\) is finite, and it is constructive: Mercer (1905) exhibits the feature map rather than merely proving its existence. Second, the eigensystem (the \(\lambda_k\) and \(\psi_k\)) depends on the choice of the measure \(d\nu(x)\); different measures lead to different feature spaces for the same kernel on the same space \(\mathcal X\). The kernel is intrinsic, its spectral coordinates are not. Third, compactness and continuity are genuinely required. For \(\mathcal X = \mathbb{R}^d\), the eigenvalue problem
+Three remarks put the theorem in perspective. First, this proof extends the proof valid when \(\mathcal X\) is finite, and it is constructive: Mercer (1909) exhibits the feature map rather than merely proving its existence. Second, the eigensystem (the \(\lambda_k\) and \(\psi_k\)) depends on the choice of the measure \(d\nu(x)\); different measures lead to different feature spaces for the same kernel on the same space \(\mathcal X\). The kernel is intrinsic, its spectral coordinates are not. Third, compactness and continuity are genuinely required. For \(\mathcal X = \mathbb{R}^d\), the eigenvalue problem
 </p>
 
 $$
@@ -870,6 +883,10 @@ K(x,y) = \sum_{k=1}^{\infty} \lambda_k\, \psi_k(x)\, \psi_k(y) = \langle \Phi(x)
 \Phi(x) = \left( \sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}.
 $$
 
+<p>
+Here is the statement in words before the symbols. Write a candidate function in the eigenfunction coordinates, \(f = \sum_i a_i\, \psi_i\). Its RKHS norm is not the plain \(\ell^2\) norm of the coefficients; it is a <em>reweighted</em> norm, \(\sum_k a_k^2 / \lambda_k\), that divides each coordinate by its eigenvalue. Directions with a large \(\lambda_k\) are cheap, directions with a small \(\lambda_k\) are expensive, and a direction with \(\lambda_k = 0\) is forbidden outright. The RKHS is exactly the set of functions whose coordinates decay fast enough for this reweighted sum to stay finite. This is the weighted-ellipsoid picture promised earlier: the unit ball of \(\mathcal H\) is an ellipsoid with axes \(\psi_k\) and semi-axes \(\sqrt{\lambda_k}\), stretched wide where the kernel is smooth and pinched to nothing where it is not. The theorem makes this precise, and the geometry is unpacked right after.
+</p>
+
 <div class="box thm"><span class="box-title">Theorem (RKHS from eigenfunctions)</span>
 <p>
 Assume all eigenvalues \(\lambda_k\) are positive. Then the RKHS of \(K\) is the Hilbert space
@@ -1016,7 +1033,7 @@ $$
 
 <div class="box proof"><span class="box-title">Proof sketch</span>
 <p>
-The characterization by Fourier coefficients is a direct application of the RKHS construction theorem: the Fourier basis is an orthonormal basis of eigenfunctions of \(L_K\), the eigenvalues are \(n^{-2\beta}\) (for both \(\psi_{2n-1}\) and \(\psi_{2n}\)), and the RKHS norm is \(\sum_k a_k^2 / \lambda_k\). For the identification with the Sobolev space, use the Parseval equality to rewrite the Sobolev norm as the \(\ell^2\) norm of the Fourier coefficients of \(f^{(\beta)}\), which are (roughly) the Fourier coefficients of \(f\) multiplied by \(n^{\beta}\); the periodic boundary conditions are what make the term-by-term differentiation of the Fourier series legitimate. For details, see Tsybakov (2004, Proposition 1.14).
+The characterization by Fourier coefficients is a direct application of the RKHS construction theorem: the Fourier basis is an orthonormal basis of eigenfunctions of \(L_K\), the eigenvalues are \(n^{-2\beta}\) (for both \(\psi_{2n-1}\) and \(\psi_{2n}\)), and the RKHS norm is \(\sum_k a_k^2 / \lambda_k\). For the identification with the Sobolev space, use the Parseval equality to rewrite the Sobolev norm as the \(\ell^2\) norm of the Fourier coefficients of \(f^{(\beta)}\), which are (roughly) the Fourier coefficients of \(f\) multiplied by \(n^{\beta}\); the periodic boundary conditions are what make the term-by-term differentiation of the Fourier series legitimate. For details, see Tsybakov (2009, Proposition 1.14).
 <span class="qed">\(\square\)</span>
 </p>
 </div>
@@ -1418,7 +1435,7 @@ Taking \(\lambda = n^{-1}\) and summing these inequalities gives the result.
 <ul>
 <li>The same rates hold for the exact quantities \(B_\lambda + V_\lambda\), without the substitution \(\Phi_n^\top\Phi_n = nT\); see Dicker et al. (2015, Corollaries 1 to 4), whose proof we followed and adapted. The constants hidden in the big-\(O\) notation depend only on the kernel \(K\) and the measure \(d\nu(x)\).</li>
 <li>These rates are minimax optimal (Caponnetto and De Vito, 2007): no estimator can uniformly improve on them over the corresponding classes of target functions.</li>
-<li>The polynomial case connects back to classical nonparametric statistics. For \(s = 2q\), the ball of the RKHS sits inside \(L^2_\nu(\mathcal X)\) as a Sobolev-type class of functions that are \(q - 1\) times differentiable with absolutely continuous derivatives and \(\| f^{(q)} \|_{L^2_\nu(\mathcal X)} \lt +\infty\), as the periodic Sobolev example made explicit with eigenvalues \(n^{-2\beta}\) and \(q = \beta\). The rate \(n^{-\frac{s}{s+1}} = n^{-\frac{2q}{2q+1}}\) is then exactly the standard optimal convergence rate of nonparametric regression (Tsybakov, 2004).</li>
+<li>The polynomial case connects back to classical nonparametric statistics. For \(s = 2q\), the ball of the RKHS sits inside \(L^2_\nu(\mathcal X)\) as a Sobolev-type class of functions that are \(q - 1\) times differentiable with absolutely continuous derivatives and \(\| f^{(q)} \|_{L^2_\nu(\mathcal X)} \lt +\infty\), as the periodic Sobolev example made explicit with eigenvalues \(n^{-2\beta}\) and \(q = \beta\). The rate \(n^{-\frac{s}{s+1}} = n^{-\frac{2q}{2q+1}}\) is then exactly the standard optimal convergence rate of nonparametric regression (Tsybakov, 2009).</li>
 <li>Under additional assumptions on \(f^*\), for instance requiring not only \(\sum_{i\geq 1}(\beta^*_i)^2 \lt \infty\) but also \(\sum_{i \geq 1} i^{\tau} (\beta^*_i)^2 \lt \infty\) for some \(\tau \gt 0\), or \(\beta^*_i = 0\) for \(i \gt J\), one obtains faster convergence rates, which are again minimax optimal for the class of functions considered. In this sense KRR is <em>adaptive</em>: the same estimator, with a properly tuned \(\lambda\), achieves the optimal rate over a range of regularity classes (Caponnetto and De Vito, 2007; Dicker et al., 2015).</li>
 </ul>
 

@@ -193,6 +193,24 @@ The saving grace is sparsity: a string of length \(|x|\) contains at most
 non-zero coordinates. The kernel is a sparse dot product, and everything hinges
 on how we align the non-zero coordinates of the two strings.</p>
 
+<p>It helps to watch the sparse inner product on a tiny case before worrying about
+speed.</p>
+
+<div class="box ex"><span class="box-title">Example (a 2-spectrum inner product)</span>
+Take \(k=2\) and the DNA strings \(x = \texttt{AGGA}\) and \(x' = \texttt{AGGT}\).
+Their contiguous \(2\)-mers are
+$$ x:\ (\texttt{AG},\ \texttt{GG},\ \texttt{GA}), \qquad
+   x':\ (\texttt{AG},\ \texttt{GG},\ \texttt{GT}), $$
+so the only nonzero coordinates of \(\Phi(x)\) are
+\(\Phi_{\texttt{AG}} = \Phi_{\texttt{GG}} = \Phi_{\texttt{GA}} = 1\), and similarly
+for \(x'\). The kernel keeps only the coordinates the two strings share,
+$$ K(x,x') = \underbrace{1\cdot 1}_{\texttt{AG}} + \underbrace{1\cdot 1}_{\texttt{GG}}
+   = 2, $$
+since \(\texttt{GA}\) and \(\texttt{GT}\) each occur in one string only. The index
+set has \(4^2 = 16\) entries, but we ever touched three per string: the work tracks
+the strings, not the alphabet.
+</div>
+
 <h4 id="spectrum-computation">Computing the spectrum kernel</h4>
 
 <p>With <em>pre-indexation</em>, we walk once through each string, hashing every
@@ -296,6 +314,15 @@ $$ K_{k,\lambda}(x,x') \;=\; \sum_{u \in \mathcal{A}^k}
    \sum_{\mathbf{i}:x(\mathbf{i})=u} \sum_{\mathbf{i}':x'(\mathbf{i}')=u}
    \lambda^{\,l(\mathbf{i}) + l(\mathbf{i}')}. $$
 
+<p>The idea that rescues us is recursion on the letters. A gapped occurrence of a
+length-\(k\) word is a gapped occurrence of its length-\((k-1)\) prefix, followed
+somewhere to the right by one more matched letter, and the decay weight
+\(\lambda^{\text{span}}\) factorizes across that boundary into the prefix's weight
+times the decay paid to reach the new letter. So if we scan a string one letter at
+a time, the length-\(k\) bookkeeping can be updated from the length-\((k-1)\)
+bookkeeping we already hold. The rest of this subsection turns that single
+observation into a table.</p>
+
 <p>Enumerating index sequences is hopeless: there are on the order of \(|x|^k\) of
 them. The way out, due to Lodhi et al. (2002), is to introduce an auxiliary
 feature in which the span is measured not to the last selected letter but to the
@@ -326,6 +353,31 @@ whose prefix \(v\) sat in \(x\):</p>
 
 $$ \Phi_{va}(xa) = \Phi_{va}(x) + \lambda\, \Psi_v(x), \qquad
    \Psi_{va}(xa) = \lambda\, \Psi_{va}(x) + \lambda\, \Psi_v(x). $$
+
+<p>The two update rules become concrete once we grow a short string letter by
+letter and watch the auxiliary features accumulate.</p>
+
+<div class="box ex"><span class="box-title">Example (building \(\Psi\) one letter at a time)</span>
+Take single-letter words \(v \in \{\texttt c, \texttt a\}\) and use the convention
+\(\Psi_\varnothing(x) = 1\) for the empty word. Start from the empty string, where
+every \(\Psi\) is \(0\), and append \(\texttt c\) then \(\texttt a\) to reach
+\(\texttt{ca}\). Appending \(\texttt c\) to the empty string closes a fresh
+occurrence of \(\texttt c\):
+$$ \Psi_{\texttt c}(\texttt c) = \lambda\,\Psi_{\texttt c}(\varnothing)
+   + \lambda\,\Psi_\varnothing(\varnothing) = \lambda\cdot 0 + \lambda\cdot 1
+   = \lambda. $$
+Now append \(\texttt a\). The word \(\texttt c\) does not end in \(\texttt a\), so it
+just pays one more unit of decay, while \(\texttt a\) closes a new occurrence:
+$$ \Psi_{\texttt c}(\texttt{ca}) = \lambda\,\Psi_{\texttt c}(\texttt c) = \lambda^2,
+   \qquad
+   \Psi_{\texttt a}(\texttt{ca}) = \lambda\,\Psi_{\texttt a}(\texttt c)
+   + \lambda\,\Psi_\varnothing(\texttt c) = 0 + \lambda = \lambda. $$
+Both agree with the closed form \(\Psi_b(\texttt{ca}) = \lambda^{\,|x| - i + 1}\)
+read off directly: \(\texttt c\) sits at position \(1\), giving
+\(\lambda^{2-1+1} = \lambda^2\), and \(\texttt a\) sits at position \(2\), giving
+\(\lambda^{2-2+1} = \lambda\). The "gap account to the right end" is precisely the
+exponent \(|x| - i + 1\), and appending a letter is what advances it.
+</div>
 
 <p>We now bundle these features into two kernels indexed by the common length
 \(k\),</p>

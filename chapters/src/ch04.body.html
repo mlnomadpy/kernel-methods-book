@@ -39,6 +39,8 @@ Then
 $$R(f) = \min_{g\text{ measurable}} R(g) = R^*.$$</p>
 </div>
 
+<p>Read plainly, the theorem promises that the surrogate does not merely sit above the 0/1 loss, it points in the same direction. At every input the best possible response under \(\varphi\) already commits to the label the Bayes rule would choose, so driving the \(\varphi\)-risk down to its floor cannot strand us on a function whose classification is far from optimal. The entire burden rests on one hypothesis: that \(\varphi\) is still strictly decreasing as the margin crosses zero, \(\varphi'(0) \lt 0\). Zero margin is the point of indecision, where the prediction is on the fence and the 0/1 loss most needs a committed sign. A loss that were flat or rising there could be driven to its minimum by a function that hedges at zero, or even leans the wrong way, precisely where doing so is most expensive for the classification error. Convexity then guarantees that this local preference set at the origin is never reversed further out, so a single condition at one point controls the sign everywhere.</p>
+
 <p>The proof strategy is to show that a minimizer of the \(\varphi\)-risk is necessarily <em>sign-consistent</em> with \(\eta\): where \(\eta(x) \gt \tfrac12\) the function must be positive, and where \(\eta(x) \lt \tfrac12\) it must be negative. Since these are precisely the signs of the Bayes classifier, \(f\) attains the Bayes risk. The key computation conditions on \(X = x\) and compares \(f\) with \(-f\):
 $$R_\varphi(f \mid X = x) = \mathbb E\big[\varphi(Yf(X)) \mid X = x\big] = \eta(x)\,\varphi(f(x)) + (1-\eta(x))\,\varphi(-f(x)),$$
 $$R_\varphi(-f \mid X = x) = \mathbb E\big[\varphi(-Yf(X)) \mid X = x\big] = \eta(x)\,\varphi(-f(x)) + (1-\eta(x))\,\varphi(f(x)),$$
@@ -89,7 +91,7 @@ $$R(f) = \mathbb E\big[\min(\eta(X), 1-\eta(X))\big] = R^*. $$
 
 <h2 id="empirical-risk-minimization">Empirical risk minimization</h2>
 
-<p>We do not know \(P\), only the sample \(S_n\), so we cannot minimize \(R_\varphi\) directly. To find a function with a small \(\varphi\)-risk, the natural candidate minimizes the empirical version over a class of functions \(\mathcal F\) that we choose.</p>
+<p>We do not know \(P\), only the sample \(S_n\), so we cannot minimize \(R_\varphi\) directly. To find a function with a small \(\varphi\)-risk, the natural candidate replaces the true risk by its empirical average and minimizes that over a class of functions \(\mathcal F\) that we choose. This is the empirical risk minimization principle of Vapnik (1995), and the choice of \(\mathcal F\) is where all the tension lives.</p>
 
 <div class="box def"><span class="box-title">Definition (ERM estimator)</span>
 <p>The <em>empirical risk minimization</em> (ERM) estimator on a functional class \(\mathcal F\) is the solution (when it exists) of
@@ -118,6 +120,8 @@ where the expectation is over the sample \((X_i)_{i=1,\dots,n}\) and over indepe
 
 <p>The random signs \(\sigma_i\) are pure noise, independent of the data and of each other. If \(\mathcal F\) is rich enough to find, for every realization of the signs, a function whose values \(f(X_i)\) track them, then \(\mathrm{Rad}_n(\mathcal F)\) stays large: such a class can fit noise, and empirical risks computed over it cannot be trusted. If instead \(\mathcal F\) is small, no single \(f\) can chase arbitrary sign patterns, the supremum stays close to zero, and empirical averages concentrate around their expectations uniformly over the class. Rademacher complexity is the right currency in which to price this uniformity, as the next theorem shows.</p>
 
+<p>It helps to read the definition in units. The inner quantity \(\frac{2}{n}\sum_i \sigma_i f(X_i)\) is, up to the factor of two, the empirical correlation between the function's values and a random relabeling of the sample. Fixing the signs, the supremum selects the member of \(\mathcal F\) that aligns best with that particular pattern of noise; averaging over the signs then asks how well the class can pull off this alignment on average, across all \(2^n\) possible labelings. A class that contains, for essentially every sign pattern, some function threading through it will score near the top; a rigid class able to produce only a few shapes is defeated by most patterns and scores near zero. Because the labels are random, a large value is not evidence of signal, it is evidence that the class can manufacture the appearance of signal from nothing, which is exactly the capacity we must charge for. This data-dependent measure refines the older combinatorial capacity notions of Vapnik (1995); the particular form used here, and the learning bound that follows, are due to Bartlett and Mendelson (2002).</p>
+
 <h2 id="basic-learning-bounds">A basic learning bound for ERM</h2>
 
 <div class="box thm"><span class="box-title">Theorem (learning bound for Lipschitz losses)</span>
@@ -128,7 +132,7 @@ $$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{
 </div>
 
 <div class="box rmk"><span class="box-title">Remark (where the bound comes from)</span>
-<p>The course states this result without proof; the standard argument has three moves. First, since \(\hat f_n\) minimizes the empirical risk, its estimation error is at most twice the uniform deviation \(\mathbb E_{S_n} \sup_{f\in\mathcal F} \big(R_\varphi(f) - R_\varphi^n(f)\big)\). Second, the <em>symmetrization</em> device introduces an independent ghost sample and random signs, bounding this uniform deviation by the Rademacher complexity of the loss class \(\{(x,y)\mapsto \varphi(y f(x)) : f \in \mathcal F\}\). Third, the <em>contraction principle</em> of Ledoux and Talagrand (1991) strips the \(L_\varphi\)-Lipschitz function \(\varphi\) at the price of the constant \(L_\varphi\), leaving the Rademacher complexity of \(\mathcal F\) itself. Collecting the constants yields the factor \(4 L_\varphi\).</p>
+<p>The course states this result without proof; the standard argument has three moves. First, since \(\hat f_n\) minimizes the empirical risk, its estimation error is at most twice the uniform deviation \(\mathbb E_{S_n} \sup_{f\in\mathcal F} \big(R_\varphi(f) - R_\varphi^n(f)\big)\). Second, the <em>symmetrization</em> device introduces an independent ghost sample and random signs, bounding this uniform deviation by the Rademacher complexity of the loss class \(\{(x,y)\mapsto \varphi(y f(x)) : f \in \mathcal F\}\). Third, the <em>contraction principle</em> of Ledoux and Talagrand (1991) strips the \(L_\varphi\)-Lipschitz function \(\varphi\) at the price of the constant \(L_\varphi\), leaving the Rademacher complexity of \(\mathcal F\) itself. Collecting the constants yields the factor \(4 L_\varphi\). The symmetrization and concentration steps are by now standard machinery; Boucheron, Bousquet, and Lugosi (2005) survey them in a form tailored to classification.</p>
 </div>
 
 <p>The theorem quantifies the trade-off announced above:</p>
@@ -144,6 +148,10 @@ $$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{
 <p>Assume now that \(\mathcal X\) is endowed with a positive definite kernel \(K\), with RKHS \(\mathcal H\) and feature map \(x \mapsto K_x = K(x,\cdot)\), so that the reproducing property \(f(x) = \langle f, K_x\rangle_{\mathcal H}\) holds for all \(f \in \mathcal H\). As function class for the ERM we take the ball of radius \(B\) in the RKHS:
 $$\mathcal F_B = \big\{ f \in \mathcal H \;:\; \lVert f \rVert_{\mathcal H} \le B \big\}.$$
 The radius \(B\) is our knob on capacity. The following theorem shows that the Rademacher complexity of \(\mathcal F_B\) is controlled by \(B\) and by the kernel alone, with no combinatorial argument anywhere: the reproducing property turns the supremum over the ball into a norm, and independence does the rest.</p>
+
+<p>Before the proof, it is worth seeing why bounding a single number, the norm \(\lVert f\rVert_{\mathcal H}\), should tame a whole infinite-dimensional class at all. The reproducing property answers this at every point at once. Writing \(f(x) = \langle f, K_x\rangle_{\mathcal H}\) and applying Cauchy-Schwarz,
+$$\big|f(x)\big| = \big|\langle f, K_x\rangle_{\mathcal H}\big| \le \lVert f\rVert_{\mathcal H}\,\lVert K_x\rVert_{\mathcal H} = \lVert f\rVert_{\mathcal H}\,\sqrt{K(x,x)},$$
+so a bound on the norm caps the height of every function in the ball, uniformly, by \(B\sqrt{K(x,x)}\). The same inequality applied to the difference \(f(x) - f(x') = \langle f, K_x - K_{x'}\rangle_{\mathcal H}\) controls how fast \(f\) can vary: two inputs whose feature vectors \(K_x\) and \(K_{x'}\) lie close together must receive nearby values, with the allowed gap scaled by \(\lVert f\rVert_{\mathcal H}\). The RKHS norm is therefore a smoothness budget, and the radius \(B\) is how much of it we permit any function to spend. A large ball buys wiggly functions that can lunge at individual data points; a small ball admits only gentle, slowly varying ones, which is precisely the noise-resistant regime the Rademacher bound rewards. The theorem below turns this qualitative picture into a number.</p>
 
 <div class="box thm"><span class="box-title">Theorem (capacity control of RKHS balls)</span>
 <p>$$\mathrm{Rad}_n(\mathcal F_B) \;\le\; \frac{2 B \sqrt{\mathbb E\, K(X,X)}}{\sqrt n}.$$</p>
@@ -161,7 +169,7 @@ $$\mathrm{Rad}_n(\mathcal F_B) \le \frac{2B}{n} \sqrt{ \mathbb E_X\!\left[ \sum_
 <span class="qed">\(\square\)</span></p>
 </div>
 
-<p>The decay in \(1/\sqrt n\) is the familiar parametric rate, yet \(\mathcal F_B\) may be a ball in an infinite-dimensional space. What replaces dimension is the average diagonal of the kernel, \(\mathbb E\, K(X,X)\), that is, the expected squared norm of the feature vector. Plugging the theorem into the learning bound gives the central statistical result of the chapter.</p>
+<p>The decay in \(1/\sqrt n\) is the familiar parametric rate, yet \(\mathcal F_B\) may be a ball in an infinite-dimensional space. What replaces dimension is the average diagonal of the kernel, \(\mathbb E\, K(X,X)\), that is, the expected squared norm of the feature vector. In words, the capacity of the ball is fixed by just two quantities and nothing else: how large we let the functions grow, through the radius \(B\), and how large the feature vectors are, through \(\sqrt{\mathbb E\, K(X,X)}\), the whole divided by \(\sqrt n\) because averaging \(n\) independent sign terms shrinks their aligned part at exactly that rate. Dimension, the usual culprit behind overfitting, never appears. A function can inhabit an infinite-dimensional space and still be easy to learn, provided its norm is kept on a budget. Plugging the theorem into the learning bound gives the central statistical result of the chapter.</p>
 
 <div class="box cor"><span class="box-title">Corollary (basic learning bound in RKHS balls)</span>
 <p>Suppose \(K(X,X) \le \kappa^2\) almost surely (for instance the Gaussian kernel, with \(\kappa = 1\)). Then the ERM estimator in \(\mathcal F_B\) with an \(L_\varphi\)-Lipschitz loss satisfies
@@ -185,6 +193,10 @@ The algorithms of the previous chapter solve something else: an unconstrained pr
 $$\min_{f\in\mathcal H}\; \left\{ \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) + \lambda\, \lVert f\rVert_{\mathcal H}^2 \right\}.$$
 The penalized formulation is the one used in practice: it is unconstrained, the representer theorem reduces it to a finite-dimensional convex program in the coefficients of \(f = \sum_i \alpha_i K_{x_i}\), and the parameter \(\lambda\) plays the role of \(1/B\): larger \(\lambda\) means a smaller effective ball. The learning bounds for \(\mathcal F_B\) therefore transfer to the penalized estimators our algorithms compute, and they explain <em>why</em> regularization works: the penalty is not a numerical convenience but a capacity constraint, and the corollary above prices exactly how much statistical safety each unit of \(\lVert f\rVert_{\mathcal H}\) costs.</p>
 
+<p>The dial is easiest to feel by turning it. In the interactive fit below the regularization parameter \(\lambda\) sets the effective norm budget, hence the radius of the RKHS ball the solution is allowed to live in: slide \(\lambda\) down to enlarge the ball and the curve grows wiggly, chasing every point, while sliding \(\lambda\) up shrinks the ball and smooths the curve out, which is the very capacity trade-off the corollary above quantifies.</p>
+
+<figure class="viz" data-widget="kernel-lab"></figure>
+
 <p>This completes the design of large-margin classifiers, which is worth recording as a summary of the whole program:
 $$\min_{f\in\mathcal H}\; \left\{ \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) + \lambda \lVert f\rVert_{\mathcal H}^2 \right\}$$</p>
 <ul>
@@ -194,7 +206,7 @@ $$\min_{f\in\mathcal H}\; \left\{ \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)
 
 <h2 id="convex-duality-interlude">Interlude: convex optimization and Lagrangian duality</h2>
 
-<p>The equivalence between constrained and penalized ERM invoked strong duality, and the derivation of support vector machines in the next chapter will lean on it even harder. This interlude develops the needed facts from scratch, for a general constrained problem; no convexity is assumed until it is needed.</p>
+<p>The equivalence between constrained and penalized ERM invoked strong duality, and the derivation of support vector machines in the next chapter will lean on it even harder. This interlude develops the needed facts from scratch, for a general constrained problem; no convexity is assumed until it is needed. The treatment follows the standard development in Boyd and Vandenberghe (2004).</p>
 
 <h3 id="duality-gap">Primal, dual, and the duality gap</h3>
 

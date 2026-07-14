@@ -157,6 +157,8 @@ where \(\mathcal{P} \subset \mathcal{X}\) is the set of path graphs.</div>
 
 <p>The whole point of a walk is that it drops the distinctness requirement of a path. This one relaxation is what turns an NP-hard count into a linear-algebra computation.</p>
 
+<p>To see why distinctness is the villain, imagine building a substructure one vertex at a time. To extend a path we must check that the next vertex has not already been used, so the bookkeeping has to carry the entire set of vertices visited so far, and there are exponentially many such sets: that memory is exactly what makes path enumeration combinatorial. A walk carries no such memory. Its next step depends only on where it stands now, not on where it has been, so extending walks is a Markov process, and counting them reduces to multiplying by the adjacency matrix once per step. Trading the path's global no-repeat constraint for the walk's purely local rule is the whole trick, and it is the concrete meaning of the earlier remark about counting objects that are only homomorphic to subgraphs.</p>
+
 <div class="box def"><span class="box-title">Definition (walk)</span> A <em>walk</em> of a graph \((V,E)\) is a sequence \(v_1, \dots, v_n \in V\) with \((v_i, v_{i+1}) \in E\) for \(i = 1, \dots, n-1\). Vertices may repeat. Write \(\mathcal{W}_n(G)\) for the set of walks on \(n\) vertices and \(\mathcal{W}(G) = \bigcup_{n \ge 1} \mathcal{W}_n(G)\) for all walks.</div>
 
 <p>Every path is a walk, but a walk that steps back and forth, or loops around a cycle, is not a path. There are infinitely many walks in any graph with a cycle, which is precisely why we can afford to weight them and sum implicitly.</p>

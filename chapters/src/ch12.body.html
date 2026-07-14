@@ -8,6 +8,9 @@
 
 <p>Two situations recur. In the first, we have a single description of the data but a whole family of candidate kernels on it, obtained by varying the kernel type or its parameters: a linear kernel, polynomial kernels of several degrees, Gaussian kernels across a range of bandwidths. Which bandwidth is right is exactly the kind of question the data should answer, not the modeler. In the second situation we have several genuinely different descriptions of the same objects, different views. A protein can be characterized by its amino acid sequence, by its folded structure, by its mass spectrometry profile, by which other proteins it interacts with. Each view comes with its own natural kernel, and each captures partial, complementary information. The question in both cases is the same: how do we choose among, or integrate, several kernels in a single learning task?</p>
 
+<p>It helps to feel the difficulty before proposing a cure. A single Gaussian kernel already forces one hard choice, its bandwidth, and that choice alone can swing a fit from useless to excellent. A narrow bandwidth makes every point its own island, so the fitted function spikes at the data and forgets it everywhere in between; a wide bandwidth blurs neighboring points together, so the fit goes flat and misses real structure. There is usually no single setting that is right across every region of every problem, which is exactly why we might want several bandwidths available at once rather than one chosen in advance. The figure below lets you move the bandwidth of a single kernel and watch the same data support wildly different curves; Multiple Kernel Learning is the formalization of the wish that follows, learning a convex combination \(\sum_i \eta_i K_i\) of several such kernels at once and letting the data set the mixing weights.</p>
+<figure class="viz" data-widget="kernel-lab" data-kernel="gaussian"></figure>
+
 <h3 id="one-kernel-setting">The setting: learning with one kernel</h3>
 
 <p>To talk about combining kernels we first fix notation for learning with one. Throughout, for a function \(f : \mathcal{X} \to \mathbb{R}\) and data points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\), we write</p>
@@ -116,7 +119,9 @@ $$
 $$
 </div>
 
-<p>The weight \(\eta_i\) appears in the denominator of the penalty: a large \(\eta_i\) discounts the cost of using kernel \(i\), letting \(f_i\) grow, while \(\eta_i \to 0\) forbids kernel \(i\) altogether. Setting all \(\eta_i = 1\) recovers the plain sum kernel of the previous section. The proof is the heart of the chapter's machinery, so we work through it in full; it produces a dual problem that depends on the weights only through the combined Gram matrix \(\sum_i \eta_i K_i\), and that observation is what makes learning the weights tractable.</p>
+<p>The weight \(\eta_i\) appears in the denominator of the penalty: a large \(\eta_i\) discounts the cost of using kernel \(i\), letting \(f_i\) grow, while \(\eta_i \to 0\) forbids kernel \(i\) altogether. Setting all \(\eta_i = 1\) recovers the plain sum kernel of the previous section. The reciprocal is worth dwelling on, because that is where the intuition lives. Read \(\eta_i\) as a spending allowance for kernel \(i\): the penalty charges \(\lVert f_i \rVert^2 / \eta_i\), so a generous allowance makes signal drawn from that kernel cheap and the optimizer will route the fit through it, while a stingy allowance taxes every use of the kernel and pushes the fit onto its competitors. At \(\eta_i \to 0\) the tax is infinite and the kernel is switched off. Weighting the sources is thus the same as allocating a modeling budget across the available views, and learning the weights is learning that allocation instead of guessing it.</p>
+
+<p>The proof is the heart of the chapter's machinery, so we work through it in full; it produces a dual problem that depends on the weights only through the combined Gram matrix \(\sum_i \eta_i K_i\), and that observation is what makes learning the weights tractable.</p>
 
 <details class="proof-details"><summary>Proof</summary>
 <div class="box proof">
@@ -184,6 +189,8 @@ which is the predictor obtained by learning directly with \(K_\eta\). The two vi
 
 <p>The weighted sum kernel is only useful if we know the weights. If we knew how much to trust each source we would simply set \(\eta\) accordingly and learn with \(K_\eta\). Usually we do not. The natural idea is to make \(\eta\) part of the optimization: rather than fix the kernel and learn the predictor, learn the kernel and the predictor together. For this to be more than wishful thinking, the objective as a function of the kernel must be something we can actually minimize.</p>
 
+<p>One might object that we already know how to set kernel parameters: sweep a grid of candidates and keep whatever cross-validates best. That works for one or two knobs, but the grid grows exponentially with the number of kernels, it returns a single winner rather than a blend, and it never even considers mixing genuinely different sources on a common footing. Promoting \(\eta\) to a continuous optimization variable addresses all three at once, and, as the next result shows, it does so over a landscape with no spurious local minima to trap the search. That last property is not automatic, and it is what separates a principled method from a heuristic, so we establish it first.</p>
+
 <h3 id="j-of-k">The value of the problem is convex in the kernel</h3>
 
 <p>Fix the data and the risk \(R\), and record how good the best predictor is as a function of the kernel we are allowed to use.</p>
@@ -226,7 +233,7 @@ $$
 returning both a weight vector \(\eta \in \Sigma_M\) and the predictor trained with the kernel \(K_\eta\).
 </div>
 
-<p>Two facts make this practical. First, \(\Sigma_M\) is a convex set (a simplex), and we just proved \(J\) is convex in \(K_\eta\), which is affine in \(\eta\); so the outer problem is a convex minimization in \(\eta\). Second, in terms of the dual variable \(\boldsymbol{\gamma}\) and the weights \(\eta\), the joint problem is jointly convex in \((\eta, \boldsymbol{\alpha})\), and can therefore be solved efficiently to a global optimum rather than a local one. The output is at once a set of weights, telling us how much each source contributed, and a predictor, the kernel method trained with \(K_\eta\). Because Lanckriet et al. phrased the search over kernels through semidefinite programming, this line of work is where semidefinite programming entered kernel learning.</p>
+<p>Two facts make this practical. First, \(\Sigma_M\) is a convex set (a simplex), and we just proved \(J\) is convex in \(K_\eta\), which is affine in \(\eta\); so the outer problem is a convex minimization in \(\eta\). Second, in terms of the dual variable \(\boldsymbol{\gamma}\) and the weights \(\eta\), the joint problem is jointly convex in \((\eta, \boldsymbol{\alpha})\), and can therefore be solved efficiently to a global optimum rather than a local one. Joint convexity is the reassurance that matters in practice: it means the weights the algorithm reports are the genuinely optimal weights, not an artifact of where the optimizer happened to start, so we can read them as evidence about which sources helped. The output is at once a set of weights, telling us how much each source contributed, and a predictor, the kernel method trained with \(K_\eta\). Because Lanckriet et al. phrased the search over kernels through semidefinite programming, this line of work is where semidefinite programming entered kernel learning.</p>
 
 <h3 id="protein-annotation-example">Example: genomic data fusion for protein annotation</h3>
 
@@ -296,6 +303,8 @@ $$
 $$
 <p>This is a sum, over blocks, of RKHS norms, an \(\ell_1\) norm of the vector of per-kernel norms rather than the \(\ell_2\) sum of squared norms that the plain sum kernel penalizes. Just as the \(\ell_1\) penalty in the lasso drives individual coefficients to exactly zero, this mixed \(\ell_1/\ell_2\) penalty drives entire blocks \(f_i\) to zero, which is to say it sets the corresponding weights \(\eta_i\) to zero and discards kernel \(i\). This is why MKL selects kernels rather than merely averaging them, and it is what the protein experiment observed when the control kernel received essentially no weight.</p>
 
+<p>It is worth asking what this sparsity actually buys, since that is the whole reason to prefer the group lasso over the plain sum. Three things. It buys interpretation: the surviving weights are a short list of the sources that mattered, which is why the protein study could read off that sequence homology drove one task and interaction patterns the other. It buys robustness to junk: an irrelevant or noisy kernel, like the deliberate random control, is not merely down-weighted but zeroed out, so it cannot leak variance into the predictor. And it buys economy at test time, since a predictor that keeps three of twenty kernels evaluates only three Gram functions per new point. The squared-\(\ell_2\) penalty of the sum kernel offers none of these; it keeps every kernel slightly active and spreads the fit thinly across all of them, which is exactly right when every source is trustworthy and exactly wrong when the menu is padded with kernels that carry no signal. The choice between them is therefore a statement about the dictionary: sum when you believe all of it, MKL when you suspect only some of it.</p>
+
 <h3 id="sum-vs-mkl">Sum kernel versus MKL, side by side</h3>
 
 <p>The contrast is entirely in the exponent on the norms. Learning with the sum kernel, the uniform combination, solves</p>
@@ -344,7 +353,9 @@ $$
 $$
 \frac{\partial J(K_\eta)}{\partial \eta_i} = -\lambda \, \boldsymbol{\gamma}^{\ast\top} K_i \boldsymbol{\gamma}^\ast .
 $$
-<p>Each partial derivative is a single quadratic form in the base Gram matrix \(K_i\). With the value and gradient in hand, \(J(K_\eta)\) is minimized over the simplex \(\Sigma_M\) by a projected gradient or reduced gradient algorithm. The result is an outer loop over \(\eta\) wrapped around an off-the-shelf single-kernel solver, which is what makes simpleMKL simple.</p>
+<p>The reason we may hold \(\boldsymbol{\gamma}^\ast\) fixed while differentiating deserves a word, because it is what makes the gradient nearly free. Since \(J(K_\eta)\) is a maximum over \(\boldsymbol{\gamma}\), at the maximizer the derivative of the inner objective with respect to \(\boldsymbol{\gamma}\) vanishes; so when we nudge \(\eta\), the induced motion of \(\boldsymbol{\gamma}^\ast\) contributes nothing to first order and only the explicit dependence on \(\eta\) survives. That explicit dependence is the lone term \(-\lambda \boldsymbol{\gamma}^\top K_\eta \boldsymbol{\gamma}\), and differentiating it in \(\eta_i\) leaves \(-\lambda \boldsymbol{\gamma}^{\ast\top} K_i \boldsymbol{\gamma}^\ast\). Read plainly: the very dual solution that trains the machine also scores each base kernel by how much of the current fit it accounts for, and that score is the gradient. Kernels that explain a lot of the fit get pushed up in the next weight update, kernels that explain little get pushed down.</p>
+
+<p>Each partial derivative is a single quadratic form in the base Gram matrix \(K_i\). With the value and gradient in hand, \(J(K_\eta)\) is minimized over the simplex \(\Sigma_M\) by a projected gradient or reduced gradient algorithm. The result is an outer loop over \(\eta\) wrapped around an off-the-shelf single-kernel solver, calling it as a black box and never opening it up, which is what makes simpleMKL simple: any SVM or ridge code you already trust becomes an MKL solver at the cost of a gradient step on the simplex.</p>
 
 <pre><code>simpleMKL
   initialize eta in the simplex (e.g. uniform)

@@ -94,11 +94,23 @@ $$\forall x,y\in\mathbb{R}^d,\qquad K(x,y)=\varphi(x-y)$$
 for some function \(\varphi:\mathbb{R}^d\to\mathbb{R}\). Such a \(\varphi\) is positive definite when \(K\) is.</p>
 </div>
 
+<p>Translation invariance means the kernel reads only the gap \(x-y\), never the absolute positions, so on the line a single profile \(\varphi\) fixes the similarity of every pair of points. Before any spectral theory, it is worth seeing what positive definiteness of \(\varphi\) actually demands: that whatever finite set of points we sample, the Gram matrix \(K_{ij}=\varphi(x_i-x_j)\) they produce be positive semidefinite. The following widget lets you watch that matrix form for the standard profiles on a line and see how the bandwidth controls the range over which points stay correlated.</p>
+
+<figure class="viz" data-widget="gram-heatmap"></figure>
+
 <div class="box thm"><span class="box-title">Theorem (Bochner)</span>
 <p>A continuous function \(\varphi:\mathbb{R}^d\to\mathbb{R}\) is positive definite if and only if it is the Fourier-Stieltjes transform of a symmetric and positive finite Borel measure \(\mu\in M(\mathbb{R}^d)\).</p>
 </div>
 
-<p>This single theorem underlies an enormous amount of practice. The Gaussian, Laplace, Matern, and sinc kernels are all Bochner transforms of familiar spectral densities, and the random Fourier feature approximation of Rahimi and Recht (2007) is nothing but Monte Carlo sampling from the measure \(\mu\).</p>
+<p>It is worth pausing on what this statement means, because it is the organizing idea of the whole subject. Read the transform in the other direction: Bochner says that every admissible \(\varphi\) can be written as
+$$\varphi(x-y)=\int_{\mathbb{R}^d}e^{-i\omega^\top(x-y)}\,d\mu(\omega)=\int_{\mathbb{R}^d}\cos\!\big(\omega^\top(x-y)\big)\,d\mu(\omega),$$
+a superposition of pure waves, one for each frequency \(\omega\), each weighted by the nonnegative amount \(d\mu(\omega)\) of spectral mass sitting at that frequency. The kernel is a chord and the measure \(\mu\) is the recipe saying how loud each note is played. Positive definiteness then has a strikingly simple reading: it is exactly the requirement that no note be played with negative volume. A single wave \(\cos(\omega^\top(x-y))\) is already positive definite, since it factors as a real feature paired with itself, and a nonnegative mixture of positive definite functions is positive definite again; Bochner's content is that these mixtures exhaust the class. The spectral measure is the frequency content of the kernel, and choosing a kernel is choosing which frequencies to trust.</p>
+
+<p>This picture is not merely intuition, it is an algorithm. When \(\mu\) is a probability measure the integral above is an expectation, so we can approximate it by drawing frequencies \(\omega_1,\dots,\omega_D\) from \(\mu\) and averaging the matching cosines: the Gaussian kernel appears as the average of a handful of random cosine features and sharpens toward the true kernel as \(D\) grows. That is precisely the random Fourier feature construction of Rahimi and Recht (2007), which is nothing but Monte Carlo sampling from the Bochner measure, and the widget below shows the average tightening onto the target as more features are drawn.</p>
+
+<figure class="viz" data-widget="rff-converge"></figure>
+
+<p>This single theorem underlies an enormous amount of practice. The Gaussian, Laplace, Matern, and sinc kernels are all Bochner transforms of familiar spectral densities, and, as just described, the random Fourier feature approximation samples the very measure \(\mu\) that the theorem produces.</p>
 
 <h3 id="fs-rd">The Fourier-Stieltjes transform on \(\mathbb{R}^d\)</h3>
 
@@ -265,6 +277,8 @@ The set of semicharacters on \(S\) is denoted \(S^\ast\).</p>
 
 <p>Two remarks fix the picture. If the involution is the identity, then \(\rho(s)=\overline{\rho(s)}\), so a semicharacter is automatically real-valued. If instead \((S,+)\) is an abelian group with \(s^\ast=-s\), then \(\rho(s)\rho(-s)=\rho(0)=1\) and \(\rho(-s)=\overline{\rho(s)}\) force \(|\rho(s)|=1\); the semicharacter takes values in the circle and is an ordinary group character. So semicharacters interpolate between real exponentials and complex characters.</p>
 
+<p>The way to hold all of this in the head is that a semicharacter is a pure exponential mode adapted to the algebra at hand. On a group the modes are the oscillating characters \(e^{i\omega t}\) that Fourier analysis is built from; on a semigroup with no inverses, such as the half-line, the modes are the decaying exponentials \(e^{-as}\) instead. In either case the mode is exactly the object that turns the semigroup operation into ordinary multiplication, \(\rho(s+t)=\rho(s)\rho(t)\), and that multiplicativity is what lets the quadratic form factor into a perfect square, which is why a single semicharacter is automatically positive definite. The semicharacters are the atoms of the theory; the integral representation below then says that every positive definite function is built by mixing them, the exact semigroup analogue of Bochner's superposition of waves.</p>
+
 <div class="box lem"><span class="box-title">Lemma (semicharacters are positive definite)</span>
 <p>Every semicharacter is positive definite, meaning \(K(s,t)=K(t,s)\) and \(\sum_{i,j=1}^n a_i a_j K(x_i,x_j)\ge 0\).</p>
 </div>
@@ -367,7 +381,9 @@ $$K(x,x')=\Phi_{\theta_0}(x)^\top I(\theta_0)^{-1}\Phi_{\theta_0}(x'),$$
 where \(I(\theta_0)=\mathbb{E}\big[\Phi_{\theta_0}(x)\Phi_{\theta_0}(x)^\top\big]\) is the Fisher information matrix.</p>
 </div>
 
-<p>When \(\theta_0\) is the maximum-likelihood estimator, \(\mathbb{E}[\Phi_{\theta_0}(x)]=0\) and \(I(\theta_0)\) is a genuine covariance matrix, so the information matrix whitens the scores. The Fisher kernel is thus a Mahalanobis inner product between score vectors.</p>
+<p>The picture behind this definition is worth drawing out. A fitted model \(P_{\theta_0}\) is a single point in the space of distributions, and near it the parameters \(\theta\) act as local coordinates. The score \(\Phi_{\theta_0}(x)=\nabla_\theta\log P_\theta(x)\) records, for one example \(x\), the direction in which we would have to tilt the parameters to raise its likelihood. Two examples that pull the model the same way, that would both be explained better by the same adjustment, get similar scores and hence a large kernel value; two examples that pull in opposite directions come out dissimilar. The model thus supplies the coordinate system, and each example is represented not by its raw features but by the fingerprint it leaves on the parameters, the gradient it induces on the log-likelihood.</p>
+
+<p>Why divide by the information matrix at all? The raw score coordinates are measured in whatever units each parameter happens to use, and a parameter the data pin down tightly produces large scores while a slack one produces small scores, so comparing them directly would let the incidental scaling of the parametrization dominate the similarity. When \(\theta_0\) is the maximum-likelihood estimator, \(\mathbb{E}[\Phi_{\theta_0}(x)]=0\) and \(I(\theta_0)\) is a genuine covariance matrix, so multiplying by \(I(\theta_0)^{-1}\) whitens the scores, rotating and rescaling them into directions that are uncorrelated and of unit variance under the model. The Fisher kernel is therefore a Mahalanobis inner product between score vectors, and the reparametrization invariance proved below is the formal statement that this whitening erases the arbitrary choice of coordinates.</p>
 
 <div class="box prop"><span class="box-title">Properties</span>
 <p>The Fisher score describes how each parameter contributes to generating a particular example, which gives the kernel a clear interpretation. Two theoretical guarantees are worth stating. A kernel classifier using the Fisher kernel derived from a model that contains the label as a latent variable is asymptotically at least as good as the MAP labelling based on that model (Jaakkola and Haussler 1999). And a variant, the Tangent of Posterior kernel of Tsuda et al. (2002), can improve over the direct posterior classification by correcting for estimation error in the parameter.</p>
