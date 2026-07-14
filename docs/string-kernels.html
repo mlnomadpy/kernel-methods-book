@@ -147,6 +147,59 @@ $$ r_j \;=\; \frac{1}{n-j} \sum_{i=1}^{n-j} h_i\, h_{i+j}, \qquad j = 1, 2, \dot
 identity of the residues in favour of a coarse numerical profile. The kernels
 that follow keep the letters.</p>
 
+<h3 id="vector-space-text">The vector space model and text kernels</h3>
+
+<p>The oldest string data is human text, and its kernel is the ancestor of every
+count kernel below. Information retrieval represents a document as a <em>bag of
+words</em>: the vector \(\Phi(d) = (\mathrm{tf}(t,d))_{t \in \mathcal{D}}\) indexed
+by a dictionary \(\mathcal{D}\) of terms, whose coordinate for term \(t\) is the
+frequency \(\mathrm{tf}(t,d)\) with which \(t\) occurs in \(d\). Word order and
+punctuation are discarded, so a phrase such as "bread winner" breaks into its
+constituents. This is the vector space model of Salton and colleagues (1975), and
+as Shawe-Taylor and Cristianini (2004) observe, reading it as a feature map turns
+the whole information-retrieval toolbox into a kernel method.</p>
+
+<div class="box def"><span class="box-title">Definition (bag-of-words kernel)</span>
+For documents \(d, d'\) over a dictionary \(\mathcal{D}\),
+$$ K(d,d') = \langle \Phi(d), \Phi(d') \rangle
+   = \sum_{t \in \mathcal{D}} \mathrm{tf}(t,d)\, \mathrm{tf}(t,d'). $$
+Being an explicit inner product it is positive definite, and, exactly like the
+spectrum kernel, it is sparse: only terms present in both documents contribute.
+</div>
+
+<p>The dictionary can hold hundreds of thousands of terms, so \(\Phi(d)\) is never
+formed: each document is tokenized once into a sorted list of (term, count) pairs,
+and the kernel is read off by merging the two lists, multiplying counts whenever
+the term numbers coincide, in time \(O(|d| + |d'|)\), the text analogue of the
+spectrum kernel's pre-indexation.</p>
+
+<p>Raw counts weight every word equally, which is wasteful: "the" carries no topic
+while "homology" carries a great deal. The remedy is <em>tf-idf</em> weighting, a
+diagonal reweighting \(R_{tt} = w(t)\) of the feature space with
+\(w(t) = \log\bigl(\ell / \mathrm{df}(t)\bigr)\), where \(\mathrm{df}(t)\) is the
+number of documents containing \(t\) and \(\ell\) the size of the corpus. Rare,
+informative terms are amplified and ubiquitous ones suppressed. The reweighted
+kernel is
+$$ \tilde{K}(d,d') = \sum_{t \in \mathcal{D}} w(t)^2\, \mathrm{tf}(t,d)\,
+   \mathrm{tf}(t,d'), $$
+and because the weights use no labels they can be estimated from any large
+background corpus. Dividing by \(\sqrt{K(d,d)\,K(d',d')}\) normalizes away document
+length, the cosine similarity of retrieval.</p>
+
+<p>Both kernels still call two documents unrelated when they share no terms, even
+if one says "physician" where the other says "doctor". Semantic similarity has to
+be injected through a term proximity matrix \(P\) with \(P_{tt'} \gt 0\) when
+\(t, t'\) are related, giving
+\(\tilde{K}(d,d') = \Phi(d)\, P P^\top \Phi(d')^\top\), which represents each
+document by the less sparse vector \(\Phi(d)P\) that fires on every term close to
+those it contains. The most useful \(P\) is learned: <em>latent semantic
+indexing</em> (Deerwester et al., 1990) takes \(P\) from the leading singular
+vectors of the term-document matrix, so terms that co-occur across the corpus
+collapse onto shared latent concepts. Shawe-Taylor and Cristianini (2004) note
+that this is precisely kernel PCA in the bag-of-words feature space, and its dual
+form, the <em>latent semantic kernel</em>, evaluates the concept projection from
+document inner products alone, so it layers on top of any base text kernel.</p>
+
 <h2 id="substring-indexation">Substring indexation and the spectrum kernel</h2>
 
 <p>The second and more powerful family indexes the feature space by short
@@ -489,6 +542,12 @@ The single shared gap-free \(2\)-mer \(\texttt{ca}\) has span \(2\), so
 \((\lambda^2)^2 = \lambda^4\), exactly what the tables return.
 </div>
 
+<p>Shawe-Taylor and Cristianini (2004) note one alternative worth keeping in mind:
+when only a bounded number \(m\) of gaps is permitted, the kernel can be evaluated
+with a <em>trie</em> instead of the dynamic program, at cost
+\(O\bigl((|x| + |x'|)\,(k+m)^m\bigr)\), which wins over the \(O(k\,|x|\,|x'|)\)
+table when the alphabet is large or few gaps are allowed.</p>
+
 <h3 id="dictionary">Dictionary-based indexation</h3>
 
 <p>A third way to build an explicit embedding replaces "index by all \(k\)-mers"
@@ -513,6 +572,51 @@ decades, and it is a shame to waste it. The models come as parametric families
 sequences: hidden Markov models for proteins, stochastic context-free grammars
 for RNA. This section turns such models into kernels, so that the biological
 structure they encode transfers to the kernel machine.</p>
+
+<h3 id="p-kernels">P-kernels and conditional independence</h3>
+
+<p>Before the individual constructions, it pays to name the umbrella they live
+under. Haussler (1999) asked when a probability distribution is itself a kernel: if
+a symmetric joint distribution \(P(x,z)\) over pairs from \(\mathcal{X}\) has a
+positive semidefinite matrix \(\bigl(P(x_i,x_j)\bigr)_{i,j}\) on every finite
+sample, then \(K(x,z) = P(x,z)\) is a valid kernel.</p>
+
+<div class="box def"><span class="box-title">Definition (P-kernel, Haussler 1999)</span>
+A symmetric joint distribution \(P(x,z)\) on \(\mathcal{X} \times \mathcal{X}\)
+that satisfies the finitely positive semidefinite property is a <em>P-kernel</em>
+on \(\mathcal{X}\). Any kernel with finite total mass
+\(\sum_{x,z} K(x,z) = M \lt \infty\) rescales to one, since \(P = K/M\) is such a
+distribution.
+</div>
+
+<p>Not every distribution qualifies: on \(\mathcal{X} = \{x_1, x_2\}\) the symmetric
+law that puts all its mass off the diagonal,
+\(P(x_1,x_2) = P(x_2,x_1) = \tfrac12\) and \(P(x_1,x_1) = P(x_2,x_2) = 0\), has Gram
+matrix with eigenvalues \(\pm\tfrac12\), a negative direction. What rescues the
+construction in general is a hidden variable.</p>
+
+<div class="box prop"><span class="box-title">Proposition (conditional independence suffices)</span>
+Let \(m\) index a family of models with prior \(P_M(m)\), and suppose \(x\) and
+\(z\) are conditionally independent given \(m\),
+$$ P(x,z \mid m) = P(x \mid m)\, P(z \mid m). $$
+Then the marginal
+$$ P(x,z) = \sum_{m} P(x \mid m)\, P(z \mid m)\, P_M(m) $$
+is a P-kernel.
+</div>
+
+<div class="box proof">
+For each fixed \(m\) the term \(P(x \mid m)P(z \mid m)\) is a rank-one product of a
+function of \(x\) with the same function of \(z\), hence positive definite, and the
+marginal is a non-negative combination of these, again p.d.
+<span class="qed">\(\square\)</span>
+</div>
+
+<p>Conditional independence is sufficient but not necessary, and it is exactly the
+engine behind the marginalized and generative kernels below: the model index
+\(m\) plays the role of the latent variable, and integrating a valid complete-data
+kernel over independent draws of the hidden layer can never destroy positive
+definiteness. Watkins (2000) developed the same conditional-independence idea
+independently, including its application to hidden Markov models.</p>
 
 <h3 id="context-tree">Context-tree models and the context-tree kernel</h3>
 
@@ -619,6 +723,46 @@ This same recipe underlies the spectrum kernel on the hidden states of a protein
 HMM (Tsuda et al., 2002), random-walk kernels on graphs (Kashima et al., 2004),
 and phylogenetic kernels on multiple alignments (Vert et al., 2006).</p>
 
+<h3 id="hmm-kernels">Fixed-length and pair hidden Markov model kernels</h3>
+
+<p>The marginalized construction above softens a complete-data kernel over a
+posterior. A complementary route marginalizes the <em>joint generation
+probability</em> of the two strings directly: if a hidden model can emit both
+\(s\) and \(t\), then
+$$ K(s,t) = \sum_{h} P(s \mid h)\, P(t \mid h)\, P(h) $$
+is a P-kernel by conditional independence, evaluated by dynamic programming.
+Shawe-Taylor and Cristianini (2004) isolate two cases worth stating.</p>
+
+<p>First take \(s\) and \(t\) of equal length \(n\), emitted symbol by symbol from
+a hidden state path \(h = h_1 \dots h_n\) that follows a first-order Markov chain,
+\(P(h) = P_M(h_1)\prod_{i \ge 2} P_M(h_i \mid h_{i-1})\). Grouping the sum by the
+final state, let \(\kappa_{k,a}(s,t)\) collect the paths of length \(k\) ending in
+state \(a\). Then \(\kappa_{1,a}(s,t) = P(s_1 \mid a)\,P(t_1 \mid a)\,P_M(a)\), and
+appending one position gives the recursion
+$$ \kappa_{k+1,a}(s,t) = P(s_{k+1} \mid a)\, P(t_{k+1} \mid a)
+   \sum_{b \in A} P_M(a \mid b)\, \kappa_{k,b}(s,t), $$
+with \(K(s,t) = \sum_{a \in A} \kappa_{n,a}(s,t)\). Filling one table per state
+costs \(O(n\,|A|^2)\). This <em>fixed-length HMM kernel</em> compares two aligned
+strings under every hidden annotation of their shared positions at once, and fits
+tasks with substitutions but no insertions or deletions.</p>
+
+<p>Sequences in biology rarely share a length. The <em>pair HMM kernel</em>
+restores insertions and deletions by augmenting the state alphabet with the empty
+symbol \(\varepsilon\), so a state may emit a letter to one string, to both, or to
+neither, exactly the moves of a pairwise alignment. Indexing the subkernels by the
+positions reached in each string, \(\kappa_{i,j,a}(s,t)\), and starting from
+\(\kappa_{0,0,a_I} = 1\), the recursion splits into the three ways a state can
+consume input:
+$$ \kappa_{i,j,a}(s,t) = \sum_{b \in A} P_M(a \mid b)
+   \Bigl[\, P\bigl((s_i,\varepsilon) \mid a\bigr)\, \kappa_{i-1,j,b}
+   + P\bigl((\varepsilon,t_j) \mid a\bigr)\, \kappa_{i,j-1,b}
+   + P\bigl((s_i,t_j) \mid a\bigr)\, \kappa_{i-1,j-1,b} \,\Bigr], $$
+and \(K(s,t) = \sum_{a \in A} \kappa_{|s|,|t|,a}(s,t)\). This is the Durbin et al.
+(1998) forward algorithm read as a kernel, the probabilistic sibling of the local
+alignment kernel of the next section: both sum a score over all alignments, but the
+pair HMM sums a genuine probability and so is a P-kernel, positive definite with no
+convolution argument needed.</p>
+
 <h3 id="scfg">Stochastic context-free grammars for RNA</h3>
 
 <p>RNA folds back on itself: distant bases pair, so the relevant dependencies are
@@ -642,6 +786,50 @@ SCFG (Tsuda et al., 2002). Projecting the kernel onto its first two principal
 components separates the three classes, evidence that the grammar-based kernel
 captures the folded structure that defines the families.
 </div>
+
+<h3 id="fisher-kernel">The Fisher kernel</h3>
+
+<p>The marginalized and HMM kernels average over a discrete set of hidden paths.
+The Fisher kernel of Jaakkola and Haussler (2000) exploits the model's
+<em>smooth</em> parameters instead, and it is the last strategy named in the
+chapter's opening that we still owe a definition. Fix a parametric model
+\(P_\theta\) already fitted to the data, at parameters \(\theta_0\). To incorporate
+a new sequence we would nudge \(\theta\) to raise its likelihood; the direction of
+that nudge, the gradient of the log-likelihood, records how each parameter would
+move. Two sequences are alike, in this view, when they stretch the model the same
+way: a prototypical sequence needs little adjustment, an unusual one pulls hard on
+the parameters that explain its oddity.</p>
+
+<div class="box def"><span class="box-title">Definition (Fisher score and Fisher kernel)</span>
+The <em>Fisher score</em> of a sequence \(x\) at \(\theta_0\) is the gradient
+$$ g(\theta_0, x) = \nabla_\theta \log P_\theta(x)\big|_{\theta = \theta_0}
+   \in \mathbb{R}^N, $$
+one coordinate per parameter. With the Fisher information matrix
+\(I = \mathbb{E}\bigl[\, g(\theta_0,x)\, g(\theta_0,x)^\top \bigr]\), the
+<em>Fisher kernel</em> is
+$$ K(x,z) = g(\theta_0,x)^\top\, I^{-1}\, g(\theta_0,z). $$
+Its feature map \(\Phi(x) = g(\theta_0,x)\) has fixed dimension \(N\), whatever the
+length of \(x\); in practice \(I\) is replaced by the identity or by the empirical
+covariance of the scores, which amounts to whitening them.
+</div>
+
+<p>The construction is not as foreign to the rest of the chapter as it looks. Take
+the generative model to be a Markov chain over \(k\)-mers, with parameters
+\(a_{u \to \sigma}\) governing the transition from a length-\(k\) context \(u\) to
+the next symbol \(\sigma\). Shawe-Taylor and Cristianini (2004) compute the Fisher
+score at the flat setting where every transition is equally likely, and find that
+the coordinate for \(u \to \sigma\) is
+$$ g(\theta_0, s)_{u \to \sigma}
+   = \bigl|\{(v_1,v_2): s = v_1 u\sigma v_2\}\bigr|
+   - |\Sigma|^{-1}\,\bigl|\{(v_1,v_2): s = v_1 u v_2\}\bigr|. $$
+The first term counts the occurrences of the \((k{+}1)\)-mer \(u\sigma\) in \(s\):
+up to the centering correction of the second term, the Fisher kernel of this
+elementary sequence model <em>is</em> the \((k{+}1)\)-spectrum kernel, so the two
+families that open and close this chapter meet at this identity. For a genuine
+hidden Markov model the Fisher scores become expectations rather than hard counts,
+supplied in one pass by the forward-backward algorithm. This is the SVM-Fisher
+baseline that the remote homology benchmark below pits against the local alignment
+kernel.</p>
 
 <h2 id="local-alignment">The local alignment kernel</h2>
 
@@ -1017,7 +1205,11 @@ et al. (2004) for the local alignment kernel.
 <li ><span class="bib-authors">Haussler, D.</span> <span class="bib-year">(1999)</span> <span class="bib-title">Convolution kernels on discrete structures</span>. <span class="bib-venue">Technical Report UCSC-CRL-99-10, UC Santa Cruz.</span></li>
 <li ><span class="bib-authors">Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Protein homology detection using string alignment kernels</span>. <span class="bib-venue">Bioinformatics 20(11), 1682-1689.</span></li>
 <li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li>
-<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
+<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
+<li ><span class="bib-authors">Salton, G., Wong, A., and Yang, C. S.</span> <span class="bib-year">(1975)</span> <span class="bib-title">A vector space model for automatic indexing</span>. <span class="bib-venue">Communications of the ACM 18(11), 613-620.</span></li>
+<li ><span class="bib-authors">Deerwester, S., Dumais, S. T., Furnas, G. W., Landauer, T. K., and Harshman, R.</span> <span class="bib-year">(1990)</span> <span class="bib-title">Indexing by latent semantic analysis</span>. <span class="bib-venue">Journal of the American Society for Information Science 41(6), 391-407.</span></li>
+<li ><span class="bib-authors">Watkins, C.</span> <span class="bib-year">(2000)</span> <span class="bib-title">Dynamic alignment kernels</span>. <span class="bib-venue">Advances in Large Margin Classifiers, MIT Press, 39-50.</span></li>
+<li ><span class="bib-authors">Durbin, R., Eddy, S. R., Krogh, A., and Mitchison, G.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Biological Sequence Analysis: Probabilistic Models of Proteins and Nucleic Acids</span>. <span class="bib-venue">Cambridge University Press.</span></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
 <a href="kernel-families.html"><span class="dir">previous</span>9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
 <a style="text-align:right" href="graph-kernels.html"><span class="dir">next</span>11. Kernels for and on Graphs</a>
 </div>

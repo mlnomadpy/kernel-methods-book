@@ -122,6 +122,8 @@ where the expectation is over the sample \((X_i)_{i=1,\dots,n}\) and over indepe
 
 <p>It helps to read the definition in units. The inner quantity \(\frac{2}{n}\sum_i \sigma_i f(X_i)\) is, up to the factor of two, the empirical correlation between the function's values and a random relabeling of the sample. Fixing the signs, the supremum selects the member of \(\mathcal F\) that aligns best with that particular pattern of noise; averaging over the signs then asks how well the class can pull off this alignment on average, across all \(2^n\) possible labelings. A class that contains, for essentially every sign pattern, some function threading through it will score near the top; a rigid class able to produce only a few shapes is defeated by most patterns and scores near zero. Because the labels are random, a large value is not evidence of signal, it is evidence that the class can manufacture the appearance of signal from nothing, which is exactly the capacity we must charge for. This data-dependent measure refines the older combinatorial capacity notions of Vapnik (1995); the particular form used here, and the learning bound that follows, are due to Bartlett and Mendelson (2002).</p>
 
+<p>It is worth pausing on why searching a class is what creates the danger, an intuition that Shawe-Taylor and Cristianini (2004) place at the center of their account of learning as the <em>detection of stable patterns</em>. A pattern is worth reporting only when it reflects the source that generated the data rather than an accident of the particular sample. A single fixed function is easy to trust, because the law of large numbers already concentrates its empirical average around the truth; a function chosen for its fit to the sample is not, because the very act of choosing can seize on coincidence. Their sharpest illustration is the birthday paradox. Among twenty-eight people the probability that some pair shares a birthday exceeds one half, yet the probability that two of them share one <em>pre-specified</em> day is below one percent. Fixing the day only after inspecting the group, that is, searching over all \(365\) possible days for a match, turns a rare event into a likely one. Rademacher complexity is the price of exactly this freedom: it measures how much a class can exploit the license to pick its function after seeing the sample, which is why the same quantity that certifies a stable pattern also caps how badly the search can fool us.</p>
+
 <h2 id="basic-learning-bounds">A basic learning bound for ERM</h2>
 
 <div class="box thm"><span class="box-title">Theorem (learning bound for Lipschitz losses)</span>
@@ -135,11 +137,30 @@ $$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{
 <p>The course states this result without proof; the standard argument has three moves. First, since \(\hat f_n\) minimizes the empirical risk, its estimation error is at most twice the uniform deviation \(\mathbb E_{S_n} \sup_{f\in\mathcal F} \big(R_\varphi(f) - R_\varphi^n(f)\big)\). Second, the <em>symmetrization</em> device introduces an independent ghost sample and random signs, bounding this uniform deviation by the Rademacher complexity of the loss class \(\{(x,y)\mapsto \varphi(y f(x)) : f \in \mathcal F\}\). Third, the <em>contraction principle</em> of Ledoux and Talagrand (1991) strips the \(L_\varphi\)-Lipschitz function \(\varphi\) at the price of the constant \(L_\varphi\), leaving the Rademacher complexity of \(\mathcal F\) itself. Collecting the constants yields the factor \(4 L_\varphi\). The symmetrization and concentration steps are by now standard machinery; Boucheron, Bousquet, and Lugosi (2005) survey them in a form tailored to classification.</p>
 </div>
 
+<p>The concentration step deserves to be named, since it is the engine that turns a statement about averages into a statement holding for the worst function in the class at once. The tool is a bounded-differences inequality, which Shawe-Taylor and Cristianini (2004) take as the analytic backbone of their treatment.</p>
+
+<div class="box thm"><span class="box-title">Theorem (McDiarmid's bounded-differences inequality)</span>
+<p>Let \(X_1,\dots,X_n\) be independent random variables taking values in a set \(\mathcal A\), and let \(F:\mathcal A^n \to \mathbb R\) change by a bounded amount whenever a single coordinate is altered:
+$$\sup_{x_1,\dots,x_n,\,\hat x_i}\big| F(x_1,\dots,x_n) - F(x_1,\dots,\hat x_i,\dots,x_n)\big| \le c_i, \qquad 1 \le i \le n.$$
+Then for every \(\varepsilon \gt 0\),
+$$P\big\{ F(X_1,\dots,X_n) - \mathbb E\, F(X_1,\dots,X_n) \ge \varepsilon \big\} \le \exp\!\left( \frac{-2\varepsilon^2}{\sum_{i=1}^n c_i^2} \right).$$</p>
+</div>
+
+<p>Hoeffding's inequality is the special case \(F(X_1,\dots,X_n) = \sum_i X_i\), and the deviation bound quoted for a single fixed function is nothing more than that case. The reason McDiarmid's form is the right one here is that the object we must control, the uniform deviation \(\sup_{f\in\mathcal F}\big(R_\varphi(f) - R_\varphi^n(f)\big)\), is a function of the whole sample that no single example can move by much: swapping one training point shifts each empirical average, and hence their supremum, by at most a term of order \(1/n\). Feeding \(c_i\) of order \(1/n\) into the inequality shows this supremum concentrates around its expectation at the rate \(1/\sqrt n\), and that expectation is exactly what symmetrization rewrites as a Rademacher complexity. This is the source of the distribution-free \(1/\sqrt n\) tail on the estimation error.</p>
+
 <p>The theorem quantifies the trade-off announced above:</p>
 <ul>
 <li>\(\mathcal F\) "large" means overfitting: the approximation error is small, but \(\mathrm{Rad}_n(\mathcal F)\), and hence the estimation error, is large.</li>
 <li>\(\mathcal F\) "small" means underfitting: the estimation error is small, but the approximation error is large.</li>
 </ul>
+
+<div class="box rmk"><span class="box-title">Remark (from expectation to high probability, and a data-dependent capacity)</span>
+<p>The bound above controls the excess risk on average over the draw of the training set. Shawe-Taylor and Cristianini (2004) give the companion statement that holds with high probability for <em>every</em> function in the class at once: fixing \(\delta \in (0,1)\), with probability at least \(1-\delta\) over the sample, every \(f \in \mathcal F\) satisfies
+$$R_\varphi(f) \;\le\; R_\varphi^n(f) + \mathrm{Rad}_n(\mathcal F) + \sqrt{\frac{\ln(2/\delta)}{2n}} .$$
+Its proof is the recipe just described: bound the uniform deviation by its expectation with McDiarmid's inequality, then bound that expectation by the Rademacher complexity through symmetrization. The Rademacher term can itself be replaced by its <em>empirical</em> version
+$$\widehat{\mathrm{Rad}}_n(\mathcal F) = \mathbb E_{\sigma}\!\left[ \sup_{f\in\mathcal F} \frac{2}{n}\sum_{i=1}^n \sigma_i f(X_i) \;\Big|\; X_1,\dots,X_n \right],$$
+which conditions on the observed inputs and averages over the signs alone, at the cost of enlarging the confidence term to \(3\sqrt{\ln(2/\delta)/2n}\). This empirical complexity is a quantity we can estimate directly from data by sampling sign patterns, so the capacity of the class becomes something we measure rather than postulate.</p>
+</div>
 
 <p>To use the bound we need classes \(\mathcal F\) that are flexible enough to keep the approximation error moderate, yet whose Rademacher complexity we can actually compute. Balls of an RKHS are exactly such classes.</p>
 
@@ -183,6 +204,15 @@ $$\mathbb E\, R_\varphi\big(\hat f_n\big) - R_\varphi^* \;\le\; \frac{8 L_\varph
 <li>The approximation error is harder to analyze in general; it depends on how well the ball can approach a minimizer of the \(\varphi\)-risk, hence on the interplay between the kernel and \(P\).</li>
 <li>In practice \(B\), or the regularization parameter \(\lambda\) introduced next, is tuned by cross-validation.</li>
 </ul>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (the empirical version, and its combinatorial ancestor)</span>
+<p>The theorem bounds the Rademacher complexity in expectation over the inputs. Conditioning instead on the observed sample, the identical argument, with the sample now held fixed, yields the fully empirical bound of Shawe-Taylor and Cristianini (2004),
+$$\widehat{\mathrm{Rad}}_n(\mathcal F_B) \;\le\; \frac{2B}{n}\sqrt{\sum_{i=1}^n K(X_i,X_i)} \;=\; \frac{2B}{n}\sqrt{\operatorname{tr}\mathbf K},$$
+where \(\mathbf K = \big(K(X_i,X_j)\big)_{i,j}\) is the kernel matrix. This is computable from the data alone: it replaces the population diagonal \(\mathbb E\, K(X,X)\) by the empirical trace of the Gram matrix, and it exposes the operational meaning of regularization. A learned function \(f = \sum_i \alpha_i K_{X_i}\) has norm \(\lVert f\rVert_{\mathcal H} = \sqrt{\alpha^\top \mathbf K \alpha}\), so shrinking \(\alpha^\top \mathbf K \alpha\) literally shrinks the radius \(B\) of the ball the solution occupies, and with it the capacity term.</p>
+<p>It is instructive that the pre-Rademacher theory reached the same verdict by a wholly combinatorial route. Vapnik controlled capacity through the VC dimension, the largest number of points a class can label in all possible ways, and for large-margin hyperplanes he proved a bound that echoes ours exactly. In the account of Schölkopf and Smola (2002), the canonical hyperplanes \(x \mapsto \langle w, x\rangle\) with \(\lVert w\rVert \le \Lambda\), acting on data contained in a ball of radius \(R\) about the origin, have VC dimension
+$$h \;\le\; R^2 \Lambda^2 .$$
+The message is the one the RKHS-ball bound delivers: capacity is governed not by the ambient dimension, which may be infinite, but by the product of a size of the data, \(R^2\) or \(\mathbb E\, K(X,X)\), and a budget on the norm, \(\Lambda^2\) or \(B^2\). Constraining \(\lVert w\rVert\), equivalently \(\lVert f\rVert_{\mathcal H}\), is what makes an infinite-dimensional class learnable, and it is why the support vector machine of the next chapter minimizes the norm at all.</p>
 </div>
 
 <h2 id="from-constraints-to-penalties">From constrained ERM to penalized ERM: regularization</h2>

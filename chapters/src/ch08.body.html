@@ -247,6 +247,30 @@ the space of functions whose spectrum is contained in \([-\Omega,\Omega]\). The 
 
 <p>The pattern is identical in all three rows: a spectral quantity (the eigenvalue \(\lambda_k\) of an operator, or the spectral density \(\hat\kappa(\omega)\)) appears in the denominator, so that directions with little spectral energy are heavily penalized. Smoothness, in every guise, is small energy at high frequency.</p>
 
+<h2 id="cpd-kernels">Conditionally positive definite kernels</h2>
+
+<p>Bochner's theorem draws the boundary of the positive definite translation-invariant kernels, but that boundary is not the edge of the useful world. The Gaussian and Laplace profiles above are all nonnegative and decreasing, yet some of the most natural dissimilarity profiles on \(\mathbb{R}^d\), the plain squared distance among them, fail positive definiteness while still generating a perfectly good geometry. The resolution, following Schölkopf and Smola (2002), is to relax the quadratic-form condition on one subspace and to read the kernel not as a dot product but as a squared distance.</p>
+
+<div class="box def"><span class="box-title">Definition (conditionally positive definite kernel)</span>
+<p>A symmetric kernel \(k\) is conditionally positive definite if
+$$\sum_{i,j=1}^n c_i c_j\, k(x_i,x_j)\ \ge\ 0$$
+for all \(n\in\mathbb{N}\), all points \(x_1,\dots,x_n\), and all real scalars \(c_1,\dots,c_n\) subject to the single constraint \(\sum_{i=1}^n c_i=0\).</p>
+</div>
+
+<p>Every positive definite kernel is conditionally positive definite, since imposing the constraint only shrinks the set of test vectors that must pass; the containment is strict. The constraint \(\sum_i c_i=0\) is exactly an invariance that many kernel algorithms already enjoy. Shifting the origin in feature space, centering the data in kernel PCA, and the equality constraint \(\sum_i\alpha_i y_i=0\) in the support vector machine dual all project onto this zero-sum subspace, so they never distinguish \(k\) from \(k\) offset by a constant. Two closure facts drop out at once: sums of conditionally positive definite kernels are again conditionally positive definite, and adding any constant \(b\) preserves the property.</p>
+
+<p>The reason this is the right class is geometric. A conditionally positive definite \(k\) with \(k(x,x)=0\) embeds as a squared distance: there is a feature map \(\Phi\) into a Hilbert space with
+$$\|\Phi(x)-\Phi(x')\|^2=-\,k(x,x'),$$
+so that positive definite kernels represent inner products while conditionally positive definite ones represent the distances arising from norms. The prototype is the negative squared Euclidean distance \(k(x,x')=-\|x-x'\|^2\), which is conditionally positive definite but positive definite nowhere.</p>
+
+<div class="box thm"><span class="box-title">Theorem (positive definite exponentials)</span>
+<p>A kernel \(k\) is conditionally positive definite if and only if \(\exp(t\,k)\) is positive definite for every \(t\gt 0\) (Schölkopf and Smola 2002).</p>
+</div>
+
+<p>This one equivalence organizes a whole shelf of the kernels met above. Take \(k(x,x')=-\|x-x'\|^2\), conditionally positive definite as just noted; the theorem makes \(\exp(-t\|x-x'\|^2)\) positive definite for every \(t\gt 0\), so the Gaussian kernel is simply the exponential of a conditionally positive definite generator, a cleaner certificate than evaluating Bochner's integral. The same reading recovers the exponential and Laplace kernels of the half-line as exponentials of conditionally positive definite generators, and it explains why these families are infinitely divisible, their \(n\)-th roots being kernels again.</p>
+
+<p>Beyond the exponential family sit conditionally positive definite kernels of higher order, graded by how large a polynomial subspace the zero-sum constraint must annihilate. Three are standard (Schölkopf and Smola 2002): the inverse multiquadric \((\|x-x'\|^2+c^2)^{-1/2}\), which is in fact already positive definite (order zero); the multiquadric \((\|x-x'\|^2+c^2)^{1/2}\), conditionally positive definite of order one, which unlike a genuine similarity need not be positive anywhere; and the thin plate spline \(\|x-x'\|^{2n}\ln\|x-x'\|\) of order \(n\). A convenient test underlies these examples: \(h(\|x-x'\|^2)\) is conditionally positive definite of order \(q\) exactly when \(h\) is completely monotonic of order \(q\), meaning \((-1)^m h^{(m)}\ge 0\) for all \(m\ge q\). These are the working kernels of scattered-data interpolation, and they show that the admissible profiles reach well past the Bochner class once the origin is allowed to drift.</p>
+
 <h2 id="semigroups">Generalization to semigroups</h2>
 
 <p>Herglotz and Bochner both rely on a group structure: differences \(x-y\), inverses, characters \(e^{i\omega t}\). Yet many data types support only a partial algebra. A bag of parts can be added to another bag, but it cannot be subtracted; a finite measure can be summed with another, but there is no inverse. The right abstraction is a semigroup, and the theory of Berg, Christensen, and Ressel (1983) extends the whole Fourier picture to that setting.</p>
@@ -513,6 +537,38 @@ The right-hand side is an inner product of the two averaged feature vectors \(\b
 </div>
 
 <p>The marginalized kernel is the feature map of the complete-data kernel, averaged under the latent posterior: two objects are close when their expected complete-data representations are close. It closes the loop with the rest of the chapter, since the mutual information kernel and the pooled Fisher vector are both instances of averaging a simple feature map over a distribution, and it is the workhorse behind many kernels for sequences and graphs where the hidden variable is a path through a model.</p>
+
+<h2 id="kernel-algebra">The algebra of kernel construction</h2>
+
+<p>The three roads of this chapter each end at a family of kernels, but in practice a kernel is rarely used bare. More often it is assembled: two similarities are added, a similarity on one factor is multiplied by a similarity on another, a base kernel is normalized or reshaped to fit a domain. What makes this safe is that positive definiteness survives a short list of operations, so the admissible kernels form not a scattered collection but an algebra closed under the natural ways of combining them. We collect the operations that the constructions above have been quietly using, following Schölkopf and Smola (2002) and Shawe-Taylor and Cristianini (2004).</p>
+
+<div class="box prop"><span class="box-title">Closure properties of positive definite kernels</span>
+<p>Let \(k_1,k_2\) be positive definite kernels. Then each of the following is positive definite:
+<br>(i) the nonnegative combination \(\alpha_1 k_1+\alpha_2 k_2\) for \(\alpha_1,\alpha_2\ge 0\), and any pointwise limit \(k=\lim_n k_n\) of kernels, so the kernels form a convex cone closed under pointwise convergence;
+<br>(ii) the pointwise product \((k_1 k_2)(x,x')=k_1(x,x')\,k_2(x,x')\), the Schur product;
+<br>(iii) the tensor product \((k_1\otimes k_2)\big((x_1,x_2),(x_1',x_2')\big)=k_1(x_1,x_1')\,k_2(x_2,x_2')\) on the product domain, and the direct sum, in which the two similarities are added rather than multiplied;
+<br>(iv) the conformal transformation \(k_f(x,x')=f(x)\,k(x,x')\,f(x')\) for any real-valued function \(f\).</p>
+</div>
+
+<p>Part (i) is exactly what licenses the Bochner and semigroup integral representations: a spectral measure, or a mixture of semicharacters, is a limit of nonnegative combinations of the elementary kernels \(\cos(\omega^\top(x-y))\) or \(\rho(s)\), and the mixture inherits their positive definiteness. Part (ii), the pointwise product, is the least obvious entry on the list, and it has a memorable probabilistic proof.</p>
+
+<details class="proof-details"><summary>Proof that the pointwise product is a kernel</summary>
+<div class="box proof">
+<p>It suffices to show that the entrywise (Hadamard) product of two positive semidefinite Gram matrices \(K_1,K_2\) is positive semidefinite. Let \((V_1,\dots,V_m)\) and \((W_1,\dots,W_m)\) be independent mean-zero Gaussian random vectors with covariance matrices \(K_1\) and \(K_2\). The product vector \((V_1 W_1,\dots,V_m W_m)\) then has covariance
+$$\mathbb{E}\big[V_i W_i\,V_j W_j\big]=\mathbb{E}[V_i V_j]\,\mathbb{E}[W_i W_j]=(K_1)_{ij}\,(K_2)_{ij},$$
+by independence of the two vectors. Hence the entrywise product \(K_1\circ K_2\) is itself a covariance matrix and therefore positive semidefinite (Schölkopf and Smola 2002). <span class="qed">\(\square\)</span></p>
+</div>
+</details>
+
+<h3 id="anova-normalisation">Interpolating with ANOVA kernels, and normalization</h3>
+
+<p>The direct sum and the tensor product are the two extremes of how far a kernel lets features interact: the direct sum keeps each factor separate, while the tensor product couples every factor with every other. The ANOVA kernels fill the gap between them. Given base kernels \(k^{(1)},\dots,k^{(N)}\), one per attribute, the ANOVA kernel of order \(D\) sums the tensor products over all size-\(D\) subsets of distinct attributes,
+$$k_D(x,x')=\sum_{1\le i_1\lt i_2\lt\cdots\lt i_D\le N}\ \prod_{j=1}^{D}k^{(i_j)}\big(x_{i_j},x'_{i_j}\big),$$
+so that \(D=1\) recovers the direct sum and \(D=N\) the full tensor product, with intermediate \(D\) selecting exactly the interactions of order \(D\) (Schölkopf and Smola 2002). The name ANOVA, for analysis of variance, records the origin of the underlying decomposition. Because the sum runs over distinct indices, a naive evaluation would cost \(\binom{N}{D}\) terms, but a dynamic-programming recursion in \(D\) and \(N\) brings it down to \(O(ND)\) (Shawe-Taylor and Cristianini 2004), and the whole construction is a special case of the convolution kernels for structured objects of Haussler (1999).</p>
+
+<p>A final operation is cosmetic but ubiquitous: normalization. Given any kernel \(k\), the normalized kernel
+$$\tilde k(x,x')=\frac{k(x,x')}{\sqrt{k(x,x)\,k(x',x')}}$$
+is again positive definite and sends every point to the unit sphere of feature space, since \(\tilde k(x,x)=1\), so the similarity now reads as a cosine between feature vectors. The Gaussian kernel is already normalized in this sense, because \(k(x,x)=1\); for an unnormalized kernel such as a polynomial, the rescaling removes the dependence on the raw magnitudes of the feature vectors and often makes the kernel behave far better (Shawe-Taylor and Cristianini 2004).</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
 <p>The constructions of this chapter are developed at length in two standard references. Schölkopf and Smola (2002), <em>Learning with Kernels</em>, devote their chapter 13 to the design of kernels and lay the groundwork for positive definite kernels and their properties in chapter 2. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, survey the basic kernels and the principles of kernel design in their chapter 9. Both give complementary derivations of the translation-invariant and probabilistic-model kernels discussed here, together with many further worked examples.</p>
