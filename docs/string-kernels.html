@@ -187,6 +187,17 @@ Being an inner product of explicit feature vectors, it is positive definite by
 construction.
 </div>
 
+<p>The intuition is compositional. Each coordinate of \(\Phi(x)\) reports how
+often one particular short word occurs, so \(\Phi(x)\) is a histogram of the
+local \(k\)-letter content of the string, blind to where in the string each word
+sits. The kernel is large exactly when two strings are built from the same
+short pieces in similar proportions, which is a sensible first notion of
+biological relatedness: conserved motifs survive as shared \(k\)-mers even after
+the surrounding sequence has drifted. Raising \(k\) sharpens the features, since
+longer words are rarer and more specific, but also makes them scarcer, so the
+choice of \(k\) trades specificity against the number of coincidences the kernel
+has to work with.</p>
+
 <p>Naively the sum has \(|\mathcal{A}|^k\) terms, an astronomically large number.
 The saving grace is sparsity: a string of length \(|x|\) contains at most
 \(|x| - k + 1\) distinct windows, so \(\Phi(x)\) has at most \(|x| - k + 1\)
@@ -407,10 +418,19 @@ $$ B_k(xa, x'b) = \lambda\, B_k(x, x'b) + \lambda\, B_k(xa, x')
    - \lambda^2 B_k(x, x') + \delta_{a=b}\, \lambda^2\, B_{k-1}(x, x'), $$
 
 <p>where \(\delta_{a=b}\) is \(1\) when the two appended letters agree and \(0\)
-otherwise. Each entry \(B_k(xa,x'b)\) now depends only on three neighbours in the
-same table plus one entry of the table for \(k-1\), so it is a genuine
-two-dimensional dynamic program. The target kernel is recovered by a companion
-recursion that reuses \(B_{k-1}\),</p>
+otherwise. It is worth reading this recursion as an inclusion-exclusion. The
+first term \(\lambda B_k(x,x'b)\) collects the occurrences that ignore the newly
+appended \(a\) on the left while paying it one unit of decay, and the second term
+\(\lambda B_k(xa,x')\) does the same for \(b\) on the right; but both terms count
+the occurrences that ignore <em>both</em> new letters, so those are added twice
+and must be removed once, which is the correction \(-\lambda^2 B_k(x,x')\).
+Finally, an occurrence that genuinely uses the two new positions can exist only
+when \(a=b\), and it extends a length-\((k-1)\) match of the old prefixes, which
+is the term \(\delta_{a=b}\,\lambda^2 B_{k-1}(x,x')\). Each entry
+\(B_k(xa,x'b)\) now depends only on three neighbours in the same table plus one
+entry of the table for \(k-1\), so it is a genuine two-dimensional dynamic
+program. The target kernel is recovered by a companion recursion that reuses
+\(B_{k-1}\),</p>
 
 $$ K_k(xa, x') = K_k(x, x') + \lambda^2 \sum_{j:\,x'_j = a}
    B_{k-1}\!\left(x, x'_{[1,j-1]}\right), $$
@@ -447,6 +467,26 @@ what keeps the overall cost at \(O(k\,|x|\,|x'|)\) rather than a factor of \(|x'
 more.) The feature space has dimension \(|\mathcal{A}|^k\), so downstream learning
 must be regularized; a support vector machine on this kernel is the standard
 choice.</p>
+
+<div class="box ex"><span class="box-title">Example (tracing the tables on \(\texttt{ca}\) against \(\texttt{ca}\))</span>
+Take \(k=2\) and compute \(K_{2,\lambda}(\texttt{ca},\texttt{ca})\), writing
+\(B_p(i,j)\) and \(K(i,j)\) for the prefixes \(x_{[1,i]}\) and \(x'_{[1,j]}\). The
+order-zero table is \(B_0(i,j)=1\) everywhere, and any table entry with an empty
+argument is \(0\). Filling \(B_1\) by the incremental rule,
+$$ B_1(1,1) = \lambda^2, \quad B_1(1,2) = B_1(2,1) = \lambda^3, \quad
+   B_1(2,2) = \lambda^4 + \lambda^4 - \lambda^4 + \lambda^2 = \lambda^4 + \lambda^2, $$
+where the corner \(B_1(2,2)\) shows the inclusion-exclusion at work: the two
+extension terms each contribute \(\lambda^4\), one copy is subtracted, and the
+matched pair \(\texttt a = \texttt a\) adds \(\lambda^2 B_0(1,1)\). This agrees
+with the direct reading \(B_1(\texttt{ca},\texttt{ca}) = \Psi_{\texttt c}^2 +
+\Psi_{\texttt a}^2 = (\lambda^2)^2 + \lambda^2\). Now the companion recursion for
+\(K\) fires only once, at \(i=j=2\) with appended letter \(\texttt a\):
+$$ K(2,2) = K(1,2) + \lambda^2 \!\!\sum_{j:\,x'_j = \texttt a}\!\! B_1\bigl(x_{[1,1]}, x'_{[1,j-1]}\bigr)
+   = 0 + \lambda^2\, B_1(\texttt c, \texttt c) = \lambda^2 \cdot \lambda^2 = \lambda^4. $$
+The single shared gap-free \(2\)-mer \(\texttt{ca}\) has span \(2\), so
+\(\Phi_{\texttt{ca}}(\texttt{ca}) = \lambda^2\) and the kernel is
+\((\lambda^2)^2 = \lambda^4\), exactly what the tables return.
+</div>
 
 <h3 id="dictionary">Dictionary-based indexation</h3>
 
@@ -513,7 +553,16 @@ information-theoretic measure of the mutual information between the two strings.
 Suppose each observed sequence \(x\) hides a latent labelling \(y\), coupled to it
 by a conditional \(P_x(dy)\), and suppose we know a kernel \(K_Z\) on the complete
 data \(z = (x,y)\). We cannot see \(y\), so we average \(K_Z\) over the posterior
-of the hidden variables.</p>
+of the hidden variables. The move is worth dwelling on: had we observed the
+latent \(y\), comparison would be easy, because the complete data carries the
+biological annotation (which hidden state generated each residue) that we
+actually care about. Since \(y\) is hidden, the honest thing is to compare the
+two strings under every explanation of the hidden layer at once, weighting each
+explanation by how plausible the generative model finds it. Averaging a valid
+kernel over independent draws of the latent variables keeps the result valid, so
+the whole apparatus of the generative model, fitted with decades of biological
+knowledge, is smuggled into a legitimate kernel at no cost to positive
+definiteness.</p>
 
 <div class="box def"><span class="box-title">Definition (marginalized kernel, Tsuda et al., 2002)</span>
 $$ K_{\mathcal X}(x,x')
@@ -555,7 +604,14 @@ $$ \Phi_{a,s}(x)
    = \sum_{i=1}^{n} \delta(x_i,a) \sum_{y} P(y \mid x)\,\delta(y_i,s)
    = \sum_{i=1}^{n} \delta(x_i,a)\, P(y_i = s \mid x). $$
 
-<p>Each posterior marginal \(P(y_i = s \mid x)\) is computed by the standard
+<p>The final expression has a clean reading. The hard count \(n_{a,s}\), which
+would tally the positions where symbol \(a\) is emitted from state \(s\), is
+replaced by a soft count: at each position that emits \(a\), we add not one but
+the posterior probability \(P(y_i = s \mid x)\) that the hidden coin was in state
+\(s\) there. The feature is the expected number of \((a,s)\) events under the
+model's own beliefs about the hidden path, so a position the model is unsure
+about contributes fractionally to several states rather than committing to one.
+Each posterior marginal \(P(y_i = s \mid x)\) is computed by the standard
 forward-backward algorithm, so the whole feature vector, and hence the kernel, is
 obtained in time linear in the sequence length times the number of hidden states.
 This same recipe underlies the spectrum kernel on the hidden states of a protein
@@ -608,6 +664,21 @@ each run of gaps:</p>
 
 $$ s_{S,g}(\pi) = \sum_{\text{aligned } (a,b)} S(a,b) \;-\; \sum_{\text{gaps of length } \ell} g(\ell). $$
 
+<p>Reading the alignment above off column by column makes the score concrete.
+Ten columns pair two residues, and two runs of gaps, one of length three and one
+of length four, separate them:</p>
+
+$$ s_{S,g}(\pi) = S(\texttt C,\texttt C) + S(\texttt L,\texttt L) + S(\texttt I,\texttt I)
+   + S(\texttt A,\texttt V) + 2\,S(\texttt M,\texttt M) + S(\texttt W,\texttt W)
+   + S(\texttt F,\texttt F) + S(\texttt G,\texttt G) + S(\texttt V,\texttt V)
+   - g(3) - g(4). $$
+
+<p>Most columns pair a residue with itself and collect a large positive
+substitution score; the one substitution \(S(\texttt A,\texttt V)\) pairs two
+different but chemically similar residues and scores positive but smaller; the
+two gap runs are charged once each. A high total means the two proteins can be
+made to line up cheaply, which is what a biologist means by similar.</p>
+
 <h3 id="smith-waterman">From Smith-Waterman to a kernel</h3>
 
 <p>The classical Smith-Waterman score keeps only the best alignment (Smith and
@@ -629,6 +700,19 @@ As \(\beta \to \infty\) the sum is dominated by the best alignment and recovers
 Smith-Waterman up to the exponential, but for finite \(\beta\) the kernel is
 symmetric and, as we now prove, positive definite.
 </div>
+
+<p>The parameter \(\beta\) is an inverse temperature, and the sum is a softened
+maximum. At large \(\beta\) the single best alignment overwhelms the rest, so the
+kernel is essentially Smith-Waterman; at small \(\beta\) every alignment, good or
+bad, contributes comparably, and the kernel measures the total mass of ways the
+two strings can be aligned rather than the single best way. The reason this
+rescues positive definiteness is structural, not a coincidence of the
+exponential: a maximum cannot in general be written as an inner product, whereas
+a sum over configurations of a product of local, individually valid weights can,
+which is exactly the convolution structure we exploit in the proof below.
+Aggregating over the whole ensemble of alignments is also often the more robust
+comparison, since two proteins may be related through many mediocre alignments
+rather than one exceptional one.</p>
 
 <h3 id="la-pd-proof">The local alignment kernel is positive definite</h3>
 
@@ -776,17 +860,23 @@ $$ K^{(\beta)}_{\mathrm{LA}} = \sum_{n=0}^{\infty}
 and is therefore positive definite.
 </div>
 
+<details class="proof-details"><summary>Proof</summary>
 <div class="box proof">
-Each term is a convolution of the three p.d. atoms, hence p.d. by the convolution
-lemma; the \(n\)-th term enumerates exactly the alignments with \(n\) aligned
-residue blocks, its bracketing \(K_0 \star (\cdots) \star K_0\) fixing the boundary
-letters and the interior alternating letter and gap kernels reproducing
-\(\exp(\beta s_{S,g}(\pi))\). The partial sums are p.d. by the sum-closure lemma,
-and their pointwise limit is p.d. by the limit-closure lemma. The induction on
-\(n\) identifying the \(n\)-th term with the \(n\)-block alignments is
-straightforward but long; see Vert et al. (2004) for the details.
+The expansion assembles the atoms in exactly the pattern of an alignment. Read
+one term of the sum from left to right: the outer \(K_0\) factors fix the empty
+boundaries, and the repeated block \(K^{(\beta)}_a \star K^{(\beta)}_g\)
+alternates one matched letter with one gap, so the \(n\)-th term lays down \(n\)
+aligned residues interleaved with gaps and reproduces the weight
+\(\exp(\beta s_{S,g}(\pi))\) of every alignment with \(n\) aligned residue blocks,
+summed over those alignments. Because each atom is p.d. and convolution preserves
+positive definiteness, every term is a p.d. kernel by the convolution lemma; the
+partial sums are p.d. by the sum-closure lemma; and the whole series, being their
+pointwise limit, is p.d. by the limit-closure lemma. The induction on \(n\) that
+matches the \(n\)-th term to the \(n\)-block alignments is straightforward but
+long to write out in full; see Vert et al. (2004) for the details.
 <span class="qed">\(\square\)</span>
 </div>
+</details>
 
 <h3 id="la-computation">Computing the LA kernel by dynamic programming</h3>
 
@@ -825,12 +915,21 @@ X_2(i,j) &= M(i-1,j) + X_2(i-1,j), \\[2pt]
 Y_2(i,j) &= M(i,j-1) + X_2(i,j-1) + Y_2(i,j-1).
 \end{aligned} $$
 
-<p>In \(M\), aligning \(x_i\) to \(y_j\) multiplies in the match weight
-\(\exp(\beta S(x_i,y_j))\) and continues any alignment of the shorter prefixes (or
-starts a fresh one, the "\(1\)"); in \(X\), the factor \(\exp(\beta d)\) opens a
-gap out of a match while \(\exp(\beta e)\) extends an existing gap, and
-symmetrically for \(Y\). The whole table is filled in \(O(|x|\,|y|)\) time, the
-same order as ordinary Smith-Waterman. In pseudocode:</p>
+<p>Each table sums the weights of a family of partial alignments, classified by
+how they end. In \(M(i,j)\), aligning \(x_i\) to \(y_j\) multiplies in the match
+weight \(\exp(\beta S(x_i,y_j))\) and continues any alignment of the shorter
+prefixes that ended in a match, an \(x\)-gap, or a \(y\)-gap (or starts a fresh
+one, the "\(1\)"); in \(X(i,j)\), the factor \(\exp(\beta d)\) opens a gap out of
+a preceding match while \(\exp(\beta e)\) extends a gap already open, and
+symmetrically for \(Y(i,j)\). The two remaining tables \(X_2\) and \(Y_2\) handle
+the boundary: a local alignment may end with unaligned residues trailing off
+either string, and \(X_2, Y_2\) accumulate exactly those terminal overhangs so
+that the final combination \(1 + X_2(|x|,|y|) + Y_2(|x|,|y|) + M(|x|,|y|)\) counts
+every alignment, whether it closes on a matched pair or runs off the end. The
+ordering of the recurrences matters: \(M\) feeds \(X\) and \(Y\), which in turn
+feed the boundary tables, so one left-to-right, top-to-bottom sweep fills all
+five. The whole table is filled in \(O(|x|\,|y|)\) time, the same order as
+ordinary Smith-Waterman. In pseudocode:</p>
 
 <pre><code>Input: x, y, substitution S, gap-open d, gap-extend e, beta
 initialize M, X, Y, X2, Y2 to 0 on row 0 and column 0
@@ -894,7 +993,30 @@ something of an art, principled routes (explicit features, generative models,
 similarity scores) have emerged. None of the constructions in this chapter is
 confined to proteins; the same kernels classify natural language, time series,
 and any other data that arrives as a string.</p>
-<div class="chnav">
+
+<div class="box rmk"><span class="box-title">Further reading</span>
+The textbook treatment closest to this chapter is Shawe-Taylor and Cristianini
+(2004), Kernel Methods for Pattern Analysis, whose chapter 11 develops kernels
+for text and strings, including the spectrum and gap-weighted subsequence
+kernels and their dynamic programs, in complementary detail. Scholkopf and Smola
+(2002), Learning with Kernels, is the standard reference for the general theory
+of kernels and support vector machines used throughout, though it predates most
+of the string-kernel work surveyed here and so says little about sequences
+specifically. For the individual constructions, the original papers remain the
+best sources: Leslie, Eskin, and Noble (2002) for the spectrum kernel, Lodhi et
+al. (2002) for the subsequence kernel, Haussler (1999) for convolution kernels,
+Jaakkola, Diekhans, and Haussler (2000) for the Fisher kernel on proteins,
+Cuturi et al. (2005) for context-tree and mutual-information kernels, and Saigo
+et al. (2004) for the local alignment kernel.
+</div>
+<section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Jaakkola, T., Diekhans, M., and Haussler, D.</span> <span class="bib-year">(2000)</span> <span class="bib-title">A discriminative framework for detecting remote protein homologies</span>. <span class="bib-venue">Journal of Computational Biology 7(1-2), 95-114.</span></li>
+<li ><span class="bib-authors">Leslie, C., Eskin, E., and Noble, W. S.</span> <span class="bib-year">(2002)</span> <span class="bib-title">The spectrum kernel: a string kernel for SVM protein classification</span>. <span class="bib-venue">Pacific Symposium on Biocomputing 7, 564-575.</span></li>
+<li ><span class="bib-authors">Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Text classification using string kernels</span>. <span class="bib-venue">Journal of Machine Learning Research 2, 419-444.</span></li>
+<li ><span class="bib-authors">Cuturi, M., Fukumizu, K., and Vert, J.-P.</span> <span class="bib-year">(2005)</span> <span class="bib-title">Semigroup kernels on measures</span>. <span class="bib-venue">Journal of Machine Learning Research 6, 1169-1198.</span></li>
+<li ><span class="bib-authors">Haussler, D.</span> <span class="bib-year">(1999)</span> <span class="bib-title">Convolution kernels on discrete structures</span>. <span class="bib-venue">Technical Report UCSC-CRL-99-10, UC Santa Cruz.</span></li>
+<li ><span class="bib-authors">Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Protein homology detection using string alignment kernels</span>. <span class="bib-venue">Bioinformatics 20(11), 1682-1689.</span></li>
+<li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li>
+<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
 <a href="kernel-families.html"><span class="dir">previous</span>8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
 <a style="text-align:right" href="graph-kernels.html"><span class="dir">next</span>10. Kernels for and on Graphs</a>
 </div>

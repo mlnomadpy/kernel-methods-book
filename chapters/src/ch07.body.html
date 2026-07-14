@@ -246,7 +246,15 @@ Each step needs care, because we now work in infinite dimension. We begin with t
 </ul>
 </div>
 
+<p>
+These three properties are the operator translations of three familiar facts about a positive semidefinite matrix, and it is worth reading them as such. Self-adjointness is symmetry, \(\mathbf K = \mathbf K^\top\); positivity is \(\mathbf f^\top \mathbf K \mathbf f \geq 0\); and compactness is the substitute, in infinite dimension, for the finite-dimensionality that let us diagonalize the matrix in the first place. In finite dimension every operator is automatically compact, so the notion is invisible; on an infinite-dimensional space it is precisely the extra hypothesis that rescues the spectral theorem, by guaranteeing a discrete spectrum accumulating only at zero rather than a continuous one. The work of the next subsection is to show that the integral operator of a Mercer kernel has all three properties, after which diagonalization proceeds exactly as for a symmetric matrix.
+</p>
+
 <h3 id="the-integral-operator-lemma">The integral operator of a kernel</h3>
+
+<p>
+Before writing any formula, it helps to be explicit about what we are trying to build and why it must be an operator on a function space. In the finite case the kernel is a matrix, a matrix acts on vectors, and diagonalizing it means finding the vectors it merely rescales. To repeat this program on an infinite \(\mathcal X\) we need an object that acts on the right infinite-dimensional analogue of a vector, namely a function, and whose action we can diagonalize. The transform below is exactly that object: it consumes a function \(f\) and returns a new function whose value at \(x\) is a kernel-weighted average of \(f\), just as the \(i\)-th entry of \(\mathbf K \mathbf f\) is a kernel-weighted combination of the entries of \(\mathbf f\). Choosing \(L^2_\nu(\mathcal X)\) as the home of these functions is what makes the diagonalization possible: it is a Hilbert space, so the spectral theorem is available, and its inner product is the continuous limit of the dot product that made the Gram matrix symmetric.
+</p>
 
 <p>
 The operator that plays the role of the kernel matrix is the integral operator with kernel \(K\). Let \(\nu\) be a finite Borel measure on \(\mathcal X\), and let \(L^2_\nu(\mathcal X)\) denote the Hilbert space of (equivalence classes of) square integrable functions on \(\mathcal X\). For any function \(K : \mathcal X^2 \to \mathbb{R}\), define the transform
@@ -412,6 +420,10 @@ $$
 where the convergence is absolute for each \(x, t \in \mathcal X\), and uniform on \(\mathcal X \times \mathcal X\).
 </p>
 </div>
+
+<p>
+Two features of the statement carry the pedagogical weight. The first is that a single list of numbers \((\lambda_k)\) and functions \((\psi_k)\) simultaneously diagonalizes the operator \(L_K\) and reconstructs the kernel \(K\) itself: the spectrum is not an auxiliary computation but a complete description of the kernel. The second is the strength of the convergence. An equality that held only in \(L^2_\nu\) would reconstruct \(K\) merely up to sets of measure zero, which is useless for a kernel we must evaluate at arbitrary individual points; uniform convergence of continuous partial sums guarantees instead that the series equals \(K(x,t)\) at every single pair \((x,t)\), and, as the corollary below shows, that the induced feature map is continuous. This is the precise sense in which Mercer's theorem upgrades the abstract existence of a feature space to an explicit coordinate system valid point by point.
+</p>
 
 <p>
 The proof is constructive and follows Mercer's original 1909 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of the first chapter, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
@@ -954,6 +966,10 @@ Directions with small eigenvalues are expensive: representing a unit of \(\psi_i
 <li>Summarizing the picture the course draws at this point: the unit ball of \(\mathcal H\), seen inside \(L^2_\nu(\mathcal X)\), is a well-defined ellipsoid whose principal axes are the eigenfunctions \(\psi_k\), with semi-axis lengths \(\sqrt{\lambda_k}\). A rapidly decaying spectrum means a thin, strongly anisotropic ellipsoid: the kernel deems only a few directions cheap, and that is exactly what regularization exploits.</li>
 </ul>
 
+<p>
+It is worth pausing on why this reweighting deserves to be called a smoothness measure, since that closes the circle with the Green functions of the first section. In every example of the chapter the eigenfunctions \(\psi_k\) grow more oscillatory as \(k\) increases, sines and cosines of rising frequency on the interval, spherical harmonics of rising degree on the sphere, while the eigenvalues \(\lambda_k\) decrease. The RKHS norm \(\sum_k a_k^2 / \lambda_k\) therefore multiplies the energy \(a_k^2\) that a function places on the \(k\)-th oscillation by the large weight \(1/\lambda_k\): a function pays little for its slow components and dearly for its fast ones, so a small RKHS norm forces the fast components to be small, which is exactly what it means to be smooth. The rate at which \(\lambda_k \to 0\) fixes the exchange rate between frequency and cost, and hence how strongly the norm insists on smoothness. A slowly decaying spectrum barely penalizes high frequencies and admits rough functions; a fast decay penalizes them heavily and admits only very smooth ones. This is the quantitative content of the slogan that opened the chapter, that choosing a kernel means choosing which functions the norm considers simple.
+</p>
+
 <h3 id="sobolev-example">Example: Sobolev spaces of periodic functions</h3>
 
 <p>
@@ -1299,6 +1315,10 @@ $$
 </ul>
 </div>
 
+<p>
+The three cases are best read as a single story about the spectrum: faster eigenvalue decay buys a faster rate. Polynomially decaying eigenvalues, \(\lambda_i \sim i^{-s}\), give the algebraic rate \(n^{-s/(s+1)}\); a larger \(s\), meaning a smoother kernel with fewer cheap directions, pushes the exponent toward the parametric \(n^{-1}\) but never reaches it, which is the familiar price of nonparametric estimation. Exponentially decaying eigenvalues collapse the spectrum so quickly that the rate improves to \(\log(n)/n\), within a logarithm of the parametric rate: such a kernel behaves almost like a finite-dimensional model. Finite-rank kernels, whose spectrum stops after \(J\) terms, are genuinely finite-dimensional and attain the parametric rate \(J/n\). In each case the regularization \(\lambda\) is tuned to place the head-tail split \(J\) of the previous theorem exactly where bias and variance balance, and that balance point is dictated entirely by how fast the \(\lambda_i\) fall. The eigenvalue decay that we read in the first section as smoothness, and in the second as the shape of the RKHS ellipsoid, is here revealed as the single quantity that governs how fast learning is possible.
+</p>
+
 <details class="proof-details"><summary>Proof for polynomial-decay kernels</summary>
 <div class="box proof">
 <p>
@@ -1399,3 +1419,12 @@ Everything in this chapter leaned on two hypotheses: \(\mathcal X\) compact and 
 <p>
 The simplest instance already displays the whole mechanism. Call a kernel \(K : \mathbb{Z} \times \mathbb{Z} \to \mathbb{R}\) translation invariant (or shift-invariant) if it depends only on the difference of its arguments, \(K(x,y) = a_{x-y}\) for some sequence \((a_n)_{n \in \mathbb Z}\), the sequence being called positive definite when the kernel is. A classical theorem of Herglotz states that a sequence \((a_n)_{n \in \mathbb Z}\) is positive definite if and only if it is the Fourier-Stieltjes transform of a positive measure \(\mu \in M(\mathbb T)\), the set of finite Borel measures on the torus \([0, 2\pi]\) with \(0\) and \(2\pi\) identified. The countable spectrum of eigenvalues has become a spectral measure. The next chapter develops this theme: Herglotz on \(\mathbb Z\), Bochner's theorem on \(\mathbb{R}^d\), the RKHS of shift-invariant kernels, and the generalization to semigroups.
 </p>
+
+<div class="box rmk"><span class="box-title">Further reading</span>
+<p>
+The spectral picture of this chapter is developed at book length in two standard references. Schölkopf and Smola (2002), <em>Learning with Kernels</em>, treat Mercer's theorem, the integral operator, and the eigenfunction feature map in their Chapter 2, with the functional-analytic prerequisites, the spectral theorem, and the proof of Mercer's expansion collected in the mathematical appendix; their exposition is the natural complement to the operator vocabulary introduced here. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, cover the same ground from the properties-of-kernels angle in their Chapter 3, including Mercer's theorem and the eigen-decomposition of the Gram matrix as the finite shadow of the integral operator, and they are especially good on the data-driven, empirical version of the spectrum that our figure previews.
+</p>
+<p>
+For the statistical half of the chapter, the convergence rates of kernel ridge regression, the comprehensive reference is Steinwart and Christmann (2008), <em>Support Vector Machines</em>, whose treatment of integral operators, effective dimension, and the interplay between eigenvalue decay and learning rates places the results of the final section in their full generality. The reader who wants the sharpest and most complete rate theory should read it alongside the primary sources cited in the text, Cucker and Smale (2002), Caponnetto and De Vito (2007), Bach (2013), and Tsybakov (2009).
+</p>
+</div>

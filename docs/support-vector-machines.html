@@ -222,6 +222,22 @@ solution, leads to much faster specialized algorithms.
 
 <h2 id="lagrangian-duality">Lagrangian duality and the dual problem</h2>
 
+<p>
+The derivation that follows runs over four subsections, so it helps to have the whole arc
+in view before the algebra begins. We attach a price to every constraint and fold the
+constraints into the objective, which frees the primal variables \(\alpha\) and \(\xi\) to
+be minimized without any restriction at all. Minimizing over \(\alpha\) pins it to the
+signed prices through the relation \(\alpha = \mathrm{diag}(y)\,\mu / 2\lambda\); minimizing
+over the slacks \(\xi\), which enter the Lagrangian only linearly, gives a finite value only
+when the two prices attached to each point sum to \(1/n\), a bookkeeping identity that then
+lets us discard the multipliers \(\nu\) altogether. What survives is a concave function of
+the price vector \(\mu\) alone, to be maximized over the simple box \(0 \le \mu \le
+\mathbf{1}/n\). Translating that box back through the same relation
+\(\alpha = \mathrm{diag}(y)\,\mu/2\lambda\) turns the whole apparatus into a clean quadratic
+program in the expansion coefficients themselves. Each subsection below carries out exactly
+one of these moves.
+</p>
+
 <h3 id="lagrangian">The Lagrangian</h3>
 
 <p>
@@ -385,6 +401,20 @@ holds here (the primal is a convex QP with feasible points, e.g. \(\alpha = 0\),
 the SVM.
 </p>
 
+<p>
+The box constraint \(0 \le y_i \alpha_i \le 1/(2\lambda n)\) repays a moment of reading,
+since it is the whole geometry of the machine compressed into two inequalities per point.
+The lower bound \(0 \le y_i \alpha_i\) forces each coefficient to agree in sign with its
+label: a positive point may only pull the decision function up and a negative point may only
+pull it down, so every training point can lobby the boundary in favour of its own class and
+never against it. The upper bound \(y_i \alpha_i \le 1/(2\lambda n)\) caps how hard any
+single point is allowed to pull. This cap is exactly what lets the soft-margin SVM absorb an
+outlier instead of being dominated by it: a badly placed point may press against the bound,
+but once there it can press no harder, and the regularizer \(\lambda\) sets the ceiling.
+Sending \(\lambda \to 0\) lifts the ceiling to infinity and recovers the hard-margin machine,
+in which a single unseparable point could in principle acquire unbounded influence.
+</p>
+
 <h2 id="complementary-slackness">Complementary slackness and the KKT conditions</h2>
 
 <p>
@@ -529,6 +559,38 @@ of \(w\): the regularizer \(\|f\|_{\mathcal{H}}^2\) is the inverse squared margi
 in the geometry of \(\mathcal{H}\).
 </p>
 
+<p>
+The reason a wide band is worth wanting is robustness. A point that sits a full margin width
+from the boundary can be perturbed by any displacement smaller than that width without
+crossing to the wrong side, so a large geometric margin is a quantitative promise that small
+changes in the input, or the arrival of a nearby unseen test point, will not flip the
+prediction. This is the geometric shadow of the statistical fact, placed by Vapnik (1995)
+inside learning theory, that the margin controls generalization: the objective is not merely
+fitting the training labels but fitting them with room to spare.
+</p>
+
+<p>
+A two-point example makes every one of these quantities concrete.
+</p>
+
+<div class="box ex"><span class="box-title">Example (two points, solved by hand)</span>
+Take the linear kernel \(K(x,x') = \langle x, x'\rangle\) on \(\mathbb{R}^2\) and just two
+training points, \(x_1 = (1,0)\) with \(y_1 = +1\) and \(x_2 = (-1,0)\) with \(y_2 = -1\).
+The classifier is \(f(x) = \alpha_1 \langle x_1, x\rangle + \alpha_2 \langle x_2, x\rangle
+= \langle w, x\rangle\) with weight vector \(w = \alpha_1 x_1 + \alpha_2 x_2 =
+(\alpha_1 - \alpha_2,\, 0)\). By symmetry the decision boundary must be the vertical axis,
+and demanding the margin condition \(y_i f(x_i) = 1\) at both points gives \(w = (1,0)\),
+hence \(\alpha_1 - \alpha_2 = 1\). The sign constraint \(0 \le y_i \alpha_i\) asks for
+\(\alpha_1 \ge 0\) and \(\alpha_2 \le 0\), and the symmetric choice \(\alpha_1 = \tfrac12\),
+\(\alpha_2 = -\tfrac12\) meets every requirement. Both coefficients are nonzero, so both
+points are support vectors, each sitting exactly on its own margin edge \(f = +1\) and
+\(f = -1\); the geometric margin is \(2/\|w\| = 2\), precisely the distance between the two
+points. As long as \(\lambda \le \tfrac12\), so that the shared value \(y_i \alpha_i =
+\tfrac12\) stays below the cap \(1/(2\lambda n) = 1/(4\lambda)\), neither coefficient is
+pinned to the upper bound, and both points fall in the strictly-interior regime of the KKT
+trichotomy, exactly on the margin.
+</div>
+
 <p>Nothing conveys this trade-off as directly as moving the points yourself and watching the boundary respond.</p>
 
 <figure class="viz" data-widget="svm-margin"></figure>
@@ -539,6 +601,18 @@ in the geometry of \(\mathcal{H}\).
 The training points with \(\alpha_i \ne 0\) are called the <em>support vectors</em> of the
 SVM.
 </div>
+
+<p>
+Complementary slackness gives the cleanest reading of why this set is the one that matters.
+The first condition, \(\alpha_i[y_i f(x_i) + \xi_i - 1] = 0\), is a switch: either the price
+\(\alpha_i\) is zero, or the bracket is zero and the margin constraint binds. A support
+vector is therefore, by definition, a point whose margin constraint is exactly tight, a
+point the machine is actively pressing against; a nonzero coefficient is precisely the force
+of that press. Points the machine feels no need to press on pay the zero price the switch
+allows them and drop out of the model entirely. Sparsity is thus not an accident of the
+solver but a direct consequence of the optimality conditions: the only points that can carry
+weight are the ones sitting on or inside the margin.
+</p>
 
 <p>
 The KKT analysis shows that support vectors are exactly the points that touch or violate
@@ -644,11 +718,24 @@ prediction fast. The \(C\)-SVM is the same machine reparameterized with
 \(C = 1/(2n\lambda)\), and the 2-SVM, built on the squared hinge, is again the same
 machine with kernel \(K + n\lambda I\) and \(C = +\infty\).
 </p>
+
+<div class="box rmk"><span class="box-title">Further reading</span>
+The support vector machine is treated at book length in two standard references. Schölkopf
+and Smola (2002), <em>Learning with Kernels</em>, develops pattern-recognition SVMs in its
+chapter 7 and gives its optimization chapters over to the quadratic programs and
+decomposition algorithms that solve them in practice, which makes it the natural place to
+go deeper on the primal-dual machinery sketched here. Shawe-Taylor and Cristianini (2004),
+<em>Kernel Methods for Pattern Analysis</em>, presents support vector machines in its
+chapter 7 with an emphasis on the margin-based statistical analysis that justifies the
+construction. Both books situate the SVM inside the same broad RKHS and regularization
+framework used throughout this chapter.
+</div>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Boser, B. E., Guyon, I. M., and Vapnik, V. N.</span> <span class="bib-year">(1992)</span> <span class="bib-title">A training algorithm for optimal margin classifiers</span>. <span class="bib-venue">COLT.</span></li>
 <li ><span class="bib-authors">Cortes, C. and Vapnik, V.</span> <span class="bib-year">(1995)</span> <span class="bib-title">Support-vector networks</span>. <span class="bib-venue">Machine Learning 20(3), 273-297.</span></li>
 <li ><span class="bib-authors">Vapnik, V. N.</span> <span class="bib-year">(1995)</span> <span class="bib-title">The Nature of Statistical Learning Theory</span>. <span class="bib-venue">Springer.</span></li>
 <li ><span class="bib-authors">Platt, J. C.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Sequential minimal optimization: a fast algorithm for training support vector machines</span>. <span class="bib-venue">Microsoft Research Technical Report MSR-TR-98-14.</span></li>
-<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
+<li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
+<li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><div class="chnav">
 <a href="learning-theory.html"><span class="dir">previous</span>4. Learning Theory in RKHS Balls</a>
 <a style="text-align:right" href="unsupervised-kernel-methods.html"><span class="dir">next</span>6. Kernel PCA, Clustering, and CCA</a>
 </div>
