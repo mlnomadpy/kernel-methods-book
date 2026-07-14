@@ -1,0 +1,360 @@
+<h1>Mean Embeddings, MMD, and Characteristic Kernels</h1>
+
+<p class="lead">Everything so far has used kernels to represent single points: a feature map sends each \(x\) to \(K_x\) in an RKHS, and the kernel measures the similarity between two points. This chapter lifts that idea one level up, from points to whole probability distributions. We attach to each distribution \(P\) a single vector in the RKHS, its mean embedding \(\mu_P\), and then compare distributions by comparing their embeddings. The distance between two embeddings is the Maximum Mean Discrepancy (MMD), a quantity we can estimate from samples alone, use as the statistic of a two-sample test, and even minimize to train a generative model. The whole construction rests on one delicate question: when does the embedding lose no information, so that \(\mu_P = \mu_Q\) forces \(P = Q\)? Kernels with that property are called characteristic, and the last third of the chapter is devoted to identifying them.</p>
+
+<h2 id="comparing-distributions">Comparing two distributions from samples</h2>
+
+<p>Suppose we are handed two bags of data points, one drawn i.i.d. from an unknown distribution \(P\) and the other from an unknown distribution \(Q\), and asked a single question: do \(P\) and \(Q\) differ? Concretely, one bag might be local field potential (LFP) recordings taken near a spike burst and the other recordings taken away from it, and we want to know whether the neural signal changes near the burst. Or one bag might be photographs of dogs and the other photographs of fish. We never see \(P\) or \(Q\), only finite samples, and we want a principled, computable verdict.</p>
+
+<p>The first idea anyone tries is to compare sample means. Given \(N\) points \(x_1,\dots,x_N\) from \(P\) and \(M\) points \(y_1,\dots,y_M\) from \(Q\), form</p>
+
+$$ \hat\mu_P = \frac{1}{N}\sum_{i=1}^{N} x_i, \qquad \hat\mu_Q = \frac{1}{M}\sum_{j=1}^{M} y_j, $$
+
+<p>and ask whether they are far apart. If \(P\) and \(Q\) are two Gaussians with the same variance but different means, this works: the difference in raw means already separates them. But now take two Gaussians with the same mean and different variances. Their raw means coincide, and comparing \(\hat\mu_P\) with \(\hat\mu_Q\) sees nothing. The fix is to enrich the description: instead of comparing means of \(x\), compare means of features \(\varphi(x)\). With \(\varphi(x) = (x, x^2)\), the second coordinate now records the variance, and the mean feature vectors differ. Push this further to a centered Gaussian versus a centered Laplace, which share mean and variance but differ in every higher moment. To tell them apart we need means of arbitrarily high order features \(\varphi(x) = (x, x^2, x^3, \dots)\). That is exactly what an RKHS gives us for free: an implicit, possibly infinite feature map whose inner products we can evaluate through the kernel. Comparing distributions then becomes comparing the mean of the feature map under each distribution, and the kernel trick keeps the computation finite.</p>
+
+<h2 id="kernel-mean-embedding">The kernel mean embedding</h2>
+
+<p>Let \(K\) be a positive definite kernel on a topological set \(\mathcal X\) with RKHS \(\mathcal H\), and write \(K_x = K(x,\cdot)\) for the canonical feature of the point \(x\). We want the RKHS analogue of "the mean of the features," an object that summarizes a whole distribution as one element of \(\mathcal H\).</p>
+
+<div class="box def"><span class="box-title">Definition (kernel mean embedding)</span>
+Let \(P\) be a Borel probability distribution on \(\mathcal X\). Its <em>kernel mean embedding</em> is the function \(\mu_P : \mathcal X \to \mathbb R\) defined by
+$$ \mu_P(y) := \mathbb E_{X \sim P}\big[K(X,y)\big], \qquad y \in \mathcal X. $$
+Equivalently, as an element of \(\mathcal H\), \(\mu_P = \mathbb E_{X\sim P}[K_X]\), the average of the feature map \(x \mapsto K_x\) over \(P\).
+</div>
+
+<p>Two facts about the RKHS make this object usable. First, the reproducing kernel is an inner product of features,</p>
+
+$$ K(x,x') = \langle K_x, K_{x'}\rangle_{\mathcal H}, $$
+
+<p>and second, evaluation of any function is an inner product with a feature, the <em>kernel trick</em>,</p>
+
+$$ f(x) = \langle f, K_x\rangle_{\mathcal H}, \qquad f \in \mathcal H,\ x \in \mathcal X. $$
+
+<p>Averaging the kernel trick over \(P\) suggests that expectations under \(P\) should collapse into a single inner product with \(\mu_P\). This is the <em>generalized kernel trick</em>:</p>
+
+$$ \mathbb E_{X\sim P}\big[f(X)\big] = \langle f, \mu_P\rangle_{\mathcal H}, \qquad f \in \mathcal H. $$
+
+<p>Read it slowly: the mean embedding \(\mu_P\) is a single vector from which we can read off the expectation under \(P\) of <em>every</em> function in the RKHS, just by taking an inner product. In this precise sense \(\mu_P\) summarizes \(P\). The same reasoning applied to two distributions gives the inner product between embeddings as a double expectation of the kernel,</p>
+
+$$ \mathbb E_{(X,Y)\sim P\otimes Q}\big[K(X,Y)\big] = \langle \mu_P, \mu_Q\rangle_{\mathcal H}, $$
+
+<p>which is what will let us compute distances between embeddings without ever forming them explicitly.</p>
+
+<p>In practice we do not know \(P\); we know samples. The embedding is estimated by the empirical average of features,</p>
+
+$$ \hat\mu_P(x) = \frac{1}{N}\sum_{i=1}^{N} K(X_i, x), \qquad X_i \overset{\text{i.i.d.}}{\sim} P, $$
+
+<p>which is just the mean embedding of the empirical distribution \(\frac1N\sum_i \delta_{X_i}\).</p>
+
+<h3 id="existence-of-embeddings">Existence of the mean embedding</h3>
+
+<p>We have written \(\mu_P\) as if it were guaranteed to be an element of \(\mathcal H\), but that needs an argument: \(\mu_P\) is defined by an integral, and there is no reason a priori that the integral of RKHS elements lands back inside \(\mathcal H\), nor that the generalized kernel trick holds. A mild integrability condition settles the matter.</p>
+
+<div class="box prop"><span class="box-title">Proposition (existence and uniqueness of \(\mu_P\))</span>
+Let \(P\) be a Borel probability distribution on \(\mathcal X\) with its Borel \(\sigma\)-algebra, and let \(K\) be a p.d. kernel on \(\mathcal X\) with RKHS \(\mathcal H\). Assume
+$$ \mathbb E_{X\sim P}\big[\sqrt{K(X,X)}\,\big] \lt \infty. $$
+Then there exists a unique element \(\mu_P \in \mathcal H\) such that
+$$ \mathbb E_{X\sim P}\big[f(X)\big] = \langle f, \mu_P\rangle_{\mathcal H}, \qquad \forall f \in \mathcal H. $$
+In particular, for every \(y \in \mathcal X\),
+$$ \mu_P(y) = \langle K_y, \mu_P\rangle_{\mathcal H} = \mathbb E_{X\sim P}\big[K(X,y)\big]. $$
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Consider the linear functional \(T_P\) on \(\mathcal H\) defined by \(T_P f = \mathbb E_{X\sim P}[f(X)]\). We show it is bounded. Using the kernel trick \(f(X) = \langle f, K_X\rangle_{\mathcal H}\) and then Cauchy–Schwarz in \(\mathcal H\),
+$$ |T_P f| \le \mathbb E_{X\sim P}\big[|f(X)|\big] = \mathbb E_{X\sim P}\big[|\langle f, K_X\rangle_{\mathcal H}|\big] \le \mathbb E_{X\sim P}\big[\sqrt{K(X,X)}\,\big]\,\|f\|_{\mathcal H}, $$
+where we used \(\|K_X\|_{\mathcal H} = \sqrt{\langle K_X,K_X\rangle_{\mathcal H}} = \sqrt{K(X,X)}\). By the assumption the constant \(\mathbb E_{X\sim P}[\sqrt{K(X,X)}]\) is finite, so \(T_P\) is a bounded linear functional on \(\mathcal H\). By the Riesz representation theorem there is a unique \(\mu_P \in \mathcal H\) with \(T_P f = \langle f, \mu_P\rangle_{\mathcal H}\) for all \(f\). Taking \(f = K_y\) and applying the reproducing property gives \(\mu_P(y) = \langle K_y, \mu_P\rangle_{\mathcal H} = \mathbb E_{X\sim P}[K(X,y)]\), matching the defining formula.
+<span class="qed">\(\square\)</span></div>
+
+<p>For a bounded kernel, say \(K(x,x) \le \kappa\) for all \(x\), the condition is automatic, so every distribution has a mean embedding. From here on we assume it exists.</p>
+
+<h2 id="maximum-mean-discrepancy">The Maximum Mean Discrepancy</h2>
+
+<p>Once each distribution is a point in \(\mathcal H\), the natural way to compare \(P\) and \(Q\) is the distance between their embeddings. That distance is the Maximum Mean Discrepancy.</p>
+
+<div class="box def"><span class="box-title">Definition (MMD)</span>
+The <em>maximum mean discrepancy</em> between \(P\) and \(Q\) is the RKHS distance between their mean embeddings,
+$$ \mathrm{MMD}(P,Q) = \|\mu_P - \mu_Q\|_{\mathcal H}. $$
+</div>
+
+<p>The name will be justified in the next section, where the same quantity reappears as a maximization over functions. First we turn the squared distance into something computable from the kernel alone. This expansion is the workhorse of the whole chapter, so we do it in full.</p>
+
+<div class="box prop"><span class="box-title">Proposition (MMD as expectations of the kernel)</span>
+For distributions \(P\) and \(Q\) with mean embeddings \(\mu_P,\mu_Q \in \mathcal H\),
+$$ \mathrm{MMD}^2(P,Q) = \mathbb E_{X,X'\sim P\otimes P}[k(X,X')] + \mathbb E_{Y,Y'\sim Q\otimes Q}[k(Y,Y')] - 2\,\mathbb E_{X,Y\sim P\otimes Q}[k(X,Y)], $$
+where \(X'\) is an independent copy of \(X\) and \(Y'\) an independent copy of \(Y\).
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Expand the squared norm of a difference using bilinearity of the inner product:
+$$ \mathrm{MMD}^2(P,Q) = \|\mu_P - \mu_Q\|_{\mathcal H}^2 = \langle \mu_P,\mu_P\rangle_{\mathcal H} + \langle \mu_Q,\mu_Q\rangle_{\mathcal H} - 2\langle \mu_P,\mu_Q\rangle_{\mathcal H}. $$
+Now use the identity \(\langle \mu_P, \mu_Q\rangle_{\mathcal H} = \mathbb E_{(X,Y)\sim P\otimes Q}[K(X,Y)]\) established above, once for each term. Writing \(\mu_P = \mathbb E_{X\sim P}[K_X]\) and \(\mu_Q = \mathbb E_{Y\sim Q}[K_Y]\) and pulling the expectations out of the (continuous, bilinear) inner product,
+$$ \langle \mu_P,\mu_P\rangle_{\mathcal H} = \mathbb E_{X\sim P}\mathbb E_{X'\sim P}\langle K_X, K_{X'}\rangle_{\mathcal H} = \mathbb E_{X,X'\sim P\otimes P}[k(X,X')], $$
+and identically \(\langle \mu_Q,\mu_Q\rangle_{\mathcal H} = \mathbb E_{Y,Y'\sim Q\otimes Q}[k(Y,Y')]\) and \(\langle \mu_P,\mu_Q\rangle_{\mathcal H} = \mathbb E_{X,Y\sim P\otimes Q}[k(X,Y)]\). Substituting the three expressions gives the claim.
+<span class="qed">\(\square\)</span></div>
+
+<p>The three terms have a clean reading. The first two, \(\mathbb E_{X,X'\sim P\otimes P}[k(X,X')]\) and \(\mathbb E_{Y,Y'\sim Q\otimes Q}[k(Y,Y')]\), are <em>intra-similarity</em> terms measuring how self-similar each distribution is under the kernel. The last, \(\mathbb E_{X,Y\sim P\otimes Q}[k(X,Y)]\), is the <em>inter-similarity</em> between the two. The MMD is large when each distribution is internally coherent but cross-similarity is low.</p>
+
+<p>One caution. In general the MMD is only a <em>semi-metric</em>: it satisfies non-negativity, symmetry, and the triangle inequality, but \(\mathrm{MMD}(P,Q) = 0\) does not by itself force \(P = Q\). If the kernel is too poor, distinct distributions can share an embedding and the MMD collapses to zero. Kernels for which \(\mathrm{MMD}(P,Q) = 0 \iff P = Q\) are called <em>characteristic</em>, and for them MMD is a genuine metric on distributions. We characterize such kernels in the final sections. Until then, we assume the kernel is characteristic so that MMD metrizes equality of distributions.</p>
+
+<h3 id="empirical-mmd">Estimating the MMD from samples</h3>
+
+<p>Given samples \(x_1,\dots,x_N \sim P\) and \(y_1,\dots,y_M \sim Q\), the obvious estimator plugs the empirical distributions into the expansion. Replacing each expectation by an average over all pairs gives the <em>biased</em> estimator</p>
+
+$$ \widehat{\mathrm{MMD}}^2_b(P,Q) = \frac{1}{N^2}\sum_{i,j} K(x_i,x_j) + \frac{1}{M^2}\sum_{i,j} K(y_i,y_j) - \frac{2}{NM}\sum_{i,j} K(x_i,y_j). $$
+
+<p>It is biased because the diagonal terms \(K(x_i,x_i)\) and \(K(y_i,y_i)\) are included: they estimate \(\mathbb E[k(X,X')]\) with pairs that are not independent, inflating the intra-similarity terms. Dropping the diagonal, that is, averaging only over distinct indices \(i \neq j\), removes the bias:</p>
+
+$$ \widehat{\mathrm{MMD}}^2_u(P,Q) = \frac{1}{N(N-1)}\sum_{i\neq j} K(x_i,x_j) + \frac{1}{M(M-1)}\sum_{i\neq j} K(y_i,y_j) - \frac{2}{NM}\sum_{i,j} K(x_i,y_j). $$
+
+<p>This <em>unbiased</em> estimator is the usual choice for testing. Both are simple sums of kernel evaluations, and both are differentiable in the sample points, a fact we exploit for generative modeling.</p>
+
+<h2 id="mmd-as-ipm">MMD as an integral probability metric</h2>
+
+<p>The distance-between-embeddings view is geometric. There is a second, dual view that explains the word "maximum" in the name and produces an interpretable object, the witness function. It fits MMD into a broad family of distances between distributions.</p>
+
+<div class="box def"><span class="box-title">Definition (integral probability metric)</span>
+Let \(\mathcal F\) be a set of measurable functions. The <em>integral probability metric</em> (IPM) associated to \(\mathcal F\) is
+$$ D_{\mathcal F}(P,Q) := \sup_{f \in \mathcal F}\ \Big(\mathbb E_{X\sim P}[f(X)] - \mathbb E_{Y\sim Q}[f(Y)]\Big). $$
+</div>
+
+<p>An IPM searches over a class of "test functions" \(\mathcal F\) for the one whose average differs most between \(P\) and \(Q\). If no function in the class can tell the two distributions apart, the supremum is zero. Different choices of \(\mathcal F\) recover classical distances: bounded continuous functions give the Dudley metric, functions of bounded variation give the Kolmogorov metric (the sup-distance between CDFs), and bounded Lipschitz functions give the \(1\)-Wasserstein distance. The MMD is the IPM obtained by taking \(\mathcal F\) to be the unit ball of the RKHS.</p>
+
+<div class="box prop"><span class="box-title">Proposition (MMD is the RKHS-ball IPM, with witness function)</span>
+Taking \(\mathcal F = \{ f \in \mathcal H : \|f\|_{\mathcal H} \le 1\}\),
+$$ \sup_{\substack{f\in\mathcal H \\ \|f\|_{\mathcal H}\le 1}} \Big(\mathbb E_{X\sim P}[f(X)] - \mathbb E_{Y\sim Q}[f(Y)]\Big) = \|\mu_P - \mu_Q\|_{\mathcal H} = \mathrm{MMD}(P,Q), $$
+and the supremum is attained at the <em>witness function</em>
+$$ f^\star = \frac{\mu_P - \mu_Q}{\|\mu_P - \mu_Q\|_{\mathcal H}}. $$
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Apply the generalized kernel trick to each expectation. For any \(f \in \mathcal H\),
+$$ \mathbb E_{X\sim P}[f(X)] - \mathbb E_{Y\sim Q}[f(Y)] = \langle f, \mu_P\rangle_{\mathcal H} - \langle f, \mu_Q\rangle_{\mathcal H} = \langle f, \mu_P - \mu_Q\rangle_{\mathcal H}. $$
+So the IPM is \(\sup_{\|f\|\le 1}\langle f, \mu_P-\mu_Q\rangle_{\mathcal H}\). By Cauchy–Schwarz this inner product is at most \(\|f\|_{\mathcal H}\|\mu_P-\mu_Q\|_{\mathcal H} \le \|\mu_P-\mu_Q\|_{\mathcal H}\), with equality when \(f\) is the unit vector aligned with \(\mu_P-\mu_Q\), namely \(f^\star = (\mu_P-\mu_Q)/\|\mu_P-\mu_Q\|_{\mathcal H}\). Evaluating, \(\langle f^\star, \mu_P-\mu_Q\rangle_{\mathcal H} = \|\mu_P-\mu_Q\|_{\mathcal H} = \mathrm{MMD}(P,Q)\).
+<span class="qed">\(\square\)</span></div>
+
+<p>The witness function is worth dwelling on. It is the single RKHS direction along which \(P\) and \(Q\) look most different, and because \(f^\star \propto \mu_P - \mu_Q\), it can be written explicitly from samples: \(f^\star(t) \propto \mathbb E_{X\sim P}[K(X,t)] - \mathbb E_{Y\sim Q}[K(Y,t)]\), estimated by \(\frac1N\sum_i K(x_i,t) - \frac1M\sum_j K(y_j,t)\). Plotting \(f^\star\) shows exactly the regions of input space where the two distributions disagree, which is often more informative than the scalar MMD itself.</p>
+
+<h2 id="two-sample-test">A two-sample test using the MMD</h2>
+
+<p>We now make the informal question "do \(P\) and \(Q\) differ?" into a hypothesis test. Given samples \(x_1,\dots,x_N \sim P\) and \(y_1,\dots,y_N \sim Q\), the null and alternative hypotheses are</p>
+
+<div class="box def"><span class="box-title">Hypotheses</span>
+\(H_0: P = Q\) versus \(H_1: P \neq Q\). Under \(H_0\) the empirical \(\widehat{\mathrm{MMD}}^2\) should be close to zero; under \(H_1\) it should be far from zero. The test statistic is the unbiased estimator
+$$ \widehat{\mathrm{MMD}}^2(P,Q) = \frac{1}{N(N-1)}\sum_{i\neq j} K(x_i,x_j) + \frac{1}{N(N-1)}\sum_{i\neq j} K(y_i,y_j) - \frac{2}{N^2}\sum_{i,j} K(x_i,y_j). $$
+</div>
+
+<p>To turn "close" and "far" into a decision we need the distribution of the statistic. It differs sharply between the two hypotheses, and this asymmetry is what makes the test work.</p>
+
+<p><strong>Under the alternative \(P \neq Q\).</strong> The statistic is asymptotically normal (Gretton et al., 2006): with \(n\) the sample size and \(V(P,Q)\) the asymptotic variance,</p>
+
+$$ \sqrt{n}\,\big(\widehat{\mathrm{MMD}}^2(P,Q) - \mathrm{MMD}^2(P,Q)\big) \ \xrightarrow{\ d\ }\ \mathcal N\big(0,\, V(P,Q)\big). $$
+
+<p>It concentrates around the true positive value \(\mathrm{MMD}^2(P,Q) \gt 0\), so \(n\,\widehat{\mathrm{MMD}}^2\) grows linearly in \(n\) and runs off to \(+\infty\).</p>
+
+<p><strong>Under the null \(P = Q\).</strong> Here \(\mathrm{MMD}^2 = 0\), the leading term vanishes, and the rescaled statistic \(n\,\widehat{\mathrm{MMD}}^2\) has a nondegenerate limit that is <em>not</em> Gaussian (Gretton et al., 2006):</p>
+
+$$ n\,\widehat{\mathrm{MMD}}^2(P,Q) \ \xrightarrow{\ d\ }\ 2\sum_{i=1}^{\infty} \lambda_i\,(z_i^2 - 1), $$
+
+<p>an infinite weighted sum of centered \(\chi^2_1\) variables. Here the \(z_i \sim \mathcal N(0,1)\) are i.i.d. standard Gaussians, and the weights \(\lambda_i\) are the eigenvalues of the integral operator \(f \mapsto \mathbb E_{X\sim P}[\tilde K(X,X')\,f(X)]\) built from the <em>centered kernel</em></p>
+
+$$ \tilde K(x,x') = \big\langle K(x,\cdot) - \mu_P,\ K(x',\cdot) - \mu_P\big\rangle_{\mathcal H}. $$
+
+<p>Collecting the two regimes, writing \(T_0 := n\,\widehat{\mathrm{MMD}}^2(P,Q)\),</p>
+
+$$ T_0 \approx \begin{cases} n\,\mathrm{MMD}^2(P,Q) + \sqrt{n}\,\mathcal N\big(0, V(P,Q)\big), & P \neq Q, \\[4pt] 2\sum_{i=1}^{\infty}\lambda_i(z_i^2 - 1), & P = Q. \end{cases} $$
+
+<h3 id="threshold-and-permutation">The threshold and the permutation test</h3>
+
+<p>The test controls the false-positive rate. Fix a significance level \(\alpha\) (typically a small value such as \(0.05\)) and choose the threshold \(c_\alpha\) as the upper-\(\alpha\) quantile of the null distribution,</p>
+
+$$ \mathbb P\big(T_0 \gt c_\alpha \mid H_0\big) = \alpha. $$
+
+<p>If \(T_0 \ge c_\alpha\) we reject the null, declaring \(P = Q\) unlikely; otherwise we cannot reject and \(P = Q\) remains plausible. The remaining difficulty is that the null distribution \(2\sum_i \lambda_i(z_i^2-1)\) depends on the unknown eigenvalues \(\lambda_i\), so \(c_\alpha\) is not available in closed form. We estimate the null by resampling.</p>
+
+<p>Let \(T\) denote a draw from the null distribution. Equivalently to comparing \(T_0\) with \(c_\alpha\), we compute the \(p\)-value \(p := \mathbb P_T(T \gt T_0)\); then \(T_0 \ge c_\alpha\) precisely when \(p \le \alpha\). To sample from the null, use a <em>permutation test</em>. Pool the \(2N\) points, and for each permutation \(j\) split them into two new groups \(\tilde P, \tilde Q\) at random and recompute \(T_j = n\,\widehat{\mathrm{MMD}}^2(\tilde P, \tilde Q)\). Since under \(H_0\) all points are exchangeable, each \(T_j\) is a valid draw from the null distribution. With \(J\) permutations the \(p\)-value is approximated by the fraction of resampled statistics that exceed the observed one,</p>
+
+$$ p \approx \frac{\big|\{\, j : T_j \ge T_0 \,\}\big|}{J}, $$
+
+<p>and we reject when this is at most \(\alpha\). The permutation test needs nothing but repeated evaluations of the kernel, so it is entirely practical.</p>
+
+<h2 id="generative-models">Learning generative models with MMD</h2>
+
+<p>MMD is not only a diagnostic; because the empirical estimator is differentiable in the samples, we can <em>minimize</em> it to fit a model. The setting is generative modeling: given samples from a data distribution \(P\) over \(\mathcal X\), we want a model that produces new samples from some \(Q \approx P\).</p>
+
+<p>Two broad families exist. An <em>explicit</em> generative model (EGM) specifies a density \(q(y)\), has support on the whole space, is trained by maximum likelihood or score matching, and is sampled by MCMC. An <em>implicit</em> generative model (IGM) instead defines samples directly by a pushforward: draw latent noise \(Z \sim \mu\) from a known simple distribution and set \(Y = G(Z) \sim Q\). Its support can be a low-dimensional manifold (Arjovsky et al., 2017), it is trained by minimizing a well-chosen divergence \(D(P,Q)\), and it is sampled just by pushing \(\mu\) forward through \(G\). IGMs power many striking applications: single-image super-resolution (Ledig et al., 2015), image-to-image translation (Isola et al., 2016), and text-to-image generation (Zhang et al., 2016).</p>
+
+<h3 id="gan-connection">The adversarial view and the GAN connection</h3>
+
+<p>Generative adversarial networks (Goodfellow et al., 2014) fit an IGM by an adversarial game against a divergence defined variationally. Given a class of critics \(\mathcal F\),</p>
+
+$$ D(P,Q) := \sup_{f\in\mathcal F} G(f,P,Q). $$
+
+<p>The <em>critic</em> maximizes \(G(f,P,Q)\) over \(f \in \mathcal F\) to find the best discriminating function \(f^\star\), and the <em>generator</em> minimizes \(D(P,Q) = G(f^\star,P,Q)\) over \(Q\). The MMD is exactly this construction when \(\mathcal F\) is the unit ball of an RKHS: the critic is then the witness function \(f^\star\), computed in closed form rather than by an inner optimization. In this sense an MMD-trained generator is a GAN whose discriminator is solved analytically by the kernel.</p>
+
+<p>Concretely, we solve</p>
+
+$$ \min_{\theta}\ \mathrm{MMD}^2(P, Q_\theta), $$
+
+<p>where \(Q_\theta\) is the pushforward of \(\mu\) through a parametric generator \(G_\theta\). Each step of stochastic gradient descent is:</p>
+
+<pre><code>1. Sample a minibatch X_1,...,X_B ~ P from the dataset.
+2. Sample latent noise Z_1,...,Z_B ~ mu.
+3. Generate model samples Y_b = G_theta(Z_b) ~ Q_theta,  1 &lt;= b &lt;= B.
+4. Compute the empirical loss  L(theta) = MMD^2_hat(P, Q_theta),
+   which is differentiable in theta through the Y_b.
+5. Update  theta &lt;- theta - gamma * grad L(theta).</code></pre>
+
+<p>Trained this way with an RBF kernel, an IGM already generates reasonable MNIST digits. But the choice of kernel is crucial, and hand-designing a good kernel for high-dimensional data such as natural images is hard. The remedy is to learn the kernel too. Optimize over a family \(\mathcal K\) of kernels,</p>
+
+$$ \min_{\theta}\ \sup_{k \in \mathcal K}\ \mathrm{MMD}^2_k(P, Q_\theta), $$
+
+<p>where a typical family is parameterized by a neural network, \(k(x,y) = h(\varphi(x), \varphi(y))\) with \(\varphi\) a network and \(h\) a fixed p.d. kernel. The inner supremum adaptively selects the MMD that best discriminates the data from the current model, exactly the adversarial critic again, and in practice one alternates gradient steps on \(k\) and on \(\theta\). Such adversarially trained MMD models produce competitive samples on datasets like MNIST and CelebA (Arbel, Sutherland, Bińkowski, and Gretton, 2018); the full story adds regularization, optimization stability, and evaluation, which we do not pursue here.</p>
+
+<h2 id="characteristic-kernels">Characteristic kernels</h2>
+
+<p>Everything above quietly assumed the embedding loses no information: that \(\mu_P = \mu_Q\) implies \(P = Q\). Without it, MMD is only a semi-metric, a two-sample test can be blind to real differences, and a generative model can converge to the wrong distribution. So we must ask directly: can the mean embedding characterize the distribution?</p>
+
+<p>The answer depends entirely on the kernel, as three examples show. Take the <em>linear</em> kernel \(K(x,x') = x^\top x'\). Then \(\mu_P(x) = \mathbb E_{X\sim P}[X]^\top x\), so the embedding sees only the mean of \(P\). Any two distributions with equal means, whatever their higher moments, have identical embeddings; the kernel is not characteristic. Take the <em>polynomial</em> kernel of order two, \(K(x,x') = (x^\top x')^2\). Then \(\mu_P(x) = \operatorname{Tr}\!\big(\mathbb E_{X\sim P}[XX^\top]\,xx^\top\big)\), which sees the second moment as well, but still nothing beyond it: distributions matched on first and second moments collapse together. Each finite-order kernel captures only finitely many moments.</p>
+
+<p>Contrast this with the <em>exponential</em> kernel \(K(x,y) = \exp(x^\top y)\). Now</p>
+
+$$ \mu_P(y) = \mathbb E_{X\sim P}\big[\exp(X^\top y)\big], $$
+
+<p>which is precisely the <em>moment generating function</em> of \(P\), evaluated at \(y\). A classical result says that if two distributions have the same moment generating function then they are equal, that is \(\mathbb E_{X\sim P}[f(X)] = \mathbb E_{Y\sim Q}[f(Y)]\) for all \(f \in C_b(\mathcal X)\). Intuitively, the family of functions \(\{K_y : x \mapsto \exp(x^\top y)\}_{y\in\mathcal X}\) is rich enough that matching \(\mathbb E_P[K_y]\) with \(\mathbb E_Q[K_y]\) for every \(y\) pins down the distribution. This richness is exactly what we formalize next.</p>
+
+<div class="box def"><span class="box-title">Definition (characteristic kernel)</span>
+Let \(\mathcal X\) be a topological set and \(\mathcal P\) the set of Borel probability measures on \(\mathcal X\). Let \(K\) be a bounded measurable p.d. kernel on \(\mathcal X\) with RKHS \(\mathcal H\). The kernel \(K\) is <em>characteristic</em> if the mean embedding map
+$$ \mathcal P \ni P \longmapsto \mu_P = \mathbb E_{X\sim P}[K_X] \in \mathcal H $$
+is injective, that is,
+$$ \forall\, P,Q \in \mathcal P:\quad \mu_P = \mu_Q \implies P = Q. $$
+</div>
+
+<p>Three equivalences organize the idea. Equality of embeddings is the same as equality of RKHS expectations,</p>
+
+$$ \mu_P = \mu_Q \iff \mathbb E_{X\sim P}[f(X)] = \mathbb E_{Y\sim Q}[f(Y)] \quad \forall f \in \mathcal H, $$
+
+<p>which is immediate from the generalized kernel trick. Equality of distributions, on the other hand, is equality of expectations of all bounded continuous functions,</p>
+
+$$ P = Q \iff \mathbb E_{X\sim P}[f(X)] = \mathbb E_{Y\sim Q}[f(Y)] \quad \forall f \in C_b(\mathcal X). $$
+
+<p>A kernel is characteristic exactly when these two conditions coincide, and that happens when \(\mathcal H\) is rich enough to stand in for \(C_b(\mathcal X)\). The rest of the chapter makes "rich enough" precise, first for compact \(\mathcal X\) through universality, then for \(\mathcal X = \mathbb R^d\) through the Fourier transform.</p>
+
+<h2 id="universality">Characteristic kernels via universality</h2>
+
+<p>On a compact domain the right notion of richness is that the RKHS is dense in the continuous functions.</p>
+
+<div class="box def"><span class="box-title">Definition (universal kernel)</span>
+Let \(K\) be a p.d. kernel with RKHS \(\mathcal H\) on a compact set \(\mathcal X\). The kernel \(K\) is <em>universal</em> if \(y \mapsto K(x,y)\) is continuous for every \(x \in \mathcal X\) and \(\mathcal H\) is dense in \(C(\mathcal X)\) in the maximum norm \(\|\cdot\|_\infty\).
+</div>
+
+<p>Density in the sup norm means every continuous function can be approximated uniformly by RKHS elements. That is exactly the leverage needed to make embeddings characterize distributions.</p>
+
+<div class="box prop"><span class="box-title">Proposition (universal \(\Rightarrow\) characteristic)</span>
+Assume \(\mathcal X\) is compact. If \(K\) is universal, then \(K\) is characteristic.
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Let \(P\) and \(Q\) satisfy \(\mu_P = \mu_Q\). We must show \(\mathbb E_{X\sim P}[f(X)] = \mathbb E_{Y\sim Q}[f(Y)]\) for all \(f \in C(\mathcal X)\), which on a compact space gives \(P = Q\). Fix \(f \in C(\mathcal X)\) and \(\epsilon \gt 0\). By universality \(\mathcal H\) is dense in \(C(\mathcal X)\) for \(\|\cdot\|_\infty\), so there is \(g \in \mathcal H\) with \(\|f - g\|_\infty \le \epsilon\). Split the difference of expectations through \(g\):
+$$ \big|\mathbb E_P[f] - \mathbb E_Q[f]\big| \le \big|\mathbb E_P[f] - \mathbb E_P[g]\big| + \big|\mathbb E_Q[f] - \mathbb E_Q[g]\big| + \big|\mathbb E_P[g] - \mathbb E_Q[g]\big|. $$
+The first two terms are each at most \(\mathbb E[\,|f-g|\,] \le \|f-g\|_\infty \le \epsilon\) by the choice of \(g\). The last term vanishes: since \(g \in \mathcal H\), the generalized kernel trick gives \(\mathbb E_P[g] - \mathbb E_Q[g] = \langle g, \mu_P - \mu_Q\rangle_{\mathcal H} = 0\) because \(\mu_P = \mu_Q\). Hence \(|\mathbb E_P[f] - \mathbb E_Q[f]| \le 2\epsilon\) for every \(\epsilon \gt 0\), so \(\mathbb E_P[f] = \mathbb E_Q[f]\). As \(f \in C(\mathcal X)\) was arbitrary, \(P = Q\).
+<span class="qed">\(\square\)</span></div>
+
+<p>This reduces the problem to producing universal kernels. We give the machinery, Stone–Weierstrass and a general criterion, and then two concrete constructions.</p>
+
+<h3 id="stone-weierstrass">Stone–Weierstrass and a general criterion</h3>
+
+<p>Density in \(C(\mathcal X)\) is exactly what the Stone–Weierstrass theorem controls, so it is the engine behind every universality result here.</p>
+
+<div class="box thm"><span class="box-title">Theorem (Stone–Weierstrass)</span>
+Let \((\mathcal X, d)\) be a compact metric space and \(\mathcal A\) a linear subspace of \(C(\mathcal X)\). Then \(\mathcal A\) is dense in \(C(\mathcal X)\) if
+<ul>
+<li>\(\mathcal A\) is an <em>algebra</em> for the pointwise product of functions;</li>
+<li>\(\mathcal A\) <em>does not vanish</em>: for every \(x \in \mathcal X\) there is \(f \in \mathcal A\) with \(f(x) \neq 0\);</li>
+<li>\(\mathcal A\) <em>separates points</em>: for all \(x \neq y\) there is \(f \in \mathcal A\) with \(f(x) \neq f(y)\).</li>
+</ul>
+</div>
+
+<p>Here an <em>algebra</em> is a vector space \(\mathcal A\) equipped with a bilinear binary product \(\times : \mathcal A \times \mathcal A \to \mathcal A\), meaning \(z\times(x+y) = z\times x + z\times y\), \((x+y)\times z = x\times z + y\times z\), and \((ax)\times(by) = (ab)(x\times y)\) for all \(x,y,z \in \mathcal A\) and scalars \(a,b\). We apply this to the span of the feature coordinates.</p>
+
+<div class="box thm"><span class="box-title">Theorem (general criterion for universality, Steinwart 2001)</span>
+Let \(\mathcal X\) be a compact metric space and \(k\) a continuous kernel on \(\mathcal X\) with \(k(x,x) \gt 0\). Suppose there is an injective feature map \(\Phi(x) = \{\varphi_i(x)\}_{i\ge 0}\) with
+$$ k(x,y) = \sum_{i=0}^{\infty} \varphi_i(x)\varphi_i(y). $$
+If \(\mathcal A := \operatorname{span}\{\varphi_i : i \ge 0\}\) is an algebra, then \(k\) is universal.
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+We check the three Stone–Weierstrass hypotheses for \(\mathcal A \subseteq C(\mathcal X)\), then transfer density to the RKHS.
+<br><em>\(\mathcal A \subseteq C(\mathcal X)\).</em> The coordinates \(\varphi_i\) are continuous because \(x \mapsto \Phi(x)\) is continuous: indeed \(\|\Phi(x) - \Phi(y)\|^2 = K(x,x) + K(y,y) - 2K(x,y) \to 0\) as \(y \to x\) since \(K\) is continuous, so each \(\varphi_i\) and every element of their span is continuous.
+<br><em>Does not vanish.</em> If some \(x\) had \(\varphi_i(x) = 0\) for all \(i\), then \(K(x,x) = \sum_i \varphi_i(x)^2 = 0\), contradicting \(k(x,x) \gt 0\).
+<br><em>Separates points.</em> If \(x \neq y\) had \(\varphi_i(x) = \varphi_i(y)\) for all \(i\), then \(\Phi(x) = \Phi(y)\), contradicting injectivity of \(\Phi\).
+<br>By hypothesis \(\mathcal A\) is an algebra, so Stone–Weierstrass gives that \(\mathcal A\) is dense in \(C(\mathcal X)\). Finally we lift this to \(\mathcal H\). Let \(f \in C(\mathcal X)\) and \(\epsilon \gt 0\); pick \(g \in \mathcal A\) with \(\|f - g\|_\infty \lt \epsilon\). By definition of \(\mathcal A\), \(g(x) = \langle w, \Phi(x)\rangle_{\ell^2}\) for some \(w = (w_i)_{i\ge 0}\) with \(w_i = 0\) for all \(i \gt N\), for some finite \(N\). Such a finite combination of features belongs to the RKHS \(\mathcal H\) of \(k\). Hence \(\mathcal H\) is dense in \(C(\mathcal X)\), so \(k\) is universal.
+<span class="qed">\(\square\)</span></div>
+
+<h3 id="taylor-construction">Universality from a Taylor series</h3>
+
+<p>The general criterion turns universality into a bookkeeping question about the feature coordinates. When the kernel is a power series of the inner product with positive coefficients, the features are monomials and their span is the polynomial algebra.</p>
+
+<div class="box prop"><span class="box-title">Proposition (Taylor criterion, Steinwart 2001)</span>
+Let \(0 \lt r \le \infty\) and let \(f : (-r, r) \to \mathbb R\) be a \(C^\infty\) function with Taylor expansion \(f(x) = \sum_{i=0}^\infty a_i x^i\) at \(0\). Let \(\mathcal X\) be a compact subset of the open ball in \(\mathbb R^d\) of radius \(\sqrt r\) centered at the origin. If \(a_i \gt 0\) for all \(i \ge 0\), then \(k(x,y) = f(\langle x,y\rangle)\) is a universal kernel on \(\mathcal X\).
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Take \(d = 1\) for clarity. The kernel is continuous and expands as
+$$ K(x,y) = \sum_{i=0}^{\infty} a_i x^i y^i = \langle \Phi(x), \Phi(y)\rangle_{\ell^2}, \qquad \Phi(x) = \big(\sqrt{a_i}\, x^i\big)_{i\ge 0}, $$
+which is legitimate since \(a_i \gt 0\). The map \(\Phi\) is injective because its coordinates already contain \(x\) itself (up to the positive factor \(\sqrt{a_1}\)). Moreover \(K(x,x) = \sum_i a_i x^{2i} \gt 0\) as all \(a_i \gt 0\). Finally \(\mathcal A = \operatorname{span}\{\varphi_i : i \ge 0\}\) is the algebra of polynomials, closed under products. All hypotheses of the general criterion hold, so \(K\) is universal.
+<span class="qed">\(\square\)</span></div>
+
+<p>Two examples. The exponential kernel \(K(x,y) = \exp\langle x,y\rangle\) on any compact \(\mathcal X\) uses \(f(x) = e^x = \sum_i \frac{1}{i!}x^i\), whose coefficients \(a_i = 1/i! \gt 0\); it is therefore universal, confirming the moment-generating-function intuition from before. The Gaussian kernel <em>on the unit sphere</em>, \(K(x,y) = \exp(-\tfrac12\|x-y\|^2)\), factors on \(\|x\| = \|y\| = 1\) as \(e^{-1}\exp\langle x,y\rangle\) because \(\|x-y\|^2 = 2 - 2\langle x,y\rangle\); with \(f(x) = e^{-1}e^x = e^{-1}\sum_i \frac{1}{i!}x^i\) the coefficients are again all positive, so it too is universal.</p>
+
+<h3 id="fourier-construction">Universality from a Fourier series</h3>
+
+<p>A parallel construction handles translation-structured kernels on a box, using a Fourier expansion in place of a Taylor expansion.</p>
+
+<div class="box prop"><span class="box-title">Proposition (Fourier criterion, Steinwart 2001)</span>
+Let \(f : [0, 2\pi] \to \mathbb R\) be continuous with a pointwise absolutely convergent Fourier series \(f(t) = \sum_{n=0}^\infty a_n \cos(nt)\). If \(a_n \gt 0\) for all \(n \ge 0\), then
+$$ K(x,y) := \prod_{i=1}^{d} f\big(|x_i - y_i|\big) $$
+is a universal kernel on every compact subset of \([0, 2\pi)^d\).
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Take \(d = 1\). Using \(\cos(n|x-y|) = \cos(n(x-y)) = \cos(nx)\cos(ny) + \sin(nx)\sin(ny)\), the kernel is continuous and expands as
+$$ K(x,y) = a_0 + \sum_{n=1}^{\infty} a_n\big(\sin(nx)\sin(ny) + \cos(nx)\cos(ny)\big) = \langle \Phi(x), \Phi(y)\rangle_{\ell^2}, $$
+with coordinates \(\varphi_0(x) = \sqrt{a_0}\), \(\varphi_{2n-1}(x) = \sqrt{a_n}\sin(nx)\), and \(\varphi_{2n}(x) = \sqrt{a_n}\cos(nx)\) for \(n \ge 1\). This \(\Phi\) is injective on \([0,2\pi)\), and \(K(x,x) = \sum_{n\ge 0} a_n \gt 0\) since every \(a_n \gt 0\). The span \(\mathcal A = \operatorname{span}\{\varphi_n : n \ge 0\}\) is an algebra, because products of sines and cosines reduce to sines and cosines of summed frequencies by the trigonometric identities, staying inside the span. The general criterion applies, so \(K\) is universal.
+<span class="qed">\(\square\)</span></div>
+
+<p>An example in this family is the regularized Fourier kernel (Vapnik 1998, p.470),</p>
+
+$$ k(x,y) = \frac{1 - q^2}{2 - 4q\cos(x-y) + 2q^2}, \qquad 0 \lt q \lt 1, $$
+
+<p>whose cosine coefficients are all positive.</p>
+
+<p>To summarize the compact case: on a compact metric space, a universal kernel is a continuous kernel whose RKHS is dense in \(C(\mathcal X)\) in the maximum norm, and every universal kernel is characteristic. A large class of universal kernels arises from Taylor or Fourier series with positive coefficients, both special cases of the general criterion, which is itself a consequence of the Stone–Weierstrass theorem. This leaves one gap: what if \(\mathcal X\) is not compact, for example \(\mathcal X = \mathbb R^d\)?</p>
+
+<h2 id="fourier-transform">Characteristic kernels via the Fourier transform</h2>
+
+<p>On \(\mathbb R^d\) the compactness argument fails, but for translation-invariant kernels a spectral argument takes its place. Consider \(K(x,y) = \kappa(x-y)\) with \(\kappa : \mathbb R^d \to \mathbb R\). Bochner's theorem says such a \(\kappa\) is (the transform of) a finite non-negative Borel measure \(\Lambda\) on \(\mathbb R^d\),</p>
+
+$$ \kappa(z) = \int_{\mathbb R^d} e^{-i z^\top w}\, d\Lambda(w). $$
+
+<p>This spectral measure \(\Lambda\) exposes the kernel as an inner product of Fourier features in \(L^2(\Lambda)\): with \(w \mapsto \Phi(x)(w) = e^{-i x^\top w}\),</p>
+
+$$ K(x,y) = \langle \Phi(x), \Phi(y)\rangle_{L^2(\Lambda)}. $$
+
+<p>The mean embedding inherits the same structure. Writing \(\mathcal F(P) = \mathbb E_{X\sim P}[\Phi(X)]\) for the Fourier transform of \(P\),</p>
+
+$$ \mu_P(y) = \mathbb E_{X\sim P}\big[\langle \Phi(X), \Phi(y)\rangle_{L^2(\Lambda)}\big] = \langle \mathcal F(P), \Phi(y)\rangle_{L^2(\Lambda)}. $$
+
+<p>So the embedding is the Fourier transform of \(P\), read against the Fourier features and weighted by \(\Lambda\). Whether the embedding is injective now becomes a question about whether \(\Lambda\) lets us recover \(\mathcal F(P)\). Two facts combine. The Fourier inversion theorem (Dudley 2002, Theorem 9.5.4) says the Fourier transform already determines the distribution: if \(\mathcal F(P) = \mathcal F(Q)\) then \(P = Q\). The remaining issue is that \(\Lambda\) must not annihilate any part of \(\mathcal F(P)\); it must "preserve the information" in the Fourier transform. It does so exactly when its support is all of \(\mathbb R^d\).</p>
+
+<div class="box thm"><span class="box-title">Theorem (translation-invariant characteristic kernels, Sriperumbudur 2008)</span>
+Let \(K\) be a translation-invariant kernel on \(\mathbb R^d\), \(K(x,y) = \kappa(x-y)\) with \(\kappa(z) = \int e^{-i z^\top w}\, d\Lambda(w)\) for a finite non-negative Borel measure \(\Lambda\). Then \(K\) is characteristic if and only if
+$$ \operatorname{supp}(\Lambda) = \mathbb R^d. $$
+</div>
+
+<p>The condition is intuitive: if \(\Lambda\) put no mass on some frequency region, distributions differing only at those frequencies would share an embedding, and the kernel would be blind to them. A full-support spectral measure sees every frequency.</p>
+
+<p>Two examples close the discussion. The Gaussian kernel \(K(x,y) = e^{-\frac{\sigma^2}{2}\|x-y\|^2}\) has spectral measure \(\Lambda\) with density \(w \mapsto (1/\sqrt{2\pi\sigma^2})^d\, e^{-\frac{1}{2\sigma^2}\|w\|^2}\), a Gaussian on \(\mathbb R^d\). Its support is all of \(\mathbb R^d\), so the Gaussian kernel is characteristic. By contrast, the sinc kernel \(\kappa(z) = z^{-1}\sin(z)\) has spectral measure equal to the uniform distribution on \([-1, 1]\), whose support is bounded; because it misses the high frequencies, \(K(x,y) = \kappa(x-y)\) is <em>not</em> characteristic.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Probability distributions can be represented by kernels through their mean embeddings \(\mu_P = \mathbb E_{X\sim P}[K_X]\), a single RKHS vector that stores the expectation under \(P\) of every function in \(\mathcal H\). The maximum mean discrepancy, the RKHS distance \(\|\mu_P - \mu_Q\|_{\mathcal H}\) between embeddings, compares distributions, expands into expectations of the kernel that are estimable from samples, and doubles as the integral probability metric over the RKHS unit ball with the witness function as its optimal test direction. MMD drives two applications developed here: two-sample tests, whose null distribution is an infinite \(\chi^2\) mixture calibrated by permutation, and implicit generative models trained by minimizing \(\mathrm{MMD}^2(P, Q_\theta)\), which are GANs with an analytically solved critic and can be sharpened by learning the kernel adversarially. Other applications include dependence detection, feature selection, and blind source separation such as ICA. All of this rests on the kernel being characteristic, so that the embedding discards no information about the distribution. On a compact domain characteristic follows from universality, obtainable from a Taylor or Fourier expansion with positive coefficients via the Stone–Weierstrass theorem. On \(\mathbb R^d\), a translation-invariant kernel is characteristic if and only if its spectral measure has full support, which holds for the Gaussian kernel but not for the sinc kernel.</p>

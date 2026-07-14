@@ -1,0 +1,528 @@
+<h1>Support Vector Machines</h1>
+
+<p class="lead">
+Kernel ridge regression taught us a recipe: pick a convex loss, add a squared RKHS norm,
+and let the representer theorem collapse the infinite-dimensional problem to a
+finite-dimensional one. This chapter applies the recipe to classification with a loss
+built for margins, the hinge loss, and obtains the support vector machine. The hinge loss
+is not smooth, so the optimization deserves more care than in the ridge case: we
+reformulate the problem as a quadratic program, derive its Lagrangian dual in full, and
+read off from the optimality conditions the single most celebrated property of the SVM,
+that its solution is supported on a small set of training points, the support vectors.
+Along the way we meet the geometric picture of margin maximization, the equivalent
+\(C\)-parameterization used by most software, and the 2-SVM variant obtained from the
+squared hinge loss.
+</p>
+
+<h2 id="hinge-loss-and-large-margin">From margins to the hinge loss</h2>
+
+<p>
+Consider binary classification: training points \(x_1,\dots,x_n \in \mathcal{X}\) with
+labels \(y_1,\dots,y_n \in \{-1,+1\}\), and a real-valued function
+\(f : \mathcal{X} \to \mathbb{R}\) whose sign will be the predicted label. The natural
+quantity to look at is the <em>margin</em> \(y_i f(x_i)\): it is positive when
+\(f\) classifies \(x_i\) correctly, and its size measures how confidently. The 0-1 loss
+\(\mathbf{1}(y f(x) \le 0)\) only asks the margin to be positive, but it is neither convex
+nor continuous, so minimizing it directly is intractable. We therefore replace it by a
+convex surrogate that not only rewards a correct sign but keeps pushing until the margin
+reaches \(1\).
+</p>
+
+<div class="box def"><span class="box-title">Definition (hinge loss)</span>
+The <em>hinge loss</em> is the function \(\varphi_{\text{hinge}} : \mathbb{R} \to \mathbb{R}_+\)
+defined by
+$$
+\varphi_{\text{hinge}}(u) \;=\; \max(1-u,\,0) \;=\;
+\begin{cases}
+0 & \text{if } u \ge 1,\\
+1-u & \text{otherwise.}
+\end{cases}
+$$
+</div>
+
+<p>
+Plotted against the margin \(u = y f(x)\), the hinge loss is a convex, piecewise-linear
+upper bound on the 0-1 loss: it vanishes on \([1,\infty)\) and grows linearly to the left
+of \(1\). A point pays nothing once its margin exceeds \(1\), pays a little when it is
+correctly classified but inside the margin band, and pays proportionally to how far it
+sits on the wrong side. This "flat then linear" shape is exactly what will later make the
+solution sparse.
+</p>
+
+<div class="box def"><span class="box-title">Definition (support vector machine)</span>
+Given a positive definite kernel \(K\) on \(\mathcal{X}\) with RKHS \(\mathcal{H}\), the
+<em>support vector machine</em> (SVM) is the large-margin classifier obtained by solving
+$$
+\min_{f \in \mathcal{H}} \;\left\{ \frac{1}{n} \sum_{i=1}^n
+\varphi_{\text{hinge}}\big(y_i f(x_i)\big) \;+\; \lambda \|f\|_{\mathcal{H}}^2 \right\},
+$$
+and classifying a new point \(x\) by the sign of the minimizer \(\hat f(x)\).
+</div>
+
+<p>
+This is the same regularized empirical risk template we used for kernel ridge regression,
+with the squared loss traded for the hinge loss. The regularization term
+\(\lambda \|f\|_{\mathcal{H}}^2\) controls the smoothness of \(f\), and, as we will see in
+the geometric interpretation below, it is precisely what makes the SVM a
+<em>large-margin</em> classifier.
+</p>
+
+<h2 id="primal-problem">The primal problem</h2>
+
+<h3 id="finite-dimensional-reformulation">Reduction to finite dimension</h3>
+
+<p>
+The objective is the sum of an empirical term depending on \(f\) only through the values
+\(f(x_1),\dots,f(x_n)\) and a strictly increasing function of \(\|f\|_{\mathcal{H}}\), so
+the representer theorem applies: the solution lives in the span of the kernel functions at
+the training points,
+$$
+\hat f(x) \;=\; \sum_{i=1}^n \hat\alpha_i\, K(x_i, x),
+$$
+for some coefficient vector \(\hat\alpha \in \mathbb{R}^n\). Writing
+\(K \in \mathbb{R}^{n\times n}\) for the Gram matrix \(K_{ij} = K(x_i,x_j)\), we have
+\(f(x_i) = [K\alpha]_i\) and \(\|f\|_{\mathcal{H}}^2 = \alpha^\top K \alpha\), so
+\(\hat\alpha\) solves
+$$
+\min_{\alpha \in \mathbb{R}^n} \;\left\{ \frac{1}{n} \sum_{i=1}^n
+\varphi_{\text{hinge}}\big(y_i [K\alpha]_i\big) \;+\; \lambda\, \alpha^\top K \alpha \right\}.
+$$
+This is a convex optimization problem in \(n\) variables. Unlike the ridge case, however,
+the objective is not smooth: the hinge loss has a kink at \(u=1\), so we cannot simply set
+a gradient to zero and solve a linear system.
+</p>
+
+<h3 id="slack-variables">Slack variables and smooth constraints</h3>
+
+<p>
+The standard cure for a piecewise-linear objective is to move the nonsmoothness into
+constraints. Introduce slack variables \(\xi_1,\dots,\xi_n \in \mathbb{R}\), one per
+training point, meant to dominate the individual losses. The problem is equivalent to
+$$
+\min_{\alpha \in \mathbb{R}^n,\; \xi \in \mathbb{R}^n}
+\;\left\{ \frac{1}{n} \sum_{i=1}^n \xi_i \;+\; \lambda\, \alpha^\top K \alpha \right\}
+\qquad \text{subject to} \qquad
+\xi_i \ge \varphi_{\text{hinge}}\big(y_i[K\alpha]_i\big),
+$$
+because at the optimum each \(\xi_i\) is pushed down onto the loss it dominates. The
+objective is now smooth (linear plus quadratic), but the constraints still carry the
+hinge. Fortunately a hinge constraint splits into two linear ones: for any
+\(u, v \in \mathbb{R}\),
+$$
+u \ge \varphi_{\text{hinge}}(v)
+\quad\Longleftrightarrow\quad
+\begin{cases} u \ge 1 - v, \\ u \ge 0. \end{cases}
+$$
+Indeed \(\varphi_{\text{hinge}}(v) = \max(1-v, 0)\), and dominating a maximum of two
+quantities is the same as dominating both. Applying this with \(u = \xi_i\) and
+\(v = y_i[K\alpha]_i\) yields a fully smooth formulation.
+</p>
+
+<div class="box prop"><span class="box-title">Proposition (SVM, primal formulation)</span>
+The SVM solution is \(\hat f(x) = \sum_{i=1}^n \hat\alpha_i K(x_i,x)\), where
+\(\hat\alpha\) solves
+$$
+\min_{\alpha \in \mathbb{R}^n,\; \xi \in \mathbb{R}^n}
+\;\frac{1}{n} \sum_{i=1}^n \xi_i \;+\; \lambda\, \alpha^\top K \alpha,
+$$
+subject to
+$$
+\begin{cases}
+y_i [K\alpha]_i + \xi_i - 1 \ge 0, & \text{for } i = 1,\dots,n,\\
+\xi_i \ge 0, & \text{for } i = 1,\dots,n.
+\end{cases}
+$$
+</div>
+
+<p>
+This is a classical <em>quadratic program</em> (QP): minimization of a convex quadratic
+function under linear inequality constraints. In principle any out-of-the-box optimization
+package can solve it. In practice the problem has \(2n\) variables and \(2n\) constraints,
+where \(n\) is the number of training points, and general-purpose QP solvers start to
+struggle when \(n\) exceeds a few thousand. This is our motivation for deriving the dual:
+the dual is also a QP, but its structure, in particular the sparsity of the final
+solution, leads to much faster specialized algorithms.
+</p>
+
+<h2 id="lagrangian-duality">Lagrangian duality and the dual problem</h2>
+
+<h3 id="lagrangian">The Lagrangian</h3>
+
+<p>
+Duality trades the constrained primal for an unconstrained inner minimization weighted by
+multipliers. Introduce Lagrange multipliers \(\mu \in \mathbb{R}^n\) for the margin
+constraints \(y_i[K\alpha]_i + \xi_i - 1 \ge 0\) and \(\nu \in \mathbb{R}^n\) for the
+positivity constraints \(\xi_i \ge 0\). The Lagrangian of the problem is
+$$
+L(\alpha, \xi, \mu, \nu)
+= \frac{1}{n}\sum_{i=1}^n \xi_i + \lambda\, \alpha^\top K \alpha
+- \sum_{i=1}^n \mu_i \big[ y_i [K\alpha]_i + \xi_i - 1 \big]
+- \sum_{i=1}^n \nu_i \xi_i,
+$$
+or, in matrix notation, writing \(\mathbf{1}\) for the all-ones vector and
+\(\mathrm{diag}(y)\) for the diagonal matrix with the labels on its diagonal,
+$$
+L(\alpha, \xi, \mu, \nu)
+= \frac{\xi^\top \mathbf{1}}{n} + \lambda\, \alpha^\top K \alpha
+- \big(\mathrm{diag}(y)\,\mu\big)^\top K \alpha
+- (\mu + \nu)^\top \xi + \mu^\top \mathbf{1}.
+$$
+The dual function is \(q(\mu,\nu) = \inf_{\alpha,\xi} L(\alpha,\xi,\mu,\nu)\), which we
+now compute by minimizing over \(\alpha\) and \(\xi\) separately, since the Lagrangian
+decouples.
+</p>
+
+<h3 id="minimizing-in-alpha">Minimizing over \(\alpha\)</h3>
+
+<p>
+As a function of \(\alpha\), the Lagrangian is a convex quadratic (the matrix \(K\) is
+positive semidefinite), so it is minimized wherever its gradient vanishes:
+$$
+\nabla_\alpha L
+= 2\lambda K \alpha - K\, \mathrm{diag}(y)\, \mu
+= K \big( 2\lambda \alpha - \mathrm{diag}(y)\,\mu \big).
+$$
+The following choice solves \(\nabla_\alpha L = 0\):
+$$
+\alpha^* = \frac{\mathrm{diag}(y)\,\mu}{2\lambda},
+\qquad\text{that is,}\qquad
+\alpha_i^* = \frac{y_i \mu_i}{2\lambda}.
+$$
+(When \(K\) is singular the stationary point is not unique, but any solution of
+\(\nabla_\alpha L = 0\) attains the same minimal value, so this choice is enough to
+evaluate the infimum.)
+</p>
+
+<h3 id="minimizing-in-xi">Minimizing over \(\xi\)</h3>
+
+<p>
+As a function of \(\xi\), the Lagrangian is linear, with slope
+$$
+\nabla_\xi L = \frac{\mathbf{1}}{n} - \mu - \nu.
+$$
+A linear function has infimum \(-\infty\) unless it is constant, so the minimum over
+\(\xi\) is finite exactly when
+$$
+\mu + \nu = \frac{\mathbf{1}}{n},
+$$
+in which case all the \(\xi\)-terms of the Lagrangian cancel.
+</p>
+
+<h3 id="dual-function">The dual function</h3>
+
+<p>
+Substituting \(\alpha^*\) into the remaining terms, the quadratic part becomes
+$$
+\lambda\, {\alpha^*}^\top K \alpha^* - \big(\mathrm{diag}(y)\mu\big)^\top K \alpha^*
+= \frac{1}{4\lambda}\, \mu^\top \mathrm{diag}(y)\, K\, \mathrm{diag}(y)\, \mu
+- \frac{1}{2\lambda}\, \mu^\top \mathrm{diag}(y)\, K\, \mathrm{diag}(y)\, \mu,
+$$
+and we obtain the Lagrange dual function
+$$
+q(\mu, \nu) = \inf_{\alpha \in \mathbb{R}^n,\, \xi \in \mathbb{R}^n} L(\alpha, \xi, \mu, \nu)
+= \begin{cases}
+\mu^\top \mathbf{1} - \dfrac{1}{4\lambda}\, \mu^\top \mathrm{diag}(y)\, K\, \mathrm{diag}(y)\, \mu
+& \text{if } \mu + \nu = \dfrac{\mathbf{1}}{n},\\[2mm]
+-\infty & \text{otherwise.}
+\end{cases}
+$$
+The dual problem is to maximize \(q(\mu,\nu)\) subject to \(\mu \ge 0\) and
+\(\nu \ge 0\) (the multipliers of inequality constraints must be nonnegative).
+</p>
+
+<h3 id="eliminating-nu">Eliminating \(\nu\)</h3>
+
+<p>
+The variable \(\nu\) only appears through the linkage \(\mu + \nu = \mathbf{1}/n\), so we
+can eliminate it. If \(\mu_i \gt 1/n\) for some \(i\), then no \(\nu_i \ge 0\) satisfies
+\(\mu_i + \nu_i = 1/n\), and \(q(\mu,\nu) = -\infty\) for every admissible \(\nu\); such
+\(\mu\) can be discarded. If instead \(0 \le \mu_i \le 1/n\) for all \(i\), then taking
+\(\nu_i = 1/n - \mu_i \ge 0\) makes the dual function finite, with a value depending on
+\(\mu\) alone. The dual problem is therefore equivalent to
+$$
+\max_{0 \le \mu \le \mathbf{1}/n}\;
+\mu^\top \mathbf{1} - \frac{1}{4\lambda}\, \mu^\top \mathrm{diag}(y)\, K\, \mathrm{diag}(y)\, \mu,
+$$
+or, written out with indices,
+$$
+\max_{0 \le \mu \le \mathbf{1}/n}\;
+\sum_{i=1}^n \mu_i - \frac{1}{4\lambda} \sum_{i,j=1}^n y_i y_j \mu_i \mu_j K(x_i, x_j).
+$$
+</p>
+
+<h3 id="dual-in-alpha">Back to the primal: the dual in terms of \(\alpha\)</h3>
+
+<p>
+Once the dual is solved in \(\mu\), a primal solution is recovered through the stationarity
+relation \(\alpha = \mathrm{diag}(y)\,\mu / 2\lambda\). The link is so simple, and
+invertible since \(y_i^2 = 1\) gives \(\mu_i = 2\lambda\, y_i \alpha_i\), that we may change
+variables directly in the dual and obtain the QP that \(\alpha\) itself must solve. The
+linear term becomes \(\mu^\top \mathbf{1} = 2\lambda \sum_i y_i \alpha_i\), the quadratic
+term becomes \(\lambda\, \alpha^\top K \alpha\), and after dividing by the positive
+constant \(\lambda\) the box constraint \(0 \le \mu_i \le 1/n\) reads
+\(0 \le y_i \alpha_i \le 1/(2\lambda n)\).
+</p>
+
+<div class="box prop"><span class="box-title">Proposition (SVM, dual formulation)</span>
+The coefficient vector \(\hat\alpha\) of the SVM solution
+\(\hat f = \sum_i \hat\alpha_i K(x_i,\cdot)\) solves
+$$
+\max_{\alpha \in \mathbb{R}^n}\;
+2 \sum_{i=1}^n \alpha_i y_i - \sum_{i,j=1}^n \alpha_i \alpha_j K(x_i, x_j)
+\;=\; 2\,\alpha^\top y - \alpha^\top K \alpha,
+$$
+subject to
+$$
+0 \le y_i \alpha_i \le \frac{1}{2\lambda n}, \qquad \text{for } i = 1,\dots,n.
+$$
+</div>
+
+<p>
+Notice what duality has bought us. The dual is a QP in only \(n\) variables (the slacks
+are gone), its constraints are simple box constraints rather than general linear
+inequalities, and, remarkably, the expansion coefficients of \(\hat f\) coincide with the
+dual variables up to the fixed relabeling \(\mu_i = 2\lambda y_i\alpha_i\). Strong duality
+holds here (the primal is a convex QP with feasible points, e.g. \(\alpha = 0\),
+\(\xi = \mathbf{1}\), satisfying the constraints), so solving the dual really does solve
+the SVM.
+</p>
+
+<h2 id="complementary-slackness">Complementary slackness and the KKT conditions</h2>
+
+<p>
+The Karush-Kuhn-Tucker conditions state that at the optimum, each multiplier and its
+constraint cannot both be "active on the wrong side": the product of each multiplier with
+its constraint value vanishes. For our two families of constraints, the complementary
+slackness conditions read, for \(i = 1,\dots,n\),
+$$
+\begin{cases}
+\mu_i \big[ y_i f(x_i) + \xi_i - 1 \big] = 0, \\
+\nu_i\, \xi_i = 0.
+\end{cases}
+$$
+Rewriting with \(\mu_i = 2\lambda y_i \alpha_i\) and \(\nu_i = 1/n - \mu_i\), and dropping
+harmless nonzero factors, this becomes
+$$
+\begin{cases}
+\alpha_i \big[ y_i f(x_i) + \xi_i - 1 \big] = 0, \\[1mm]
+\left( \alpha_i - \dfrac{y_i}{2\lambda n} \right) \xi_i = 0.
+\end{cases}
+$$
+</p>
+
+<h3 id="kkt-analysis">Reading off the three regimes</h3>
+
+<p>
+Combining these two conditions with primal feasibility
+(\(y_i f(x_i) + \xi_i \ge 1\), \(\xi_i \ge 0\)) and the dual box constraint
+\(0 \le y_i\alpha_i \le 1/(2\lambda n)\), every training point falls into one of three
+regimes, indexed by where its coefficient sits in the box.
+</p>
+
+<ul>
+<li>
+<strong>Interior of the flat region, \(\alpha_i = 0\).</strong> Then
+\(\alpha_i - y_i/(2\lambda n) \ne 0\), so the second condition forces \(\xi_i = 0\), and
+feasibility gives \(y_i f(x_i) \ge 1\). The point sits on the correct side, at or beyond
+the margin, and contributes nothing to \(\hat f\).
+</li>
+<li>
+<strong>Strictly inside the box, \(0 \lt y_i \alpha_i \lt \dfrac{1}{2\lambda n}\).</strong>
+Both multipliers \(\mu_i\) and \(\nu_i\) are strictly positive, so both constraints are
+active: \(\xi_i = 0\) and \(y_i f(x_i) + \xi_i - 1 = 0\). Hence \(y_i f(x_i) = 1\): the
+point lies exactly on the margin.
+</li>
+<li>
+<strong>At the upper bound, \(\alpha_i = \dfrac{y_i}{2\lambda n}\).</strong> The second
+condition is void (\(\xi_i \ge 0\) is unconstrained by it), while \(\mu_i \gt 0\) makes the
+first constraint active: \(y_i f(x_i) + \xi_i = 1\) with \(\xi_i \ge 0\), so
+\(y_i f(x_i) \le 1\). The point is on the margin or inside it, possibly misclassified.
+</li>
+</ul>
+
+<h3 id="without-kkt">The same conclusions without KKT</h3>
+
+<p>
+The three regimes can also be derived from first principles, without invoking the KKT
+machinery, by staring at the dual as a box-constrained minimization. Changing sign, the
+dual is equivalent to
+$$
+\min_{\alpha \in \mathbb{R}^n}\; q(\alpha) = \frac{1}{2}\,\alpha^\top K \alpha - \alpha^\top y
+\qquad \text{s.t.} \qquad \forall i,\; 0 \le y_i \alpha_i \le C,
+$$
+with \(C = 1/(2\lambda n)\). Its gradient has the striking form
+$$
+\nabla q(\alpha) = K\alpha - y = \big[ f(x_i) - y_i \big]_{i=1,\dots,n} :
+$$
+the \(i\)-th partial derivative is the residual of the current function at the \(i\)-th
+training point. Now fix a coordinate \(i\), assume \(y_i = 1\) (the case \(y_i = -1\) is
+symmetric), and consider the one-dimensional restriction of \(q\) to \(\alpha_i\) over the
+interval \([0, C]\), a convex parabola. The slides illustrate each case with this parabola
+and the position of the constrained minimizer \(\alpha_i^\star\) on the interval; the
+picture translates into three statements about the sign of the partial derivative at the
+optimum.
+</p>
+
+<ul>
+<li>
+<strong>Case 1: \(0 \lt y_i \alpha_i^\star \lt C\).</strong> The minimizer is interior, so
+the partial derivative vanishes, \([\nabla q(\alpha^\star)]_i = 0\), i.e.
+\(f(x_i) = y_i\), hence \(y_i f(x_i) = 1\).
+</li>
+<li>
+<strong>Case 2: \(y_i \alpha_i^\star = C\).</strong> The minimizer is pushed against the
+upper bound, which can only happen if the parabola is still decreasing there:
+\([\nabla q(\alpha^\star)]_i \le 0\), i.e. \(f(x_i) \le y_i\), hence \(y_i f(x_i) \le 1\).
+</li>
+<li>
+<strong>Case 3: \(\alpha_i^\star = 0\).</strong> The minimizer is pushed against the lower
+bound, so the parabola is nondecreasing there: \([\nabla q(\alpha^\star)]_i \ge 0\), i.e.
+\(f(x_i) \ge y_i\), hence \(y_i f(x_i) \ge 1\).
+</li>
+</ul>
+
+<p>
+This is exactly the KKT trichotomy again, obtained from nothing more than the geometry of
+minimizing a parabola over an interval.
+</p>
+
+<h2 id="geometric-interpretation">Geometric interpretation</h2>
+
+<p>
+The slides accompany this analysis with a sequence of pictures of a two-class point cloud;
+let us reconstruct what they show. Draw the level sets \(f(x) = 0\) (the decision
+boundary) and \(f(x) = +1\), \(f(x) = -1\) (the edges of the <em>margin band</em>). The
+three regimes of the previous section stratify the training set geometrically:
+</p>
+
+<ul>
+<li>points with \(\alpha_i = 0\) lie strictly outside the margin band, on the correct side
+(\(y_i f(x_i) \ge 1\));</li>
+<li>points with \(0 \lt y_i \alpha_i \lt \frac{1}{2\lambda n}\) lie exactly on the edge of
+the band, \(y_i f(x_i) = 1\);</li>
+<li>points with \(y_i \alpha_i = \frac{1}{2\lambda n}\) lie on or inside the band, or on
+the wrong side of the boundary altogether (\(y_i f(x_i) \le 1\)).</li>
+</ul>
+
+<p>
+The picture also explains the name "large-margin classifier". Consider the linear kernel
+on \(\mathbb{R}^d\), so that \(f(x) = \langle w, x \rangle\) with
+\(\|f\|_{\mathcal{H}} = \|w\|\). The two hyperplanes \(f(x) = +1\) and \(f(x) = -1\) are
+parallel, at Euclidean distance \(2 / \|w\|\) from each other. Points incur no hinge loss
+precisely when they lie beyond their side of this band. Minimizing the hinge loss plus
+\(\lambda \|w\|^2\) therefore trades off two desiderata: keep the training points out of
+the band (small loss) while making the band as wide as possible (small \(\|w\|\), i.e.
+large geometric margin \(2/\|w\|\)). In an RKHS the same picture holds with \(f\) in place
+of \(w\): the regularizer \(\|f\|_{\mathcal{H}}^2\) is the inverse squared margin measured
+in the geometry of \(\mathcal{H}\).
+</p>
+
+<h2 id="support-vectors">Support vectors</h2>
+
+<div class="box def"><span class="box-title">Definition (support vectors)</span>
+The training points with \(\alpha_i \ne 0\) are called the <em>support vectors</em> of the
+SVM.
+</div>
+
+<p>
+The KKT analysis shows that support vectors are exactly the points that touch or violate
+the margin: those on the margin edge (interior coefficients) and those inside or beyond it
+(coefficients at the bound). All the comfortably classified points, the ones the parabola
+argument parks at \(\alpha_i = 0\), simply disappear from the model. Only support vectors
+matter for classifying new points:
+$$
+\forall x \in \mathcal{X}, \qquad
+f(x) = \sum_{i=1}^n \alpha_i K(x_i, x) = \sum_{i \in \mathrm{SV}} \alpha_i K(x_i, x),
+$$
+where \(\mathrm{SV}\) denotes the set of support vectors. Two practical consequences
+follow.
+</p>
+
+<ul>
+<li>
+<strong>Fast training.</strong> The solution is sparse in \(\alpha\). Decomposition
+methods exploit this by optimizing over small working sets of coordinates at a time,
+which is what makes SVM solvers scale far beyond what a generic \(2n\)-dimensional QP
+solver on the primal could handle.
+</li>
+<li>
+<strong>Fast prediction.</strong> Classifying a new point requires kernel evaluations
+against the support vectors only, not against the whole training set.
+</li>
+</ul>
+
+<p>
+Note where the sparsity comes from: the flat part of the hinge loss. A loss that is
+strictly curved everywhere, like the squared loss of ridge regression, gives every
+training point a nonzero coefficient; the hinge loss lets well-classified points drop out
+exactly.
+</p>
+
+<h2 id="practical-remarks">Practical remarks and variants</h2>
+
+<h3 id="c-svm">The \(C\)-SVM parameterization</h3>
+
+<div class="box rmk"><span class="box-title">Remark (\(C\)-SVM)</span>
+The SVM optimization problem is often written in terms of a regularization parameter
+\(C\) instead of \(\lambda\), as
+$$
+\arg\min_{f \in \mathcal{H}}\;
+\frac{1}{2} \|f\|_{\mathcal{H}}^2 + C \sum_{i=1}^n L_{\text{hinge}}\big(f(x_i), y_i\big).
+$$
+This is equivalent to our formulation with
+$$
+C = \frac{1}{2 n \lambda}.
+$$
+The dual problem then reads
+$$
+\max_{\alpha \in \mathbb{R}^n}\;
+2 \sum_{i=1}^n \alpha_i y_i - \sum_{i,j=1}^n \alpha_i \alpha_j K(x_i, x_j),
+\qquad \text{subject to} \quad
+0 \le y_i \alpha_i \le C, \quad i = 1,\dots,n.
+$$
+This formulation is often called the <em>\(C\)-SVM</em>; it is the convention used by most
+software packages. Large \(C\) means weak regularization (a hard, narrow margin), small
+\(C\) means strong regularization (a soft, wide margin).
+</div>
+
+<h3 id="two-svm">The 2-SVM</h3>
+
+<div class="box rmk"><span class="box-title">Remark (2-SVM)</span>
+A variant of the SVM, sometimes called the <em>2-SVM</em>, is obtained by replacing the
+hinge loss by the <em>squared</em> hinge loss:
+$$
+\min_{f \in \mathcal{H}} \;\left\{ \frac{1}{n} \sum_{i=1}^n
+\varphi_{\text{hinge}}\big(y_i f(x_i)\big)^2 \;+\; \lambda \|f\|_{\mathcal{H}}^2 \right\}.
+$$
+After some computation (following the same slack-variable and Lagrangian steps as above,
+and left as an exercise in the course), the dual problem of the 2-SVM turns out to be
+$$
+\max_{\alpha \in \mathbb{R}^n}\;
+2\, \alpha^\top y - \alpha^\top (K + n\lambda I)\, \alpha,
+\qquad \text{subject to} \quad
+0 \le y_i \alpha_i, \quad i = 1,\dots,n.
+$$
+This is exactly the dual of the ordinary SVM run with the modified kernel
+\(K + n\lambda I\) and \(C = +\infty\): squaring the hinge removes the upper box
+constraint and shifts the kernel by a ridge on the diagonal. The 2-SVM thus stays inside
+the same algorithmic family, at the cost of losing some sparsity, since the quadratic
+growth of the loss softens the flat region that produced exact zeros.
+</div>
+
+<h2 id="summary">Summary</h2>
+
+<p>
+The support vector machine is regularized empirical risk minimization in an RKHS with the
+hinge loss. The representer theorem reduces it to a convex but nonsmooth problem in
+\(\mathbb{R}^n\); slack variables turn it into a QP with \(2n\) variables; Lagrangian
+duality compresses it back to a box-constrained QP in \(n\) variables whose solution
+coincides, after the relabeling \(\mu_i = 2\lambda y_i \alpha_i\), with the expansion
+coefficients of \(\hat f\). Complementary slackness, or equivalently an elementary
+parabola-on-an-interval argument, sorts the training points into three regimes:
+\(\alpha_i = 0\) off the margin, coefficients strictly inside the box exactly on the
+margin, and coefficients at the bound on or beyond it. The nonzero-coefficient points, the
+support vectors, are all the machine remembers, which is what makes both training and
+prediction fast. The \(C\)-SVM is the same machine reparameterized with
+\(C = 1/(2n\lambda)\), and the 2-SVM, built on the squared hinge, is again the same
+machine with kernel \(K + n\lambda I\) and \(C = +\infty\).
+</p>

@@ -1,0 +1,56 @@
+{
+  "title": "Machine Learning with Kernel Methods",
+  "subtitle": "A book-form companion to the Mairal–Vert course",
+  "source": "Based on the lecture slides of Julien Mairal and Jean-Philippe Vert, \"Machine Learning with Kernel Methods\" (kernel-learning.github.io). All results and their attributions follow the course; the prose explanations are this book's.",
+  "parts": [
+    {
+      "part": "I · Foundations",
+      "chapters": [
+        {"src": "ch01", "slug": "kernels-and-rkhs", "title": "Positive Definite Kernels and RKHS"},
+        {"src": "ch02", "slug": "kernel-tricks", "title": "The Kernel Trick"}
+      ]
+    },
+    {
+      "part": "II · Supervised Learning",
+      "chapters": [
+        {"src": "ch03", "slug": "kernel-ridge-and-friends", "title": "Kernel Ridge Regression and Smooth Losses"},
+        {"src": "ch04", "slug": "learning-theory", "title": "Learning Theory in RKHS Balls"},
+        {"src": "ch05", "slug": "support-vector-machines", "title": "Support Vector Machines"}
+      ]
+    },
+    {
+      "part": "III · Unsupervised Learning",
+      "chapters": [
+        {"src": "ch06", "slug": "unsupervised-kernel-methods", "title": "Kernel PCA, Clustering, and CCA"}
+      ]
+    },
+    {
+      "part": "IV · The Theory of the Space",
+      "chapters": [
+        {"src": "ch07", "slug": "mercer-and-rates", "title": "Mercer's Theorem, Spectra, and Rates"}
+      ]
+    },
+    {
+      "part": "V · The Kernel Jungle",
+      "chapters": [
+        {"src": "ch08", "slug": "kernel-families", "title": "Translation-Invariant, Semigroup, and Probabilistic Kernels"},
+        {"src": "ch09", "slug": "string-kernels", "title": "Kernels for Sequences"},
+        {"src": "ch10", "slug": "graph-kernels", "title": "Kernels for and on Graphs"}
+      ]
+    },
+    {
+      "part": "VI · Distributions",
+      "chapters": [
+        {"src": "ch11", "slug": "kernel-mean-embeddings", "title": "Mean Embeddings, MMD, and Characteristic Kernels"}
+      ]
+    },
+    {
+      "part": "VII · Frontiers",
+      "chapters": [
+        {"src": "ch12", "slug": "multiple-kernel-learning", "title": "Multiple Kernel Learning"},
+        {"src": "ch13", "slug": "large-scale-kernels", "title": "Large-Scale Kernel Machines"},
+        {"src": "ch14", "slug": "kernels-and-deep-learning", "title": "Deep Learning from a Kernel Point of View"}
+      ]
+    }
+  ]
+}

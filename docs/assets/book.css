@@ -1,0 +1,148 @@
+/* Kernel Methods, the book: shared stylesheet. Serif reading column, fixed
+   sidebar TOC on wide screens, boxed environments for the mathematical
+   apparatus (definition, theorem, proof, example, remark). */
+:root {
+  --paper: #fffdf8;
+  --ink: #1e2126;
+  --muted: #5c636e;
+  --faint: #9aa1ab;
+  --rule: #e4ded2;
+  --accent: #8a4c1f;
+  --accent-soft: #f4e8da;
+  --def: #2f6f4f;
+  --thm: #8a4c1f;
+  --proof: #5c636e;
+  --ex: #3f6c9e;
+  --rmk: #7a5a9e;
+  --code-bg: #f4f1e9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14161a;
+    --ink: #e6e2d8;
+    --muted: #a7ada9;
+    --faint: #6d7378;
+    --rule: #2c2f35;
+    --accent: #d99a5b;
+    --accent-soft: #26211a;
+    --def: #7fc39e;
+    --thm: #d99a5b;
+    --proof: #a7ada9;
+    --ex: #8ab4dd;
+    --rmk: #b79ad9;
+    --code-bg: #1d2025;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.72 "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  text-rendering: optimizeLegibility;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* layout: sidebar + column */
+.book { display: flex; min-height: 100vh; }
+nav.toc {
+  width: 300px; flex: 0 0 300px;
+  border-right: 1px solid var(--rule);
+  padding: 26px 22px 60px;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px; line-height: 1.5;
+}
+nav.toc .booktitle { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+nav.toc .bookmeta { color: var(--faint); font-size: 11.5px; margin-bottom: 18px; }
+nav.toc .part { color: var(--faint); text-transform: uppercase; letter-spacing: .06em; font-size: 10.5px; margin: 16px 0 4px; }
+nav.toc a { display: block; color: var(--muted); padding: 2.5px 0; }
+nav.toc a.here { color: var(--accent); font-weight: 600; }
+main {
+  flex: 1; min-width: 0;
+  padding: 48px 34px 90px;
+}
+.page { max-width: 46rem; margin: 0 auto; }
+@media (max-width: 900px) {
+  .book { display: block; }
+  nav.toc { position: static; width: auto; height: auto; border-right: none; border-bottom: 1px solid var(--rule); }
+}
+
+/* typography */
+h1 { font-size: 2.0rem; line-height: 1.2; margin: 0 0 .3em; letter-spacing: -0.01em; }
+h1 .chno { display: block; font-family: ui-sans-serif, system-ui, sans-serif; font-size: .82rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+h2 { font-size: 1.42rem; margin: 2.2em 0 .5em; line-height: 1.25; }
+h3 { font-size: 1.12rem; margin: 1.8em 0 .4em; }
+h2, h3 { scroll-margin-top: 20px; }
+p { margin: 0 0 1.05em; }
+.lead { font-size: 1.06rem; color: var(--muted); }
+hr { border: none; border-top: 1px solid var(--rule); margin: 2.4em 0; }
+figure { margin: 1.6em 0; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: .5em; }
+ul, ol { padding-left: 1.4em; }
+li { margin: .25em 0; }
+strong { font-weight: 650; }
+
+/* boxed environments */
+.box {
+  margin: 1.5em 0; padding: 14px 18px 12px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--muted);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--paper) 92%, var(--muted) 8%);
+}
+.box > :last-child { margin-bottom: 0; }
+.box-title {
+  display: block;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: .78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  margin-bottom: .45em;
+}
+.box.def { border-left-color: var(--def); } .box.def .box-title { color: var(--def); }
+.box.thm, .box.lem, .box.prop, .box.cor { border-left-color: var(--thm); }
+.box.thm .box-title, .box.lem .box-title, .box.prop .box-title, .box.cor .box-title { color: var(--thm); }
+.box.ex { border-left-color: var(--ex); } .box.ex .box-title { color: var(--ex); }
+.box.rmk { border-left-color: var(--rmk); } .box.rmk .box-title { color: var(--rmk); }
+.box.proof { border-left-color: var(--proof); background: transparent; }
+.box.proof .box-title { color: var(--proof); }
+.box.proof .qed { float: right; }
+
+details.proof-details summary {
+  cursor: pointer;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: .82rem; color: var(--muted);
+}
+
+/* code */
+code { font: .84em/1.5 ui-monospace, "SF Mono", Menlo, monospace; background: var(--code-bg); padding: .1em .35em; border-radius: 4px; }
+pre { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+
+/* math display scroll on small screens */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+/* tables */
+table { border-collapse: collapse; margin: 1.4em 0; font-size: .92em; width: 100%; }
+th, td { border: 1px solid var(--rule); padding: 7px 11px; text-align: left; vertical-align: top; }
+th { font-family: ui-sans-serif, system-ui, sans-serif; font-size: .8em; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--accent-soft); }
+
+/* chapter navigation footer */
+.chnav {
+  display: flex; justify-content: space-between; gap: 14px;
+  margin-top: 4em; padding-top: 1.4em; border-top: 1px solid var(--rule);
+  font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px;
+}
+.chnav a { max-width: 46%; }
+.chnav .dir { display: block; font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .07em; }
+
+/* cover page */
+.cover h1 { font-size: 2.6rem; margin-top: .4em; }
+.cover .subtitle { font-size: 1.15rem; color: var(--muted); margin-bottom: 2em; }
+.cover .attribution { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 6px; padding: 12px 18px; font-size: .92rem; color: var(--muted); }
+.cover ol.contents { list-style: none; padding: 0; }
+.cover ol.contents .part { margin: 1.6em 0 .4em; font-family: ui-sans-serif, system-ui, sans-serif; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); }
+.cover ol.contents li { margin: .3em 0; }
+.cover ol.contents .n { display: inline-block; width: 2.2em; color: var(--faint); font-variant-numeric: tabular-nums; }

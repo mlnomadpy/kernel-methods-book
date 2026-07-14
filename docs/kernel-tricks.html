@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Kernel Trick · Machine Learning with Kernel Methods</title>
+<meta name="description" content="The Kernel Trick, from Machine Learning with Kernel Methods.">
+<link rel="stylesheet" href="assets/book.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],throwOnError:false});"></script>
+
+</head>
+<body>
+<div class="book">
+<nav class="toc">
+<div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
+<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
+<div class="part">I · Foundations</div>
+<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html" class="here">2. The Kernel Trick</a>
+<div class="part">II · Supervised Learning</div>
+<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
+<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<a href="support-vector-machines.html">5. Support Vector Machines</a>
+<div class="part">III · Unsupervised Learning</div>
+<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Theory of the Space</div>
+<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · The Kernel Jungle</div>
+<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">9. Kernels for Sequences</a>
+<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
+<div class="part">VI · Distributions</div>
+<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Frontiers</div>
+<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
+<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+</nav>
+<main><div class="page">
+<h1><span class="chno">Chapter 2 · I · Foundations</span>The Kernel Trick</h1>
+
+<p class="lead">Chapter 1 built the theory: positive definite kernels are exactly inner products after an embedding \(\Phi : \mathcal{X} \to \mathcal{H}\), and each kernel carries its own function space, the RKHS. This chapter turns that theory into a way of computing. Two results do all the work. The <em>kernel trick</em> says that any algorithm which touches its data only through pairwise inner products can be run, unchanged, in the feature space of any p.d. kernel, even an infinite-dimensional one. The <em>representer theorem</em> says that a large class of learning problems posed over the entire RKHS actually have their solutions in an \(n\)-dimensional subspace spanned by the training points. Together they explain how kernel methods can be simultaneously nonlinear, nonparametric, and computationally concrete, and they give a general recipe, used throughout the rest of the book, for turning a linear algorithm into a kernel method.</p>
+
+<h2 id="motivation-from-supervised-learning">Why map data to a Hilbert space?</h2>
+
+<p>Before stating the trick, it helps to recall the kind of problem it is designed for. In supervised learning we want a prediction function \(f : \mathcal{X} \to \mathcal{Y}\), given labeled training data \((x_i, y_i)_{i=1,\dots,n}\) with \(x_i \in \mathcal{X}\) and \(y_i \in \mathcal{Y}\). The dominant template, going back to Vapnik (1995), is regularized empirical risk minimization:</p>
+
+$$
+\min_{f \in \mathcal{F}} \; \underbrace{\frac{1}{n} \sum_{i=1}^{n} L\big(y_i, f(x_i)\big)}_{\text{empirical risk, data fit}} \; + \; \underbrace{\lambda\, \Omega(f)}_{\text{regularization}} .
+$$
+
+<p>The first term asks \(f\) to fit the data; the second penalizes complexity so that \(f\) also behaves sensibly away from the data. The output set \(\mathcal{Y}\) determines the flavor of the problem: \(y_i \in \{-1, +1\}\) for binary classification, \(y_i \in \{1, \dots, K\}\) for multi-class classification, \(y_i \in \mathbb{R}\) for regression, and \(y_i \in \mathbb{R}^k\) for multivariate regression.</p>
+
+<p>The most familiar instance is the linear model, as in logistic regression: one assumes a linear relation between \(y\) and features \(x \in \mathbb{R}^p\), takes \(f(x) = w^\top x + b\) parametrized by \((w, b) \in \mathbb{R}^{p+1}\), chooses \(L\) to be a convex loss, and takes \(\Omega(f)\) to be the squared \(\ell_2\)-norm \(\lVert w \rVert^2\). Linear models are easy to fit and easy to regularize, but they are limited twice over: they only express linear relationships, and they only apply when \(\mathcal{X}\) is a vector space in the first place.</p>
+
+<p>Kernel methods remove both limitations at once by moving the problem into the RKHS. We map the data into a Hilbert space and work with linear forms there:</p>
+
+$$
+\Phi : \mathcal{X} \to \mathcal{H}, \qquad f(x) = \langle \Phi(x), f \rangle_{\mathcal{H}},
+$$
+
+<p>and we solve the learning problem over the RKHS, with the RKHS norm as the regularizer:</p>
+
+$$
+\min_{f \in \mathcal{H}} \; \frac{1}{n} \sum_{i=1}^{n} L\big(y_i, f(x_i)\big) + \lambda \lVert f \rVert_{\mathcal{H}}^2 .
+$$
+
+<p>The picture to keep in mind is the one from the course slides: a cloud of raw objects \(x\) in \(\mathcal{X}\), which may have no useful geometry of its own, sent by \(\varphi\) into a Hilbert space \(\mathcal{H}\) where each image \(\Phi(x)\) is a point in an honest vector space and predictors are simply inner products against a fixed vector \(f\).</p>
+
+<h3 id="two-purposes-of-the-embedding">Two purposes of the embedding</h3>
+
+<p>Why is this a good idea? There are two distinct motivations, and it is worth keeping them separate.</p>
+
+<p><strong>First purpose: gain a geometry.</strong> Embedding data in a vector space gives access to the entire toolbox of Euclidean and Hilbertian geometry: angle computation, projection onto linear subspaces, definition of barycenters, and so on. It lets us learn potentially rich, infinite-dimensional models, and it makes regularization natural and theoretically grounded, since \(\lVert f \rVert_{\mathcal{H}}\) measures the smoothness of the predictor. Crucially, the principle is generic: it assumes nothing about the nature of the set \(\mathcal{X}\), which may consist of vectors, sets, graphs, or sequences. Any set carrying a p.d. kernel inherits this geometry.</p>
+
+<p><strong>Second purpose: fix a geometry you do not like.</strong> Even when \(\mathcal{X} = \mathbb{R}^p\) already is a vector space, its Euclidean structure may be the wrong one for the task. We can then lift the data to a higher-dimensional space with nicer properties, such as linear separability or a clearer clustering structure. The classic two-dimensional illustration: data \((x_1, x_2)\) that are separated by a circle of radius \(R\) in the plane, hence not linearly separable there, become linearly separable after the map \((x_1, x_2) \mapsto (x_1^2, x_2^2)\), because the circle \(x_1^2 + x_2^2 = R^2\) turns into a straight line in the new coordinates. The linear form \(f(x) = \langle \Phi(x), f \rangle_{\mathcal{H}}\) in \(\mathcal{H}\) then corresponds to a nonlinear model back in \(\mathcal{X}\).</p>
+
+<p>All of this raises an obvious objection: the feature space may be huge, even infinite-dimensional, so how could we ever compute in it? Two theoretical results underpin the family of algorithms known collectively as kernel methods and answer this objection. The kernel trick rests on the representation of p.d. kernels as inner products; the representer theorem rests on properties of the regularization functional defined by the RKHS norm. We take them in turn.</p>
+
+<h2 id="the-kernel-trick">The kernel trick</h2>
+
+<p>The first result is almost embarrassingly simple to state and prove, which should not distract from how much it changes in practice.</p>
+
+<div class="box prop"><span class="box-title">Proposition (the kernel trick)</span>
+<p>Any algorithm to process finite-dimensional vectors that can be expressed only in terms of pairwise inner products can be applied to potentially infinite-dimensional vectors in the feature space of a p.d. kernel, by replacing each inner product evaluation by a kernel evaluation.</p>
+</div>
+
+<p>The proof is trivial, because the kernel <em>is</em> exactly the inner product in the feature space: by the Aronszajn (1950) theorem of Chapter 1, \(K(x, x') = \langle \Phi(x), \Phi(x') \rangle_{\mathcal{H}}\). If an algorithm never looks at coordinates of its input vectors and only ever asks for inner products between pairs of them, then feeding it the values \(K(x_i, x_j)\) is indistinguishable, from the algorithm's point of view, from running it on the vectors \(\Phi(x_1), \dots, \Phi(x_n)\) themselves.</p>
+
+<p>Despite its triviality, the trick has huge practical applications, and one conceptual consequence worth stating explicitly: vectors in the feature space are only ever manipulated <em>implicitly</em>, through pairwise inner products. We never write down \(\Phi(x)\), we never need to, and in many cases we could not even if we wanted to. The rest of this section makes this concrete through three worked examples: computing distances, comparing a point to a set, and centering data, all in the feature space, all without ever leaving the world of kernel evaluations.</p>
+
+<h3 id="distances-in-the-feature-space">Example 1: distances in the feature space</h3>
+
+<p>The most basic geometric quantity is the distance between the images of two points \(x_1, x_2 \in \mathcal{X}\). Expanding the squared norm through the inner product:</p>
+
+$$
+\begin{aligned}
+d_K(x_1, x_2)^2 &= \lVert \Phi(x_1) - \Phi(x_2) \rVert_{\mathcal{H}}^2 \\
+&= \big\langle \Phi(x_1) - \Phi(x_2),\, \Phi(x_1) - \Phi(x_2) \big\rangle_{\mathcal{H}} \\
+&= \langle \Phi(x_1), \Phi(x_1) \rangle_{\mathcal{H}} + \langle \Phi(x_2), \Phi(x_2) \rangle_{\mathcal{H}} - 2 \langle \Phi(x_1), \Phi(x_2) \rangle_{\mathcal{H}},
+\end{aligned}
+$$
+
+<p>and every term on the right is a kernel evaluation:</p>
+
+$$
+d_K(x_1, x_2)^2 = K(x_1, x_1) + K(x_2, x_2) - 2\, K(x_1, x_2).
+$$
+
+<p>So every p.d. kernel on \(\mathcal{X}\) induces a distance on \(\mathcal{X}\), computable from three kernel values, whatever \(\mathcal{X}\) is and however large \(\mathcal{H}\) is.</p>
+
+<div class="box ex"><span class="box-title">Example (distance for the Gaussian kernel)</span>
+<p>Take the Gaussian kernel with bandwidth \(\sigma\) on \(\mathbb{R}^d\):</p>
+$$
+K(x, y) = e^{-\frac{\lVert x - y \rVert^2}{2\sigma^2}}.
+$$
+<p>Since \(K(x, x) = 1 = \lVert \Phi(x) \rVert_{\mathcal{H}}^2\) for every \(x\), all points are mapped onto the unit sphere of the feature space. The distance between the images of two points \(x\) and \(y\) is</p>
+$$
+d_K(x, y) = \sqrt{2 \left( 1 - e^{-\frac{\lVert x - y \rVert^2}{2\sigma^2}} \right)}.
+$$
+<p>As a function of the Euclidean distance \(\lVert x - y \rVert\), this grows from \(0\), is approximately proportional to \(\lVert x - y \rVert / \sigma\) for nearby points, and saturates at \(\sqrt{2}\) as the points move far apart: beyond a few bandwidths, all pairs look maximally dissimilar. The bandwidth \(\sigma\) sets the scale at which the feature-space geometry stops resolving distances in the input space.</p>
+</div>
+
+<h3 id="distance-between-a-point-and-a-set">Example 2: distance between a point and a set</h3>
+
+<p>Distances between single points are only the beginning; the feature space also contains objects that have no counterpart in \(\mathcal{X}\) at all. Here is a natural problem. Let \(S = (x_1, \dots, x_n)\) be a finite set of points in \(\mathcal{X}\). How can we define, and compute, the similarity between an arbitrary point \(x \in \mathcal{X}\) and the set \(S\)?</p>
+
+<p>A solution: map all points to the feature space, summarize \(S\) by the barycenter of its images,</p>
+
+$$
+\mu := \frac{1}{n} \sum_{i=1}^{n} \Phi(x_i),
+$$
+
+<p>and define the distance between \(x\) and \(S\) as the feature-space distance to that barycenter:</p>
+
+$$
+d_K(x, S) := \lVert \Phi(x) - \mu \rVert_{\mathcal{H}}.
+$$
+
+<p>Expanding the squared norm exactly as before, every cross term is again an inner product between feature vectors, hence a kernel value:</p>
+
+$$
+d_K(x, S) = \left\lVert \Phi(x) - \frac{1}{n} \sum_{i=1}^{n} \Phi(x_i) \right\rVert_{\mathcal{H}}
+= \sqrt{\, K(x, x) - \frac{2}{n} \sum_{i=1}^{n} K(x, x_i) + \frac{1}{n^2} \sum_{i=1}^{n} \sum_{j=1}^{n} K(x_i, x_j) \,}.
+$$
+
+<div class="box rmk"><span class="box-title">Remark (no pre-image)</span>
+<p>The barycenter \(\mu\) exists only in the feature space in general: it need not have a <em>pre-image</em>, that is, a point \(x_\mu \in \mathcal{X}\) such that \(\Phi(x_\mu) = \mu\). The images \(\Phi(x)\) of input points typically form a thin, curved subset of \(\mathcal{H}\) (for the Gaussian kernel, a subset of the unit sphere), and averages of points on that subset fall off it. This is the first instance of a recurring theme: the kernel trick lets us compute with feature-space objects, like \(\mu\), that we could never write down as elements of \(\mathcal{X}\), because everything we ever ask about them reduces to kernel evaluations.</p>
+</div>
+
+<h3 id="illustrations-in-one-and-two-dimensions">What the choice of kernel does: illustrations</h3>
+
+<p>The formula for \(d_K(x, S)\) is the same for every kernel; the geometry it induces is not. The course illustrates this by fixing a small set \(S\) and plotting \(f(x) = d_K(x, S)\) for several kernels.</p>
+
+<p><strong>One dimension.</strong> Take \(S = \{2, 3\}\) on the real line and plot \(x \mapsto d_K(x, S)\) on \([0, 5]\) for three kernels: the linear kernel \(K(x, y) = xy\), and the Gaussian kernel \(K(x, y) = e^{-(x - y)^2 / (2\sigma^2)}\) with \(\sigma = 1\) and with \(\sigma = 0.2\).</p>
+
+<ul>
+<li>For the linear kernel, the feature space is \(\mathcal{H} = \mathbb{R}\) itself, the barycenter has the pre-image \(\mu = 2.5\), and the distance is simply \(d_K(x, S) = \lvert x - \mu \rvert\): a V-shaped curve with its minimum at the ordinary mean of \(S\). Nothing nonlinear has happened.</li>
+<li>For the Gaussian kernel, since \(K(x,x) = 1\), the formula collapses to
+$$ d_K(x, S) = \sqrt{\, C - \frac{2}{n} \sum_{i=1}^{n} K(x_i, x) \,}, $$
+where \(C = 1 + \frac{1}{n^2} \sum_{i,j} K(x_i, x_j)\) does not depend on \(x\). The distance is therefore a constant minus a sum of Gaussian bumps centered at the points of \(S\). With \(\sigma = 1\) the two bumps merge and the curve has a single smooth dip spanning the whole set. With \(\sigma = 0.2\) the curve is essentially flat at its saturation value except for two sharp dips, one at \(x = 2\) and one at \(x = 3\): the kernel now resolves the individual points rather than the set as a whole.</li>
+</ul>
+
+<p><strong>Two dimensions.</strong> The same experiment with \(S = \{(1,1)', (1,2)', (2,2)'\}\) in the plane shows the level sets of \(x \mapsto d_K(x, S)\). For the linear kernel they are the level sets of the distance to the barycenter computed in \(\mathbb{R}^2\). For the Gaussian kernel with \(\sigma = 1\) they form a single smooth basin around the cloud, and with \(\sigma = 0.2\) the basin fragments into three local wells, one around each point of \(S\). As before, the barycenter \(\mu\) in \(\mathcal{H}\), a single point in the feature space, may carry a lot of information about the training data: with a Gaussian kernel, distance to \(\mu\) behaves like a density model of the set.</p>
+
+<p><strong>A basic application to discrimination.</strong> The point-to-set distance immediately yields a classifier. Take two labeled sets \(S_1 = \{(1,1)', (1,2)'\}\) and \(S_2 = \{(1,3)', (2,2)'\}\) and score a new point by</p>
+
+$$
+f(x) = d_K(x, S_1)^2 - d_K(x, S_2)^2,
+$$
+
+<p>assigning \(x\) to the class whose set is nearer in the feature space. With the linear kernel the terms \(K(x,x)\) cancel and \(f\) is an affine function of \(x\): the decision boundary is a straight line, the perpendicular bisector geometry of the two barycenters. With the Gaussian kernel at \(\sigma = 1\) the boundary bends to follow the shape of the two clouds, and at \(\sigma = 0.2\) the classifier becomes local, carving out neighborhoods around individual training points. One formula, three classifiers; the kernel is where the modeling happens.</p>
+
+<h3 id="centering-in-the-feature-space">Example 3: centering data in the feature space</h3>
+
+<p>Many classical data-analysis procedures, principal component analysis first among them, begin with the instruction "center the data". Our third example shows that this too survives the move to an implicit feature space.</p>
+
+<div class="box def"><span class="box-title">Problem (centered Gram matrix)</span>
+<p>Let \(S = (x_1, \dots, x_n)\) be a finite set of points in \(\mathcal{X}\) endowed with a p.d. kernel \(K\), and let \(\mathbf{K}\) be their \(n \times n\) Gram matrix, \([\mathbf{K}]_{ij} = K(x_i, x_j)\). Let \(\mu = \frac{1}{n} \sum_{i=1}^{n} \Phi(x_i)\) be the barycenter, and let \(u_i = \Phi(x_i) - \mu\), for \(i = 1, \dots, n\), be the centered data in \(\mathcal{H}\). How can we compute the centered Gram matrix \([\mathbf{K}^c]_{ij} = \langle u_i, u_j \rangle_{\mathcal{H}}\)?</p>
+</div>
+
+<p>We cannot form the vectors \(u_i\) explicitly, but their pairwise inner products expand into kernel evaluations. A direct computation gives, for \(1 \le i, j \le n\):</p>
+
+$$
+\begin{aligned}
+\mathbf{K}^c_{ij} &= \langle \Phi(x_i) - \mu,\, \Phi(x_j) - \mu \rangle_{\mathcal{H}} \\
+&= \langle \Phi(x_i), \Phi(x_j) \rangle_{\mathcal{H}} - \langle \mu,\, \Phi(x_i) + \Phi(x_j) \rangle_{\mathcal{H}} + \langle \mu, \mu \rangle_{\mathcal{H}} \\
+&= \mathbf{K}_{ij} - \frac{1}{n} \sum_{k=1}^{n} \big( \mathbf{K}_{ik} + \mathbf{K}_{jk} \big) + \frac{1}{n^2} \sum_{k,l=1}^{n} \mathbf{K}_{kl}.
+\end{aligned}
+$$
+
+<p>Each entry subtracts the corresponding row and column means and adds back the grand mean. This can be rewritten in matrix form: with \(U\) the \(n \times n\) matrix whose entries are all \(U_{ij} = 1/n\),</p>
+
+$$
+\mathbf{K}^c = \mathbf{K} - U\mathbf{K} - \mathbf{K}U + U\mathbf{K}U = (I - U)\, \mathbf{K}\, (I - U).
+$$
+
+<p>Centering in the feature space is thus a fixed, data-independent linear operation on the Gram matrix. We will use this formula verbatim when we kernelize PCA later in the book.</p>
+
+<h3 id="kernel-trick-summary">Summary: three ways to use the trick</h3>
+
+<p>The kernel trick is a trivial statement with important applications, and the examples above illustrate its three main uses.</p>
+
+<ul>
+<li>It can be used to obtain <strong>nonlinear versions of well-known linear algorithms</strong>, for instance by replacing the classical inner product with a Gaussian kernel, as the discrimination example showed.</li>
+<li>It can be used to apply classical algorithms to <strong>non-vectorial data</strong> such as strings or graphs, by again replacing the classical inner product with a valid kernel for that data type. The formulas for \(d_K\), for \(d_K(x, S)\), and for \(\mathbf{K}^c\) never used anything about \(\mathcal{X}\).</li>
+<li>It allows us in some cases to <strong>embed the initial space into a larger feature space and manipulate points that have no pre-image</strong>, the barycenter \(\mu\) being the standard example.</li>
+</ul>
+
+<h3 id="structured-inputs-and-outputs">Structured inputs and outputs</h3>
+
+<p>The second and third uses deserve emphasis, because they extend beyond exotic inputs to exotic <em>outputs</em>. Nothing in the framework requires the prediction targets to be numbers or class labels: since a kernel can be defined on any set, it can in particular be defined on a set of input-output <em>pairs</em>.</p>
+
+<p>The course's running illustration is machine translation, say from Japanese to French. Here an input \(x\) is a Japanese sentence and the desired output \(y\) is a French sentence: both spaces are discrete, combinatorially huge, and nothing like \(\mathbb{R}^p\). The kernel approach is to define a p.d. kernel \(K\) on the product set \(\mathcal{X} \times \mathcal{Y}\) of sentence pairs, for example built from string kernels that measure shared subsequences, and to learn a real-valued compatibility function \(g(x, y) = \langle \Phi(x, y), g \rangle_{\mathcal{H}}\) that scores how well the candidate translation \(y\) matches the source sentence \(x\). Training fits \(g\) so that correct pairs from a bilingual corpus score higher than incorrect ones, and prediction returns the highest-scoring output,</p>
+
+$$
+\hat{y}(x) = \arg\max_{y \in \mathcal{Y}} \; g(x, y).
+$$
+
+<p>Learning the scoring function is a kernel method like any other: the algorithm only ever touches sentence pairs through kernel evaluations. The structured nature of the problem is absorbed entirely by the kernel on pairs, plus a search procedure for the \(\arg\max\). This pattern, kernels on \(\mathcal{X} \times \mathcal{Y}\) for structured output prediction, will return when we discuss the kernel jungle; for now it stands as the clearest demonstration that "data" in the kernel trick means any set we can measure similarity on, on either side of the prediction.</p>
+
+<h2 id="the-representer-theorem">The representer theorem</h2>
+
+<p>The kernel trick handles algorithms already phrased in terms of inner products. But our motivating problem was an optimization over a function space:</p>
+
+$$
+\min_{f \in \mathcal{H}} \; \underbrace{\frac{1}{n} \sum_{i=1}^{n} \ell\big(y_i, f(x_i)\big)}_{\text{empirical risk, data fit}} + \underbrace{\lambda \lVert f \rVert_{\mathcal{H}}^2}_{\text{regularization}}
+$$
+
+<p>for a loss function \(\ell\) such as \(\ell(y, t) = (y - t)^2\). An RKHS is a space of potentially nonlinear functions, and \(\lVert f \rVert_{\mathcal{H}}\) measures the smoothness of \(f\), so this is a natural way to estimate a regression function \(f : \mathcal{X} \to \mathbb{R}\) from data \((x_i \in \mathcal{X}, y_i \in \mathbb{R})_{i=1,\dots,n}\). But how do we solve such a problem in practice, when \(\mathcal{H}\) is infinite-dimensional? The second pillar of kernel methods answers this: the search space collapses, exactly, to a subspace of dimension at most \(n\).</p>
+
+<div class="box thm"><span class="box-title">Theorem (representer theorem)</span>
+<p>Let \(\mathcal{X}\) be a set endowed with a p.d. kernel \(K\), let \(\mathcal{H}\) be the corresponding RKHS, and let \(S = \{x_1, \dots, x_n\} \subseteq \mathcal{X}\) be a finite set of points in \(\mathcal{X}\). Let \(\Psi : \mathbb{R}^{n+1} \to \mathbb{R}\) be a function of \(n + 1\) variables, strictly increasing with respect to its last variable. Then any solution of the optimization problem</p>
+$$
+\min_{f \in \mathcal{H}} \; \Psi\big(f(x_1), \dots, f(x_n), \lVert f \rVert_{\mathcal{H}}\big)
+$$
+<p>admits a representation of the form</p>
+$$
+\forall x \in \mathcal{X}, \qquad f(x) = \sum_{i=1}^{n} \alpha_i K(x_i, x) = \sum_{i=1}^{n} \alpha_i K_{x_i}(x).
+$$
+<p>In other words, the solution lives in a finite-dimensional subspace: \(f \in \mathrm{Span}(K_{x_1}, \dots, K_{x_n})\).</p>
+</div>
+
+<p>Note how weak the hypotheses are. The theorem asks nothing of the first \(n\) arguments of \(\Psi\): the data-fit term need not be convex, differentiable, or even continuous. All that matters is that the objective strictly prefers a smaller RKHS norm when the values at the data points are held fixed. The regularized empirical risk above is the special case \(\Psi(t_1, \dots, t_n, u) = \frac{1}{n}\sum_i \ell(y_i, t_i) + \lambda u^2\). The result in this generality is due to Kimeldorf and Wahba (1971) for the quadratic case, with the general form popularized by Sch&ouml;lkopf, Herbrich, and Smola (2001).</p>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Let \(\xi(f)\) denote the functional being minimized, \(\xi(f) = \Psi(f(x_1), \dots, f(x_n), \lVert f \rVert_{\mathcal{H}})\), and let \(\mathcal{H}_S\) be the linear span in \(\mathcal{H}\) of the vectors \(K_{x_i}\):</p>
+$$
+\mathcal{H}_S = \left\{ f \in \mathcal{H} \; : \; f(x) = \sum_{i=1}^{n} \alpha_i K(x_i, x), \; (\alpha_1, \dots, \alpha_n) \in \mathbb{R}^n \right\}.
+$$
+<p>\(\mathcal{H}_S\) is a finite-dimensional subspace of the Hilbert space \(\mathcal{H}\), hence closed, so any \(f \in \mathcal{H}\) decomposes uniquely by orthogonal projection as</p>
+$$
+f = f_S + f_\perp, \qquad f_S \in \mathcal{H}_S, \quad f_\perp \perp \mathcal{H}_S.
+$$
+<p>Now the reproducing property enters. Since \(\mathcal{H}\) is an RKHS, point evaluation is an inner product against \(K_{x_i} = K(x_i, \cdot)\), and \(K_{x_i} \in \mathcal{H}_S\) while \(f_\perp \perp \mathcal{H}_S\), so</p>
+$$
+\forall i = 1, \dots, n, \qquad f_\perp(x_i) = \langle f_\perp, K_{x_i} \rangle_{\mathcal{H}} = 0,
+$$
+<p>and therefore \(f(x_i) = f_S(x_i)\) for all \(i = 1, \dots, n\): the orthogonal part is invisible at the data points, so the first \(n\) arguments of \(\Psi\) are unchanged when \(f\) is replaced by \(f_S\). Pythagoras' theorem in \(\mathcal{H}\) then gives</p>
+$$
+\lVert f \rVert_{\mathcal{H}}^2 = \lVert f_S \rVert_{\mathcal{H}}^2 + \lVert f_\perp \rVert_{\mathcal{H}}^2,
+$$
+<p>so \(\lVert f_S \rVert_{\mathcal{H}} \le \lVert f \rVert_{\mathcal{H}}\), with equality if and only if \(\lVert f_\perp \rVert_{\mathcal{H}} = 0\). Since \(\Psi\) is strictly increasing in its last argument, \(\xi(f) \ge \xi(f_S)\), with equality if and only if \(\lVert f_\perp \rVert_{\mathcal{H}} = 0\). Any minimizer of \(\xi\) must therefore satisfy \(f_\perp = 0\), that is, lie in \(\mathcal{H}_S\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (why the theorem is "trivial", and why it matters)</span>
+<p>The representer theorem has important consequences, but it is in fact rather simple once the reproducing property is internalized. We are looking for a function \(f \in \mathcal{H}\) that interacts with the world only through the values \(f(x) = \langle K_x, f \rangle_{\mathcal{H}}\) at the training points: the part \(f_\perp\) orthogonal to the \(K_{x_i}\) is useless for explaining the training data, and the regularizer strictly punishes carrying it around. The theorem simply says the optimum carries no dead weight.</p>
+</div>
+
+<h3 id="the-regularization-reading">Scope and the regularization reading</h3>
+
+<p>Often the function \(\Psi\) has the separable form</p>
+
+$$
+\Psi\big(f(x_1), \dots, f(x_n), \lVert f \rVert_{\mathcal{H}}\big) = c\big(f(x_1), \dots, f(x_n)\big) + \lambda\, \Omega\big(\lVert f \rVert_{\mathcal{H}}\big),
+$$
+
+<p>where \(c(\cdot)\) measures the fit of \(f\) to a given problem (regression, classification, dimension reduction, and so on) and \(\Omega\) is strictly increasing. This formulation has two important consequences.</p>
+
+<ul>
+<li><strong>Theoretically</strong>, the minimization will enforce the norm \(\lVert f \rVert_{\mathcal{H}}\) to be small, which can be beneficial by ensuring a sufficient level of smoothness for the solution. This is the regularization effect, and it is what connects the optimization problem to the statistical goal of generalizing beyond the sample.</li>
+<li><strong>Practically</strong>, we know by the representer theorem that the solution lives in a subspace of dimension \(n\), which can lead to efficient algorithms even though the RKHS itself can be of infinite dimension.</li>
+</ul>
+
+<p>Two boundary notes on scope. First, strict monotonicity in the norm is what forces <em>every</em> minimizer into \(\mathcal{H}_S\); if \(\Psi\) is merely nondecreasing in its last variable (for instance \(\lambda = 0\), no regularization), the proof still shows that <em>some</em> minimizer lies in \(\mathcal{H}_S\) whenever a minimizer exists, but uniqueness of the representation is lost. Second, the objective must depend on \(f\) only through finitely many point evaluations and the norm; a data-fit term involving, say, derivatives of \(f\) or an integral of \(f\) over \(\mathcal{X}\) falls outside the statement.</p>
+
+<h3 id="practical-use-of-the-representer-theorem">Practical use: from \(\mathcal{H}\) to \(\mathbb{R}^n\)</h3>
+
+<p>The representer theorem is not just a structural statement; it is a computational device. When it holds, we may restrict the search to functions of the form</p>
+
+$$
+f(x) = \sum_{i=1}^{n} \alpha_i K(x_i, x), \qquad \alpha \in \mathbb{R}^n,
+$$
+
+<p>and rewrite every ingredient of the objective in terms of \(\alpha\) and the Gram matrix \(\mathbf{K}\). For any \(j = 1, \dots, n\), the value at a training point is a matrix-vector product:</p>
+
+$$
+f(x_j) = \sum_{i=1}^{n} \alpha_i K(x_i, x_j) = [\mathbf{K} \alpha]_j.
+$$
+
+<p>Furthermore, the RKHS norm becomes a quadratic form, again by the reproducing property applied pairwise:</p>
+
+$$
+\lVert f \rVert_{\mathcal{H}}^2 = \left\lVert \sum_{i=1}^{n} \alpha_i K_{x_i} \right\rVert_{\mathcal{H}}^2 = \sum_{i=1}^{n} \sum_{j=1}^{n} \alpha_i \alpha_j K(x_i, x_j) = \alpha^\top \mathbf{K} \alpha.
+$$
+
+<p>Therefore a problem of the form</p>
+
+$$
+\min_{f \in \mathcal{H}} \; \Psi\big(f(x_1), \dots, f(x_n), \lVert f \rVert_{\mathcal{H}}^2\big)
+$$
+
+<p>is equivalent to the following \(n\)-dimensional optimization problem:</p>
+
+$$
+\min_{\alpha \in \mathbb{R}^n} \; \Psi\big([\mathbf{K}\alpha]_1, \dots, [\mathbf{K}\alpha]_n,\; \alpha^\top \mathbf{K} \alpha\big).
+$$
+
+<p>This problem can usually be solved analytically or by numerical methods; the following chapters work through many examples, kernel ridge regression and the support vector machine chief among them. An infinite-dimensional variational problem has become a finite-dimensional one whose data are exactly the \(n \times n\) Gram matrix: once again, the algorithm touches the data only through pairwise kernel evaluations.</p>
+
+<h2 id="a-recipe-for-kernelizing-an-algorithm">A general recipe for kernelizing an algorithm</h2>
+
+<p>We can now step back and describe the pattern that the rest of this book instantiates over and over. Most kernel methods admit two complementary interpretations, and it pays to be fluent in both.</p>
+
+<div class="box rmk"><span class="box-title">Remark (dual interpretations of kernel methods)</span>
+<p>Most kernel methods can be read in two ways:</p>
+<ul>
+<li>A <strong>geometric interpretation in the feature space</strong>, thanks to the kernel trick. Even when the feature space is large, most kernel methods work in the linear span of the embeddings of the available points.</li>
+<li>A <strong>functional interpretation</strong>, often as an optimization problem over (subsets of) the RKHS associated with the kernel, with the representer theorem collapsing that problem to finite dimension.</li>
+</ul>
+<p>These are two descriptions of the same object: the span of \(\Phi(x_1), \dots, \Phi(x_n)\) in the feature space corresponds, through the isometry of Chapter 1, to the span of \(K_{x_1}, \dots, K_{x_n}\) in the RKHS.</p>
+</div>
+
+<p>Correspondingly, there are two routes for turning a classical linear algorithm into a kernel method, and the recipe is short enough to state as pseudocode:</p>
+
+<pre><code>To kernelize an algorithm A operating on data x_1, ..., x_n:
+
+Route 1 (kernel trick, geometric):
+  1. Rewrite A so that it accesses the data ONLY through
+     pairwise inner products (x_i, x_j)  [and inner products
+     (x, x_i) with any test point x].
+  2. Replace every inner product by a kernel evaluation
+     K(x_i, x_j), i.e., precompute the Gram matrix K.
+  3. Run A unchanged; feature-space objects (barycenters,
+     projections, centered data) remain implicit.
+
+Route 2 (representer theorem, functional):
+  1. Pose A as minimizing Psi(f(x_1), ..., f(x_n), ||f||_H)
+     over the RKHS H, with Psi strictly increasing in ||f||_H.
+  2. Substitute f = sum_i alpha_i K(x_i, .), so that
+     f(x_j) = [K alpha]_j and ||f||_H^2 = alpha' K alpha.
+  3. Solve the resulting n-dimensional problem in alpha.
+  4. Predict at a new point x via f(x) = sum_i alpha_i K(x_i, x).
+</code></pre>
+
+<p>The two routes meet in the middle: both reduce the algorithm to computations on the Gram matrix, and both output predictors expressed as kernel expansions over the training points. Route 1 is the natural reading for procedures defined by geometry, such as centering, projections, or nearest-barycenter classification; Route 2 is the natural reading for procedures defined by an objective function, such as regularized regression and classification. Everything we kernelize in the coming chapters, ridge regression, support vector machines, PCA, canonical correlation analysis, will be an instance of one route or the other, and usually both at once.</p>
+
+<p>The cost of this generality is also visible in the recipe: kernel methods manipulate \(n \times n\) Gram matrices, so their complexity scales with the number of data points rather than the dimension of the data, a trade we will revisit when we discuss large-scale approximations such as random features (Rahimi and Recht, 2007). But the conceptual gain is settled: with the kernel trick and the representer theorem in hand, linearity in the feature space buys nonlinearity in the input space, and infinite-dimensional function classes come with finite-dimensional algorithms.</p>
+<div class="chnav">
+<a href="kernels-and-rkhs.html"><span class="dir">previous</span>1. Positive Definite Kernels and RKHS</a>
+<a style="text-align:right" href="kernel-ridge-and-friends.html"><span class="dir">next</span>3. Kernel Ridge Regression and Smooth Losses</a>
+</div>
+</div></main>
+</div>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kernels for and on Graphs · Machine Learning with Kernel Methods</title>
+<meta name="description" content="Kernels for and on Graphs, from Machine Learning with Kernel Methods.">
+<link rel="stylesheet" href="assets/book.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],throwOnError:false});"></script>
+
+</head>
+<body>
+<div class="book">
+<nav class="toc">
+<div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
+<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
+<div class="part">I · Foundations</div>
+<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">2. The Kernel Trick</a>
+<div class="part">II · Supervised Learning</div>
+<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
+<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<a href="support-vector-machines.html">5. Support Vector Machines</a>
+<div class="part">III · Unsupervised Learning</div>
+<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Theory of the Space</div>
+<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · The Kernel Jungle</div>
+<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">9. Kernels for Sequences</a>
+<a href="graph-kernels.html" class="here">10. Kernels for and on Graphs</a>
+<div class="part">VI · Distributions</div>
+<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Frontiers</div>
+<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
+<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+</nav>
+<main><div class="page">
+<h1><span class="chno">Chapter 10 · V · The Kernel Jungle</span>Kernels for and on Graphs</h1>
+
+<p class="lead">Graphs appear in machine learning in two very different roles, and the word alone hides the difference. Sometimes each data point <em>is</em> a graph: a molecule, an image parsed into regions, a program's call structure, and we want a kernel that compares two whole graphs. Sometimes there is a single fixed graph, an interaction network or a discretized domain, and each data point is one of its <em>nodes</em>: we want a kernel that compares two vertices of the same graph. These are genuinely separate problems with separate mathematics, so this chapter keeps them apart. The first half builds kernels <em>between</em> graphs and runs headlong into computational hardness: the most expressive comparisons are NP-hard, and the art is to trade a little expressiveness for tractability by counting walks and subtrees instead of subgraphs. The second half builds kernels <em>on</em> a graph from the graph Laplacian, and finds a clean answer, the diffusion kernel, that is the discrete cousin of the Gaussian and that we will read off directly from a discrete harmonic analysis.</p>
+
+<h2 id="kernels-between-graphs">Part A: Kernels between graphs</h2>
+
+<p>The template is the one we have used throughout. To classify or regress on objects living in a space \(\mathcal{X}\), we map each object \(x\) to a vector \(\Phi(x)\) in a Hilbert space \(\mathcal{H}\), either explicitly or implicitly through a kernel</p>
+
+$$K(x,x') = \langle \Phi(x), \Phi(x') \rangle_{\mathcal H} = \Phi(x)^\top \Phi(x'),$$
+
+<p>and then run a linear method in \(\mathcal{H}\). What is new is that now \(\mathcal{X}\) is a set of graphs. The motivating applications are concrete. In virtual screening for drug discovery, each molecule is a labeled graph (atoms as vertices, bonds as edges) and we want to predict biological activity, for instance whether a compound is active against a target, from public assays such as the NCI AIDS screen. In image retrieval and classification (Harchaoui and Bach, 2007) an image is segmented into regions and encoded as a graph of adjacent regions. In both cases the learning problem is standard once we have a kernel; the whole difficulty is building a good kernel between graphs.</p>
+
+<h3 id="explicit-features">Explicit features: indexing by substructures</h3>
+
+<p>The most transparent approach is to represent each graph <em>explicitly</em> by a fixed-dimensional vector \(\Phi(x) \in \mathbb{R}^p\) and then run any regression or pattern-recognition algorithm (SVM, kNN, PLS, decision trees) on those vectors. In chemoinformatics this is the classical idea of a <em>structural key</em> or <em>2D fingerprint</em>: fix a limited list of predefined substructures (particular rings, functional groups, fragments) and index a molecule by a binary vector recording, for each substructure, whether it is present. The premise is that the presence or absence of particular substructures carries much of the predictive signal, so counting them should retain the information that matters.</p>
+
+<p>This raises the design question that governs everything that follows: which descriptors, that is, which substructures, do we count? Three demands pull against each other.</p>
+
+<ul>
+<li><strong>Expressiveness.</strong> The features should retain as much information about the graph as possible.</li>
+<li><strong>Computation.</strong> The features should be fast to compute.</li>
+<li><strong>Dimension.</strong> A very large feature vector costs memory and speed, and creates statistical problems (many weakly populated coordinates).</li>
+</ul>
+
+<p>The natural way to be expressive is to index by <em>all</em> substructures of a given kind and let the learning algorithm decide which matter. The trouble is that detecting the presence of a substructure can be computationally hard, and this is not a minor caveat: it is the central obstruction of the whole subject.</p>
+
+<div class="box def"><span class="box-title">Definition (subgraph)</span> A <em>subgraph</em> of a graph \((V,E)\) is a graph \((V',E')\) with \(V' \subset V\) and \(E' \subset E\).</div>
+
+<p>Indexing a graph by the counts of all its connected subgraphs would be maximally expressive. It is also intractable.</p>
+
+<div class="box thm"><span class="box-title">Theorem (all-subgraph indexing is hard)</span> Computing the vector of occurrences of all subgraphs is NP-hard.</div>
+
+<div class="box proof"><span class="box-title">Proof</span> The <em>linear graph</em> (path graph) on \(n\) vertices is a subgraph of a graph \(X\) with \(n\) vertices if and only if \(X\) has a Hamiltonian path, that is, a path visiting each vertex exactly once. So if we could read off, from the subgraph-occurrence vector, whether the length-\(n\) linear graph occurs, we would decide the Hamiltonian-path problem, which is NP-complete. Hence computing all subgraph occurrences is NP-hard. <span class="qed">\(\square\)</span></div>
+
+<p>One might hope that restricting to a simpler family of substructures escapes the difficulty. The most natural restriction is to paths.</p>
+
+<div class="box def"><span class="box-title">Definition (path)</span> A <em>path</em> of a graph \((V,E)\) is a sequence of <em>distinct</em> vertices \(v_1, \dots, v_n \in V\) (so \(i \neq j \Rightarrow v_i \neq v_j\)) with \((v_i, v_{i+1}) \in E\) for \(i = 1, \dots, n-1\). Equivalently, the paths are exactly the linear subgraphs.</div>
+
+<p>Indexing by all paths, that is, recording for each possible label sequence how many paths carry it, is no easier.</p>
+
+<div class="box thm"><span class="box-title">Theorem (all-path indexing is hard)</span> Computing the vector of occurrences of all paths is NP-hard.</div>
+
+<div class="box proof"><span class="box-title">Proof</span> Identical to the subgraph case: because paths are exactly the linear subgraphs, deciding whether the length-\(n\) path occurs already decides the Hamiltonian-path problem. <span class="qed">\(\square\)</span></div>
+
+<p>The escape is not to change the type of substructure but to <em>limit the set</em> of substructures we insist on counting. Many computationally efficient choices have been proposed:</p>
+
+<ul>
+<li>substructures selected by domain knowledge (the classic MDL fingerprints);</li>
+<li>all paths up to a fixed length \(k\) (the Openeye fingerprint, Nicholls 2005);</li>
+<li>all shortest-path lengths (Borgwardt and Kriegel, 2005);</li>
+<li>all subgraphs up to \(k\) vertices, the graphlet kernel (Shervashidze et al., 2009);</li>
+<li>all subgraphs that are <em>frequent</em> in the database (Helma et al., 2004).</li>
+</ul>
+
+<p>Two of these deserve their complexity accounting, because they show that limiting the family really does buy tractability.</p>
+
+<div class="box ex"><span class="box-title">Example (shortest-path indexing)</span> Index a graph by the counts of its shortest paths, keyed by the path length together with the labels of the two endpoints; a coordinate might read "there are two shortest paths of length \(1\) between an \(A\) and an \(A\)." A graph on \(n\) vertices has \(O(n^2)\) shortest paths (one per ordered pair), and the whole count vector is computed in \(O(n^3)\) by the Floyd-Warshall all-pairs shortest-path algorithm (Borgwardt and Kriegel, 2005).</div>
+
+<div class="box ex"><span class="box-title">Example (graphlet counting)</span> Index a graph by the counts of all its subgraphs on up to \(k\) vertices. Naive enumeration scales as \(O(n^k)\). For bounded-degree graphs one does much better: connected graphlets can be enumerated in \(O(n\,d^{k-1})\) for graphs of maximum degree \(d\) and \(k \le 5\) (Shervashidze et al., 2009). When even that is infeasible, one samples subgraphs at random and estimates the counts.</div>
+
+<div class="box rmk"><span class="box-title">Summary of the explicit approach</span> Explicit enumeration of substructure occurrences can be prohibitive: all subgraphs and all paths are both NP-hard. Restricting to a smaller, cleverly chosen family (short paths, shortest-path lengths, small graphlets, frequent patterns) restores polynomial time. And the NP-hardness is a worst case: for the graphs that occur in practice, often sparse and of small degree, the exact strategy may be perfectly affordable, so the right method depends on the data.</div>
+
+<h3 id="expressiveness-vs-complexity">The expressiveness-complexity tradeoff</h3>
+
+<p>Instead of committing to an explicit feature vector, we can represent each graph <em>implicitly</em> through a kernel \(K(G_1, G_2) = \langle \Phi(G_1), \Phi(G_2)\rangle\) and run a kernel method. This is attractive because it lets the feature space \(\mathcal{H}\) be enormous, even infinite-dimensional, as long as the inner product is cheap. But before chasing cheap kernels we should ask what a good graph kernel could possibly look like, and here a sharp tension appears.</p>
+
+<div class="box def"><span class="box-title">Definition (complete graph kernel)</span> A graph kernel \(K\) is <em>complete</em> if it distinguishes non-isomorphic graphs:
+$$\forall G_1, G_2 \in \mathcal{X}, \quad d_K(G_1, G_2) = 0 \implies G_1 \simeq G_2,$$
+where \(d_K\) is the Hilbert distance induced by \(K\). Equivalently, \(\Phi(G_1) \neq \Phi(G_2)\) whenever \(G_1\) and \(G_2\) are not isomorphic.</div>
+
+<p>Completeness is exactly the property we want for expressiveness. If a kernel is <em>not</em> complete, then two non-isomorphic graphs collapse to the same point of \(\mathcal{H}\), and no function built from the kernel can ever tell them apart: there is no hope of learning all functions over \(\mathcal{X}\). On the other hand, we need the kernel to be tractable, computable in polynomial time with a small degree. Can a kernel be both tractable and complete? The following proposition says the two goals collide.</p>
+
+<div class="box prop"><span class="box-title">Proposition (Gärtner et al., 2003)</span> Computing any complete graph kernel is at least as hard as the graph isomorphism problem.</div>
+
+<div class="box proof"><span class="box-title">Proof</span> For any kernel \(K\), computing the distance \(d_K\) is no harder than computing \(K\), since
+$$d_K(G_1, G_2)^2 = K(G_1, G_1) + K(G_2, G_2) - 2 K(G_1, G_2)$$
+uses only three kernel evaluations. If \(K\) is complete, then by definition \(d_K(G_1, G_2) = 0\) if and only if \(G_1 \simeq G_2\), so computing \(d_K\) decides graph isomorphism. Hence computing \(K\) is at least as hard as graph isomorphism. <span class="qed">\(\square\)</span></div>
+
+<p>Graph isomorphism is not known to be polynomial (nor known to be NP-complete), so a complete kernel is at best of uncertain complexity. It gets worse if we try to build the feature map from subgraph counts directly.</p>
+
+<div class="box def"><span class="box-title">Definition (subgraph kernel)</span> Let \((\lambda_H)_{H \in \mathcal{X}}\) be nonnegative weights. For a graph \(G\) and a connected graph \(H\), let \(\Phi_H(G)\) be the number of subgraphs of \(G\) isomorphic to \(H\),
+$$\Phi_H(G) = \#\{\, G' \text{ subgraph of } G : G' \simeq H \,\}.$$
+The <em>subgraph kernel</em> is
+$$K_{\mathrm{subgraph}}(G_1, G_2) = \sum_{\substack{H \in \mathcal{X} \\ H \text{ connected}}} \lambda_H \, \Phi_H(G_1)\, \Phi_H(G_2).$$
+</div>
+
+<div class="box prop"><span class="box-title">Proposition (Gärtner et al., 2003)</span> Computing the subgraph kernel is NP-hard.</div>
+
+<div class="box proof"><span class="box-title">Proof</span> Let \(P_n\) denote the path graph on \(n\) vertices, and write \(e_H\) for the feature-space basis vector indexing subgraph pattern \(H\). The subgraphs of \(P_n\) are themselves path graphs, and one checks that its feature vector is
+$$\Phi(P_n) = n\, e_{P_1} + (n-1)\, e_{P_2} + \dots + e_{P_n},$$
+counting \(n\) single vertices, \(n-1\) edges, and so on down to one copy of \(P_n\) itself. The vectors \(\Phi(P_1), \dots, \Phi(P_n)\) are linearly independent (they form a triangular system in the basis \(e_{P_1}, \dots, e_{P_n}\)), so the pure indicator \(e_{P_n}\) can be written as a combination
+$$e_{P_n} = \sum_{i=1}^n \alpha_i \, \Phi(P_i),$$
+whose coefficients \(\alpha_i\) are found in polynomial time by solving an \(n \times n\) triangular system. Now let \(G\) be any graph on \(n\) vertices. It has a Hamiltonian path, a path visiting each vertex exactly once, if and only if \(\Phi(G)^\top e_{P_n} \gt 0\), that is, if and only if
+$$\Phi(G)^\top \Big( \sum_{i=1}^n \alpha_i \, \Phi(P_i) \Big) = \sum_{i=1}^n \alpha_i \, K_{\mathrm{subgraph}}(G, P_i) \gt 0.$$
+So \(n\) evaluations of the subgraph kernel decide the Hamiltonian-path problem, which is NP-complete. Hence the subgraph kernel is NP-hard. <span class="qed">\(\square\)</span></div>
+
+<p>As with the explicit case, restricting to paths does not save us.</p>
+
+<div class="box def"><span class="box-title">Definition (path kernel)</span> The <em>path kernel</em> is the subgraph kernel restricted to path patterns,
+$$K_{\mathrm{path}}(G_1, G_2) = \sum_{H \in \mathcal{P}} \lambda_H \, \Phi_H(G_1) \, \Phi_H(G_2),$$
+where \(\mathcal{P} \subset \mathcal{X}\) is the set of path graphs.</div>
+
+<div class="box prop"><span class="box-title">Proposition (Gärtner et al., 2003)</span> Computing the path kernel is NP-hard.</div>
+
+<div class="box rmk"><span class="box-title">Where this leaves us</span> Completeness is intractable; the subgraph kernel is intractable; and restricting to linear subgraphs, the path kernel, is intractable too. The way out is to relax what a "substructure" means. Instead of counting subgraphs, we count objects that are only <em>homomorphic</em> to subgraphs, most usefully <em>walks</em>: sequences of adjacent vertices that, unlike paths, are allowed to revisit vertices. Walks are cheap to enumerate implicitly, and, as we now show, the resulting kernel is polynomial.</div>
+
+<h3 id="walk-kernels">Walk kernels</h3>
+
+<p>The whole point of a walk is that it drops the distinctness requirement of a path. This one relaxation is what turns an NP-hard count into a linear-algebra computation.</p>
+
+<div class="box def"><span class="box-title">Definition (walk)</span> A <em>walk</em> of a graph \((V,E)\) is a sequence \(v_1, \dots, v_n \in V\) with \((v_i, v_{i+1}) \in E\) for \(i = 1, \dots, n-1\). Vertices may repeat. Write \(\mathcal{W}_n(G)\) for the set of walks on \(n\) vertices and \(\mathcal{W}(G) = \bigcup_{n \ge 1} \mathcal{W}_n(G)\) for all walks.</div>
+
+<p>Every path is a walk, but a walk that steps back and forth, or loops around a cycle, is not a path. There are infinitely many walks in any graph with a cycle, which is precisely why we can afford to weight them and sum implicitly.</p>
+
+<div class="box def"><span class="box-title">Definition (walk kernel)</span> Let \(\mathcal{S}_n\) be the set of all possible label sequences of walks on \(n\) vertices (including both vertex and edge labels), and \(\mathcal{S} = \bigcup_{n \ge 1} \mathcal{S}_n\). For each graph \(G\) assign a weight \(\lambda_G(w) \ge 0\) to every walk \(w \in \mathcal{W}(G)\). Define the feature vector \(\Phi(G) = (\Phi_s(G))_{s \in \mathcal{S}}\) by
+$$\Phi_s(G) = \sum_{w \in \mathcal{W}(G)} \lambda_G(w)\, \mathbf{1}\big(s \text{ is the label sequence of } w\big).$$
+The <em>walk kernel</em> is
+$$K_{\mathrm{walk}}(G_1, G_2) = \sum_{s \in \mathcal{S}} \Phi_s(G_1)\, \Phi_s(G_2).$$
+</div>
+
+<p>The coordinate \(\Phi_s(G)\) is the total weight of walks in \(G\) whose labels spell out \(s\); the kernel then matches the two graphs through their <em>common labeled walks</em>. Different choices of the weights \(\lambda_G\) give qualitatively different kernels.</p>
+
+<div class="box ex"><span class="box-title">Examples of walk kernels</span>
+<ul>
+<li>The <strong>\(n\)-th-order walk kernel</strong> takes \(\lambda_G(w) = 1\) if \(w\) has length \(n\) and \(0\) otherwise. It compares two graphs through their common walks of length exactly \(n\).</li>
+<li>The <strong>random walk kernel</strong> takes \(\lambda_G(w) = P_G(w)\), the probability of the walk under a Markov random walk on \(G\). Then
+$$K(G_1, G_2) = P\big(\mathrm{label}(W_1) = \mathrm{label}(W_2)\big),$$
+the probability that two <em>independent</em> random walks \(W_1\) on \(G_1\) and \(W_2\) on \(G_2\) produce the same label sequence (Kashima et al., 2003).</li>
+<li>The <strong>geometric walk kernel</strong> takes \(\lambda_G(w) = \beta^{\mathrm{length}(w)}\) for some \(\beta \gt 0\), when the resulting series converges. Because walks of every length contribute, the feature space is infinite-dimensional (Gärtner et al., 2003).</li>
+</ul>
+</div>
+
+<div class="box prop"><span class="box-title">Proposition (tractability)</span> The \(n\)-th-order, random, and geometric walk kernels can all be computed in polynomial time.</div>
+
+<p>The proof, and the reason walks succeed where paths fail, is a single beautiful construction: the product graph.</p>
+
+<h3 id="product-graph">The product graph</h3>
+
+<p>The idea is to package "a pair of walks with the same labels, one in each graph" as "a single walk in one auxiliary graph." That auxiliary graph is the product graph.</p>
+
+<div class="box def"><span class="box-title">Definition (product graph)</span> Let \(G_1 = (V_1, E_1)\) and \(G_2 = (V_2, E_2)\) be graphs with labeled vertices. The <em>product graph</em> \(G = G_1 \times G_2\) has
+$$V = \{ (v_1, v_2) \in V_1 \times V_2 : v_1 \text{ and } v_2 \text{ have the same label} \},$$
+$$E = \{ ((v_1, v_2), (v_1', v_2')) \in V \times V : (v_1, v_1') \in E_1 \text{ and } (v_2, v_2') \in E_2 \}.$$
+</div>
+
+<p>A vertex of \(G_1 \times G_2\) is a pair of identically labeled vertices, one from each graph, and an edge exists only when both graphs can take the corresponding step simultaneously. Walking on the product graph therefore means walking on both graphs in lockstep along matching labels, which is exactly the coincidence the kernel sums over.</p>
+
+<div class="box lem"><span class="box-title">Lemma (walk bijection)</span> There is a bijection between
+<ol>
+<li>the pairs of walks \(w_1 \in \mathcal{W}_n(G_1)\) and \(w_2 \in \mathcal{W}_n(G_2)\) with the same label sequence, and</li>
+<li>the walks \(w \in \mathcal{W}_n(G_1 \times G_2)\) on the product graph.</li>
+</ol>
+</div>
+
+<div class="box cor"><span class="box-title">Corollary (walk kernel on the product graph)</span> Assigning the product weight \(\lambda_{G_1 \times G_2}(w) = \lambda_{G_1}(w_1)\,\lambda_{G_2}(w_2)\) to the walk \(w\) corresponding to the pair \((w_1, w_2)\),
+$$K_{\mathrm{walk}}(G_1, G_2) = \sum_{s \in \mathcal{S}} \Phi_s(G_1)\, \Phi_s(G_2) = \sum_{\substack{(w_1, w_2) \in \\ \mathcal{W}(G_1) \times \mathcal{W}(G_2)}} \lambda_{G_1}(w_1)\,\lambda_{G_2}(w_2)\, \mathbf{1}\big(l(w_1) = l(w_2)\big) = \sum_{w \in \mathcal{W}(G_1 \times G_2)} \lambda_{G_1 \times G_2}(w).$$
+</div>
+
+<p>The kernel has become a single weighted sum over walks in one graph, and such sums are what adjacency matrices compute. Take first the \(n\)-th-order kernel, where \(\lambda_{G_1 \times G_2}(w) = 1\) exactly on walks of length \(n\).</p>
+
+<div class="box prop"><span class="box-title">Computation of the \(n\)-th-order walk kernel</span> Let \(A\) be the adjacency matrix of \(G_1 \times G_2\). The number of walks of length \(n\) between vertices \(i\) and \(j\) is \([A^n]_{i,j}\), so
+$$K_{n\text{-th order}}(G_1, G_2) = \sum_{w \in \mathcal{W}_n(G_1 \times G_2)} 1 = \sum_{i,j} [A^n]_{i,j} = \mathbf{1}^\top A^n \mathbf{1}.$$
+This costs \(O(n\,|V_1|\,|V_2|\,d_1 d_2)\), where \(d_i\) is the maximum degree of \(G_i\), because the product graph has \(O(|V_1||V_2|)\) vertices and \(O(|V_1||V_2|d_1 d_2)\) edges, and each of the \(n\) matrix-vector products costs one pass over the edges.</div>
+
+<p>For the random and geometric kernels the weight of a walk factorizes into an initial weight and a product of transition weights: for \(w = v_1 \dots v_n\),</p>
+
+$$\lambda_G(v_1 \dots v_n) = \lambda_i(v_1) \prod_{k=2}^n \lambda_t(v_{k-1}, v_k).$$
+
+<p>Collect the initial weights into a vector \(\Lambda_i\) (entries \(\lambda_i(v)\)) and the transition weights into a matrix \(\Lambda_t\) (entries \(\lambda_t(v, v')\)) on the product graph. Summing over all walk lengths gives a geometric series in \(\Lambda_t\):</p>
+
+$$K_{\mathrm{walk}}(G_1, G_2) = \sum_{n=1}^{\infty} \sum_{w \in \mathcal{W}_n(G_1 \times G_2)} \lambda_i(v_1)\prod_{k=2}^n \lambda_t(v_{k-1}, v_k) = \sum_{n=0}^{\infty} \Lambda_i \Lambda_t^{\,n} \mathbf{1} = \Lambda_i (I - \Lambda_t)^{-1} \mathbf{1},$$
+
+<p>valid whenever the series converges (spectral radius of \(\Lambda_t\) below \(1\), which is what "when it converges" meant for the geometric kernel). The cost is dominated by inverting a matrix of size \(|V_1||V_2|\), so \(O(|V_1|^3 |V_2|^3)\). Either way, walks give a polynomial-time graph kernel, the goal we could not reach with paths.</p>
+
+<h3 id="extensions">Extensions: labels, tottering, and subtrees</h3>
+
+<p>The basic walk kernel is a starting point that several refinements improve, all still reducible to the product graph.</p>
+
+<p><strong>Label enrichment (Mahé et al., 2004).</strong> A walk kernel only matches walks with identical label sequences, so enriching the vertex labels makes matching stricter and more informative. The <em>Morgan index</em> relabels each atom by an integer computed iteratively: at order \(0\) every atom has index \(1\); at each order the new index of a vertex is the sum of its neighbors' current indices. Order-\(k\) indices thus encode the size of a growing neighborhood, giving a compromise between structureless fingerprints and rigid structural keys. Enrichment is also a speed trick: richer labels mean fewer coincidences, hence a smaller product graph and faster computation. Many relabeling schemes are possible.</p>
+
+<p><strong>Non-tottering walks (Mahé et al., 2005).</strong> A walk that steps from a vertex to a neighbor and immediately back, \(v_i = v_{i+2}\), is said to <em>totter</em>. Tottering walks inflate the kernel with contributions that seem irrelevant for chemistry and other applications, since they describe no real substructure. Forbidding them moves the walk kernel closer to the (intractable) path kernel; on trees the non-tottering walk kernel and the path kernel actually coincide. Computationally, a second-order Markov random walk suppresses tottering, and it can be rewritten as an ordinary first-order random walk on an augmented (directed) graph, so we recover a plain walk kernel on that augmented graph.</p>
+
+<p><strong>Subtree kernels (Ramon and Gärtner, 2003; Mahé and Vert, 2009).</strong> Walks are one-dimensional; branching substructures carry more information. Here a "subtree" means a tree-<em>like</em> pattern that may reuse vertices and edges of the graph, the branching analogue of a walk. Like the walk kernel, the subtree kernel amounts to a weighted count of subtrees in the product graph, and it obeys a clean recursion. If \(T(v, n)\) is the weighted number of subtrees of depth \(n\) rooted at vertex \(v\), then</p>
+
+$$T(v, n+1) = \sum_{R \subseteq N(v)} \; \prod_{v' \in R} \lambda_t(v, v')\, T(v', n),$$
+
+<p>where \(N(v)\) is the set of neighbors of \(v\) and the sum runs over all subsets \(R\) of neighbors used to extend the tree by one level. Combining this with the non-tottering transformation as preprocessing yields the non-tottering subtree kernel.</p>
+
+<p>There is a pretty link back to label enrichment. The Morgan index of order \(k\) at a vertex \(v\) equals the number of leaves of the full subtree pattern of order \(k\) rooted at \(v\), so the enrichment scheme was implicitly counting subtrees all along.</p>
+
+<p><strong>The Weisfeiler-Lehman subtree kernel (Shervashidze and Borgwardt, 2009).</strong> A more systematic enrichment uses the Weisfeiler-Lehman relabeling (Weisfeiler and Lehman, 1968), a classical graph-isomorphism heuristic. Each iteration performs three steps: (1) for every vertex, gather the multiset of its neighbors' current labels and sort it; (2) compress each distinct sorted multiset into a fresh symbol; (3) relabel every vertex by that symbol. A compressed label after \(k\) iterations encodes the full subtree pattern of depth \(k\) around a vertex, so the histogram of labels over iterations \(0, 1, \dots, k\) is a subtree feature vector, and the WL subtree kernel is the inner product of these histograms. The features up to order \(k\) are computed in \(O(|E| k)\), essentially linear in the graph. Like the Morgan index, WL relabeling can be layered on top of <em>any</em> kernel that reads categorical node labels to make it more expressive (Shervashidze et al., 2011).</p>
+
+<h3 id="graph-kernel-applications">Applications and summary</h3>
+
+<p>These kernels work well in practice. On the MUTAG dataset (188 aromatic and heteroaromatic compounds, 125 mutagenic and 63 not, assayed in <em>Salmonella typhimurium</em>), a 2D walk kernel reaches 91.2% ten-fold cross-validation accuracy against 81.4% for the earlier Progol rule learner (Mahé et al., 2005). Across a screen of inhibitors for 60 cancer cell lines, subtree kernels generally edge out walk kernels in AUC, confirming that branching structure helps. A broad comparison of graph feature methods on chemo- and bioinformatics classification (Shervashidze et al., 2011) is summarized below (ten-fold cross-validation accuracy, standard deviation in parentheses).</p>
+
+<table>
+<thead><tr><th>Method</th><th>NCI1</th><th>NCI109</th><th>ENZYMES</th></tr></thead>
+<tbody>
+<tr><td>WL subtree</td><td>82.19 (±0.18)</td><td>82.46 (±0.24)</td><td>52.22 (±1.26)</td></tr>
+<tr><td>WL shortest path</td><td>84.55 (±0.36)</td><td>83.53 (±0.30)</td><td>59.05 (±1.05)</td></tr>
+<tr><td>Ramon &amp; Gärtner</td><td>61.86 (±0.27)</td><td>61.67 (±0.21)</td><td>13.35 (±0.87)</td></tr>
+<tr><td>Geometric \(p\)-walk</td><td>58.66 (±0.28)</td><td>58.36 (±0.94)</td><td>27.67 (±0.95)</td></tr>
+<tr><td>Geometric walk</td><td>64.34 (±0.27)</td><td>63.51 (±0.18)</td><td>21.68 (±0.94)</td></tr>
+<tr><td>Graphlet count</td><td>66.00 (±0.07)</td><td>66.59 (±0.08)</td><td>32.70 (±1.20)</td></tr>
+<tr><td>Shortest path</td><td>73.47 (±0.11)</td><td>73.07 (±0.11)</td><td>41.68 (±1.79)</td></tr>
+</tbody>
+</table>
+
+<p>The Weisfeiler-Lehman variants dominate, and shortest-path features are strong; pure geometric walk kernels are the weakest, which is the empirical face of the walk-vs-subtree expressiveness point. On the COREL14 image benchmark (1400 natural images in 14 classes), Harchaoui and Bach (2007) find that walk and subtree kernels, and especially a weighted subtree kernel and a combined kernel, reduce test error relative to a plain histogram kernel.</p>
+
+<div class="box rmk"><span class="box-title">Summary: kernels between graphs</span> Kernels do not repeal the NP-hardness of subgraph and path patterns. What they buy is the ability to work with <em>approximate</em> substructures, walks and subtrees, in an infinite-dimensional feature space, at polynomial cost, through the product-graph trick. The price is interpretability: after learning in the implicit feature space it is hard to recover which patterns drove the decision.</div>
+
+<h2 id="kernels-on-a-graph">Part B: Kernels on a graph</h2>
+
+<p>Now the graph is fixed and singular, and the data points are its nodes. We want a kernel \(K(x, x')\) between two <em>vertices</em> of one graph. Such data arise for several reasons: by definition (an interaction network, the web, a social network), by discretizing or sampling a continuous domain, or simply by convenience when all we are given is a similarity between objects. A running example is predicting protein function from high-throughput protein-protein interaction data, where the graph is the interaction network and each node is a protein.</p>
+
+<p>Since the vertex set \(\mathcal{X} = \{x_1, \dots, x_m\}\) is finite, a kernel is just an \(m \times m\) symmetric positive semi-definite matrix \(K\); every such matrix is a valid kernel. The design question is how to translate the <em>topology</em> of the graph into that matrix. Three strategies suggest themselves, and they turn out to converge:</p>
+
+<ul>
+<li><strong>Geometric.</strong> Make \(K_{i,j}\) large when \(x_i\) and \(x_j\) are close on the graph.</li>
+<li><strong>Functional.</strong> Make the RKHS norm \(\|f\|_K\) small when \(f\) is smooth on the graph, that is, varies little across edges.</li>
+<li><strong>Discrete/continuous link.</strong> Look for the graph analogue of the continuous Gaussian kernel, ideally as a limit of fine discretizations.</li>
+</ul>
+
+<h3 id="graph-distance">Graph distance and conditionally p.d. kernels</h3>
+
+<p>The most direct geometric route is to build a kernel from the graph distance. To see whether that is even possible we need the notion of conditional positive definiteness, which is the exact condition for a distance to come from a Hilbert-space embedding.</p>
+
+<div class="box def"><span class="box-title">Hilbert distance and c.p.d.</span> Any p.d. kernel is an inner product in a Hilbert space, \(K(x, x') = \langle \Phi(x), \Phi(x') \rangle_{\mathcal H}\), and induces the Hilbert distance
+$$d_K(x, x')^2 = K(x, x) + K(x', x') - 2 K(x, x').$$
+The negative squared distance \(-d_K^2\) is <em>conditionally positive definite</em> (c.p.d.): in particular \(\exp(-t\, d_K(x, x')^2)\) is p.d. for every \(t \gt 0\).</div>
+
+<div class="box ex"><span class="box-title">The Euclidean prototype</span> On \(\mathcal{X} = \mathbb{R}^n\) with \(K(x, x') = x^\top x'\), the Hilbert distance is the Euclidean distance,
+$$d_K(x, x')^2 = x^\top x + x'^\top x' - 2 x^\top x' = \|x - x'\|^2,$$
+and \(-\|x - x'\|^2\) is c.p.d., which is exactly why the Gaussian \(\exp(-t\|x-x'\|^2)\) is a valid kernel for all \(t \gt 0\).</div>
+
+<p>Transporting this to a graph, the natural distance between vertices is the <em>graph distance</em> \(d_G(x, x')\), the length of the shortest path between them. We say \(G = (V, E)\) embeds exactly in a Hilbert space if \(-d_G\) is c.p.d., which would give us \(\exp(-t\, d_G(x, x'))\) as a valid kernel for all \(t \gt 0\). Unfortunately this fails in general.</p>
+
+<div class="box lem"><span class="box-title">Lemma (embeddability)</span> In general, graphs cannot be embedded exactly in a Hilbert space, i.e. \(-d_G\) is not c.p.d. In some special cases exact embeddings do exist; in particular, <em>trees</em> embed exactly, and <em>closed chains</em> (cycles) embed exactly.</div>
+
+<div class="box ex"><span class="box-title">A non-c.p.d. graph distance</span> For a small five-vertex graph one finds the distance matrix
+$$d_G = \begin{pmatrix} 0&1&1&1&2 \\ 1&0&2&2&1 \\ 1&2&0&2&1 \\ 1&2&2&0&1 \\ 2&1&1&1&0 \end{pmatrix},$$
+and the matrix with entries \(\exp(-0.2\, d_G(i,j))\) has smallest eigenvalue \(\lambda_{\min} \approx -0.028 \lt 0\). Being indefinite, it is not a valid kernel, so this distance does <em>not</em> come from a Hilbert embedding.</div>
+
+<div class="box proof"><span class="box-title">Proof that tree distances are c.p.d.</span> Let \(G = (V, E)\) be a tree and fix a root \(x_0 \in V\). Represent each vertex \(x\) by the vector \(\Phi(x) \in \mathbb{R}^{|E|}\) whose \(i\)-th coordinate is \(1\) if the \(i\)-th edge lies on the unique path from \(x\) to \(x_0\), and \(0\) otherwise. For two vertices, the edges on their two root-paths that are <em>not</em> shared are exactly the edges of the path between them (the shared prefix cancels), so
+$$d_G(x, x')^2 = \|\Phi(x) - \Phi(x')\|^2.$$
+Hence the graph distance is a squared Euclidean distance, \(-d_G\) is c.p.d., and \(\exp(-t\, d_G(x, x'))\) is p.d. for all \(t \gt 0\). <span class="qed">\(\square\)</span></div>
+
+<div class="box proof"><span class="box-title">Proof that closed-chain distances are c.p.d. (even cycle)</span> Let \(G\) be a directed cycle with an even number of vertices \(|V| = 2p\). Fix a root \(x_0\) and number the \(2p\) edges in order around the cycle from \(x_0\) back to \(x_0\). Label these edges with the vectors \(e_1, \dots, e_p, -e_1, \dots, -e_p\) in \(\mathbb{R}^p\), so that opposite edges of the cycle carry opposite labels. For a vertex \(v\), let \(\Phi(v)\) be the sum of the labels of the edges on the shortest directed path from \(x_0\) to \(v\). One checks that \(\|\Phi(v) - \Phi(v')\|^2\) reproduces the graph distance, so \(-d_G\) is c.p.d. <span class="qed">\(\square\)</span></div>
+
+<div class="box ex"><span class="box-title">The Cayley graph of \(S_4\)</span> Let \(S_n\) be the symmetric group of permutations of \(n\) items, and form the Cayley graph \(G\) by connecting two permutations when they differ by one adjacent transposition. Here the graph distance (the number of adjacent transpositions needed, the Kendall-tau distance) can be computed in \(O(n \log n)\), and it turns out to be c.p.d., so \(\exp(-t\, d_G)\) is a valid kernel on permutations (Jiao and Vert, 2017).</div>
+
+<div class="box rmk"><span class="box-title">Summary on graph distance</span> Some graph distances are c.p.d. and some are not, and there is a large mathematical literature on embedding graphs approximately. But the graph distance has two flaws for machine learning: it is only sometimes a valid kernel, and it is very sensitive to noise in the edges (a single spurious edge can create a shortcut and collapse many distances). We want a construction that yields a p.d. kernel for <em>every</em> graph and degrades gracefully under edge noise. That is the functional route, through the Laplacian.</div>
+
+<h3 id="laplacian-regularization">Construction by regularization: the graph Laplacian</h3>
+
+<p>Rather than starting from a distance and hoping it is c.p.d., we start from the <em>functional</em> requirement, that smooth functions should have small norm, and let it define the RKHS. Designing a kernel is equivalent to defining an RKHS, and on a graph there is an intuitive notion of smoothness: a function is smooth if it changes little across edges. So the plan is to fix a smoothness functional on functions \(f : \mathcal{X} \to \mathbb{R}\), show it is a squared RKHS norm, and read off the kernel.</p>
+
+<p>Set up notation. The vertex set \(\mathcal{X} = \{x_1, \dots, x_m\}\) is finite; write \(x \sim x'\) when there is an edge between \(x\) and \(x'\); assume no self-loops and a single connected component. The adjacency matrix \(A \in \mathbb{R}^{m \times m}\) has \(A_{i,j} = 1\) if \(i \sim j\) and \(0\) otherwise, and \(D\) is the diagonal degree matrix with \(D_{i,i} = \sum_{j} A_{i,j}\), the number of neighbors of \(x_i\).</p>
+
+<div class="box def"><span class="box-title">Definition (graph Laplacian)</span> The <em>Laplacian</em> of the graph is \(L = D - A\).</div>
+
+<p>The Laplacian is the discrete object that measures roughness, as the following lemma makes precise.</p>
+
+<div class="box lem"><span class="box-title">Lemma (properties of \(L\))</span> Let \(L = D - A\) be the Laplacian of a connected graph. Then:
+<ol>
+<li>For any \(f : \mathcal{X} \to \mathbb{R}\), the roughness functional
+$$\Omega(f) := \sum_{i \sim j} \big(f(x_i) - f(x_j)\big)^2 = f^\top L f,$$
+where the sum runs over edges.</li>
+<li>\(L\) is symmetric positive semi-definite.</li>
+<li>\(0\) is an eigenvalue of multiplicity \(1\), with eigenvector the constant vector \(\mathbf{1} = (1, \dots, 1)\).</li>
+<li>The image of \(L\) is \(\mathrm{Im}(L) = \{ f \in \mathbb{R}^m : \sum_{i=1}^m f_i = 0 \}\), the mean-zero functions.</li>
+</ol>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span> For the first claim, expand
+$$\Omega(f) = \sum_{i \sim j} \big(f(x_i) - f(x_j)\big)^2 = \sum_{i \sim j}\big(f(x_i)^2 + f(x_j)^2 - 2 f(x_i) f(x_j)\big).$$
+Each vertex \(i\) contributes \(f(x_i)^2\) once per incident edge, that is, \(D_{i,i}\) times, so the squared terms sum to \(\sum_i D_{i,i} f(x_i)^2 = f^\top D f\); the cross terms give \(-2 \sum_{i \sim j} f(x_i) f(x_j) = -f^\top A f\). Hence \(\Omega(f) = f^\top D f - f^\top A f = f^\top L f\).
+
+Symmetry of \(L\) is immediate from symmetry of \(A\) and \(D\). Since \(f^\top L f = \Omega(f) \ge 0\) for all \(f\), the (real) eigenvalues of \(L\) are nonnegative, so \(L\) is positive semi-definite. Next, \(f\) is an eigenvector for eigenvalue \(0\) iff \(f^\top L f = 0\) iff \(\sum_{i \sim j}(f(x_i) - f(x_j))^2 = 0\) iff \(f(x_i) = f(x_j)\) whenever \(i \sim j\); because the graph is connected this forces \(f\) constant, so the kernel of \(L\) is one-dimensional, spanned by \(\mathbf{1}\). Finally, \(L\) symmetric implies \(\mathrm{Im}(L)\) is the orthogonal complement of \(\mathrm{Ker}(L) = \mathrm{span}(\mathbf{1})\), namely the functions orthogonal to \(\mathbf{1}\), i.e. the mean-zero functions. <span class="qed">\(\square\)</span></div>
+
+<p>So \(\Omega(f) = f^\top L f\) is exactly the smoothness penalty we wanted, and it is a positive semi-definite quadratic form. The only obstruction to using it as a squared norm is its one-dimensional kernel: constants are penalized \(0\). We therefore work on the mean-zero functions, where \(\Omega\) is strictly positive.</p>
+
+<div class="box thm"><span class="box-title">Theorem (the Laplacian kernel)</span> The space \(\mathcal{H} = \{ f \in \mathbb{R}^m : \sum_{i=1}^m f_i = 0 \}\), endowed with the norm \(\Omega(f) = \sum_{i \sim j}(f(x_i) - f(x_j))^2\), is an RKHS whose reproducing kernel is \(L^{*}\), the Moore-Penrose pseudo-inverse of the graph Laplacian.</div>
+
+<div class="box rmk"><span class="box-title">Recall: the pseudo-inverse of \(L\)</span> The pseudo-inverse \(L^{*}\) is the linear map that is \(0\) on \(\mathrm{Ker}(L)\) and equal to \(L^{-1}\) on \(\mathrm{Im}(L)\). Concretely, from the eigendecomposition \(L = \sum_{i=1}^m \lambda_i u_i u_i^\top\),
+$$L^{*} = \sum_{\lambda_i \neq 0} \frac{1}{\lambda_i}\, u_i u_i^\top.$$
+It satisfies \(L^{*} L = L L^{*} = \Pi_{\mathcal H}\), the orthogonal projection onto \(\mathrm{Im}(L) = \mathcal{H}\).</div>
+
+<div class="box proof"><span class="box-title">Proof of the theorem</span> Restricted to \(\mathcal{H} = \mathrm{Im}(L)\), the symmetric bilinear form \(\langle f, g \rangle = f^\top L g\) is positive definite, because \(L\) is positive semi-definite and its only null direction, \(\mathbf{1}\), has been removed. It is therefore a genuine inner product, making \(\mathcal{H}\) a (finite-dimensional, hence complete) Hilbert space, with norm
+$$\|f\|^2 = \langle f, f \rangle = f^\top L f = \Omega(f).$$
+To identify the reproducing kernel we must exhibit \(K\) with \(K_x \in \mathcal{H}\) for every \(x\) and \(\langle f, K_x \rangle = f(x)\) for every \(f \in \mathcal{H}\) and \(x\). Take \(K = L^{*}\). Since \(\mathrm{Ker}(L^{*}) = \mathrm{Ker}(L) = \mathrm{span}(\mathbf{1})\), we have \(K \mathbf{1} = 0\), so every column of \(K\) is mean-zero, i.e. \(K_x \in \mathcal{H}\). For the reproducing property, let \(f \in \mathcal{H}\) and set \(g_i = \langle K_{(i, \cdot)}, f \rangle\). In matrix form, using the inner product \(\langle \cdot, \cdot \rangle = (\cdot)^\top L (\cdot)\),
+$$g = K L f = L^{*} L f = \Pi_{\mathcal H}(f) = f,$$
+because \(f\) already lies in \(\mathcal{H}\). Thus \(\langle K_{(i,\cdot)}, f\rangle = f_i = f(x_i)\), and \(K = L^{*}\) is the reproducing kernel of \(\mathcal{H}\). <span class="qed">\(\square\)</span></div>
+
+<p>This is our first genuine kernel on a graph: valid for <em>any</em> connected graph, and by construction it makes smooth functions cheap. Two limits make clear why \(L\) deserves the name "Laplacian" and why \(\Omega\) is the right penalty.</p>
+
+<div class="box rmk"><span class="box-title">Interpretation of \(L\): a discrete second derivative</span> On a one-dimensional chain with spacing \(dx\), the continuous Laplacian \(\Delta f = f''\) is approximated by a symmetric second difference:
+$$\Delta f(x) \approx \frac{f'(x + dx/2) - f'(x - dx/2)}{dx} \approx \frac{f_{i+1} - f_i - (f_i - f_{i-1})}{dx^2} = \frac{f_{i-1} + f_{i+1} - 2 f_i}{dx^2} = -\frac{(Lf)_i}{dx^2}.$$
+So the graph Laplacian is (minus) a discrete Laplace operator: \(\Delta \approx -L / dx^2\).</div>
+
+<div class="box rmk"><span class="box-title">Interpretation of the regularizer: a discrete Dirichlet energy</span> For \(f : [0,1] \to \mathbb{R}\) sampled at \(x_i = i/m\) along a chain,
+$$\Omega(f) = \sum_{i=1}^m \Big( f\big(\tfrac{i+1}{m}\big) - f\big(\tfrac{i}{m}\big)\Big)^2 \approx \sum_{i=1}^m \frac{1}{m^2}\, f'\big(\tfrac{i}{m}\big)^2 = \frac{1}{m} \cdot \frac{1}{m}\sum_{i=1}^m f'\big(\tfrac{i}{m}\big)^2 \approx \frac{1}{m} \int_0^1 f'(t)^2\, dt.$$
+Penalizing \(f^\top L f\) on the graph is the discrete analogue of penalizing the Dirichlet energy \(\int (f')^2\), the standard smoothness functional on the continuum.</div>
+
+<h3 id="diffusion-kernel">The diffusion kernel</h3>
+
+<p>The Laplacian kernel \(L^{*}\) is one member of a richer family, and to find the family we chase the third strategy from the start: the graph analogue of the Gaussian. The continuous normalized Gaussian on \(\mathbb{R}^d\),</p>
+
+$$K_t(x, x') = \frac{1}{(4\pi t)^{d/2}} \exp\!\Big( -\frac{\|x - x'\|^2}{4t} \Big),$$
+
+<p>cannot be moved to a graph by simply substituting the shortest-path distance for \(\|x - x'\|\): as we saw, that need not even be p.d. Instead we characterize the Gaussian by a property that <em>does</em> transfer, namely that it solves a differential equation built from the Laplacian.</p>
+
+<div class="box lem"><span class="box-title">Lemma (the Gaussian is the heat kernel)</span> For any \(x_0 \in \mathbb{R}^d\), the function \(K_{x_0}(x, t) = K_t(x_0, x)\) solves the <em>diffusion equation</em>
+$$\frac{\partial}{\partial t} K_{x_0}(x, t) = \Delta K_{x_0}(x, t), \qquad K_{x_0}(x, 0) = \delta_{x_0}(x),$$
+by direct computation. The Gaussian is the heat spreading out from a point source at \(x_0\).</div>
+
+<p>This description transfers verbatim. Replace the continuous Laplacian \(\Delta\) by \(-L\) (recall \(\Delta \approx -L/dx^2\)), so that for a finite-dimensional \(f_t \in \mathbb{R}^m\) the discrete diffusion equation reads</p>
+
+$$\frac{\partial}{\partial t} f_t = -L f_t, \qquad \text{with solution} \qquad f_t = e^{-tL} f_0,$$
+
+<p>where the matrix exponential is defined by its series</p>
+
+$$e^{-tL} = I - tL + \frac{t^2}{2!} L^2 - \frac{t^3}{3!} L^3 + \cdots .$$
+
+<p>Just as the Gaussian was the operator carrying the initial condition to the solution at time \(t\), the operator \(e^{-tL}\) carries \(f_0\) to \(f_t\), and it is a valid kernel.</p>
+
+<div class="box def"><span class="box-title">Diffusion kernel (Kondor and Lafferty, 2002)</span> The <em>diffusion kernel</em> (or <em>heat kernel</em>) on the graph is
+$$K = e^{-tL}.$$
+It is symmetric positive semi-definite: writing \(L = \sum_{i=1}^m \lambda_i u_i u_i^\top\) with \(\lambda_i \ge 0\),
+$$K = e^{-tL} = \sum_{i=1}^m e^{-t\lambda_i}\, u_i u_i^\top,$$
+whose eigenvalues \(e^{-t\lambda_i} \gt 0\) are strictly positive. The parameter \(t\) sets the diffusion time: larger \(t\) spreads similarity further across the graph.</div>
+
+<div class="box ex"><span class="box-title">Complete graph</span> On the complete graph on \(m\) vertices the diffusion kernel is
+$$K_{i,j} = \begin{cases} \dfrac{1 + (m-1) e^{-tm}}{m} & i = j, \\[2mm] \dfrac{1 - e^{-tm}}{m} & i \neq j. \end{cases}$$
+</div>
+
+<div class="box ex"><span class="box-title">Closed chain</span> On the cycle of length \(m\), using the discrete Fourier eigenvectors,
+$$K_{i,j} = \frac{1}{m} \sum_{\nu = 0}^{m-1} \exp\!\Big( -2t\big(1 - \cos\tfrac{2\pi\nu}{m}\big)\Big) \cos\frac{2\pi\nu(i-j)}{m}.$$
+</div>
+
+<h3 id="harmonic-analysis">Harmonic analysis on graphs</h3>
+
+<p>The eigenexpansions above are not incidental: they say that both the Laplacian kernel and the diffusion kernel act by <em>reshaping the spectrum</em> of \(L\). Making this explicit puts kernels on graphs into the frequency domain, exactly the harmonic-analysis picture we used for semigroup and translation-invariant kernels, and it produces a whole family of kernels at once.</p>
+
+<p>Order the Laplacian eigenvalues \(0 = \lambda_1 \lt \lambda_2 \le \dots \le \lambda_m\) (the strict first gap uses connectedness), with orthonormal eigenvectors \(u_1, \dots, u_m\). The diffusion kernel \(K_t = \sum_i e^{-t\lambda_i} u_i u_i^\top\) has strictly positive eigenvalues, hence is <em>invertible</em>, and its inverse lets us compute the RKHS norm directly.</p>
+
+<p>Any \(f \in \mathbb{R}^m\) can be written \(f = K(K^{-1} f)\), so its norm in the diffusion RKHS is</p>
+
+$$\|f\|_{K_t}^2 = (K^{-1} f)^\top K (K^{-1} f) = f^\top K^{-1} f.$$
+
+<p>Introduce the <em>discrete Fourier transform</em> of \(f\), the projections onto the eigenbasis,</p>
+
+$$\hat{f}_i = u_i^\top f, \qquad i = 1, \dots, m.$$
+
+<p>Then, since \(K^{-1} = \sum_i e^{t\lambda_i} u_i u_i^\top\),</p>
+
+$$\|f\|_{K_t}^2 = f^\top K^{-1} f = \sum_{i=1}^m e^{t \lambda_i}\, \hat{f}_i^2.$$
+
+<p>This is precisely the graph version of the continuous penalty \(\int |\hat f(\omega)|^2 e^{\sigma^2 \omega^2}\, d\omega\) that characterizes the Gaussian RKHS: high-frequency components are penalized exponentially.</p>
+
+<div class="box rmk"><span class="box-title">The Laplacian eigenbasis is a Fourier basis</span> The vector \(\hat f = (\hat f_1, \dots, \hat f_m)^\top\) is the discrete Fourier transform of \(f\). The eigenvectors \(u_i\) of the Laplacian play the role of the sine/cosine basis on \(\mathbb{R}^n\), and the eigenvalues \(\lambda_i\) play the role of squared frequencies \(\omega^2\). As \(\lambda_i\) grows, the eigenvector \(u_i\) oscillates more rapidly across the graph, so summing \(e^{t\lambda_i}\hat f_i^2\) charges rough (high-frequency) functions the most.</div>
+
+<p>Nothing in the argument required the specific weights \(e^{t\lambda_i}\). Any reweighting of the spectrum defines a kernel.</p>
+
+<div class="box def"><span class="box-title">Spectral family of graph kernels</span> For a non-increasing function \(r : \mathbb{R}_+ \to \mathbb{R}_+^{*}\), define
+$$K_r = \sum_{i=1}^m r(\lambda_i)\, u_i u_i^\top, \qquad \text{with RKHS norm} \qquad \|f\|_{K_r}^2 = \sum_{i=1}^m \frac{\hat{f}_i^2}{r(\lambda_i)}.$$
+Choosing \(r(\lambda) = e^{-t\lambda}\) recovers the diffusion kernel; \(r(\lambda) = 1/\lambda\) (on \(\mathrm{Im}(L)\)) recovers the Laplacian pseudo-inverse. Requiring \(r\) non-increasing makes high-frequency modes expensive, i.e. enforces smoothness.</div>
+
+<div class="box ex"><span class="box-title">Regularized Laplacian</span> Take \(r(\lambda) = \dfrac{1}{\lambda + \epsilon}\) with \(\epsilon \gt 0\). Then
+$$K = \sum_{i=1}^m \frac{1}{\lambda_i + \epsilon}\, u_i u_i^\top = (L + \epsilon I)^{-1},$$
+a full-rank kernel (no need to work on the mean-zero subspace, since \(\epsilon\) shifts the zero eigenvalue). Its norm reads
+$$\|f\|_K^2 = f^\top K^{-1} f = f^\top (L + \epsilon I) f = \sum_{i \sim j} \big(f(x_i) - f(x_j)\big)^2 + \epsilon \sum_{i=1}^m f(x_i)^2,$$
+the graph roughness \(\Omega(f)\) plus a ridge term \(\epsilon \|f\|^2\) that also penalizes large values. This is the smoothing-plus-shrinkage regularizer used in practice.</div>
+
+<h3 id="graph-kernel-on-applications">Applications</h3>
+
+<p>With a kernel on the graph in hand, standard kernel methods immediately do useful things on networks.</p>
+
+<p><strong>Graph partitioning.</strong> A classical relaxation of graph partitioning minimizes edge-cut energy subject to a normalization,
+$$\min_{f \in \mathbb{R}^m} \sum_{i \sim j} (f_i - f_j)^2 \quad \text{s.t.} \quad \sum_i f_i^2 = 1,$$
+which, using \(\sum_{i \sim j}(f_i - f_j)^2 = \|f\|_{\mathcal H}^2\), is the same as
+$$\max_f \sum_i f_i^2 \quad \text{s.t.} \quad \|f\|_{\mathcal H} \le 1.$$
+Maximizing the ordinary variance under an RKHS-norm constraint is exactly kernel PCA in the Laplacian RKHS, so the leading spectral components partition the graph.</p>
+
+<p><strong>Search on a graph.</strong> Given a query set of nodes \(x_1, \dots, x_q\), rank the other nodes by similarity by solving
+$$\min_f \|f\|_{\mathcal H} \quad \text{s.t.} \quad f(x_i) \ge 1 \text{ for } i = 1, \dots, q,$$
+the smoothest function that is high on the query. Its values on the remaining nodes give a ranking that diffuses the query outward along the graph.</p>
+
+<p><strong>Semi-supervised learning.</strong> When only a few nodes are labeled, fitting a function that agrees with the labels while being smooth in the graph norm propagates the labels through dense regions of the graph, the kernel version of label propagation.</p>
+
+<p><strong>Tumor classification from microarray data (Rapaport et al., 2006).</strong> Here the graph is a biological network and the "nodes" are genes. One measures expression of more than \(10^4\) genes on fewer than \(100\) samples of two or more tumor classes, and wants a classifier
+$$f(x) = \sum_{i=1}^p \beta_i x_i + \beta_0$$
+that both separates the classes and is biologically interpretable through its weights \(\beta_i\). With roughly \(10^5\) features and \(100\) samples no robust estimate exists without prior knowledge. The usual remedies each have drawbacks: constraining \(\|\beta\|_2\) (ridge, SVM) or \(\|\beta\|_1\) (lasso) classifies well but the small or sparse weights carry no biological reading, and hard feature selection down to a handful of genes is not robust and is easily misinterpreted because neighboring genes are highly correlated.</p>
+
+<p>The pathway insight is that biological function lives in <em>pathways</em>, groups of interacting genes, not in single genes, and many pathways are already mapped. Rapaport et al. (2006) therefore constrain the <em>diffusion RKHS norm</em> of \(\beta\) with respect to the gene network, which is appropriate exactly when the true decision function is smooth along the network. Projecting the weights of an ordinary SVM onto the complete known metabolic network of budding yeast (from the KEGG database) gives good accuracy but a scattered, uninterpretable weight pattern; projecting the weights of a <em>spectral</em> SVM, one regularized by the graph, gives comparable accuracy while the weights now vary smoothly over pathways and can be read biologically. Smoothness on the network buys interpretation at no cost in accuracy, which is the whole promise of a well-chosen kernel on a graph.</p>
+<div class="chnav">
+<a href="string-kernels.html"><span class="dir">previous</span>9. Kernels for Sequences</a>
+<a style="text-align:right" href="kernel-mean-embeddings.html"><span class="dir">next</span>11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+</div>
+</div></main>
+</div>
+</body>
+</html>

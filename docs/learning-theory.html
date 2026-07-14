@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Theory in RKHS Balls · Machine Learning with Kernel Methods</title>
+<meta name="description" content="Learning Theory in RKHS Balls, from Machine Learning with Kernel Methods.">
+<link rel="stylesheet" href="assets/book.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],throwOnError:false});"></script>
+
+</head>
+<body>
+<div class="book">
+<nav class="toc">
+<div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
+<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
+<div class="part">I · Foundations</div>
+<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">2. The Kernel Trick</a>
+<div class="part">II · Supervised Learning</div>
+<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
+<a href="learning-theory.html" class="here">4. Learning Theory in RKHS Balls</a>
+<a href="support-vector-machines.html">5. Support Vector Machines</a>
+<div class="part">III · Unsupervised Learning</div>
+<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Theory of the Space</div>
+<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · The Kernel Jungle</div>
+<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">9. Kernels for Sequences</a>
+<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
+<div class="part">VI · Distributions</div>
+<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Frontiers</div>
+<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
+<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+</nav>
+<main><div class="page">
+<h1><span class="chno">Chapter 4 · II · Supervised Learning</span>Learning Theory in RKHS Balls</h1>
+
+<p class="lead">The previous chapters replaced the intractable 0/1 classification error with a convex surrogate, the \(\varphi\)-risk, and replaced arbitrary measurable functions with functions in a reproducing kernel Hilbert space. This chapter justifies both moves. First we prove a calibration theorem of Bartlett et al. (2003): minimizing a well-chosen convex \(\varphi\)-risk automatically minimizes the classification error. Then we develop the statistical side: Rademacher complexity as a measure of the capacity of a function class, a basic learning bound for empirical risk minimization with Lipschitz losses, and an explicit capacity bound for balls of an RKHS whose proof is three lines of Hilbert space geometry. The chapter closes the circle by showing, via Lagrangian duality, that empirical risk minimization over an RKHS ball is exactly the penalized problem \(\min_f \frac{1}{n}\sum_i \varphi(y_i f(x_i)) + \lambda \lVert f\rVert_{\mathcal H}^2\) that our algorithms actually solve. A self-contained interlude on convex duality supplies the tools and will be reused when we derive support vector machines.</p>
+
+<h2 id="surrogate-losses">From the 0/1 loss to convex surrogates</h2>
+
+<p>We work in the standard binary classification setting. A pair \((X,Y)\) is drawn from an unknown probability distribution \(P\) on \(\mathcal X \times \{-1,+1\}\), and we observe a training sample \(S_n = \big((X_1,Y_1),\dots,(X_n,Y_n)\big)\) of \(n\) independent copies of \((X,Y)\). A real-valued function \(f:\mathcal X \to \mathbb R\) classifies a point \(x\) by the sign of \(f(x)\). Its quality is measured by the 0/1 risk.</p>
+
+<div class="box def"><span class="box-title">Definition (0/1 risk, Bayes risk)</span>
+<p>The <em>0/1 risk</em> (or classification error) of a measurable function \(f:\mathcal X\to\mathbb R\) is
+$$R(f) = P\big(\operatorname{sign} f(X) \neq Y\big),$$
+and the <em>Bayes risk</em> is \(R^* = \min_{g \text{ measurable}} R(g)\). We write
+$$\eta(x) = P(Y = 1 \mid X = x)$$
+for the regression function of the labels.</p>
+</div>
+
+<p>Conditioning on \(X = x\), a function that predicts \(+1\) errs with probability \(1-\eta(x)\) and a function that predicts \(-1\) errs with probability \(\eta(x)\). The conditional error of any \(g\) is therefore at least \(\min(\eta(x), 1-\eta(x))\), and this floor is attained by the <em>Bayes classifier</em> \(\operatorname{sign}(2\eta(x)-1)\). Integrating over \(x\),
+$$R^* = \mathbb E\big[\min(\eta(X),\, 1-\eta(X))\big].$$</p>
+
+<p>Minimizing the empirical 0/1 risk directly is computationally hopeless: the loss \(\mathbf 1\{y f(x) \le 0\}\) is a discontinuous, non-convex function of \(f\). The way out, already used for logistic regression and large-margin classifiers, is to replace the step function by a convex upper envelope of it.</p>
+
+<div class="box def"><span class="box-title">Definition (\(\varphi\)-risk)</span>
+<p>Let \(\varphi : \mathbb R \to \mathbb R_+\) be a loss function. The <em>\(\varphi\)-risk</em> of a measurable \(f:\mathcal X\to\mathbb R\) is
+$$R_\varphi(f) = \mathbb E\big[\varphi\big(Y f(X)\big)\big],$$
+its minimal value over measurable functions is \(R_\varphi^* = \min_{g\text{ measurable}} R_\varphi(g)\), and the <em>empirical \(\varphi\)-risk</em> on the sample \(S_n\) is
+$$R_\varphi^n(f) = \frac{1}{n}\sum_{i=1}^n \varphi\big(Y_i f(X_i)\big).$$</p>
+</div>
+
+<p>The argument \(u = y f(x)\) is the <em>margin</em>: it is positive when the classification is correct, and its magnitude measures confidence. Typical convex surrogates are decreasing functions of the margin, such as the hinge loss \(\varphi(u) = \max(1-u, 0)\), the logistic loss \(\varphi(u) = \log(1 + e^{-u})\), and the squared loss \(\varphi(u) = (1-u)^2\). All of them dominate (up to scaling) the 0/1 loss, so a small \(\varphi\)-risk certainly bounds the classification error from above. But the real question is sharper: if we push the \(\varphi\)-risk all the way down to its minimum, do we land on a function whose <em>classification</em> error is also minimal? Nothing in the definition guarantees it; a badly chosen surrogate could prefer functions whose sign is wrong on a region where being wrong is cheap for \(\varphi\) but costly for the 0/1 loss.</p>
+
+<h2 id="calibration">Calibration: a small \(\varphi\)-risk ensures a small 0/1 risk</h2>
+
+<p>The following theorem answers the question in the affirmative for a large family of convex losses. The hypotheses are exactly designed to make the loss point in the right direction at the decision boundary: \(\varphi\) must be decreasing through zero margin, with a strictly negative slope there.</p>
+
+<div class="box thm"><span class="box-title">Theorem (Bartlett et al., 2003)</span>
+<p>Let \(\varphi:\mathbb R\to\mathbb R_+\) be convex, non-increasing, differentiable at \(0\) with \(\varphi'(0) \lt 0\). Let \(f:\mathcal X\to\mathbb R\) be measurable such that
+$$R_\varphi(f) = \min_{g\text{ measurable}} R_\varphi(g) = R_\varphi^*.$$
+Then
+$$R(f) = \min_{g\text{ measurable}} R(g) = R^*.$$</p>
+</div>
+
+<p>The proof strategy is to show that a minimizer of the \(\varphi\)-risk is necessarily <em>sign-consistent</em> with \(\eta\): where \(\eta(x) \gt \tfrac12\) the function must be positive, and where \(\eta(x) \lt \tfrac12\) it must be negative. Since these are precisely the signs of the Bayes classifier, \(f\) attains the Bayes risk. The key computation conditions on \(X = x\) and compares \(f\) with \(-f\):
+$$R_\varphi(f \mid X = x) = \mathbb E\big[\varphi(Yf(X)) \mid X = x\big] = \eta(x)\,\varphi(f(x)) + (1-\eta(x))\,\varphi(-f(x)),$$
+$$R_\varphi(-f \mid X = x) = \mathbb E\big[\varphi(-Yf(X)) \mid X = x\big] = \eta(x)\,\varphi(-f(x)) + (1-\eta(x))\,\varphi(f(x)),$$
+so that
+$$R_\varphi(f\mid X=x) - R_\varphi(-f\mid X=x) = \big[2\eta(x) - 1\big]\times\big[\varphi(f(x)) - \varphi(-f(x))\big].$$
+Since \(f\) minimizes the \(\varphi\)-risk, we have \(R_\varphi(f) \le R_\varphi(-f)\), and localizing this comparison (replacing \(f\) by \(-f\) only on measurable sets) forces the displayed difference to be non-positive almost surely. With \(\varphi\) non-increasing this pins the sign of \(f(x)\) to the sign of \(2\eta(x)-1\): if \(\eta(x) \gt \tfrac12\) then \(\varphi(f(x)) \le \varphi(-f(x))\), hence \(f(x) \ge 0\); if \(\eta(x) \lt \tfrac12\) then \(\varphi(f(x)) \ge \varphi(-f(x))\), hence \(f(x) \le 0\). The slides leave the strictness of these inequalities as an exercise; the complete argument, which is where convexity and \(\varphi'(0) \lt 0\) do their work, is written out below.</p>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p><strong>Step 1: the conditional \(\varphi\)-risk.</strong> For \(\eta \in [0,1]\) define the conditional risk function
+$$C_\eta(\alpha) = \eta\,\varphi(\alpha) + (1-\eta)\,\varphi(-\alpha), \qquad \alpha \in \mathbb R,$$
+so that, conditioning on \(X\),
+$$R_\varphi(g) = \mathbb E\big[C_{\eta(X)}\big(g(X)\big)\big] \quad\text{for every measurable } g .$$
+Each \(C_\eta\) is convex on \(\mathbb R\), as a convex combination of \(\varphi(\alpha)\) and \(\varphi(-\alpha)\), both convex in \(\alpha\); being finite and convex it is also continuous. Since \(\varphi\) is differentiable at \(0\), so is \(C_\eta\), with
+$$C_\eta'(0) = \eta\,\varphi'(0) - (1-\eta)\,\varphi'(0) = (2\eta - 1)\,\varphi'(0).$$
+Write \(H(\eta) = \inf_{\alpha\in\mathbb R} C_\eta(\alpha)\) for the optimal conditional risk.</p>
+
+<p><strong>Step 2: a global minimizer is a pointwise minimizer.</strong> We first check that
+$$R_\varphi^* = \mathbb E\big[H(\eta(X))\big].$$
+The inequality \(R_\varphi(g) \ge \mathbb E[H(\eta(X))]\) holds for every measurable \(g\), since \(C_{\eta(x)}(g(x)) \ge H(\eta(x))\) pointwise. For the converse, let \(Q_k = \{ j/2^k : j \in \mathbb Z,\ |j| \le 4^k \}\) be a nested sequence of finite grids whose union is dense in \(\mathbb R\), and let \(g_k(x)\) be the smallest element of \(Q_k\) minimizing \(C_{\eta(x)}\) over \(Q_k\); each \(g_k\) is measurable because it is built from the finitely many measurable functions \(x \mapsto C_{\eta(x)}(\alpha)\), \(\alpha \in Q_k\). By continuity of \(C_\eta\) and density of \(\bigcup_k Q_k\), the values \(C_{\eta(x)}(g_k(x))\) decrease to \(H(\eta(x))\) for every \(x\); they are bounded above by \(C_{\eta(x)}(0) = \varphi(0)\) and below by \(0\), so monotone convergence gives \(R_\varphi(g_k) \to \mathbb E[H(\eta(X))]\), proving the claim.</p>
+<p>Now let \(f\) attain \(R_\varphi^*\), and note that \(R_\varphi(f) = R_\varphi^* \le R_\varphi(0) = \varphi(0) \lt \infty\). The function \(x \mapsto C_{\eta(x)}(f(x)) - H(\eta(x))\) is non-negative and its integral equals \(R_\varphi(f) - \mathbb E[H(\eta(X))] = 0\), hence
+$$C_{\eta(x)}\big(f(x)\big) = H\big(\eta(x)\big) \qquad \text{for } P\text{-almost every } x .$$</p>
+
+<p><strong>Step 3: minimizers of \(C_\eta\) have the Bayes sign.</strong> We claim that if \(\eta \gt \tfrac12\), then every \(\alpha \le 0\) satisfies \(C_\eta(\alpha) \gt H(\eta)\); symmetrically, if \(\eta \lt \tfrac12\), then every \(\alpha \ge 0\) satisfies \(C_\eta(\alpha) \gt H(\eta)\).</p>
+<p>Suppose \(\eta \gt \tfrac12\). Then \(C_\eta'(0) = (2\eta-1)\varphi'(0) \lt 0\), and two consequences follow from convexity.</p>
+<p>First, \(C_\eta(0) \gt H(\eta)\): since \(C_\eta'(0) \lt 0\), there exists \(\beta \gt 0\) with \(C_\eta(\beta) \lt C_\eta(0)\), so \(C_\eta(0)\) is not the infimum.</p>
+<p>Second, for every \(\alpha \lt 0\) we have \(C_\eta(\alpha) \gt C_\eta(0)\): convexity makes difference quotients non-decreasing, so
+$$\frac{C_\eta(0) - C_\eta(\alpha)}{0 - \alpha} \;\le\; C_\eta'(0) \;\lt\; 0,$$
+and since \(0 - \alpha \gt 0\) this forces \(C_\eta(0) \lt C_\eta(\alpha)\).</p>
+<p>Combining, every \(\alpha \le 0\) has \(C_\eta(\alpha) \ge C_\eta(0) \gt H(\eta)\), which proves the claim. The case \(\eta \lt \tfrac12\) is identical after replacing \(\alpha\) by \(-\alpha\), because \(C_\eta(\alpha) = C_{1-\eta}(-\alpha)\).</p>
+<p>(This step is the strictness "left as an exercise" in the sketch above: the comparison of \(f\) with \(-f\) only shows \(f(x) \ge 0\) where \(\eta(x) \gt \tfrac12\), up to flat pieces of \(\varphi\); the assumption \(\varphi'(0) \lt 0\) is exactly what upgrades the weak inequalities to strict ones.)</p>
+
+<p><strong>Step 4: conclusion.</strong> By Steps 2 and 3, for almost every \(x\) with \(\eta(x) \gt \tfrac12\) we have \(f(x) \gt 0\), and for almost every \(x\) with \(\eta(x) \lt \tfrac12\) we have \(f(x) \lt 0\). The conditional 0/1 risk of \(f\) at \(x\) is
+$$P\big(\operatorname{sign} f(X) \ne Y \mid X = x\big) = \eta(x)\,\mathbf 1\{f(x) \le 0\} + (1-\eta(x))\,\mathbf 1\{f(x) \gt 0\},$$
+which equals \(\min(\eta(x), 1-\eta(x))\) on \(\{\eta \ne \tfrac12\}\) by the sign consistency just established, and equals \(\tfrac12 = \min(\eta(x),1-\eta(x))\) automatically on \(\{\eta = \tfrac12\}\), whatever the value of \(f\) there. Integrating,
+$$R(f) = \mathbb E\big[\min(\eta(X), 1-\eta(X))\big] = R^*. $$
+<span class="qed">\(\square\)</span></p>
+</div>
+</details>
+
+<div class="box rmk"><span class="box-title">Remarks</span>
+<ul>
+<li>The theorem tells us that, if we knew \(P\), minimizing the \(\varphi\)-risk would be a sound strategy even though our real target is the classification error. It licenses the surrogate.</li>
+<li>The assumptions on \(\varphi\) can be relaxed: the result holds for the broader class of <em>classification-calibrated</em> loss functions characterized by Bartlett et al. (2003). For convex losses, calibration turns out to be equivalent to differentiability at \(0\) with \(\varphi'(0) \lt 0\).</li>
+<li>More is true, and more is needed in practice, since no estimator reaches \(R_\varphi^*\) exactly: Bartlett et al. (2003) prove a quantitative version, showing that if the excess \(\varphi\)-risk \(R_\varphi(f) - R_\varphi^*\) is small, then the excess 0/1 risk \(R(f) - R^*\) is small too. The remainder of the chapter therefore aims at controlling the excess \(\varphi\)-risk of estimators computed from a finite sample.</li>
+</ul>
+</div>
+
+<h2 id="empirical-risk-minimization">Empirical risk minimization</h2>
+
+<p>We do not know \(P\), only the sample \(S_n\), so we cannot minimize \(R_\varphi\) directly. To find a function with a small \(\varphi\)-risk, the natural candidate minimizes the empirical version over a class of functions \(\mathcal F\) that we choose.</p>
+
+<div class="box def"><span class="box-title">Definition (ERM estimator)</span>
+<p>The <em>empirical risk minimization</em> (ERM) estimator on a functional class \(\mathcal F\) is the solution (when it exists) of
+$$\hat f_n = \operatorname*{arg\,min}_{f \in \mathcal F}\; R_\varphi^n(f).$$</p>
+</div>
+
+<p>Two questions decide whether this is a good idea.</p>
+<ul>
+<li>Is \(R_\varphi^n(f)\) a good estimate of the true risk \(R_\varphi(f)\)? For a single fixed \(f\) the law of large numbers says yes, but \(\hat f_n\) is selected using the data, so we need the estimate to be reliable uniformly over \(\mathcal F\).</li>
+<li>Is \(R_\varphi(\hat f_n)\) small? Not merely compared with the best of \(\mathcal F\), but compared with \(R_\varphi^*\)?</li>
+</ul>
+
+<p>The second question splits into two parts according to the following decomposition, which organizes everything that follows:
+$$R_\varphi(\hat f_n) - R_\varphi^\star \;=\; \underbrace{R_\varphi(\hat f_n) - \inf_{f\in\mathcal F} R_\varphi(f)}_{\text{estimation error}} \;+\; \underbrace{\inf_{f\in\mathcal F} R_\varphi(f) - R_\varphi^\star}_{\text{approximation error}} .$$
+The approximation error is deterministic: it measures how well the class \(\mathcal F\) can approach the best measurable function, and it can only decrease as \(\mathcal F\) grows. The estimation error is statistical: it measures how much the finite sample misleads the minimizer within \(\mathcal F\), and it grows with the size of \(\mathcal F\). Choosing \(\mathcal F\) is negotiating this trade-off.</p>
+
+<h2 id="rademacher-complexity">Rademacher complexity</h2>
+
+<p>The ERM principle gives a good solution when \(R_\varphi(\hat f_n)\) is close to the minimum achievable risk \(\inf_{f\in\mathcal F} R_\varphi(f)\), and this can be ensured when \(\mathcal F\) is not "too large". To turn that intuition into a theorem we need a quantitative measure of the "capacity" of \(\mathcal F\). The measure used here asks: how well can the class correlate with pure noise?</p>
+
+<div class="box def"><span class="box-title">Definition (Rademacher complexity)</span>
+<p>The <em>Rademacher complexity</em> of a class of functions \(\mathcal F\) is
+$$\mathrm{Rad}_n(\mathcal F) = \mathbb E_{X,\sigma}\!\left[\, \sup_{f\in\mathcal F}\, \frac{2}{n} \sum_{i=1}^n \sigma_i f(X_i) \right],$$
+where the expectation is over the sample \((X_i)_{i=1,\dots,n}\) and over independent uniform \(\{\pm 1\}\)-valued (Rademacher) random variables \((\sigma_i)_{i=1,\dots,n}\).</p>
+</div>
+
+<p>The random signs \(\sigma_i\) are pure noise, independent of the data and of each other. If \(\mathcal F\) is rich enough to find, for every realization of the signs, a function whose values \(f(X_i)\) track them, then \(\mathrm{Rad}_n(\mathcal F)\) stays large: such a class can fit noise, and empirical risks computed over it cannot be trusted. If instead \(\mathcal F\) is small, no single \(f\) can chase arbitrary sign patterns, the supremum stays close to zero, and empirical averages concentrate around their expectations uniformly over the class. Rademacher complexity is the right currency in which to price this uniformity, as the next theorem shows.</p>
+
+<h2 id="basic-learning-bounds">A basic learning bound for ERM</h2>
+
+<div class="box thm"><span class="box-title">Theorem (learning bound for Lipschitz losses)</span>
+<p>Suppose \(\varphi\) is Lipschitz with constant \(L_\varphi\):
+$$\forall u, u' \in \mathbb R, \qquad \big|\varphi(u) - \varphi(u')\big| \le L_\varphi\, \big|u - u'\big| .$$
+Then the \(\varphi\)-risk of the ERM estimator satisfies, on average over the sampling of the training set,
+$$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{excess } \varphi\text{-risk}} \;\le\; \underbrace{4 L_\varphi\, \mathrm{Rad}_n(\mathcal F)}_{\text{estimation error}} \;+\; \underbrace{\inf_{f\in\mathcal F} R_\varphi(f) - R_\varphi^*}_{\text{approximation error}} .$$</p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (where the bound comes from)</span>
+<p>The course states this result without proof; the standard argument has three moves. First, since \(\hat f_n\) minimizes the empirical risk, its estimation error is at most twice the uniform deviation \(\mathbb E_{S_n} \sup_{f\in\mathcal F} \big(R_\varphi(f) - R_\varphi^n(f)\big)\). Second, the <em>symmetrization</em> device introduces an independent ghost sample and random signs, bounding this uniform deviation by the Rademacher complexity of the loss class \(\{(x,y)\mapsto \varphi(y f(x)) : f \in \mathcal F\}\). Third, the <em>contraction principle</em> of Ledoux and Talagrand (1991) strips the \(L_\varphi\)-Lipschitz function \(\varphi\) at the price of the constant \(L_\varphi\), leaving the Rademacher complexity of \(\mathcal F\) itself. Collecting the constants yields the factor \(4 L_\varphi\).</p>
+</div>
+
+<p>The theorem quantifies the trade-off announced above:</p>
+<ul>
+<li>\(\mathcal F\) "large" means overfitting: the approximation error is small, but \(\mathrm{Rad}_n(\mathcal F)\), and hence the estimation error, is large.</li>
+<li>\(\mathcal F\) "small" means underfitting: the estimation error is small, but the approximation error is large.</li>
+</ul>
+
+<p>To use the bound we need classes \(\mathcal F\) that are flexible enough to keep the approximation error moderate, yet whose Rademacher complexity we can actually compute. Balls of an RKHS are exactly such classes.</p>
+
+<h2 id="erm-in-rkhs-balls">ERM in balls of an RKHS</h2>
+
+<p>Assume now that \(\mathcal X\) is endowed with a positive definite kernel \(K\), with RKHS \(\mathcal H\) and feature map \(x \mapsto K_x = K(x,\cdot)\), so that the reproducing property \(f(x) = \langle f, K_x\rangle_{\mathcal H}\) holds for all \(f \in \mathcal H\). As function class for the ERM we take the ball of radius \(B\) in the RKHS:
+$$\mathcal F_B = \big\{ f \in \mathcal H \;:\; \lVert f \rVert_{\mathcal H} \le B \big\}.$$
+The radius \(B\) is our knob on capacity. The following theorem shows that the Rademacher complexity of \(\mathcal F_B\) is controlled by \(B\) and by the kernel alone, with no combinatorial argument anywhere: the reproducing property turns the supremum over the ball into a norm, and independence does the rest.</p>
+
+<div class="box thm"><span class="box-title">Theorem (capacity control of RKHS balls)</span>
+<p>$$\mathrm{Rad}_n(\mathcal F_B) \;\le\; \frac{2 B \sqrt{\mathbb E\, K(X,X)}}{\sqrt n}.$$</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Using the reproducing property and linearity of the inner product,
+$$\mathrm{Rad}_n(\mathcal F_B) = \mathbb E_{X,\sigma}\!\left[ \sup_{f\in\mathcal F_B} \frac{2}{n}\sum_{i=1}^n \sigma_i f(X_i) \right] = \mathbb E_{X,\sigma}\!\left[ \sup_{f\in\mathcal F_B} \Big\langle f,\; \frac{2}{n}\sum_{i=1}^n \sigma_i K_{X_i} \Big\rangle_{\mathcal H} \right].$$
+For a fixed vector \(g \in \mathcal H\), the Cauchy-Schwarz inequality gives \(\langle f, g\rangle_{\mathcal H} \le B \lVert g\rVert_{\mathcal H}\) for all \(f \in \mathcal F_B\), with equality at \(f = B\, g / \lVert g\rVert_{\mathcal H}\) (and the supremum is trivially \(0 = B\lVert g\rVert_{\mathcal H}\) when \(g = 0\)). Hence
+$$\mathrm{Rad}_n(\mathcal F_B) = \mathbb E_{X,\sigma}\!\left[ B\, \Big\lVert \frac{2}{n}\sum_{i=1}^n \sigma_i K_{X_i} \Big\rVert_{\mathcal H} \right] = \frac{2B}{n}\, \mathbb E_{X,\sigma}\!\left[ \sqrt{ \Big\lVert \sum_{i=1}^n \sigma_i K_{X_i} \Big\rVert_{\mathcal H}^2 } \right].$$
+Expanding the squared norm with \(\langle K_{X_i}, K_{X_j}\rangle_{\mathcal H} = K(X_i, X_j)\), and applying Jensen's inequality to the concave square root,
+$$\mathrm{Rad}_n(\mathcal F_B) \le \frac{2B}{n} \sqrt{ \mathbb E_{X,\sigma}\!\left[ \sum_{i,j=1}^n \sigma_i \sigma_j K(X_i, X_j) \right] }.$$
+But \(\mathbb E_\sigma[\sigma_i \sigma_j]\) is \(1\) if \(i = j\), \(0\) otherwise, and the \(\sigma_i\) are independent of the \(X_i\). Therefore
+$$\mathrm{Rad}_n(\mathcal F_B) \le \frac{2B}{n} \sqrt{ \mathbb E_X\!\left[ \sum_{i,j=1}^n \mathbb E_\sigma[\sigma_i\sigma_j]\, K(X_i,X_j) \right] } = \frac{2B}{n} \sqrt{ \mathbb E_X \sum_{i=1}^n K(X_i, X_i) } = \frac{2B\sqrt{\mathbb E_X K(X,X)}}{\sqrt n}. $$
+<span class="qed">\(\square\)</span></p>
+</div>
+
+<p>The decay in \(1/\sqrt n\) is the familiar parametric rate, yet \(\mathcal F_B\) may be a ball in an infinite-dimensional space. What replaces dimension is the average diagonal of the kernel, \(\mathbb E\, K(X,X)\), that is, the expected squared norm of the feature vector. Plugging the theorem into the learning bound gives the central statistical result of the chapter.</p>
+
+<div class="box cor"><span class="box-title">Corollary (basic learning bound in RKHS balls)</span>
+<p>Suppose \(K(X,X) \le \kappa^2\) almost surely (for instance the Gaussian kernel, with \(\kappa = 1\)). Then the ERM estimator in \(\mathcal F_B\) with an \(L_\varphi\)-Lipschitz loss satisfies
+$$\mathbb E\, R_\varphi\big(\hat f_n\big) - R_\varphi^* \;\le\; \frac{8 L_\varphi \kappa B}{\sqrt n} \;+\; \left( \inf_{f\in\mathcal F_B} R_\varphi(f) - R_\varphi^* \right).$$</p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remarks</span>
+<ul>
+<li>\(B\) controls the trade-off between approximation and estimation error: enlarging the ball shrinks the approximation term and inflates the estimation term.</li>
+<li>The bound on the estimation error, \(8 L_\varphi \kappa B / \sqrt n\), is independent of the distribution \(P\) and decreases with \(n\): whatever the problem, the statistical part of the risk is under uniform control.</li>
+<li>The approximation error is harder to analyze in general; it depends on how well the ball can approach a minimizer of the \(\varphi\)-risk, hence on the interplay between the kernel and \(P\).</li>
+<li>In practice \(B\), or the regularization parameter \(\lambda\) introduced next, is tuned by cross-validation.</li>
+</ul>
+</div>
+
+<h2 id="from-constraints-to-penalties">From constrained ERM to penalized ERM: regularization</h2>
+
+<p>The theory above analyzes ERM over the ball \(\mathcal F_B\), which is the constrained minimization problem
+$$\begin{cases} \displaystyle \min_{f\in\mathcal H}\; \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) \\[2pt] \text{subject to}\;\; \lVert f\rVert_{\mathcal H} \le B . \end{cases}$$
+The algorithms of the previous chapter solve something else: an unconstrained problem with a norm penalty. The bridge between the two is convex duality. To make the problem practical we assume that \(\varphi\) is convex. The objective is then convex in \(f\), since each map \(f \mapsto \varphi(y_i \langle f, K_{x_i}\rangle_{\mathcal H})\) composes the convex \(\varphi\) with a continuous linear functional of \(f\), and the constraint set is a convex ball. The problem is thus a convex problem in \(f\) for which strong duality holds (the interlude below develops the machinery; Slater's condition is trivially satisfied here since the constraint can be made strict). In particular, \(f\) solves the constrained problem if and only if it solves, for some dual parameter \(\lambda \ge 0\), the unconstrained problem
+$$\min_{f\in\mathcal H}\; \left\{ \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) + \lambda\, \lVert f\rVert_{\mathcal H}^2 \right\}.$$
+The penalized formulation is the one used in practice: it is unconstrained, the representer theorem reduces it to a finite-dimensional convex program in the coefficients of \(f = \sum_i \alpha_i K_{x_i}\), and the parameter \(\lambda\) plays the role of \(1/B\): larger \(\lambda\) means a smaller effective ball. The learning bounds for \(\mathcal F_B\) therefore transfer to the penalized estimators our algorithms compute, and they explain <em>why</em> regularization works: the penalty is not a numerical convenience but a capacity constraint, and the corollary above prices exactly how much statistical safety each unit of \(\lVert f\rVert_{\mathcal H}\) costs.</p>
+
+<p>This completes the design of large-margin classifiers, which is worth recording as a summary of the whole program:
+$$\min_{f\in\mathcal H}\; \left\{ \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) + \lambda \lVert f\rVert_{\mathcal H}^2 \right\}$$</p>
+<ul>
+<li>\(\varphi\) calibrated (for example decreasing with \(\varphi'(0) \lt 0\)) implies the \(\varphi\)-risk is a good proxy for the classification error, by the calibration theorem;</li>
+<li>\(\varphi\) convex, combined with the representer theorem, implies efficient algorithms.</li>
+</ul>
+
+<h2 id="convex-duality-interlude">Interlude: convex optimization and Lagrangian duality</h2>
+
+<p>The equivalence between constrained and penalized ERM invoked strong duality, and the derivation of support vector machines in the next chapter will lean on it even harder. This interlude develops the needed facts from scratch, for a general constrained problem; no convexity is assumed until it is needed.</p>
+
+<h3 id="duality-gap">Primal, dual, and the duality gap</h3>
+
+<p>The picture to keep in mind (the course draws it as two curves) is this: the primal objective \(f(x)\) is a curve whose minimum \(f(x^\star)\) we want; duality constructs a second function \(q(\nu)\), the dual, every value of which sits below every value of \(f\) on the feasible set. <em>Strong duality</em> means the two meet:
+$$\max_\nu q(\nu) = \min_x f(x).$$
+Strong duality holds in most "reasonable cases" of convex optimization, in a sense made precise below. Two caveats accompany the picture. First, the relation between the primal optimum \(x^\star\) and the dual optimum \(\nu^\star\) is not always known a priori. Second, and more usefully, even without solving anything to optimality, any candidate pair \((\tilde x, \tilde\nu)\) certifies its own quality through the <em>duality gap</em> \(\delta(\tilde x,\tilde\nu) = f(\tilde x) - q(\tilde\nu)\), since
+$$0 \le f(\tilde x) - f(x^\star) \le \delta(\tilde x, \tilde \nu).$$
+This makes duality a practical stopping criterion, not only a theoretical device. Dual problems are typically obtained by Lagrangian or Fenchel duality; we develop the Lagrangian route.</p>
+
+<h3 id="lagrangian-duality">The Lagrangian and the dual function</h3>
+
+<p>Consider an equality and inequality constrained optimization problem over a variable \(x \in \mathcal X\):
+$$\begin{aligned} \text{minimize} \quad & f(x) \\ \text{subject to} \quad & h_i(x) = 0, \quad i = 1,\dots,m, \\ & g_j(x) \le 0, \quad j = 1,\dots,r, \end{aligned}$$
+making no assumption on \(f\), \(g\) and \(h\). Denote by \(f^\star\) the optimal value of the decision function under the constraints, that is, \(f^\star = f(x^\star)\) if the minimum is reached at a global minimum \(x^\star\).</p>
+
+<div class="box def"><span class="box-title">Definition (Lagrangian, dual function)</span>
+<p>The <em>Lagrangian</em> of this problem is the function \(L : \mathcal X \times \mathbb R^m \times \mathbb R^r \to \mathbb R\) defined by
+$$L(x, \lambda, \mu) = f(x) + \sum_{i=1}^m \lambda_i h_i(x) + \sum_{j=1}^r \mu_j g_j(x).$$
+The <em>Lagrange dual function</em> \(q : \mathbb R^m \times \mathbb R^r \to \mathbb R \cup \{-\infty\}\) is
+$$q(\lambda,\mu) = \inf_{x\in\mathcal X} L(x,\lambda,\mu) = \inf_{x\in\mathcal X}\left( f(x) + \sum_{i=1}^m \lambda_i h_i(x) + \sum_{j=1}^r \mu_j g_j(x) \right).$$</p>
+</div>
+
+<p>The multipliers \(\lambda_i\) and \(\mu_j\) price the constraints: the Lagrangian relaxes the hard constraints into linear charges on their violation. For the primal problem above, the <em>Lagrange dual problem</em> is
+$$\begin{aligned} \text{maximize} \quad & q(\lambda, \mu) \\ \text{subject to} \quad & \mu \ge 0. \end{aligned}$$</p>
+
+<div class="box prop"><span class="box-title">Proposition</span>
+<ul>
+<li>\(q\) is concave in \((\lambda,\mu)\), even if the original problem is not convex.</li>
+<li>The dual function yields lower bounds on the optimal value \(f^\star\) of the original problem when \(\mu\) is non-negative:
+$$q(\lambda,\mu) \le f^\star, \qquad \forall \lambda \in \mathbb R^m,\; \forall \mu \in \mathbb R^r,\; \mu \ge 0.$$</li>
+</ul>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Recall that
+$$L(x,\lambda,\mu) = f(x) + \sum_{i=1}^m \lambda_i h_i(x) + \sum_{j=1}^r \mu_j g_j(x).$$
+For each fixed \(x\), the function \((\lambda,\mu) \mapsto L(x,\lambda,\mu)\) is affine, and therefore both convex and concave in \((\lambda,\mu)\). The pointwise infimum of a family of concave functions is concave, therefore \(q\) is concave.</p>
+<p>Let \(\bar x\) be any feasible point, that is, \(h(\bar x) = 0\) and \(g(\bar x) \le 0\). Then we have, for any \(\lambda\) and any \(\mu \ge 0\),
+$$\sum_{i=1}^m \lambda_i h_i(\bar x) + \sum_{j=1}^r \mu_j g_j(\bar x) \le 0,$$
+hence
+$$L(\bar x, \lambda, \mu) = f(\bar x) + \sum_{i=1}^m \lambda_i h_i(\bar x) + \sum_{j=1}^r \mu_j g_j(\bar x) \le f(\bar x),$$
+and therefore
+$$q(\lambda,\mu) = \inf_{x} L(x,\lambda,\mu) \le L(\bar x,\lambda,\mu) \le f(\bar x)$$
+for every feasible \(\bar x\). Taking the infimum over feasible \(\bar x\) gives \(q(\lambda,\mu) \le f^\star\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<h3 id="weak-and-strong-duality">Weak and strong duality</h3>
+
+<p>Let \(q^\star\) be the optimal value of the Lagrange dual problem. Each \(q(\lambda,\mu)\) with \(\mu \ge 0\) is a lower bound for \(f^\star\), and by definition \(q^\star\) is the best lower bound so obtained. The following <em>weak duality</em> inequality therefore always holds:
+$$q^\star \le f^\star.$$
+This inequality holds even when \(q^\star\) or \(f^\star\) is infinite. The difference \(f^\star - q^\star \ge 0\) is called the <em>optimal duality gap</em> of the original problem.</p>
+
+<p>We say that <em>strong duality</em> holds if the optimal duality gap is zero, that is,
+$$q^\star = f^\star.$$
+If strong duality holds, then the best lower bound obtainable from the Lagrange dual function is tight. Strong duality does not hold for general nonlinear problems, but it usually holds for convex problems; conditions that ensure it for convex problems are called <em>constraint qualifications</em>. When it holds, we have for all feasible primal and dual points \(x\), \((\lambda,\mu)\),
+$$q(\lambda,\mu) \le q(\lambda^\star,\mu^\star) = L(x^\star,\lambda^\star,\mu^\star) = f(x^\star) \le f(x),$$
+so any feasible dual point brackets the optimum from below and any feasible primal point brackets it from above.</p>
+
+<div class="box thm"><span class="box-title">Theorem (Slater's constraint qualification)</span>
+<p>Strong duality holds for a convex problem
+$$\begin{aligned} \text{minimize} \quad & f(x) \\ \text{subject to} \quad & g_j(x) \le 0, \quad j = 1,\dots,r, \\ & Ax = b, \end{aligned}$$
+if it is <em>strictly feasible</em>, that is, if there exists at least one feasible point satisfying
+$$g_j(x) \lt 0, \quad j = 1,\dots,r, \qquad Ax = b.$$</p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remarks</span>
+<ul>
+<li>Slater's condition also ensures that the maximum \(q^\star\), when \(q^\star \gt -\infty\), is <em>attained</em>: there exists a point \((\lambda^\star,\mu^\star)\) with \(q(\lambda^\star,\mu^\star) = q^\star = f^\star\).</li>
+<li>The condition can be sharpened: for example, strict feasibility is not required for affine constraints.</li>
+<li>Many other types of constraint qualifications exist.</li>
+</ul>
+</div>
+
+<h3 id="complementary-slackness">Dual optimal pairs and complementary slackness</h3>
+
+<p>Suppose that strong duality holds, \(x^\star\) is primal optimal, and \((\lambda^\star, \mu^\star)\) is dual optimal. Then we have
+$$\begin{aligned} f(x^\star) = q(\lambda^\star, \mu^\star) &= \inf_{x} \left( f(x) + \sum_{i=1}^m \lambda_i^\star h_i(x) + \sum_{j=1}^r \mu_j^\star g_j(x) \right) \\ &\le f(x^\star) + \sum_{i=1}^m \lambda_i^\star h_i(x^\star) + \sum_{j=1}^r \mu_j^\star g_j(x^\star) \\ &\le f(x^\star), \end{aligned}$$
+where the last step uses \(h_i(x^\star) = 0\), \(\mu_j^\star \ge 0\) and \(g_j(x^\star) \le 0\). Hence both inequalities are in fact equalities, and each carries information.</p>
+
+<p>The first equality, read at the point \(x^\star\), shows that
+$$L(x^\star, \lambda^\star, \mu^\star) = \inf_{x} L(x, \lambda^\star, \mu^\star),$$
+that is, \(x^\star\) minimizes the Lagrangian at \((\lambda^\star,\mu^\star)\): once the optimal multipliers are known, the constrained primal problem collapses to an unconstrained minimization. This is precisely the mechanism that converted ERM over an RKHS ball into penalized ERM, with \(\lambda\) the optimal multiplier of the norm constraint. The second equality gives the following important property.</p>
+
+<div class="box prop"><span class="box-title">Proposition (complementary slackness)</span>
+<p>Each optimal Lagrange multiplier is zero unless the corresponding constraint is active at the optimum:
+$$\mu_j^\star\, g_j(x^\star) = 0, \qquad j = 1,\dots,r.$$</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>The second equality in the chain above states that \(\sum_{i=1}^m \lambda_i^\star h_i(x^\star) + \sum_{j=1}^r \mu_j^\star g_j(x^\star) = 0\), and the equality-constraint terms vanish since \(h_i(x^\star) = 0\), leaving \(\sum_{j=1}^r \mu_j^\star g_j(x^\star) = 0\). Each summand satisfies \(\mu_j^\star g_j(x^\star) \le 0\), being the product of a non-negative and a non-positive number; a sum of non-positive terms equals zero only if every term is zero. <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>Complementary slackness says that inactive constraints, those satisfied with room to spare at the optimum, cost nothing: their prices \(\mu_j^\star\) vanish. Only constraints that actually bind can carry positive multipliers. In kernel methods this is the source of <em>sparsity</em>: solutions supported on the few data points whose constraints are active.</p>
+
+<h2 id="towards-support-vector-machines">Looking ahead: support vector machines</h2>
+
+<p>Everything is now in place for the flagship large-margin classifier. The support vector machine (SVM) is the penalized ERM problem of this chapter with one particular choice of calibrated convex loss function, the hinge loss \(\varphi(u) = \max(1-u,\, 0)\). Historically it was the first "kernel method" for pattern recognition, and it remains the most popular, often state-of-the-art in performance. Two features distinguish it, and both are consequences of the duality theory just developed. The hinge loss leads to a <em>sparse</em> solution: by complementary slackness, not all points are involved in the decomposition \(f = \sum_i \alpha_i K_{x_i}\), a form of compression that keeps only the support vectors. And the structure of the dual problem enables a particular algorithm for fast optimization, decomposition by chunking methods, which scales the approach to large training sets. The next chapter derives all of this in detail.</p>
+<div class="chnav">
+<a href="kernel-ridge-and-friends.html"><span class="dir">previous</span>3. Kernel Ridge Regression and Smooth Losses</a>
+<a style="text-align:right" href="support-vector-machines.html"><span class="dir">next</span>5. Support Vector Machines</a>
+</div>
+</div></main>
+</div>
+</body>
+</html>

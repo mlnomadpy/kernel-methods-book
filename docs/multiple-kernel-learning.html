@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multiple Kernel Learning · Machine Learning with Kernel Methods</title>
+<meta name="description" content="Multiple Kernel Learning, from Machine Learning with Kernel Methods.">
+<link rel="stylesheet" href="assets/book.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],throwOnError:false});"></script>
+
+</head>
+<body>
+<div class="book">
+<nav class="toc">
+<div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
+<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
+<div class="part">I · Foundations</div>
+<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">2. The Kernel Trick</a>
+<div class="part">II · Supervised Learning</div>
+<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
+<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<a href="support-vector-machines.html">5. Support Vector Machines</a>
+<div class="part">III · Unsupervised Learning</div>
+<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Theory of the Space</div>
+<a href="mercer-and-rates.html">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · The Kernel Jungle</div>
+<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">9. Kernels for Sequences</a>
+<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
+<div class="part">VI · Distributions</div>
+<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Frontiers</div>
+<a href="multiple-kernel-learning.html" class="here">12. Multiple Kernel Learning</a>
+<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
+<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+</nav>
+<main><div class="page">
+<h1><span class="chno">Chapter 12 · VII · Frontiers</span>Multiple Kernel Learning</h1>
+
+<p class="lead">Every method in this book so far has taken the kernel as given. We fixed a positive definite kernel \(K\), formed its Gram matrix, and let a representer argument reduce learning to linear algebra on that matrix. But where does \(K\) come from? In practice we almost never have one obviously correct kernel. We have a menu: linear, polynomial, and Gaussian kernels with a range of bandwidths on the same feature vectors, or genuinely different kernels built from genuinely different views of the same objects, a protein described at once by its sequence, its three-dimensional structure, and its mass spectrometry profile. This chapter is about what to do with such a menu. The simplest answer, adding the kernels together, turns out to be exactly concatenating their feature spaces, and it already gives a principled way to fuse heterogeneous data. The more ambitious answer is to let the data choose. We will see that the value of the learning problem is a convex function of the kernel, so we can search a convex set of candidate kernels by convex optimization. Learning a convex combination \(K_\eta = \sum_i \eta_i K_i\) jointly with the classifier is Multiple Kernel Learning (Lanckriet et al., 2004); the problem is jointly convex in the weights and the classifier, and, read correctly, it is a sparsity-inducing group lasso in disguise.</p>
+
+<h2 id="motivation">Choosing or combining kernels</h2>
+
+<p>We have seen how to build a learning algorithm once we are handed a kernel \(K\) on a data space \(\mathcal{X}\). The kernel is the entire interface between the data and the algorithm: it is where our knowledge about similarity between objects lives. This makes the choice of kernel the single most consequential modeling decision, and it is rarely a decision with one clear answer.</p>
+
+<p>Two situations recur. In the first, we have a single description of the data but a whole family of candidate kernels on it, obtained by varying the kernel type or its parameters: a linear kernel, polynomial kernels of several degrees, Gaussian kernels across a range of bandwidths. Which bandwidth is right is exactly the kind of question the data should answer, not the modeler. In the second situation we have several genuinely different descriptions of the same objects, different views. A protein can be characterized by its amino acid sequence, by its folded structure, by its mass spectrometry profile, by which other proteins it interacts with. Each view comes with its own natural kernel, and each captures partial, complementary information. The question in both cases is the same: how do we choose among, or integrate, several kernels in a single learning task?</p>
+
+<h3 id="one-kernel-setting">The setting: learning with one kernel</h3>
+
+<p>To talk about combining kernels we first fix notation for learning with one. Throughout, for a function \(f : \mathcal{X} \to \mathbb{R}\) and data points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\), we write</p>
+$$
+\mathbf{f}_n = \big( f(\mathbf{x}_1), \ldots, f(\mathbf{x}_n) \big) \in \mathbb{R}^n
+$$
+<p>for the vector of values of \(f\) on the training set. Given a positive definite kernel \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) with RKHS \(\mathcal{H}\), we learn by solving the regularized empirical risk minimization problem</p>
+$$
+\min_{f \in \mathcal{H}} \; R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}}^2 ,
+$$
+<p>where \(\lambda \gt 0\) and \(R : \mathbb{R}^n \to \mathbb{R}\) is a closed convex empirical risk. Every method we have built fits this template through its choice of \(R\):</p>
+
+<table>
+<thead><tr><th>Method</th><th>Empirical risk \(R(\mathbf{u})\)</th></tr></thead>
+<tbody>
+<tr><td>Kernel ridge regression</td><td>\(\frac{1}{n} \sum_{i=1}^n (u_i - y_i)^2\)</td></tr>
+<tr><td>Support vector machine</td><td>\(\frac{1}{n} \sum_{i=1}^n \max(1 - y_i u_i, 0)\)</td></tr>
+<tr><td>Kernel logistic regression</td><td>\(\frac{1}{n} \sum_{i=1}^n \log\!\big(1 + \exp(-y_i u_i)\big)\)</td></tr>
+</tbody>
+</table>
+
+<p>Recall that \(R\) is <em>closed</em> if for every \(A \in \mathbb{R}\) the sublevel set \(\{\mathbf{u} \in \mathbb{R}^n : R(\mathbf{u}) \le A\}\) is closed; a continuous \(R\), such as all three above, is closed. Closedness and convexity are exactly what we will need to invoke Fenchel duality later, so we carry them from the start. This single-kernel problem is the atom out of which everything in this chapter is assembled.</p>
+
+<h2 id="sum-kernel">The sum kernel</h2>
+
+<p>The most elementary way to combine kernels is to add them. Since a sum of positive definite kernels is positive definite, the result is again a legitimate kernel, and it requires no new machinery to learn with. What makes the sum kernel more than a convenience is that it has a transparent meaning in feature space.</p>
+
+<div class="box def"><span class="box-title">Definition (sum kernel)</span>
+Let \(K_1, \ldots, K_M\) be kernels on \(\mathcal{X}\). The <em>sum kernel</em> \(K_S\) is the kernel on \(\mathcal{X}\) defined by
+$$
+\forall \mathbf{x}, \mathbf{x}' \in \mathcal{X}, \qquad K_S(\mathbf{x}, \mathbf{x}') = \sum_{i=1}^M K_i(\mathbf{x}, \mathbf{x}') .
+$$
+</div>
+
+<h3 id="sum-concatenation">Summing kernels is concatenating features</h3>
+
+<p>Each kernel \(K_i\) comes with a feature map into its own space. Adding the kernels stacks those feature maps side by side into one long feature vector, so the sum kernel is the inner product in the direct sum of the individual feature spaces. This is precisely why the sum kernel is the natural tool for data integration: laying complementary views next to each other in one feature vector is the most literal notion of combining them.</p>
+
+<div class="box thm"><span class="box-title">Theorem (sum kernel and vector concatenation)</span>
+For \(i = 1, \ldots, M\), let \(\Phi_i : \mathcal{X} \to \mathcal{H}_i\) be a feature map with
+$$
+K_i(\mathbf{x}, \mathbf{x}') = \big\langle \Phi_i(\mathbf{x}), \Phi_i(\mathbf{x}') \big\rangle_{\mathcal{H}_i} .
+$$
+Then \(K_S = \sum_{i=1}^M K_i\) can be written as
+$$
+K_S(\mathbf{x}, \mathbf{x}') = \big\langle \Phi_S(\mathbf{x}), \Phi_S(\mathbf{x}') \big\rangle_{\mathcal{H}_S} ,
+$$
+where \(\Phi_S : \mathcal{X} \to \mathcal{H}_S = \mathcal{H}_1 \oplus \cdots \oplus \mathcal{H}_M\) is the concatenation of the feature maps,
+$$
+\Phi_S(\mathbf{x}) = \big( \Phi_1(\mathbf{x}), \ldots, \Phi_M(\mathbf{x}) \big)^\top .
+$$
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+The inner product on the direct sum \(\mathcal{H}_S = \mathcal{H}_1 \oplus \cdots \oplus \mathcal{H}_M\) is the sum of the inner products on the summands. Hence
+$$
+\big\langle \Phi_S(\mathbf{x}), \Phi_S(\mathbf{x}') \big\rangle_{\mathcal{H}_S}
+= \sum_{i=1}^M \big\langle \Phi_i(\mathbf{x}), \Phi_i(\mathbf{x}') \big\rangle_{\mathcal{H}_i}
+= \sum_{i=1}^M K_i(\mathbf{x}, \mathbf{x}')
+= K_S(\mathbf{x}, \mathbf{x}') .
+$$
+<span class="qed">\(\square\)</span>
+</div>
+
+<p>So summing kernels amounts to concatenating their feature space representations. This is a very natural way to integrate different features, and it is the mechanism behind the bioinformatics application below.</p>
+
+<h3 id="data-integration-example">Example: data integration in bioinformatics</h3>
+
+<p>Yamanishi, Vert, and Kanehisa (2004), in their study of protein network inference from multiple genomic data, give a clean illustration of integration by the sum kernel. The goal is to reconstruct, for the yeast <em>Saccharomyces cerevisiae</em>, the network whose vertices are proteins and whose edges join proteins that interact, and to do so from heterogeneous genomic measurements. They cast the network inference as a supervised problem built on a variant of kernel canonical correlation analysis, using a gold-standard partial network as the target.</p>
+
+<p>Four widely available data sources are each turned into a kernel: gene expression, represented by a Gaussian RBF kernel \(K_{\mathrm{exp}}\); protein interactions measured by yeast two-hybrid systems, represented by a diffusion kernel \(K_{\mathrm{ppi}}\); protein localization in the cell, a linear kernel \(K_{\mathrm{loc}}\); and phylogenetic profiles, a linear kernel \(K_{\mathrm{phy}}\). All kernels are normalized to one on the diagonal and centered in feature space. The experiment compares learning from each source alone against learning from the integrated kernel
+$$
+K_{\mathrm{exp}} + K_{\mathrm{ppi}} + K_{\mathrm{loc}} + K_{\mathrm{phy}} .
+$$
+Assessed by cross-validated recovery of the gold-standard network, the integrated kernel outperforms any single source, confirming that fusing complementary genomic views is beneficial for prediction. The authors emphasize that new data sources can be folded in at any time, as long as a kernel can be derived from them, which is exactly the modularity the concatenation theorem promises: adding a source appends a block to the feature vector without disturbing the rest.</p>
+
+<h3 id="sum-functional">The sum kernel from the functional side</h3>
+
+<p>The feature space picture tells us what the sum kernel <em>is</em>; the next theorem tells us what learning with it <em>does</em>. It decomposes the single problem in \(\mathcal{H}_{K_S}\) into a coupled problem over the individual RKHSs, where the coupling is only through the shared data-fitting term.</p>
+
+<div class="box thm"><span class="box-title">Theorem (learning with the sum kernel)</span>
+The solution \(f^\ast \in \mathcal{H}_{K_S}\) of the problem learned with \(K_S = \sum_{i=1}^M K_i\) equals
+$$
+f^\ast = \sum_{i=1}^M f_i^\ast ,
+$$
+where \((f_1^\ast, \ldots, f_M^\ast) \in \mathcal{H}_{K_1} \times \cdots \times \mathcal{H}_{K_M}\) is the solution of
+$$
+\min_{f_1, \ldots, f_M} \; R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \sum_{i=1}^M \lVert f_i \rVert_{\mathcal{H}_{K_i}}^2 .
+$$
+</div>
+
+<p>Reading the right-hand side back through the concatenation theorem: a function in \(\mathcal{H}_{K_S}\) decomposes into one piece per feature block, the data-fitting risk sees only the sum of the pieces (because that is what the concatenated predictor computes), and the penalty is the total squared norm across blocks. We prove a more general version below and recover this one as the special case of equal weights.</p>
+
+<h2 id="weighted-sum-kernel">The weighted sum kernel</h2>
+
+<p>Adding kernels treats every source as equally trustworthy. That is rarely appropriate: a noisy or irrelevant view should count for less than an informative one. The obvious fix is to attach a nonnegative weight to each kernel before summing, which leads to the weighted sum kernel and, once we decide to learn the weights, to Multiple Kernel Learning.</p>
+
+<div class="box thm"><span class="box-title">Theorem (learning with the weighted sum kernel)</span>
+Let \(\eta_1, \ldots, \eta_M \ge 0\) and set \(K_\eta = \sum_{i=1}^M \eta_i K_i\). The solution \(f^\ast\) of the problem learned with \(K_\eta\) equals
+$$
+f^\ast = \sum_{i=1}^M f_i^\ast ,
+$$
+where \((f_1^\ast, \ldots, f_M^\ast) \in \mathcal{H}_{K_1} \times \cdots \times \mathcal{H}_{K_M}\) is the solution of
+$$
+\min_{f_1, \ldots, f_M} \; R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \sum_{i=1}^M \frac{\lVert f_i \rVert_{\mathcal{H}_{K_i}}^2}{\eta_i} .
+$$
+</div>
+
+<p>The weight \(\eta_i\) appears in the denominator of the penalty: a large \(\eta_i\) discounts the cost of using kernel \(i\), letting \(f_i\) grow, while \(\eta_i \to 0\) forbids kernel \(i\) altogether. Setting all \(\eta_i = 1\) recovers the plain sum kernel of the previous section. The proof is the heart of the chapter's machinery, so we work through it in full; it produces a dual problem that depends on the weights only through the combined Gram matrix \(\sum_i \eta_i K_i\), and that observation is what makes learning the weights tractable.</p>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p><strong>Step 1: reduce to a finite-dimensional problem.</strong> Since \(R\) is convex, the objective is strictly convex in \((f_1, \ldots, f_M)\) and has a unique solution \((f_1^\ast, \ldots, f_M^\ast) \in \mathcal{H}_{K_1} \times \cdots \times \mathcal{H}_{K_M}\). By the representer theorem applied in each \(\mathcal{H}_{K_i}\), there exist \(\boldsymbol{\alpha}_1^\ast, \ldots, \boldsymbol{\alpha}_M^\ast \in \mathbb{R}^n\) with
+$$
+f_i^\ast(\mathbf{x}) = \sum_{j=1}^n \alpha_{ij}^\ast K_i(\mathbf{x}_j, \mathbf{x}) .
+$$
+Writing \(K_i\) also for the \(i\)-th Gram matrix, so that \((\mathbf{f}_i)_n = K_i \boldsymbol{\alpha}_i\) and \(\lVert f_i \rVert_{\mathcal{H}_{K_i}}^2 = \boldsymbol{\alpha}_i^\top K_i \boldsymbol{\alpha}_i\), the coefficients solve
+$$
+\min_{\boldsymbol{\alpha}_1, \ldots, \boldsymbol{\alpha}_M \in \mathbb{R}^n} \; R\!\left( \sum_{i=1}^M K_i \boldsymbol{\alpha}_i \right) + \lambda \sum_{i=1}^M \frac{\boldsymbol{\alpha}_i^\top K_i \boldsymbol{\alpha}_i}{\eta_i} .
+$$</p>
+
+<p><strong>Step 2: introduce the fitted values and dualize.</strong> Introduce a variable \(\mathbf{u} = \sum_{i=1}^M K_i \boldsymbol{\alpha}_i\) for the vector of fitted values, giving the equivalent constrained problem
+$$
+\min_{\mathbf{u}, \boldsymbol{\alpha}_1, \ldots, \boldsymbol{\alpha}_M} \; R(\mathbf{u}) + \lambda \sum_{i=1}^M \frac{\boldsymbol{\alpha}_i^\top K_i \boldsymbol{\alpha}_i}{\eta_i} \quad \text{s.t.} \quad \mathbf{u} = \sum_{i=1}^M K_i \boldsymbol{\alpha}_i .
+$$
+Attaching a multiplier \(2\lambda\boldsymbol{\gamma}\) to the equality constraint yields the saddle-point problem
+$$
+\min_{\mathbf{u}, \boldsymbol{\alpha}_1, \ldots, \boldsymbol{\alpha}_M} \; \max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; R(\mathbf{u}) + \lambda \sum_{i=1}^M \frac{\boldsymbol{\alpha}_i^\top K_i \boldsymbol{\alpha}_i}{\eta_i} + 2\lambda \, \boldsymbol{\gamma}^\top\!\left( \mathbf{u} - \sum_{i=1}^M K_i \boldsymbol{\alpha}_i \right) .
+$$
+By Slater's condition strong duality holds, so we may swap the min and the max:
+$$
+\max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; \min_{\mathbf{u}, \boldsymbol{\alpha}_1, \ldots, \boldsymbol{\alpha}_M} \; R(\mathbf{u}) + \lambda \sum_{i=1}^M \frac{\boldsymbol{\alpha}_i^\top K_i \boldsymbol{\alpha}_i}{\eta_i} + 2\lambda \, \boldsymbol{\gamma}^\top\!\left( \mathbf{u} - \sum_{i=1}^M K_i \boldsymbol{\alpha}_i \right) .
+$$</p>
+
+<p><strong>Step 3: minimize over the primal variables.</strong> The inner minimization separates. In \(\mathbf{u}\),
+$$
+\min_{\mathbf{u}} \; R(\mathbf{u}) + 2\lambda \, \boldsymbol{\gamma}^\top \mathbf{u} = - \max_{\mathbf{u}} \big\{ -2\lambda \, \boldsymbol{\gamma}^\top \mathbf{u} - R(\mathbf{u}) \big\} = - R^\ast(-2\lambda \boldsymbol{\gamma}) ,
+$$
+where \(R^\ast\) is the Fenchel conjugate of \(R\),
+$$
+R^\ast(\mathbf{v}) = \sup_{\mathbf{u} \in \mathbb{R}^n} \; \mathbf{u}^\top \mathbf{v} - R(\mathbf{u}) .
+$$
+In each \(\boldsymbol{\alpha}_i\) we minimize the quadratic
+$$
+\min_{\boldsymbol{\alpha}_i} \; \lambda \frac{\boldsymbol{\alpha}_i^\top K_i \boldsymbol{\alpha}_i}{\eta_i} - 2\lambda \, \boldsymbol{\gamma}^\top K_i \boldsymbol{\alpha}_i = -\lambda \eta_i \, \boldsymbol{\gamma}^\top K_i \boldsymbol{\gamma} ,
+$$
+the minimum being attained at \(\boldsymbol{\alpha}_i^\ast = \eta_i \boldsymbol{\gamma}\).</p>
+
+<p><strong>Step 4: the dual and its consequences.</strong> Collecting the terms, the dual problem is
+$$
+\max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; \left\{ - R^\ast(-2\lambda \boldsymbol{\gamma}) - \lambda \, \boldsymbol{\gamma}^\top \!\left( \sum_{i=1}^M \eta_i K_i \right)\! \boldsymbol{\gamma} \right\} .
+$$
+This is exactly the dual we would have obtained by learning from the single kernel \(K_\eta = \sum_i \eta_i K_i\), namely
+$$
+\max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; \big\{ - R^\ast(-2\lambda \boldsymbol{\gamma}) - \lambda \, \boldsymbol{\gamma}^\top K_\eta \boldsymbol{\gamma} \big\} .
+$$
+If \(\boldsymbol{\gamma}^\ast\) solves the dual, then \(\boldsymbol{\alpha}_i^\ast = \eta_i \boldsymbol{\gamma}^\ast\), so
+$$
+f_i^\ast(\mathbf{x}) = \sum_{j=1}^n \alpha_{ij}^\ast K_i(\mathbf{x}_j, \mathbf{x}) = \sum_{j=1}^n \eta_i \gamma_j^\ast K_i(\mathbf{x}_j, \mathbf{x}) ,
+$$
+and therefore \(f^\ast = \sum_{i=1}^M f_i^\ast\) satisfies
+$$
+f^\ast(\mathbf{x}) = \sum_{i=1}^M \sum_{j=1}^n \eta_i \gamma_j^\ast K_i(\mathbf{x}_j, \mathbf{x}) = \sum_{j=1}^n \gamma_j^\ast K_\eta(\mathbf{x}_j, \mathbf{x}) ,
+$$
+which is the predictor obtained by learning directly with \(K_\eta\). The two views agree.
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<p>Setting every \(\eta_i = 1\) in this theorem recovers the sum kernel theorem of the previous section, so the plain sum kernel is the uniform-weight special case.</p>
+
+<h2 id="learning-the-kernel">Learning the kernel</h2>
+
+<p>The weighted sum kernel is only useful if we know the weights. If we knew how much to trust each source we would simply set \(\eta\) accordingly and learn with \(K_\eta\). Usually we do not. The natural idea is to make \(\eta\) part of the optimization: rather than fix the kernel and learn the predictor, learn the kernel and the predictor together. For this to be more than wishful thinking, the objective as a function of the kernel must be something we can actually minimize.</p>
+
+<h3 id="j-of-k">The value of the problem is convex in the kernel</h3>
+
+<p>Fix the data and the risk \(R\), and record how good the best predictor is as a function of the kernel we are allowed to use.</p>
+
+<div class="box thm"><span class="box-title">Theorem (convexity in the kernel)</span>
+For any positive definite kernel \(K\) on \(\mathcal{X}\), let
+$$
+J(K) = \min_{f \in \mathcal{H}} \; \big\{ R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}}^2 \big\} .
+$$
+Then the map \(K \mapsto J(K)\) is convex.
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+By the strong duality established in the previous proof (specialized to a single kernel),
+$$
+J(K) = \max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; \big\{ - R^\ast(-2\lambda \boldsymbol{\gamma}) - \lambda \, \boldsymbol{\gamma}^\top K \boldsymbol{\gamma} \big\} .
+$$
+For each fixed \(\boldsymbol{\gamma}\), the term \(-R^\ast(-2\lambda\boldsymbol{\gamma}) - \lambda \boldsymbol{\gamma}^\top K \boldsymbol{\gamma}\) is an affine function of the matrix \(K\), since \(\boldsymbol{\gamma}^\top K \boldsymbol{\gamma}\) is linear in the entries of \(K\); an affine function is convex. The map \(K \mapsto J(K)\) is a pointwise supremum over \(\boldsymbol{\gamma}\) of these convex functions, and a supremum of convex functions is convex.
+<span class="qed">\(\square\)</span>
+</div>
+
+<p>This is the key that unlocks kernel learning. It suggests a principled recipe: define a convex set of candidate kernels, and minimize the convex function \(J(K)\) over it by convex optimization. Different choices of candidate set give different kernel-learning methods; the choice that defines Multiple Kernel Learning is the set of convex combinations of a fixed dictionary.</p>
+
+<h3 id="mkl-definition">Multiple Kernel Learning</h3>
+
+<p>Lanckriet et al. (2004) take the candidate set to be the convex combinations of \(M\) given base kernels. Writing \(\Sigma_M\) for the probability simplex,</p>
+$$
+K_\eta = \sum_{i=1}^M \eta_i K_i , \qquad \eta \in \Sigma_M = \left\{ \eta_i \ge 0, \; \sum_{i=1}^M \eta_i = 1 \right\} ,
+$$
+<p>and optimize the weights and the predictor together:</p>
+$$
+\min_{\eta \in \Sigma_M} \; J(K_\eta) = \min_{\eta \in \Sigma_M} \; \min_{f \in \mathcal{H}_{K_\eta}} \; \big\{ R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}_{K_\eta}}^2 \big\} .
+$$
+
+<div class="box def"><span class="box-title">Definition (Multiple Kernel Learning)</span>
+Given base kernels \(K_1, \ldots, K_M\), <em>Multiple Kernel Learning</em> (MKL) solves
+$$
+\min_{\eta \in \Sigma_M} \; \min_{f \in \mathcal{H}_{K_\eta}} \; \big\{ R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}_{K_\eta}}^2 \big\} ,
+$$
+returning both a weight vector \(\eta \in \Sigma_M\) and the predictor trained with the kernel \(K_\eta\).
+</div>
+
+<p>Two facts make this practical. First, \(\Sigma_M\) is a convex set (a simplex), and we just proved \(J\) is convex in \(K_\eta\), which is affine in \(\eta\); so the outer problem is a convex minimization in \(\eta\). Second, in terms of the dual variable \(\boldsymbol{\gamma}\) and the weights \(\eta\), the joint problem is jointly convex in \((\eta, \boldsymbol{\alpha})\), and can therefore be solved efficiently to a global optimum rather than a local one. The output is at once a set of weights, telling us how much each source contributed, and a predictor, the kernel method trained with \(K_\eta\). Because Lanckriet et al. phrased the search over kernels through semidefinite programming, this line of work is where semidefinite programming entered kernel learning.</p>
+
+<h3 id="protein-annotation-example">Example: genomic data fusion for protein annotation</h3>
+
+<p>Lanckriet, De Bie, Cristianini, Jordan, and Noble (2004), in "A statistical framework for genomic data fusion," apply MKL to protein classification in yeast and give the canonical demonstration that learning the weights helps. The task is to recognize particular classes of proteins, namely membrane proteins and ribosomal proteins, from several complementary data types. Seven kernels are assembled, listed below.</p>
+
+<table>
+<thead><tr><th>Kernel</th><th>Data</th><th>Similarity measure</th></tr></thead>
+<tbody>
+<tr><td>\(K_{\mathrm{SW}}\)</td><td>protein sequences</td><td>Smith-Waterman</td></tr>
+<tr><td>\(K_{\mathrm{B}}\)</td><td>protein sequences</td><td>BLAST</td></tr>
+<tr><td>\(K_{\mathrm{Pfam}}\)</td><td>protein sequences</td><td>Pfam HMM</td></tr>
+<tr><td>\(K_{\mathrm{FFT}}\)</td><td>hydropathy profile</td><td>FFT</td></tr>
+<tr><td>\(K_{\mathrm{LI}}\)</td><td>protein interactions</td><td>linear kernel</td></tr>
+<tr><td>\(K_{\mathrm{D}}\)</td><td>protein interactions</td><td>diffusion kernel</td></tr>
+<tr><td>\(K_{\mathrm{E}}\)</td><td>gene expression</td><td>radial basis kernel</td></tr>
+<tr><td>\(K_{\mathrm{RND}}\)</td><td>random numbers</td><td>linear kernel</td></tr>
+</tbody>
+</table>
+
+<p>The final kernel \(K_{\mathrm{RND}}\), built from random numbers, is a deliberate control: a well-behaved weighting scheme should learn to ignore it. Each kernel makes explicit one type of similarity, from sequence homology (BLAST, Smith-Waterman, Pfam HMMs), through the hydrophobicity periodicity that the FFT kernel detects and that is diagnostic of membrane-spanning proteins, to the interaction patterns that are informative for ribosomal proteins because ribosomal proteins interact with one another.</p>
+
+<p>Trained by the semidefinite-programming MKL formulation over all sources at once, the SVM significantly outperforms the same algorithm trained on any single data type, measured by ROC score and by the true-positive rate at one percent false positives, over thirty random train/test splits. The learned weights are themselves interpretable: they concentrate on the informative kernels for each task and place little mass on the control kernel, so MKL performs a soft, data-driven selection among the sources.</p>
+
+<h3 id="image-classification-example">Example: image classification</h3>
+
+<p>Harchaoui and Bach (2007) apply the same idea to natural image classification on the COREL14 dataset, 1400 natural images in 14 classes. Here the base kernels are different structured kernels on images represented as graphs or histograms: a kernel between color histograms (H), a walk kernel (W), a subtree kernel (TW), and a weighted subtree kernel (wTW). MKL (M) combines them. The combination attains the lowest test error of all, below every individual kernel, illustrating that even when the candidate kernels are elaborate structured objects rather than simple bandwidth variants, learning their combination pays off.</p>
+
+<h2 id="mkl-group-lasso">MKL is a group lasso</h2>
+
+<p>The name "Multiple Kernel Learning" and the picture of a weighted average of kernels suggest the method is essentially about averaging. That picture is misleading. Bach et al. (2004) show that eliminating the weights turns MKL into a penalized risk minimization with a sparsity-inducing penalty, which explains both why it selects among kernels and why it differs from the plain sum kernel.</p>
+
+<div class="box thm"><span class="box-title">Theorem (MKL as a mixed-norm problem)</span>
+With \(K_\eta = \sum_{i=1}^M \eta_i K_i\) and \(\eta \in \Sigma_M\), the solution \(f^\ast\) of
+$$
+\min_{\eta \in \Sigma_M} \; \min_{f \in \mathcal{H}_{K_\eta}} \; \big\{ R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}_{K_\eta}}^2 \big\}
+$$
+is \(f^\ast = \sum_{i=1}^M f_i^\ast\), where \((f_1^\ast, \ldots, f_M^\ast) \in \mathcal{H}_{K_1} \times \cdots \times \mathcal{H}_{K_M}\) solves
+$$
+\min_{f_1, \ldots, f_M} \; \left\{ R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \left( \sum_{i=1}^M \lVert f_i \rVert_{\mathcal{H}_{K_i}} \right)^{\!2} \right\} .
+$$
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Start from the weighted sum kernel theorem, which rewrites the inner problem for fixed \(\eta\) as a problem over \((f_1, \ldots, f_M)\) with penalty \(\sum_i \lVert f_i \rVert_{\mathcal{H}_{K_i}}^2 / \eta_i\). The MKL objective is then
+$$
+\min_{\eta \in \Sigma_M} \min_{f_1, \ldots, f_M} \left\{ R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \sum_{i=1}^M \frac{\lVert f_i \rVert_{\mathcal{H}_{K_i}}^2}{\eta_i} \right\} .
+$$
+The risk term does not involve \(\eta\), so we may swap the two minimizations and carry out the minimization over \(\eta\) first:
+$$
+= \min_{f_1, \ldots, f_M} \left\{ R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \min_{\eta \in \Sigma_M} \sum_{i=1}^M \frac{\lVert f_i \rVert_{\mathcal{H}_{K_i}}^2}{\eta_i} \right\} .
+$$
+It remains to evaluate the inner minimization over the simplex. For any nonnegative reals \(a_1, \ldots, a_M\),
+$$
+\min_{\eta \in \Sigma_M} \sum_{i=1}^M \frac{a_i^2}{\eta_i} = \left( \sum_{i=1}^M a_i \right)^{\!2} ,
+$$
+which is a direct consequence of the Cauchy-Schwarz inequality: writing \(a_i = \dfrac{a_i}{\sqrt{\eta_i}} \cdot \sqrt{\eta_i}\),
+$$
+\sum_{i=1}^M a_i = \sum_{i=1}^M \frac{a_i}{\sqrt{\eta_i}} \sqrt{\eta_i} \le \left( \sum_{i=1}^M \frac{a_i^2}{\eta_i} \right)^{\!1/2} \left( \sum_{i=1}^M \eta_i \right)^{\!1/2} = \left( \sum_{i=1}^M \frac{a_i^2}{\eta_i} \right)^{\!1/2} ,
+$$
+using \(\sum_i \eta_i = 1\). Squaring gives \(\left( \sum_i a_i \right)^2 \le \sum_i a_i^2 / \eta_i\) for every \(\eta \in \Sigma_M\), so the minimum is at least \(\left( \sum_i a_i \right)^2\); equality holds at \(\eta_i \propto a_i\), which lies in \(\Sigma_M\), so the minimum is attained and equals \(\left( \sum_i a_i \right)^2\). Applying this with \(a_i = \lVert f_i \rVert_{\mathcal{H}_{K_i}}\) yields the claimed objective.
+<span class="qed">\(\square\)</span>
+</div>
+
+<p>It is worth stating the conclusion plainly. Although MKL can be pictured as optimizing a convex combination of kernels, it is more correct to view it as a penalized risk minimization estimator with a <em>group lasso</em> penalty. Define</p>
+$$
+\Omega(f) = \min_{f_1 + \cdots + f_M = f} \; \sum_{i=1}^M \lVert f_i \rVert_{\mathcal{H}_{K_i}} .
+$$
+<p>This is a sum, over blocks, of RKHS norms, an \(\ell_1\) norm of the vector of per-kernel norms rather than the \(\ell_2\) sum of squared norms that the plain sum kernel penalizes. Just as the \(\ell_1\) penalty in the lasso drives individual coefficients to exactly zero, this mixed \(\ell_1/\ell_2\) penalty drives entire blocks \(f_i\) to zero, which is to say it sets the corresponding weights \(\eta_i\) to zero and discards kernel \(i\). This is why MKL selects kernels rather than merely averaging them, and it is what the protein experiment observed when the control kernel received essentially no weight.</p>
+
+<h3 id="sum-vs-mkl">Sum kernel versus MKL, side by side</h3>
+
+<p>The contrast is entirely in the exponent on the norms. Learning with the sum kernel, the uniform combination, solves</p>
+$$
+\min_{f_1, \ldots, f_M} \; \left\{ R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \sum_{i=1}^M \lVert f_i \rVert_{\mathcal{H}_{K_i}}^2 \right\} ,
+$$
+<p>while learning with MKL, the best convex combination, solves</p>
+$$
+\min_{f_1, \ldots, f_M} \; \left\{ R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \left( \sum_{i=1}^M \lVert f_i \rVert_{\mathcal{H}_{K_i}} \right)^{\!2} \right\} .
+$$
+<p>The sum kernel sums squared norms (a squared \(\ell_2\) penalty across blocks) and spreads weight over all kernels; MKL squares a sum of norms (an \(\ell_1\)-type penalty across blocks) and concentrates weight on a few. The next example makes the difference concrete in the most familiar setting.</p>
+
+<h3 id="ridge-vs-lasso">Example: ridge versus lasso regression</h3>
+
+<p>Take \(\mathcal{X} = \mathbb{R}^d\), and for \(\mathbf{x} = (x_1, \ldots, x_d)^\top\) consider the \(d\) rank-one coordinate kernels</p>
+$$
+K_i(\mathbf{x}, \mathbf{x}') = x_i x_i' , \qquad i = 1, \ldots, d .
+$$
+<p>The RKHS of \(K_i\) consists of the functions \(f_i(\mathbf{x}) = \beta_i x_i\) of the single coordinate \(x_i\), with norm \(\lVert f_i \rVert_{\mathcal{H}_{K_i}} = |\beta_i|\). The sum kernel is
+$$
+K_S(\mathbf{x}, \mathbf{x}') = \sum_{i=1}^d x_i x_i' = \mathbf{x}^\top \mathbf{x}' ,
+$$
+the ordinary linear kernel, whose RKHS consists of the linear functions \(f(\mathbf{x}) = \boldsymbol{\beta}^\top \mathbf{x}\) with norm \(\lVert f \rVert_{\mathcal{H}_{K_S}} = \lVert \boldsymbol{\beta} \rVert_{\mathbb{R}^d}\). Now the two combination rules specialize to two textbook estimators. Learning with the sum kernel solves a ridge regression problem,</p>
+$$
+\min_{\boldsymbol{\beta} \in \mathbb{R}^d} \; \left\{ R(X\boldsymbol{\beta}) + \lambda \sum_{i=1}^d \beta_i^2 \right\} ,
+$$
+<p>while learning with MKL solves a lasso regression problem,</p>
+$$
+\min_{\boldsymbol{\beta} \in \mathbb{R}^d} \; \left\{ R(X\boldsymbol{\beta}) + \lambda \left( \sum_{i=1}^d |\beta_i| \right)^{\!2} \right\} .
+$$
+<p>The squared \(\ell_2\) penalty of ridge regression shrinks all coordinates smoothly and keeps them nonzero; the \(\ell_1\) penalty of the lasso sets many coordinates to exactly zero and performs variable selection. Reading a coordinate as a one-dimensional kernel, selecting variables and selecting kernels are the same operation, and MKL is the kernel-space lasso.</p>
+
+<h2 id="algorithm-and-extensions">Algorithm and extensions</h2>
+
+<h3 id="simplemkl">The simpleMKL algorithm</h3>
+
+<p>The joint convexity guarantees a global optimum exists; simpleMKL (Rakotomamonjy et al., 2008) is a clean way to reach it that reuses any existing single-kernel solver as a black box. The idea is to optimize the weights in the outer loop and delegate the predictor to the inner loop. We want to minimize over \(\eta \in \Sigma_M\),</p>
+$$
+\min_{\eta \in \Sigma_M} \; J(K_\eta) = \min_{\eta \in \Sigma_M} \; \max_{\boldsymbol{\gamma} \in \mathbb{R}^n} \; \big\{ - R^\ast(-2\lambda \boldsymbol{\gamma}) - \lambda \, \boldsymbol{\gamma}^\top K_\eta \boldsymbol{\gamma} \big\} .
+$$
+<p>For a fixed \(\eta\), evaluating \(J(K_\eta)\) is nothing but training a single kernel machine with the combined kernel \(K_\eta\): a standard solver returns the maximizer \(\boldsymbol{\gamma}^\ast\), and</p>
+$$
+J(K_\eta) = - R^\ast(-2\lambda \boldsymbol{\gamma}^\ast) - \lambda \, \boldsymbol{\gamma}^{\ast\top} K_\eta \boldsymbol{\gamma}^\ast .
+$$
+<p>The same \(\boldsymbol{\gamma}^\ast\) hands us the gradient of \(J\) at almost no extra cost. By Danskin's theorem, differentiating through the inner maximum with \(\boldsymbol{\gamma}^\ast\) held fixed,</p>
+$$
+\frac{\partial J(K_\eta)}{\partial \eta_i} = -\lambda \, \boldsymbol{\gamma}^{\ast\top} K_i \boldsymbol{\gamma}^\ast .
+$$
+<p>Each partial derivative is a single quadratic form in the base Gram matrix \(K_i\). With the value and gradient in hand, \(J(K_\eta)\) is minimized over the simplex \(\Sigma_M\) by a projected gradient or reduced gradient algorithm. The result is an outer loop over \(\eta\) wrapped around an off-the-shelf single-kernel solver, which is what makes simpleMKL simple.</p>
+
+<pre><code>simpleMKL
+  initialize eta in the simplex (e.g. uniform)
+  repeat
+    1. train a single-kernel machine with K_eta      -> gamma*
+    2. J     = -R*(-2 lambda gamma*) - lambda gamma*' K_eta gamma*
+       dJ/d eta_i = -lambda gamma*' K_i gamma*
+    3. update eta by a projected/reduced gradient step on the simplex
+  until convergence
+</code></pre>
+
+<h3 id="lp-extensions">Beyond the simplex: the \(\ell_r\) extension</h3>
+
+<p>The simplex constraint \(\sum_i \eta_i = 1\) is one choice among many, and it is the one that produces the sparse, group-lasso behavior. Micchelli and Pontil (2005) generalize it by constraining a different norm of the weight vector. For a parameter \(r \gt 0\), take</p>
+$$
+K_\eta = \sum_{i=1}^M \eta_i K_i , \qquad \eta \in \Sigma_M^r = \left\{ \eta_i \ge 0, \; \sum_{i=1}^M \eta_i^r = 1 \right\} .
+$$
+
+<div class="box thm"><span class="box-title">Theorem (\(\ell_r\) multiple kernel learning)</span>
+The solution \(f^\ast\) of
+$$
+\min_{\eta \in \Sigma_M^r} \; \min_{f \in \mathcal{H}_{K_\eta}} \; \big\{ R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}_{K_\eta}}^2 \big\}
+$$
+is \(f^\ast = \sum_{i=1}^M f_i^\ast\), where \((f_1^\ast, \ldots, f_M^\ast) \in \mathcal{H}_{K_1} \times \cdots \times \mathcal{H}_{K_M}\) solves
+$$
+\min_{f_1, \ldots, f_M} \; \left\{ R\!\left( \sum_{i=1}^M (\mathbf{f}_i)_n \right) + \lambda \left( \sum_{i=1}^M \lVert f_i \rVert_{\mathcal{H}_{K_i}}^{\frac{2r}{r+1}} \right)^{\!\frac{r+1}{r}} \right\} .
+$$
+</div>
+
+<p>The penalty is now a mixed norm with exponent \(\frac{2r}{r+1}\) on the per-block RKHS norms. The proof mirrors the group-lasso derivation, replacing the Cauchy-Schwarz step by the corresponding Hölder inequality on \(\Sigma_M^r\). Setting \(r = 1\) recovers the standard MKL problem with its \(\ell_1\) block penalty and its kernel selection; letting \(r\) grow relaxes the sparsity toward the dense, ridge-like behavior of the plain sum kernel. The parameter \(r\) is thus a dial between selecting a few kernels and averaging over all of them, and where to set it is itself a modeling choice, one more instance of the theme this chapter began with: the more of the kernel we are willing to learn, the fewer decisions we have to make by hand.</p>
+<div class="chnav">
+<a href="kernel-mean-embeddings.html"><span class="dir">previous</span>11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<a style="text-align:right" href="large-scale-kernels.html"><span class="dir">next</span>13. Large-Scale Kernel Machines</a>
+</div>
+</div></main>
+</div>
+</body>
+</html>

@@ -1,0 +1,795 @@
+<h1>Kernels for Sequences</h1>
+
+<p class="lead">Much of the data that kernel methods were built to attack does not live in
+\(\mathbb{R}^d\). A protein is a string over a twenty-letter alphabet; a gene is a
+string over four; a document is a string over the characters of a language. This
+chapter builds kernels directly on such strings. We start from the biology that
+made the problem urgent, then develop three families: kernels from explicit
+feature maps indexed by short substrings (the spectrum, mismatch, and substring
+kernels, with their string-algorithm implementations), kernels derived from
+generative models of sequences (context-tree models, hidden Markov models, and
+stochastic context-free grammars for RNA), and finally the local alignment
+kernel, whose positive definiteness we prove in full by a convolution argument.
+Throughout, the recurring theme is that a good sequence kernel must be
+mathematically valid, fast to compute by dynamic programming, and adapted to the
+biology of the task.</p>
+
+<h2 id="motivation">Why sequences, and why kernels</h2>
+
+<p>The central dogma of molecular biology reads a one-dimensional string in two
+stages: DNA, a string over the four bases \(\{A,C,G,T\}\), is transcribed into
+RNA and then translated into protein, a string over the twenty-letter alphabet
+of amino acids. A protein is therefore literally a variable-length word. Human
+insulin, for instance, is the chain</p>
+
+<pre><code>FVNQHLCGSHLVEALYLVCGERGFFYTPKA</code></pre>
+
+<p>The Human Genome Project set out to sequence all three billion bases of the
+human genome. It ran as a consortium of some twenty laboratories across six
+countries and cost between half a billion and one billion US dollars, and it
+closed the genomics era in 2003 with a set of surprises: only about 25,000 genes,
+representing a mere 1.2% of the genome, with the remaining 97% long dismissed as
+"junk DNA" but now understood to superimpose many biological signals still being
+discovered. Automatic gene finding was already being done with graphical models.
+Since then the cost of sequencing has collapsed far faster than Moore's law, so
+sequences are produced at a rate that no human can annotate. The bottleneck moved
+from generating strings to comparing, classifying, and analyzing them.</p>
+
+<p>A representative task makes the setting concrete.</p>
+
+<div class="box ex"><span class="box-title">Example (secreted protein prediction)</span>
+We are given a training set of protein sequences, each labelled secreted or
+non-secreted, for example the secreted
+<code>MASKATLLLAFTLLFATCIARHQQRQQQQNQCQLQNIEA...</code> against the non-secreted
+<code>MAPPSVFAEVPQAQPVLVFKLIADFREDPDPRKVNLGVG...</code>, and we want a classifier
+that predicts whether a new protein is secreted. The label depends on subtle
+regularities of the amino-acid string, not on any obvious numeric feature.
+</div>
+
+<p>Kernel methods are a natural fit. Since the seminal paper of Jaakkola,
+Diekhans, and Haussler (1998), the entire kernel toolbox, from the support
+vector machine to kernel PCA, becomes available on strings the moment we exhibit
+a valid kernel \(K(x,x')\) between two sequences. The design question is
+therefore the only question, and a good string kernel must satisfy three demands
+at once:</p>
+
+<ul>
+<li>it must be <em>mathematically valid</em>, that is symmetric and positive
+definite (or conditionally positive definite);</li>
+<li>it must be <em>fast to compute</em>, because sequences are long and numerous;</li>
+<li>it must be <em>adapted to the problem</em>, encoding the right notion of
+biological similarity so that it actually performs.</li>
+</ul>
+
+<p>There is no single best answer. Kernel engineering for sequences has produced
+three broad strategies, which organize the rest of this chapter: define an
+explicit, possibly very high dimensional, feature space (physico-chemical
+kernels; the spectrum, mismatch, and substring kernels; motif and pairwise
+kernels); derive a kernel from a generative model (the Fisher kernel, mutual
+information kernels, and marginalized kernels); or derive a kernel from a
+similarity measure (the local alignment kernel).</p>
+
+<h2 id="vector-embeddings">Supervised classification by vector embedding</h2>
+
+<p>The simplest idea is the most direct: map each string \(x \in \mathcal{X}\) to
+a vector \(\Phi(x) \in \mathcal{F}\) in some feature space, and then train any
+vectorial classifier, a nearest-neighbour rule, a perceptron, logistic
+regression, or a support vector machine, on the images
+\(\Phi(x_1), \dots, \Phi(x_n)\) of the training strings. Every choice of
+embedding \(\Phi\) yields a kernel
+\(K(x,x') = \langle \Phi(x), \Phi(x') \rangle_{\mathcal F}\), and conversely we
+will often specify \(\Phi\) only implicitly through \(K\). Two questions remain:
+what should the coordinates of \(\Phi(x)\) measure, and can the inner product be
+computed without ever forming \(\Phi(x)\) explicitly?</p>
+
+<h3 id="physico-chemical">Physico-chemical embeddings</h3>
+
+<p>One family of coordinates comes from chemistry. Each amino acid carries
+numerical properties (polarity, hydrophobicity, and so on), so a sequence
+\(x = x_1 \dots x_n\) induces a numerical time series \(h_1, \dots, h_n\), where
+\(h_i\) is the chosen property of residue \(x_i\). We then summarize this series
+by a fixed-length vector of features: its length, its Fourier coefficients
+(Wang et al., 2004), or its autocorrelation coefficients (Zhang et al., 2003)</p>
+
+$$ r_j \;=\; \frac{1}{n-j} \sum_{i=1}^{n-j} h_i\, h_{i+j}, \qquad j = 1, 2, \dots $$
+
+<p>Such physico-chemical kernels are cheap and interpretable, but they discard the
+identity of the residues in favour of a coarse numerical profile. The kernels
+that follow keep the letters.</p>
+
+<h2 id="substring-indexation">Substring indexation and the spectrum kernel</h2>
+
+<p>The second and more powerful family indexes the feature space by short
+strings. Fix an integer \(k\) and let \(\mathcal{A}\) be the alphabet. For each
+word \(u \in \mathcal{A}^k\) of length \(k\), let \(\Phi_u(x)\) be some measure of
+how \(u\) appears in \(x\), and set</p>
+
+$$ \Phi(x) \;=\; \bigl( \Phi_u(x) \bigr)_{u \in \mathcal{A}^k},
+   \qquad
+   K(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
+
+<p>Different choices of \(\Phi_u\) give different kernels, all sharing the same
+\(|\mathcal{A}|^k\)-dimensional index set:</p>
+
+<ul>
+<li>the number of occurrences of \(u\) in \(x\), without gaps, gives the
+<em>spectrum kernel</em> (Leslie et al., 2002);</li>
+<li>the number of occurrences of \(u\) up to \(m\) mismatches, without gaps, gives
+the <em>mismatch kernel</em> (Leslie et al., 2004);</li>
+<li>the number of occurrences of \(u\) allowing gaps, each occurrence weighted by
+an exponentially decaying factor of the gap length, gives the <em>substring
+kernel</em> (Lodhi et al., 2002).</li>
+</ul>
+
+<h3 id="spectrum-kernel">The spectrum kernel</h3>
+
+<p>The \(k\)-spectrum of a string lists all of its contiguous length-\(k\)
+windows. For \(x = \texttt{CGGSLIAMMWFGV}\) the \(3\)-spectrum is</p>
+
+$$ (\texttt{CGG}, \texttt{GGS}, \texttt{GSL}, \texttt{SLI}, \texttt{LIA},
+   \texttt{IAM}, \texttt{AMM}, \texttt{MMW}, \texttt{MWF}, \texttt{WFG},
+   \texttt{FGV}). $$
+
+<div class="box def"><span class="box-title">Definition (spectrum kernel)</span>
+Let \(\Phi_u(x)\) be the number of occurrences of the \(k\)-mer \(u\) as a
+contiguous substring of \(x\). The \(k\)-spectrum kernel is
+$$ K(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
+Being an inner product of explicit feature vectors, it is positive definite by
+construction.
+</div>
+
+<p>Naively the sum has \(|\mathcal{A}|^k\) terms, an astronomically large number.
+The saving grace is sparsity: a string of length \(|x|\) contains at most
+\(|x| - k + 1\) distinct windows, so \(\Phi(x)\) has at most \(|x| - k + 1\)
+non-zero coordinates. The kernel is a sparse dot product, and everything hinges
+on how we align the non-zero coordinates of the two strings.</p>
+
+<h4 id="spectrum-computation">Computing the spectrum kernel</h4>
+
+<p>With <em>pre-indexation</em>, we walk once through each string, hashing every
+length-\(k\) window to an integer and tallying counts, then intersect the two
+tallies. Both the counting and the intersection are linear, so</p>
+
+$$ K(x,x') \text{ costs } O(|x| + |x'|). $$
+
+<p>Classification of a new sequence is just as fast. If \(f(x) = w \cdot \Phi(x)\)
+is a learned linear score, then</p>
+
+$$ f(x) \;=\; \sum_{u} w_u\, \Phi_u(x)
+   \;=\; \sum_{i=1}^{|x|-k+1} w_{\,x_i \dots x_{i+k-1}}, $$
+
+<p>a single sweep summing one weight per window, in \(O(|x|)\). The spectrum
+kernel therefore works on any strings at all, natural language, time series, log
+files, and is a fast, scalable default for string classification; its mismatch
+variants extend it to approximate matching.</p>
+
+<p>When we cannot afford to pre-index (for instance because the vocabulary is
+built on the fly), classical string data structures recover almost the same
+speed. A <em>retrieval tree</em> or <em>trie</em> stores every observed \(k\)-mer
+along a root-to-leaf path of length \(k\); for the sequence
+\(\texttt{ACGTTTAACGTAC}\) the depth-one nodes are \(A, C, G, T\), the depth-two
+nodes are \(AA, AC, CG, GT, TA, TT\), and so on down to the \(k\)-mers at the
+leaves. Traversing both strings through a shared trie computes \(K(x,x')\) in
+\(O\!\left(k(|x| + |x'|)\right)\). A <em>suffix tree</em> compresses this further
+and restores the linear \(O(|x| + |x'|)\) bound, at the price of a larger
+constant. The table below summarizes the trade-offs.</p>
+
+<table>
+<thead>
+<tr><th>Kernel</th><th>Data structure</th><th>Time and memory</th></tr>
+</thead>
+<tbody>
+<tr><td>spectrum / mismatch</td><td>pre-indexation or suffix tree</td><td>\(O(|x| + |x'|)\)</td></tr>
+<tr><td>spectrum / mismatch</td><td>trie</td><td>\(O(k(|x| + |x'|))\)</td></tr>
+<tr><td>substring (gapped)</td><td>dynamic programming</td><td>\(O(k\,|x|\,|x'|)\)</td></tr>
+</tbody>
+</table>
+
+<h2 id="substring-kernel">The substring kernel and its dynamic program</h2>
+
+<p>The spectrum kernel demands that a \(k\)-mer appear as an <em>uninterrupted</em>
+block. Biological similarity is more forgiving: the same motif may recur with
+insertions between its letters. The substring kernel rewards such gapped matches,
+but penalizes gaps by an exponential decay, so that a spread-out match counts for
+less than a tight one.</p>
+
+<h3 id="substring-def">Definition</h3>
+
+<p>We first name the gapped occurrences. For \(1 \le k \le n\), let
+\(\mathcal{I}(k,n)\) be the set of strictly increasing index sequences
+\(\mathbf{i} = (i_1, \dots, i_k)\) with \(1 \le i_1 \lt i_2 \lt \dots \lt i_k \le n\).
+For a string \(x = x_1 \dots x_n\) and \(\mathbf{i} \in \mathcal{I}(k,|x|)\), the
+selected substring and its span are</p>
+
+$$ x(\mathbf{i}) \;=\; x_{i_1} x_{i_2} \dots x_{i_k},
+   \qquad
+   l(\mathbf{i}) \;=\; i_k - i_1 + 1. $$
+
+<p>The span \(l(\mathbf{i})\) is the width of the window actually used, so it
+exceeds \(k\) exactly by the number of gapped positions.</p>
+
+<div class="box ex"><span class="box-title">Example</span>
+In \(x = \texttt{ABRACADABRA}\), the index sequence
+\(\mathbf{i} = (3,4,7,8,10)\) selects
+\(x(\mathbf{i}) = \texttt{RADAR}\) with span
+\(l(\mathbf{i}) = 10 - 3 + 1 = 8\), so three positions were skipped.
+</div>
+
+<div class="box def"><span class="box-title">Definition (substring kernel)</span>
+Fix \(k \in \mathbb{N}\) and a decay \(\lambda \in (0,1]\). For every
+\(u \in \mathcal{A}^k\) define the feature
+$$ \Phi_u(x) \;=\; \sum_{\mathbf{i} \in \mathcal{I}(k,|x|)\,:\, x(\mathbf{i}) = u}
+   \lambda^{\,l(\mathbf{i})}, $$
+so each gapped occurrence of \(u\) contributes \(\lambda^{\text{span}}\). The
+substring kernel is
+$$ K_{k,\lambda}(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
+</div>
+
+<div class="box ex"><span class="box-title">Example (\(k=2\))</span>
+With the four strings \(\texttt{cat}, \texttt{car}, \texttt{bat}, \texttt{bar}\)
+and the \(2\)-mers \(u \in \{\texttt{ca},\texttt{ct},\texttt{at},\texttt{ba},
+\texttt{bt},\texttt{cr},\texttt{ar},\texttt{br}\}\), the non-zero features are
+$$ \Phi(\texttt{cat}) = (\lambda^2, \lambda^3, \lambda^2, 0,0,0,0,0), \quad
+   \Phi(\texttt{car}) = (\lambda^2, 0,0,0,0, \lambda^3, \lambda^2, 0), $$
+(the \(\texttt{ct}\) in \(\texttt{cat}\) is gapped, hence \(\lambda^3\)). Reading
+off inner products,
+$$ K(\texttt{cat},\texttt{cat}) = K(\texttt{car},\texttt{car}) = 2\lambda^4 + \lambda^6,
+   \quad K(\texttt{cat},\texttt{car}) = \lambda^4, \quad K(\texttt{cat},\texttt{bar}) = 0. $$
+The shared \(\texttt{ca}\) alone links \(\texttt{cat}\) and \(\texttt{car}\), while
+\(\texttt{cat}\) and \(\texttt{bar}\) have no common \(2\)-mer.
+</div>
+
+<h3 id="substring-dp">Computing the kernel by dynamic programming</h3>
+
+<p>Expanding the definition,</p>
+
+$$ K_{k,\lambda}(x,x') \;=\; \sum_{u \in \mathcal{A}^k}
+   \sum_{\mathbf{i}:x(\mathbf{i})=u} \sum_{\mathbf{i}':x'(\mathbf{i}')=u}
+   \lambda^{\,l(\mathbf{i}) + l(\mathbf{i}')}. $$
+
+<p>Enumerating index sequences is hopeless: there are on the order of \(|x|^k\) of
+them. The way out, due to Lodhi et al. (2002), is to introduce an auxiliary
+feature in which the span is measured not to the last selected letter but to the
+<em>end of the string</em>. Alongside</p>
+
+$$ \Phi_u(x) = \sum_{\mathbf{i}:x(\mathbf{i})=u} \lambda^{\,i_k - i_1 + 1}
+   \qquad\text{define}\qquad
+   \Psi_u(x) = \sum_{\mathbf{i}:x(\mathbf{i})=u} \lambda^{\,|x| - i_1 + 1}. $$
+
+<p>The auxiliary \(\Psi\) keeps a "gap account open" to the right end of the
+string, which is exactly what makes it compose cleanly when we append a letter.
+Writing \(u = va\) with \(a \in \mathcal{A}\) its last letter and \(x_{[1,j]} =
+x_1 \dots x_j\), a direct rewriting gives</p>
+
+$$ \Phi_{va}(x) = \sum_{j:\,x_j = a} \Psi_v\!\left(x_{[1,j-1]}\right)\lambda,
+   \qquad
+   \Psi_{va}(x) = \sum_{j:\,x_j = a} \Psi_v\!\left(x_{[1,j-1]}\right)\lambda^{\,|x|-j+1}. $$
+
+<p>From these follow the incremental update rules when a single letter \(a\) is
+appended to a string \(x\), forming \(xa\). If the last letter of \(u\) is
+<em>not</em> \(a\), appending \(a\) cannot end a new occurrence of \(u\), so
+\(\Phi\) is unchanged while \(\Psi\) simply pays one more unit of decay:</p>
+
+$$ \Phi_u(xa) = \Phi_u(x), \qquad \Psi_u(xa) = \lambda\, \Psi_u(x). $$
+
+<p>If instead \(u = va\) ends in \(a\), the new letter can close an occurrence
+whose prefix \(v\) sat in \(x\):</p>
+
+$$ \Phi_{va}(xa) = \Phi_{va}(x) + \lambda\, \Psi_v(x), \qquad
+   \Psi_{va}(xa) = \lambda\, \Psi_{va}(x) + \lambda\, \Psi_v(x). $$
+
+<p>We now bundle these features into two kernels indexed by the common length
+\(k\),</p>
+
+$$ B_k(x,x') = \sum_{u \in \mathcal{A}^k} \Psi_u(x)\,\Psi_u(x'),
+   \qquad
+   K_k(x,x') = \sum_{u \in \mathcal{A}^k} \Phi_u(x)\,\Phi_u(x'), $$
+
+<p>so \(B_k\) is the auxiliary companion of the target \(K_k = K_{k,\lambda}\).
+Their boundary conditions are</p>
+
+$$ B_0(x,x') = K_0(x,x') = 1 \ \text{ for all } x,x',
+   \qquad
+   B_k(x,x') = K_k(x,x') = 0 \ \text{ if } \min(|x|,|x'|) \lt k. $$
+
+<p>Summing the update rules over \(u\) turns them into recursions on the strings.
+Appending \(a\) to the first argument,</p>
+
+$$ B_k(xa,x') = \lambda\, B_k(x,x')
+   \;+\; \sum_{j:\,x'_j = a} B_{k-1}\!\left(x, x'_{[1,j-1]}\right) \lambda^{\,|x'|-j+2}. $$
+
+<p>To remove the inner sum over \(j\), we append a letter to the second argument
+as well. Writing the second string as \(x'b\) and using the identity above once
+in each argument yields the fully incremental form</p>
+
+$$ B_k(xa, x'b) = \lambda\, B_k(x, x'b) + \lambda\, B_k(xa, x')
+   - \lambda^2 B_k(x, x') + \delta_{a=b}\, \lambda^2\, B_{k-1}(x, x'), $$
+
+<p>where \(\delta_{a=b}\) is \(1\) when the two appended letters agree and \(0\)
+otherwise. Each entry \(B_k(xa,x'b)\) now depends only on three neighbours in the
+same table plus one entry of the table for \(k-1\), so it is a genuine
+two-dimensional dynamic program. The target kernel is recovered by a companion
+recursion that reuses \(B_{k-1}\),</p>
+
+$$ K_k(xa, x') = K_k(x, x') + \lambda^2 \sum_{j:\,x'_j = a}
+   B_{k-1}\!\left(x, x'_{[1,j-1]}\right), $$
+
+<p>and \(K_{k,\lambda}(x,x') = K_k(x,x')\) once the tables are complete. Filling
+the \(B\) tables for orders \(1, \dots, k-1\) and then the \(K\) table costs
+\(O(k\,|x|\,|x'|)\) time and memory. In pseudocode:</p>
+
+<pre><code>Input: strings x, x', order k, decay lambda
+# B[p] is the (|x|+1) x (|x'|+1) table for order p
+B[0][i][j] = 1        for all 0 &lt;= i &lt;= |x|, 0 &lt;= j &lt;= |x'|
+for p = 1 .. k-1:
+    B[p][i][j] = 0    whenever i &lt; p or j &lt; p          # base case
+    for i = p .. |x|:
+        for j = p .. |x'|:
+            a = x[i]; b = x'[j]
+            B[p][i][j] = lambda*B[p][i-1][j]
+                       + lambda*B[p][i][j-1]
+                       - lambda*lambda*B[p][i-1][j-1]
+                       + (a==b ? lambda*lambda*B[p-1][i-1][j-1] : 0)
+
+K[i][j] = 0           for all i, j
+for i = k .. |x|:
+    for j = 1 .. |x'|:
+        a = x[i]
+        s = 0
+        for m = 1 .. j:               # sum over positions of x' equal to a
+            if x'[m] == a: s += B[k-1][i-1][m-1]
+        K[i][j] = K[i-1][j] + lambda*lambda*s
+return K[|x|][|x'|]</code></pre>
+
+<p>(The innermost sum over \(m\) can itself be maintained incrementally, which is
+what keeps the overall cost at \(O(k\,|x|\,|x'|)\) rather than a factor of \(|x'|\)
+more.) The feature space has dimension \(|\mathcal{A}|^k\), so downstream learning
+must be regularized; a support vector machine on this kernel is the standard
+choice.</p>
+
+<h3 id="dictionary">Dictionary-based indexation</h3>
+
+<p>A third way to build an explicit embedding replaces "index by all \(k\)-mers"
+with "index by a chosen dictionary". Pick a dictionary of reference sequences
+\(D = (x_1, \dots, x_n)\) and a similarity measure \(s(x,x')\), and set</p>
+
+$$ \Phi_D(x) = \bigl( s(x, x_i) \bigr)_{x_i \in D}. $$
+
+<p>Two instances are common. In <em>motif kernels</em> (Logan et al., 2001) the
+dictionary is a library of known biological motifs and \(s\) is a matching
+function, so each coordinate reports how strongly \(x\) hits one motif. In the
+<em>pairwise kernel</em> (Liao and Noble, 2003) the dictionary is the training set
+itself and \(s\) is a classical sequence-similarity score; the embedding of \(x\)
+is its vector of similarities to all training sequences. Both trade a canonical
+feature space for one tailored by prior knowledge.</p>
+
+<h2 id="generative-kernels">Kernels from generative models</h2>
+
+<p>Probabilistic modeling of biological sequences predates kernel design by
+decades, and it is a shame to waste it. The models come as parametric families
+\(\{P_\theta : \theta \in \Theta \subset \mathbb{R}^m\}\) of distributions over
+sequences: hidden Markov models for proteins, stochastic context-free grammars
+for RNA. This section turns such models into kernels, so that the biological
+structure they encode transfers to the kernel machine.</p>
+
+<h3 id="context-tree">Context-tree models and the context-tree kernel</h3>
+
+<p>A context-tree model is a Markov chain of variable memory: how many previous
+symbols the next symbol depends on is itself a function of those symbols. Formally</p>
+
+$$ P_{D,\theta}(x) = P_{D,\theta}(x_1 \dots x_D)
+   \prod_{i=D+1}^{n} P_{D,\theta}\!\left(x_i \mid x_{i-D} \dots x_{i-1}\right), $$
+
+<p>where \(D\) is a suffix tree telling us, for each context, how far back to look,
+and \(\theta \in \Sigma_D\) is a collection of conditional multinomials. The tree
+lets short, predictive contexts stay short and only deepens where the data demand
+it.</p>
+
+<div class="box ex"><span class="box-title">Example</span>
+For a suitable tree,
+$$ P(\texttt{AABACBACC}) = P(\texttt{AAB})\,\theta_{AB}(A)\,\theta_{A}(C)\,
+   \theta_{C}(B)\,\theta_{ACB}(A)\,\theta_{A}(C)\,\theta_{C}(A), $$
+each factor conditioning on just enough preceding context (here \(AB\), \(A\),
+\(C\), \(ACB\), and so on) to predict the next letter.
+</div>
+
+<p>Rather than fit one tree and one \(\theta\), we average over all of them under
+a prior, which yields a kernel.</p>
+
+<div class="box thm"><span class="box-title">Theorem (context-tree kernel, Cuturi et al., 2005)</span>
+For particular choices of priors \(w(d\theta \mid D)\) and \(\pi(D)\), the
+context-tree kernel
+$$ K(x,x') = \sum_{D} \int_{\theta \in \Sigma_D}
+   P_{D,\theta}(x)\, P_{D,\theta}(x')\; w(d\theta \mid D)\, \pi(D) $$
+can be computed in \(O(|x| + |x'|)\) by a variant of the Context-Tree Weighting
+algorithm. It is a valid mutual-information kernel, and its value is tied to an
+information-theoretic measure of the mutual information between the two strings.
+</div>
+
+<h3 id="marginalized">Marginalized kernels</h3>
+
+<p>The context-tree kernel is one instance of a general and useful construction.
+Suppose each observed sequence \(x\) hides a latent labelling \(y\), coupled to it
+by a conditional \(P_x(dy)\), and suppose we know a kernel \(K_Z\) on the complete
+data \(z = (x,y)\). We cannot see \(y\), so we average \(K_Z\) over the posterior
+of the hidden variables.</p>
+
+<div class="box def"><span class="box-title">Definition (marginalized kernel, Tsuda et al., 2002)</span>
+$$ K_{\mathcal X}(x,x')
+   = \mathbb{E}_{P_x(dy)\,\times\,P_{x'}(dy')}\, K_Z(z,z')
+   = \int\!\!\int K_Z\!\left((x,y),(x',y')\right)\, P_x(dy)\, P_{x'}(dy'). $$
+Being an expectation of a kernel over independent latent draws, \(K_{\mathcal X}\)
+is again a valid kernel on \(\mathcal{X}\).
+</div>
+
+<p>Concretely, take a hidden Markov model whose hidden states are a normal coin
+\(N\) and a biased coin \(B\), emitting bits with
+\(\pi(0 \mid N) = 0.5\) and \(\pi(0 \mid B) = 0.2\). A realization is a pair
+\(z = (x,y)\) of an emitted bit string \(x\) and its hidden state string \(y\),
+for example the states \(y = \texttt{NNNNNBBB...}\) driving the bits
+\(x = \texttt{10010111...}\). If we could see \(z\), a natural complete-data
+kernel is the \(1\)-spectrum on the joint alphabet \(\mathcal{A} \times \mathcal{S}\)
+of (bit, state) pairs,</p>
+
+$$ K_Z(z,z') = \sum_{(a,s) \in \mathcal{A} \times \mathcal{S}}
+   n_{a,s}(z)\, n_{a,s}(z'), $$
+
+<p>where \(n_{a,s}(x,y)\) counts the positions whose hidden state is \(s\) and
+whose emitted symbol is \(a\). Marginalizing over the unseen states gives a kernel
+on the observed bits alone,</p>
+
+$$ K_{\mathcal X}(x,x') = \sum_{y,y'} K_Z\!\left((x,y),(x',y')\right)
+   P(y \mid x)\, P(y' \mid x')
+   = \sum_{(a,s)} \Phi_{a,s}(x)\, \Phi_{a,s}(x'), $$
+
+<p>with the marginalized feature</p>
+
+$$ \Phi_{a,s}(x) = \sum_{y} P(y \mid x)\, n_{a,s}(x,y). $$
+
+<p>The last object looks like an intractable sum over all hidden paths, but the
+count \(n_{a,s}\) is additive over positions, so the sum collapses:</p>
+
+$$ \Phi_{a,s}(x)
+   = \sum_{y} P(y \mid x) \sum_{i=1}^{n} \delta(x_i,a)\,\delta(y_i,s)
+   = \sum_{i=1}^{n} \delta(x_i,a) \sum_{y} P(y \mid x)\,\delta(y_i,s)
+   = \sum_{i=1}^{n} \delta(x_i,a)\, P(y_i = s \mid x). $$
+
+<p>Each posterior marginal \(P(y_i = s \mid x)\) is computed by the standard
+forward-backward algorithm, so the whole feature vector, and hence the kernel, is
+obtained in time linear in the sequence length times the number of hidden states.
+This same recipe underlies the spectrum kernel on the hidden states of a protein
+HMM (Tsuda et al., 2002), random-walk kernels on graphs (Kashima et al., 2004),
+and phylogenetic kernels on multiple alignments (Vert et al., 2006).</p>
+
+<h3 id="scfg">Stochastic context-free grammars for RNA</h3>
+
+<p>RNA folds back on itself: distant bases pair, so the relevant dependencies are
+nested rather than sequential, and a Markov chain is the wrong model. The right
+generative model is a stochastic context-free grammar, whose productions can
+generate matched pairs. A minimal grammar for base-paired RNA has the rules</p>
+
+$$ S \to SS, \qquad S \to aSa, \qquad S \to aS, \qquad S \to a, $$
+
+<p>where the rule \(S \to aSa\) emits two paired bases wrapping a nested
+structure. Marginalizing a kernel over the hidden parse of such a grammar is the
+RNA analogue of the HMM construction above. The features count occurrences of
+each (base, grammar-state) combination, and the marginalization is carried out by
+the classical inside-outside algorithm, the context-free counterpart of
+forward-backward (Kin et al., 2002).</p>
+
+<div class="box ex"><span class="box-title">Example (tRNA clustering)</span>
+A set of 74 human tRNA sequences, spanning three classes (Ala-AGC, Asn-GTT, and
+Cys-GCA), was analyzed with the second-order marginalized kernel built on an
+SCFG (Tsuda et al., 2002). Projecting the kernel onto its first two principal
+components separates the three classes, evidence that the grammar-based kernel
+captures the folded structure that defines the families.
+</div>
+
+<h2 id="local-alignment">The local alignment kernel</h2>
+
+<p>The third strategy starts not from a feature map or a generative model but from
+the biologist's own notion of similarity: alignment. To compare</p>
+
+<pre><code>x1 = CGGSLIAMMWFGV
+x2 = CLIVMMNRLMWFGV</code></pre>
+
+<p>a biologist looks for a good alignment, matching conserved residues and paying
+for the insertions and deletions in between:</p>
+
+<pre><code>CGGSLIAMM------WFGV
+|...|||||....||||
+C-----LIVMMNRLMWFGV</code></pre>
+
+<p>An alignment \(\pi\) is scored with a substitution matrix
+\(S \in \mathbb{R}^{\mathcal{A}\times\mathcal{A}}\), rewarding aligned residue
+pairs, and a gap penalty function \(g : \mathbb{N} \to \mathbb{R}\), charging for
+each run of gaps:</p>
+
+$$ s_{S,g}(\pi) = \sum_{\text{aligned } (a,b)} S(a,b) \;-\; \sum_{\text{gaps of length } \ell} g(\ell). $$
+
+<h3 id="smith-waterman">From Smith-Waterman to a kernel</h3>
+
+<p>The classical Smith-Waterman score keeps only the best alignment (Smith and
+Waterman, 1981),</p>
+
+$$ \mathrm{SW}_{S,g}(x,y) = \max_{\pi \in \Pi(x,y)} s_{S,g}(\pi). $$
+
+<p>It is symmetric, and it is the workhorse of sequence comparison, but a
+maximum over alignments is <em>not</em> positive definite, so it cannot be used
+as a kernel. The fix of Saigo et al. (2004) is to replace the maximum by a
+Boltzmann-weighted sum over <em>all</em> alignments, softening the hard optimum
+into a smooth aggregate.</p>
+
+<div class="box def"><span class="box-title">Definition (local alignment kernel)</span>
+For an inverse temperature \(\beta \gt 0\),
+$$ K^{(\beta)}_{\mathrm{LA}}(x,y)
+   = \sum_{\pi \in \Pi(x,y)} \exp\!\bigl(\beta\, s_{S,g}(x,y,\pi)\bigr). $$
+As \(\beta \to \infty\) the sum is dominated by the best alignment and recovers
+Smith-Waterman up to the exponential, but for finite \(\beta\) the kernel is
+symmetric and, as we now prove, positive definite.
+</div>
+
+<h3 id="la-pd-proof">The local alignment kernel is positive definite</h3>
+
+<p>The proof is a beautiful application of kernel closure properties: we build the
+LA kernel out of trivially valid pieces using operations that preserve positive
+definiteness. We assemble the tools in order.</p>
+
+<div class="box lem"><span class="box-title">Lemma (closure properties)</span>
+If \(K_1\) and \(K_2\) are positive definite kernels, then so are \(K_1 + K_2\),
+the product \(K_1 K_2\), and \(cK_1\) for any \(c \ge 0\). Moreover, if a sequence
+\((K_i)_{i \ge 1}\) of p.d. kernels converges pointwise to a function \(K\),
+$$ K(x,x') = \lim_{i \to \infty} K_i(x,x') \quad\text{for all } x,x', $$
+then \(K\) is also positive definite.
+</div>
+
+<div class="box proof">
+Sums and non-negative multiples are immediate from the definition, since a
+non-negative combination of positive semidefinite Gram matrices is positive
+semidefinite; and a pointwise limit of positive semidefinite matrices is positive
+semidefinite because the quadratic form \(\sum_{i,j}\alpha_i\alpha_j K_i(x_i,x_j)
+\ge 0\) passes to the limit. Only the product needs work, and it is the Schur
+(Hadamard) product theorem. Let \(A\) and \(B\) be \(n \times n\) positive
+semidefinite matrices. Diagonalizing \(A\),
+$$ A_{i,j} = \sum_{p=1}^{n} f_p(i)\, f_p(j) $$
+for some vectors \(f_1, \dots, f_n\). Then for any \(\alpha \in \mathbb{R}^n\),
+$$ \sum_{i,j=1}^{n} \alpha_i \alpha_j A_{i,j} B_{i,j}
+   = \sum_{p=1}^{n} \sum_{i,j=1}^{n}
+     \bigl(\alpha_i f_p(i)\bigr)\bigl(\alpha_j f_p(j)\bigr) B_{i,j}
+   \ge 0, $$
+each inner double sum being non-negative because \(B\) is positive semidefinite.
+Hence the entrywise product \(C_{i,j} = A_{i,j} B_{i,j}\) is positive
+semidefinite. <span class="qed">\(\square\)</span>
+</div>
+
+<p>The next two lemmas let us combine kernels living on different spaces and
+kernels of sets.</p>
+
+<div class="box lem"><span class="box-title">Lemma (direct sum and product)</span>
+Let \(\mathcal{X} = \mathcal{X}_1 \times \mathcal{X}_2\), with \(K_1\) a p.d.
+kernel on \(\mathcal{X}_1\) and \(K_2\) a p.d. kernel on \(\mathcal{X}_2\). Then
+both the direct sum
+$$ K\bigl((x_1,x_2),(y_1,y_2)\bigr) = K_1(x_1,y_1) + K_2(x_2,y_2) $$
+and the direct product
+$$ K\bigl((x_1,x_2),(y_1,y_2)\bigr) = K_1(x_1,y_1)\, K_2(x_2,y_2) $$
+are p.d. kernels on \(\mathcal{X}\).
+</div>
+
+<div class="box proof">
+Let \(\Phi_1 : \mathcal{X}_1 \to \mathcal{H}\) satisfy
+\(K_1(x_1,y_1) = \langle \Phi_1(x_1), \Phi_1(y_1)\rangle_{\mathcal H}\). Define
+\(\Phi : \mathcal{X}_1 \times \mathcal{X}_2 \to \mathcal{H}\) by
+\(\Phi((x_1,x_2)) = \Phi_1(x_1)\), ignoring the second coordinate. Then
+$$ \bigl\langle \Phi((x_1,x_2)), \Phi((y_1,y_2)) \bigr\rangle_{\mathcal H}
+   = K_1(x_1,y_1), $$
+so \((x,y) \mapsto K_1(x_1,y_1)\) is p.d. on the product space, and symmetrically
+for \(K_2\). The sum and product statements now follow from the closure lemma.
+<span class="qed">\(\square\)</span>
+</div>
+
+<div class="box lem"><span class="box-title">Lemma (kernel for sets)</span>
+Let \(K\) be a p.d. kernel on \(\mathcal{X}\) and let \(\mathcal{P}(\mathcal{X})\)
+be the set of finite subsets of \(\mathcal{X}\). Then
+$$ K_{\mathcal P}(A,B) = \sum_{x \in A} \sum_{y \in B} K(x,y) $$
+is a p.d. kernel on \(\mathcal{P}(\mathcal{X}) \times \mathcal{P}(\mathcal{X})\).
+</div>
+
+<div class="box proof">
+With \(K(x,y) = \langle \Phi(x), \Phi(y)\rangle_{\mathcal H}\), linearity of the
+inner product gives
+$$ K_{\mathcal P}(A,B)
+   = \sum_{x \in A}\sum_{y \in B} \langle \Phi(x), \Phi(y)\rangle_{\mathcal H}
+   = \Bigl\langle \textstyle\sum_{x \in A}\Phi(x),\ \sum_{y \in B}\Phi(y)
+     \Bigr\rangle_{\mathcal H}
+   = \langle \Phi_{\mathcal P}(A), \Phi_{\mathcal P}(B)\rangle_{\mathcal H}, $$
+where \(\Phi_{\mathcal P}(A) = \sum_{x \in A}\Phi(x)\). Being an inner product, it
+is p.d. <span class="qed">\(\square\)</span>
+</div>
+
+<p>The decisive tool is Haussler's convolution, which builds a kernel on strings
+by splitting each string into two pieces in every possible way and combining
+sub-kernels on the pieces.</p>
+
+<div class="box def"><span class="box-title">Definition (convolution kernel, Haussler 1999)</span>
+For p.d. string kernels \(K_1\) and \(K_2\), their convolution
+\(K_1 \star K_2\) is
+$$ K_1 \star K_2(x,y)
+   = \sum_{x_1 x_2 = x,\ y_1 y_2 = y} K_1(x_1,y_1)\, K_2(x_2,y_2), $$
+the sum running over all ways of writing \(x\) as a concatenation \(x_1 x_2\) and
+\(y\) as \(y_1 y_2\).
+</div>
+
+<div class="box lem"><span class="box-title">Lemma</span>
+If \(K_1\) and \(K_2\) are p.d., then \(K_1 \star K_2\) is p.d.
+</div>
+
+<div class="box proof">
+For a string \(x\) let
+\(R(x) = \{(x_1,x_2) : x = x_1 x_2\} \subset \mathcal{X} \times \mathcal{X}\) be
+the finite set of its splits. Then
+$$ K_1 \star K_2(x,y)
+   = \sum_{(x_1,x_2) \in R(x)} \sum_{(y_1,y_2) \in R(y)}
+     K_1(x_1,y_1)\, K_2(x_2,y_2). $$
+The integrand \((x_1,x_2),(y_1,y_2) \mapsto K_1(x_1,y_1)K_2(x_2,y_2)\) is a direct
+product kernel on \(\mathcal{X} \times \mathcal{X}\), hence p.d.; summing it over
+the finite sets \(R(x)\) and \(R(y)\) is exactly the kernel-for-sets construction,
+hence p.d. <span class="qed">\(\square\)</span>
+</div>
+
+<p>We are ready to name the three atomic string kernels from which the LA kernel
+is assembled.</p>
+
+<div class="box def"><span class="box-title">Three basic string kernels</span>
+<ul>
+<li>the constant kernel \(K_0(x,y) := 1\);</li>
+<li>a kernel for single letters,
+$$ K^{(\beta)}_a(x,y) := \begin{cases} 0 & \text{if } |x| \ne 1 \text{ or } |y| \ne 1, \\
+   \exp\!\bigl(\beta\, S(x,y)\bigr) & \text{otherwise;} \end{cases} $$</li>
+<li>a kernel for gaps,
+$$ K^{(\beta)}_g(x,y) = \exp\!\bigl[\beta\,(g(|x|) + g(|y|))\bigr]. $$</li>
+</ul>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (validity of the atoms)</span>
+Here \(S : \mathcal{A}^2 \to \mathbb{R}\) is the substitution score. The letter
+kernel \(K^{(\beta)}_a\) is p.d. exactly when the matrix
+\(\bigl(\exp(\beta\, S(a,b))\bigr)_{(a,b) \in \mathcal{A}^2}\) is positive
+semidefinite, which holds for every \(\beta \gt 0\) when \(S\) is conditionally
+positive definite. The gap kernel is p.d. with no restriction on \(g\), because it
+factorizes,
+$$ K^{(\beta)}_g(x,y) = \exp\!\bigl(\beta\, g(|x|)\bigr) \times
+   \exp\!\bigl(\beta\, g(|y|)\bigr), $$
+which is a product of a function of \(x\) with the same function of \(y\), the
+canonical form of a p.d. kernel of rank one.
+</div>
+
+<p>Finally, an alignment is a run of matched-letter blocks separated by gaps, so
+summing the alignment score over all alignments is precisely a sum of
+convolutions of the atoms.</p>
+
+<div class="box thm"><span class="box-title">Theorem (LA kernel is p.d.)</span>
+The local alignment kernel is a pointwise limit of convolution kernels,
+$$ K^{(\beta)}_{\mathrm{LA}} = \sum_{n=0}^{\infty}
+   K_0 \star \Bigl( K^{(\beta)}_a \star K^{(\beta)}_g \Bigr)^{\star (n-1)}
+   \star K^{(\beta)}_a \star K_0, $$
+and is therefore positive definite.
+</div>
+
+<div class="box proof">
+Each term is a convolution of the three p.d. atoms, hence p.d. by the convolution
+lemma; the \(n\)-th term enumerates exactly the alignments with \(n\) aligned
+residue blocks, its bracketing \(K_0 \star (\cdots) \star K_0\) fixing the boundary
+letters and the interior alternating letter and gap kernels reproducing
+\(\exp(\beta s_{S,g}(\pi))\). The partial sums are p.d. by the sum-closure lemma,
+and their pointwise limit is p.d. by the limit-closure lemma. The induction on
+\(n\) identifying the \(n\)-th term with the \(n\)-block alignments is
+straightforward but long; see Vert et al. (2004) for the details.
+<span class="qed">\(\square\)</span>
+</div>
+
+<h3 id="la-computation">Computing the LA kernel by dynamic programming</h3>
+
+<p>The infinite sum over alignments is, like Smith-Waterman itself, computed by a
+dynamic program. Assume the standard <em>affine</em> gap penalty, which charges an
+opening cost \(d\) and a smaller extension cost \(e\) per additional gapped
+position:</p>
+
+$$ g(0) = 0, \qquad g(n) = d + e\,(n-1) \ \text{ for } n \ge 1. $$
+
+<p>The kernel decomposes into five interlocking tables. For
+\(0 \le i \le |x|\) and \(0 \le j \le |y|\), let \(M(i,j)\) accumulate alignments
+of the prefixes \(x_{[1,i]}\) and \(y_{[1,j]}\) that end in a matched pair, let
+\(X(i,j)\) and \(Y(i,j)\) accumulate those ending in a gap in \(x\) or in \(y\)
+respectively, and let \(X_2, Y_2\) carry the boundary contributions so that the
+final answer collects every alignment. Then</p>
+
+$$ K^{(\beta)}_{\mathrm{LA}}(x,y)
+   = 1 + X_2(|x|,|y|) + Y_2(|x|,|y|) + M(|x|,|y|). $$
+
+<p>The tables are initialized to zero along the top and left borders,</p>
+
+$$ M(i,0) = M(0,j) = X(i,0) = X(0,j) = Y(i,0) = Y(0,j)
+   = X_2(i,0) = X_2(0,j) = Y_2(i,0) = Y_2(0,j) = 0, $$
+
+<p>and filled for \(i = 1, \dots, |x|\) and \(j = 1, \dots, |y|\) by the
+recursion</p>
+
+$$ \begin{aligned}
+M(i,j) &= \exp\!\bigl(\beta\, S(x_i,y_j)\bigr)
+   \bigl[\, 1 + X(i-1,j-1) + Y(i-1,j-1) + M(i-1,j-1) \,\bigr], \\[2pt]
+X(i,j) &= \exp(\beta d)\, M(i-1,j) + \exp(\beta e)\, X(i-1,j), \\[2pt]
+Y(i,j) &= \exp(\beta d)\, \bigl[\, M(i,j-1) + X(i,j-1) \,\bigr]
+   + \exp(\beta e)\, Y(i,j-1), \\[2pt]
+X_2(i,j) &= M(i-1,j) + X_2(i-1,j), \\[2pt]
+Y_2(i,j) &= M(i,j-1) + X_2(i,j-1) + Y_2(i,j-1).
+\end{aligned} $$
+
+<p>In \(M\), aligning \(x_i\) to \(y_j\) multiplies in the match weight
+\(\exp(\beta S(x_i,y_j))\) and continues any alignment of the shorter prefixes (or
+starts a fresh one, the "\(1\)"); in \(X\), the factor \(\exp(\beta d)\) opens a
+gap out of a match while \(\exp(\beta e)\) extends an existing gap, and
+symmetrically for \(Y\). The whole table is filled in \(O(|x|\,|y|)\) time, the
+same order as ordinary Smith-Waterman. In pseudocode:</p>
+
+<pre><code>Input: x, y, substitution S, gap-open d, gap-extend e, beta
+initialize M, X, Y, X2, Y2 to 0 on row 0 and column 0
+for i = 1 .. |x|:
+    for j = 1 .. |y|:
+        w = exp(beta * S(x[i], y[j]))
+        M[i][j]  = w * (1 + X[i-1][j-1] + Y[i-1][j-1] + M[i-1][j-1])
+        X[i][j]  = exp(beta*d)*M[i-1][j] + exp(beta*e)*X[i-1][j]
+        Y[i][j]  = exp(beta*d)*(M[i][j-1] + X[i][j-1]) + exp(beta*e)*Y[i][j-1]
+        X2[i][j] = M[i-1][j] + X2[i-1][j]
+        Y2[i][j] = M[i][j-1] + X2[i][j-1] + Y2[i][j-1]
+return 1 + X2[|x|][|y|] + Y2[|x|][|y|] + M[|x|][|y|]</code></pre>
+
+<p>Equivalently, the recursion is exactly the computation performed by a
+finite-state transducer with match, gap, and boundary states, running in
+\(O(|x| \times |x'|)\). One practical caveat: because scores are exponentiated,
+the table entries grow exponentially and overflow. Taking the logarithm of the LA
+kernel keeps the numbers in range and is common in practice, but the logarithm is
+no longer positive definite, so one trades validity for numerical safety.</p>
+
+<h2 id="remote-homology">Application: remote homology detection</h2>
+
+<p>The payoff for all this machinery is detecting <em>remote homology</em>, common
+evolutionary ancestry between proteins whose sequences have diverged so far that
+direct comparison fails. Homologous proteins share structure and function long
+after their sequences have drifted apart, so on a similarity axis they occupy a
+"twilight zone": close homologs are easy, non-homologs are clearly unrelated, and
+the remote homologs in between cannot be found by naive sequence matching. The
+SCOP database organizes proteins hierarchically into families (close homologs),
+superfamilies (remote homologs), and folds, giving a ground truth.</p>
+
+<p>The benchmark of Saigo et al. (2004) asks a classifier to recognize the
+correct superfamily: for a target, positive training examples are drawn from the
+same superfamily but different families, negatives from other superfamilies, and
+the test measures whether new sequences are assigned the right superfamily, a
+direct test of remote-homology detection. Support vector machines were compared
+across kernels using the \(\mathrm{ROC}_{50}\) score. The local alignment kernel
+(SVM-LA) dominated, outperforming the pairwise kernel (SVM-pairwise), the
+mismatch kernel (SVM-mismatch), and the Fisher kernel (SVM-Fisher). Aligning
+the whole soft ensemble of local alignments, it turns out, sees homology that
+\(k\)-mer counts and generative-model gradients miss.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>A single alphabet, three routes to a kernel. From explicit feature maps we
+obtained the spectrum kernel and its mismatch variant, computable in
+\(O(|x|+|x'|)\) with suffix trees or \(O(k(|x|+|x'|))\) with tries, and the gapped
+substring kernel, computable in \(O(k\,|x|\,|x'|)\) by a two-table dynamic
+program. From generative models we obtained context-tree kernels and, through the
+marginalized-kernel construction with forward-backward and inside-outside, kernels
+that inherit the biology of hidden Markov models and RNA grammars. From the
+biologist's alignment score we obtained the local alignment kernel, whose positive
+definiteness we proved by writing it as a limit of Haussler convolutions of three
+atomic kernels, and which wins on remote homology detection.</p>
+
+<p>Several lessons generalize well beyond biology. Good kernel design is
+specific to the data and the task, and raw performance is not the only criterion:
+speed, interpretability, and validity all matter. String kernels admit fast
+implementations through classical string algorithms, and while the design is still
+something of an art, principled routes (explicit features, generative models,
+similarity scores) have emerged. None of the constructions in this chapter is
+confined to proteins; the same kernels classify natural language, time series,
+and any other data that arrives as a string.</p>

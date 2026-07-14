@@ -1,0 +1,1438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mercer&#x27;s Theorem, Spectra, and Rates · Machine Learning with Kernel Methods</title>
+<meta name="description" content="Mercer&#x27;s Theorem, Spectra, and Rates, from Machine Learning with Kernel Methods.">
+<link rel="stylesheet" href="assets/book.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],throwOnError:false});"></script>
+
+</head>
+<body>
+<div class="book">
+<nav class="toc">
+<div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
+<div class="bookmeta">A book-form companion to the Mairal–Vert course</div>
+<div class="part">I · Foundations</div>
+<a href="kernels-and-rkhs.html">1. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">2. The Kernel Trick</a>
+<div class="part">II · Supervised Learning</div>
+<a href="kernel-ridge-and-friends.html">3. Kernel Ridge Regression and Smooth Losses</a>
+<a href="learning-theory.html">4. Learning Theory in RKHS Balls</a>
+<a href="support-vector-machines.html">5. Support Vector Machines</a>
+<div class="part">III · Unsupervised Learning</div>
+<a href="unsupervised-kernel-methods.html">6. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Theory of the Space</div>
+<a href="mercer-and-rates.html" class="here">7. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · The Kernel Jungle</div>
+<a href="kernel-families.html">8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">9. Kernels for Sequences</a>
+<a href="graph-kernels.html">10. Kernels for and on Graphs</a>
+<div class="part">VI · Distributions</div>
+<a href="kernel-mean-embeddings.html">11. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Frontiers</div>
+<a href="multiple-kernel-learning.html">12. Multiple Kernel Learning</a>
+<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
+<a href="kernels-and-deep-learning.html">14. Deep Learning from a Kernel Point of View</a>
+</nav>
+<main><div class="page">
+<h1><span class="chno">Chapter 7 · IV · The Theory of the Space</span>Mercer's Theorem, Spectra, and Rates</h1>
+
+<p class="lead">
+The kernel is the one place in a kernel method where prior knowledge about the problem enters: choosing a kernel means choosing which functions the RKHS norm considers simple. This chapter makes that choice quantitative. We first show, on a hand-computed example and then through Green functions, that RKHS norms are smoothness functionals. We then develop the spectral theory of kernels on compact spaces: the integral operator of a kernel, its diagonalization, Mercer's theorem of 1905 with its full proof, and the explicit construction of the RKHS from eigenfunctions and eigenvalues. Two worked examples, periodic kernels on the unit interval and dot-product kernels on the sphere, make the spectra concrete. The payoff comes at the end: the eigenvalue decay of the kernel governs the statistical performance of kernel ridge regression, and we prove convergence rates for polynomially decaying, exponentially decaying, and finite-rank spectra.
+</p>
+
+<h2 id="from-smoothness-to-kernels">From smoothness functionals to kernels</h2>
+
+<p>
+Every learning algorithm we have built so far minimizes an empirical risk plus a multiple of the squared RKHS norm. The RKHS norm is therefore the regularizer, and the kernel determines what the regularizer penalizes. To use kernel methods intelligently we need intuition for the link between a kernel and the norm of its RKHS, and the natural language for that link is smoothness. Smoothness of a function is classically quantified by Sobolev-type norms, in particular \(L^2\) norms of derivatives. A canonical example is spline regression on the real line:
+</p>
+
+$$
+\min_{f} \; \sum_{i=1}^n \left( y_i - f(x_i) \right)^2 + \lambda \int f''(t)^2 \, dt ,
+$$
+
+<p>
+which trades data fit against the integrated squared second derivative, and produces the familiar smooth curve threading through a noisy scatter of points. The question for us: is a penalty like \(\int (f'')^2\) secretly an RKHS norm, so that spline-type problems are kernel ridge regressions in disguise? In this section we answer yes on a simple example, then in general through Green functions of differential operators.
+</p>
+
+<h3 id="the-min-kernel-on-the-unit-interval">A first example: the min kernel on \([0,1]\)</h3>
+
+<p>
+Consider the space of functions on the unit interval that vanish at the origin and have a square-integrable derivative:
+</p>
+
+$$
+\mathcal{H} = \left\{ f : [0,1] \to \mathbb{R} \;\middle|\; f \text{ absolutely continuous},\; f' \in L^2([0,1]),\; f(0) = 0 \right\},
+$$
+
+<p>endowed with the bilinear form</p>
+
+$$
+\forall f, g \in \mathcal{H}, \quad \langle f, g \rangle_{\mathcal H} = \int_0^1 f'(u) \, g'(u) \, du .
+$$
+
+<p>
+The associated quadratic form is exactly a smoothness functional: \(\langle f, f\rangle_{\mathcal H} = \int_0^1 f'(u)^2\,du = \| f' \|^2_{L^2([0,1])}\), the energy of the first derivative. Absolute continuity is the precise regularity needed for this to make sense; we recall the definition, since it recurs throughout the chapter.
+</p>
+
+<div class="box def"><span class="box-title">Definition (absolute continuity)</span>
+<p>
+Let \(I \subset \mathbb{R}\) be an interval. A function \(f : I \to \mathbb{R}\) is <em>absolutely continuous</em> (AC) on \(I\) if for any \(\epsilon \gt 0\) there exists \(\delta \gt 0\) such that for any finite sequence of pairwise disjoint sub-intervals \((u_k, v_k) \subset I\) with \(\sum_k (v_k - u_k) \lt \delta\), it holds that \(\sum_k \lvert f(v_k) - f(u_k) \rvert \lt \epsilon\).
+</p>
+</div>
+
+<p>
+Absolute continuity implies uniform continuity, hence continuity. The property that matters for us is the fundamental theorem of calculus: \(f\) is AC on \([a,b]\) if and only if \(f\) has a derivative \(f'\) almost everywhere, \(f'\) is Lebesgue integrable, and for all \(x \in [a,b]\),
+</p>
+
+$$
+f(x) = f(a) + \int_a^x f'(t) \, dt .
+$$
+
+<p>
+Equivalently, there exists a Lebesgue integrable \(g\) on \([a,b]\) with \(f(x) = f(a) + \int_a^x g(t)\,dt\) for all \(x\), in which case \(g = f'\) almost everywhere. Absolutely continuous functions are exactly the functions one can recover by integrating their derivative.
+</p>
+
+<div class="box thm"><span class="box-title">Theorem (the min kernel)</span>
+<p>
+\(\mathcal{H}\) is an RKHS with reproducing kernel
+</p>
+$$
+\forall (x,y) \in [0,1]^2, \quad K(x,y) = \min(x,y).
+$$
+</div>
+
+<p>
+The RKHS norm of the min kernel is therefore precisely the smoothness functional we started from, \(\| f \|_{\mathcal H} = \| f' \|_{L^2([0,1])}\). In particular, the first-derivative spline problem
+</p>
+
+$$
+\min_{f \in \mathcal H} \; \sum_{i=1}^n \left( y_i - f(x_i) \right)^2 + \lambda \int_0^1 f'(t)^2 \, dt
+$$
+
+<p>
+is nothing but kernel ridge regression with kernel \(K(x,y) = \min(x,y)\): replace the integral penalty by \(\lambda \| f \|_{\mathcal H}^2\) and apply the representer theorem. A smoothing problem posed in analysis language has become a finite-dimensional linear-algebra problem posed in kernel language.
+</p>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p>
+We must verify three things: that \(\mathcal H\) is a Hilbert space of functions, that \(K_x \in \mathcal H\) for every \(x \in [0,1]\), and that \(\langle f, K_x \rangle_{\mathcal H} = f(x)\) for all \(x\) and all \(f \in \mathcal H\).
+</p>
+
+<p><strong>Step 1: \(\mathcal H\) is a pre-Hilbert space of functions.</strong>
+\(\mathcal H\) is a vector space of functions and \(\langle f, g\rangle_{\mathcal H}\) is a bilinear form with \(\langle f, f\rangle_{\mathcal H} \geq 0\). Since \(f\) is absolutely continuous, it is differentiable almost everywhere and
+\(f(x) = f(0) + \int_0^x f'(u)\,du\) for all \(x \in [0,1]\). Because \(f(0) = 0\), the Cauchy-Schwarz inequality (applied to \(f' \cdot \mathbf{1}_{[0,x]}\)) gives
+</p>
+$$
+\lvert f(x) \rvert = \left\lvert \int_0^x f'(u)\,du \right\rvert
+\;\leq\; \sqrt{x} \left( \int_0^1 f'(u)^2\,du \right)^{\frac12}
+= \sqrt{x}\, \langle f, f\rangle_{\mathcal H}^{1/2}.
+$$
+<p>
+Hence \(\langle f, f\rangle_{\mathcal H} = 0\) forces \(f = 0\) everywhere, so the form is an inner product and \(\mathcal H\) is a pre-Hilbert space. The same inequality shows that norm convergence in \(\mathcal H\) controls pointwise values, which we use next.
+</p>
+
+<p><strong>Step 2: \(\mathcal H\) is complete.</strong>
+Let \((f_n)_{n \in \mathbb N}\) be a Cauchy sequence in \(\mathcal H\). Then \((f'_n)_{n\in\mathbb N}\) is a Cauchy sequence in \(L^2([0,1])\), hence converges to some \(g \in L^2([0,1])\). By the inequality of Step 1, \((f_n(x))_{n\in\mathbb N}\) is a Cauchy sequence of reals for each \(x \in [0,1]\), hence converges to a limit \(f(x)\). Moreover
+</p>
+$$
+f(x) = \lim_n f_n(x) = \lim_n \int_0^x f'_n(u)\,du = \int_0^x g(u)\,du,
+$$
+<p>
+so \(f\) is absolutely continuous with \(f' = g\) almost everywhere; in particular \(f' \in L^2([0,1])\). Finally \(f(0) = \lim_n f_n(0) = 0\), so \(f \in \mathcal H\), and \(\|f_n - f\|_{\mathcal H} = \|f'_n - g\|_{L^2([0,1])} \to 0\). Thus \(\mathcal H\) is a Hilbert space.
+</p>
+
+<p><strong>Step 3: \(K_x \in \mathcal H\) for all \(x\).</strong>
+Fix \(x\) and let \(K_x(y) = K(x,y) = \min(x,y)\) on \([0,1]\). As a function of \(y\), \(K_x\) rises with slope one until \(y = x\) and is constant equal to \(x\) afterwards. It is differentiable except at the single point \(y=x\), its derivative \(\mathbf{1}_{[0,x]}\) is square integrable, and \(K_x(0) = 0\). Hence \(K_x \in \mathcal H\).
+</p>
+
+<p><strong>Step 4: the reproducing property.</strong>
+For any \(x \in [0,1]\) and \(f \in \mathcal H\),
+</p>
+$$
+\langle f, K_x \rangle_{\mathcal H} = \int_0^1 f'(u)\, K'_x(u)\, du = \int_0^x f'(u)\, du = f(x).
+$$
+<p>
+This shows \(\mathcal H\) is an RKHS with reproducing kernel \(K\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<h3 id="green-functions">Green functions of differential operators</h3>
+
+<p>
+The min kernel is no accident. The computation above used only two structural facts: the inner product was \(\langle Df, Dg\rangle_{L^2}\) for a differential operator \(D\) (here \(Df = f'\)), and the kernel section \(K_x\) was the function whose image under \(D^*D\) reproduces evaluation at \(x\). That second object has a classical name.
+</p>
+
+<div class="box def"><span class="box-title">Definition (Green function)</span>
+<p>
+Consider the differential equation \(f = Dg\) on a class of functions, where \(g\) is unknown. To solve it, one looks for \(g\) of the form
+</p>
+$$
+g(x) = \int_{\mathcal X} k(x,y)\, f(y)\, dy
+$$
+<p>
+for some function \(k : \mathcal X^2 \to \mathbb{R}\). Applying \(D\) under the integral sign, \(k\) must satisfy, for all \(x \in \mathcal X\),
+</p>
+$$
+f(x) = Dg(x) = \langle D k_x, f \rangle_{L^2(\mathcal X)} .
+$$
+<p>
+If such a \(k\) exists, it is called the <em>Green function</em> of the operator \(D\).
+</p>
+</div>
+
+<div class="box thm"><span class="box-title">Theorem (Green kernels)</span>
+<p>
+Let \(\mathcal X = \mathbb{R}^d\) and let \(D\) be a differential operator on a class of functions \(\mathcal H\) such that, endowed with the inner product
+</p>
+$$
+\forall (f,g) \in \mathcal H^2, \quad \langle f, g \rangle_{\mathcal H} = \langle Df, Dg \rangle_{L^2(\mathcal X)},
+$$
+<p>
+\(\mathcal H\) is a Hilbert space. Then \(\mathcal H\) is an RKHS whose reproducing kernel is the Green function of the operator \(D^* D\), where \(D^*\) denotes the adjoint of \(D\).
+</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>
+Let \(K\) be the Green function of \(D^*D\). For every \(x \in \mathcal X\), \(K_x \in \mathcal H\), because
+</p>
+$$
+\langle D K_x, D K_x \rangle_{L^2(\mathcal X)} = \langle D^* D K_x, K_x \rangle_{L^2(\mathcal X)} = K_x(x) \lt \infty,
+$$
+<p>
+where the last equality is the Green function property applied to \(f = K_x\). (Caveat: depending on how \(\mathcal H\) is defined, membership may require further conditions, such as boundary conditions, to be checked case by case.) Moreover, for all \(f \in \mathcal H\) and \(x \in \mathcal X\),
+</p>
+$$
+f(x) = \langle D^* D K_x, f \rangle_{L^2(\mathcal X)}
+= \langle D K_x, D f \rangle_{L^2(\mathcal X)}
+= \langle K_x, f \rangle_{\mathcal H},
+$$
+<p>
+which is the reproducing property. Hence \(\mathcal H\) is an RKHS with reproducing kernel \(K\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<div class="box ex"><span class="box-title">Example (recovering the min kernel)</span>
+<p>
+Take \(\mathcal X = [0,1]\) and \(Df(u) = f'(u)\), with the boundary condition \(f(0)=0\) defining \(\mathcal H\) as before. To find the reproducing kernel we solve for \(k\) in
+</p>
+$$
+f(x) = \langle D^* D k_x, f \rangle_{L^2([0,1])}
+= \langle D k_x, D f \rangle_{L^2([0,1])}
+= \int_0^1 k'_x(u)\, f'(u)\, du .
+$$
+<p>
+Since \(f(x) = \int_0^x f'(u)\,du\), the solution is \(k'_x(u) = \mathbf{1}_{[0,x]}(u)\), which integrates (with \(k_x(0)=0\)) to
+</p>
+$$
+k_x(u) = \begin{cases} u & \text{if } u \leq x, \\ x & \text{otherwise,} \end{cases}
+$$
+<p>
+that is, \(k(x, x') = \min(x, x')\), exactly the kernel found by direct verification.
+</p>
+</div>
+
+<p>
+Green functions explain, on a case-by-case basis, why particular RKHS norms are Sobolev-type penalties. But we would like something more systematic: a decomposition that works for a whole class of kernels at once, exhibits an explicit feature space, and quantifies smoothness by a spectrum. That is Mercer's theory, to which the rest of this chapter is devoted.
+</p>
+
+<h2 id="the-integral-operator">Mercer kernels and their integral operator</h2>
+
+<h3 id="mercer-kernels">Mercer kernels</h3>
+
+<p>
+When \(\mathcal X\) is finite, a positive definite kernel is just a positive semidefinite matrix, and the spectral decomposition of that matrix produces an explicit feature map: \(K(x,t) = \sum_k \lambda_k \psi_k(x)\psi_k(t)\) with \(\lambda_k \geq 0\). Mercer's theory generalizes exactly this factorization from finite sets to compact metric spaces. Historically it also provided the first proof, due to Mercer (1905), that a positive definite kernel on a non-finite set is an inner product.
+</p>
+
+<div class="box def"><span class="box-title">Definition (Mercer kernel)</span>
+<p>
+A kernel \(K\) on a set \(\mathcal X\) is called a <em>Mercer kernel</em> if:
+</p>
+<ol>
+<li>\(\mathcal X\) is a compact metric space (typically, a closed bounded subset of \(\mathbb{R}^d\));</li>
+<li>\(K : \mathcal X \times \mathcal X \to \mathbb{R}\) is a continuous positive definite kernel (with respect to the Borel topology).</li>
+</ol>
+</div>
+
+<p>
+The plan mirrors the finite case, one object at a time. The kernel matrix becomes a linear operator on a function space; positive semidefiniteness of the matrix becomes self-adjointness and positivity of the operator; diagonalization of the matrix becomes the spectral theorem for compact self-adjoint operators, which supplies a complete orthonormal basis of eigenfunctions with nonnegative eigenvalues; and the factorization of the matrix becomes the expansion
+</p>
+
+$$
+K(x,t) = \sum_{k=1}^{\infty} \lambda_k\, \psi_k(x)\, \psi_k(t).
+$$
+
+<p>
+Each step needs care, because we now work in infinite dimension. We begin with the operator vocabulary.
+</p>
+
+<h3 id="compact-operators">Compact, self-adjoint, positive operators</h3>
+
+<div class="box def"><span class="box-title">Definition (operator classes)</span>
+<p>Let \(\mathcal H\) be a Hilbert space.</p>
+<ul>
+<li>A <em>linear operator</em> is a continuous linear mapping from \(\mathcal H\) to itself.</li>
+<li>A linear operator \(L\) is <em>compact</em> if, for any bounded sequence \(\{f_n\}_{n=1}^{\infty}\), the sequence \(\{L f_n\}_{n=1}^{\infty}\) has a convergent subsequence.</li>
+<li>\(L\) is <em>self-adjoint</em> if \(\langle f, Lg \rangle = \langle Lf, g \rangle\) for all \(f, g \in \mathcal H\).</li>
+<li>\(L\) is <em>positive</em> if it is self-adjoint and \(\langle f, Lf \rangle \geq 0\) for all \(f \in \mathcal H\).</li>
+</ul>
+</div>
+
+<h3 id="the-integral-operator-lemma">The integral operator of a kernel</h3>
+
+<p>
+The operator that plays the role of the kernel matrix is the integral operator with kernel \(K\). Let \(\nu\) be a finite Borel measure on \(\mathcal X\), and let \(L^2_\nu(\mathcal X)\) denote the Hilbert space of (equivalence classes of) square integrable functions on \(\mathcal X\). For any function \(K : \mathcal X^2 \to \mathbb{R}\), define the transform
+</p>
+
+$$
+\forall f \in L^2_\nu(\mathcal X), \quad
+\left( L_K f \right)(x) = \int_{\mathcal X} K(x,t)\, f(t)\, d\nu(t).
+$$
+
+<p>
+On a finite set with counting measure this is exactly multiplication by the kernel matrix. The following lemma transfers all the good properties of that matrix to \(L_K\).
+</p>
+
+<div class="box lem"><span class="box-title">Lemma (properties of \(L_K\))</span>
+<p>
+If \(K\) is a Mercer kernel and \(\nu\) a finite Borel measure on \(\mathcal X\), then \(L_K\) is a compact and bounded linear operator on \(L^2_\nu(\mathcal X)\), self-adjoint and positive.
+</p>
+</div>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p>
+Throughout, \(C_K = \max_{x,t \in \mathcal X} \lvert K(x,t) \rvert \lt +\infty\), which exists because \(K\) is continuous and \(\mathcal X \times \mathcal X\) is compact.
+</p>
+
+<p><strong>Step 1: \(L_K\) maps \(L^2_\nu(\mathcal X)\) into \(L^2_\nu(\mathcal X)\), and in fact into continuous functions.</strong>
+For any \(f \in L^2_\nu(\mathcal X)\) and \(x_1, x_2 \in \mathcal X\),
+</p>
+$$
+\begin{aligned}
+\left\lvert (L_K f)(x_1) - (L_K f)(x_2) \right\rvert
+&= \left\lvert \int \left( K(x_1,t) - K(x_2,t) \right) f(t)\, d\nu(t) \right\rvert \\
+&= \left\lvert \langle K_{x_1} - K_{x_2}, f \rangle_{L^2_\nu(\mathcal X)} \right\rvert \\
+&\leq \left\| K_{x_1} - K_{x_2} \right\|_{L^2_\nu(\mathcal X)} \left\| f \right\|_{L^2_\nu(\mathcal X)} \\
+&\leq \sqrt{\nu(\mathcal X)}\, \max_{t \in \mathcal X} \left\lvert K(x_1,t) - K(x_2,t) \right\rvert\, \left\| f \right\|_{L^2_\nu(\mathcal X)},
+\end{aligned}
+$$
+<p>
+where the first inequality is Cauchy-Schwarz. \(K\) being continuous on the compact \(\mathcal X \times \mathcal X\) is uniformly continuous, so the right-hand side tends to zero as \(x_2 \to x_1\), uniformly. Hence \(L_K f\) is continuous, and in particular \(L_K f \in L^2_\nu(\mathcal X)\) (with the slight abuse of notation \(C(\mathcal X) \subset L^2_\nu(\mathcal X)\)).
+</p>
+
+<p><strong>Step 2: \(L_K\) is linear and continuous.</strong>
+Linearity is immediate from the definition of \(L_K\) and linearity of the integral. For continuity, for all \(f \in L^2_\nu(\mathcal X)\) and \(x \in \mathcal X\),
+</p>
+$$
+\left\lvert (L_K f)(x) \right\rvert
+= \left\lvert \int K(x,t) f(t)\, d\nu(t) \right\rvert
+\leq \sqrt{\nu(\mathcal X)}\, \max_{t \in \mathcal X} \lvert K(x,t) \rvert \, \|f\|_{L^2_\nu(\mathcal X)}
+\leq \sqrt{\nu(\mathcal X)}\, C_K\, \|f\|_{L^2_\nu(\mathcal X)},
+$$
+<p>and therefore</p>
+$$
+\left\| L_K f \right\|_{L^2_\nu(\mathcal X)}
+= \left( \int (L_K f)(t)^2\, d\nu(t) \right)^{\frac12}
+\leq \nu(\mathcal X)\, C_K\, \|f\|_{L^2_\nu(\mathcal X)}.
+$$
+
+<p><strong>Step 3: a criterion for compactness.</strong>
+Let \(C(\mathcal X)\) denote the continuous functions on \(\mathcal X\) with the uniform norm \(\|f\|_\infty = \max_{x \in \mathcal X} \lvert f(x)\rvert\). A set of functions \(G \subset C(\mathcal X)\) is <em>equicontinuous</em> if
+</p>
+$$
+\forall \epsilon \gt 0, \; \exists \delta \gt 0, \; \forall (x,y) \in \mathcal X^2, \quad
+\|x - y\| \lt \delta \implies \forall g \in G, \; \lvert g(x) - g(y) \rvert \lt \epsilon .
+$$
+<p>
+The Ascoli theorem states that a subset \(H \subset C(\mathcal X)\) is relatively compact (i.e., its closure is compact) if and only if it is uniformly bounded and equicontinuous.
+</p>
+
+<p><strong>Step 4: \(L_K\) is compact.</strong>
+Let \((f_n)_{n \geq 0}\) be a bounded sequence in \(L^2_\nu(\mathcal X)\), say \(\|f_n\|_{L^2_\nu(\mathcal X)} \lt M\) for all \(n\). By Step 1, \((L_K f_n)_{n\geq 0}\) is a sequence of continuous functions. It is uniformly bounded because, by Step 2,
+</p>
+$$
+\| L_K f_n \|_\infty \leq \sqrt{\nu(\mathcal X)}\, C_K\, \|f_n\|_{L^2_\nu(\mathcal X)} \leq \sqrt{\nu(\mathcal X)}\, C_K M,
+$$
+<p>and it is equicontinuous because, by the bound of Step 1,</p>
+$$
+\left\lvert L_K f_n(x_1) - L_K f_n(x_2) \right\rvert
+\leq \sqrt{\nu(\mathcal X)}\, \max_{t \in \mathcal X} \lvert K(x_1,t) - K(x_2,t)\rvert\, M,
+$$
+<p>
+with \(K\) uniformly continuous. By the Ascoli theorem we can extract a subsequence converging uniformly in \(C(\mathcal X)\), hence also in \(L^2_\nu(\mathcal X)\) since \(\nu\) is finite. Thus \(L_K\) is compact.
+</p>
+
+<p><strong>Step 5: \(L_K\) is self-adjoint.</strong>
+\(K\) being symmetric, for all \(f, g \in L^2_\nu(\mathcal X)\),
+</p>
+$$
+\langle f, L_K g \rangle_{L^2_\nu(\mathcal X)}
+= \int f(x)\, (L_K g)(x)\, d\nu(x)
+= \iint f(x)\, g(t)\, K(x,t)\, d\nu(x)\, d\nu(t)
+= \langle L_K f, g \rangle_{L^2_\nu(\mathcal X)},
+$$
+<p>where the middle equality uses Fubini's theorem, justified since the integrand is integrable for the product measure (\(K\) bounded, \(f, g\) square integrable, \(\nu\) finite).</p>
+
+<p><strong>Step 6: \(L_K\) is positive.</strong>
+Approximating the double integral by finite sums over points \(x_1, \dots, x_k\),
+</p>
+$$
+\langle f, L_K f \rangle_{L^2_\nu(\mathcal X)}
+= \iint f(x)\, f(t)\, K(x,t)\, \nu(dx)\, \nu(dt)
+= \lim_{k \to \infty} \frac{\nu(\mathcal X)}{k^2} \sum_{i,j=1}^k K(x_i, x_j)\, f(x_i)\, f(x_j)
+\;\geq\; 0,
+$$
+<p>
+because each finite sum is nonnegative by positive definiteness of \(K\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<h3 id="spectral-decomposition">Spectral decomposition of the operator</h3>
+
+<p>
+Compact self-adjoint operators are precisely the operators that can be diagonalized like symmetric matrices. We quote the general result (see, e.g., Debnath and Mikusinski, 2005, Section 4.10).
+</p>
+
+<div class="box thm"><span class="box-title">Theorem (spectral theorem)</span>
+<p>
+Let \(L\) be a compact self-adjoint linear operator on a Hilbert space \(\mathcal H\). Then there exists in \(\mathcal H\) a complete orthonormal system \((\psi_1, \psi_2, \ldots)\) of eigenvectors of \(L\), with real eigenvalues \((\lambda_1, \lambda_2, \ldots)\), which are nonnegative if \(L\) is positive.
+</p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (continuity of eigenfunctions)</span>
+<p>
+The spectral theorem applies to \(L_K\) by the lemma above. The eigenfunctions \(\psi_k\) associated with eigenvalues \(\lambda_k \neq 0\) can be taken continuous, because
+</p>
+$$
+\psi_k = \frac{1}{\lambda_k}\, L_K \psi_k ,
+$$
+<p>
+and \(L_K\) maps \(L^2_\nu(\mathcal X)\) into continuous functions (Step 1 of the proof). Each such \(\psi_k\) has a canonical continuous representative, which we use from now on.
+</p>
+</div>
+
+<h2 id="mercers-theorem">Mercer's theorem</h2>
+
+<p>
+We can now state the main result. One hypothesis deserves emphasis: the measure \(\nu\) must be <em>nondegenerate</em>, meaning \(\nu(U) \gt 0\) for every nonempty open set \(U \subset \mathcal X\). Nondegeneracy is what lets us upgrade an equality in \(L^2_\nu\) to an equality at every point: a continuous function whose \(L^2_\nu\) norm vanishes must vanish identically, since otherwise it would be bounded away from zero on some open set of positive measure.
+</p>
+
+<div class="box thm"><span class="box-title">Theorem (Mercer)</span>
+<p>
+Let \(\mathcal X\) be a compact metric space, \(\nu\) a nondegenerate finite Borel measure on \(\mathcal X\), and \(K\) a continuous positive definite kernel. Let \(\lambda_1 \geq \lambda_2 \geq \cdots \geq 0\) denote the nonnegative eigenvalues of \(L_K\) and \((\psi_1, \psi_2, \ldots)\) the corresponding eigenfunctions. Then all functions \(\psi_k\) with \(\lambda_k \neq 0\) are continuous, and for any \(x, t \in \mathcal X\),
+</p>
+$$
+K(x,t) = \sum_{k=1}^{\infty} \lambda_k\, \psi_k(x)\, \psi_k(t),
+$$
+<p>
+where the convergence is absolute for each \(x, t \in \mathcal X\), and uniform on \(\mathcal X \times \mathcal X\).
+</p>
+</div>
+
+<p>
+The proof is constructive and follows Mercer's original 1905 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of the first chapter, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
+</p>
+
+<details class="proof-details"><summary>Proof (six steps)</summary>
+<div class="box proof">
+<p><strong>Step 1: for any \(k \geq 1\) with \(\lambda_k \gt 0\), \(\psi_k\) belongs to the RKHS \(\mathcal H\) of \(K\).</strong>
+Since \(\lambda_k \gt 0\), for all \(x \in \mathcal X\),
+</p>
+$$
+\psi_k(x) = \frac{1}{\lambda_k} L_K \psi_k(x)
+= \frac{1}{\lambda_k} \int K(x,t)\, \psi_k(t)\, d\nu(t)
+= \lim_{n \to +\infty} \underbrace{\frac{\nu(\mathcal X)}{\lambda_k n} \sum_{i=1}^n K(x, t_i)\, \psi_k(t_i)}_{h_n(x)}
+$$
+<p>
+for a conveniently chosen sequence of quadrature points \(t_1, t_2, \ldots\) (the integrand \(t \mapsto K(x,t)\psi_k(t)\) is continuous, so the integral is a limit of such finite sums). Each \(h_n\) is a finite linear combination of the functions \(K_{t_i}\), hence \(h_n \in \mathcal H\), and for any \(n, m \in \mathbb N\),
+</p>
+$$
+\langle h_n, h_m \rangle_{\mathcal H}
+= \frac{\nu(\mathcal X)^2}{\lambda_k^2\, n m} \sum_{i=1}^n \sum_{j=1}^m \psi_k(t_i)\, \psi_k(t_j)\, K(t_i, t_j),
+$$
+<p>using \(\langle K_{t_i}, K_{t_j}\rangle_{\mathcal H} = K(t_i,t_j)\).</p>
+
+<p><strong>Step 2: the sequence \((h_n)\) is Cauchy in \(\mathcal H\) and converges to \(\psi_k\).</strong>
+The double sums above are quadrature sums for a continuous integrand, so
+</p>
+$$
+\lim_{n,m \to +\infty} \langle h_n, h_m \rangle_{\mathcal H}
+= \frac{1}{\lambda_k^2} \iint K(t, t')\, \psi_k(t)\, \psi_k(t')\, d\nu(t)\, d\nu(t') := R,
+$$
+<p>and therefore</p>
+$$
+\| h_n - h_m \|^2_{\mathcal H}
+= \langle h_n, h_n\rangle_{\mathcal H} + \langle h_m, h_m\rangle_{\mathcal H} - 2 \langle h_n, h_m\rangle_{\mathcal H}
+\;\xrightarrow[n,m \to \infty]{}\; R + R - 2R = 0 .
+$$
+<p>
+So \((h_n)_{n \in \mathbb N}\) is a Cauchy sequence in \(\mathcal H\) and converges to some \(h \in \mathcal H\). Convergence in the RKHS norm implies pointwise convergence (since \(\lvert g(x)\rvert = \lvert\langle g, K_x\rangle_{\mathcal H}\rvert \leq \|g\|_{\mathcal H} \sqrt{K(x,x)}\)), so for every \(x \in \mathcal X\),
+</p>
+$$
+h(x) = \lim_{n \to +\infty} h_n(x) = \psi_k(x),
+$$
+<p>and finally \(\psi_k = h \in \mathcal H\).</p>
+
+<p><strong>Step 3: \(\left\{ \sqrt{\lambda_k}\, \psi_k : \lambda_k \gt 0 \right\}\) is an orthonormal system in \(\mathcal H\).</strong>
+Let \(i, j \geq 1\) with \(\lambda_i, \lambda_j \gt 0\); then \(\sqrt{\lambda_i}\psi_i, \sqrt{\lambda_j}\psi_j \in \mathcal H\) by Steps 1 and 2. Writing \(\psi_i = \frac{1}{\lambda_i}\int K_t\, \psi_i(t)\, d\nu(t)\) as an \(\mathcal H\)-valued integral (the limit of the \(h_n\) of Step 1), and using the reproducing property \(\langle K_t, \psi_j\rangle_{\mathcal H} = \psi_j(t)\),
+</p>
+$$
+\begin{aligned}
+\left\langle \sqrt{\lambda_i}\, \psi_i,\; \sqrt{\lambda_j}\, \psi_j \right\rangle_{\mathcal H}
+&= \frac{1}{\sqrt{\lambda_i}} \left\langle \int K_t\, \psi_i(t)\, d\nu(t),\; \sqrt{\lambda_j}\, \psi_j \right\rangle_{\mathcal H} \\
+&= \sqrt{\frac{\lambda_j}{\lambda_i}} \int \langle K_t, \psi_j \rangle_{\mathcal H}\, \psi_i(t)\, d\nu(t) \\
+&= \sqrt{\frac{\lambda_j}{\lambda_i}} \int \psi_j(t)\, \psi_i(t)\, d\nu(t)
+= \sqrt{\frac{\lambda_j}{\lambda_i}}\, \langle \psi_i, \psi_j \rangle_{L^2_\nu(\mathcal X)}
+= \delta_{i,j},
+\end{aligned}
+$$
+<p>since the \(\psi_k\) are orthonormal in \(L^2_\nu(\mathcal X)\) and the prefactor equals one when \(i = j\).</p>
+
+<p><strong>Step 4: for any \(x \in \mathcal X\), \(\sum_{k : \lambda_k \gt 0} \lambda_k\, \psi_k(x)^2 \leq C_K\).</strong>
+For any \(x\), \(K_x \in \mathcal H\) with \(\|K_x\|^2_{\mathcal H} = K(x,x) \leq C_K\). Since \(\{\sqrt{\lambda_k}\psi_k : \lambda_k \gt 0\}\) is an orthonormal system in \(\mathcal H\) and \(\langle K_x, \sqrt{\lambda_k}\psi_k\rangle_{\mathcal H} = \sqrt{\lambda_k}\, \psi_k(x)\), Bessel's inequality gives
+</p>
+$$
+C_K \geq \| K_x \|^2_{\mathcal H}
+\geq \sum_{k : \lambda_k \gt 0} \left\langle K_x, \sqrt{\lambda_k}\, \psi_k \right\rangle^2_{\mathcal H}
+= \sum_{k : \lambda_k \gt 0} \lambda_k\, \psi_k(x)^2 .
+$$
+
+<p><strong>Step 5: for fixed \(x\), the series \(t \mapsto \sum_i \lambda_i \psi_i(x) \psi_i(t)\) converges uniformly in \(t\) to a continuous function \(g_x\).</strong>
+Restricting sums to indices with \(\lambda_i \gt 0\), Cauchy-Schwarz and Step 4 give, for any \(m, \ell\) and any \(t \in \mathcal X\),
+</p>
+$$
+\left\lvert \sum_{i=m}^{m+\ell} \lambda_i\, \psi_i(x)\, \psi_i(t) \right\rvert
+\leq \left( \sum_{i=m}^{m+\ell} \lambda_i \psi_i(x)^2 \right)^{\frac12}
+\left( \sum_{i=m}^{m+\ell} \lambda_i \psi_i(t)^2 \right)^{\frac12}
+\leq \sqrt{C_K} \left( \sum_{i=m}^{m+\ell} \lambda_i \psi_i(x)^2 \right)^{\frac12},
+$$
+<p>
+and the right-hand side tends to zero as \(m \to \infty\) (tail of a convergent series), uniformly in \(t\). The series is therefore uniformly Cauchy in \(t\); its terms are continuous, so it converges uniformly to a continuous function \(g_x\). The same bound shows the convergence is absolute at every pair \((x,t)\).
+</p>
+
+<p><strong>Step 6: \(K_x = g_x\), first in \(L^2_\nu\), then everywhere.</strong>
+Expand \(K_x\) over the orthonormal basis \(\{\psi_k, k \geq 1\}\) of \(L^2_\nu(\mathcal X)\), using \(\langle K_x, \psi_k\rangle_{L^2_\nu(\mathcal X)} = (L_K\psi_k)(x) = \lambda_k \psi_k(x)\):
+</p>
+$$
+K_x = \sum_{k \geq 1} \langle K_x, \psi_k \rangle_{L^2_\nu(\mathcal X)}\, \psi_k
+= \sum_{k \geq 1} \lambda_k\, \psi_k(x)\, \psi_k
+= \sum_{k \geq 1 :\, \lambda_k \gt 0} \lambda_k\, \psi_k(x)\, \psi_k ,
+$$
+<p>
+so \(K_x = g_x\) in \(L^2_\nu(\mathcal X)\), i.e., \(\|K_x - g_x\|_{L^2(\nu)} = 0\). Since \(\nu\) is nondegenerate and both \(K_x\) and \(g_x\) are continuous, this forces
+</p>
+$$
+\forall t \in \mathcal X, \quad K_x(t) = g_x(t) = \sum_i \lambda_i\, \psi_i(x)\, \psi_i(t).
+$$
+<p>
+It remains to upgrade to uniform convergence on \(\mathcal X \times \mathcal X\), which is where continuity of \(K\) enters once more. Taking \(t = x\) gives \(\sum_i \lambda_i \psi_i(x)^2 = K(x,x)\) pointwise; the partial sums are continuous, nondecreasing in the number of terms, and converge pointwise to the continuous function \(x \mapsto K(x,x)\) on the compact \(\mathcal X\), so by Dini's theorem the convergence is uniform in \(x\). The Cauchy-Schwarz bound of Step 5 then controls the tail at any pair \((x,t)\) by the uniform tails on the diagonal, so the expansion of \(K(x,t)\) converges uniformly on \(\mathcal X \times \mathcal X\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<h3 id="mercer-feature-map">Mercer kernels as inner products in \(\ell^2\)</h3>
+
+<p>
+The promised explicit feature space is the space of square-summable sequences. Let \(\ell^2\) denote the Hilbert space of real sequences \(u = (u_k)_{k \in \mathbb N}\) with \(\sum_{k \in \mathbb N} u_k^2 \lt +\infty\), endowed with \(\langle u, v \rangle = \sum_{k \in \mathbb N} u_k v_k\).
+</p>
+
+<div class="box cor"><span class="box-title">Corollary (Mercer feature map)</span>
+<p>The mapping</p>
+$$
+\Phi : \mathcal X \to \ell^2, \qquad
+x \mapsto \left( \sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}
+$$
+<p>is well defined, continuous, and satisfies</p>
+$$
+K(x,t) = \langle \Phi(x), \Phi(t) \rangle_{\ell^2}.
+$$
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>
+By Mercer's theorem, for all \(x \in \mathcal X\) the series \(\sum_k \lambda_k \psi_k^2(x)\) converges to \(K(x,x) \lt \infty\), so \(\Phi(x) \in \ell^2\), and the identity \(K(x,t) = \sum_k \lambda_k\psi_k(x)\psi_k(t) = \langle \Phi(x),\Phi(t)\rangle_{\ell^2}\) is the Mercer expansion. Continuity of \(\Phi\) results from
+</p>
+$$
+\| \Phi(x) - \Phi(t) \|^2_{\ell^2}
+= \sum_{k=1}^{\infty} \lambda_k \left( \psi_k(x) - \psi_k(t) \right)^2
+= K(x,x) + K(t,t) - 2 K(x,t),
+$$
+<p>
+which tends to zero as \(t \to x\) by continuity of \(K\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<h3 id="scope-and-limits">Scope and limits of the construction</h3>
+
+<p>
+Three remarks put the theorem in perspective. First, this proof extends the proof valid when \(\mathcal X\) is finite, and it is constructive: Mercer (1905) exhibits the feature map rather than merely proving its existence. Second, the eigensystem (the \(\lambda_k\) and \(\psi_k\)) depends on the choice of the measure \(d\nu(x)\); different measures lead to different feature spaces for the same kernel on the same space \(\mathcal X\). The kernel is intrinsic, its spectral coordinates are not. Third, compactness and continuity are genuinely required. For \(\mathcal X = \mathbb{R}^d\), the eigenvalue problem
+</p>
+
+$$
+\int_{\mathcal X} K(x,t)\, \psi(t)\, dt = \lambda\, \psi(x)
+$$
+
+<p>
+need not have a countable family of eigenvalues, and Mercer's theorem does not hold. Other tools are then required, notably the Fourier transform for shift-invariant kernels, which is the subject of the next chapter.
+</p>
+
+<h2 id="example-the-unit-interval">Worked example 1: periodic kernels on \([0,1]\)</h2>
+
+<p>
+Our first worked example makes every object of Mercer's theorem computable. Take \(\mathcal X = [0,1]\) endowed with the Lebesgue measure \(d\nu(x) = dx\), and consider a positive definite kernel of the convolutional form
+</p>
+
+$$
+K(x,t) = \kappa(x - t),
+$$
+
+<p>
+where \(\kappa : \mathbb{R} \to \mathbb{R}\) is continuous and 1-periodic. To write Mercer's expansion we must find the eigenfunctions of \(L_K\), i.e., solve
+</p>
+
+$$
+(L_K \psi)(x) = \int_0^1 \kappa(x-t)\, \psi(t)\, dt = \lambda\, \psi(x).
+$$
+
+<p>
+Convolution operators are diagonalized by Fourier modes, and that is exactly what happens.
+</p>
+
+<h3 id="fourier-eigenfunctions">Fourier eigenfunctions</h3>
+
+<div class="box lem"><span class="box-title">Lemma (Fourier diagonalization)</span>
+<p>
+Let \((\psi_n)_{n \in \mathbb N}\) be the Fourier orthonormal basis of \(L^2([0,1])\) given by \(\psi_0(x) = 1\) and, for \(n \geq 1\),
+</p>
+$$
+\psi_{2n-1}(x) = \sqrt{2}\, \sin(2\pi n x), \qquad
+\psi_{2n}(x) = \sqrt{2}\, \cos(2\pi n x).
+$$
+<p>
+Let the Fourier expansion of \(\kappa\) be
+</p>
+$$
+\forall x \in [0,1], \quad \kappa(x) = \sum_{n=0}^{\infty} \hat\kappa_{2n}\, \psi_{2n}(x),
+$$
+<p>
+which involves only cosine terms because \(K\) symmetric forces \(\kappa\) even, hence \(\hat\kappa_{2n+1} = 0\) for all \(n \in \mathbb N\). Then every \(\psi_n\) is an eigenfunction of \(L_K\), with eigenvalue \(\hat\kappa_0\) for \(\psi_0\) and eigenvalue \(\hat\kappa_{2n}/\sqrt{2}\) for both \(\psi_{2n-1}\) and \(\psi_{2n}\).
+</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof sketch</span>
+<p>
+That \((\psi_n)_{n\in\mathbb N}\) is an orthonormal basis of \(L^2([0,1])\) follows from the direct computation \(\int_0^1 \psi_i(x)\psi_j(x)\,dx = \delta_{ij}\) together with the classical completeness of the trigonometric system. The key structural identities come from the trigonometric expansions of \(\sin(a+b)\) and \(\cos(a+b)\):
+</p>
+$$
+\begin{cases}
+\psi_{2n}(x-t) = \dfrac{1}{\sqrt 2} \left[ \psi_{2n}(x)\psi_{2n}(t) + \psi_{2n-1}(x)\psi_{2n-1}(t) \right], \\[2mm]
+\psi_{2n-1}(x-t) = \dfrac{1}{\sqrt 2} \left[ \psi_{2n-1}(x)\psi_{2n}(t) - \psi_{2n}(x)\psi_{2n-1}(t) \right].
+\end{cases}
+$$
+<p>
+Then a direct computation, term by term in the (uniformly convergent) expansion of \(\kappa\), gives for instance
+</p>
+$$
+\begin{aligned}
+L_K \psi_{2n}(x)
+&= \sum_{\ell=0}^{\infty} \hat\kappa_{2\ell} \int_0^1 \psi_{2\ell}(x-t)\, \psi_{2n}(t)\, dt \\
+&= \sum_{\ell=0}^{\infty} \frac{\hat\kappa_{2\ell}}{\sqrt 2} \int_0^1 \left[ \psi_{2\ell}(x)\psi_{2\ell}(t) + \psi_{2\ell-1}(x)\psi_{2\ell-1}(t) \right] \psi_{2n}(t)\, dt \\
+&= \sum_{\ell=0}^{\infty} \frac{\hat\kappa_{2\ell}}{\sqrt 2}\, \psi_{2\ell}(x)\, \delta_{n\ell}
+= \frac{\hat\kappa_{2n}}{\sqrt 2}\, \psi_{2n}(x),
+\end{aligned}
+$$
+<p>
+and similarly for \(\psi_{2n-1}\) and \(\psi_0\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (Mercer's expansion, verified)</span>
+<p>
+Mercer's theorem can be checked by hand here. All \(\psi_k\) are continuous, and for any \(x, t \in [0,1]\) the Mercer expansion of the kernel collapses back onto \(\kappa\) via the addition formulas:
+</p>
+$$
+K(x,t) = \hat\kappa_0 + \sum_{n=1}^{\infty} \frac{\hat\kappa_{2n}}{\sqrt 2}
+\left[ \psi_{2n-1}(x)\psi_{2n-1}(t) + \psi_{2n}(x)\psi_{2n}(t) \right]
+= \sum_{n=0}^{\infty} \hat\kappa_{2n}\, \psi_{2n}(x-t)
+= \kappa(x-t),
+$$
+<p>
+with absolute and uniform convergence, because \(\kappa\) is continuous.
+</p>
+</div>
+
+<h3 id="polynomial-decay-example">Polynomial decay of eigenvalues: Bernoulli kernels</h3>
+
+<div class="box ex"><span class="box-title">Example (polynomial decay)</span>
+<p>
+For any integer \(\beta \geq 1\), choose the Fourier coefficients
+</p>
+$$
+\hat\kappa_0 = 0, \qquad \hat\kappa_{2n} = \sqrt{2}\, n^{-2\beta} \;\; \text{for } n \geq 1,
+$$
+<p>
+so that the Mercer eigenvalues decay polynomially, \(\hat\kappa_{2n}/\sqrt 2 = n^{-2\beta}\). Then the corresponding kernel has a closed form in terms of Bernoulli polynomials:
+</p>
+$$
+\forall x, t \in [0,1], \quad
+K(x,t) = \frac{1}{(2\beta)!}\, B_{2\beta}\!\left( x - t - \lfloor x - t \rfloor \right),
+$$
+<p>
+where \(B_{2\beta}\) is the \((2\beta)\)-th Bernoulli polynomial, e.g., \(B_2(x) = x^2 - x + 1/6\) and \(B_4(x) = x^4 - 2x^3 + x^2 - 1/30\). The proof is left as an exercise: check the Fourier expansion of the Bernoulli polynomials.
+</p>
+</div>
+
+<h3 id="exponential-decay-example">Exponential decay of eigenvalues</h3>
+
+<div class="box ex"><span class="box-title">Example (exponential decay)</span>
+<p>
+For any \(\rho \gt 0\), choose
+</p>
+$$
+\hat\kappa_0 = 0, \qquad \hat\kappa_{2n} = e^{-\rho n} \;\; \text{for } n \geq 1,
+$$
+<p>
+so the eigenvalues decay geometrically. The corresponding kernel again has a closed form:
+</p>
+$$
+\forall x, t \in [0,1], \quad
+K(x,t) = \sqrt{2}\; \frac{e^{\rho}\, \cos\!\left( 2\pi (x-t) \right) - 1}{e^{2\rho} - 2 e^{\rho} \cos\!\left( 2\pi (x-t) \right) + 1}.
+$$
+<p>
+The verification is left as an exercise, by summing the geometric series of cosines, or see Bach (2013, p. 21).
+</p>
+</div>
+
+<p>
+Keep these two families in mind. At the end of the chapter, polynomial versus exponential decay of the spectrum will translate directly into slow versus fast convergence rates for kernel ridge regression.
+</p>
+
+<h2 id="example-the-sphere">Worked example 2: dot-product kernels on the sphere \(S^{d-1}\)</h2>
+
+<p>
+Our second example replaces Fourier modes by their spherical cousins. Consider the unit sphere in \(\mathbb{R}^d\),
+</p>
+
+$$
+\mathcal X = S^{d-1} = \left\{ x \in \mathbb{R}^d : \|x\| = 1 \right\},
+$$
+
+<p>
+with \(\nu\) the Lebesgue (surface) measure on \(S^{d-1}\), whose total mass is
+</p>
+
+$$
+\nu\!\left(S^{d-1}\right) = \frac{2 \pi^{\frac d2}}{\Gamma\!\left( \frac d2 \right)} .
+$$
+
+<p>
+Consider a positive definite kernel of dot-product form,
+</p>
+
+$$
+K(x,t) = \varphi\!\left( x^\top t \right),
+$$
+
+<p>
+where \(\varphi : [-1, 1] \to \mathbb{R}\) is continuous. To write Mercer's expansion we must solve
+</p>
+
+$$
+\int_{S^{d-1}} \varphi\!\left( x^\top t \right) \psi(t)\, d\nu(t) = \lambda\, \psi(x).
+$$
+
+<p>
+The eigenfunctions turn out to be polynomial: they come from the polynomials that solve the Laplace equation
+</p>
+
+$$
+\Delta f = \frac{\partial^2 f}{\partial x_1^2} + \cdots + \frac{\partial^2 f}{\partial x_d^2} = 0,
+$$
+
+<p>where \(\Delta\) is the Laplacian operator on \(\mathbb{R}^d\).</p>
+
+<h3 id="spherical-harmonics">Spherical harmonics</h3>
+
+<div class="box def"><span class="box-title">Definition (spherical harmonics)</span>
+<ul>
+<li>A homogeneous polynomial of degree \(k \geq 0\) in \(\mathbb{R}^d\) whose Laplacian vanishes is called a <em>homogeneous harmonic</em> of order \(k\).</li>
+<li>A <em>spherical harmonic</em> of order \(k\) is the restriction of a homogeneous harmonic of order \(k\) to the unit sphere \(S^{d-1}\).</li>
+<li>The set \(\mathcal Y_k(d)\) of spherical harmonics of order \(k\) is a vector space of dimension
+$$
+N(d,k) = \dim\!\left( \mathcal Y_k(d) \right) = \frac{(2k + d - 2)\,(k + d - 3)!}{k!\,(d-2)!}.
+$$
+</li>
+</ul>
+</div>
+
+<h3 id="funk-hecke">The Funk-Hecke theorem</h3>
+
+<p>
+Spherical harmonics are the Mercer eigenfunctions of every dot-product kernel at once, by the following classical result (see, e.g., Muller, 1998, p. 30).
+</p>
+
+<div class="box thm"><span class="box-title">Theorem (Funk-Hecke)</span>
+<p>
+For any \(x \in S^{d-1}\), any \(Y_k \in \mathcal Y_k(d)\), and any \(\varphi \in C([-1,1])\),
+</p>
+$$
+\int_{S^{d-1}} \varphi\!\left( x^\top t \right) Y_k(t)\, d\nu(t) = \lambda_k\, Y_k(x),
+$$
+<p>where</p>
+$$
+\lambda_k = \nu\!\left( S^{d-2} \right) \int_{-1}^{1} \varphi(t)\, P_k(d; t)\, \left( 1 - t^2 \right)^{\frac{d-3}{2}} dt,
+$$
+<p>
+and \(P_k(d; t)\) is the Legendre polynomial of degree \(k\) in dimension \(d\).
+</p>
+</div>
+
+<p>
+When \(\varphi \in C^k([-1,1])\), the eigenvalues can also be computed by the Rodrigues rule (Muller, 1998, p. 23):
+</p>
+
+$$
+\lambda_k = \nu\!\left( S^{d-2} \right)
+\frac{\Gamma\!\left( \frac{d-1}{2} \right)}{2^k\, \Gamma\!\left( k + \frac{d-1}{2} \right)}
+\int_{-1}^{1} \varphi^{(k)}(t)\, \left( 1 - t^2 \right)^{k + \frac{d-3}{2}} dt .
+$$
+
+<p>
+For each \(k \geq 0\), let \(\{ Y_{k,j}(d; x) \}_{j=1}^{N(d,k)}\) be an orthonormal basis of \(\mathcal Y_k(d)\). The collection of all spherical harmonics, over all orders \(k\), forms an orthonormal basis of \(L^2\!\left( S^{d-1} \right)\). Therefore, for any kernel \(K(x,t) = \varphi(x^\top t)\) on \(S^{d-1}\), the Mercer eigenvalues are exactly the Funk-Hecke numbers \(\lambda_k\), each with multiplicity \(N(d,k)\) and orthonormal eigenfunctions \(\{Y_{k,j}(d;x)\}_{j=1}^{N(d,k)}\). Note the remarkable structure: the eigenfunctions are the same for every \(\varphi\); only the eigenvalues change with the kernel. Choosing a dot-product kernel on the sphere is choosing a decay profile over the fixed ladder of spherical harmonics.
+</p>
+
+<h3 id="a-worked-quadratic-kernel">A fully worked case: the quadratic kernel on the circle</h3>
+
+<div class="box ex"><span class="box-title">Example (\(d = 2\), quadratic kernel)</span>
+<p>
+Take \(d = 2\) and \(K(x,t) = \left( 1 + x^\top t \right)^2\) for \(x, t \in S^1\). Applying the Rodrigues rule to \(\varphi(u) = (1+u)^2\) yields exactly three nonzero eigenvalues:
+</p>
+$$
+\lambda_0 = 3\pi, \qquad \lambda_1 = 2\pi, \qquad \lambda_2 = \frac{\pi}{2},
+$$
+<p>
+with multiplicities \(1\), \(2\), and \(2\). The corresponding orthonormal eigenfunctions are
+</p>
+$$
+\frac{1}{\sqrt{2\pi}}, \qquad
+\frac{x_1}{\sqrt{\pi}}, \qquad
+\frac{x_2}{\sqrt{\pi}}, \qquad
+\frac{2 x_1 x_2}{\sqrt{\pi}}, \qquad
+\frac{x_1^2 - x_2^2}{\sqrt{\pi}},
+$$
+<p>
+the degree-two pair being the spherical harmonics \(\sin 2\theta\) and \(\cos 2\theta\) in angular coordinates. The resulting Mercer feature map \(\Phi(x) = \left( \sqrt{\lambda_k}\,\psi_k(x) \right)_k\) is
+</p>
+$$
+\Phi(x) = \left( \sqrt{\frac 32},\; \sqrt{2}\, x_1,\; \sqrt{2}\, x_2,\; \sqrt{2}\, x_1 x_2,\; \frac{x_1^2 - x_2^2}{\sqrt{2}} \right),
+$$
+<p>
+and one checks directly (exercise, using \(x_1^2 + x_2^2 = 1\) on \(S^1\)) that \(\Phi(x)^\top \Phi(t) = \left( 1 + x^\top t \right)^2 = K(x,t)\): the abstract Mercer map reproduces the explicit polynomial feature map of the quadratic kernel.
+</p>
+</div>
+
+<h2 id="rkhs-from-the-spectrum">The RKHS built from the spectrum</h2>
+
+<p>
+Mercer's theorem decomposes the kernel over the eigenfunctions of the integral operator, and in favorable cases the resulting feature space is intuitive. But the kernel also has an RKHS, like any positive definite kernel, and the RKHS norm is what our learning algorithms penalize. Can we describe the RKHS, and above all its norm, in terms of the eigenfunctions and eigenvalues of the operator? The answer is a complete and remarkably clean description: the RKHS consists of the eigenfunction expansions whose coefficients decay fast enough relative to the spectrum.
+</p>
+
+<p>
+Throughout this section, \(\mathcal X\) is a compact metric space, \(\nu\) a nondegenerate finite Borel measure, and \(K\) a Mercer kernel with eigenvalues \(\lambda_1 \geq \lambda_2 \geq \cdots\) (in decreasing order) and eigenfunctions \((\psi_1, \psi_2, \ldots)\), so that by Mercer's theorem
+</p>
+
+$$
+K(x,y) = \sum_{k=1}^{\infty} \lambda_k\, \psi_k(x)\, \psi_k(y) = \langle \Phi(x), \Phi(y) \rangle_{\ell^2},
+\qquad
+\Phi(x) = \left( \sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}.
+$$
+
+<div class="box thm"><span class="box-title">Theorem (RKHS from eigenfunctions)</span>
+<p>
+Assume all eigenvalues \(\lambda_k\) are positive. Then the RKHS of \(K\) is the Hilbert space
+</p>
+$$
+\mathcal H = \left\{ f = \sum_{i=1}^{\infty} a_i\, \psi_i \;:\; \sum_{k=1}^{\infty} \frac{a_k^2}{\lambda_k} \lt \infty \right\},
+$$
+<p>endowed with the inner product</p>
+$$
+\langle f, g \rangle_{\mathcal H} = \sum_{k=1}^{\infty} \frac{a_k\, b_k}{\lambda_k},
+\qquad \text{for } f = \sum_k a_k \psi_k, \;\; g = \sum_k b_k \psi_k .
+$$
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (zero eigenvalues)</span>
+<p>
+If some eigenvalues vanish, the result and its proof remain valid on the subspace spanned by the eigenfunctions with positive eigenvalues: the RKHS is then the set of expansions over those eigenfunctions only, with the same norm.
+</p>
+</div>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p>
+As always we must show three things: that \(\mathcal H\) is a Hilbert space of functions from \(\mathcal X\) to \(\mathbb R\), that \(K_x \in \mathcal H\) for any \(x \in \mathcal X\), and that \(f(x) = \langle f, K_x\rangle_{\mathcal H}\) for any \(x \in \mathcal X\) and \(f \in \mathcal H\).
+</p>
+
+<p><strong>Step 1: \(\mathcal H\) is a Hilbert space.</strong>
+The map
+</p>
+$$
+L_K^{\frac12} : L^2_\nu(\mathcal X) \to \mathcal H, \qquad
+\sum_{i=1}^{\infty} a_i\, \psi_i \mapsto \sum_{i=1}^{\infty} a_i \sqrt{\lambda_i}\, \psi_i
+$$
+<p>
+is a linear bijection that carries the \(L^2_\nu\) inner product to \(\langle\cdot,\cdot\rangle_{\mathcal H}\): it is an isomorphism of inner-product spaces. \(\mathcal H\) is therefore complete, hence a Hilbert space, like \(L^2_\nu(\mathcal X)\).
+</p>
+
+<p><strong>Step 2: elements of \(\mathcal H\) are bounded pointwise by their norm.</strong>
+For any \(f = \sum_{i=1}^\infty a_i \psi_i \in \mathcal H\) and \(x \in \mathcal X\), whenever the series defining \(f(x)\) makes sense,
+</p>
+$$
+\lvert f(x) \rvert
+= \left\lvert \sum_{i=1}^{\infty} a_i\, \psi_i(x) \right\rvert
+= \left\lvert \sum_{i=1}^{\infty} \frac{a_i}{\sqrt{\lambda_i}}\, \sqrt{\lambda_i}\, \psi_i(x) \right\rvert
+\leq \left( \sum_{i=1}^{\infty} \frac{a_i^2}{\lambda_i} \right)^{\frac12}
+\left( \sum_{i=1}^{\infty} \lambda_i\, \psi_i(x)^2 \right)^{\frac12}
+= \| f \|_{\mathcal H}\; K(x,x)^{\frac12}
+\leq \| f \|_{\mathcal H}\, \sqrt{C_K},
+$$
+<p>
+by Cauchy-Schwarz and Mercer's theorem. In particular the series converges absolutely at every \(x\) (so \(f(x)\) is well defined), and convergence in \(\|\cdot\|_{\mathcal H}\) implies uniform convergence of functions.
+</p>
+
+<p><strong>Step 3: \(\mathcal H\) is a space of continuous functions.</strong>
+Let \(f_n = \sum_{i=1}^n a_i \psi_i\). Each \(\psi_i\) is continuous, hence each \(f_n\) is continuous, and \(f_n \to f\) in \(\mathcal H\), hence uniformly by Step 2, hence in the complete space of continuous functions with the uniform norm. Let \(f_c\) denote the continuous limit. Then \(f_c \in L^2_\nu(\mathcal X)\) and \(\| f_n - f_c \|_{L^2_\nu(\mathcal X)} \to 0\). On the other hand, comparing coefficients,
+</p>
+$$
+\| f - f_n \|_{L^2_\nu(\mathcal X)} \leq \sqrt{\lambda_1}\, \| f - f_n \|_{\mathcal H} \xrightarrow[n \to \infty]{} 0,
+$$
+<p>
+since \(\|g\|^2_{L^2_\nu} = \sum_i b_i^2 \leq \lambda_1 \sum_i b_i^2/\lambda_i = \lambda_1 \|g\|^2_{\mathcal H}\) for \(g = \sum_i b_i \psi_i \in \mathcal H\). By uniqueness of limits in \(L^2_\nu\), \(f = f_c\): every element of \(\mathcal H\) is (the everywhere-defined version of) a continuous function.
+</p>
+
+<p><strong>Step 4: \(K_x \in \mathcal H\).</strong>
+Fix \(x \in \mathcal X\) and set \(a_i = \lambda_i\, \psi_i(x)\) for all \(i\). Then
+</p>
+$$
+\sum_{i=1}^{\infty} \frac{a_i^2}{\lambda_i}
+= \sum_{i=1}^{\infty} \lambda_i\, \psi_i(x)^2
+= K(x,x) \lt \infty,
+$$
+<p>
+so \(\varphi_x := \sum_{i=1}^\infty a_i \psi_i \in \mathcal H\). Since convergence in \(\mathcal H\) implies pointwise convergence (Step 2), for any \(t \in \mathcal X\),
+</p>
+$$
+\varphi_x(t) = \sum_{i=1}^{\infty} a_i\, \psi_i(t)
+= \sum_{i=1}^{\infty} \lambda_i\, \psi_i(x)\, \psi_i(t)
+= K(x,t),
+$$
+<p>by Mercer's theorem, so \(\varphi_x = K_x \in \mathcal H\).</p>
+
+<p><strong>Step 5: the reproducing property.</strong>
+Let \(f = \sum_{i=1}^\infty a_i \psi_i \in \mathcal H\) and \(x \in \mathcal X\). By Step 4, \(K_x = \sum_{i=1}^\infty \lambda_i \psi_i(x)\, \psi_i\), so
+</p>
+$$
+\langle f, K_x \rangle_{\mathcal H}
+= \sum_{i=1}^{\infty} \frac{a_i \cdot \lambda_i\, \psi_i(x)}{\lambda_i}
+= \sum_{i=1}^{\infty} a_i\, \psi_i(x)
+= f(x),
+$$
+<p>
+which concludes the proof.
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<h3 id="geometry-of-the-rkhs">The geometry of the RKHS</h3>
+
+<p>
+Several consequences deserve to be spelled out.
+</p>
+
+<ul>
+<li>Although \(\mathcal H\) was built from the eigenfunctions of \(L_K\), which depend on the choice of the measure \(d\nu(x)\), we know by uniqueness of the RKHS of a given kernel that \(\mathcal H\) itself is independent of \(\nu\) and of \(L_K\). Only the coordinate system changes with \(\nu\).</li>
+<li>Mercer's theorem thus provides a concrete recipe for building the RKHS: take linear combinations of the eigenfunctions of \(L_K\), with adequately decaying weights.</li>
+<li>The eigenfunctions \((\psi_i)_{i \in \mathbb N}\) form an orthogonal basis of the RKHS, with
+$$
+\langle \psi_i, \psi_j \rangle_{\mathcal H} = 0 \text{ for } i \neq j,
+\qquad
+\| \psi_i \|_{\mathcal H} = \frac{1}{\sqrt{\lambda_i}} .
+$$
+Directions with small eigenvalues are expensive: representing a unit of \(\psi_i\) costs \(1/\sqrt{\lambda_i}\) in RKHS norm.</li>
+<li>Summarizing the picture the course draws at this point: the unit ball of \(\mathcal H\), seen inside \(L^2_\nu(\mathcal X)\), is a well-defined ellipsoid whose principal axes are the eigenfunctions \(\psi_k\), with semi-axis lengths \(\sqrt{\lambda_k}\). A rapidly decaying spectrum means a thin, strongly anisotropic ellipsoid: the kernel deems only a few directions cheap, and that is exactly what regularization exploits.</li>
+</ul>
+
+<h3 id="sobolev-example">Example: Sobolev spaces of periodic functions</h3>
+
+<p>
+Applied to the Bernoulli kernels of the first worked example, the construction identifies the RKHS as a classical Sobolev space.
+</p>
+
+<div class="box cor"><span class="box-title">Corollary (periodic Sobolev space)</span>
+<p>
+For \(\beta \in \mathbb{N}^*\), consider the Mercer kernel with polynomially decaying eigenvalues
+</p>
+$$
+\forall x, t \in [0,1], \quad
+K(x,t) = \frac{1}{(2\beta)!}\, B_{2\beta}\!\left( x - t - \lfloor x - t \rfloor \right),
+$$
+<p>
+where \(B_{2\beta}\) is the \((2\beta)\)-th Bernoulli polynomial. Then the RKHS is the set of functions \(f : [0,1] \to \mathbb{R}\) whose Fourier coefficients satisfy
+</p>
+$$
+\| f \|^2_{\mathcal H} := \sum_{n=1}^{\infty} \left( \hat f_{2n-1}^2 + \hat f_{2n}^2 \right) n^{2\beta} \lt +\infty .
+$$
+<p>
+This is the Sobolev space of functions \(f\) such that \(f^{(i)}\) is absolutely continuous and \(f^{(i)}(0) = f^{(i)}(1)\) for \(i = 0, \ldots, \beta - 1\), with
+</p>
+$$
+\| f \|^2_{\mathcal H} = \pi^{-2\beta} \int_0^1 \left( f^{(\beta)}(x) \right)^2 dx .
+$$
+</div>
+
+<div class="box proof"><span class="box-title">Proof sketch</span>
+<p>
+The characterization by Fourier coefficients is a direct application of the RKHS construction theorem: the Fourier basis is an orthonormal basis of eigenfunctions of \(L_K\), the eigenvalues are \(n^{-2\beta}\) (for both \(\psi_{2n-1}\) and \(\psi_{2n}\)), and the RKHS norm is \(\sum_k a_k^2 / \lambda_k\). For the identification with the Sobolev space, use the Parseval equality to rewrite the Sobolev norm as the \(\ell^2\) norm of the Fourier coefficients of \(f^{(\beta)}\), which are (roughly) the Fourier coefficients of \(f\) multiplied by \(n^{\beta}\); the periodic boundary conditions are what make the term-by-term differentiation of the Fourier series legitimate. For details, see Tsybakov (2004, Proposition 1.14).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<p>
+This closes the loop opened at the start of the chapter: smoothness penalties are RKHS norms (Green functions), and RKHS norms are weighted spectral norms (Mercer). The kernel's spectrum is a complete dial for the smoothness the method enforces. We now show that the same dial controls statistical performance.
+</p>
+
+<h2 id="krr-rates">Convergence rates of kernel ridge regression</h2>
+
+<h3 id="the-isometry">The isometry between \(\mathcal H\) and \(L^2_\nu(\mathcal X)\)</h3>
+
+<p>
+The map used in Step 1 of the RKHS construction proof,
+</p>
+
+$$
+L_K^{\frac12} : L^2_\nu(\mathcal X) \to \mathcal H, \qquad
+\sum_{i=1}^{\infty} a_i\, \psi_i \mapsto \sum_{i=1}^{\infty} a_i \sqrt{\lambda_i}\, \psi_i,
+$$
+
+<p>
+is an isometric isomorphism between \(L^2_\nu(\mathcal X)\) and \(\mathcal H\):
+</p>
+
+$$
+\forall f \in L^2_\nu(\mathcal X), \;\; \| f \|_{L^2_\nu(\mathcal X)} = \| L_K^{\frac12} f \|_{\mathcal H},
+\qquad \text{and conversely} \qquad
+\forall f \in \mathcal H, \;\; \| f \|_{\mathcal H} = \| L_K^{-\frac12} f \|_{L^2_\nu(\mathcal X)} .
+$$
+
+<p>
+This is more than a formal remark: it lets us compute \(L^2_\nu(\mathcal X)\) norms, the norms in which prediction error is measured, using RKHS theory, where the estimator has a closed form. That is precisely how we will analyze the performance of kernel ridge regression (KRR).
+</p>
+
+<h3 id="the-model">KRR and the statistical model</h3>
+
+<p>
+Recall the KRR estimator. Given \((x_1, \ldots, x_n) \in \mathcal X^n\), \((y_1, \ldots, y_n) \in \mathbb{R}^n\), and \(\lambda \gt 0\),
+</p>
+
+$$
+\hat f_\lambda = \arg\min_{f \in \mathcal H} \; \frac{1}{n} \sum_{i=1}^n \left( y_i - f(x_i) \right)^2 + \lambda\, \| f \|^2_{\mathcal H},
+$$
+
+<p>whose solution, by the representer theorem, is</p>
+
+$$
+\hat f_\lambda(x) = \sum_{i=1}^n \alpha_i\, K(x_i, x),
+\qquad \text{where} \quad
+\alpha = \left( \mathbf{K} + \lambda n I \right)^{-1} \mathbf{y},
+$$
+
+<p>with \(\mathbf K\) the kernel Gram matrix. We adopt the following model; every hypothesis is used in the proofs.</p>
+
+<div class="box def"><span class="box-title">Model (assumptions for the analysis)</span>
+<ul>
+<li>\(K\) is a Mercer kernel over the compact set \(\mathcal X\), and \(\nu\) is a nondegenerate probability measure on \(\mathcal X\) (so \(\nu(\mathcal X) = 1\)).</li>
+<li>\(\lambda_1 \geq \lambda_2 \geq \cdots \geq 0\) are the eigenvalues of \(L_K\) and \(\{\psi_i, i \geq 1\}\) the eigenfunctions; we assume the eigenvalues positive, so that \(\left\{ \varphi_i = \sqrt{\lambda_i}\, \psi_i,\; i \geq 1 \right\}\) is an orthonormal basis of \(\mathcal H\). (Beware the notational collision, standard in this literature: \(\lambda\) is the regularization parameter, \(\lambda_i\) the eigenvalues.)</li>
+<li>\((X, Y)\) is a pair of random variables with distribution \(P\), where \(X \in \mathcal X\) has distribution \(\nu\) and
+$$
+Y = f^*(X) + \epsilon, \qquad f^* \in \mathcal H, \quad \epsilon \sim \mathcal N(0, \sigma^2),
+$$
+with \(\epsilon\) independent of \(X\).</li>
+<li>\((x_i, y_i)_{i=1,\ldots,n}\) are i.i.d. realizations of \((X, Y)\).</li>
+</ul>
+<p>We estimate the performance of KRR in terms of the mean squared error
+$$
+\mathrm{MSE}(\hat f_\lambda) = \mathbb E \left( Y - \hat f_\lambda(X) \right)^2,
+$$
+the expectation being over both the training sample and an independent test pair \((X,Y)\). Note that \(\mathrm{MSE}(f^*) = \sigma^2\) is the best achievable error, so the quantity to control is the excess \(\mathrm{MSE}(\hat f_\lambda) - \mathrm{MSE}(f^*)\).</p>
+</div>
+
+<h3 id="bias-variance-decomposition">The bias-variance decomposition of the excess MSE</h3>
+
+<p>
+The analysis becomes transparent in spectral coordinates. Write \(f^* = \sum_{i \geq 1} \beta^*_i \varphi_i\) with \(\beta^* \in \ell^2\), let \(\Phi_n\) be the \(n \times \infty\) matrix
+</p>
+
+$$
+\Phi_n = \left( \varphi_j(x_i) \right)_{1 \leq i \leq n,\; 1 \leq j \lt +\infty},
+$$
+
+<p>
+and let \(T : \ell^2 \to \ell^2\) be the diagonal operator \(T(a_1, a_2, \ldots) = (\lambda_1 a_1, \lambda_2 a_2, \ldots)\).
+</p>
+
+<div class="box lem"><span class="box-title">Lemma (bias-variance decomposition)</span>
+<p>Under the model above, for any \(\lambda \gt 0\),</p>
+$$
+\mathrm{MSE}(\hat f_\lambda) - \mathrm{MSE}(f^*) = B_\lambda + V_\lambda,
+$$
+<p>where, with \(\varepsilon = (\epsilon_1, \ldots, \epsilon_n)^\top\),</p>
+$$
+B_\lambda = \mathbb E \left\| T^{\frac12} \left( I - \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \Phi_n \right) \beta^* \right\|^2_{\ell^2},
+\qquad
+V_\lambda = \mathbb E \left\| T^{\frac12} \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \varepsilon \right\|^2_{\ell^2}.
+$$
+</div>
+
+<p>
+This is the classical decomposition of the excess MSE as "bias plus variance": \(B_\lambda\) measures how much the regularization shrinks the true coefficient vector \(\beta^*\), and increases with \(\lambda\); \(V_\lambda\) measures how much noise the estimator absorbs, and decreases with \(\lambda\). The optimal \(\lambda\) balances the two, and the balance point depends on the spectrum through \(T\).
+</p>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p><strong>Step 1: reduce to an RKHS norm.</strong>
+Since \(\epsilon\) is independent of \(X\) and of \(\hat f_\lambda\) (which depends only on the training sample), and \(\mathbb E \epsilon = 0\),
+</p>
+$$
+\mathrm{MSE}(\hat f_\lambda)
+= \mathbb E \left( f^*(X) - \hat f_\lambda(X) + \epsilon \right)^2
+= \mathbb E \left( f^*(X) - \hat f_\lambda(X) \right)^2 + \mathbb E \epsilon^2
+= \mathbb E \left\| f^* - \hat f_\lambda \right\|^2_{L^2_\nu(\mathcal X)} + \mathrm{MSE}(f^*),
+$$
+<p>using that \(X \sim \nu\) is independent of the training sample. By the isometry between \(L^2_\nu(\mathcal X)\) and \(\mathcal H\),</p>
+$$
+\mathrm{MSE}(\hat f_\lambda) - \mathrm{MSE}(f^*) = \mathbb E \left\| L_K^{\frac12} \left( f^* - \hat f_\lambda \right) \right\|^2_{\mathcal H}.
+$$
+
+<p><strong>Step 2: coordinates.</strong>
+Since \(\{\varphi_i = \sqrt{\lambda_i}\psi_i,\; i \geq 1\}\) is an orthonormal basis of \(\mathcal H\), define the linear isomorphism
+</p>
+$$
+e : \mathcal H \to \ell^2, \qquad
+f = \sum_{i \geq 1} a_i\, \varphi_i \mapsto (a_1, a_2, \ldots)^\top,
+\qquad \text{i.e.} \quad e(f)_i = \langle f, \varphi_i \rangle_{\mathcal H}.
+$$
+<p>
+In particular, for any \(x \in \mathcal X\), \(e(K_x) = \left( \varphi_1(x), \varphi_2(x), \ldots \right)^\top\), because \(\langle K_x, \varphi_i\rangle_{\mathcal H} = \varphi_i(x)\). In this basis \(L_K\) is the diagonal operator \(T = \mathrm{diag}(\lambda_1, \lambda_2, \ldots)\): for any \(f = \sum_{i\geq 1} a_i \varphi_i \in \mathcal H\), \(e(L_K f) = T e(f) = (\lambda_1 a_1, \lambda_2 a_2, \ldots)^\top\).
+</p>
+
+<p><strong>Step 3: the estimator in coordinates.</strong>
+By construction \(\Phi_n = \left( e(K_{x_1}), \ldots, e(K_{x_n}) \right)^\top\). The representer expansion \(\hat f_\lambda = \sum_{i=1}^n \alpha_i K_{x_i}\) translates to
+</p>
+$$
+e(\hat f_\lambda) = \sum_{i=1}^n \alpha_i\, e(K_{x_i}) = \Phi_n^\top \alpha .
+$$
+<p>Notice that</p>
+$$
+\left[ \Phi_n \Phi_n^\top \right]_{ij}
+= \left\langle e(K_{x_i}), e(K_{x_j}) \right\rangle_{\ell^2}
+= \left\langle K_{x_i}, K_{x_j} \right\rangle_{\mathcal H}
+= K(x_i, x_j),
+$$
+<p>
+so \(\Phi_n \Phi_n^\top = \mathbf K\), and \(\alpha = (\mathbf K + \lambda n I)^{-1} \mathbf y\) becomes \(\alpha = \left( \Phi_n \Phi_n^\top + \lambda n I \right)^{-1} \mathbf y\). Putting these together and using the matrix inversion lemma, in the form \(\Phi_n^\top \left( \Phi_n \Phi_n^\top + \lambda n I \right)^{-1} = \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top\),
+</p>
+$$
+e(\hat f_\lambda)
+= \Phi_n^\top \left( \Phi_n \Phi_n^\top + \lambda n I \right)^{-1} \mathbf y
+= \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \mathbf y .
+$$
+
+<p><strong>Step 4: the data in coordinates.</strong>
+Let \(\beta^* = (\beta^*_1, \beta^*_2, \ldots)^\top = e(f^*)\). For any \(x \in \mathcal X\), \(f^*(x) = \langle f^*, K_x\rangle_{\mathcal H} = \langle \beta^*, e(K_x)\rangle_{\ell^2}\), so the model \(y_i = f^*(x_i) + \epsilon_i\), \(i = 1, \ldots, n\), translates to
+</p>
+$$
+\mathbf y = \Phi_n\, \beta^* + \varepsilon,
+\qquad \varepsilon = (\epsilon_1, \ldots, \epsilon_n)^\top .
+$$
+
+<p><strong>Step 5: conclusion.</strong>
+Combining Steps 3 and 4,
+</p>
+$$
+e\!\left( f^* - \hat f_\lambda \right)
+= \beta^* - \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \left( \Phi_n \beta^* + \varepsilon \right)
+= \left( I - \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \Phi_n \right) \beta^*
+- \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \varepsilon .
+$$
+<p>
+Since \(e\) is an isometry and \(e(L_K^{1/2} g) = T^{1/2} e(g)\),
+</p>
+$$
+\mathbb E \left\| L_K^{\frac12} \left( f^* - \hat f_\lambda \right) \right\|^2_{\mathcal H}
+= \mathbb E \left\| T^{\frac12}\, e\!\left( f^* - \hat f_\lambda \right) \right\|^2_{\ell^2},
+$$
+<p>
+and expanding the square, the cross term vanishes because \(\varepsilon\) is independent of \(\Phi_n\) with mean zero. What remains is exactly \(B_\lambda + V_\lambda\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<h3 id="the-effective-approximation">A simplification: replacing \(\Phi_n^\top \Phi_n\) by \(n T\)</h3>
+
+<p>
+The bias and variance depend on the data only through the random operator \(\Phi_n^\top \Phi_n : \ell^2 \to \ell^2\). For large \(n\), the law of large numbers identifies its limit: for any \(i, j \geq 1\),
+</p>
+
+$$
+\left[ \Phi_n^\top \Phi_n \right]_{ij}
+= \sum_{k=1}^n \varphi_i(x_k)\, \varphi_j(x_k)
+\;\approx\; n\, \langle \varphi_i, \varphi_j \rangle_{L^2_\nu(\mathcal X)}
+= n \sqrt{\lambda_i \lambda_j}\, \langle \psi_i, \psi_j \rangle_{L^2_\nu(\mathcal X)}
+= n\, \lambda_i\, \delta_{ij},
+$$
+
+<p>
+so \(\Phi_n^\top \Phi_n \approx n T\). We now study the bias and the variance under the substitution \(\Phi_n^\top \Phi_n = nT\), and write \(\tilde B_\lambda\) and \(\tilde V_\lambda\) for the corresponding approximations. The difference between \(B_\lambda\) and \(\tilde B_\lambda\) (respectively \(V_\lambda\) and \(\tilde V_\lambda\)) can be studied rigorously and does not change much the main results below; see Dicker et al. (2015) for details.
+</p>
+
+<h3 id="bounds-on-bias-and-variance">Upper bounds on bias and variance</h3>
+
+<div class="box thm"><span class="box-title">Theorem (spectral bounds on \(\tilde B_\lambda\) and \(\tilde V_\lambda\))</span>
+<p>For any integer \(J \geq 1\),</p>
+$$
+\tilde B_\lambda \leq \left( \frac{\lambda^2}{\lambda_J} + \lambda_{J+1} \right) \| f^* \|^2_{\mathcal H},
+\qquad
+\tilde V_\lambda \leq \frac{\sigma^2}{n} \left[ J + \frac{\sum_{i=J+1}^{+\infty} \lambda_i}{4 \lambda} \right].
+$$
+</div>
+
+<p>
+The free integer \(J\) splits the spectrum into a head, where the regularization barely bites but each direction contributes noise, and a tail, where the eigenvalues themselves are small. Both \(J\) and \(\lambda\) will be optimized in the corollary below, depending on the assumptions made on \(f^*\) and on the decrease of the \(\lambda_i\).
+</p>
+
+<details class="proof-details"><summary>Proof</summary>
+<div class="box proof">
+<p><strong>Bias.</strong> With \(T = \mathrm{diag}(\lambda_i;\; i \geq 1)\) and \(\Phi_n^\top \Phi_n = nT\), the operator in \(\tilde B_\lambda\) is diagonal:
+</p>
+$$
+T^{\frac12} \left( I - \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \Phi_n \right)
+= T^{\frac12} \left( I - (T + \lambda I)^{-1} T \right)
+= \mathrm{diag} \left( \frac{\lambda \sqrt{\lambda_i}}{\lambda + \lambda_i};\; i \geq 1 \right),
+$$
+<p>and therefore, splitting at an arbitrary \(J \geq 1\),</p>
+$$
+\tilde B_\lambda = \sum_{i=1}^{J} \frac{\lambda^2 \lambda_i}{(\lambda + \lambda_i)^2} (\beta^*_i)^2
++ \sum_{i \geq J+1} \frac{\lambda^2 \lambda_i}{(\lambda + \lambda_i)^2} (\beta^*_i)^2 .
+$$
+<p>
+For the first term, use \(\lambda_i^2 / (\lambda + \lambda_i)^2 \leq 1\) and \(\lambda_i \geq \lambda_J\) for \(i \leq J\):
+</p>
+$$
+\sum_{i=1}^{J} \frac{\lambda^2 \lambda_i}{(\lambda + \lambda_i)^2} (\beta^*_i)^2
+= \sum_{i=1}^{J} \frac{\lambda^2}{\lambda_i}\, \frac{\lambda_i^2}{(\lambda + \lambda_i)^2}\, (\beta^*_i)^2
+\leq \frac{\lambda^2}{\lambda_J} \sum_{i=1}^{J} (\beta^*_i)^2
+\leq \frac{\lambda^2}{\lambda_J}\, \| \beta^* \|^2_{\ell^2}.
+$$
+<p>
+For the second term, use \(\lambda^2 / (\lambda + \lambda_i)^2 \leq 1\) and \(\lambda_i \leq \lambda_{J+1}\) for \(i \geq J+1\):
+</p>
+$$
+\sum_{i \geq J+1} \frac{\lambda^2 \lambda_i}{(\lambda + \lambda_i)^2} (\beta^*_i)^2
+\leq \lambda_{J+1} \sum_{i \geq J+1} (\beta^*_i)^2
+\leq \lambda_{J+1}\, \| \beta^* \|^2_{\ell^2}.
+$$
+<p>
+Since \(e\) is an isometry, \(\| \beta^* \|_{\ell^2} = \| f^* \|_{\mathcal H}\), and adding the two bounds gives the claim for \(\tilde B_\lambda\).
+</p>
+
+<p><strong>Variance.</strong> Using \(T = \mathrm{diag}(\lambda_i;\; i \geq 1)\), \(\Phi_n^\top \Phi_n = nT\), and \(\mathbb E\, \varepsilon \varepsilon^\top = \sigma^2 I\),
+</p>
+$$
+\begin{aligned}
+\tilde V_\lambda
+&= \mathbb E \left\| T^{\frac12} \left( \Phi_n^\top \Phi_n + \lambda n I \right)^{-1} \Phi_n^\top \varepsilon \right\|^2_{\ell^2}
+= \frac{1}{n^2}\, \mathbb E \left\| T^{\frac12} (T + \lambda I)^{-1} \Phi_n^\top \varepsilon \right\|^2_{\ell^2} \\
+&= \frac{1}{n^2}\, \mathrm{Trace} \left[ T^{\frac12} (T + \lambda I)^{-1} \Phi_n^\top\, \mathbb E\!\left( \varepsilon \varepsilon^\top \right) \Phi_n\, (T + \lambda I)^{-1} T^{\frac12} \right] \\
+&= \frac{\sigma^2}{n^2}\, \mathrm{Trace} \left[ T^{\frac12} (T + \lambda I)^{-1}\, \Phi_n^\top \Phi_n\, (T + \lambda I)^{-1} T^{\frac12} \right] \\
+&= \frac{\sigma^2}{n}\, \mathrm{Trace} \left[ T^{\frac12} (T + \lambda I)^{-1}\, T\, (T + \lambda I)^{-1} T^{\frac12} \right]
+= \frac{\sigma^2}{n} \left[ \sum_{i=1}^{J} \frac{\lambda_i^2}{(\lambda_i + \lambda)^2}
++ \sum_{i=J+1}^{+\infty} \frac{\lambda_i^2}{(\lambda_i + \lambda)^2} \right],
+\end{aligned}
+$$
+<p>
+where we used successively the definition of the trace, the independence of \(\varepsilon\) and \(\Phi_n\), and \(\Phi_n^\top \Phi_n = nT\) once more, which absorbs one factor of \(n\). For the first term, \(\lambda_i^2 / (\lambda_i + \lambda)^2 \leq 1\) gives
+</p>
+$$
+\sum_{i=1}^{J} \frac{\lambda_i^2}{(\lambda_i + \lambda)^2} \leq J .
+$$
+<p>
+For the second term, the function \(t \mapsto t / (t + \lambda)^2\) on \([0, \infty)\) reaches its maximum at \(t = \lambda\), where it equals \(1/(4\lambda)\), so
+</p>
+$$
+\sum_{i=J+1}^{+\infty} \frac{\lambda_i^2}{(\lambda_i + \lambda)^2}
+= \sum_{i=J+1}^{+\infty} \lambda_i\, \frac{\lambda_i}{(\lambda_i + \lambda)^2}
+\leq \frac{\sum_{i=J+1}^{+\infty} \lambda_i}{4 \lambda} .
+$$
+<p>
+Combining both terms gives the claim for \(\tilde V_\lambda\).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<h3 id="rates-corollary">Rates of convergence</h3>
+
+<p>
+Optimizing \(J\) and \(\lambda\) against the decay profile of the spectrum yields the rates. Recall that the excess risk is \(\tilde B_\lambda + \tilde V_\lambda\), so a bound on their sum is a bound on how fast KRR approaches the best possible MSE.
+</p>
+
+<div class="box cor"><span class="box-title">Corollary (convergence rates of KRR)</span>
+<ul>
+<li><strong>Polynomial-decay kernels.</strong> Suppose there are constants \(C \gt 0\) and \(s \gt 1\) such that \(0 \lt \lambda_i \leq C i^{-s}\) for \(i = 1, 2, \ldots\). Take \(\lambda = n^{-\frac{s}{s+1}}\). Then
+$$
+\tilde B_\lambda + \tilde V_\lambda \leq O\!\left( \left( \| f^* \|^2_{\mathcal H} + \sigma^2 \right) n^{-\frac{s}{s+1}} \right).
+$$
+</li>
+<li><strong>Exponential-decay kernels.</strong> Suppose there are constants \(C \gt 0\) and \(\alpha \gt 0\) such that \(0 \lt \lambda_i \leq C e^{-\alpha i}\) for \(i = 1, 2, \ldots\). Take \(\lambda = n^{-1} \log(n)\). Then
+$$
+\tilde B_\lambda + \tilde V_\lambda \leq O\!\left( \left( \| f^* \|^2_{\mathcal H} + \sigma^2 \right) \frac{\log(n)}{n} \right).
+$$
+</li>
+<li><strong>Finite-rank kernels.</strong> Suppose there is \(J \geq 1\) such that \(\lambda_J = \lambda_{J+1} = \cdots = 0\). Take \(\lambda = n^{-1}\). Then
+$$
+\tilde B_\lambda + \tilde V_\lambda \leq O\!\left( \frac{\| f^* \|^2_{\mathcal H} + \sigma^2 J}{n} \right).
+$$
+</li>
+</ul>
+</div>
+
+<details class="proof-details"><summary>Proof for polynomial-decay kernels</summary>
+<div class="box proof">
+<p>
+For \(n\) large enough that \(\lambda \leq \lambda_1\), let \(J\) be such that \(\lambda_{J+1} \leq \lambda \leq \lambda_J\).
+</p>
+
+<p><strong>Bias.</strong> By the choice of \(J\), \(\lambda^2 / \lambda_J \leq \lambda\) and \(\lambda_{J+1} \leq \lambda\), so the bias bound of the theorem gives immediately
+</p>
+$$
+\tilde B_\lambda \leq 2 \lambda\, \| f^* \|^2_{\mathcal H} = 2\, n^{-\frac{s}{s+1}}\, \| f^* \|^2_{\mathcal H}.
+$$
+
+<p><strong>Variance: bounding \(J\).</strong> Since \(\lambda \leq \lambda_J \leq C J^{-s}\),
+</p>
+$$
+J \leq C^{\frac1s}\, \lambda^{-\frac1s} = C^{\frac1s}\, n^{\frac{1}{s+1}} .
+$$
+
+<p><strong>Variance: bounding the tail sum.</strong> Let \(J_0 = \lfloor C^{1/s} n^{1/(s+1)} \rfloor + 1 \geq J\). Splitting the tail at \(J_0\) and comparing the far tail with an integral,
+</p>
+$$
+\sum_{i=J+1}^{+\infty} \lambda_i
+= \sum_{i=J+1}^{J_0} \lambda_i + \sum_{i=J_0+1}^{+\infty} \lambda_i
+\leq J_0\, \lambda + C \int_{J_0}^{+\infty} t^{-s}\, dt
+\leq J_0\, n^{-\frac{s}{s+1}} + \frac{C}{s-1}\, J_0^{1-s},
+$$
+<p>
+using \(\lambda_i \leq \lambda_{J+1} \leq \lambda\) for \(i \geq J+1\). Since \(J_0 \leq C^{1/s} n^{1/(s+1)} + 1\) and \(1 \leq n^{1/(s+1)}\),
+</p>
+$$
+J_0\, n^{-\frac{s}{s+1}} \leq \left( C^{\frac1s} + 1 \right) n^{\frac{1-s}{s+1}},
+$$
+<p>and since \(J_0 \geq C^{1/s} n^{1/(s+1)}\),</p>
+$$
+\frac{C}{s-1}\, J_0^{1-s} \leq \frac{C^{\frac1s}\, n^{\frac{1-s}{s+1}}}{s-1}.
+$$
+<p>Therefore the tail sum is upper bounded by</p>
+$$
+\sum_{i=J+1}^{+\infty} \lambda_i \leq \frac{s}{s-1} \left( C^{\frac1s} + 1 \right) n^{\frac{1-s}{s+1}} .
+$$
+
+<p><strong>Variance: conclusion.</strong> Plugging both bounds into the variance bound of the theorem, with \(\lambda = n^{-s/(s+1)}\),
+</p>
+$$
+\tilde V_\lambda = \frac{\sigma^2}{n} \left[ J + \frac{\sum_{i=J+1}^{+\infty} \lambda_i}{4\, n^{-\frac{s}{s+1}}} \right]
+\leq \frac{\sigma^2}{n} \left[ C^{\frac1s}\, n^{\frac{1}{s+1}}
++ \frac{1}{4}\, \frac{s}{s-1} \left( C^{\frac1s} + 1 \right) n^{\frac{1-s}{s+1}}\, n^{\frac{s}{s+1}} \right]
+\leq \sigma^2 \left( C^{\frac1s} \left( 1 + \frac{s}{4(s-1)} \right) + \frac14 \right) n^{-\frac{s}{s+1}} .
+$$
+<p>
+Adding \(\tilde B_\lambda\) and \(\tilde V_\lambda\) gives the announced rate.
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+</details>
+
+<div class="box proof"><span class="box-title">Proof sketch for exponential-decay kernels</span>
+<p>
+We proceed similarly, with \(\lambda = n^{-1}\log(n)\) and \(J\) such that \(\lambda_{J+1} \leq \lambda \leq \lambda_J\). From \(\lambda \leq \lambda_J \leq C e^{-\alpha J}\) we deduce \(J \leq O(\log n)\). Using the threshold \(J_0 = \lfloor \alpha^{-1} \log(n) \rfloor + 1\) and summing the geometric tail, we deduce \(\sum_{i \geq J+1} \lambda_i \leq O\!\left( \log(n)^2 / n \right)\), hence \(\tilde V_\lambda \leq O\!\left( \sigma^2 \log(n)/n \right)\), while the bias satisfies \(\tilde B_\lambda \leq 2\lambda \|f^*\|^2_{\mathcal H} = O\!\left( \|f^*\|^2_{\mathcal H} \log(n)/n \right)\) as before. Details are left as an exercise; see Dicker et al. (2015, Corollary 2).
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof for finite-rank kernels</span>
+<p>
+Here we use a simpler bound on the bias: since \(t / (t + \lambda)^2 \leq 1/(4\lambda)\) for any \(t \geq 0\), every term of \(\tilde B_\lambda = \sum_i \lambda^2 \lambda_i (\lambda + \lambda_i)^{-2} (\beta^*_i)^2\) is at most \(\frac{\lambda}{4} (\beta^*_i)^2\), so
+</p>
+$$
+\tilde B_\lambda \leq \frac{\lambda}{4}\, \| f^* \|^2_{\mathcal H} .
+$$
+<p>
+For the variance, \(\lambda_i = 0\) for \(i \geq J\), so at most \(J\) terms survive in the trace and the bound simplifies to
+</p>
+$$
+\tilde V_\lambda \leq \frac{\sigma^2 J}{n} .
+$$
+<p>
+Taking \(\lambda = n^{-1}\) and summing these inequalities gives the result.
+<span class="qed">\(\square\)</span>
+</p>
+</div>
+
+<h3 id="optimality-remarks">Optimality and adaptivity</h3>
+
+<ul>
+<li>The same rates hold for the exact quantities \(B_\lambda + V_\lambda\), without the substitution \(\Phi_n^\top\Phi_n = nT\); see Dicker et al. (2015, Corollaries 1 to 4), whose proof we followed and adapted. The constants hidden in the big-\(O\) notation depend only on the kernel \(K\) and the measure \(d\nu(x)\).</li>
+<li>These rates are minimax optimal (Caponnetto and De Vito, 2007): no estimator can uniformly improve on them over the corresponding classes of target functions.</li>
+<li>The polynomial case connects back to classical nonparametric statistics. For \(s = 2q\), the ball of the RKHS sits inside \(L^2_\nu(\mathcal X)\) as a Sobolev-type class of functions that are \(q - 1\) times differentiable with absolutely continuous derivatives and \(\| f^{(q)} \|_{L^2_\nu(\mathcal X)} \lt +\infty\), as the periodic Sobolev example made explicit with eigenvalues \(n^{-2\beta}\) and \(q = \beta\). The rate \(n^{-\frac{s}{s+1}} = n^{-\frac{2q}{2q+1}}\) is then exactly the standard optimal convergence rate of nonparametric regression (Tsybakov, 2004).</li>
+<li>Under additional assumptions on \(f^*\), for instance requiring not only \(\sum_{i\geq 1}(\beta^*_i)^2 \lt \infty\) but also \(\sum_{i \geq 1} i^{\tau} (\beta^*_i)^2 \lt \infty\) for some \(\tau \gt 0\), or \(\beta^*_i = 0\) for \(i \gt J\), one obtains faster convergence rates, which are again minimax optimal for the class of functions considered. In this sense KRR is <em>adaptive</em>: the same estimator, with a properly tuned \(\lambda\), achieves the optimal rate over a range of regularity classes (Caponnetto and De Vito, 2007; Dicker et al., 2015).</li>
+</ul>
+
+<h2 id="beyond-compactness">Beyond compactness: an outlook</h2>
+
+<p>
+Everything in this chapter leaned on two hypotheses: \(\mathcal X\) compact and \(K\) continuous. Suppose now that \(\mathcal X\) is not compact, for example \(\mathcal X = \mathbb{R}^d\). Then the eigenvalue problem \(\int_{\mathcal X} K(x,t)\, \psi(t)\, d\nu(t) = \lambda\, \psi(x)\) need not have a countable family of eigenvalues, and Mercer's theorem does not hold. For the most important class of kernels on \(\mathbb{R}^d\), the translation invariant (or shift-invariant) kernels \(K(x,y) = \varphi(x - y)\), Fourier transforms provide a convenient extension, and harmonic analysis brings kernels well beyond vector spaces, to groups and semigroups.
+</p>
+
+<p>
+The simplest instance already displays the whole mechanism. Call a kernel \(K : \mathbb{Z} \times \mathbb{Z} \to \mathbb{R}\) translation invariant (or shift-invariant) if it depends only on the difference of its arguments, \(K(x,y) = a_{x-y}\) for some sequence \((a_n)_{n \in \mathbb Z}\), the sequence being called positive definite when the kernel is. A classical theorem of Herglotz states that a sequence \((a_n)_{n \in \mathbb Z}\) is positive definite if and only if it is the Fourier-Stieltjes transform of a positive measure \(\mu \in M(\mathbb T)\), the set of finite Borel measures on the torus \([0, 2\pi]\) with \(0\) and \(2\pi\) identified. The countable spectrum of eigenvalues has become a spectral measure. The next chapter develops this theme: Herglotz on \(\mathbb Z\), Bochner's theorem on \(\mathbb{R}^d\), the RKHS of shift-invariant kernels, and the generalization to semigroups.
+</p>
+<div class="chnav">
+<a href="unsupervised-kernel-methods.html"><span class="dir">previous</span>6. Kernel PCA, Clustering, and CCA</a>
+<a style="text-align:right" href="kernel-families.html"><span class="dir">next</span>8. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+</div>
+</div></main>
+</div>
+</body>
+</html>
