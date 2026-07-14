@@ -113,7 +113,7 @@ is p.d.
 
 <div class="box proof"><span class="box-title">Proof</span>
 Symmetry is clear: \(x x' = x' x\). For positivity, the double sum collapses into a square:
-$$\sum_{i=1}^{N} \sum_{j=1}^{N} a_i a_j\, x_i x_j = \Big( \sum_{i=1}^{N} a_i x_i \Big)^{2} \ge 0.$$
+$$\sum_{i=1}^{N} \sum_{j=1}^{N} a_i a_j\, x_i x_j = \Big(\sum_{i=1}^{N} a_i x_i \Big)^{2} \ge 0.$$
 <span class="qed">\(\square\)</span>
 </div>
 
@@ -151,8 +151,8 @@ $$\sum_{i=1}^{N} \sum_{j=1}^{N} a_i a_j \big\langle \Phi(x_i), \Phi(x_j) \big\ra
 $$
 K(x, x') = \big\langle \Phi(x), \Phi(x') \big\rangle_{\mathbb{R}^3}
 = x_1^2 x_1'^2 + 2 x_1 x_2 x_1' x_2' + x_2^2 x_2'^2
-= \big( x_1 x_1' + x_2 x_2' \big)^2
-= \langle x, x' \rangle_{\mathbb{R}^2}^2 .
+= \big(x_1 x_1' + x_2 x_2' \big)^2
+= \langle x, x' \rangle_{\mathbb{R}^2}^2.
 $$
 
 <p>The squared inner product is therefore p.d. on \(\mathbb{R}^2\) by the embedding lemma, and it lets linear machinery capture quadratic structure: a function that is linear in \(\Phi(x)\) is a quadratic function of \(x\). Geometrically, a curved boundary in the plane, such as an ellipse, becomes a hyperplane in the three-dimensional feature space.</p>
@@ -358,7 +358,7 @@ $$\langle f, g \rangle_{\mathcal{H}_0} := \sum_{i, j} a_i b_j\, K(x_i, y_j).$$</
 
 <p><strong>Step 2: the definition is legitimate.</strong>
 A function of \(\mathcal{H}_0\) may admit several expansions, so we must check that \(\langle f, g \rangle_{\mathcal{H}_0}\) does not depend on the expansions chosen for \(f\) and \(g\). Regrouping the double sum in two ways,
-$$\langle f, g \rangle_{\mathcal{H}_0} = \sum_{i=1}^{m} a_i \Big( \sum_{j=1}^{n} b_j K(x_i, y_j) \Big) = \sum_{i=1}^{m} a_i\, g(x_i),
+$$\langle f, g \rangle_{\mathcal{H}_0} = \sum_{i=1}^{m} a_i \Big(\sum_{j=1}^{n} b_j K(x_i, y_j) \Big) = \sum_{i=1}^{m} a_i\, g(x_i),
 \qquad
 \langle f, g \rangle_{\mathcal{H}_0} = \sum_{j=1}^{n} b_j\, f(y_j).$$
 The first expression depends on \(g\) only through its values as a function, so the result is unchanged if the expansion of \(g\) is replaced by another one; the second expression shows the same for \(f\). Hence \(\langle \cdot, \cdot \rangle_{\mathcal{H}_0}\) is well defined, and it is clearly a symmetric bilinear form. Taking \(g = K_x\) in the first identity also shows that for any \(x \in \mathcal{X}\) and \(f \in \mathcal{H}_0\):
@@ -421,16 +421,16 @@ which is the reproducing property. \(\mathcal{H}\) is thus the RKHS of the linea
 
 <p>Let us find the RKHS of the polynomial kernel of degree 2 on \(\mathcal{X} = \mathbb{R}^d\):</p>
 
-$$\forall x, y \in \mathbb{R}^d, \quad K(x, y) = \langle x, y \rangle_{\mathbb{R}^d}^2 = \big( x^\top y \big)^2 .$$
+$$\forall x, y \in \mathbb{R}^d, \quad K(x, y) = \langle x, y \rangle_{\mathbb{R}^d}^2 = \big(x^\top y \big)^2.$$
 
 <p>The derivation illustrates a reusable four-step method.</p>
 
 <p><strong>First step: look for an inner product.</strong> Using the invariance of the trace under cyclic permutations and the fact that \(x^\top y\) is a scalar,</p>
 
 $$
-K(x, y) = \mathrm{trace}\big( x^\top y\, x^\top y \big)
-= \mathrm{trace}\big( y^\top x\, x^\top y \big)
-= \mathrm{trace}\big( x x^\top y y^\top \big)
+K(x, y) = \mathrm{trace}\big(x^\top y\, x^\top y \big)
+= \mathrm{trace}\big(y^\top x\, x^\top y \big)
+= \mathrm{trace}\big(x x^\top y y^\top \big)
 = \big\langle x x^\top,\, y y^\top \big\rangle_F,
 $$
 
@@ -438,7 +438,7 @@ $$
 
 <p><strong>Second step: propose a candidate RKHS.</strong> We know that \(\mathcal{H}\) must contain all finite expansions</p>
 
-$$f(x) = \sum_i a_i K(x_i, x) = \sum_i a_i \big\langle x_i x_i^\top,\, x x^\top \big\rangle_F = \Big\langle \sum_i a_i x_i x_i^\top,\; x x^\top \Big\rangle_F .$$
+$$f(x) = \sum_i a_i K(x_i, x) = \sum_i a_i \big\langle x_i x_i^\top,\, x x^\top \big\rangle_F = \Big\langle \sum_i a_i x_i x_i^\top,\; x x^\top \Big\rangle_F.$$
 
 <p>Any symmetric matrix in \(\mathbb{R}^{d \times d}\) may be decomposed as \(\sum_i a_i x_i x_i^\top\) (diagonalize, and take the eigenvectors with their signed eigenvalues as coefficients). Our candidate RKHS is therefore the set of quadratic functions</p>
 
@@ -507,8 +507,8 @@ then \(K\) is also a p.d. kernel.
 Consider \(n\) points in \(\mathcal{X}\) and the corresponding \(n \times n\) positive semidefinite kernel matrices \(\mathbf{K}_1\) and \(\mathbf{K}_2\). As p.s.d. matrices, they admit factorizations \(\mathbf{K}_1 = X^\top X\) and \(\mathbf{K}_2 = Y^\top Y\) (for instance via the spectral decomposition). Writing \(x_i\) and \(y_i\) for the \(i\)-th columns of \(X\) and \(Y\) respectively, the entrywise product matrix \(\mathbf{K}\) satisfies
 $$
 [\mathbf{K}]_{ij} = [\mathbf{K}_1]_{ij} [\mathbf{K}_2]_{ij}
-= \mathrm{trace}\big( (x_i^\top x_j)(y_j^\top y_i) \big)
-= \mathrm{trace}\big( (y_i x_i^\top)(x_j y_j^\top) \big)
+= \mathrm{trace}\big((x_i^\top x_j)(y_j^\top y_i) \big)
+= \mathrm{trace}\big((y_i x_i^\top)(x_j y_j^\top) \big)
 = \big\langle x_i y_i^\top,\, x_j y_j^\top \big\rangle_F
 = \langle z_i, z_j \rangle_{\mathbb{R}^{n^2}},
 $$
@@ -594,13 +594,13 @@ $$\sum_{i, j} a_i a_j K(x_i, x_j) = \max(0,0) - 2 \max(0,1) + \max(1,1) = 0 - 2 
 Equivalently, the similarity matrix of these two points has determinant \(0 \cdot 1 - 1 \cdot 1 = -1\) and is not p.s.d.</p>
 
 <p><strong>10. \(K(x, x') = \min(x, x') / \max(x, x')\) on positive reals: p.d.</strong> Write it as a product of two p.d. kernels:
-$$\frac{\min(x, x')}{\max(x, x')} = \min(x, x') \cdot \min\Big( \frac{1}{x}, \frac{1}{x'} \Big),$$
+$$\frac{\min(x, x')}{\max(x, x')} = \min(x, x') \cdot \min\Big(\frac{1}{x}, \frac{1}{x'} \Big),$$
 using the identity \(1/\max(x, x') = \min(1/x, 1/x')\) for positive numbers. The first factor is p.d. by example 8. The second factor is the p.d. kernel \(\min\) composed with the map \(\sigma(x) = 1/x\); and if \(K\) is p.d. then \((x, x') \mapsto K(\sigma(x), \sigma(x'))\) is p.d. for <em>any</em> map \(\sigma\), since the definition only involves evaluations at finitely many points, which \(\sigma\) merely relabels. The product rule concludes.</p>
 
 <h3 id="quiz-arithmetic">Arithmetic kernels (11, 12, 13)</h3>
 
 <p><strong>11. \(K(x, x') = \mathrm{GCD}(x, x')\) on positive integers: p.d.</strong> Gauss's identity for the Euler totient function \(\varphi\) states that \(n = \sum_{d \mid n} \varphi(d)\) for every positive integer \(n\). Applying it to \(n = \gcd(x, x')\), and noting that \(d\) divides \(\gcd(x, x')\) exactly when \(d\) divides both \(x\) and \(x'\):
-$$\gcd(x, x') = \sum_{d = 1}^{\infty} \varphi(d)\, \mathbf{1}\{d \mid x\}\, \mathbf{1}\{d \mid x'\} = \big\langle \Phi(x), \Phi(x') \big\rangle, \qquad \Phi(x) = \big( \sqrt{\varphi(d)}\, \mathbf{1}\{d \mid x\} \big)_{d \ge 1},$$
+$$\gcd(x, x') = \sum_{d = 1}^{\infty} \varphi(d)\, \mathbf{1}\{d \mid x\}\, \mathbf{1}\{d \mid x'\} = \big\langle \Phi(x), \Phi(x') \big\rangle, \qquad \Phi(x) = \big(\sqrt{\varphi(d)}\, \mathbf{1}\{d \mid x\} \big)_{d \ge 1},$$
 a sum with nonnegative weights of separable p.d. kernels (each vector \(\Phi(x)\) has finitely many nonzero entries, so the inner product is a finite sum). Hence \(\mathrm{GCD}\) is p.d.</p>
 
 <p><strong>12. \(K(x, x') = \mathrm{LCM}(x, x')\) on positive integers: not p.d.</strong> The same counterexample shape as for \(\max\): take \(x_1 = 1\), \(x_2 = 2\) and \(a = (1, -1)\):
@@ -632,7 +632,7 @@ $$
 
 <p>where the first equality uses the reproducing property at \(x\) and at \(x'\), and where</p>
 
-$$d_K(x, x') := \lVert K_x - K_{x'} \rVert_{\mathcal{H}} = \big( K(x, x) - 2 K(x, x') + K(x', x') \big)^{1/2}$$
+$$d_K(x, x') := \lVert K_x - K_{x'} \rVert_{\mathcal{H}} = \big(K(x, x) - 2 K(x, x') + K(x', x') \big)^{1/2}$$
 
 <p>is the distance between the embedded points \(\Phi(x) = K_x\) and \(\Phi(x') = K_{x'}\). In other words, the kernel equips the raw set \(\mathcal{X}\) with a geometry, and every function of the RKHS is Lipschitz with constant \(\lVert f \rVert_{\mathcal{H}}\) with respect to that geometry: the norm of a function in the RKHS controls how fast the function varies over \(\mathcal{X}\).</p>
 
@@ -658,6 +658,38 @@ Small norm \(\Longrightarrow\) slow variations. Penalizing \(\lVert f \rVert_{\m
 
 <div class="box rmk"><span class="box-title">Further reading</span>
 <p>The reproducing-kernel foundations of this chapter are developed at book length by <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, <em>Learning with Kernels</em>, whose chapter 2 introduces positive definite kernels, the reproducing kernel Hilbert space, and the basic constructions, and by <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>, <em>Kernel Methods for Pattern Analysis</em>, whose chapters 2 and 3 build the Gram matrix, the feature-space viewpoint, and the properties of kernels. The original source for the correspondence between positive definite kernels and Hilbert spaces of functions is <a class="cite" href="bibliography.html#aronszajn1950" data-ref="Aronszajn, N. (1950) Theory of reproducing kernels. Transactions of the American Mathematical Society 68(3), 337-404.">Aronszajn (1950)</a>.</p></div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">warm-up</span> Two necessary conditions fall out of the definition by choosing small coefficient vectors. Taking \(N = 1\), show that any p.d. kernel satisfies \(K(x, x) \ge 0\) for every \(x \in \mathcal{X}\). Taking \(N = 2\) with points \(x, x'\) and the matrix it produces, show that \(K(x, x')^2 \le K(x, x)\, K(x', x')\). Then use the first condition alone to explain in one line why \(K(x, x') = \cos(x + x')\) is not p.d. on \(\mathbb{R}\).</li>
+
+<li><span class="ex-tag">computation</span> Let \(\mathcal{X} = \mathbb{R}_+\) and \(K(x, x') = \min(x, x')\). Write down the \(3 \times 3\) Gram matrix \(\mathbf{K}\) for the points \(x_1 = 1\), \(x_2 = 2\), \(x_3 = 3\). Then exhibit three vectors \(z_1, z_2, z_3 \in \mathbb{R}^3\) with \(\langle z_i, z_j \rangle_{\mathbb{R}^3} = [\mathbf{K}]_{ij}\), and explain how they are the finite-dimensional shadow of the feature map \(\Phi(x) = \mathbf{1}_{[0, x]}\) used to prove that \(\min\) is p.d.
+ <details class="ex-hint"><summary>Hint</summary><div class="hint-body">The matrix has entry \(\min(i, j)\). Try the staircase vectors \(z_i = (\underbrace{1, \dots, 1}_{i}, 0, \dots)\); the number of shared leading ones between \(z_i\) and \(z_j\) is \(\min(i, j)\), exactly as \(\int \mathbf{1}\{t \le x\}\,\mathbf{1}\{t \le x'\}\,dt = \min(x, x')\).</div></details>
+</li>
+
+<li><span class="ex-tag">computation</span> Consider the inhomogeneous kernel \(K(x, x') = (1 + x x')^2\) on \(\mathcal{X} = \mathbb{R}\). Expand it into monomials, read off an explicit feature map \(\Phi : \mathbb{R} \to \mathbb{R}^3\) with \(K(x, x') = \langle \Phi(x), \Phi(x') \rangle_{\mathbb{R}^3}\), and conclude that \(K\) is p.d. two ways: from the feature map, and from the closure rules applied to the constant, linear, and squared-linear kernels.
+ <details class="ex-hint"><summary>Hint</summary><div class="hint-body">\((1 + x x')^2 = 1 + 2 x x' + x^2 x'^2\). Match this against \(\langle \Phi(x), \Phi(x') \rangle\) with \(\Phi(x) = (1,\, \sqrt{2}\, x,\, x^2)\); the \(\sqrt{2}\) plays the same multiplicity-balancing role as in the degree-two map of the text.</div></details>
+</li>
+
+<li><span class="ex-tag">proof</span> Prove directly from the definition that the p.d. kernels on a set \(\mathcal{X}\) form a convex cone: if \(K_1, K_2\) are p.d. and \(c_1, c_2 \ge 0\), then \(c_1 K_1 + c_2 K_2\) is p.d. Then show that a pointwise limit of p.d. kernels is p.d. (You may take symmetry of each \(K_i\) as given; check that it too passes to the combination.)
+ <details class="ex-hint"><summary>Hint</summary><div class="hint-body">The quadratic form \(\sum_{i, j} a_i a_j K(x_i, x_j)\) is linear in \(K\), so it splits as \(c_1 (\ge 0) + c_2 (\ge 0) \ge 0\). For the limit, a limit of nonnegative reals is nonnegative.</div></details>
+</li>
+
+<li><span class="ex-tag">proof</span> Verify the reproducing property by hand in the RKHS of the linear kernel on \(\mathbb{R}^2\), where \(K(x, x') = \langle x, x' \rangle\) and functions are \(f_w(x) = \langle w, x \rangle\) with \(\langle f_w, f_v \rangle_{\mathcal{H}} = \langle w, v \rangle\). Fix \(w = (2, -1)\) and \(x = (3, 5)\). Compute \(f_w(x)\) directly, then identify the kernel section \(K_x\) as some \(f_v\), compute \(\langle f_w, K_x \rangle_{\mathcal{H}}\), and confirm the two numbers agree. State which \(v\) realizes \(K_x\).
+ <details class="ex-hint"><summary>Hint</summary><div class="hint-body">\(K_x(t) = \langle x, t \rangle = f_x(t)\), so \(K_x = f_x\) with \(v = x\). Then \(\langle f_w, K_x \rangle_{\mathcal{H}} = \langle w, x \rangle = f_w(x)\); both should give \(6 - 5 = 1\).</div></details>
+</li>
+
+<li><span class="ex-tag">proof</span> Show that \(K(x, x') = (x - x')^2\) is <em>not</em> a p.d. kernel on \(\mathbb{R}\), even though it is symmetric and its diagonal vanishes. Do so by writing the \(2 \times 2\) Gram matrix for the points \(x_1 = 0\), \(x_2 = 1\), reading off its eigenvalues, and exhibiting coefficients \((a_1, a_2)\) that make the quadratic form strictly negative. Contrast this with \(\min(x, x')\), which the text shows <em>is</em> p.d.
+ <details class="ex-hint"><summary>Hint</summary><div class="hint-body">The matrix is \(\begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}\), with eigenvalues \(\pm 1\); the eigenvector for \(-1\) gives \(a = (1, -1)\) and quadratic form \(-2 \lt 0\).</div></details>
+</li>
+
+<li><span class="ex-tag">exploration</span> Open the two interactive figures of this chapter. In the Gram-matrix heatmap, place a handful of points on the line, switch between the linear, polynomial, and Gaussian kernels, and sweep the bandwidth: confirm that the smallest eigenvalue of the displayed matrix never drops below zero, and describe what shrinking the Gaussian bandwidth does to the off-diagonal entries and to the spread of eigenvalues. Then in the kernel-lab figure, drag a few data points and raise the ridge weight \(\lambda\): report what happens to the fitted curve and relate the stiffening you observe to the bound \(|f(x) - f(x')| \le \lVert f \rVert_{\mathcal{H}}\, d_K(x, x')\) from the smoothness section.</li>
+
+<li><span class="ex-tag">challenge</span> The kernel equips \(\mathcal{X}\) with the distance \(d_K(x, x') = \lVert K_x - K_{x'} \rVert_{\mathcal{H}} = \big(K(x, x) - 2 K(x, x') + K(x', x')\big)^{1/2}\). Using the feature map \(\Phi(x) = K_x\) into the Hilbert space \(\mathcal{H}\), prove that \(d_K\) satisfies the triangle inequality \(d_K(x, z) \le d_K(x, y) + d_K(y, z)\) for all \(x, y, z \in \mathcal{X}\). Then argue that \(d_K\) is only a pseudometric in general by describing when \(d_K(x, x') = 0\) can occur for distinct \(x \ne x'\), and give one concrete kernel where this happens.
+ <details class="ex-hint"><summary>Hint</summary><div class="hint-body">\(d_K(x, y) = \lVert \Phi(x) - \Phi(y) \rVert_{\mathcal{H}}\) is a distance induced by a norm, so the triangle inequality is inherited from \(\lVert \cdot \rVert_{\mathcal{H}}\). It degenerates exactly when \(\Phi(x) = \Phi(x')\); for instance a constant kernel \(K \equiv 1\) collapses every point to the same image.</div></details>
+</li>
+</ol>
+</section>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Aronszajn, N.</span> <span class="bib-year">(1950)</span> <span class="bib-title">Theory of reproducing kernels</span>. <span class="bib-venue">Transactions of the American Mathematical Society 68(3), 337-404.</span></li>
 <li ><span class="bib-authors">Mercer, J.</span> <span class="bib-year">(1909)</span> <span class="bib-title">Functions of positive and negative type, and their connection with the theory of integral equations</span>. <span class="bib-venue">Philosophical Transactions of the Royal Society A 209, 415-446.</span></li>
 <li ><span class="bib-authors">Kolmogorov, A. N.</span> <span class="bib-year">(1941)</span> <span class="bib-title">Stationary sequences in Hilbert space</span>. <span class="bib-venue">Bulletin of Moscow State University, Mathematics 2(6), 1-40.</span></li>
@@ -694,7 +726,8 @@ Small norm \(\Longrightarrow\) slow variations. Penalizing \(\lVert f \rVert_{\m
 <a class="l3" href="#quiz-arithmetic">Arithmetic kernels (11, 12, 13)</a>
 <a class="l3" href="#quiz-log">A cautionary counterexample (4)</a>
 <a class="l2" href="#smoothness-functional">The RKHS norm as a smoothness functional</a>
-<a class="l2" href="#summary">Summary</a></aside></main>
+<a class="l2" href="#summary">Summary</a>
+<a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>

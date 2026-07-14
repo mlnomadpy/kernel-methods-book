@@ -112,7 +112,7 @@ the whole information-retrieval toolbox into a kernel method.</p>
 <div class="box def"><span class="box-title">Definition (bag-of-words kernel)</span>
 For documents \(d, d'\) over a dictionary \(\mathcal{D}\),
 $$ K(d,d') = \langle \Phi(d), \Phi(d') \rangle
-   = \sum_{t \in \mathcal{D}} \mathrm{tf}(t,d)\, \mathrm{tf}(t,d'). $$
+ = \sum_{t \in \mathcal{D}} \mathrm{tf}(t,d)\, \mathrm{tf}(t,d'). $$
 Being an explicit inner product it is positive definite, and, exactly like the
 spectrum kernel, it is sparse: only terms present in both documents contribute.
 </div>
@@ -131,7 +131,7 @@ number of documents containing \(t\) and \(\ell\) the size of the corpus. Rare,
 informative terms are amplified and ubiquitous ones suppressed. The reweighted
 kernel is
 $$ \tilde{K}(d,d') = \sum_{t \in \mathcal{D}} w(t)^2\, \mathrm{tf}(t,d)\,
-   \mathrm{tf}(t,d'), $$
+ \mathrm{tf}(t,d'), $$
 and because the weights use no labels they can be estimated from any large
 background corpus. Dividing by \(\sqrt{K(d,d)\,K(d',d')}\) normalizes away document
 length, the cosine similarity of retrieval.</p>
@@ -157,9 +157,9 @@ strings. Fix an integer \(k\) and let \(\mathcal{A}\) be the alphabet. For each
 word \(u \in \mathcal{A}^k\) of length \(k\), let \(\Phi_u(x)\) be some measure of
 how \(u\) appears in \(x\), and set</p>
 
-$$ \Phi(x) \;=\; \bigl( \Phi_u(x) \bigr)_{u \in \mathcal{A}^k},
-   \qquad
-   K(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
+$$ \Phi(x) \;=\; \bigl(\Phi_u(x) \bigr)_{u \in \mathcal{A}^k},
+ \qquad
+ K(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
 
 <p>Different choices of \(\Phi_u\) give different kernels, all sharing the same
 \(|\mathcal{A}|^k\)-dimensional index set:</p>
@@ -180,8 +180,8 @@ kernel</em> (Lodhi et al., 2002).</li>
 windows. For \(x = \texttt{CGGSLIAMMWFGV}\) the \(3\)-spectrum is</p>
 
 $$ (\texttt{CGG}, \texttt{GGS}, \texttt{GSL}, \texttt{SLI}, \texttt{LIA},
-   \texttt{IAM}, \texttt{AMM}, \texttt{MMW}, \texttt{MWF}, \texttt{WFG},
-   \texttt{FGV}). $$
+ \texttt{IAM}, \texttt{AMM}, \texttt{MMW}, \texttt{MWF}, \texttt{WFG},
+ \texttt{FGV}). $$
 
 <div class="box def"><span class="box-title">Definition (spectrum kernel)</span>
 Let \(\Phi_u(x)\) be the number of occurrences of the \(k\)-mer \(u\) as a
@@ -215,12 +215,12 @@ speed.</p>
 Take \(k=2\) and the DNA strings \(x = \texttt{AGGA}\) and \(x' = \texttt{AGGT}\).
 Their contiguous \(2\)-mers are
 $$ x:\ (\texttt{AG},\ \texttt{GG},\ \texttt{GA}), \qquad
-   x':\ (\texttt{AG},\ \texttt{GG},\ \texttt{GT}), $$
+ x':\ (\texttt{AG},\ \texttt{GG},\ \texttt{GT}), $$
 so the only nonzero coordinates of \(\Phi(x)\) are
 \(\Phi_{\texttt{AG}} = \Phi_{\texttt{GG}} = \Phi_{\texttt{GA}} = 1\), and similarly
 for \(x'\). The kernel keeps only the coordinates the two strings share,
 $$ K(x,x') = \underbrace{1\cdot 1}_{\texttt{AG}} + \underbrace{1\cdot 1}_{\texttt{GG}}
-   = 2, $$
+ = 2, $$
 since \(\texttt{GA}\) and \(\texttt{GT}\) each occur in one string only. The index
 set has \(4^2 = 16\) entries, but we ever touched three per string: the work tracks
 the strings, not the alphabet.
@@ -238,7 +238,7 @@ $$ K(x,x') \text{ costs } O(|x| + |x'|). $$
 is a learned linear score, then</p>
 
 $$ f(x) \;=\; \sum_{u} w_u\, \Phi_u(x)
-   \;=\; \sum_{i=1}^{|x|-k+1} w_{\,x_i \dots x_{i+k-1}}, $$
+ \;=\; \sum_{i=1}^{|x|-k+1} w_{\,x_i \dots x_{i+k-1}}, $$
 
 <p>a single sweep summing one weight per window, in \(O(|x|)\). The spectrum
 kernel therefore works on any strings at all, natural language, time series, log
@@ -284,8 +284,8 @@ For a string \(x = x_1 \dots x_n\) and \(\mathbf{i} \in \mathcal{I}(k,|x|)\), th
 selected substring and its span are</p>
 
 $$ x(\mathbf{i}) \;=\; x_{i_1} x_{i_2} \dots x_{i_k},
-   \qquad
-   l(\mathbf{i}) \;=\; i_k - i_1 + 1. $$
+ \qquad
+ l(\mathbf{i}) \;=\; i_k - i_1 + 1. $$
 
 <p>The span \(l(\mathbf{i})\) is the width of the window actually used, so it
 exceeds \(k\) exactly by the number of gapped positions.</p>
@@ -301,7 +301,7 @@ In \(x = \texttt{ABRACADABRA}\), the index sequence
 Fix \(k \in \mathbb{N}\) and a decay \(\lambda \in (0,1]\). For every
 \(u \in \mathcal{A}^k\) define the feature
 $$ \Phi_u(x) \;=\; \sum_{\mathbf{i} \in \mathcal{I}(k,|x|)\,:\, x(\mathbf{i}) = u}
-   \lambda^{\,l(\mathbf{i})}, $$
+ \lambda^{\,l(\mathbf{i})}, $$
 so each gapped occurrence of \(u\) contributes \(\lambda^{\text{span}}\). The
 substring kernel is
 $$ K_{k,\lambda}(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
@@ -312,11 +312,11 @@ With the four strings \(\texttt{cat}, \texttt{car}, \texttt{bat}, \texttt{bar}\)
 and the \(2\)-mers \(u \in \{\texttt{ca},\texttt{ct},\texttt{at},\texttt{ba},
 \texttt{bt},\texttt{cr},\texttt{ar},\texttt{br}\}\), the non-zero features are
 $$ \Phi(\texttt{cat}) = (\lambda^2, \lambda^3, \lambda^2, 0,0,0,0,0), \quad
-   \Phi(\texttt{car}) = (\lambda^2, 0,0,0,0, \lambda^3, \lambda^2, 0), $$
+ \Phi(\texttt{car}) = (\lambda^2, 0,0,0,0, \lambda^3, \lambda^2, 0), $$
 (the \(\texttt{ct}\) in \(\texttt{cat}\) is gapped, hence \(\lambda^3\)). Reading
 off inner products,
 $$ K(\texttt{cat},\texttt{cat}) = K(\texttt{car},\texttt{car}) = 2\lambda^4 + \lambda^6,
-   \quad K(\texttt{cat},\texttt{car}) = \lambda^4, \quad K(\texttt{cat},\texttt{bar}) = 0. $$
+ \quad K(\texttt{cat},\texttt{car}) = \lambda^4, \quad K(\texttt{cat},\texttt{bar}) = 0. $$
 The shared \(\texttt{ca}\) alone links \(\texttt{cat}\) and \(\texttt{car}\), while
 \(\texttt{cat}\) and \(\texttt{bar}\) have no common \(2\)-mer.
 </div>
@@ -326,8 +326,8 @@ The shared \(\texttt{ca}\) alone links \(\texttt{cat}\) and \(\texttt{car}\), wh
 <p>Expanding the definition,</p>
 
 $$ K_{k,\lambda}(x,x') \;=\; \sum_{u \in \mathcal{A}^k}
-   \sum_{\mathbf{i}:x(\mathbf{i})=u} \sum_{\mathbf{i}':x'(\mathbf{i}')=u}
-   \lambda^{\,l(\mathbf{i}) + l(\mathbf{i}')}. $$
+ \sum_{\mathbf{i}:x(\mathbf{i})=u} \sum_{\mathbf{i}':x'(\mathbf{i}')=u}
+ \lambda^{\,l(\mathbf{i}) + l(\mathbf{i}')}. $$
 
 <p>The idea that rescues us is recursion on the letters. A gapped occurrence of a
 length-\(k\) word is a gapped occurrence of its length-\((k-1)\) prefix, followed
@@ -344,8 +344,8 @@ feature in which the span is measured not to the last selected letter but to the
 <em>end of the string</em>. Alongside</p>
 
 $$ \Phi_u(x) = \sum_{\mathbf{i}:x(\mathbf{i})=u} \lambda^{\,i_k - i_1 + 1}
-   \qquad\text{define}\qquad
-   \Psi_u(x) = \sum_{\mathbf{i}:x(\mathbf{i})=u} \lambda^{\,|x| - i_1 + 1}. $$
+ \qquad\text{define}\qquad
+ \Psi_u(x) = \sum_{\mathbf{i}:x(\mathbf{i})=u} \lambda^{\,|x| - i_1 + 1}. $$
 
 <p>The auxiliary \(\Psi\) keeps a "gap account open" to the right end of the
 string, which is exactly what makes it compose cleanly when we append a letter.
@@ -353,8 +353,8 @@ Writing \(u = va\) with \(a \in \mathcal{A}\) its last letter and \(x_{[1,j]} =
 x_1 \dots x_j\), a direct rewriting gives</p>
 
 $$ \Phi_{va}(x) = \sum_{j:\,x_j = a} \Psi_v\!\left(x_{[1,j-1]}\right)\lambda,
-   \qquad
-   \Psi_{va}(x) = \sum_{j:\,x_j = a} \Psi_v\!\left(x_{[1,j-1]}\right)\lambda^{\,|x|-j+1}. $$
+ \qquad
+ \Psi_{va}(x) = \sum_{j:\,x_j = a} \Psi_v\!\left(x_{[1,j-1]}\right)\lambda^{\,|x|-j+1}. $$
 
 <p>From these follow the incremental update rules when a single letter \(a\) is
 appended to a string \(x\), forming \(xa\). If the last letter of \(u\) is
@@ -367,7 +367,7 @@ $$ \Phi_u(xa) = \Phi_u(x), \qquad \Psi_u(xa) = \lambda\, \Psi_u(x). $$
 whose prefix \(v\) sat in \(x\):</p>
 
 $$ \Phi_{va}(xa) = \Phi_{va}(x) + \lambda\, \Psi_v(x), \qquad
-   \Psi_{va}(xa) = \lambda\, \Psi_{va}(x) + \lambda\, \Psi_v(x). $$
+ \Psi_{va}(xa) = \lambda\, \Psi_{va}(x) + \lambda\, \Psi_v(x). $$
 
 <p>The two update rules become concrete once we grow a short string letter by
 letter and watch the auxiliary features accumulate.</p>
@@ -379,14 +379,14 @@ every \(\Psi\) is \(0\), and append \(\texttt c\) then \(\texttt a\) to reach
 \(\texttt{ca}\). Appending \(\texttt c\) to the empty string closes a fresh
 occurrence of \(\texttt c\):
 $$ \Psi_{\texttt c}(\texttt c) = \lambda\,\Psi_{\texttt c}(\varnothing)
-   + \lambda\,\Psi_\varnothing(\varnothing) = \lambda\cdot 0 + \lambda\cdot 1
-   = \lambda. $$
+ + \lambda\,\Psi_\varnothing(\varnothing) = \lambda\cdot 0 + \lambda\cdot 1
+ = \lambda. $$
 Now append \(\texttt a\). The word \(\texttt c\) does not end in \(\texttt a\), so it
 just pays one more unit of decay, while \(\texttt a\) closes a new occurrence:
 $$ \Psi_{\texttt c}(\texttt{ca}) = \lambda\,\Psi_{\texttt c}(\texttt c) = \lambda^2,
-   \qquad
-   \Psi_{\texttt a}(\texttt{ca}) = \lambda\,\Psi_{\texttt a}(\texttt c)
-   + \lambda\,\Psi_\varnothing(\texttt c) = 0 + \lambda = \lambda. $$
+ \qquad
+ \Psi_{\texttt a}(\texttt{ca}) = \lambda\,\Psi_{\texttt a}(\texttt c)
+ + \lambda\,\Psi_\varnothing(\texttt c) = 0 + \lambda = \lambda. $$
 Both agree with the closed form \(\Psi_b(\texttt{ca}) = \lambda^{\,|x| - i + 1}\)
 read off directly: \(\texttt c\) sits at position \(1\), giving
 \(\lambda^{2-1+1} = \lambda^2\), and \(\texttt a\) sits at position \(2\), giving
@@ -398,28 +398,28 @@ exponent \(|x| - i + 1\), and appending a letter is what advances it.
 \(k\),</p>
 
 $$ B_k(x,x') = \sum_{u \in \mathcal{A}^k} \Psi_u(x)\,\Psi_u(x'),
-   \qquad
-   K_k(x,x') = \sum_{u \in \mathcal{A}^k} \Phi_u(x)\,\Phi_u(x'), $$
+ \qquad
+ K_k(x,x') = \sum_{u \in \mathcal{A}^k} \Phi_u(x)\,\Phi_u(x'), $$
 
 <p>so \(B_k\) is the auxiliary companion of the target \(K_k = K_{k,\lambda}\).
 Their boundary conditions are</p>
 
 $$ B_0(x,x') = K_0(x,x') = 1 \ \text{ for all } x,x',
-   \qquad
-   B_k(x,x') = K_k(x,x') = 0 \ \text{ if } \min(|x|,|x'|) \lt k. $$
+ \qquad
+ B_k(x,x') = K_k(x,x') = 0 \ \text{ if } \min(|x|,|x'|) \lt k. $$
 
 <p>Summing the update rules over \(u\) turns them into recursions on the strings.
 Appending \(a\) to the first argument,</p>
 
 $$ B_k(xa,x') = \lambda\, B_k(x,x')
-   \;+\; \sum_{j:\,x'_j = a} B_{k-1}\!\left(x, x'_{[1,j-1]}\right) \lambda^{\,|x'|-j+2}. $$
+ \;+\; \sum_{j:\,x'_j = a} B_{k-1}\!\left(x, x'_{[1,j-1]}\right) \lambda^{\,|x'|-j+2}. $$
 
 <p>To remove the inner sum over \(j\), we append a letter to the second argument
 as well. Writing the second string as \(x'b\) and using the identity above once
 in each argument yields the fully incremental form</p>
 
 $$ B_k(xa, x'b) = \lambda\, B_k(x, x'b) + \lambda\, B_k(xa, x')
-   - \lambda^2 B_k(x, x') + \delta_{a=b}\, \lambda^2\, B_{k-1}(x, x'), $$
+ - \lambda^2 B_k(x, x') + \delta_{a=b}\, \lambda^2\, B_{k-1}(x, x'), $$
 
 <p>where \(\delta_{a=b}\) is \(1\) when the two appended letters agree and \(0\)
 otherwise. It is worth reading this recursion as an inclusion-exclusion. The
@@ -437,7 +437,7 @@ program. The target kernel is recovered by a companion recursion that reuses
 \(B_{k-1}\),</p>
 
 $$ K_k(xa, x') = K_k(x, x') + \lambda^2 \sum_{j:\,x'_j = a}
-   B_{k-1}\!\left(x, x'_{[1,j-1]}\right), $$
+ B_{k-1}\!\left(x, x'_{[1,j-1]}\right), $$
 
 <p>and \(K_{k,\lambda}(x,x') = K_k(x,x')\) once the tables are complete. Filling
 the \(B\) tables for orders \(1, \dots, k-1\) and then the \(K\) table costs
@@ -445,25 +445,25 @@ the \(B\) tables for orders \(1, \dots, k-1\) and then the \(K\) table costs
 
 <pre><code>Input: strings x, x', order k, decay lambda
 # B[p] is the (|x|+1) x (|x'|+1) table for order p
-B[0][i][j] = 1        for all 0 &lt;= i &lt;= |x|, 0 &lt;= j &lt;= |x'|
-for p = 1 .. k-1:
-    B[p][i][j] = 0    whenever i &lt; p or j &lt; p          # base case
-    for i = p .. |x|:
-        for j = p .. |x'|:
-            a = x[i]; b = x'[j]
-            B[p][i][j] = lambda*B[p][i-1][j]
-                       + lambda*B[p][i][j-1]
-                       - lambda*lambda*B[p][i-1][j-1]
-                       + (a==b ? lambda*lambda*B[p-1][i-1][j-1] : 0)
+B[0][i][j] = 1 for all 0 &lt;= i &lt;= |x|, 0 &lt;= j &lt;= |x'|
+for p = 1.. k-1:
+ B[p][i][j] = 0 whenever i &lt; p or j &lt; p # base case
+ for i = p.. |x|:
+ for j = p.. |x'|:
+ a = x[i]; b = x'[j]
+ B[p][i][j] = lambda*B[p][i-1][j]
+ + lambda*B[p][i][j-1]
+ - lambda*lambda*B[p][i-1][j-1]
+ + (a==b ? lambda*lambda*B[p-1][i-1][j-1] : 0)
 
-K[i][j] = 0           for all i, j
-for i = k .. |x|:
-    for j = 1 .. |x'|:
-        a = x[i]
-        s = 0
-        for m = 1 .. j:               # sum over positions of x' equal to a
-            if x'[m] == a: s += B[k-1][i-1][m-1]
-        K[i][j] = K[i-1][j] + lambda*lambda*s
+K[i][j] = 0 for all i, j
+for i = k.. |x|:
+ for j = 1.. |x'|:
+ a = x[i]
+ s = 0
+ for m = 1.. j: # sum over positions of x' equal to a
+ if x'[m] == a: s += B[k-1][i-1][m-1]
+ K[i][j] = K[i-1][j] + lambda*lambda*s
 return K[|x|][|x'|]</code></pre>
 
 <p>(The innermost sum over \(m\) can itself be maintained incrementally, which is
@@ -478,7 +478,7 @@ Take \(k=2\) and compute \(K_{2,\lambda}(\texttt{ca},\texttt{ca})\), writing
 order-zero table is \(B_0(i,j)=1\) everywhere, and any table entry with an empty
 argument is \(0\). Filling \(B_1\) by the incremental rule,
 $$ B_1(1,1) = \lambda^2, \quad B_1(1,2) = B_1(2,1) = \lambda^3, \quad
-   B_1(2,2) = \lambda^4 + \lambda^4 - \lambda^4 + \lambda^2 = \lambda^4 + \lambda^2, $$
+ B_1(2,2) = \lambda^4 + \lambda^4 - \lambda^4 + \lambda^2 = \lambda^4 + \lambda^2, $$
 where the corner \(B_1(2,2)\) shows the inclusion-exclusion at work: the two
 extension terms each contribute \(\lambda^4\), one copy is subtracted, and the
 matched pair \(\texttt a = \texttt a\) adds \(\lambda^2 B_0(1,1)\). This agrees
@@ -486,7 +486,7 @@ with the direct reading \(B_1(\texttt{ca},\texttt{ca}) = \Psi_{\texttt c}^2 +
 \Psi_{\texttt a}^2 = (\lambda^2)^2 + \lambda^2\). Now the companion recursion for
 \(K\) fires only once, at \(i=j=2\) with appended letter \(\texttt a\):
 $$ K(2,2) = K(1,2) + \lambda^2 \!\!\sum_{j:\,x'_j = \texttt a}\!\! B_1\bigl(x_{[1,1]}, x'_{[1,j-1]}\bigr)
-   = 0 + \lambda^2\, B_1(\texttt c, \texttt c) = \lambda^2 \cdot \lambda^2 = \lambda^4. $$
+ = 0 + \lambda^2\, B_1(\texttt c, \texttt c) = \lambda^2 \cdot \lambda^2 = \lambda^4. $$
 The single shared gap-free \(2\)-mer \(\texttt{ca}\) has span \(2\), so
 \(\Phi_{\texttt{ca}}(\texttt{ca}) = \lambda^2\) and the kernel is
 \((\lambda^2)^2 = \lambda^4\), exactly what the tables return.
@@ -504,7 +504,7 @@ table when the alphabet is large or few gaps are allowed.</p>
 with "index by a chosen dictionary". Pick a dictionary of reference sequences
 \(D = (x_1, \dots, x_n)\) and a similarity measure \(s(x,x')\), and set</p>
 
-$$ \Phi_D(x) = \bigl( s(x, x_i) \bigr)_{x_i \in D}. $$
+$$ \Phi_D(x) = \bigl(s(x, x_i) \bigr)_{x_i \in D}. $$
 
 <p>Two instances are common. In <em>motif kernels</em> (Logan et al., 2001) the
 dictionary is a library of known biological motifs and \(s\) is a matching
@@ -574,7 +574,7 @@ independently, including its application to hidden Markov models.</p>
 symbols the next symbol depends on is itself a function of those symbols. Formally</p>
 
 $$ P_{D,\theta}(x) = P_{D,\theta}(x_1 \dots x_D)
-   \prod_{i=D+1}^{n} P_{D,\theta}\!\left(x_i \mid x_{i-D} \dots x_{i-1}\right), $$
+ \prod_{i=D+1}^{n} P_{D,\theta}\!\left(x_i \mid x_{i-D} \dots x_{i-1}\right), $$
 
 <p>where \(D\) is a suffix tree telling us, for each context, how far back to look,
 and \(\theta \in \Sigma_D\) is a collection of conditional multinomials. The tree
@@ -584,7 +584,7 @@ it.</p>
 <div class="box ex"><span class="box-title">Example</span>
 For a suitable tree,
 $$ P(\texttt{AABACBACC}) = P(\texttt{AAB})\,\theta_{AB}(A)\,\theta_{A}(C)\,
-   \theta_{C}(B)\,\theta_{ACB}(A)\,\theta_{A}(C)\,\theta_{C}(A), $$
+ \theta_{C}(B)\,\theta_{ACB}(A)\,\theta_{A}(C)\,\theta_{C}(A), $$
 each factor conditioning on just enough preceding context (here \(AB\), \(A\),
 \(C\), \(ACB\), and so on) to predict the next letter.
 </div>
@@ -596,7 +596,7 @@ a prior, which yields a kernel.</p>
 For particular choices of priors \(w(d\theta \mid D)\) and \(\pi(D)\), the
 context-tree kernel
 $$ K(x,x') = \sum_{D} \int_{\theta \in \Sigma_D}
-   P_{D,\theta}(x)\, P_{D,\theta}(x')\; w(d\theta \mid D)\, \pi(D) $$
+ P_{D,\theta}(x)\, P_{D,\theta}(x')\; w(d\theta \mid D)\, \pi(D) $$
 can be computed in \(O(|x| + |x'|)\) by a variant of the Context-Tree Weighting
 algorithm. It is a valid mutual-information kernel, and its value is tied to an
 information-theoretic measure of the mutual information between the two strings.
@@ -621,8 +621,8 @@ definiteness.</p>
 
 <div class="box def"><span class="box-title">Definition (marginalized kernel, Tsuda et al., 2002)</span>
 $$ K_{\mathcal X}(x,x')
-   = \mathbb{E}_{P_x(dy)\,\times\,P_{x'}(dy')}\, K_Z(z,z')
-   = \int\!\!\int K_Z\!\left((x,y),(x',y')\right)\, P_x(dy)\, P_{x'}(dy'). $$
+ = \mathbb{E}_{P_x(dy)\,\times\,P_{x'}(dy')}\, K_Z(z,z')
+ = \int\!\!\int K_Z\!\left((x,y),(x',y')\right)\, P_x(dy)\, P_{x'}(dy'). $$
 Being an expectation of a kernel over independent latent draws, \(K_{\mathcal X}\)
 is again a valid kernel on \(\mathcal{X}\).
 </div>
@@ -637,15 +637,15 @@ kernel is the \(1\)-spectrum on the joint alphabet \(\mathcal{A} \times \mathcal
 of (bit, state) pairs,</p>
 
 $$ K_Z(z,z') = \sum_{(a,s) \in \mathcal{A} \times \mathcal{S}}
-   n_{a,s}(z)\, n_{a,s}(z'), $$
+ n_{a,s}(z)\, n_{a,s}(z'), $$
 
 <p>where \(n_{a,s}(x,y)\) counts the positions whose hidden state is \(s\) and
 whose emitted symbol is \(a\). Marginalizing over the unseen states gives a kernel
 on the observed bits alone,</p>
 
 $$ K_{\mathcal X}(x,x') = \sum_{y,y'} K_Z\!\left((x,y),(x',y')\right)
-   P(y \mid x)\, P(y' \mid x')
-   = \sum_{(a,s)} \Phi_{a,s}(x)\, \Phi_{a,s}(x'), $$
+ P(y \mid x)\, P(y' \mid x')
+ = \sum_{(a,s)} \Phi_{a,s}(x)\, \Phi_{a,s}(x'), $$
 
 <p>with the marginalized feature</p>
 
@@ -655,9 +655,9 @@ $$ \Phi_{a,s}(x) = \sum_{y} P(y \mid x)\, n_{a,s}(x,y). $$
 count \(n_{a,s}\) is additive over positions, so the sum collapses:</p>
 
 $$ \Phi_{a,s}(x)
-   = \sum_{y} P(y \mid x) \sum_{i=1}^{n} \delta(x_i,a)\,\delta(y_i,s)
-   = \sum_{i=1}^{n} \delta(x_i,a) \sum_{y} P(y \mid x)\,\delta(y_i,s)
-   = \sum_{i=1}^{n} \delta(x_i,a)\, P(y_i = s \mid x). $$
+ = \sum_{y} P(y \mid x) \sum_{i=1}^{n} \delta(x_i,a)\,\delta(y_i,s)
+ = \sum_{i=1}^{n} \delta(x_i,a) \sum_{y} P(y \mid x)\,\delta(y_i,s)
+ = \sum_{i=1}^{n} \delta(x_i,a)\, P(y_i = s \mid x). $$
 
 <p>The final expression has a clean reading. The hard count \(n_{a,s}\), which
 would tally the positions where symbol \(a\) is emitted from state \(s\), is
@@ -690,7 +690,7 @@ final state, let \(\kappa_{k,a}(s,t)\) collect the paths of length \(k\) ending 
 state \(a\). Then \(\kappa_{1,a}(s,t) = P(s_1 \mid a)\,P(t_1 \mid a)\,P_M(a)\), and
 appending one position gives the recursion
 $$ \kappa_{k+1,a}(s,t) = P(s_{k+1} \mid a)\, P(t_{k+1} \mid a)
-   \sum_{b \in A} P_M(a \mid b)\, \kappa_{k,b}(s,t), $$
+ \sum_{b \in A} P_M(a \mid b)\, \kappa_{k,b}(s,t), $$
 with \(K(s,t) = \sum_{a \in A} \kappa_{n,a}(s,t)\). Filling one table per state
 costs \(O(n\,|A|^2)\). This <em>fixed-length HMM kernel</em> compares two aligned
 strings under every hidden annotation of their shared positions at once, and fits
@@ -704,9 +704,9 @@ positions reached in each string, \(\kappa_{i,j,a}(s,t)\), and starting from
 \(\kappa_{0,0,a_I} = 1\), the recursion splits into the three ways a state can
 consume input:
 $$ \kappa_{i,j,a}(s,t) = \sum_{b \in A} P_M(a \mid b)
-   \Bigl[\, P\bigl((s_i,\varepsilon) \mid a\bigr)\, \kappa_{i-1,j,b}
-   + P\bigl((\varepsilon,t_j) \mid a\bigr)\, \kappa_{i,j-1,b}
-   + P\bigl((s_i,t_j) \mid a\bigr)\, \kappa_{i-1,j-1,b} \,\Bigr], $$
+ \Bigl[\, P\bigl((s_i,\varepsilon) \mid a\bigr)\, \kappa_{i-1,j,b}
+ + P\bigl((\varepsilon,t_j) \mid a\bigr)\, \kappa_{i,j-1,b}
+ + P\bigl((s_i,t_j) \mid a\bigr)\, \kappa_{i-1,j-1,b} \,\Bigr], $$
 and \(K(s,t) = \sum_{a \in A} \kappa_{|s|,|t|,a}(s,t)\). This is the Durbin et al.
 (1998) forward algorithm read as a kernel, the probabilistic sibling of the local
 alignment kernel of the next section: both sum a score over all alignments, but the
@@ -753,7 +753,7 @@ the parameters that explain its oddity.</p>
 <div class="box def"><span class="box-title">Definition (Fisher score and Fisher kernel)</span>
 The <em>Fisher score</em> of a sequence \(x\) at \(\theta_0\) is the gradient
 $$ g(\theta_0, x) = \nabla_\theta \log P_\theta(x)\big|_{\theta = \theta_0}
-   \in \mathbb{R}^N, $$
+ \in \mathbb{R}^N, $$
 one coordinate per parameter. With the Fisher information matrix
 \(I = \mathbb{E}\bigl[\, g(\theta_0,x)\, g(\theta_0,x)^\top \bigr]\), the
 <em>Fisher kernel</em> is
@@ -770,8 +770,8 @@ the next symbol \(\sigma\). Shawe-Taylor and Cristianini (2004) compute the Fish
 score at the flat setting where every transition is equally likely, and find that
 the coordinate for \(u \to \sigma\) is
 $$ g(\theta_0, s)_{u \to \sigma}
-   = \bigl|\{(v_1,v_2): s = v_1 u\sigma v_2\}\bigr|
-   - |\Sigma|^{-1}\,\bigl|\{(v_1,v_2): s = v_1 u v_2\}\bigr|. $$
+ = \bigl|\{(v_1,v_2): s = v_1 u\sigma v_2\}\bigr|
+ - |\Sigma|^{-1}\,\bigl|\{(v_1,v_2): s = v_1 u v_2\}\bigr|. $$
 The first term counts the occurrences of the \((k{+}1)\)-mer \(u\sigma\) in \(s\):
 up to the centering correction of the second term, the Fisher kernel of this
 elementary sequence model <em>is</em> the \((k{+}1)\)-spectrum kernel, so the two
@@ -808,9 +808,9 @@ Ten columns pair two residues, and two runs of gaps, one of length three and one
 of length four, separate them:</p>
 
 $$ s_{S,g}(\pi) = S(\texttt C,\texttt C) + S(\texttt L,\texttt L) + S(\texttt I,\texttt I)
-   + S(\texttt A,\texttt V) + 2\,S(\texttt M,\texttt M) + S(\texttt W,\texttt W)
-   + S(\texttt F,\texttt F) + S(\texttt G,\texttt G) + S(\texttt V,\texttt V)
-   - g(3) - g(4). $$
+ + S(\texttt A,\texttt V) + 2\,S(\texttt M,\texttt M) + S(\texttt W,\texttt W)
+ + S(\texttt F,\texttt F) + S(\texttt G,\texttt G) + S(\texttt V,\texttt V)
+ - g(3) - g(4). $$
 
 <p>Most columns pair a residue with itself and collect a large positive
 substitution score; the one substitution \(S(\texttt A,\texttt V)\) pairs two
@@ -834,7 +834,7 @@ into a smooth aggregate.</p>
 <div class="box def"><span class="box-title">Definition (local alignment kernel)</span>
 For an inverse temperature \(\beta \gt 0\),
 $$ K^{(\beta)}_{\mathrm{LA}}(x,y)
-   = \sum_{\pi \in \Pi(x,y)} \exp\!\bigl(\beta\, s_{S,g}(x,y,\pi)\bigr). $$
+ = \sum_{\pi \in \Pi(x,y)} \exp\!\bigl(\beta\, s_{S,g}(x,y,\pi)\bigr). $$
 As \(\beta \to \infty\) the sum is dominated by the best alignment and recovers
 Smith-Waterman up to the exponential, but for finite \(\beta\) the kernel is
 symmetric and, as we now prove, positive definite.
@@ -878,9 +878,9 @@ semidefinite matrices. Diagonalizing \(A\),
 $$ A_{i,j} = \sum_{p=1}^{n} f_p(i)\, f_p(j) $$
 for some vectors \(f_1, \dots, f_n\). Then for any \(\alpha \in \mathbb{R}^n\),
 $$ \sum_{i,j=1}^{n} \alpha_i \alpha_j A_{i,j} B_{i,j}
-   = \sum_{p=1}^{n} \sum_{i,j=1}^{n}
-     \bigl(\alpha_i f_p(i)\bigr)\bigl(\alpha_j f_p(j)\bigr) B_{i,j}
-   \ge 0, $$
+ = \sum_{p=1}^{n} \sum_{i,j=1}^{n}
+ \bigl(\alpha_i f_p(i)\bigr)\bigl(\alpha_j f_p(j)\bigr) B_{i,j}
+ \ge 0, $$
 each inner double sum being non-negative because \(B\) is positive semidefinite.
 Hence the entrywise product \(C_{i,j} = A_{i,j} B_{i,j}\) is positive
 semidefinite. <span class="qed">\(\square\)</span>
@@ -905,7 +905,7 @@ Let \(\Phi_1 : \mathcal{X}_1 \to \mathcal{H}\) satisfy
 \(\Phi : \mathcal{X}_1 \times \mathcal{X}_2 \to \mathcal{H}\) by
 \(\Phi((x_1,x_2)) = \Phi_1(x_1)\), ignoring the second coordinate. Then
 $$ \bigl\langle \Phi((x_1,x_2)), \Phi((y_1,y_2)) \bigr\rangle_{\mathcal H}
-   = K_1(x_1,y_1), $$
+ = K_1(x_1,y_1), $$
 so \((x,y) \mapsto K_1(x_1,y_1)\) is p.d. on the product space, and symmetrically
 for \(K_2\). The sum and product statements now follow from the closure lemma.
 <span class="qed">\(\square\)</span>
@@ -922,10 +922,10 @@ is a p.d. kernel on \(\mathcal{P}(\mathcal{X}) \times \mathcal{P}(\mathcal{X})\)
 With \(K(x,y) = \langle \Phi(x), \Phi(y)\rangle_{\mathcal H}\), linearity of the
 inner product gives
 $$ K_{\mathcal P}(A,B)
-   = \sum_{x \in A}\sum_{y \in B} \langle \Phi(x), \Phi(y)\rangle_{\mathcal H}
-   = \Bigl\langle \textstyle\sum_{x \in A}\Phi(x),\ \sum_{y \in B}\Phi(y)
-     \Bigr\rangle_{\mathcal H}
-   = \langle \Phi_{\mathcal P}(A), \Phi_{\mathcal P}(B)\rangle_{\mathcal H}, $$
+ = \sum_{x \in A}\sum_{y \in B} \langle \Phi(x), \Phi(y)\rangle_{\mathcal H}
+ = \Bigl\langle \textstyle\sum_{x \in A}\Phi(x),\ \sum_{y \in B}\Phi(y)
+ \Bigr\rangle_{\mathcal H}
+ = \langle \Phi_{\mathcal P}(A), \Phi_{\mathcal P}(B)\rangle_{\mathcal H}, $$
 where \(\Phi_{\mathcal P}(A) = \sum_{x \in A}\Phi(x)\). Being an inner product, it
 is p.d. <span class="qed">\(\square\)</span>
 </div>
@@ -938,7 +938,7 @@ sub-kernels on the pieces.</p>
 For p.d. string kernels \(K_1\) and \(K_2\), their convolution
 \(K_1 \star K_2\) is
 $$ K_1 \star K_2(x,y)
-   = \sum_{x_1 x_2 = x,\ y_1 y_2 = y} K_1(x_1,y_1)\, K_2(x_2,y_2), $$
+ = \sum_{x_1 x_2 = x,\ y_1 y_2 = y} K_1(x_1,y_1)\, K_2(x_2,y_2), $$
 the sum running over all ways of writing \(x\) as a concatenation \(x_1 x_2\) and
 \(y\) as \(y_1 y_2\).
 </div>
@@ -952,8 +952,8 @@ For a string \(x\) let
 \(R(x) = \{(x_1,x_2) : x = x_1 x_2\} \subset \mathcal{X} \times \mathcal{X}\) be
 the finite set of its splits. Then
 $$ K_1 \star K_2(x,y)
-   = \sum_{(x_1,x_2) \in R(x)} \sum_{(y_1,y_2) \in R(y)}
-     K_1(x_1,y_1)\, K_2(x_2,y_2). $$
+ = \sum_{(x_1,x_2) \in R(x)} \sum_{(y_1,y_2) \in R(y)}
+ K_1(x_1,y_1)\, K_2(x_2,y_2). $$
 The integrand \((x_1,x_2),(y_1,y_2) \mapsto K_1(x_1,y_1)K_2(x_2,y_2)\) is a direct
 product kernel on \(\mathcal{X} \times \mathcal{X}\), hence p.d.; summing it over
 the finite sets \(R(x)\) and \(R(y)\) is exactly the kernel-for-sets construction,
@@ -968,7 +968,7 @@ is assembled.</p>
 <li>the constant kernel \(K_0(x,y) := 1\);</li>
 <li>a kernel for single letters,
 $$ K^{(\beta)}_a(x,y) := \begin{cases} 0 & \text{if } |x| \ne 1 \text{ or } |y| \ne 1, \\
-   \exp\!\bigl(\beta\, S(x,y)\bigr) & \text{otherwise;} \end{cases} $$</li>
+ \exp\!\bigl(\beta\, S(x,y)\bigr) & \text{otherwise;} \end{cases} $$</li>
 <li>a kernel for gaps,
 $$ K^{(\beta)}_g(x,y) = \exp\!\bigl[\beta\,(g(|x|) + g(|y|))\bigr]. $$</li>
 </ul>
@@ -982,7 +982,7 @@ semidefinite, which holds for every \(\beta \gt 0\) when \(S\) is conditionally
 positive definite. The gap kernel is p.d. with no restriction on \(g\), because it
 factorizes,
 $$ K^{(\beta)}_g(x,y) = \exp\!\bigl(\beta\, g(|x|)\bigr) \times
-   \exp\!\bigl(\beta\, g(|y|)\bigr), $$
+ \exp\!\bigl(\beta\, g(|y|)\bigr), $$
 which is a product of a function of \(x\) with the same function of \(y\), the
 canonical form of a p.d. kernel of rank one.
 </div>
@@ -994,8 +994,8 @@ convolutions of the atoms.</p>
 <div class="box thm"><span class="box-title">Theorem (LA kernel is p.d.)</span>
 The local alignment kernel is a pointwise limit of convolution kernels,
 $$ K^{(\beta)}_{\mathrm{LA}} = \sum_{n=0}^{\infty}
-   K_0 \star \Bigl( K^{(\beta)}_a \star K^{(\beta)}_g \Bigr)^{\star (n-1)}
-   \star K^{(\beta)}_a \star K_0, $$
+ K_0 \star \Bigl(K^{(\beta)}_a \star K^{(\beta)}_g \Bigr)^{\star (n-1)}
+ \star K^{(\beta)}_a \star K_0, $$
 and is therefore positive definite.
 </div>
 
@@ -1034,22 +1034,22 @@ respectively, and let \(X_2, Y_2\) carry the boundary contributions so that the
 final answer collects every alignment. Then</p>
 
 $$ K^{(\beta)}_{\mathrm{LA}}(x,y)
-   = 1 + X_2(|x|,|y|) + Y_2(|x|,|y|) + M(|x|,|y|). $$
+ = 1 + X_2(|x|,|y|) + Y_2(|x|,|y|) + M(|x|,|y|). $$
 
 <p>The tables are initialized to zero along the top and left borders,</p>
 
 $$ M(i,0) = M(0,j) = X(i,0) = X(0,j) = Y(i,0) = Y(0,j)
-   = X_2(i,0) = X_2(0,j) = Y_2(i,0) = Y_2(0,j) = 0, $$
+ = X_2(i,0) = X_2(0,j) = Y_2(i,0) = Y_2(0,j) = 0, $$
 
 <p>and filled for \(i = 1, \dots, |x|\) and \(j = 1, \dots, |y|\) by the
 recursion</p>
 
 $$ \begin{aligned}
 M(i,j) &= \exp\!\bigl(\beta\, S(x_i,y_j)\bigr)
-   \bigl[\, 1 + X(i-1,j-1) + Y(i-1,j-1) + M(i-1,j-1) \,\bigr], \\[2pt]
+ \bigl[\, 1 + X(i-1,j-1) + Y(i-1,j-1) + M(i-1,j-1) \,\bigr], \\[2pt]
 X(i,j) &= \exp(\beta d)\, M(i-1,j) + \exp(\beta e)\, X(i-1,j), \\[2pt]
 Y(i,j) &= \exp(\beta d)\, \bigl[\, M(i,j-1) + X(i,j-1) \,\bigr]
-   + \exp(\beta e)\, Y(i,j-1), \\[2pt]
+ + \exp(\beta e)\, Y(i,j-1), \\[2pt]
 X_2(i,j) &= M(i-1,j) + X_2(i-1,j), \\[2pt]
 Y_2(i,j) &= M(i,j-1) + X_2(i,j-1) + Y_2(i,j-1).
 \end{aligned} $$
@@ -1072,14 +1072,14 @@ ordinary Smith-Waterman. In pseudocode:</p>
 
 <pre><code>Input: x, y, substitution S, gap-open d, gap-extend e, beta
 initialize M, X, Y, X2, Y2 to 0 on row 0 and column 0
-for i = 1 .. |x|:
-    for j = 1 .. |y|:
-        w = exp(beta * S(x[i], y[j]))
-        M[i][j]  = w * (1 + X[i-1][j-1] + Y[i-1][j-1] + M[i-1][j-1])
-        X[i][j]  = exp(beta*d)*M[i-1][j] + exp(beta*e)*X[i-1][j]
-        Y[i][j]  = exp(beta*d)*(M[i][j-1] + X[i][j-1]) + exp(beta*e)*Y[i][j-1]
-        X2[i][j] = M[i-1][j] + X2[i-1][j]
-        Y2[i][j] = M[i][j-1] + X2[i][j-1] + Y2[i][j-1]
+for i = 1.. |x|:
+ for j = 1.. |y|:
+ w = exp(beta * S(x[i], y[j]))
+ M[i][j] = w * (1 + X[i-1][j-1] + Y[i-1][j-1] + M[i-1][j-1])
+ X[i][j] = exp(beta*d)*M[i-1][j] + exp(beta*e)*X[i-1][j]
+ Y[i][j] = exp(beta*d)*(M[i][j-1] + X[i][j-1]) + exp(beta*e)*Y[i][j-1]
+ X2[i][j] = M[i-1][j] + X2[i-1][j]
+ Y2[i][j] = M[i][j-1] + X2[i][j-1] + Y2[i][j-1]
 return 1 + X2[|x|][|y|] + Y2[|x|][|y|] + M[|x|][|y|]</code></pre>
 
 <p>Equivalently, the recursion is exactly the computation performed by a
@@ -1148,3 +1148,106 @@ Jaakkola, Diekhans, and Haussler (2000) for the Fisher kernel on proteins,
 Cuturi et al. (2005) for context-tree and mutual-information kernels, and Saigo
 et al. (2004) for the local alignment kernel.
 </div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+
+<li><span class="ex-tag">warm-up</span> Take the DNA string \(x = \texttt{AGGAG}\) and
+\(k = 2\). List its contiguous \(2\)-mers, write down the nonzero coordinates of the
+spectrum feature vector \(\Phi(x)\), and compute the self-kernel \(K(x,x)\). Then
+explain in one sentence why \(K(x,x)\) always equals \(\sum_u \Phi_u(x)^2\), the sum
+of squared \(k\)-mer counts, and why raising \(k\) toward \(|x|\) drives this value
+down.</li>
+
+<li><span class="ex-tag">computation</span> Let \(x = \texttt{CACAC}\) and
+\(x' = \texttt{ACACA}\), both over \(\{\texttt A,\texttt C\}\), with \(k = 2\). By
+hand, list the contiguous \(2\)-mers of each string, form the two count vectors, and
+compute \(K(x,x')\), \(K(x,x)\), and \(K(x',x')\) for the spectrum kernel. Evaluate
+the normalized kernel
+$$ \hat K(x,x') = \frac{K(x,x')}{\sqrt{K(x,x)\,K(x',x')}}, $$
+and comment on the value you get. What does it say about the ability of the spectrum
+kernel to tell \(x\) and \(x'\) apart, and which structural feature of the two
+strings is responsible?</li>
+
+<li><span class="ex-tag">computation</span> Compute the gap-weighted subsequence
+kernel \(K_{2,\lambda}(x,x')\) for \(x = \texttt{AAB}\) and \(x' = \texttt{AB}\).
+<ol type="a">
+<li>Directly: enumerate every ordered index pair \(\mathbf i = (i_1,i_2)\) with
+\(i_1 \lt i_2\) in each string, record the selected \(2\)-mer and its span
+\(l(\mathbf i) = i_2 - i_1 + 1\), collect the features \(\Phi_u\), and read off the
+inner product. You should find \(K_{2,\lambda}(x,x') = \lambda^5 + \lambda^4\).</li>
+<li>By the dynamic program: fill the order-\(1\) auxiliary table \(B_1(i,j)\) using
+$$ B_k(x a, x' b) = \lambda\,B_k(x,x' b) + \lambda\,B_k(x a,x')
+ - \lambda^2 B_k(x,x') + \delta_{a=b}\,\lambda^2\, B_{k-1}(x,x'), $$
+with \(B_0 \equiv 1\), then run the companion recursion for \(K_2\) and confirm it
+returns the same value as part (a).</li>
+</ol>
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">In (a), the only \(2\)-mer shared by both strings is \(\texttt{AB}\); in \(x\) it occurs both gap-free (span \(2\)) and gapped (span \(3\)), so \(\Phi_{\texttt{AB}}(x) = \lambda^2 + \lambda^3\), while \(\Phi_{\texttt{AB}}(x') = \lambda^2\). In (b) you need \(B_1\) at the entries \((i-1, m-1)\) fed into the \(K_2\) sum; the companion recursion only fires when the appended letter of \(x\) equals a letter of \(x'\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> Prove directly from the definition that the
+\(k\)-spectrum kernel is positive definite: for any strings \(x_1,\dots,x_n\) and
+any reals \(c_1,\dots,c_n\), show that
+\(\sum_{i,j} c_i c_j\, K(x_i,x_j) \ge 0\). Identify the vector whose squared norm
+this quadratic form equals. Explain why the mismatch and gap-weighted substring
+kernels inherit positive definiteness by the very same one-line argument, and why
+that argument breaks for the Smith-Waterman score \(\mathrm{SW}_{S,g}(x,y)\).</li>
+
+<li><span class="ex-tag">proof</span> This exercise works through the P-kernel
+framework of Haussler (1999).
+<ol type="a">
+<li>On \(\mathcal X = \{x_1,x_2\}\), take the symmetric distribution with
+\(P(x_1,x_2) = P(x_2,x_1) = \tfrac12\) and \(P(x_1,x_1) = P(x_2,x_2) = 0\). Write out
+its \(2\times 2\) Gram matrix, find its eigenvalues, and conclude that not every
+symmetric joint distribution is a valid kernel.</li>
+<li>Now prove the rescue. Suppose a latent model index \(m\) has prior \(P_M(m)\) and
+that \(x\) and \(z\) are conditionally independent given \(m\), so that
+\(P(x,z\mid m) = P(x\mid m)\,P(z\mid m)\). Show that the marginal
+\(P(x,z) = \sum_m P(x\mid m)\,P(z\mid m)\,P_M(m)\) is positive definite.</li>
+</ol>
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">In (a) the matrix is \(\bigl(\begin{smallmatrix}0 & 1/2\\ 1/2 & 0\end{smallmatrix}\bigr)\); its eigenvalues are \(\pm\tfrac12\), and the negative one exhibits a direction of negative quadratic form. In (b), for each fixed \(m\) the term \(P(x\mid m)P(z\mid m)\) is a rank-one product \(f(x)f(z)\) with \(f(\cdot) = P(\cdot\mid m)\), hence p.d.; a non-negative combination of p.d. kernels is p.d.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Two steps of the local-alignment-kernel
+positive-definiteness argument.
+<ol type="a">
+<li>Show that the gap kernel
+\(K^{(\beta)}_g(x,y) = \exp\!\bigl[\beta\,(g(|x|) + g(|y|))\bigr]\) is positive
+definite for <em>every</em> gap function \(g\) and every \(\beta \gt 0\), with no
+condition on \(g\). Contrast this with the letter kernel \(K^{(\beta)}_a\), which
+requires the substitution matrix \(S\) to make
+\(\bigl(\exp(\beta S(a,b))\bigr)_{a,b}\) positive semidefinite: what is the
+structural difference that frees the gap kernel of any condition?</li>
+<li>Assuming the direct-product lemma and the kernel-for-sets lemma proved in the
+chapter, prove the convolution lemma: if \(K_1\) and \(K_2\) are p.d., then so is
+\(K_1 \star K_2\).</li>
+</ol>
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">In (a), \(K^{(\beta)}_g\) factorizes as \(h(x)\,h(y)\) with \(h(x) = \exp(\beta g(|x|))\), the canonical rank-one form, so it is p.d. regardless of \(g\); the letter kernel is a genuine two-argument matrix indexed by \((a,b)\), so its positivity is a real constraint on \(S\). In (b), write \(R(x) = \{(x_1,x_2): x = x_1x_2\}\) for the finite set of splits of \(x\); the summand \(K_1(x_1,y_1)K_2(x_2,y_2)\) is a direct-product kernel on \(\mathcal X\times\mathcal X\), and summing it over \(R(x)\) and \(R(y)\) is exactly the kernel-for-sets construction.</div></details></li>
+
+<li><span class="ex-tag">computation</span> A corpus has \(\ell = 4\) documents. The
+term \(\texttt{the}\) appears in all four, \(\texttt{kernel}\) in two, and
+\(\texttt{gene}\) in one. Using the idf weight \(w(t) = \log\bigl(\ell/\mathrm{df}(t)\bigr)\),
+compute \(w(\texttt{the})\), \(w(\texttt{kernel})\), and \(w(\texttt{gene})\).
+Two documents have term-frequency vectors
+$$ d: \ \mathrm{tf}(\texttt{the}) = 3,\ \mathrm{tf}(\texttt{gene}) = 1,\ \mathrm{tf}(\texttt{kernel}) = 1, \qquad
+ d': \ \mathrm{tf}(\texttt{the}) = 2,\ \mathrm{tf}(\texttt{gene}) = 0,\ \mathrm{tf}(\texttt{kernel}) = 2. $$
+Evaluate the tf-idf kernel
+\(\tilde K(d,d') = \sum_t w(t)^2\,\mathrm{tf}(t,d)\,\mathrm{tf}(t,d')\), and explain why
+the word \(\texttt{the}\), despite being shared and by far the most frequent, makes
+no contribution at all.</li>
+
+<li><span class="ex-tag">challenge</span> Take the generative model to be a Markov
+chain over \(k\)-mers, with a parameter \(a_{u\to\sigma}\) for the transition from a
+length-\(k\) context \(u\) to the next symbol \(\sigma\), and fit it at the flat
+setting \(\theta_0\) where every \(a_{u\to\sigma} = |\Sigma|^{-1}\). Working from the
+log-likelihood of a sequence \(s\) and respecting the multinomial constraint
+\(\sum_\sigma a_{u\to\sigma} = 1\), derive the Fisher score coordinate
+$$ g(\theta_0,s)_{u\to\sigma}
+ = \bigl|\{(v_1,v_2): s = v_1 u\sigma v_2\}\bigr|
+ - |\Sigma|^{-1}\,\bigl|\{(v_1,v_2): s = v_1 u v_2\}\bigr|, $$
+and conclude that, up to the centering term, the Fisher kernel of this model is the
+\((k{+}1)\)-spectrum kernel. Comment on what the centering term does and why the two
+families that open and close the chapter meet here.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Write \(\log P_\theta(s)\) as a sum over positions of \(\log a_{u_i \to \sigma_i}\); the derivative with respect to \(a_{u\to\sigma}\) counts how often that exact transition, that is the \((k{+}1)\)-mer \(u\sigma\), is used. Enforcing \(\sum_\sigma a_{u\to\sigma}=1\) by a Lagrange multiplier (or by differentiating along the simplex) produces the second term, which subtracts the expected usage of context \(u\) spread uniformly over the \(|\Sigma|\) possible next symbols. The first term is exactly the \((k{+}1)\)-spectrum feature.</div></details></li>
+
+</ol>
+</section>
+

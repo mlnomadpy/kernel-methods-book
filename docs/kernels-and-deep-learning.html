@@ -57,15 +57,15 @@
 
 <p>Before any construction, it is worth naming the objects we will keep meeting, because each is a different bridge between the two worlds. The first is the family of <em>dot-product kernels</em>. On vectors these take the form</p>
 $$
-K(\mathbf{x}, \mathbf{x}') = \kappa\!\left( \mathbf{x}^\top \mathbf{x}' \right)
+K(\mathbf{x}, \mathbf{x}') = \kappa\!\left(\mathbf{x}^\top \mathbf{x}' \right)
 \qquad\text{or, in homogeneous form,}\qquad
-K(\mathbf{x}, \mathbf{x}') = \lVert \mathbf{x} \rVert \, \lVert \mathbf{x}' \rVert \, \kappa\!\left( \frac{\mathbf{x}^\top \mathbf{x}'}{\lVert \mathbf{x} \rVert \, \lVert \mathbf{x}' \rVert} \right) .
+K(\mathbf{x}, \mathbf{x}') = \lVert \mathbf{x} \rVert \, \lVert \mathbf{x}' \rVert \, \kappa\!\left(\frac{\mathbf{x}^\top \mathbf{x}'}{\lVert \mathbf{x} \rVert \, \lVert \mathbf{x}' \rVert} \right).
 $$
 <p>They depend on the inputs only through angles and norms, exactly the quantities a single artificial neuron sees, which is why they are the natural kernels to place at the junction with neural networks. The second object is the <em>hierarchical composition of feature maps</em>: a deep kernel is one whose feature map is itself a composition,</p>
 $$
 K(\mathbf{x}, \mathbf{x}') = \langle \Phi(\mathbf{x}), \Phi(\mathbf{x}') \rangle
 \qquad\text{with}\qquad
-\Phi(\mathbf{x}) = \varphi_2(\varphi_1(\mathbf{x})) ,
+\Phi(\mathbf{x}) = \varphi_2(\varphi_1(\mathbf{x})),
 $$
 <p>mirroring the layer-by-layer structure of a network. The third is the <em>neural tangent kernel</em>, which captures the asymptotic behavior of overparametrized deep networks trained by gradient descent. The fourth is the family of <em>convolutional kernel networks</em> (CKNs), which combine convolutional and hierarchical kernel constructions with end-to-end learning.</p>
 
@@ -75,7 +75,7 @@ $$
 
 <p>The simplest way to obtain a deep kernel is to compose two feature maps, and the cleanest place to do it is on the sphere. If \(\varphi_1\) sends inputs to the unit sphere of some Hilbert space and \(K\) is a dot-product kernel there, then</p>
 $$
-K(\mathbf{x}, \mathbf{x}') = \kappa_2\!\left( \langle \varphi_1(\mathbf{x}), \varphi_1(\mathbf{x}') \rangle \right) = \kappa_2\!\left( \kappa_1(\mathbf{x}^\top \mathbf{x}') \right)
+K(\mathbf{x}, \mathbf{x}') = \kappa_2\!\left(\langle \varphi_1(\mathbf{x}), \varphi_1(\mathbf{x}') \rangle \right) = \kappa_2\!\left(\kappa_1(\mathbf{x}^\top \mathbf{x}') \right)
 $$
 <p>is again a valid kernel (Cho and Saul, 2009b). Iterating this composition builds arbitrarily deep kernels, each layer a dot-product kernel applied to the output of the previous one. For this to make sense we need to know which functions \(\kappa\) turn an inner product into a positive definite kernel, and a classical theorem answers exactly that.</p>
 
@@ -98,14 +98,14 @@ Let \(\mathcal{X} = \mathbb{S}\) be the unit sphere of a Hilbert space \(\mathca
 <tr><td>exponential</td><td>\(e^{\alpha(\langle \mathbf{z}, \mathbf{z}' \rangle - 1)}\)</td></tr>
 <tr><td>inverse polynomial</td><td>\(\dfrac{1}{2 - \langle \mathbf{z}, \mathbf{z}' \rangle}\)</td></tr>
 <tr><td>polynomial of degree \(p\)</td><td>\((c + \langle \mathbf{z}, \mathbf{z}' \rangle)^p\)</td></tr>
-<tr><td>arc-cosine of degree 1</td><td>\(\dfrac{1}{\pi}\left( \sin\theta + (\pi - \theta)\cos\theta \right),\quad \theta = \arccos\langle \mathbf{z}, \mathbf{z}' \rangle\)</td></tr>
-<tr><td>Vovk's of degree 3</td><td>\(\dfrac{1}{3}\,\dfrac{1 - \langle \mathbf{z}, \mathbf{z}' \rangle^3}{1 - \langle \mathbf{z}, \mathbf{z}' \rangle} = \dfrac{1}{3}\left( 1 + \langle \mathbf{z}, \mathbf{z}' \rangle + \langle \mathbf{z}, \mathbf{z}' \rangle^2 \right)\)</td></tr>
+<tr><td>arc-cosine of degree 1</td><td>\(\dfrac{1}{\pi}\left(\sin\theta + (\pi - \theta)\cos\theta \right),\quad \theta = \arccos\langle \mathbf{z}, \mathbf{z}' \rangle\)</td></tr>
+<tr><td>Vovk's of degree 3</td><td>\(\dfrac{1}{3}\,\dfrac{1 - \langle \mathbf{z}, \mathbf{z}' \rangle^3}{1 - \langle \mathbf{z}, \mathbf{z}' \rangle} = \dfrac{1}{3}\left(1 + \langle \mathbf{z}, \mathbf{z}' \rangle + \langle \mathbf{z}, \mathbf{z}' \rangle^2 \right)\)</td></tr>
 </tbody>
 </table>
 
 <p>It is worth reading this table as a menu of angular reshapings rather than a list of formulas. Every entry is a univariate function \(\kappa\) of a single number, the cosine of the angle between the two normalized inputs, and each shapes that cosine differently: the polynomial kernels sharpen it by raising it to a power, so that only nearly aligned directions retain appreciable similarity; the exponential kernel decays smoothly as the angle opens; the arc-cosine kernels bend it into the particular curve a rectified neuron traces. Choosing a dot-product kernel is therefore choosing how aggressively the layer should contract angular similarity, and Schoenberg's condition is the single admissibility test every choice on the menu must pass. Each satisfies it. The exponential kernel is the bridge to the everyday Gaussian: if \(\lVert \mathbf{z} \rVert = \lVert \mathbf{z}' \rVert = 1\), then</p>
 $$
-\kappa_{\exp}(\langle \mathbf{z}, \mathbf{z}' \rangle) = e^{\alpha(\langle \mathbf{z}, \mathbf{z}' \rangle - 1)} = e^{-\frac{\alpha}{2}\lVert \mathbf{z} - \mathbf{z}' \rVert^2} ,
+\kappa_{\exp}(\langle \mathbf{z}, \mathbf{z}' \rangle) = e^{\alpha(\langle \mathbf{z}, \mathbf{z}' \rangle - 1)} = e^{-\frac{\alpha}{2}\lVert \mathbf{z} - \mathbf{z}' \rVert^2},
 $$
 <p>because \(\lVert \mathbf{z} - \mathbf{z}' \rVert^2 = 2 - 2\langle \mathbf{z}, \mathbf{z}' \rangle\) on the sphere. So the Gaussian kernel is a dot-product kernel in disguise once inputs are normalized, and the arc-cosine kernel, as we will now see, is precisely what a layer of rectified neurons computes.</p>
 
@@ -113,14 +113,14 @@ $$
 
 <p>Consider a one-hidden-layer network with \(m\) neurons,</p>
 $$
-f_\theta(\mathbf{x}) = \frac{1}{\sqrt{m}} \sum_{i=1}^m v_i \, \sigma(\mathbf{w}_i^\top \mathbf{x}) ,
+f_\theta(\mathbf{x}) = \frac{1}{\sqrt{m}} \sum_{i=1}^m v_i \, \sigma(\mathbf{w}_i^\top \mathbf{x}),
 $$
 <p>and ask what happens as the width \(m \to \infty\). There are two natural ways to let it grow, and each produces a kernel. In the first, due to <a class="cite" href="bibliography.html#neal1996" data-ref="Neal, R. M. (1996) Bayesian Learning for Neural Networks. Springer, Lecture Notes in Statistics 118.">Neal (1996)</a> and revived by <a class="cite" href="bibliography.html#rahimi2007" data-ref="Rahimi, A. and Recht, B. (2007) Random features for large-scale kernel machines. NeurIPS 20.">Rahimi and Recht (2007)</a> under the name random features, we <em>freeze</em> the hidden weights at their random initialization \(\mathbf{w}_i \sim \mathcal{N}(0, I)\) and train only the output weights \(\theta = (v_i)_i\). The network is then linear in its parameters, a linear model over the random features \(\mathbf{x} \mapsto \sigma(\mathbf{w}_i^\top \mathbf{x})\), and by the law of large numbers the associated kernel converges to an expectation over the weight distribution.</p>
 
 <div class="box def"><span class="box-title">Definition (random feature kernel)</span>
 With hidden weights drawn as \(\mathbf{w} \sim \mathcal{N}(0, I)\), the random feature kernel is
 $$
-K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x}) \, \sigma(\mathbf{w}^\top \mathbf{y}) \right] .
+K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x}) \, \sigma(\mathbf{w}^\top \mathbf{y}) \right].
 $$
 </div>
 
@@ -134,32 +134,32 @@ $$
 
 <p>This is the population inner product of the random features, and the finite network approximates it with \(m\) Monte Carlo samples. Chapter 8 met such integral representations for translation-invariant kernels, where the features were random Fourier modes. The point here is that they are available for many dot-product kernels too. Cho and Saul (2009b) give the family</p>
 $$
-k_n(\mathbf{x}, \mathbf{y}) = \frac{1}{\pi} \lVert \mathbf{x} \rVert^n \, \lVert \mathbf{y} \rVert^n \, J_n(\theta) ,
+k_n(\mathbf{x}, \mathbf{y}) = \frac{1}{\pi} \lVert \mathbf{x} \rVert^n \, \lVert \mathbf{y} \rVert^n \, J_n(\theta),
 \qquad
-\theta = \cos^{-1}\!\frac{\mathbf{x}^\top \mathbf{y}}{\lVert \mathbf{x} \rVert \, \lVert \mathbf{y} \rVert} ,
+\theta = \cos^{-1}\!\frac{\mathbf{x}^\top \mathbf{y}}{\lVert \mathbf{x} \rVert \, \lVert \mathbf{y} \rVert},
 $$
 <p>the arc-cosine kernels, where the angular part is</p>
 $$
-J_n(\theta) = (-1)^n (\sin\theta)^{2n+1} \left( \frac{1}{\sin\theta} \frac{\partial}{\partial\theta} \right)^{\! n} \frac{\pi - \theta}{\sin\theta} .
+J_n(\theta) = (-1)^n (\sin\theta)^{2n+1} \left(\frac{1}{\sin\theta} \frac{\partial}{\partial\theta} \right)^{\! n} \frac{\pi - \theta}{\sin\theta}.
 $$
 <p>The first three are</p>
 $$
 J_0(\theta) = \pi - \theta, \qquad
 J_1(\theta) = \sin\theta + (\pi - \theta)\cos\theta, \qquad
-J_2(\theta) = 3\sin\theta\cos\theta + (\pi - \theta)(1 + 2\cos^2\theta) .
+J_2(\theta) = 3\sin\theta\cos\theta + (\pi - \theta)(1 + 2\cos^2\theta).
 $$
 <p>Comparing \(J_1\) to the table above shows that \(k_1\) restricted to the sphere is exactly the arc-cosine kernel of degree 1. And these kernels are random feature kernels for a specific activation.</p>
 
 <div class="box thm"><span class="box-title">Theorem (Cho and Saul, 2009a)</span>
-For the rectified power activation \(\sigma(u) = \dfrac{u^n}{\sqrt{2}}\left( 1 + \operatorname{sign}(u) \right)\), that is \(\sigma(u) = \sqrt{2}\, u^n\) for \(u \gt 0\) and \(0\) otherwise, the arc-cosine kernel is a random feature kernel:
+For the rectified power activation \(\sigma(u) = \dfrac{u^n}{\sqrt{2}}\left(1 + \operatorname{sign}(u) \right)\), that is \(\sigma(u) = \sqrt{2}\, u^n\) for \(u \gt 0\) and \(0\) otherwise, the arc-cosine kernel is a random feature kernel:
 $$
-k_n(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x}) \, \sigma(\mathbf{w}^\top \mathbf{y}) \right] .
+k_n(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x}) \, \sigma(\mathbf{w}^\top \mathbf{y}) \right].
 $$
 </div>
 
 <p>The case \(n = 1\) is the one to remember, because there the rectified power is proportional to the rectified linear unit and</p>
 $$
-k_1(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \operatorname{ReLU}(\mathbf{w}^\top \mathbf{x}) \, \operatorname{ReLU}(\mathbf{w}^\top \mathbf{y}) \right] .
+k_1(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \operatorname{ReLU}(\mathbf{w}^\top \mathbf{x}) \, \operatorname{ReLU}(\mathbf{w}^\top \mathbf{y}) \right].
 $$
 <p>A layer of infinitely many random ReLU neurons computes, in expectation, the degree-1 arc-cosine kernel. This identity is one of the fundamental tools for analyzing ReLU networks, and it makes the arc-cosine kernel the canonical dot-product kernel of the deep-learning era.</p>
 
@@ -169,7 +169,7 @@ $$
 
 <p>Freezing the hidden layer is a strong assumption, and the more interesting question is what happens when we train <em>all</em> the parameters \(\theta = (v_i, \mathbf{w}_i)_i\) by gradient descent from an initialization \(\theta_0 \sim \mathcal{N}(0, I)\). The remarkable discovery of <a class="cite" href="bibliography.html#jacot2018" data-ref="Jacot, A., Gabriel, F., and Hongler, C. (2018) Neural tangent kernel: convergence and generalization in neural networks. NeurIPS 31.">Jacot, Gabriel, and Hongler (2018)</a> is that in the infinite-width limit this is again governed by a kernel, though a different one. The mechanism is what <a class="cite" href="bibliography.html#chizat2019" data-ref="Chizat, L., Oyallon, E., and Bach, F. (2019) On lazy training in differentiable programming. NeurIPS 32.">Chizat, Oyallon, and Bach (2019)</a> call <em>lazy training</em>: when \(m\) is large, the parameters barely move, \(\theta\) stays close to \(\theta_0\) throughout training, and the network is well approximated by its first-order Taylor expansion around initialization,</p>
 $$
-f_\theta(\mathbf{x}) \approx f_{\theta_0}(\mathbf{x}) + \big\langle \theta - \theta_0, \, \nabla_\theta f_\theta(\mathbf{x})\big|_{\theta = \theta_0} \big\rangle .
+f_\theta(\mathbf{x}) \approx f_{\theta_0}(\mathbf{x}) + \big\langle \theta - \theta_0, \, \nabla_\theta f_\theta(\mathbf{x})\big|_{\theta = \theta_0} \big\rangle.
 $$
 <p>This linearized model is linear in the deviation \(\theta - \theta_0\), with feature map the gradient \(\nabla_\theta f_{\theta_0}(\mathbf{x})\). Training it by gradient descent is therefore linear regression in that fixed feature space, and its kernel is the inner product of the gradients.</p>
 
@@ -177,7 +177,7 @@ $$
 
 <div class="box def"><span class="box-title">Definition (neural tangent kernel)</span>
 $$
-K_{\mathrm{NTK}}(\mathbf{x}, \mathbf{y}) = \lim_{m \to \infty} \big\langle \nabla_\theta f_{\theta_0}(\mathbf{x}), \, \nabla_\theta f_{\theta_0}(\mathbf{y}) \big\rangle .
+K_{\mathrm{NTK}}(\mathbf{x}, \mathbf{y}) = \lim_{m \to \infty} \big\langle \nabla_\theta f_{\theta_0}(\mathbf{x}), \, \nabla_\theta f_{\theta_0}(\mathbf{y}) \big\rangle.
 $$
 </div>
 
@@ -189,7 +189,7 @@ In the infinite-width limit, training the network by gradient descent behaves li
 
 <p>For our two-layer network the gradient has two blocks, one from the output weights \(v_i\) and one from the hidden weights \(\mathbf{w}_i\), and computing the inner product of each in the limit gives</p>
 $$
-K_{\mathrm{NTK}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w}}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x}) \, \sigma(\mathbf{w}^\top \mathbf{y}) + (\mathbf{x}^\top \mathbf{y}) \, \sigma'(\mathbf{w}^\top \mathbf{x}) \, \sigma'(\mathbf{w}^\top \mathbf{y}) \right] .
+K_{\mathrm{NTK}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w}}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x}) \, \sigma(\mathbf{w}^\top \mathbf{y}) + (\mathbf{x}^\top \mathbf{y}) \, \sigma'(\mathbf{w}^\top \mathbf{x}) \, \sigma'(\mathbf{w}^\top \mathbf{y}) \right].
 $$
 <p>The first term is exactly the random feature kernel from differentiating with respect to the output weights; the second, from differentiating with respect to the hidden weights, brings in the derivative \(\sigma'\) and an explicit \(\mathbf{x}^\top \mathbf{y}\) factor. With ReLU networks \(\sigma'\) is a step function, both expectations are functions of the angle alone, and \(K_{\mathrm{NTK}}\) is again a dot-product kernel, assembled from the arc-cosine kernels of the previous section.</p>
 
@@ -199,25 +199,25 @@ $$
 
 <p>The kernels above are infinite-dimensional, so to compute with them we need a finite approximation, and the approximation itself turns out to look like a neural-network layer. This is the technical heart of the chapter, so we develop it carefully. Given a kernel \(K\) with feature map \(\varphi\) into an RKHS \(\mathcal{H}\), the Nyström method replaces any point \(\varphi(\mathbf{x})\) by its orthogonal projection onto a finite-dimensional subspace spanned by the embeddings of \(p\) <em>anchor points</em> \(Z = [\mathbf{z}_1, \ldots, \mathbf{z}_p]\),</p>
 $$
-\mathcal{F} = \operatorname{span}\!\left( \varphi(\mathbf{z}_1), \ldots, \varphi(\mathbf{z}_p) \right) .
+\mathcal{F} = \operatorname{span}\!\left(\varphi(\mathbf{z}_1), \ldots, \varphi(\mathbf{z}_p) \right).
 $$
 <p>The projection is the best approximation of \(\varphi(\mathbf{x})\) inside \(\mathcal{F}\),</p>
 $$
 \Pi_\mathcal{F}[\mathbf{x}] = \sum_{j=1}^p \beta_j^\star \, \varphi(\mathbf{z}_j),
 \qquad
-\beta^\star \in \arg\min_{\beta \in \mathbb{R}^p} \Big\lVert \varphi(\mathbf{x}) - \sum_{j=1}^p \beta_j \, \varphi(\mathbf{z}_j) \Big\rVert_\mathcal{H}^2 ,
+\beta^\star \in \arg\min_{\beta \in \mathbb{R}^p} \Big\lVert \varphi(\mathbf{x}) - \sum_{j=1}^p \beta_j \, \varphi(\mathbf{z}_j) \Big\rVert_\mathcal{H}^2,
 $$
 <p>a least-squares problem solved by the normal equations. Writing everything through the kernel and, for a dot-product kernel \(K(\mathbf{x}, \mathbf{y}) = \kappa(\langle \mathbf{x}, \mathbf{y} \rangle)\), approximating the kernel by the inner product of projections gives a finite-dimensional embedding \(\psi\),</p>
 $$
 K(\mathbf{x}, \mathbf{y}) \approx \langle \Pi_\mathcal{F}[\mathbf{x}], \Pi_\mathcal{F}[\mathbf{y}] \rangle_\mathcal{H} = \langle \psi(\mathbf{x}), \psi(\mathbf{y}) \rangle_{\mathbb{R}^p},
 \qquad
-\psi(\mathbf{x}) = \kappa(Z^\top Z)^{-1/2} \, \kappa(Z^\top \mathbf{x}) ,
+\psi(\mathbf{x}) = \kappa(Z^\top Z)^{-1/2} \, \kappa(Z^\top \mathbf{x}),
 $$
 <p>where \(\kappa\) is applied entrywise. Read the right-hand side left to right: \(Z^\top \mathbf{x}\) is a linear map, \(\kappa(\cdot)\) is a pointwise nonlinearity, and multiplication by \(\kappa(Z^\top Z)^{-1/2}\) is a second linear map. The Nyström embedding of a dot-product kernel <em>is</em> a small neural network layer: linear, nonlinearity, linear (Williams and Seeger, 2001; Smola and Schölkopf, 2000; Fine and Scheinberg, 2001).</p>
 
 <p>This is what lets us learn kernels end to end. The encoding \(\psi_Z(\mathbf{x}) = \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top \mathbf{x})\) is parametrized by the anchors \(Z\), and there are two ways to choose them. Unsupervised: run K-means on the data and take the centroids as anchors, so that \(\mathcal{F}\) covers the region of the RKHS where data actually live. Supervised: treat \(Z\) as network parameters and optimize them by backpropagation jointly with a linear predictor,</p>
 $$
-\min_{\mathbf{w}, Z} \; \frac{1}{n} \sum_{i=1}^n L\!\left( y_i, \mathbf{w}^\top \psi_Z(\mathbf{x}_i) \right) + \lambda \lVert \mathbf{w} \rVert^2 .
+\min_{\mathbf{w}, Z} \; \frac{1}{n} \sum_{i=1}^n L\!\left(y_i, \mathbf{w}^\top \psi_Z(\mathbf{x}_i) \right) + \lambda \lVert \mathbf{w} \rVert^2.
 $$
 <p>End-to-end learning with kernels, then, means learning a parametrized linear subspace \(\mathcal{F}\) of the RKHS onto which the data are projected. The kernel supplies the geometry; learning chooses the subspace.</p>
 
@@ -225,13 +225,13 @@ $$
 
 <p>We now scale this idea up from a single layer to a whole convolutional architecture. <a class="cite" href="bibliography.html#mairal2016" data-ref="Mairal, J. (2016) End-to-end kernel learning with supervised convolutional kernel networks. NeurIPS 29.">Mairal (2016)</a> shows it is possible to design a functional space \(\mathcal{H}\), an RKHS, in which deep convolutional networks live: for a network</p>
 $$
-f(\mathbf{x}) = \sigma_k\!\left( A_k \sigma_{k-1}\!\left( A_{k-1} \cdots \sigma_2(A_2 \sigma_1(A_1 \mathbf{x})) \cdots \right) \right) = \langle f, \Phi(\mathbf{x}) \rangle_\mathcal{H} ,
+f(\mathbf{x}) = \sigma_k\!\left(A_k \sigma_{k-1}\!\left(A_{k-1} \cdots \sigma_2(A_2 \sigma_1(A_1 \mathbf{x})) \cdots \right) \right) = \langle f, \Phi(\mathbf{x}) \rangle_\mathcal{H},
 $$
 <p>the entire nonlinear network becomes a single linear functional of a fixed feature map \(\Phi\). The construction is called a <em>convolutional kernel network</em>. The recipe has a theoretical and a practical half. For the theory, replace each layer's map \(\mathbf{x} \mapsto \sigma(A\mathbf{x})\) by a kernel mapping \(\mathbf{x} \mapsto \varphi(\mathbf{x})\) associated with a dot-product kernel. For practice, replace it by the Nyström embedding \(\mathbf{x} \mapsto \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top \mathbf{x})\), whose anchors \(Z\) are learned by K-means (unsupervised) or backpropagation (supervised), exactly as above.</p>
 
 <p>Two features of this decomposition make it worth the effort. First, \(\Phi\) depends only on the architecture and is <em>independent of the training data</em>, so it can be analyzed once and for all: we can ask whether it is stable to perturbations and whether it loses information about the signal. Second, \(f\) is a predictor whose behavior is controlled by its RKHS norm through the defining inequality of any RKHS,</p>
 $$
-\lvert f(\mathbf{x}) - f(\mathbf{x}') \rvert \leq \lVert f \rVert_\mathcal{H} \, \lVert \Phi(\mathbf{x}) - \Phi(\mathbf{x}') \rVert_\mathcal{H} .
+\lvert f(\mathbf{x}) - f(\mathbf{x}') \rvert \leq \lVert f \rVert_\mathcal{H} \, \lVert \Phi(\mathbf{x}) - \Phi(\mathbf{x}') \rVert_\mathcal{H}.
 $$
 <p>The right-hand side factorizes cleanly. The geometry factor \(\lVert \Phi(\mathbf{x}) - \Phi(\mathbf{x}') \rVert_\mathcal{H}\) is a property of the architecture alone; the complexity factor \(\lVert f \rVert_\mathcal{H}\) is a property of the learned model. Controlling each separately is the program of the rest of the chapter.</p>
 
@@ -241,11 +241,11 @@ $$
 
 <p>To analyze stability to deformations honestly we must work with continuous signals, where a deformation is a smooth warp of the domain rather than a permutation of pixels. So we model an image as a map, not an array. The input is a continuous signal</p>
 $$
-\mathbf{x}_0 : \Omega \to \mathcal{H}_0, \qquad \mathbf{x}_0 \in L^2(\Omega, \mathcal{H}_0) ,
+\mathbf{x}_0 : \Omega \to \mathcal{H}_0, \qquad \mathbf{x}_0 \in L^2(\Omega, \mathcal{H}_0),
 $$
 <p>where \(\Omega = \mathbb{R}^d\) is the domain (\(d = 2\) for images) and \(\mathbf{x}_0(u) \in \mathcal{H}_0\) is the value at location \(u\) (with \(\mathcal{H}_0 = \mathbb{R}^3\) for RGB). Each layer transforms a feature map \(\mathbf{x}_{k-1} \in L^2(\Omega, \mathcal{H}_{k-1})\) into the next one \(\mathbf{x}_k \in L^2(\Omega, \mathcal{H}_k)\) by composing three operators,</p>
 $$
-\mathbf{x}_k = A_k M_k P_k \, \mathbf{x}_{k-1} .
+\mathbf{x}_k = A_k M_k P_k \, \mathbf{x}_{k-1}.
 $$
 <p>Each operator has one job, and it is the interplay of the three that makes the theory work.</p>
 
@@ -253,7 +253,7 @@ $$
 
 <p>The first operator gathers local context. For a patch shape \(S_k \subset \Omega\) (a small box, say), \(P_k\) stacks the values of the feature map over a neighborhood of each point,</p>
 $$
-P_k \mathbf{x}_{k-1}(u) := \left( \mathbf{x}_{k-1}(u + v) \right)_{v \in S_k} \; \in \; \mathcal{P}_k = \mathcal{H}_{k-1}^{S_k} .
+P_k \mathbf{x}_{k-1}(u) := \left(\mathbf{x}_{k-1}(u + v) \right)_{v \in S_k} \; \in \; \mathcal{P}_k = \mathcal{H}_{k-1}^{S_k}.
 $$
 <p>So \(P_k \mathbf{x}_{k-1}(u)\) is the patch of \(\mathbf{x}_{k-1}\) centered at \(u\), living in a product Hilbert space. This is a linear operator, and it is what will fail to commute with deformations at high frequencies, the technical obstacle we confront later.</p>
 
@@ -261,13 +261,13 @@ $$
 
 <p>The second operator embeds each patch through the kernel. Pointwise in \(u\),</p>
 $$
-M_k P_k \mathbf{x}_{k-1}(u) := \varphi_k\!\left( P_k \mathbf{x}_{k-1}(u) \right) \; \in \; \mathcal{H}_k ,
+M_k P_k \mathbf{x}_{k-1}(u) := \varphi_k\!\left(P_k \mathbf{x}_{k-1}(u) \right) \; \in \; \mathcal{H}_k,
 $$
 <p>where \(\varphi_k\) is the feature map of a homogeneous dot-product kernel on patches,</p>
 $$
-K_k(\mathbf{z}, \mathbf{z}') = \lVert \mathbf{z} \rVert \, \lVert \mathbf{z}' \rVert \, \kappa_k\!\left( \frac{\langle \mathbf{z}, \mathbf{z}' \rangle}{\lVert \mathbf{z} \rVert \, \lVert \mathbf{z}' \rVert} \right) = \langle \varphi_k(\mathbf{z}), \varphi_k(\mathbf{z}') \rangle ,
+K_k(\mathbf{z}, \mathbf{z}') = \lVert \mathbf{z} \rVert \, \lVert \mathbf{z}' \rVert \, \kappa_k\!\left(\frac{\langle \mathbf{z}, \mathbf{z}' \rangle}{\lVert \mathbf{z} \rVert \, \lVert \mathbf{z}' \rVert} \right) = \langle \varphi_k(\mathbf{z}), \varphi_k(\mathbf{z}') \rangle,
 \qquad
-\kappa_k(u) = \sum_{j=0}^\infty b_j u^j, \quad b_j \geq 0, \quad \kappa_k(1) = 1 .
+\kappa_k(u) = \sum_{j=0}^\infty b_j u^j, \quad b_j \geq 0, \quad \kappa_k(1) = 1.
 $$
 <p>The non-negative coefficients guarantee positive definiteness (Schoenberg), and \(\kappa_k(1) = 1\) normalizes the map so that \(\lVert \varphi_k(\mathbf{z}) \rVert = \lVert \mathbf{z} \rVert\). Standard choices are the Gaussian kernel on the sphere \(\kappa_{\exp}(\langle \mathbf{z}, \mathbf{z}' \rangle) = e^{\langle \mathbf{z}, \mathbf{z}' \rangle - 1}\) and the inverse polynomial \(\kappa_{\text{inv-poly}}(\langle \mathbf{z}, \mathbf{z}' \rangle) = 1/(2 - \langle \mathbf{z}, \mathbf{z}' \rangle)\). Being pointwise, \(M_k\) will commute with any warp of the domain, which is why it never causes trouble in the stability analysis.</p>
 
@@ -275,7 +275,7 @@ $$
 
 <p>The third operator blurs, providing local invariance. It is a linear convolution against a Gaussian pooling filter at scale \(\sigma_k\),</p>
 $$
-\mathbf{x}_k(u) = A_k M_k P_k \mathbf{x}_{k-1}(u) = \int_{\mathbb{R}^d} h_{\sigma_k}(u - v) \, M_k P_k \mathbf{x}_{k-1}(v) \, dv \; \in \; \mathcal{H}_k ,
+\mathbf{x}_k(u) = A_k M_k P_k \mathbf{x}_{k-1}(u) = \int_{\mathbb{R}^d} h_{\sigma_k}(u - v) \, M_k P_k \mathbf{x}_{k-1}(v) \, dv \; \in \; \mathcal{H}_k,
 $$
 <p>with \(h_{\sigma_k}(u) = \sigma_k^{-d} h(u / \sigma_k)\) and \(h\) a Gaussian. Two properties matter. First, \(A_k\) is linear and non-expansive, \(\lVert A_k \rVert \leq 1\), so it can never amplify a perturbation. Second, in practice pooling is followed by <em>discretization</em>: we subsample at resolution \(\sigma_k\), which is what lets the feature maps shrink from layer to layer. The blur before the subsample is anti-aliasing, and information is preserved as long as the subsampling factor does not exceed the patch size, a claim we make precise in the discretization section.</p>
 
@@ -283,11 +283,11 @@ $$
 
 <p>Composing \(n\) layers gives the feature map of the whole network,</p>
 $$
-\Phi_n(\mathbf{x}) = A_n M_n P_n A_{n-1} M_{n-1} P_{n-1} \cdots A_1 M_1 P_1 \, \mathbf{x}_0 \; \in \; L^2(\Omega, \mathcal{H}_n) .
+\Phi_n(\mathbf{x}) = A_n M_n P_n A_{n-1} M_{n-1} P_{n-1} \cdots A_1 M_1 P_1 \, \mathbf{x}_0 \; \in \; L^2(\Omega, \mathcal{H}_n).
 $$
 <p>In practice the patch sizes \(S_k\) and pooling scales \(\sigma_k\) grow exponentially with depth, because each layer is subsampled and so a fixed patch covers an exponentially larger region of the original image. A prediction is a linear functional of this representation, \(f(\mathbf{x}) = \langle \mathbf{w}, \Phi_n(\mathbf{x}) \rangle\), and the corresponding kernel is the "linear kernel" on top of the feature maps,</p>
 $$
-K_{\mathrm{CKN}}(\mathbf{x}, \mathbf{x}') = \langle \Phi_n(\mathbf{x}), \Phi_n(\mathbf{x}') \rangle_{L^2(\Omega)} = \int_\Omega \langle \mathbf{x}_n(u), \mathbf{x}'_n(u) \rangle \, du .
+K_{\mathrm{CKN}}(\mathbf{x}, \mathbf{x}') = \langle \Phi_n(\mathbf{x}), \Phi_n(\mathbf{x}') \rangle_{L^2(\Omega)} = \int_\Omega \langle \mathbf{x}_n(u), \mathbf{x}'_n(u) \rangle \, du.
 $$
 <p>Finally, real inputs are discrete signals acquired by a physical device, which we model as \(\mathbf{x}_0 = A_0 \mathbf{x}\), where \(\mathbf{x}\) is the underlying continuous signal and \(A_0\) is a local integrator at scale \(\sigma_0\) performing anti-aliasing. The full representation is then \(\Phi_n(A_0 \mathbf{x})\), and this is the object whose stability we study.</p>
 
@@ -295,11 +295,11 @@ $$
 
 <p>It helps to see exactly where a CKN and a CNN part ways, because they differ in one operator only. Given a patch \(\mathbf{x}\), a convolutional network computes</p>
 $$
-\psi_{\mathrm{CNN}}(\mathbf{x}) = \sigma(Z^\top \mathbf{x}) ,
+\psi_{\mathrm{CNN}}(\mathbf{x}) = \sigma(Z^\top \mathbf{x}),
 $$
 <p>a linear map followed by a pointwise nonlinearity, with \(Z\) the filters. A convolutional kernel network computes the Nyström embedding of the patch kernel,</p>
 $$
-\psi_{\mathrm{CKN}}(\mathbf{x}) = \lVert \mathbf{x} \rVert \, \kappa(Z^\top Z)^{-1/2} \, \kappa\!\left( Z^\top \mathbf{x} / \lVert \mathbf{x} \rVert \right) .
+\psi_{\mathrm{CKN}}(\mathbf{x}) = \lVert \mathbf{x} \rVert \, \kappa(Z^\top Z)^{-1/2} \, \kappa\!\left(Z^\top \mathbf{x} / \lVert \mathbf{x} \rVert \right).
 $$
 <p>The extra factor \(\kappa(Z^\top Z)^{-1/2}\) is precisely the projection onto the subspace \(\mathcal{F}\), the geometric content that distinguishes learning a subspace of an RKHS from applying an arbitrary nonlinearity. Everything downstream flows from this one change. We inherit a geometric interpretation of the filters as anchor points defining a subspace, an unsupervised training route through K-means, a still-feasible supervised route through backpropagation, and regularization mechanisms from the kernel viewpoint. Because the representation is a genuine kernel embedding, it can in principle be reused in other kernel machinery: statistical testing, kernel PCA, CCA, K-means.</p>
 
@@ -309,14 +309,14 @@ $$
 
 <p>We now cash in the promise that \(\Phi\) can be analyzed independently of the data. The results are those of Bietti and Mairal (2019a): a multilayer construction of the RKHS \(\mathcal{H}\) that contains convolutional networks with smooth homogeneous activations; conditions under which the feature map \(\Phi\) preserves the signal, is stable to deformations, and is non-expansive; constructions achieving invariance to groups beyond translation; and bounds on the RKHS norm \(\lVert \cdot \rVert_\mathcal{H}\) that control both stability and generalization of a learned model, through the same inequality</p>
 $$
-\lvert f(\mathbf{x}) - f(\mathbf{x}') \rvert \leq \lVert f \rVert_\mathcal{H} \, \lVert \Phi(\mathbf{x}) - \Phi(\mathbf{x}') \rVert_\mathcal{H} .
+\lvert f(\mathbf{x}) - f(\mathbf{x}') \rvert \leq \lVert f \rVert_\mathcal{H} \, \lVert \Phi(\mathbf{x}) - \Phi(\mathbf{x}') \rVert_\mathcal{H}.
 $$
 
 <h3 id="smooth-homogeneous">Smooth homogeneous activations</h3>
 
 <p>For a network to live inside this RKHS, its activation must be admissible, and the plain ReLU is not: it is not smooth at the origin. The fix is to homogenize. Instead of \(\mathbf{z} \mapsto \operatorname{ReLU}(\mathbf{w}^\top \mathbf{z})\), the kernel construction uses</p>
 $$
-\mathbf{z} \; \longmapsto \; \lVert \mathbf{z} \rVert \, \sigma\!\left( \mathbf{w}^\top \mathbf{z} / \lVert \mathbf{z} \rVert \right) ,
+\mathbf{z} \; \longmapsto \; \lVert \mathbf{z} \rVert \, \sigma\!\left(\mathbf{w}^\top \mathbf{z} / \lVert \mathbf{z} \rVert \right),
 $$
 <p>where \(\sigma\) is a smooth surrogate of the ReLU (a "sReLU"). The factor \(\lVert \mathbf{z} \rVert\) restores the positive homogeneity that the ReLU has and that a bare smooth function would lack, so that the map is homogeneous of degree one, like the original neuron, while being differentiable everywhere the analysis needs.</p>
 
@@ -324,14 +324,14 @@ $$
 
 <p>A deformation is a \(C^1\)-diffeomorphism \(\tau : \Omega \to \Omega\) acting on signals through</p>
 $$
-L_\tau \mathbf{x}(u) = \mathbf{x}(u - \tau(u)) .
+L_\tau \mathbf{x}(u) = \mathbf{x}(u - \tau(u)).
 $$
 <p>This is a far richer group of transformations than pure translations \(L_c \mathbf{x}(u) = \mathbf{x}(u - c)\): patterns are not only shifted but locally warped. The right notion of robustness, following Mallat's (2012) analysis of the scattering transform (Bruna and Mallat, 2013), asks the representation to change little under small deformations.</p>
 
 <div class="box def"><span class="box-title">Definition (stability, Mallat, 2012)</span>
 A representation \(\Phi\) is stable to deformations if there are constants \(C_1, C_2\) such that
 $$
-\lVert \Phi(L_\tau \mathbf{x}) - \Phi(\mathbf{x}) \rVert \leq \left( C_1 \lVert \nabla\tau \rVert_\infty + C_2 \lVert \tau \rVert_\infty \right) \lVert \mathbf{x} \rVert ,
+\lVert \Phi(L_\tau \mathbf{x}) - \Phi(\mathbf{x}) \rVert \leq \left(C_1 \lVert \nabla\tau \rVert_\infty + C_2 \lVert \tau \rVert_\infty \right) \lVert \mathbf{x} \rVert,
 $$
 where \(\lVert \nabla\tau \rVert_\infty = \sup_u \lVert \nabla\tau(u) \rVert\) measures the size of the deformation and \(\lVert \tau \rVert_\infty = \sup_u \lvert \tau(u) \rvert\) measures the maximal displacement.
 </div>
@@ -345,7 +345,7 @@ $$
 \lVert \Phi_n(L_c \mathbf{x}) - \Phi_n(\mathbf{x}) \rVert
 = \lVert L_c \Phi_n(\mathbf{x}) - \Phi_n(\mathbf{x}) \rVert
 \leq \lVert L_c A_n - A_n \rVert \cdot \lVert M_n P_n \Phi_{n-1}(\mathbf{x}) \rVert
-\leq \lVert L_c A_n - A_n \rVert \, \lVert \mathbf{x} \rVert .
+\leq \lVert L_c A_n - A_n \rVert \, \lVert \mathbf{x} \rVert.
 $$
 <p>Mallat's estimate on how much a shift disturbs a Gaussian pooling of scale \(\sigma_n\) is \(\lVert L_c A_n - A_n \rVert \leq (C_2 / \sigma_n)\, c\). So the last layer's pooling scale \(\sigma_n\) directly controls translation invariance: the coarser the final pooling, the more shift-invariant the representation. This is the mechanism a global average-pooling layer exploits.</p>
 
@@ -353,25 +353,25 @@ $$
 
 <p>General deformations are harder because patch extraction \(P_k\) and pooling \(A_k\) do <em>not</em> commute with \(L_\tau\); only the pointwise map \(M_k\) does. The disturbance is measured by commutators. For pooling, Mallat's bound gives</p>
 $$
-\lVert [A_k, L_\tau] \rVert = \lVert A_k L_\tau - L_\tau A_k \rVert \leq C_1 \lVert \nabla\tau \rVert_\infty ,
+\lVert [A_k, L_\tau] \rVert = \lVert A_k L_\tau - L_\tau A_k \rVert \leq C_1 \lVert \nabla\tau \rVert_\infty,
 $$
 <p>which is well behaved. Patch extraction is the problem: \([P_k, L_\tau]\) is unstable at high frequencies, because a fixed patch operator resolves detail finer than the current feature map can safely carry under a warp. The remedy is to adapt the patch to the current resolution. If the patch of layer \(k\) is applied after the pooling of layer \(k-1\), so that its size is controlled by \(\sigma_{k-1}\), the commutator is tamed,</p>
 $$
-\lVert [P_k A_{k-1}, L_\tau] \rVert \leq C_{1,\kappa} \lVert \nabla\tau \rVert_\infty ,
-\qquad \sup_{u \in S_k} \lvert u \rvert \leq \kappa \, \sigma_{k-1} ,
+\lVert [P_k A_{k-1}, L_\tau] \rVert \leq C_{1,\kappa} \lVert \nabla\tau \rVert_\infty,
+\qquad \sup_{u \in S_k} \lvert u \rvert \leq \kappa \, \sigma_{k-1},
 $$
 <p>where \(\kappa\) is the ratio of patch size to resolution. The constant grows as \(C_{1,\kappa} = O(\kappa^{d+1})\), so small patches relative to the resolution are more stable. This is a first-principles reason to prefer the small 3-by-3 patches of VGG-style architectures. Assembling the layerwise bounds yields the main theorem.</p>
 
 <div class="box thm"><span class="box-title">Theorem (stability of CKNs, Bietti and Mairal, 2019a)</span>
 Let \(\Phi_n(\mathbf{x}) = \Phi(A_0 \mathbf{x})\) and assume \(\lVert \nabla\tau \rVert_\infty \leq 1/2\). Then
 $$
-\lVert \Phi_n(L_\tau \mathbf{x}) - \Phi_n(\mathbf{x}) \rVert \leq \left( C \beta \, (n+1) \lVert \nabla\tau \rVert_\infty + \frac{C}{\sigma_n} \lVert \tau \rVert_\infty \right) \lVert \mathbf{x} \rVert .
+\lVert \Phi_n(L_\tau \mathbf{x}) - \Phi_n(\mathbf{x}) \rVert \leq \left(C \beta \, (n+1) \lVert \nabla\tau \rVert_\infty + \frac{C}{\sigma_n} \lVert \tau \rVert_\infty \right) \lVert \mathbf{x} \rVert.
 $$
 </div>
 
 <p>The bound reads as a design guide. Translation invariance comes from a large final scale \(\sigma_n\), which shrinks the second term. Deformation stability comes from small patches, since \(\beta\) is the patch size and the deformation constant behaves as \(C_\beta = O(\beta^3)\) for images. Signal preservation requires the subsampling factor to be roughly the patch size. Because each layer can only subsample by about \(\beta\), reaching a final scale \(\sigma_n\) from an initial \(\sigma_0\) needs several layers,</p>
 $$
-n = O\!\left( \frac{\log(\sigma_n / \sigma_0)}{\log \beta} \right) .
+n = O\!\left(\frac{\log(\sigma_n / \sigma_0)}{\log \beta} \right).
 $$
 <p>Small patches force depth: the network must be deep precisely because we insisted on small, stable patches. The proof rests on controlling the commutator norm \(\lVert [L_\tau, P_k A_{k-1}] \rVert\), extending Mallat's (2012) control of \(\lVert [L_\tau, A] \rVert\), and requires patches \(S_k\) adapted to the resolution, \(\operatorname{diam} S_k \leq \beta \sigma_{k-1}\).</p>
 
@@ -379,11 +379,11 @@ $$
 
 <p>Nothing above is special to translations. To build invariance to a locally compact group \(G\) (rotations, reflections), let the group act by \(L_g \mathbf{x}(u) = \mathbf{x}(g^{-1} u)\) and define feature maps on \(G\) itself. The recipe is equivariant inner layers followed by a global pooling in the last layer. Patch extraction becomes \(P\mathbf{x}(u) = (\mathbf{x}(uv))_{v \in S}\); the nonlinear map is equivariant automatically because it is pointwise; and pooling integrates against the left-invariant Haar measure \(\mu\),</p>
 $$
-A\mathbf{x}(u) = \int_G \mathbf{x}(uv) \, h(v) \, d\mu(v) = \int_G \mathbf{x}(v) \, h(u^{-1} v) \, d\mu(v) .
+A\mathbf{x}(u) = \int_G \mathbf{x}(uv) \, h(v) \, d\mu(v) = \int_G \mathbf{x}(v) \, h(u^{-1} v) \, d\mu(v).
 $$
 <p>This recovers and generalizes group-equivariant constructions (Sifre and Mallat, 2013; Cohen and Welling, 2016; Raj et al., 2016). The same analysis extends to the neural tangent kernel of infinitely wide convolutional networks (Bietti and Mairal, 2019b), which is stable too, with the weaker rate</p>
 $$
-\lVert \Phi_n(L_\tau \mathbf{x}) - \Phi_n(\mathbf{x}) \rVert \leq \left( C \beta \, n^{7/4} \lVert \nabla\tau \rVert_\infty^{1/2} + C' \beta \, n^2 \lVert \nabla\tau \rVert_\infty + \sqrt{n+1}\, \frac{C}{\sigma_n} \lVert \tau \rVert_\infty \right) \lVert \mathbf{x} \rVert .
+\lVert \Phi_n(L_\tau \mathbf{x}) - \Phi_n(\mathbf{x}) \rVert \leq \left(C \beta \, n^{7/4} \lVert \nabla\tau \rVert_\infty^{1/2} + C' \beta \, n^2 \lVert \nabla\tau \rVert_\infty + \sqrt{n+1}\, \frac{C}{\sigma_n} \lVert \tau \rVert_\infty \right) \lVert \mathbf{x} \rVert.
 $$
 <p>The half-power on \(\lVert \nabla\tau \rVert_\infty\) makes the convolutional NTK less deformation-stable than the CKN, a concrete difference between the lazy-training kernel and the architectural kernel.</p>
 
@@ -391,7 +391,7 @@ $$
 
 <p>We promised that subsampling loses no information as long as its factor stays below the patch size, and we now show why in one dimension, because it explains what the "filters" of a CKN really encode. Write \(\bar{\mathbf{x}}_k \in \ell^2(\mathbb{Z}, \bar{\mathcal{H}}_k)\) for the discrete feature maps, obtained from the continuous \(\mathbf{x}_k \in L^2(\mathbb{R}, \mathcal{H}_k)\) by subsampling with factor \(s_k\) after pooling at a matching scale \(\sigma_k \approx s_k\),</p>
 $$
-\bar{\mathbf{x}}_k[n] = \bar{A}_k \bar{M}_k \bar{P}_k \bar{\mathbf{x}}_{k-1}[n s_k] .
+\bar{\mathbf{x}}_k[n] = \bar{A}_k \bar{M}_k \bar{P}_k \bar{\mathbf{x}}_{k-1}[n s_k].
 $$
 
 <div class="box prop"><span class="box-title">Claim (recovery)</span>
@@ -400,11 +400,11 @@ If \(s_k\) is at most the patch size, then \(\bar{\mathbf{x}}_{k-1}\) can be rec
 
 <p>The mechanism is that the RKHS \(\bar{\mathcal{H}}_k\) contains the linear functionals of a patch, so we can read the patch back out of its embedding. For a linear function \(f_\mathbf{w}\), evaluating it against the embedded patch recovers a linear measurement of the raw patch,</p>
 $$
-\langle f_\mathbf{w}, \bar{M}_k \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \rangle = f_\mathbf{w}\!\left( \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \right) = \langle \mathbf{w}, \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \rangle ,
+\langle f_\mathbf{w}, \bar{M}_k \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \rangle = f_\mathbf{w}\!\left(\bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \right) = \langle \mathbf{w}, \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \rangle,
 $$
 <p>and running \(\mathbf{w}\) over an orthonormal basis \(\mathcal{B}\) of patch space reconstructs the whole patch,</p>
 $$
-\bar{P}_k \bar{\mathbf{x}}_{k-1}(u) = \sum_{\mathbf{w} \in \mathcal{B}} \langle f_\mathbf{w}, \bar{M}_k \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \rangle \, \mathbf{w} .
+\bar{P}_k \bar{\mathbf{x}}_{k-1}(u) = \sum_{\mathbf{w} \in \mathcal{B}} \langle f_\mathbf{w}, \bar{M}_k \bar{P}_k \bar{\mathbf{x}}_{k-1}(u) \rangle \, \mathbf{w}.
 $$
 <p>Given the patches at every location one can deconvolve the pooling and recover \(\bar{\mathbf{x}}_{k-1}\), provided the subsampling was not so aggressive as to skip patches, hence the "factor at most patch size" condition. One warning: this is an information-theoretic statement, with no claim that the recovery is practical or numerically stable. It is the pre-image of the filters in principle, not a recommended algorithm.</p>
 
@@ -412,32 +412,32 @@ $$
 
 <p>Stability told us about the map \(\Phi\); to talk about the learned model \(f\) we need to know which functions live in the RKHS and what their norms are. For the homogeneous patch kernel \(K_k(\mathbf{z}, \mathbf{z}') = \lVert \mathbf{z} \rVert \lVert \mathbf{z}' \rVert \kappa(\langle \mathbf{z}, \mathbf{z}' \rangle / (\lVert \mathbf{z} \rVert \lVert \mathbf{z}' \rVert))\) with \(\kappa(u) = \sum_{j \geq 0} b_j u^j\), the RKHS contains all homogeneous functions of the form</p>
 $$
-f : \mathbf{z} \; \longmapsto \; \lVert \mathbf{z} \rVert \, \sigma\!\left( \langle \mathbf{g}, \mathbf{z} \rangle / \lVert \mathbf{z} \rVert \right) ,
+f : \mathbf{z} \; \longmapsto \; \lVert \mathbf{z} \rVert \, \sigma\!\left(\langle \mathbf{g}, \mathbf{z} \rangle / \lVert \mathbf{z} \rVert \right),
 $$
 <p>for any smooth activation \(\sigma(u) = \sum_{j \geq 0} a_j u^j\) with non-negative coefficients, exactly the homogenized neurons of the stability analysis. Their norm is bounded through the coefficients of \(\sigma\) and \(\kappa\),</p>
 $$
-\lVert f \rVert_{\mathcal{H}_k}^2 \leq C_\sigma^2(\lVert \mathbf{g} \rVert^2) = \sum_{j=0}^\infty \frac{a_j^2}{b_j} \lVert \mathbf{g} \rVert^{2j} \lt \infty ,
+\lVert f \rVert_{\mathcal{H}_k}^2 \leq C_\sigma^2(\lVert \mathbf{g} \rVert^2) = \sum_{j=0}^\infty \frac{a_j^2}{b_j} \lVert \mathbf{g} \rVert^{2j} \lt \infty,
 $$
 <p>a homogeneous version of the analysis of Zhang et al. (2016, 2017). The rate at which \(C_\sigma^2\) grows measures how expensive the activation is to represent: \(\sigma(u) = u\) (linear) gives \(C_\sigma^2(\lambda^2) = O(\lambda^2)\); a degree-\(p\) polynomial gives \(O(\lambda^{2p})\); and smoother saturating activations such as the sine, the sigmoid, or a smooth ReLU cost \(O(e^{c\lambda^2})\), an exponential price for their smoothness.</p>
 
 <p>This is the last ingredient needed for the linearization principle. A convolutional network with filters \(W_k^{ij}(u)\) (layer \(k\), output filter \(i\), input channel \(j\)) and smooth homogeneous activations can be built hierarchically inside \(\mathcal{H}_K\), so that</p>
 $$
-f(\mathbf{x}) = \sigma_k\!\left( A_k \sigma_{k-1}(A_{k-1} \cdots \sigma_1(A_1 \mathbf{x}) \cdots) \right) = \langle f, \Phi(\mathbf{x}) \rangle_\mathcal{H} .
+f(\mathbf{x}) = \sigma_k\!\left(A_k \sigma_{k-1}(A_{k-1} \cdots \sigma_1(A_1 \mathbf{x}) \cdots) \right) = \langle f, \Phi(\mathbf{x}) \rangle_\mathcal{H}.
 $$
 <p>The RKHS norm of the network is bounded by nesting the activation-cost function through the layers,</p>
 $$
-\lVert f_\sigma \rVert^2 \leq \lVert W_{n+1} \rVert_2^2 \, C_\sigma^2\!\left( \lVert W_n \rVert_2^2 \, C_\sigma^2\!\left( \lVert W_{n-1} \rVert_2^2 \, C_\sigma^2( \cdots ) \right) \right) ,
+\lVert f_\sigma \rVert^2 \leq \lVert W_{n+1} \rVert_2^2 \, C_\sigma^2\!\left(\lVert W_n \rVert_2^2 \, C_\sigma^2\!\left(\lVert W_{n-1} \rVert_2^2 \, C_\sigma^2(\cdots) \right) \right),
 $$
 <p>and in the purely linear case (\(\sigma = \text{id}\)) this collapses to the product of spectral norms of the layers,</p>
 $$
-\lVert f_\sigma \rVert^2 \leq \lVert W_{n+1} \rVert_2^2 \cdot \lVert W_n \rVert_2^2 \cdots \lVert W_1 \rVert_2^2 .
+\lVert f_\sigma \rVert^2 \leq \lVert W_{n+1} \rVert_2^2 \cdot \lVert W_n \rVert_2^2 \cdots \lVert W_1 \rVert_2^2.
 $$
 
 <h3 id="generalization">Link with generalization</h3>
 
 <p>Because the trained CNN is now a function in an RKHS ball, the classical generalization theory of Chapter 4 applies with no modification. For the ball \(\mathcal{F}_B = \{ f \in \mathcal{H}_K : \lVert f \rVert \leq B \}\), the Rademacher complexity over \(N\) samples of radius \(R\) is</p>
 $$
-\operatorname{Rad}_N(\mathcal{F}_B) \leq O\!\left( \frac{B R}{\sqrt{N}} \right) ,
+\operatorname{Rad}_N(\mathcal{F}_B) \leq O\!\left(\frac{B R}{\sqrt{N}} \right),
 $$
 <p>which yields a margin bound \(O(\lVert \hat{f}_N \rVert R / (\gamma \sqrt{N}))\) for a learned CNN \(\hat{f}_N\) with confidence margin \(\gamma \gt 0\). Since \(\lVert \hat{f}_N \rVert\) is controlled by the product of spectral norms, this recovers, from the kernel viewpoint, the spectral-norm generalization bounds for neural networks of Bartlett et al. (2017) and Neyshabur et al. (2018), and connects to the classical treatments of Boucheron et al. (2005) and Shalev-Shwartz and Ben-David (2014).</p>
 
@@ -463,13 +463,13 @@ $$
 $$
 \varphi_{\text{path}}(u) = \sum_{p \in \mathcal{P}_k(G, u)} \delta_{a(p)}(\cdot)
 \quad\Longrightarrow\quad
-\Phi(G) = \sum_{u \in \mathcal{V}} \sum_{p \in \mathcal{P}_k(G, u)} \delta_{a(p)} ,
+\Phi(G) = \sum_{u \in \mathcal{V}} \sum_{p \in \mathcal{P}_k(G, u)} \delta_{a(p)},
 $$
 <p>so \(\Phi(G)\) is a histogram of path occurrences. This has two defects. The Dirac \(\delta\) only makes hard, all-or-nothing comparisons, so it handles discrete attributes but not continuous ones; and it is not differentiable, so it cannot be optimized by backpropagation. Both defects vanish if we soften the spike into a Gaussian bump,</p>
 $$
 \varphi_{\text{path}}(u) = \sum_{p \in \mathcal{P}_k(G, u)} \delta_{a(p)}(\cdot)
 \quad\longrightarrow\quad
-\sum_{p \in \mathcal{P}_k(G, u)} e^{-\frac{\alpha}{2}\lVert a(p) - \cdot \rVert^2} ,
+\sum_{p \in \mathcal{P}_k(G, u)} e^{-\frac{\alpha}{2}\lVert a(p) - \cdot \rVert^2},
 $$
 <p>a sum of Gaussians centered at each path's attributes: soft, differentiable, and defined for continuous attributes.</p>
 
@@ -477,18 +477,18 @@ $$
 
 <p>The one-layer GCKN is exactly this relaxed path kernel mapping,</p>
 $$
-\varphi_1(u) := \sum_{p \in \mathcal{P}_k(G, u)} e^{-\frac{\alpha_1}{2}\lVert a(p) - \cdot \rVert^2} = \sum_{p \in \mathcal{P}_k(G, u)} \varphi_{\mathrm{RBF}}(a(p)) \; \in \; \mathcal{H}_1 ,
+\varphi_1(u) := \sum_{p \in \mathcal{P}_k(G, u)} e^{-\frac{\alpha_1}{2}\lVert a(p) - \cdot \rVert^2} = \sum_{p \in \mathcal{P}_k(G, u)} \varphi_{\mathrm{RBF}}(a(p)) \; \in \; \mathcal{H}_1,
 $$
 <p>and it decomposes into the same three moves as a CKN layer. <em>Path extraction</em>: enumerate all paths \(\mathcal{P}_k(G, u)\) from \(u\), the graph analogue of patch extraction. <em>Kernel mapping</em>: embed each path's features through the Gaussian feature map \(\varphi_{\mathrm{RBF}}\). <em>Path aggregation</em>: sum the path embeddings, the graph analogue of pooling. The result is a new graph on the same topology but with richer node features,</p>
 $$
-(\mathcal{V}, \mathcal{E}, a) \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_1) .
+(\mathcal{V}, \mathcal{E}, a) \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_1).
 $$
 
 <h3 id="multilayer-gckn">Stacking layers</h3>
 
 <p>Because the output is again an attributed graph, we can apply \(\varphi_{\text{path}}\) again,</p>
 $$
-(\mathcal{V}, \mathcal{E}, a) \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_1) \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_2) \xrightarrow{\;\varphi_{\text{path}}\;} \cdots \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_j) ,
+(\mathcal{V}, \mathcal{E}, a) \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_1) \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_2) \xrightarrow{\;\varphi_{\text{path}}\;} \cdots \xrightarrow{\;\varphi_{\text{path}}\;} (\mathcal{V}, \mathcal{E}, \varphi_j),
 $$
 <p>and read out the graph representation at layer \(j\) as \(\Phi(G) = \sum_{u \in \mathcal{V}} \varphi_j(u)\). Depth buys structure: applying \(\varphi_{\text{path}}\) once captures paths (GCKN-path), applying it twice captures subtrees (GCKN-subtree), and applying it more may capture higher-order substructures. This is how the model reaches long-range structure without ever enumerating long paths, which would be computationally prohibitive; a stack of short-path layers captures long-range substructures that a single layer could not afford.</p>
 
@@ -508,7 +508,7 @@ $$
 $$
 \psi_k(u) = \sum_{p \in \mathcal{P}_k(G, u)} \kappa(Z^\top Z)^{-1/2} \, \kappa(Z^\top \psi_{k-1}(p)),
 \qquad
-f_k(u) = \sum_{v \in \mathcal{N}(u)} \operatorname{ReLU}(Z^\top f_{k-1}(v)) .
+f_k(u) = \sum_{v \in \mathcal{N}(u)} \operatorname{ReLU}(Z^\top f_{k-1}(v)).
 $$
 
 <table>
@@ -532,11 +532,11 @@ $$
 
 <p>The third domain is biological sequences, where the same recipe produces convolutional and recurrent kernel networks. The task is standard supervised learning: given sequences \(\mathbf{x}_1, \ldots, \mathbf{x}_n \in \mathcal{X}\) with labels \(y_1, \ldots, y_n\), learn a predictive and <em>interpretable</em> function by regularized risk minimization,</p>
 $$
-\min_{f \in \mathcal{F}} \; \frac{1}{n} \sum_{i=1}^n L(y_i, f(\mathbf{x}_i)) + \mu \, \Omega(f) ,
+\min_{f \in \mathcal{F}} \; \frac{1}{n} \sum_{i=1}^n L(y_i, f(\mathbf{x}_i)) + \mu \, \Omega(f),
 $$
 <p>and the modeling question is how to choose \(\mathcal{F}\). The classical answer for a sequence over an alphabet \(\mathcal{A}\) is a string kernel comparing counts of \(k\)-mers,</p>
 $$
-K(\mathbf{x}, \mathbf{x}') = \sum_{u \in \mathcal{A}^k} \delta_u(\mathbf{x}) \, \delta_u(\mathbf{x}') = \langle \Phi(\mathbf{x}), \Phi(\mathbf{x}') \rangle ,
+K(\mathbf{x}, \mathbf{x}') = \sum_{u \in \mathcal{A}^k} \delta_u(\mathbf{x}) \, \delta_u(\mathbf{x}') = \langle \Phi(\mathbf{x}), \Phi(\mathbf{x}') \rangle,
 $$
 <p>where \(\delta_u(\mathbf{x})\) counts occurrences of the \(k\)-mer \(u\): exact occurrences (spectrum kernel, Leslie et al., 2002), occurrences up to \(m\) mismatches (mismatch kernel, Leslie and Kuang, 2004), or occurrences with gaps weighted by an exponential decay (substring kernel, Lodhi et al., 2002). The feature map \(\Phi(\mathbf{x})\) is a histogram of pattern occurrences, and its discreteness is the same obstacle we met with paths.</p>
 
@@ -544,17 +544,17 @@ $$
 
 <p>We relax the mismatch kernel to a continuous, differentiable one (Chen et al., 2019a; Morrow et al., 2017) by comparing all pairs of \(k\)-mers through a smooth kernel \(K_0\) rather than exact matching,</p>
 $$
-K_{\mathrm{CKN}}(\mathbf{x}, \mathbf{x}') = \sum_{i=1}^{|\mathbf{x}|-k+1} \sum_{j=1}^{|\mathbf{x}'|-k+1} K_0\!\left( \mathbf{x}[i{:}i{+}k], \, \mathbf{x}'[j{:}j{+}k] \right) = \Big\langle \sum_i \varphi_0(\mathbf{x}[i{:}i{+}k]), \; \sum_j \varphi_0(\mathbf{x}'[j{:}j{+}k]) \Big\rangle .
+K_{\mathrm{CKN}}(\mathbf{x}, \mathbf{x}') = \sum_{i=1}^{|\mathbf{x}|-k+1} \sum_{j=1}^{|\mathbf{x}'|-k+1} K_0\!\left(\mathbf{x}[i{:}i{+}k], \, \mathbf{x}'[j{:}j{+}k] \right) = \Big\langle \sum_i \varphi_0(\mathbf{x}[i{:}i{+}k]), \; \sum_j \varphi_0(\mathbf{x}'[j{:}j{+}k]) \Big\rangle.
 $$
 <p>Each \(k\)-mer is one-hot encoded as a matrix in \(\mathbb{R}^{k \times d}\), for instance the DNA window TTGAG over the alphabet \(\{A, T, C, G\}\) becomes a \(4 \times 5\) binary matrix with a single 1 per column, and \(K_0\) is a Gaussian kernel over these encodings. The mapping \(\Phi(\mathbf{x}) = \sum_i \varphi_0(\mathbf{x}[i{:}i{+}k])\) is a differentiable relaxation of the mismatch kernel.</p>
 
 <p>To make it finite we again use Nyström, and here it is worth stating the general form. Projecting \(\varphi_0(u)\) onto \(E_0 = \operatorname{span}(\varphi_0(z_1), \ldots, \varphi_0(z_q))\) gives \(\psi_0(u) \in \mathbb{R}^q\) with</p>
 $$
-\psi_0(u) = K_0(Z, Z)^{-1/2} K_0(Z, u) ,
+\psi_0(u) = K_0(Z, Z)^{-1/2} K_0(Z, u),
 $$
 <p>and when \(K_0(u, u') = \kappa(\langle u, u' \rangle)\) is a dot-product kernel this specializes to the by-now familiar layer</p>
 $$
-\psi_0(u) = \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top u) ,
+\psi_0(u) = \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top u),
 $$
 <p>a linear operation, a pointwise nonlinearity \(\kappa\), and a linear operation, with \(\kappa(\beta) = e^{\beta - 1}\), polynomial, inverse polynomial, or arc-cosine. A single-layer CKN for sequences extracts \(k\)-mers, applies \(\psi_0\), pools globally into \(\Psi(\mathbf{x}) \in \mathbb{R}^q\), and predicts with \(\langle \mathbf{w}, \Psi(\mathbf{x}) \rangle\); stacking an embedding layer, a convolutional kernel layer with a dot-product kernel, and pooling gives the multilayer version.</p>
 
@@ -562,15 +562,15 @@ $$
 
 <p>Biological motifs tolerate insertions, so we want to compare \(k\)-mers <em>with gaps</em>. For a sequence \(\mathbf{x} = x_1 \ldots x_n\) and an ordered index tuple \(\imath = (i_1, \ldots, i_k)\), define the \(k\)-substring \(\mathbf{x}[\imath] = x_{i_1} x_{i_2} \ldots x_{i_k}\) and let \(\operatorname{gaps}(\imath)\) count the gaps it skips. For example, in \(\mathbf{x} = \texttt{ABRACADABRA}\) the indices \(\imath = (4,5,8,9,11)\) read off \(\mathbf{x}[\imath] = \texttt{RADAR}\) with \(\operatorname{gaps}(\imath) = 3\). The recurrent kernel network compares all gapped \(k\)-mers, penalizing gaps geometrically with a factor \(\lambda \in (0,1)\),</p>
 $$
-K_{\mathrm{RKN}}(\mathbf{x}, \mathbf{x}') = \sum_{\imath \in \mathcal{I}(k, |\mathbf{x}|)} \sum_{\jmath \in \mathcal{I}(k, |\mathbf{x}'|)} \lambda^{\operatorname{gaps}(\imath)} \lambda^{\operatorname{gaps}(\jmath)} K_0\!\left( \mathbf{x}[\imath], \mathbf{x}'[\jmath] \right),
+K_{\mathrm{RKN}}(\mathbf{x}, \mathbf{x}') = \sum_{\imath \in \mathcal{I}(k, |\mathbf{x}|)} \sum_{\jmath \in \mathcal{I}(k, |\mathbf{x}'|)} \lambda^{\operatorname{gaps}(\imath)} \lambda^{\operatorname{gaps}(\jmath)} K_0\!\left(\mathbf{x}[\imath], \mathbf{x}'[\jmath] \right),
 \qquad
-\Phi(\mathbf{x}) = \sum_{\imath \in \mathcal{I}(k, |\mathbf{x}|)} \lambda^{\operatorname{gaps}(\imath)} \varphi_0(\mathbf{x}[\imath]) ,
+\Phi(\mathbf{x}) = \sum_{\imath \in \mathcal{I}(k, |\mathbf{x}|)} \lambda^{\operatorname{gaps}(\imath)} \varphi_0(\mathbf{x}[\imath]),
 $$
 <p>a differentiable relaxation of the substring kernel. Enumerating all index tuples is exponentially costly, but the Nyström feature map</p>
 $$
 \Psi(\mathbf{x}) = \sum_{\imath \in \mathcal{I}(k, t)} \lambda^{\operatorname{gaps}(\imath)} \psi_0(\mathbf{x}[\imath]) \in \mathbb{R}^q,
 \qquad
-\psi_0(\mathbf{x}[\imath]) = \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top \mathbf{x}[\imath]) ,
+\psi_0(\mathbf{x}[\imath]) = \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top \mathbf{x}[\imath]),
 $$
 <p>can be computed by dynamic programming (Lodhi et al., 2002), and the resulting recursion is precisely a particular recurrent neural network (Lei et al., 2017). When \(K_0\) is Gaussian, the RKN feature map is a mixture of Gaussians centered at the substrings \(\mathbf{x}[\imath]\) and weighted by \(\lambda^{\operatorname{gaps}(\imath)}\): the network is a soft, gap-tolerant substring counter that trains by gradient descent.</p>
 
@@ -583,6 +583,39 @@ Almost everything in this chapter postdates the two standard kernel-methods text
 <h2 id="conclusion">Conclusion</h2>
 
 <p>The thread running through this chapter is a single idea seen from many sides: a deep architecture is a map into a reproducing kernel Hilbert space. Fixing the hidden layer sends the infinite-width network to the random-feature kernel; letting gradient descent run on a very wide network sends its trajectory to the neural tangent kernel; and building each layer as a Nyström-approximated kernel embedding places an entire convolutional, graph, or recurrent network inside an RKHS, where it becomes one linear functional of a data-independent feature map \(\Phi\). Once there, the RKHS norm becomes a single lever controlling smoothness, deformation stability, and generalization at once, the pieces we treated separately as the geometry factor and the complexity factor of the basic inequality \(\lvert f(\mathbf{x}) - f(\mathbf{x}') \rvert \leq \lVert f \rVert_\mathcal{H} \lVert \Phi(\mathbf{x}) - \Phi(\mathbf{x}') \rVert_\mathcal{H}\). Kernels do not compete with deep learning; they supply the geometry within which deep learning can be understood, regularized, and, through the learned anchor points, trained end to end.</p>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+
+<li><span class="ex-tag">warm-up</span> Schoenberg's theorem says that \(K(\mathbf{x}, \mathbf{y}) = \kappa(\langle \mathbf{x}, \mathbf{y} \rangle)\) is positive definite on the sphere of every Hilbert space exactly when \(\kappa\) has a power series with non-negative coefficients. Decide which of the following univariate functions passes the test on \([-1, 1]\), and for each one that fails, name the offending coefficient: (a) the exponential \(\kappa(u) = e^{\alpha(u - 1)}\) with \(\alpha \gt 0\); (b) the inverse polynomial \(\kappa(u) = 1/(2 - u)\); (c) the polynomial \(\kappa(u) = (c + u)^p\) with \(c \geq 0\) and integer \(p \geq 1\); (d) \(\kappa(u) = 1 - u\); (e) \(\kappa(u) = \cos u\). For (b), expand the geometric series \(1/(2 - u) = \tfrac{1}{2}\sum_{j \geq 0} (u/2)^j\) and read off the sign of every coefficient.</li>
+
+<li><span class="ex-tag">computation</span> Take two unit vectors \(\mathbf{z}, \mathbf{z}'\) on the sphere separated by angle \(\theta = \pi/3\), so \(\langle \mathbf{z}, \mathbf{z}' \rangle = \tfrac{1}{2}\). (a) Using the table of dot-product kernels, evaluate the degree-1 arc-cosine kernel \(\tfrac{1}{\pi}\big(\sin\theta + (\pi - \theta)\cos\theta\big)\) and Vovk's degree-3 kernel \(\tfrac{1}{3}(1 + u + u^2)\) at this angle, to three decimals. (b) Confirm the identity \(\lVert \mathbf{z} - \mathbf{z}' \rVert^2 = 2 - 2\langle \mathbf{z}, \mathbf{z}' \rangle\) here, and use it to check that the exponential kernel \(e^{\alpha(\langle \mathbf{z}, \mathbf{z}' \rangle - 1)}\) equals the Gaussian \(e^{-\frac{\alpha}{2}\lVert \mathbf{z} - \mathbf{z}' \rVert^2}\) at \(\alpha = 2\). (c) Evaluate the degree-0 angular part \(J_0(\theta) = \pi - \theta\) and confirm it decreases as the angle opens, consistent with its reading as a count of separating hyperplanes.</li>
+
+<li><span class="ex-tag">proof</span> Derive the degree-0 arc-cosine kernel from a random layer of step neurons. Let \(\sigma\) be the Heaviside step, \(\sigma(t) = 1\) if \(t \gt 0\) and \(0\) otherwise, and draw \(\mathbf{w} \sim \mathcal{N}(0, I)\). Show that
+$$ K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w}}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x})\, \sigma(\mathbf{w}^\top \mathbf{y}) \right] = \mathbb{P}\!\left(\mathbf{w}^\top \mathbf{x} \gt 0 \ \text{and}\ \mathbf{w}^\top \mathbf{y} \gt 0 \right) = \frac{\pi - \theta}{2\pi}, $$
+where \(\theta = \arccos\big(\mathbf{x}^\top \mathbf{y} / (\lVert \mathbf{x} \rVert \lVert \mathbf{y} \rVert)\big)\). Conclude that this expectation depends on the inputs through the angle alone, and relate it to the Cho and Saul factor \(J_0(\theta) = \pi - \theta\). Why does the answer not change if you replace \(\mathbf{x}\) by \(\lambda \mathbf{x}\) for any \(\lambda \gt 0\)?
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The pair \((\mathbf{w}^\top \mathbf{x}, \mathbf{w}^\top \mathbf{y})\) is jointly Gaussian and centered, so only the plane spanned by \(\mathbf{x}\) and \(\mathbf{y}\) matters; project \(\mathbf{w}\) onto it. The direction of \(\mathbf{w}\) in that plane is uniform on the circle by rotational invariance of \(\mathcal{N}(0, I)\), so the probability that a uniformly random half-plane through the origin puts both \(\mathbf{x}\) and \(\mathbf{y}\) on its positive side is the fraction of directions lying within \(\pi/2\) of both, which is \((\pi - \theta)/(2\pi)\). Positive scaling of \(\mathbf{x}\) leaves the sign of \(\mathbf{w}^\top \mathbf{x}\) untouched.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Make precise the claim that a wide random layer is a Monte Carlo estimate of \(K_{\mathrm{RF}}\). Fix inputs \(\mathbf{x}, \mathbf{y}\), draw \(\mathbf{w}_1, \ldots, \mathbf{w}_m\) independently from \(\mathcal{N}(0, I)\), and set the empirical kernel
+$$ \widehat{K}_m(\mathbf{x}, \mathbf{y}) = \frac{1}{m} \sum_{i=1}^m \sigma(\mathbf{w}_i^\top \mathbf{x})\, \sigma(\mathbf{w}_i^\top \mathbf{y}). $$
+Assume the feature product \(\xi_i = \sigma(\mathbf{w}_i^\top \mathbf{x})\, \sigma(\mathbf{w}_i^\top \mathbf{y})\) has finite variance \(v(\mathbf{x}, \mathbf{y}) \lt \infty\). Show that \(\mathbb{E}\big[\widehat{K}_m(\mathbf{x}, \mathbf{y})\big] = K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y})\) for every \(m\) (the estimate is unbiased), that \(\operatorname{Var}\big[\widehat{K}_m(\mathbf{x}, \mathbf{y})\big] = v(\mathbf{x}, \mathbf{y}) / m\), and hence that \(\widehat{K}_m(\mathbf{x}, \mathbf{y}) \to K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y})\) with a typical fluctuation of order \(1/\sqrt{m}\). Explain in one sentence why this is exactly the statement that widening a frozen hidden layer refines a kernel estimate rather than changing the kernel it targets.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The \(\xi_i\) are independent and identically distributed with common mean \(K_{\mathrm{RF}}(\mathbf{x}, \mathbf{y})\), so linearity of expectation gives the mean and independence gives \(\operatorname{Var}[\frac{1}{m}\sum_i \xi_i] = \frac{1}{m^2}\sum_i \operatorname{Var}[\xi_i] = v/m\). The \(1/\sqrt{m}\) rate is the standard deviation, the square root of the variance; the law of large numbers then forces convergence to the population mean, which is the kernel.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Derive the two-term neural tangent kernel for the two-layer network \(f_\theta(\mathbf{x}) = \tfrac{1}{\sqrt{m}} \sum_{i=1}^m v_i\, \sigma(\mathbf{w}_i^\top \mathbf{x})\) with parameters \(\theta = (v_i, \mathbf{w}_i)_i\). (a) Compute the two blocks of the gradient, \(\partial f_\theta / \partial v_i\) and \(\nabla_{\mathbf{w}_i} f_\theta\), and check that each carries a factor \(1/\sqrt{m}\). (b) Form the gradient inner product \(\langle \nabla_\theta f_{\theta_0}(\mathbf{x}), \nabla_\theta f_{\theta_0}(\mathbf{y}) \rangle\), summing both blocks over \(i\). (c) With \(\mathbf{w}_i, v_i\) drawn from \(\mathcal{N}(0, I)\) and \(\mathbb{E}[v_i^2] = 1\), take \(m \to \infty\) and apply the law of large numbers to obtain
+$$ K_{\mathrm{NTK}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w}}\!\left[ \sigma(\mathbf{w}^\top \mathbf{x})\, \sigma(\mathbf{w}^\top \mathbf{y}) + (\mathbf{x}^\top \mathbf{y})\, \sigma'(\mathbf{w}^\top \mathbf{x})\, \sigma'(\mathbf{w}^\top \mathbf{y}) \right]. $$
+Identify which term comes from the output weights and which from the hidden weights, and explain why freezing the hidden layer deletes the second term and leaves exactly \(K_{\mathrm{RF}}\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Differentiating gives \(\partial f_\theta / \partial v_i = \tfrac{1}{\sqrt{m}} \sigma(\mathbf{w}_i^\top \mathbf{x})\) and \(\nabla_{\mathbf{w}_i} f_\theta = \tfrac{1}{\sqrt{m}} v_i\, \sigma'(\mathbf{w}_i^\top \mathbf{x})\, \mathbf{x}\). The \(v\)-block sum is \(\tfrac{1}{m}\sum_i \sigma(\mathbf{w}_i^\top \mathbf{x})\sigma(\mathbf{w}_i^\top \mathbf{y})\); the \(\mathbf{w}\)-block sum is \(\tfrac{1}{m}\sum_i v_i^2\, \sigma'(\mathbf{w}_i^\top \mathbf{x})\sigma'(\mathbf{w}_i^\top \mathbf{y})\, (\mathbf{x}^\top \mathbf{y})\). Each empirical average converges to its expectation; use \(\mathbb{E}[v_i^2] = 1\) and independence of \(v_i\) from \(\mathbf{w}_i\).</div></details></li>
+
+<li><span class="ex-tag">exploration</span> Open the interactive figure above in the section on random feature kernels. It plots a target dot-product kernel against the estimate produced by a finite bank of \(D\) random features, the same object a width-\(D\) hidden layer computes. Start at small \(D\), where the estimate is visibly rough and rattles around the smooth target curve, then raise \(D\) and watch the estimate settle onto its infinite-width limit. Answer three questions from what you see: (a) roughly how does the size of the wiggle around the target shrink as you multiply \(D\) by four, and does that match the \(1/\sqrt{m}\) rate you proved above? (b) the target curve itself never moves as \(D\) grows, only the estimate tightens onto it; which fact about frozen random features does that illustrate, as opposed to what would happen if the layer were being trained? (c) in the language of the chapter, in what precise sense is each additional random feature one more Monte Carlo sample of the population inner product \(\mathbb{E}_{\mathbf{w}}[\sigma(\mathbf{w}^\top \mathbf{x})\sigma(\mathbf{w}^\top \mathbf{y})]\)?</li>
+
+<li><span class="ex-tag">challenge</span> Explain, and then quantify, why the lazy regime performs no feature learning. Consider the linearization \(f_\theta(\mathbf{x}) \approx f_{\theta_0}(\mathbf{x}) + \langle \theta - \theta_0,\, \nabla_\theta f_{\theta_0}(\mathbf{x}) \rangle\) around initialization. (a) Argue from the \(1/\sqrt{m}\) prefactor of \(f_\theta = \tfrac{1}{\sqrt{m}}\sum_i v_i \sigma(\mathbf{w}_i^\top \mathbf{x})\) that changing the output by an order-one amount requires each of the \(m\) hidden weights to move by only about \(1/\sqrt{m}\), which vanishes as \(m \to \infty\). (b) Conclude that the feature map \(\nabla_\theta f_{\theta_0}\) is frozen throughout training, so the trained model is a linear predictor in a fixed feature space, that is kernel ridge regression with \(K_{\mathrm{NTK}}\). (c) Contrast this with genuine feature learning, in which the hidden representation reorganizes around the data, and state precisely what it is about the scaling, not any added assumption, that rules such reorganization out in the wide limit. Where in the two-term NTK of the previous exercise does the small but non-zero movement of the hidden weights leave its trace?
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Because the outputs of the \(m\) neurons are summed with weight \(1/\sqrt{m}\), a collective order-one change in the sum needs only an order-\(1/\sqrt{m}\) change per neuron, so the per-parameter displacement \(\lVert \theta - \theta_0 \rVert_{\text{per weight}}\) is \(O(1/\sqrt{m})\). Small displacement is exactly the regime where the first-order Taylor expansion is accurate, so the nonlinear network tracks its own linearization; a fixed feature map means fixed features, hence no feature learning. The second term of \(K_{\mathrm{NTK}}\), carrying \(\sigma'\) and \(\mathbf{x}^\top \mathbf{y}\), is the residue of that infinitesimal hidden-weight motion.</div></details></li>
+
+<li><span class="ex-tag">challenge</span> Trace the Nyström bridge that turns an infinite-dimensional kernel into a finite neural-network layer, and follow it onto graphs. (a) For a dot-product kernel \(K(\mathbf{x}, \mathbf{y}) = \kappa(\langle \mathbf{x}, \mathbf{y} \rangle)\) with feature map \(\varphi\) and anchors \(Z = [\mathbf{z}_1, \ldots, \mathbf{z}_p]\), the Nyström embedding is \(\psi(\mathbf{x}) = \kappa(Z^\top Z)^{-1/2}\, \kappa(Z^\top \mathbf{x})\). Reading the three factors from right to left, identify which is a linear map, which is a pointwise nonlinearity, and which is a second linear map, and explain in what sense the factor \(\kappa(Z^\top Z)^{-1/2}\) is what distinguishes projecting onto a subspace of the RKHS from applying an arbitrary nonlinearity as a plain CNN does. (b) Verify the normalization role of \(\kappa(Z^\top Z)^{-1/2}\) by showing that when the anchors are orthonormal in feature space, so \(\kappa(Z^\top Z) = I\), the embedding reduces to \(\psi(\mathbf{x}) = \kappa(Z^\top \mathbf{x})\). (c) A one-layer graph convolutional kernel network replaces patches by paths: it enumerates the paths \(\mathcal{P}_k(G, u)\) from each node \(u\), embeds each path's attributes through the same Nyström layer, and sums. Write the node update \(\psi(u) = \sum_{p \in \mathcal{P}_k(G, u)} \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top \psi_{\text{prev}}(p))\) and say which of the three CKN moves (extract local patterns, embed with a kernel, pool) each piece implements, and why the anchors \(Z\) are now interpretable as learned prototypical path features.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">In \(\psi(\mathbf{x}) = \kappa(Z^\top Z)^{-1/2} \kappa(Z^\top \mathbf{x})\), the innermost \(Z^\top \mathbf{x}\) is linear, the entrywise \(\kappa(\cdot)\) is the nonlinearity, and left-multiplication by \(\kappa(Z^\top Z)^{-1/2}\) is the second linear map; a CNN keeps the first two and drops the third, which is precisely the orthogonal projection onto \(\mathcal{F} = \operatorname{span}(\varphi(\mathbf{z}_1), \ldots, \varphi(\mathbf{z}_p))\). For (c), path enumeration is patch extraction, the Nyström layer is the kernel embedding, and the sum over paths is pooling; the anchors sit in path-feature space, so each \(\mathbf{z}_j\) is a template local pattern the layer scores against.</div></details></li>
+
+</ol>
+</section>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Neal, R. M.</span> <span class="bib-year">(1996)</span> <span class="bib-title">Bayesian Learning for Neural Networks</span>. <span class="bib-venue">Springer, Lecture Notes in Statistics 118.</span></li>
 <li ><span class="bib-authors">Cho, Y. and Saul, L. K.</span> <span class="bib-year">(2009)</span> <span class="bib-title">Kernel methods for deep learning</span>. <span class="bib-venue">NeurIPS 22.</span></li>
 <li ><span class="bib-authors">Rahimi, A. and Recht, B.</span> <span class="bib-year">(2007)</span> <span class="bib-title">Random features for large-scale kernel machines</span>. <span class="bib-venue">NeurIPS 20.</span></li>
@@ -626,7 +659,8 @@ Almost everything in this chapter postdates the two standard kernel-methods text
 <a class="l2" href="#sequences">Application to biological sequences</a>
 <a class="l3" href="#ckn-sequences">A convolutional kernel network for sequences</a>
 <a class="l3" href="#rkn">Gapped k-mers and recurrent kernel networks</a>
-<a class="l2" href="#conclusion">Conclusion</a></aside></main>
+<a class="l2" href="#conclusion">Conclusion</a>
+<a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>

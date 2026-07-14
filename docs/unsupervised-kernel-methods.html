@@ -61,21 +61,21 @@
 
 <p>Assume the data are centered; if they are not, we center them as a preprocessing step:</p>
 $$
-\frac{1}{n} \sum_{i=1}^n \mathbf{x}_i = 0 .
+\frac{1}{n} \sum_{i=1}^n \mathbf{x}_i = 0.
 $$
 <p>The object PCA optimizes over is a direction, but it is fruitful to think of a direction as the function it induces. The orthogonal projection onto a direction \(\mathbf{w} \in \mathbb{R}^d\) is the function \(h_\mathbf{w} : \mathbb{R}^d \to \mathbb{R}\) defined by</p>
 $$
-h_\mathbf{w}(\mathbf{x}) = \frac{\mathbf{x}^\top \mathbf{w}}{\lVert \mathbf{w} \rVert} .
+h_\mathbf{w}(\mathbf{x}) = \frac{\mathbf{x}^\top \mathbf{w}}{\lVert \mathbf{w} \rVert}.
 $$
 <p>Because the data are centered, the values \(h_\mathbf{w}(\mathbf{x}_1), \ldots, h_\mathbf{w}(\mathbf{x}_n)\) have zero mean, and the empirical variance captured by \(h_\mathbf{w}\) is simply the mean of their squares:</p>
 $$
-\widehat{\operatorname{var}}(h_\mathbf{w}) := \frac{1}{n} \sum_{i=1}^n h_\mathbf{w}(\mathbf{x}_i)^2 = \frac{1}{n} \sum_{i=1}^n \frac{\left( \mathbf{x}_i^\top \mathbf{w} \right)^2}{\lVert \mathbf{w} \rVert^2} .
+\widehat{\operatorname{var}}(h_\mathbf{w}) := \frac{1}{n} \sum_{i=1}^n h_\mathbf{w}(\mathbf{x}_i)^2 = \frac{1}{n} \sum_{i=1}^n \frac{\left(\mathbf{x}_i^\top \mathbf{w} \right)^2}{\lVert \mathbf{w} \rVert^2}.
 $$
 
 <div class="box def"><span class="box-title">Definition (principal directions)</span>
 The \(i\)-th principal direction \(\mathbf{w}_i\), for \(i = 1, \ldots, d\), is defined recursively by
 $$
-\mathbf{w}_i = \arg\max_{\mathbf{w} \perp \{\mathbf{w}_1, \ldots, \mathbf{w}_{i-1}\}} \widehat{\operatorname{var}}(h_\mathbf{w}) \quad \text{s.t.} \quad \lVert \mathbf{w} \rVert = 1 .
+\mathbf{w}_i = \arg\max_{\mathbf{w} \perp \{\mathbf{w}_1, \ldots, \mathbf{w}_{i-1}\}} \widehat{\operatorname{var}}(h_\mathbf{w}) \quad \text{s.t.} \quad \lVert \mathbf{w} \rVert = 1.
 $$
 Each direction captures as much variance as possible while being orthogonal to all the previous ones.
 </div>
@@ -84,7 +84,7 @@ Each direction captures as much variance as possible while being orthogonal to a
 
 <p>The maximization has a classical closed-form answer. Let \(X\) be the \(n \times d\) data matrix whose rows are the vectors \(\mathbf{x}_1, \ldots, \mathbf{x}_n\). Stacking the projections, we can write the variance as a Rayleigh quotient:</p>
 $$
-\widehat{\operatorname{var}}(h_\mathbf{w}) = \frac{1}{n} \sum_{i=1}^n \frac{\left( \mathbf{x}_i^\top \mathbf{w} \right)^2}{\lVert \mathbf{w} \rVert^2} = \frac{1}{n} \, \frac{\mathbf{w}^\top X^\top X \mathbf{w}}{\mathbf{w}^\top \mathbf{w}} .
+\widehat{\operatorname{var}}(h_\mathbf{w}) = \frac{1}{n} \sum_{i=1}^n \frac{\left(\mathbf{x}_i^\top \mathbf{w} \right)^2}{\lVert \mathbf{w} \rVert^2} = \frac{1}{n} \, \frac{\mathbf{w}^\top X^\top X \mathbf{w}}{\mathbf{w}^\top \mathbf{w}}.
 $$
 
 <div class="box prop"><span class="box-title">Proposition (PCA as an eigenproblem)</span>
@@ -105,25 +105,25 @@ are the successive eigenvectors of \(X^\top X\), ranked by decreasing eigenvalue
 
 <p>Each ingredient of PCA translates term by term. Centering the data becomes centering the embedded data: we assume</p>
 $$
-\frac{1}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i) = 0 ,
+\frac{1}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i) = 0,
 $$
 <p>which, as we will see below, can be enforced by manipulating the kernel matrix rather than the points themselves. A direction is now an element \(f \in \mathcal{H}\), and the orthogonal projection onto it is the function \(h_f : \mathcal{X} \to \mathbb{R}\) defined by</p>
 $$
-h_f(\mathbf{x}) = \frac{\langle \varphi(\mathbf{x}), f \rangle_{\mathcal{H}}}{\lVert f \rVert_{\mathcal{H}}} ,
+h_f(\mathbf{x}) = \frac{\langle \varphi(\mathbf{x}), f \rangle_{\mathcal{H}}}{\lVert f \rVert_{\mathcal{H}}},
 $$
 <p>the exact analogue of \(h_\mathbf{w}(\mathbf{x}) = \mathbf{x}^\top \mathbf{w} / \lVert \mathbf{w} \rVert\). The empirical variance captured by \(h_f\) is</p>
 $$
-\widehat{\operatorname{var}}(h_f) := \frac{1}{n} \sum_{i=1}^n \frac{\langle \varphi(\mathbf{x}_i), f \rangle_{\mathcal{H}}^2}{\lVert f \rVert_{\mathcal{H}}^2} .
+\widehat{\operatorname{var}}(h_f) := \frac{1}{n} \sum_{i=1}^n \frac{\langle \varphi(\mathbf{x}_i), f \rangle_{\mathcal{H}}^2}{\lVert f \rVert_{\mathcal{H}}^2}.
 $$
 <p>And now the reproducing property pays off: \(\langle \varphi(\mathbf{x}_i), f \rangle_{\mathcal{H}} = f(\mathbf{x}_i)\). The abstract inner product with a direction in a possibly infinite-dimensional space is just the evaluation of the function \(f\) at the data point, so</p>
 $$
-\widehat{\operatorname{var}}(h_f) = \frac{1}{n} \sum_{i=1}^n \frac{f(\mathbf{x}_i)^2}{\lVert f \rVert_{\mathcal{H}}^2} .
+\widehat{\operatorname{var}}(h_f) = \frac{1}{n} \sum_{i=1}^n \frac{f(\mathbf{x}_i)^2}{\lVert f \rVert_{\mathcal{H}}^2}.
 $$
 
 <div class="box def"><span class="box-title">Definition (kernel principal directions)</span>
 The \(i\)-th principal direction \(f_i\), for \(i = 1, \ldots, d\), is defined by
 $$
-f_i = \arg\max_{f \perp \{f_1, \ldots, f_{i-1}\}} \sum_{i=1}^n f(\mathbf{x}_i)^2 \quad \text{s.t.} \quad \lVert f \rVert_{\mathcal{H}} = 1 ,
+f_i = \arg\max_{f \perp \{f_1, \ldots, f_{i-1}\}} \sum_{i=1}^n f(\mathbf{x}_i)^2 \quad \text{s.t.} \quad \lVert f \rVert_{\mathcal{H}} = 1,
 $$
 where orthogonality is in the RKHS inner product.
 </div>
@@ -132,11 +132,11 @@ where orthogonality is in the RKHS inner product.
 
 <p>Before solving the problem, let us verify that we have not changed it. Take \(K(\mathbf{x}, \mathbf{y}) = \mathbf{x}^\top \mathbf{y}\), the linear kernel on \(\mathbb{R}^d\). Its RKHS \(\mathcal{H}\) is the set of linear functions</p>
 $$
-f_\mathbf{w}(\mathbf{x}) = \mathbf{w}^\top \mathbf{x} ,
+f_\mathbf{w}(\mathbf{x}) = \mathbf{w}^\top \mathbf{x},
 $$
 <p>endowed with the norm \(\lVert f_\mathbf{w} \rVert_{\mathcal{H}} = \lVert \mathbf{w} \rVert_{\mathbb{R}^d}\). Therefore</p>
 $$
-\widehat{\operatorname{var}}(h_\mathbf{w}) = \frac{1}{n} \sum_{i=1}^n \frac{\left( \mathbf{x}_i^\top \mathbf{w} \right)^2}{\lVert \mathbf{w} \rVert^2} = \frac{1}{n \lVert f_\mathbf{w} \rVert^2} \sum_{i=1}^n f_\mathbf{w}(\mathbf{x}_i)^2 ,
+\widehat{\operatorname{var}}(h_\mathbf{w}) = \frac{1}{n} \sum_{i=1}^n \frac{\left(\mathbf{x}_i^\top \mathbf{w} \right)^2}{\lVert \mathbf{w} \rVert^2} = \frac{1}{n \lVert f_\mathbf{w} \rVert^2} \sum_{i=1}^n f_\mathbf{w}(\mathbf{x}_i)^2,
 $$
 <p>which is precisely the kernel PCA objective. Moreover \(\mathbf{w} \perp \mathbf{w}'\) if and only if \(f_\mathbf{w} \perp f_{\mathbf{w}'}\) in \(\mathcal{H}\), so the orthogonality constraints coincide too. Kernel PCA with the linear kernel recovers classical PCA exactly.</p>
 
@@ -144,21 +144,21 @@ $$
 
 <p>The optimization over \(f \in \mathcal{H}\) looks infinite-dimensional, but the representer theorem rescues us, just as it did in the supervised setting. The objective \(\sum_i f(\mathbf{x}_i)^2\) depends on \(f\) only through its values at the data points, and the constraint involves only the RKHS norm; the same is true of the orthogonality constraints once the previous \(f_j\) are known to be spanned by the \(\varphi(\mathbf{x}_j)\). Checking that the representer theorem indeed applies to this constrained maximization is a worthwhile exercise (the slides leave it as one): any component of \(f\) orthogonal to the span of \(\{\varphi(\mathbf{x}_1), \ldots, \varphi(\mathbf{x}_n)\}\) does not change any \(f(\mathbf{x}_i)\) and can only waste norm, so at the optimum it vanishes. Hence for each \(i = 1, \ldots, d\) we may write</p>
 $$
-\forall \mathbf{x} \in \mathcal{X}, \quad f_i(\mathbf{x}) = \sum_{j=1}^n \alpha_{i,j} K(\mathbf{x}_j, \mathbf{x}) ,
+\forall \mathbf{x} \in \mathcal{X}, \quad f_i(\mathbf{x}) = \sum_{j=1}^n \alpha_{i,j} K(\mathbf{x}_j, \mathbf{x}),
 $$
 <p>with a coefficient vector \(\boldsymbol{\alpha}_i = (\alpha_{i,1}, \ldots, \alpha_{i,n})^\top \in \mathbb{R}^n\).</p>
 
 <p>Every quantity in the problem now becomes a quadratic form in \(\boldsymbol{\alpha}_i\) involving the Gram matrix \(K\) with entries \([K]_{kl} = K(\mathbf{x}_k, \mathbf{x}_l)\). For the norm,</p>
 $$
-\lVert f_i \rVert_{\mathcal{H}}^2 = \sum_{k,l=1}^n \alpha_{i,k} \, \alpha_{i,l} \, K(\mathbf{x}_k, \mathbf{x}_l) = \boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_i .
+\lVert f_i \rVert_{\mathcal{H}}^2 = \sum_{k,l=1}^n \alpha_{i,k} \, \alpha_{i,l} \, K(\mathbf{x}_k, \mathbf{x}_l) = \boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_i.
 $$
 <p>For the variance term, \(f_i(\mathbf{x}_k) = [K \boldsymbol{\alpha}_i]_k\), so</p>
 $$
-\sum_{k=1}^n f_i(\mathbf{x}_k)^2 = \boldsymbol{\alpha}_i^\top K^2 \boldsymbol{\alpha}_i .
+\sum_{k=1}^n f_i(\mathbf{x}_k)^2 = \boldsymbol{\alpha}_i^\top K^2 \boldsymbol{\alpha}_i.
 $$
 <p>And for the orthogonality constraints,</p>
 $$
-\langle f_i, f_j \rangle_{\mathcal{H}} = \boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_j .
+\langle f_i, f_j \rangle_{\mathcal{H}} = \boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_j.
 $$
 
 <h3 id="kpca-solution">Solving the finite-dimensional problem</h3>
@@ -167,27 +167,27 @@ $$
 $$
 \boldsymbol{\alpha}_i = \arg\max_{\boldsymbol{\alpha} \in \mathbb{R}^n} \boldsymbol{\alpha}^\top K^2 \boldsymbol{\alpha}
 \quad \text{s.t.} \quad
-\boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_j = 0 \ \text{ for } j = 1, \ldots, i-1, \qquad \boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_i = 1 .
+\boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_j = 0 \ \text{ for } j = 1, \ldots, i-1, \qquad \boldsymbol{\alpha}_i^\top K \boldsymbol{\alpha}_i = 1.
 $$
 <p>This is almost a standard eigenproblem, except that the constraints use the \(K\)-weighted inner product rather than the Euclidean one. A change of variable straightens this out. Compute the eigenvalue decomposition of the kernel matrix,</p>
 $$
-K = U \Delta U^\top , \qquad \Delta_1 \geq \cdots \geq \Delta_n \geq 0 ,
+K = U \Delta U^\top, \qquad \Delta_1 \geq \cdots \geq \Delta_n \geq 0,
 $$
 <p>where the columns \(\mathbf{u}_1, \ldots, \mathbf{u}_n\) of \(U\) are orthonormal eigenvectors, and define \(K^{1/2} = U \Delta^{1/2} U^\top\). Setting \(\boldsymbol{\beta} = K^{1/2} \boldsymbol{\alpha}\) turns \(\boldsymbol{\alpha}^\top K^2 \boldsymbol{\alpha}\) into \(\boldsymbol{\beta}^\top K \boldsymbol{\beta}\), and the constraints \(\boldsymbol{\alpha}^\top K \boldsymbol{\alpha}' \) into plain Euclidean inner products \(\boldsymbol{\beta}^\top \boldsymbol{\beta}'\). The problem becomes</p>
 $$
 \boldsymbol{\beta}_i = \arg\max_{\boldsymbol{\beta} \in \mathbb{R}^n} \boldsymbol{\beta}^\top K \boldsymbol{\beta}
 \quad \text{s.t.} \quad
-\boldsymbol{\beta}_i^\top \boldsymbol{\beta}_j = 0 \ \text{ for } j = 1, \ldots, i-1, \qquad \boldsymbol{\beta}_i^\top \boldsymbol{\beta}_i = 1 ,
+\boldsymbol{\beta}_i^\top \boldsymbol{\beta}_j = 0 \ \text{ for } j = 1, \ldots, i-1, \qquad \boldsymbol{\beta}_i^\top \boldsymbol{\beta}_i = 1,
 $$
 <p>which is exactly the variational characterization of the eigenvectors of \(K\) we met for classical PCA. Thus \(\boldsymbol{\beta}_i = \mathbf{u}_i\), the \(i\)-th eigenvector, is a solution. Undoing the change of variable, and using \(K^{1/2} \mathbf{u}_i = \Delta_i^{1/2} \mathbf{u}_i\), we obtain</p>
 $$
-\boldsymbol{\alpha}_i = \frac{1}{\sqrt{\Delta_i}} \, \mathbf{u}_i .
+\boldsymbol{\alpha}_i = \frac{1}{\sqrt{\Delta_i}} \, \mathbf{u}_i.
 $$
 
 <div class="box thm"><span class="box-title">Theorem (kernel PCA)</span>
 Let \(K = U \Delta U^\top\) be the eigendecomposition of the centered Gram matrix, with eigenvalues \(\Delta_1 \geq \cdots \geq \Delta_n \geq 0\) and orthonormal eigenvectors \(\mathbf{u}_1, \ldots, \mathbf{u}_n\). Then the \(i\)-th kernel principal direction is
 $$
-f_i(\mathbf{x}) = \sum_{j=1}^n \alpha_{i,j} K(\mathbf{x}_j, \mathbf{x}) , \qquad \boldsymbol{\alpha}_i = \frac{\mathbf{u}_i}{\sqrt{\Delta_i}} ,
+f_i(\mathbf{x}) = \sum_{j=1}^n \alpha_{i,j} K(\mathbf{x}_j, \mathbf{x}), \qquad \boldsymbol{\alpha}_i = \frac{\mathbf{u}_i}{\sqrt{\Delta_i}},
 $$
 and the vector of projections of the \(n\) data points onto the \(i\)-th direction is \(K \boldsymbol{\alpha}_i = \sqrt{\Delta_i} \, \mathbf{u}_i\).
 </div>
@@ -195,10 +195,10 @@ and the vector of projections of the \(n\) data points onto the \(i\)-th directi
 <p>In summary, the algorithm is short:</p>
 
 <pre><code>Kernel PCA
-  1. Center the Gram matrix.
-  2. Compute the first eigenvectors (u_i, Delta_i) of the centered Gram matrix.
-  3. Normalize the eigenvectors: alpha_i = u_i / sqrt(Delta_i).
-  4. The projections of the points onto the i-th component are given by K alpha_i.
+ 1. Center the Gram matrix.
+ 2. Compute the first eigenvectors (u_i, Delta_i) of the centered Gram matrix.
+ 3. Normalize the eigenvectors: alpha_i = u_i / sqrt(Delta_i).
+ 4. The projections of the points onto the i-th component are given by K alpha_i.
 </code></pre>
 
 <p>It is worth pausing on what this spectrum means, because it is the whole content of the method. The centered Gram matrix records, in its entry \((i,j)\), how similar points \(i\) and \(j\) look through the kernel, and kernel PCA does nothing more than diagonalize it. Its leading eigenvector is the pattern the kernel's similarities most agree on, the weighting of the points whose mutual similarities reinforce one another most strongly, which is exactly the direction of greatest spread in feature space. Successive eigenvectors pick up progressively weaker patterns, each orthogonal to the ones before, and the eigenvalue \(\Delta_i\) reports how much variance the \(i\)-th component captures. The two facts that make the method usable both live in this matrix. The coefficients \(\boldsymbol{\alpha}_i = \mathbf{u}_i / \sqrt{\Delta_i}\) rescale each eigenvector so that the corresponding direction \(f_i\) has unit RKHS norm, and the projections \(K\boldsymbol{\alpha}_i = \sqrt{\Delta_i}\,\mathbf{u}_i\) are just the eigenvector again, stretched by \(\sqrt{\Delta_i}\): plotting the top two of them against each other is the kernel-PCA scatter that reveals nonlinear structure a linear projection would miss.</p>
@@ -212,7 +212,7 @@ and the vector of projections of the \(n\) data points onto the \(i\)-th directi
 <div class="box rmk"><span class="box-title">Remark (centering the Gram matrix)</span>
 The derivation assumed \(\frac{1}{n} \sum_i \varphi(\mathbf{x}_i) = 0\). We cannot center the embedded points directly, since we never compute them, but we can center the kernel matrix: replacing each \(\varphi(\mathbf{x}_i)\) by \(\varphi(\mathbf{x}_i) - \frac{1}{n}\sum_j \varphi(\mathbf{x}_j)\) changes the Gram matrix into
 $$
-K_c = \Big(I - \tfrac{1}{n} \mathbf{1}\mathbf{1}^\top\Big) K \Big(I - \tfrac{1}{n} \mathbf{1}\mathbf{1}^\top\Big) ,
+K_c = \Big(I - \tfrac{1}{n} \mathbf{1}\mathbf{1}^\top\Big) K \Big(I - \tfrac{1}{n} \mathbf{1}\mathbf{1}^\top\Big),
 $$
 where \(\mathbf{1} \in \mathbb{R}^n\) is the all-ones vector, an operation that again only requires kernel evaluations. It is \(K_c\) that step 1 of the algorithm produces and that is diagonalized in step 2.
 </div>
@@ -231,13 +231,13 @@ Diagonalizing the \(n \times n\) Gram matrix rather than a \(d \times d\) covari
 
 <p>We motivated the principal directions as the directions of greatest variance, but there is a complementary reading that <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> put at the center of their eigen-decomposition account, and it is the reading that makes denoising precise. Fix a dimension \(k\) and ask not which \(k\)-dimensional subspace of \(\mathcal{H}\) captures the most variance, but which one reconstructs the embedded data best: which subspace \(U\) minimizes the average squared residual left after projecting each point onto it. Writing \(P_U\) for the orthogonal projection onto \(U\) and \(P_U^\perp = I - P_U\) for its complement, the quantity to minimize is</p>
 $$
-J^\perp(U) = \sum_{i=1}^n \big\lVert P_U^\perp \varphi(\mathbf{x}_i) \big\rVert_{\mathcal{H}}^2 , \qquad \dim U = k .
+J^\perp(U) = \sum_{i=1}^n \big\lVert P_U^\perp \varphi(\mathbf{x}_i) \big\rVert_{\mathcal{H}}^2, \qquad \dim U = k.
 $$
 
 <div class="box prop"><span class="box-title">Proposition (principal subspaces minimize reconstruction error)</span>
 The minimizer of \(J^\perp\) over \(k\)-dimensional subspaces is the span \(U_k\) of the first \(k\) kernel principal directions, and the minimum value is the sum of the discarded eigenvalues,
 $$
-J^\perp(U_k) = \sum_{i=k+1}^n \Delta_i .
+J^\perp(U_k) = \sum_{i=k+1}^n \Delta_i.
 $$
 </div>
 
@@ -253,19 +253,19 @@ Reading the residual off the training sample only helps if it also predicts the 
 
 <p>There is a subtlety we glossed over, and it is worth naming because it is the price of never forming the feature vectors. Kernel PCA gives us, for each point, its projections onto the leading directions, and that is all we usually want for visualization or as features for a downstream algorithm. But some applications, denoising being the classic one, want to go back: to take the projection of \(\varphi(\mathbf{x})\) onto the top few components, a point</p>
 $$
-P_k \varphi(\mathbf{x}) = \sum_{i=1}^k \langle \varphi(\mathbf{x}), f_i \rangle_{\mathcal{H}} \, f_i \ \in \mathcal{H} ,
+P_k \varphi(\mathbf{x}) = \sum_{i=1}^k \langle \varphi(\mathbf{x}), f_i \rangle_{\mathcal{H}} \, f_i \ \in \mathcal{H},
 $$
 <p>and read off an input \(\mathbf{z} \in \mathcal{X}\) that this reconstruction represents. The reason one would want this is that the projection cleans the point up: discarding the low-variance components throws away the directions in which noise tends to live, so \(P_k \varphi(\mathbf{x})\) is a denoised version of \(\varphi(\mathbf{x})\), and its pre-image is the actual input, the image or the signal, that this cleaned-up feature vector stands for. The trouble is that \(P_k \varphi(\mathbf{x})\) is a general element of \(\mathcal{H}\), and there is in general no \(\mathbf{z}\) at all whose embedding equals it: the set of genuine embeddings \(\{\varphi(\mathbf{z}) : \mathbf{z} \in \mathcal{X}\}\) is a thin, curved surface inside the ambient space \(\mathcal{H}\), and projecting onto a linear subspace almost always lands just off it. An exact pre-image need not exist.</p>
 
 <p>What one does instead is settle for an approximate pre-image, the input whose embedding is closest to the target reconstruction:</p>
 $$
-\mathbf{z}^\star = \arg\min_{\mathbf{z} \in \mathcal{X}} \ \big\lVert \varphi(\mathbf{z}) - P_k \varphi(\mathbf{x}) \big\rVert_{\mathcal{H}}^2 .
+\mathbf{z}^\star = \arg\min_{\mathbf{z} \in \mathcal{X}} \ \big\lVert \varphi(\mathbf{z}) - P_k \varphi(\mathbf{x}) \big\rVert_{\mathcal{H}}^2.
 $$
 <p>The objective expands into kernel values, like everything else in this chapter, but it is no longer convex in \(\mathbf{z}\), so this is a genuine nonlinear optimization that may have several local minima. For the Gaussian kernel it reduces to a fixed-point iteration on \(\mathbf{z}\); in general it is solved numerically and only approximately <a class="cite" href="bibliography.html#mika1999" data-ref="Mika, S., Schölkopf, B., Smola, A., Müller, K.-R., Scholz, M., and Rätsch, G. (1999) Kernel PCA and de-noising in feature spaces. Advances in Neural Information Processing Systems 11, 536-542.">(Mika et al., 1999)</a>. The moral is that the kernel trick buys entry into \(\mathcal{H}\) cheaply but charges for the return trip: mapping forward through \(\varphi\) is free, mapping back out is a problem in its own right.</p>
 
 <p>The Gaussian kernel makes the denoising picture concrete. There each step of the fixed-point iteration writes the pre-image as a similarity-weighted average of the data,</p>
 $$
-\mathbf{z} \ \leftarrow \ \frac{\sum_{i=1}^n \gamma_i \, e^{-\lVert \mathbf{z} - \mathbf{x}_i \rVert^2 / 2\sigma^2} \, \mathbf{x}_i}{\sum_{i=1}^n \gamma_i \, e^{-\lVert \mathbf{z} - \mathbf{x}_i \rVert^2 / 2\sigma^2}} ,
+\mathbf{z} \ \leftarrow \ \frac{\sum_{i=1}^n \gamma_i \, e^{-\lVert \mathbf{z} - \mathbf{x}_i \rVert^2 / 2\sigma^2} \, \mathbf{x}_i}{\sum_{i=1}^n \gamma_i \, e^{-\lVert \mathbf{z} - \mathbf{x}_i \rVert^2 / 2\sigma^2}},
 $$
 <p>with weights \(\gamma_i\) read off from the projection \(P_k \varphi(\mathbf{x})\). Each reconstructed input is thus pulled toward the region where the data are dense and away from the isolated excursions in which noise tends to live, so the pre-image comes out smoother than the point it started from. Applied to images of handwritten digits corrupted by noise, keeping only the top kernel components and taking pre-images returns visibly cleaner digits, the standard demonstration that discarding low-variance directions in feature space denoises in input space <a class="cite" href="bibliography.html#mika1999" data-ref="Mika, S., Schölkopf, B., Smola, A., Müller, K.-R., Scholz, M., and Rätsch, G. (1999) Kernel PCA and de-noising in feature spaces. Advances in Neural Information Processing Systems 11, 536-542.">(Mika et al., 1999)</a>.</p>
 
@@ -277,21 +277,21 @@ $$
 
 <p>Given data points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) in \(\mathbb{R}^p\) and a target number of clusters \(k\), K-means represents each cluster by a centroid \(\boldsymbol{\mu}_j \in \mathbb{R}^p\) and assigns each point an index \(s_i \in \{1, \ldots, k\}\) naming its cluster. It seeks the assignments and centroids that minimize the total squared distance from each point to the centroid of its cluster:</p>
 $$
-\min_{\substack{\boldsymbol{\mu}_j \in \mathbb{R}^p,\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \mathbf{x}_i - \boldsymbol{\mu}_{s_i} \rVert_2^2 .
+\min_{\substack{\boldsymbol{\mu}_j \in \mathbb{R}^p,\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \mathbf{x}_i - \boldsymbol{\mu}_{s_i} \rVert_2^2.
 $$
 <p>This objective couples two very different kinds of unknown: the continuous centroids and the discrete assignments. Optimizing both at once is hard, but optimizing either one with the other held fixed is easy, and that observation is the algorithm. K-means performs alternate minimization, cycling between two steps until the assignments stop changing.</p>
 
 <p>The first step is <em>cluster assignment</em>. With the centroids \(\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_k\) fixed, the objective decouples across points, and each \(\mathbf{x}_i\) is best assigned to its nearest centroid:</p>
 $$
-\forall i, \quad s_i \in \arg\min_{s \in \{1, \ldots, k\}} \lVert \mathbf{x}_i - \boldsymbol{\mu}_s \rVert_2^2 .
+\forall i, \quad s_i \in \arg\min_{s \in \{1, \ldots, k\}} \lVert \mathbf{x}_i - \boldsymbol{\mu}_s \rVert_2^2.
 $$
 <p>The second step is the <em>centroid update</em>. With the assignments \(s_1, \ldots, s_n\) fixed, the objective decouples across clusters, and within cluster \(j\) we minimize \(\sum_{i : s_i = j} \lVert \mathbf{x}_i - \boldsymbol{\mu} \rVert_2^2\) over \(\boldsymbol{\mu} \in \mathbb{R}^p\):</p>
 $$
-\forall j, \quad \boldsymbol{\mu}_j = \arg\min_{\boldsymbol{\mu} \in \mathbb{R}^p} \sum_{i : s_i = j} \lVert \mathbf{x}_i - \boldsymbol{\mu} \rVert_2^2 .
+\forall j, \quad \boldsymbol{\mu}_j = \arg\min_{\boldsymbol{\mu} \in \mathbb{R}^p} \sum_{i : s_i = j} \lVert \mathbf{x}_i - \boldsymbol{\mu} \rVert_2^2.
 $$
 <p>Setting the gradient to zero, the minimizer is the mean of the points currently assigned to the cluster:</p>
 $$
-\forall j, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{i \in C_j} \mathbf{x}_i, \qquad C_j = \{ i : s_i = j \} .
+\forall j, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{i \in C_j} \mathbf{x}_i, \qquad C_j = \{ i : s_i = j \}.
 $$
 <p>Each step can only decrease the objective, which is bounded below, so the alternation converges (to a local minimum; the objective is nonconvex and the result depends on initialization). The only two operations K-means performs on the data are computing squared distances to centroids and averaging points, and, as with PCA, this is exactly the structure that lets us kernelize.</p>
 
@@ -299,7 +299,7 @@ $$
 
 <p>To cluster data whose natural similarity is nonlinear, or data that are not vectors at all, we move the objective into an RKHS. Given points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) in a set \(\mathcal{X}\) and a p.d. kernel \(K\) with RKHS \(\mathcal{H}\) and feature map \(\varphi\), the centroids now live in \(\mathcal{H}\) and the objective becomes</p>
 $$
-\min_{\substack{\boldsymbol{\mu}_j \in \mathcal{H},\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu}_{s_i} \rVert_{\mathcal{H}}^2 .
+\min_{\substack{\boldsymbol{\mu}_j \in \mathcal{H},\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu}_{s_i} \rVert_{\mathcal{H}}^2.
 $$
 <p>It helps to picture what this buys us. Ordinary K-means splits \(\mathbb{R}^p\) into cells with flat boundaries, the point being assigned to whichever centroid is nearest, so it can only recover clusters that are roughly convex blobs; two interlocking rings or a small cluster wrapped inside a larger one defeat it. Running the same algorithm on \(\varphi(\mathbf{x})\) draws those same flat boundaries in feature space, but a flat boundary in \(\mathcal{H}\) pulls back to a curved boundary in \(\mathcal{X}\), bent to follow the geometry the kernel encodes. The nonlinearity comes for free from the feature map; the algorithm itself is unchanged.</p>
 
@@ -308,7 +308,7 @@ $$
 <div class="box prop"><span class="box-title">Proposition (the center of mass minimizes total dispersion)</span>
 The center of mass \(\bar\varphi_n = \frac{1}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i)\) solves
 $$
-\min_{\boldsymbol{\mu} \in \mathcal{H}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2 .
+\min_{\boldsymbol{\mu} \in \mathcal{H}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2.
 $$
 </div>
 
@@ -316,11 +316,11 @@ $$
 Expand the averaged objective, using bilinearity of the inner product:
 $$
 \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2
-= \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) \rVert_{\mathcal{H}}^2 - \Big\langle \tfrac{2}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i), \boldsymbol{\mu} \Big\rangle_{\mathcal{H}} + \lVert \boldsymbol{\mu} \rVert_{\mathcal{H}}^2 .
+= \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) \rVert_{\mathcal{H}}^2 - \Big\langle \tfrac{2}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i), \boldsymbol{\mu} \Big\rangle_{\mathcal{H}} + \lVert \boldsymbol{\mu} \rVert_{\mathcal{H}}^2.
 $$
 Recognizing \(\frac{1}{n}\sum_i \varphi(\mathbf{x}_i) = \bar\varphi_n\) in the middle term and completing the square in \(\boldsymbol{\mu}\),
 $$
-= \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) \rVert_{\mathcal{H}}^2 - \lVert \bar\varphi_n \rVert_{\mathcal{H}}^2 + \lVert \bar\varphi_n - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2 .
+= \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) \rVert_{\mathcal{H}}^2 - \lVert \bar\varphi_n \rVert_{\mathcal{H}}^2 + \lVert \bar\varphi_n - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2.
 $$
 The first two terms do not depend on \(\boldsymbol{\mu}\), and the last is minimized, at value zero, exactly when \(\boldsymbol{\mu} = \bar\varphi_n\). <span class="qed">\(\square\)</span>
 </div>
@@ -329,15 +329,15 @@ The first two terms do not depend on \(\boldsymbol{\mu}\), and the last is minim
 
 <p>By the proposition, with assignments fixed, the optimal centroid of cluster \(j\) is the center of mass of its members,</p>
 $$
-\forall j, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{i \in C_j} \varphi(\mathbf{x}_i), \qquad C_j = \{ i : s_i = j \} .
+\forall j, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{i \in C_j} \varphi(\mathbf{x}_i), \qquad C_j = \{ i : s_i = j \}.
 $$
 <p>We cannot store this vector, but we do not need to: it enters the assignment step only through squared distances, and those we can expand into kernel values. For the assignment step, fixing the centroids and using \(\boldsymbol{\mu}_s = \frac{1}{|C_s|}\sum_{j \in C_s} \varphi(\mathbf{x}_j)\),</p>
 $$
-s_i \in \arg\min_{s \in \{1, \ldots, k\}} \ \Big\lVert \varphi(\mathbf{x}_i) - \frac{1}{|C_s|} \sum_{j \in C_s} \varphi(\mathbf{x}_j) \Big\rVert_{\mathcal{H}}^2 .
+s_i \in \arg\min_{s \in \{1, \ldots, k\}} \ \Big\lVert \varphi(\mathbf{x}_i) - \frac{1}{|C_s|} \sum_{j \in C_s} \varphi(\mathbf{x}_j) \Big\rVert_{\mathcal{H}}^2.
 $$
 <p>Expanding the squared norm through the reproducing kernel, \(\langle \varphi(\mathbf{x}_a), \varphi(\mathbf{x}_b) \rangle_{\mathcal{H}} = K(\mathbf{x}_a, \mathbf{x}_b)\), gives a formula in kernel values only:</p>
 $$
-s_i \in \arg\min_{s \in \{1, \ldots, k\}} \left[ K(\mathbf{x}_i, \mathbf{x}_i) - \frac{2}{|C_s|} \sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j) + \frac{1}{|C_s|^2} \sum_{j, l \in C_s} K(\mathbf{x}_j, \mathbf{x}_l) \right] .
+s_i \in \arg\min_{s \in \{1, \ldots, k\}} \left[ K(\mathbf{x}_i, \mathbf{x}_i) - \frac{2}{|C_s|} \sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j) + \frac{1}{|C_s|^2} \sum_{j, l \in C_s} K(\mathbf{x}_j, \mathbf{x}_l) \right].
 $$
 <p>The three terms are the squared norm of the point, its average similarity to the cluster, and the internal cohesion of the cluster. Every operation is a kernel evaluation, so kernel K-means never touches \(\mathcal{H}\) directly. It alternates the centroid step (bookkeeping the memberships \(C_j\)) and this assignment step until convergence, a greedy descent on the objective just like ordinary K-means.</p>
 
@@ -347,26 +347,26 @@ $$
 
 <p>Substituting the optimal centroids back into the cost turns kernel K-means into a pure assignment problem: minimize, over assignments alone,</p>
 $$
-\min_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{i=1}^n \Big\lVert \varphi(\mathbf{x}_i) - \frac{1}{|C_{s_i}|} \sum_{j \in C_{s_i}} \varphi(\mathbf{x}_j) \Big\rVert_{\mathcal{H}}^2 ,
+\min_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{i=1}^n \Big\lVert \varphi(\mathbf{x}_i) - \frac{1}{|C_{s_i}|} \sum_{j \in C_{s_i}} \varphi(\mathbf{x}_j) \Big\rVert_{\mathcal{H}}^2,
 $$
 <p>equivalently, in kernel values,</p>
 $$
-\min_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{i=1}^n \left[ K(\mathbf{x}_i, \mathbf{x}_i) - \frac{2}{|C_{s_i}|} \sum_{j \in C_{s_i}} K(\mathbf{x}_i, \mathbf{x}_j) + \frac{1}{|C_{s_i}|^2} \sum_{j, l \in C_{s_i}} K(\mathbf{x}_j, \mathbf{x}_l) \right] .
+\min_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{i=1}^n \left[ K(\mathbf{x}_i, \mathbf{x}_i) - \frac{2}{|C_{s_i}|} \sum_{j \in C_{s_i}} K(\mathbf{x}_i, \mathbf{x}_j) + \frac{1}{|C_{s_i}|^2} \sum_{j, l \in C_{s_i}} K(\mathbf{x}_j, \mathbf{x}_l) \right].
 $$
 <p>The last two sums simplify when we group points by cluster. Summing the cross term over all \(i\) and reindexing by the cluster \(l\) that \(i\) belongs to,</p>
 $$
-\sum_{i=1}^n \frac{1}{|C_{s_i}|} \sum_{j \in C_{s_i}} K(\mathbf{x}_i, \mathbf{x}_j) = \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) ,
+\sum_{i=1}^n \frac{1}{|C_{s_i}|} \sum_{j \in C_{s_i}} K(\mathbf{x}_i, \mathbf{x}_j) = \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j),
 $$
 <p>and by the same reindexing the double-counted cohesion term collapses identically:</p>
 $$
-\sum_{i=1}^n \frac{1}{|C_{s_i}|^2} \sum_{j, l \in C_{s_i}} K(\mathbf{x}_j, \mathbf{x}_l) = \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) .
+\sum_{i=1}^n \frac{1}{|C_{s_i}|^2} \sum_{j, l \in C_{s_i}} K(\mathbf{x}_j, \mathbf{x}_l) = \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j).
 $$
 <p>The two combine into a single term, the constant \(\sum_i K(\mathbf{x}_i, \mathbf{x}_i)\) is fixed by the data and drops out of the minimization, and after flipping the sign the minimization becomes a maximization.</p>
 
 <div class="box prop"><span class="box-title">Proposition (equivalent kernel K-means objective)</span>
 Minimizing the kernel K-means cost is equivalent to
 $$
-\max_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) .
+\max_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j).
 $$
 </div>
 
@@ -376,18 +376,18 @@ $$
 
 <p>Rather than descend greedily and risk poor local minima, spectral clustering relaxes the assignment problem into an eigenvalue problem, solves that exactly, and then rounds the continuous solution back to a partition. The starting point is the maximization we just obtained,</p>
 $$
-\max_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) .
+\max_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j).
 $$
 
 <h3 id="spectral-matrix-form">A matrix form of the objective</h3>
 
 <p>To expose the eigenstructure we encode the partition in matrices. Introduce the binary assignment matrix \(A \in \{0, 1\}^{n \times k}\), where \([A]_{ij} = 1\) if point \(i\) belongs to cluster \(j\) and \(0\) otherwise; each row of \(A\) sums to one, since every point lands in exactly one cluster. Introduce also the diagonal rescaling matrix \(D \in \mathbb{R}^{k \times k}\) whose entry \([D]_{jj} = \big(\sum_{i=1}^n [A]_{ij}\big)^{-1}\) is the reciprocal of the size of cluster \(j\). With these, the double sum for cluster \(l\) is \([A^\top K A]_{ll}\), and dividing by the cluster size and summing over \(l\) is exactly a trace:</p>
 $$
-\sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) = \operatorname{trace}\!\big( D^{1/2} A^\top K A \, D^{1/2} \big) .
+\sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) = \operatorname{trace}\!\big(D^{1/2} A^\top K A \, D^{1/2} \big).
 $$
 <p>So the objective is (the algebra is a short exercise)</p>
 $$
-\max_{A, D} \ \operatorname{trace}\!\big( D^{1/2} A^\top K A \, D^{1/2} \big) \quad \text{s.t.} \quad (\star) \text{ and } (\star\star) ,
+\max_{A, D} \ \operatorname{trace}\!\big(D^{1/2} A^\top K A \, D^{1/2} \big) \quad \text{s.t.} \quad (\star) \text{ and } (\star\star),
 $$
 <p>where \((\star)\) is the constraint that \(A\) is binary with unit row sums and \((\star\star)\) that \(D\) holds the inverse cluster cardinalities.</p>
 
@@ -395,11 +395,11 @@ $$
 
 <p>The key observation is that these constraints force an orthonormality relation. A direct computation shows</p>
 $$
-D^{1/2} A^\top A \, D^{1/2} = I ,
+D^{1/2} A^\top A \, D^{1/2} = I,
 $$
 <p>because \(A^\top A\) is the diagonal matrix of cluster sizes and \(D\) inverts exactly those sizes (again a short exercise). Now set \(Z = A D^{1/2} \in \mathbb{R}^{n \times k}\). The objective is \(\operatorname{trace}(Z^\top K Z)\) and the identity above reads \(Z^\top Z = I\). The <em>relaxation</em> consists of dropping the rigid constraints \((\star)\) and \((\star\star)\) on \(A\) and \(D\) and keeping only this orthonormality, letting \(Z\) range over all real matrices with orthonormal columns:</p>
 $$
-\max_{Z \in \mathbb{R}^{n \times k}} \ \operatorname{trace}\!\big( Z^\top K Z \big) \quad \text{s.t.} \quad Z^\top Z = I .
+\max_{Z \in \mathbb{R}^{n \times k}} \ \operatorname{trace}\!\big(Z^\top K Z \big) \quad \text{s.t.} \quad Z^\top Z = I.
 $$
 
 <p>The point of the move is a change in the kind of problem we face. The original maximization ranges over assignments, a discrete set of exponentially many partitions with no calculus to exploit and generally no efficient way to find the best member. The relaxed one ranges over a continuous set, the matrices with orthonormal columns, on which the objective is a smooth quadratic form with a known global maximizer. We trade the guarantee that the answer is a genuine partition for the ability to solve the resulting problem exactly, and we recover a partition at the end by rounding.</p>
@@ -434,15 +434,15 @@ The relaxation above diagonalizes the kernel matrix \(K\) itself, but many spect
 
 <p>Given two views \(X = [\mathbf{x}_1, \ldots, \mathbf{x}_n] \in \mathbb{R}^{p \times n}\) and \(Y = [\mathbf{y}_1, \ldots, \mathbf{y}_n] \in \mathbb{R}^{d \times n}\) of the same \(n\) objects (so \(\mathbf{x}_i\) and \(\mathbf{y}_i\) are the two descriptions of object \(i\)), and assuming both views centered, CCA seeks directions \(\mathbf{w}_a \in \mathbb{R}^p\) and \(\mathbf{w}_b \in \mathbb{R}^d\) maximizing the empirical correlation of the projections \(\mathbf{w}_a^\top \mathbf{x}_i\) and \(\mathbf{w}_b^\top \mathbf{y}_i\):</p>
 $$
-\max_{\mathbf{w}_a \in \mathbb{R}^p,\ \mathbf{w}_b \in \mathbb{R}^d} \ \frac{\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \, \mathbf{y}_i^\top \mathbf{w}_b}{\big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \mathbf{x}_i^\top \mathbf{w}_a\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_b^\top \mathbf{y}_i \mathbf{y}_i^\top \mathbf{w}_b\big)^{1/2}} .
+\max_{\mathbf{w}_a \in \mathbb{R}^p,\ \mathbf{w}_b \in \mathbb{R}^d} \ \frac{\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \, \mathbf{y}_i^\top \mathbf{w}_b}{\big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \mathbf{x}_i^\top \mathbf{w}_a\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_b^\top \mathbf{y}_i \mathbf{y}_i^\top \mathbf{w}_b\big)^{1/2}}.
 $$
 <p>Interpreting the sums as sample covariance and variances, this is the population objective</p>
 $$
-\max_{\mathbf{w}_a, \mathbf{w}_b} \ \frac{\operatorname{cov}(\mathbf{w}_a^\top X, \mathbf{w}_b^\top Y)}{\sqrt{\operatorname{var}(\mathbf{w}_a^\top X)} \, \sqrt{\operatorname{var}(\mathbf{w}_b^\top Y)}} ,
+\max_{\mathbf{w}_a, \mathbf{w}_b} \ \frac{\operatorname{cov}(\mathbf{w}_a^\top X, \mathbf{w}_b^\top Y)}{\sqrt{\operatorname{var}(\mathbf{w}_a^\top X)} \, \sqrt{\operatorname{var}(\mathbf{w}_b^\top Y)}},
 $$
 <p>the correlation coefficient between the two one-dimensional projections. In matrix notation the objective is</p>
 $$
-\max_{\mathbf{w}_a, \mathbf{w}_b} \ \frac{\mathbf{w}_a^\top X^\top Y \mathbf{w}_b}{\big(\mathbf{w}_a^\top X^\top X \mathbf{w}_a\big)^{1/2} \big(\mathbf{w}_b^\top Y^\top Y \mathbf{w}_b\big)^{1/2}} .
+\max_{\mathbf{w}_a, \mathbf{w}_b} \ \frac{\mathbf{w}_a^\top X^\top Y \mathbf{w}_b}{\big(\mathbf{w}_a^\top X^\top X \mathbf{w}_a\big)^{1/2} \big(\mathbf{w}_b^\top Y^\top Y \mathbf{w}_b\big)^{1/2}}.
 $$
 <p>This first optimum gives the first pair of canonical directions; subsequent pairs are found by solving the same problem under the constraint of orthogonality to the directions already found.</p>
 
@@ -450,7 +450,7 @@ $$
 
 <p>The ratio is invariant to rescaling \(\mathbf{w}_a\) and \(\mathbf{w}_b\), so we may fix the scale by demanding unit projected variance and maximize only the numerator:</p>
 $$
-\max_{\mathbf{w}_a, \mathbf{w}_b} \ \mathbf{w}_a^\top X^\top Y \mathbf{w}_b \quad \text{s.t.} \quad \mathbf{w}_a^\top X^\top X \mathbf{w}_a = 1 \ \text{ and } \ \mathbf{w}_b^\top Y^\top Y \mathbf{w}_b = 1 .
+\max_{\mathbf{w}_a, \mathbf{w}_b} \ \mathbf{w}_a^\top X^\top Y \mathbf{w}_b \quad \text{s.t.} \quad \mathbf{w}_a^\top X^\top X \mathbf{w}_a = 1 \ \text{ and } \ \mathbf{w}_b^\top Y^\top Y \mathbf{w}_b = 1.
 $$
 <p>Introducing multipliers \(\lambda_a, \lambda_b\) for the two constraints, the stationarity conditions of the Lagrangian</p>
 $$
@@ -458,15 +458,15 @@ $$
 $$
 <p>are obtained by setting the gradients to zero:</p>
 $$
--X^\top Y \mathbf{w}_b + \lambda_a X^\top X \mathbf{w}_a = 0 , \qquad -Y^\top X \mathbf{w}_a + \lambda_b Y^\top Y \mathbf{w}_b = 0 .
+-X^\top Y \mathbf{w}_b + \lambda_a X^\top X \mathbf{w}_a = 0, \qquad -Y^\top X \mathbf{w}_a + \lambda_b Y^\top Y \mathbf{w}_b = 0.
 $$
 <p>Left-multiplying the first by \(\mathbf{w}_a^\top\) and the second by \(\mathbf{w}_b^\top\) and subtracting, the numerator terms cancel and the constraints give \(\lambda_a \mathbf{w}_a^\top X^\top X \mathbf{w}_a = \lambda_b \mathbf{w}_b^\top Y^\top Y \mathbf{w}_b\), hence \(\lambda_a = \lambda_b =: \lambda\). The two stationarity equations then assemble into a single generalized eigenvalue problem:</p>
 $$
-\begin{pmatrix} 0 & X^\top Y \\ Y^\top X & 0 \end{pmatrix} \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix} = \lambda \begin{pmatrix} X^\top X & 0 \\ 0 & Y^\top Y \end{pmatrix} \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix} .
+\begin{pmatrix} 0 & X^\top Y \\ Y^\top X & 0 \end{pmatrix} \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix} = \lambda \begin{pmatrix} X^\top X & 0 \\ 0 & Y^\top Y \end{pmatrix} \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix}.
 $$
 <p>Writing \(\Sigma_A = \begin{pmatrix} 0 & X^\top Y \\ Y^\top X & 0 \end{pmatrix}\), \(\Sigma_B = \begin{pmatrix} X^\top X & 0 \\ 0 & Y^\top Y \end{pmatrix}\), and \(\mathbf{w} = \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix}\), this is \(\Sigma_A \mathbf{w} = \lambda \Sigma_B \mathbf{w}\). If the block covariances are invertible, multiplying through and substituting \(\mathbf{v} = \Sigma_B^{1/2} \mathbf{w}\) turns it into the ordinary symmetric eigenproblem</p>
 $$
-\Sigma_B^{-1/2} \Sigma_A \Sigma_B^{-1/2} \, \mathbf{v} = \lambda \, \mathbf{v} ,
+\Sigma_B^{-1/2} \Sigma_A \Sigma_B^{-1/2} \, \mathbf{v} = \lambda \, \mathbf{v},
 $$
 <p>whose eigenvalues are the canonical correlations and whose eigenvectors, transformed back, give the canonical directions. The derivation follows Section 6.5 of <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>.</p>
 
@@ -474,19 +474,19 @@ $$
 
 <p>Exactly as with PCA, we can replace each view by an RKHS embedding. Take two p.d. kernels \(K_a, K_b : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\), with embeddings \(\varphi_a : \mathcal{X} \to \mathcal{H}_a\) and \(\varphi_b : \mathcal{X} \to \mathcal{H}_b\), giving two views \((\varphi_a(\mathbf{x}_i))_i\) and \((\varphi_b(\mathbf{x}_i))_i\) of the dataset. We look for directions \(f_a \in \mathcal{H}_a\) and \(f_b \in \mathcal{H}_b\) maximizing</p>
 $$
-\max_{f_a \in \mathcal{H}_a,\ f_b \in \mathcal{H}_b} \ \frac{\frac{1}{n} \sum_{i=1}^n \langle f_a, \varphi_a(\mathbf{x}_i) \rangle_{\mathcal{H}_a} \langle \varphi_b(\mathbf{x}_i), f_b \rangle_{\mathcal{H}_b}}{\big(\frac{1}{n} \sum_{i=1}^n \langle f_a, \varphi_a(\mathbf{x}_i) \rangle_{\mathcal{H}_a}^2\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \langle f_b, \varphi_b(\mathbf{x}_i) \rangle_{\mathcal{H}_b}^2\big)^{1/2}} ,
+\max_{f_a \in \mathcal{H}_a,\ f_b \in \mathcal{H}_b} \ \frac{\frac{1}{n} \sum_{i=1}^n \langle f_a, \varphi_a(\mathbf{x}_i) \rangle_{\mathcal{H}_a} \langle \varphi_b(\mathbf{x}_i), f_b \rangle_{\mathcal{H}_b}}{\big(\frac{1}{n} \sum_{i=1}^n \langle f_a, \varphi_a(\mathbf{x}_i) \rangle_{\mathcal{H}_a}^2\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \langle f_b, \varphi_b(\mathbf{x}_i) \rangle_{\mathcal{H}_b}^2\big)^{1/2}},
 $$
 <p>and again the reproducing property replaces every inner product by a function evaluation, \(\langle f_a, \varphi_a(\mathbf{x}_i)\rangle_{\mathcal{H}_a} = f_a(\mathbf{x}_i)\), giving</p>
 $$
-\max_{f_a \in \mathcal{H}_a,\ f_b \in \mathcal{H}_b} \ \frac{\frac{1}{n} \sum_{i=1}^n f_a(\mathbf{x}_i) f_b(\mathbf{x}_i)}{\big(\frac{1}{n} \sum_{i=1}^n f_a(\mathbf{x}_i)^2\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n f_b(\mathbf{x}_i)^2\big)^{1/2}} .
+\max_{f_a \in \mathcal{H}_a,\ f_b \in \mathcal{H}_b} \ \frac{\frac{1}{n} \sum_{i=1}^n f_a(\mathbf{x}_i) f_b(\mathbf{x}_i)}{\big(\frac{1}{n} \sum_{i=1}^n f_a(\mathbf{x}_i)^2\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n f_b(\mathbf{x}_i)^2\big)^{1/2}}.
 $$
 <p>Up to a few technical details (again left as an exercise), the representer theorem applies, and we seek solutions of the form \(f_a(\cdot) = \sum_{i=1}^n \alpha_i K_a(\mathbf{x}_i, \cdot)\) and \(f_b(\cdot) = \sum_{i=1}^n \beta_i K_b(\mathbf{x}_i, \cdot)\). Then \(f_a(\mathbf{x}_i) = [K_a \boldsymbol{\alpha}]_i\) and \(f_b(\mathbf{x}_i) = [K_b \boldsymbol{\beta}]_i\), and the objective becomes finite-dimensional:</p>
 $$
-\max_{\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^n} \ \frac{\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}}{\big(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha}\big)^{1/2} \big(\boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta}\big)^{1/2}} .
+\max_{\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^n} \ \frac{\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}}{\big(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha}\big)^{1/2} \big(\boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta}\big)^{1/2}}.
 $$
 <p>Removing the scaling ambiguity as before, this is</p>
 $$
-\max_{\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^n} \ \boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta} \quad \text{s.t.} \quad \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1 \ \text{ and } \ \boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta} = 1 ,
+\max_{\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^n} \ \boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta} \quad \text{s.t.} \quad \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1 \ \text{ and } \ \boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta} = 1,
 $$
 <p>which, by the same Lagrangian argument as in the linear case, leads to a generalized eigenvalue problem. Subsequent canonical directions come from the same problem with added orthogonality constraints.</p>
 
@@ -494,7 +494,7 @@ $$
 
 <p>There is a serious flaw hiding in the kernelized problem. Suppose \(K_a\) and \(K_b\) are invertible, and change variables to \(\boldsymbol{\alpha}' = K_a \boldsymbol{\alpha}\) and \(\boldsymbol{\beta}' = K_b \boldsymbol{\beta}\). The objective and constraints turn into</p>
 $$
-\max_{\boldsymbol{\alpha}', \boldsymbol{\beta}' \in \mathbb{R}^n} \ \boldsymbol{\alpha}'^\top \boldsymbol{\beta}' \quad \text{s.t.} \quad \boldsymbol{\alpha}'^\top \boldsymbol{\alpha}' = 1 \ \text{ and } \ \boldsymbol{\beta}'^\top \boldsymbol{\beta}' = 1 .
+\max_{\boldsymbol{\alpha}', \boldsymbol{\beta}' \in \mathbb{R}^n} \ \boldsymbol{\alpha}'^\top \boldsymbol{\beta}' \quad \text{s.t.} \quad \boldsymbol{\alpha}'^\top \boldsymbol{\alpha}' = 1 \ \text{ and } \ \boldsymbol{\beta}'^\top \boldsymbol{\beta}' = 1.
 $$
 <p>This is maximized, at value \(1\), by any \(\boldsymbol{\alpha}' = \boldsymbol{\beta}'\) on the unit sphere. In other words the maximal correlation is always attainable and the solution is completely undetermined: the method reports perfect correlation between the two views no matter what data it is fed. This is not a numerical accident but the RKHS version of a familiar disease. In high or infinite dimension it is trivially easy to find directions that make any two finite samples look perfectly correlated, precisely the phenomenon of <em>spurious correlations</em> that populate collections like Tyler Vigen's gallery of nonsense coincidences. Unregularized kernel CCA overfits by construction.</p>
 
@@ -502,7 +502,7 @@ $$
 
 <p>The failure has two faces. It is an overfitting problem, since the fit is perfect for reasons having nothing to do with genuine shared structure, and it is a numerical instability problem, since the derivation needed to invert the kernel matrices, which are typically ill-conditioned. Both are cured by the same remedy: regularize by preferring smooth directions, penalizing the RKHS norms \(\lVert f_a \rVert_{\mathcal{H}_a}\) and \(\lVert f_b \rVert_{\mathcal{H}_b}\). Concretely, recall \(\lVert f_a \rVert_{\mathcal{H}_a}^2 = \boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}\), and replace the constraint \(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1\) by the convex combination</p>
 $$
-(1 - \tau)\, \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau \, \underbrace{\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}}_{\lVert f_a \rVert_{\mathcal{H}_a}^2} = 1 ,
+(1 - \tau)\, \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau \, \underbrace{\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}}_{\lVert f_a \rVert_{\mathcal{H}_a}^2} = 1,
 $$
 <p>and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau \in [0, 1]\) interpolates between the raw, degenerate problem at \(\tau = 0\) and a pure norm penalty at \(\tau = 1\). The added term makes the constraint matrices strictly positive definite, curing the numerical instability, and it forbids the wild, wiggly directions responsible for spurious correlations, curing the overfitting. Reading the penalty this way, as a preference for directions of small RKHS norm and therefore for smooth, slowly varying functions, is what ties the fix back to the regularization that ran through the supervised chapters: there we penalized \(\lVert f \rVert_{\mathcal{H}}\) to keep a fitted function from chasing noise, and here we do the same to keep a canonical direction from manufacturing correlation. The regularized problem is again a generalized eigenvalue problem, now well posed; this form of kernel CCA, together with its use as a kernel measure of dependence, is due to <a class="cite" href="bibliography.html#bach2002" data-ref="Bach, F. R. and Jordan, M. I. (2002) Kernel independent component analysis. Journal of Machine Learning Research 3, 1-48.">Bach and Jordan (2002)</a>.</p>
 
@@ -512,7 +512,7 @@ $$
 
 <p>It is worth stepping back to see that the unsupervised methods of this chapter are the same construction tuned by a single choice: what we ask of a pair of directions. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> organize their whole treatment this way. Given one view, asking for the direction of maximal variance gives PCA, the eigenvectors of the covariance matrix. Given two paired views \(X\) and \(Y\), we can instead ask for a pair of directions \((\mathbf{w}_a, \mathbf{w}_b)\) maximizing the raw covariance of the projections,</p>
 $$
-\max_{\lVert \mathbf{w}_a \rVert = \lVert \mathbf{w}_b \rVert = 1} \ \mathbf{w}_a^\top C_{XY} \mathbf{w}_b , \qquad C_{XY} = \tfrac{1}{n} X Y^\top ,
+\max_{\lVert \mathbf{w}_a \rVert = \lVert \mathbf{w}_b \rVert = 1} \ \mathbf{w}_a^\top C_{XY} \mathbf{w}_b, \qquad C_{XY} = \tfrac{1}{n} X Y^\top,
 $$
 <p>whose solution is the leading pair of singular vectors of the cross-covariance matrix \(C_{XY}\), the covariance itself being the top singular value, with subsequent pairs found by deflation. Or we can ask for the directions of maximal correlation, dividing that same covariance by the projected standard deviations, and we are back to CCA and its generalized eigenproblem. Variance is a self-covariance diagonalized, covariance is a cross-term factorized by singular value decomposition, and correlation is covariance normalized by variance; the eigen-decomposition machinery is identical, and only the matrix in the quadratic form changes.</p>
 
@@ -520,7 +520,38 @@ $$
 
 <div class="box rmk"><span class="box-title">Further reading</span>
 For a book-length treatment of the methods in this chapter, <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, <em>Learning with Kernels</em>, develops kernel PCA in its chapter 14 and takes up the related kernel feature-extraction methods in the neighbouring chapters, with the pre-image problem and kernel-PCA denoising worked out in detail. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>, <em>Kernel Methods for Pattern Analysis</em>, covers the same territory from the pattern-analysis viewpoint: its chapters 5 and 6 treat the spectral methods, kernel PCA, and canonical correlation analysis, and Section 6.5 is the source of the generalized-eigenvalue derivation of CCA used above. Both books also situate these unsupervised methods within the wider representer-theorem program that organizes this chapter.
-</div><section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Schölkopf, B., Smola, A., and Müller, K.-R.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Nonlinear component analysis as a kernel eigenvalue problem</span>. <span class="bib-venue">Neural Computation 10(5), 1299-1319.</span></li>
+</div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">warm-up</span> In the kernel K-means assignment step, the squared distance from point \(\mathbf{x}_i\) to the centroid of a candidate cluster \(s\) expands into three terms: the self-similarity \(K(\mathbf{x}_i, \mathbf{x}_i)\), the average similarity \(\frac{2}{|C_s|}\sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j)\), and the internal cohesion \(\frac{1}{|C_s|^2}\sum_{j,l \in C_s} K(\mathbf{x}_j, \mathbf{x}_l)\). Say which of the three does not depend on the candidate cluster \(s\), and may therefore be dropped from the \(\arg\min\) over \(s\); which depends on \(s\) but not on the point \(i\); and which couples the point to the cluster. Conclude that assigning \(\mathbf{x}_i\) amounts to comparing, across clusters, the cohesion minus twice the average similarity.</li>
+
+<li><span class="ex-tag">computation</span> A centered Gram matrix has eigenvalues \(\Delta = (10, 6, 3, 1, 0, 0, 0, 0)\) (the last four vanish). (a) What fraction of the total variance is captured by projecting onto the top two kernel principal components? (b) By the reconstruction-error proposition, what is the residual \(J^\perp(U_2) = \sum_{i \gt 2}\Delta_i\) left by that two-dimensional summary? (c) What is the smallest number of components \(k\) needed for the captured variance to reach at least ninety percent of the total? (d) The stability remark ties reliability to how early the spectrum falls off; comment on whether a two-dimensional projection of this dataset looks trustworthy.</li>
+
+<li><span class="ex-tag">proof</span> Derive the centering formula. Starting from the recentered embeddings \(\tilde{\varphi}(\mathbf{x}_i) = \varphi(\mathbf{x}_i) - \frac{1}{n}\sum_{a=1}^n \varphi(\mathbf{x}_a)\), compute the new Gram entry \([K_c]_{ij} = \langle \tilde{\varphi}(\mathbf{x}_i), \tilde{\varphi}(\mathbf{x}_j)\rangle_{\mathcal{H}}\) purely in terms of the original kernel values, and show it equals
+$$
+[K_c]_{ij} = K_{ij} - \frac{1}{n}\sum_{a=1}^n K_{aj} - \frac{1}{n}\sum_{b=1}^n K_{ib} + \frac{1}{n^2}\sum_{a,b=1}^n K_{ab}.
+$$
+Then verify that in matrix form this is exactly \(K_c = (I - U)K(I - U)\) with \(U = \frac{1}{n}\mathbf{1}\mathbf{1}^\top\), and note that only kernel evaluations, never the embedded points, are required.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Expand the inner product by bilinearity into four sums. The matrix \(U = \frac{1}{n}\mathbf{1}\mathbf{1}^\top\) acts on a vector by replacing every entry with the mean; convince yourself that left-multiplying \(K\) by \((I-U)\) subtracts each column's mean and right-multiplying subtracts each row's mean, and that \(U\) is symmetric and idempotent (\(U^2 = U\)).</div></details></li>
+
+<li><span class="ex-tag">proof</span> Prove that the top-\(k\) principal subspace minimizes reconstruction error, with residual equal to the sum of the discarded eigenvalues. For a \(k\)-dimensional subspace \(U \subset \mathcal{H}\) with orthogonal projection \(P_U\), use the Pythagorean split \(\lVert \varphi(\mathbf{x}_i)\rVert^2 = \lVert P_U \varphi(\mathbf{x}_i)\rVert^2 + \lVert P_U^\perp \varphi(\mathbf{x}_i)\rVert^2\) to show that minimizing \(J^\perp(U) = \sum_i \lVert P_U^\perp \varphi(\mathbf{x}_i)\rVert^2\) is the same as maximizing the captured norm \(\sum_i \lVert P_U \varphi(\mathbf{x}_i)\rVert^2\). Identify that captured norm as a trace maximization over rank-\(k\) projections, invoke the eigenvector characterization to conclude the maximizer is the span \(U_k\) of the first \(k\) kernel principal directions, and read off
+$$
+J^\perp(U_k) = \sum_{i \gt k}^{} \Delta_i.
+$$
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Write \(P_U = \sum_{m=1}^k \mathbf{e}_m \mathbf{e}_m^\top\) for an orthonormal basis \(\{\mathbf{e}_m\}\) of \(U\) in feature space, so that \(\sum_i \lVert P_U \varphi(\mathbf{x}_i)\rVert^2 = \sum_m \mathbf{e}_m^\top C \mathbf{e}_m = \operatorname{trace}(P_U C)\), where \(C = \sum_i \varphi(\mathbf{x}_i)\varphi(\mathbf{x}_i)^\top\) is the (uncentered-in-notation, centered-in-fact) covariance operator whose nonzero eigenvalues match the \(\Delta_i\). The trace is maximized by aligning \(U\) with the top-\(k\) eigenvectors; the leftover \(\sum_i \lVert \varphi(\mathbf{x}_i)\rVert^2 = \sum_i \Delta_i\) minus the captured part is the tail.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Show why unregularized kernel CCA saturates at correlation \(1\). Assume \(K_a\) and \(K_b\) are invertible and substitute \(\boldsymbol{\alpha}' = K_a \boldsymbol{\alpha}\), \(\boldsymbol{\beta}' = K_b \boldsymbol{\beta}\) into the finite-dimensional objective \(\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}\) with constraints \(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1\) and \(\boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta} = 1\). Show the problem becomes \(\max\, \boldsymbol{\alpha}'^\top \boldsymbol{\beta}'\) subject to \(\lVert\boldsymbol{\alpha}'\rVert = \lVert\boldsymbol{\beta}'\rVert = 1\), whose maximum is \(1\), attained by any \(\boldsymbol{\alpha}' = \boldsymbol{\beta}'\) on the unit sphere. Interpret the result: the map \(\boldsymbol{\alpha} \mapsto K_a\boldsymbol{\alpha}\) being a bijection means the projected values \((f_a(\mathbf{x}_1), \ldots, f_a(\mathbf{x}_n))\) can be steered to any pattern, so any two samples can be matched exactly. Then explain how replacing the constraint by \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\) breaks the degeneracy.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The Cauchy-Schwarz inequality bounds \(\boldsymbol{\alpha}'^\top\boldsymbol{\beta}' \le \lVert\boldsymbol{\alpha}'\rVert\,\lVert\boldsymbol{\beta}'\rVert = 1\), with equality exactly when the two unit vectors coincide. For the regularization step, note that \(\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = \lVert f_a\rVert_{\mathcal{H}_a}^2\) is the RKHS norm of the direction: adding \(\tau \gt 0\) of it makes the constraint matrix strictly positive definite and charges for high-norm, wiggly directions, so the change of variable no longer decouples the problem.</div></details></li>
+
+<li><span class="ex-tag">exploration</span> Open the interactive Gram-matrix heatmap earlier in this chapter; this is exactly the matrix kernel PCA diagonalizes. Widen the kernel bandwidth and watch the off-diagonal entries fill in, then narrow it toward zero and watch the matrix drift toward the identity. Describe how the spectrum you would read off changes between these regimes: for which bandwidth does the variance concentrate into a few dominant eigenvalues, and for which does it flatten so that no small set of components can summarize the data? Connect your observation to the stability rule of thumb that kernel PCA is trustworthy exactly when the eigenvalues fall off early.</li>
+
+<li><span class="ex-tag">challenge</span> The graph Laplacian \(L = D - K\), with \([D]_{ii} = \sum_j K(\mathbf{x}_i, \mathbf{x}_j)\), sits at the heart of the spectral methods. (a) Prove the quadratic-form identity \(\mathbf{v}^\top L \mathbf{v} = \frac{1}{2}\sum_{i,j} K(\mathbf{x}_i, \mathbf{x}_j)(v_i - v_j)^2\). (b) Deduce that \(L\) is positive semidefinite whenever the affinities \(K(\mathbf{x}_i,\mathbf{x}_j)\) are nonnegative, and that the all-ones vector \(\mathbf{1}\) is always an eigenvector with eigenvalue \(0\). (c) Argue from the identity why the smallest nontrivial eigenvector varies slowly across strongly connected points and jumps across weakly connected ones, so that thresholding it separates the graph along its weakest cut.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), expand \(\frac{1}{2}\sum_{i,j}K_{ij}(v_i - v_j)^2 = \frac{1}{2}\sum_{i,j}K_{ij}(v_i^2 - 2 v_i v_j + v_j^2)\) and recognize the degree matrix in the pure-square sums and \(K\) in the cross term. For (c), a small value of \(\mathbf{v}^\top L \mathbf{v}\) under a norm constraint forces \((v_i - v_j)^2\) to be small wherever \(K_{ij}\) is large, so tightly coupled points get nearly equal coordinates.</div></details></li>
+
+<li><span class="ex-tag">challenge</span> The chapter argues that variance, covariance, and correlation are one eigen-decomposition family tuned by a single choice. Fill in the family for a pair of centered views \(X, Y\): (a) which matrix's eigenvectors solve the single-view maximal-variance problem (PCA); (b) which matrix's singular vectors solve the maximal-covariance problem \(\max_{\lVert\mathbf{w}_a\rVert = \lVert\mathbf{w}_b\rVert = 1} \mathbf{w}_a^\top C_{XY}\mathbf{w}_b\); and (c) which generalized eigenproblem solves maximal correlation (CCA). Then explain, using the regularized constraint \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\), why sending \(\tau\) from \(0\) to \(1\) slides kernel CCA from pure correlation toward pure covariance, and why a modest \(\tau\) is what buys resistance to spurious correlation.</li>
+</ol>
+</section><section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Schölkopf, B., Smola, A., and Müller, K.-R.</span> <span class="bib-year">(1998)</span> <span class="bib-title">Nonlinear component analysis as a kernel eigenvalue problem</span>. <span class="bib-venue">Neural Computation 10(5), 1299-1319.</span></li>
 <li ><span class="bib-authors">Tsuda, K., Kin, T., and Asai, K.</span> <span class="bib-year">(2003)</span> <span class="bib-title">Marginalized kernels for biological sequences</span>. <span class="bib-venue">Bioinformatics 18(Suppl. 1), S268-S275.</span></li>
 <li ><span class="bib-authors">Mika, S., Schölkopf, B., Smola, A., Müller, K.-R., Scholz, M., and Rätsch, G.</span> <span class="bib-year">(1999)</span> <span class="bib-title">Kernel PCA and de-noising in feature spaces</span>. <span class="bib-venue">Advances in Neural Information Processing Systems 11, 536-542.</span></li>
 <li ><span class="bib-authors">Dhillon, I. S., Guan, Y., and Kulis, B.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel k-means, spectral clustering and normalized cuts</span>. <span class="bib-venue">Proceedings of the 10th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 551-556.</span></li>
@@ -558,7 +589,8 @@ For a book-length treatment of the methods in this chapter, <a class="cite" href
 <a class="l3" href="#cca-eigenproblem">CCA is a generalized eigenvalue problem</a>
 <a class="l3" href="#kernel-cca-formulation">Kernelizing CCA</a>
 <a class="l3" href="#kernel-cca-overfitting">What goes wrong, and why we must regularize</a>
-<a class="l3" href="#cca-covariance-family">Variance, covariance, and correlation as one family</a></aside></main>
+<a class="l3" href="#cca-covariance-family">Variance, covariance, and correlation as one family</a>
+<a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>

@@ -86,7 +86,7 @@ $$ \min_{f}\; \underbrace{\frac1n\sum_{i=1}^n \ell\big(y_i, f(x_i)\big)}_{\text{
 <p>The third answer, the pedagogical heart of Shawe-Taylor and Cristianini, is a clean separation of concerns. A kernel method has two independent halves: a <em>kernel</em> that encodes what the data are and how they compare, and an <em>algorithm</em> that consumes a Gram matrix and returns a pattern. Because the algorithm only ever touches the matrix, the two halves mix and match freely.</p>
 
 <div class="box rmk"><span class="box-title">The two-part recipe</span>
-<p>Any pattern-analysis task decomposes as <strong>a kernel</strong> (choose or design it for your data type) plus <strong>an algorithm</strong> (ridge regression, an SVM, PCA, a two-sample test, ...). Swap the kernel and the same algorithm now works on strings or graphs; swap the algorithm and the same kernel now clusters instead of classifies. This modularity is why one small theory covers so much ground, and why the book can treat algorithms (Parts II and III) separately from the kernels that feed them (Part V).</p></div>
+<p>Any pattern-analysis task decomposes as <strong>a kernel</strong> (choose or design it for your data type) plus <strong>an algorithm</strong> (ridge regression, an SVM, PCA, a two-sample test,...). Swap the kernel and the same algorithm now works on strings or graphs; swap the algorithm and the same kernel now clusters instead of classifies. This modularity is why one small theory covers so much ground, and why the book can treat algorithms (Parts II and III) separately from the kernels that feed them (Part V).</p></div>
 
 <h2 id="the-solve">The one obstacle: the solve</h2>
 
@@ -110,6 +110,18 @@ $$ \min_{f}\; \underbrace{\frac1n\sum_{i=1}^n \ell\big(y_i, f(x_i)\big)}_{\text{
 
 <div class="box rmk"><span class="box-title">Further reading</span>
 <p>The three sources this book synthesizes are complementary points of entry. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, opens with the pattern-analysis framing and the modular kernel-plus-algorithm view used above. Schölkopf and Smola (2002), <em>Learning with Kernels</em>, develops the regularization and support-vector viewpoint in depth. The lecture course of Mairal and Vert, <em>Machine Learning with Kernel Methods</em>, gives the broadest modern survey, including the kernel families, distribution embeddings, and deep-learning connections of the later parts.</p></div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">warm-up</span> The chapter frames classification, regression, clustering, and correlation as four kinds of pattern. For each of the following, name which kind of pattern is being sought: sorting a stack of images into cats and dogs; predicting a molecule's boiling point from its structure; grouping customers by how close their buying habits are; measuring how strongly the text of an article moves with the photograph beside it.</li>
+<li><span class="ex-tag">concept</span> A kernel method is told that it will only ever be shown the \(n \times n\) Gram matrix \(K_{ij} = k(x_i, x_j)\), never the examples \(x_i\) themselves. Explain in one or two sentences why this is what lets the same algorithm run unchanged on vectors, strings, and graphs. Then state, in your own words, the one property the entries of \(K\) must carry so that the geometric view of Section 2 applies, that is, so that \(k(x,x') = \langle \Phi(x), \Phi(x') \rangle\) for some feature map \(\Phi\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The algorithm's independence from the raw data is exactly the modular kernel-plus-algorithm split. The property you need on \(K\) is the one the chapter names when it says a valid kernel is "secretly a dot product."</div></details></li>
+<li><span class="ex-tag">concept</span> The chapter says the classical way to fit a kernel machine solves a linear system over the whole Gram matrix, at a cost of about \(n^2\) memory and \(n^3\) time, and that "neither exponent has an \(n\) you can escape." Roughly how many times more time does the solve take when the dataset grows from one thousand to one million examples? Explain why the modular view of Section 2 does not, on its own, remove this wall, and name which part of the book is devoted to walking through it.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">A factor of \(10^3\) more examples raises an \(n^3\) cost by \((10^3)^3\). The wall lives in the algorithm's use of the matrix, not in the choice of kernel, so swapping kernels leaves it untouched.</div></details></li>
+<li><span class="ex-tag">exploration</span> Open the interactive Gram-matrix figure for the twelve points on a line and narrow the kernel's bandwidth toward zero while watching the table of similarities. Describe what the matrix approaches, and say which matrix it comes to resemble. Then argue, from that shape alone, why a kernel with a very small bandwidth "sees" each point as similar only to itself, and why an algorithm handed such a matrix has almost no relations left to learn from.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Watch the off-diagonal entries as the bandwidth shrinks: a point stops resembling even its close neighbors. What is left is large only where \(i = j\). Compare the limiting table to the identity matrix.</div></details></li>
+</ol>
+</section>
 <div class="chnav">
 <a href="index.html"><span class="dir">previous</span>Contents</a>
 <a style="text-align:right" href="kernels-and-rkhs.html"><span class="dir">next</span>2. Positive Definite Kernels and RKHS</a>
@@ -121,7 +133,8 @@ $$ \min_{f}\; \underbrace{\frac1n\sum_{i=1}^n \ell\big(y_i, f(x_i)\big)}_{\text{
 <a class="l3" href="#view-regularization">The regularization view: the norm is smoothness</a>
 <a class="l3" href="#view-modularity">The modular view: kernel plus algorithm</a>
 <a class="l2" href="#the-solve">The one obstacle: the solve</a>
-<a class="l2" href="#roadmap">How to read this book</a></aside></main>
+<a class="l2" href="#roadmap">How to read this book</a>
+<a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>

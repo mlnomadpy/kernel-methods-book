@@ -197,3 +197,15 @@ table.gloss td.gterm { width: 26%; font-weight: 650; }
 table.gloss .gsrc { display: inline-block; margin-left: 4px; font-family: ui-sans-serif, system-ui; font-size: .8em; white-space: nowrap; }
 table.gloss .gsrc a { color: var(--faint); }
 table.gloss .gsrc a:hover { color: var(--accent); }
+
+/* exercises */
+section.exercises { margin-top: 2.8em; padding-top: 1.4em; border-top: 1px solid var(--rule); }
+section.exercises h2 { font-size: 1.3rem; }
+ol.exlist { padding-left: 1.6em; }
+ol.exlist > li { margin: 0 0 1.1em; padding-left: .3em; }
+ol.exlist > li::marker { color: var(--accent); font-family: ui-sans-serif, system-ui; font-weight: 700; font-size: .9em; }
+.ex-tag { display: inline-block; font-family: ui-sans-serif, system-ui; font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); border: 1px solid var(--rule); border-radius: 4px; padding: 1px 6px; margin-right: 8px; vertical-align: 1px; }
+details.ex-hint { margin-top: .45em; }
+details.ex-hint summary { cursor: pointer; font-family: ui-sans-serif, system-ui; font-size: .8rem; color: var(--muted); }
+details.ex-hint[open] summary { margin-bottom: .4em; }
+details.ex-hint .hint-body { font-size: .95em; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 12px; }

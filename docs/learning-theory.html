@@ -104,7 +104,7 @@ Since \(f\) minimizes the \(\varphi\)-risk, we have \(R_\varphi(f) \le R_\varphi
 <p><strong>Step 1: the conditional \(\varphi\)-risk.</strong> For \(\eta \in [0,1]\) define the conditional risk function
 $$C_\eta(\alpha) = \eta\,\varphi(\alpha) + (1-\eta)\,\varphi(-\alpha), \qquad \alpha \in \mathbb R,$$
 so that, conditioning on \(X\),
-$$R_\varphi(g) = \mathbb E\big[C_{\eta(X)}\big(g(X)\big)\big] \quad\text{for every measurable } g .$$
+$$R_\varphi(g) = \mathbb E\big[C_{\eta(X)}\big(g(X)\big)\big] \quad\text{for every measurable } g.$$
 Each \(C_\eta\) is convex on \(\mathbb R\), as a convex combination of \(\varphi(\alpha)\) and \(\varphi(-\alpha)\), both convex in \(\alpha\); being finite and convex it is also continuous. Since \(\varphi\) is differentiable at \(0\), so is \(C_\eta\), with
 $$C_\eta'(0) = \eta\,\varphi'(0) - (1-\eta)\,\varphi'(0) = (2\eta - 1)\,\varphi'(0).$$
 Write \(H(\eta) = \inf_{\alpha\in\mathbb R} C_\eta(\alpha)\) for the optimal conditional risk.</p>
@@ -113,7 +113,7 @@ Write \(H(\eta) = \inf_{\alpha\in\mathbb R} C_\eta(\alpha)\) for the optimal con
 $$R_\varphi^* = \mathbb E\big[H(\eta(X))\big].$$
 The inequality \(R_\varphi(g) \ge \mathbb E[H(\eta(X))]\) holds for every measurable \(g\), since \(C_{\eta(x)}(g(x)) \ge H(\eta(x))\) pointwise. For the converse, let \(Q_k = \{ j/2^k : j \in \mathbb Z,\ |j| \le 4^k \}\) be a nested sequence of finite grids whose union is dense in \(\mathbb R\), and let \(g_k(x)\) be the smallest element of \(Q_k\) minimizing \(C_{\eta(x)}\) over \(Q_k\); each \(g_k\) is measurable because it is built from the finitely many measurable functions \(x \mapsto C_{\eta(x)}(\alpha)\), \(\alpha \in Q_k\). By continuity of \(C_\eta\) and density of \(\bigcup_k Q_k\), the values \(C_{\eta(x)}(g_k(x))\) decrease to \(H(\eta(x))\) for every \(x\); they are bounded above by \(C_{\eta(x)}(0) = \varphi(0)\) and below by \(0\), so monotone convergence gives \(R_\varphi(g_k) \to \mathbb E[H(\eta(X))]\), proving the claim.</p>
 <p>Now let \(f\) attain \(R_\varphi^*\), and note that \(R_\varphi(f) = R_\varphi^* \le R_\varphi(0) = \varphi(0) \lt \infty\). The function \(x \mapsto C_{\eta(x)}(f(x)) - H(\eta(x))\) is non-negative and its integral equals \(R_\varphi(f) - \mathbb E[H(\eta(X))] = 0\), hence
-$$C_{\eta(x)}\big(f(x)\big) = H\big(\eta(x)\big) \qquad \text{for } P\text{-almost every } x .$$</p>
+$$C_{\eta(x)}\big(f(x)\big) = H\big(\eta(x)\big) \qquad \text{for } P\text{-almost every } x.$$</p>
 
 <p><strong>Step 3: minimizers of \(C_\eta\) have the Bayes sign.</strong> We claim that if \(\eta \gt \tfrac12\), then every \(\alpha \le 0\) satisfies \(C_\eta(\alpha) \gt H(\eta)\); symmetrically, if \(\eta \lt \tfrac12\), then every \(\alpha \ge 0\) satisfies \(C_\eta(\alpha) \gt H(\eta)\).</p>
 <p>Suppose \(\eta \gt \tfrac12\). Then \(C_\eta'(0) = (2\eta-1)\varphi'(0) \lt 0\), and two consequences follow from convexity.</p>
@@ -156,7 +156,7 @@ $$\hat f_n = \operatorname*{arg\,min}_{f \in \mathcal F}\; R_\varphi^n(f).$$</p>
 </ul>
 
 <p>The second question splits into two parts according to the following decomposition, which organizes everything that follows:
-$$R_\varphi(\hat f_n) - R_\varphi^\star \;=\; \underbrace{R_\varphi(\hat f_n) - \inf_{f\in\mathcal F} R_\varphi(f)}_{\text{estimation error}} \;+\; \underbrace{\inf_{f\in\mathcal F} R_\varphi(f) - R_\varphi^\star}_{\text{approximation error}} .$$
+$$R_\varphi(\hat f_n) - R_\varphi^\star \;=\; \underbrace{R_\varphi(\hat f_n) - \inf_{f\in\mathcal F} R_\varphi(f)}_{\text{estimation error}} \;+\; \underbrace{\inf_{f\in\mathcal F} R_\varphi(f) - R_\varphi^\star}_{\text{approximation error}}.$$
 The approximation error is deterministic: it measures how well the class \(\mathcal F\) can approach the best measurable function, and it can only decrease as \(\mathcal F\) grows. The estimation error is statistical: it measures how much the finite sample misleads the minimizer within \(\mathcal F\), and it grows with the size of \(\mathcal F\). Choosing \(\mathcal F\) is negotiating this trade-off.</p>
 
 <h2 id="rademacher-complexity">Rademacher complexity</h2>
@@ -179,9 +179,9 @@ where the expectation is over the sample \((X_i)_{i=1,\dots,n}\) and over indepe
 
 <div class="box thm"><span class="box-title">Theorem (learning bound for Lipschitz losses)</span>
 <p>Suppose \(\varphi\) is Lipschitz with constant \(L_\varphi\):
-$$\forall u, u' \in \mathbb R, \qquad \big|\varphi(u) - \varphi(u')\big| \le L_\varphi\, \big|u - u'\big| .$$
+$$\forall u, u' \in \mathbb R, \qquad \big|\varphi(u) - \varphi(u')\big| \le L_\varphi\, \big|u - u'\big|.$$
 Then the \(\varphi\)-risk of the ERM estimator satisfies, on average over the sampling of the training set,
-$$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{excess } \varphi\text{-risk}} \;\le\; \underbrace{4 L_\varphi\, \mathrm{Rad}_n(\mathcal F)}_{\text{estimation error}} \;+\; \underbrace{\inf_{f\in\mathcal F} R_\varphi(f) - R_\varphi^*}_{\text{approximation error}} .$$</p>
+$$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{excess } \varphi\text{-risk}} \;\le\; \underbrace{4 L_\varphi\, \mathrm{Rad}_n(\mathcal F)}_{\text{estimation error}} \;+\; \underbrace{\inf_{f\in\mathcal F} R_\varphi(f) - R_\varphi^*}_{\text{approximation error}}.$$</p>
 </div>
 
 <div class="box rmk"><span class="box-title">Remark (where the bound comes from)</span>
@@ -194,7 +194,7 @@ $$\underbrace{\mathbb E_{S_n} R_\varphi\big(\hat f_n\big) - R_\varphi^*}_{\text{
 <p>Let \(X_1,\dots,X_n\) be independent random variables taking values in a set \(\mathcal A\), and let \(F:\mathcal A^n \to \mathbb R\) change by a bounded amount whenever a single coordinate is altered:
 $$\sup_{x_1,\dots,x_n,\,\hat x_i}\big| F(x_1,\dots,x_n) - F(x_1,\dots,\hat x_i,\dots,x_n)\big| \le c_i, \qquad 1 \le i \le n.$$
 Then for every \(\varepsilon \gt 0\),
-$$P\big\{ F(X_1,\dots,X_n) - \mathbb E\, F(X_1,\dots,X_n) \ge \varepsilon \big\} \le \exp\!\left( \frac{-2\varepsilon^2}{\sum_{i=1}^n c_i^2} \right).$$</p>
+$$P\big\{ F(X_1,\dots,X_n) - \mathbb E\, F(X_1,\dots,X_n) \ge \varepsilon \big\} \le \exp\!\left(\frac{-2\varepsilon^2}{\sum_{i=1}^n c_i^2} \right).$$</p>
 </div>
 
 <p>Hoeffding's inequality is the special case \(F(X_1,\dots,X_n) = \sum_i X_i\), and the deviation bound quoted for a single fixed function is nothing more than that case. The reason McDiarmid's form is the right one here is that the object we must control, the uniform deviation \(\sup_{f\in\mathcal F}\big(R_\varphi(f) - R_\varphi^n(f)\big)\), is a function of the whole sample that no single example can move by much: swapping one training point shifts each empirical average, and hence their supremum, by at most a term of order \(1/n\). Feeding \(c_i\) of order \(1/n\) into the inequality shows this supremum concentrates around its expectation at the rate \(1/\sqrt n\), and that expectation is exactly what symmetrization rewrites as a Rademacher complexity. This is the source of the distribution-free \(1/\sqrt n\) tail on the estimation error.</p>
@@ -207,7 +207,7 @@ $$P\big\{ F(X_1,\dots,X_n) - \mathbb E\, F(X_1,\dots,X_n) \ge \varepsilon \big\}
 
 <div class="box rmk"><span class="box-title">Remark (from expectation to high probability, and a data-dependent capacity)</span>
 <p>The bound above controls the excess risk on average over the draw of the training set. <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> give the companion statement that holds with high probability for <em>every</em> function in the class at once: fixing \(\delta \in (0,1)\), with probability at least \(1-\delta\) over the sample, every \(f \in \mathcal F\) satisfies
-$$R_\varphi(f) \;\le\; R_\varphi^n(f) + \mathrm{Rad}_n(\mathcal F) + \sqrt{\frac{\ln(2/\delta)}{2n}} .$$
+$$R_\varphi(f) \;\le\; R_\varphi^n(f) + \mathrm{Rad}_n(\mathcal F) + \sqrt{\frac{\ln(2/\delta)}{2n}}.$$
 Its proof is the recipe just described: bound the uniform deviation by its expectation with McDiarmid's inequality, then bound that expectation by the Rademacher complexity through symmetrization. The Rademacher term can itself be replaced by its <em>empirical</em> version
 $$\widehat{\mathrm{Rad}}_n(\mathcal F) = \mathbb E_{\sigma}\!\left[ \sup_{f\in\mathcal F} \frac{2}{n}\sum_{i=1}^n \sigma_i f(X_i) \;\Big|\; X_1,\dots,X_n \right],$$
 which conditions on the observed inputs and averages over the signs alone, at the cost of enlarging the confidence term to \(3\sqrt{\ln(2/\delta)/2n}\). This empirical complexity is a quantity we can estimate directly from data by sampling sign patterns, so the capacity of the class becomes something we measure rather than postulate.</p>
@@ -245,7 +245,7 @@ $$\mathrm{Rad}_n(\mathcal F_B) \le \frac{2B}{n} \sqrt{ \mathbb E_X\!\left[ \sum_
 
 <div class="box cor"><span class="box-title">Corollary (basic learning bound in RKHS balls)</span>
 <p>Suppose \(K(X,X) \le \kappa^2\) almost surely (for instance the Gaussian kernel, with \(\kappa = 1\)). Then the ERM estimator in \(\mathcal F_B\) with an \(L_\varphi\)-Lipschitz loss satisfies
-$$\mathbb E\, R_\varphi\big(\hat f_n\big) - R_\varphi^* \;\le\; \frac{8 L_\varphi \kappa B}{\sqrt n} \;+\; \left( \inf_{f\in\mathcal F_B} R_\varphi(f) - R_\varphi^* \right).$$</p>
+$$\mathbb E\, R_\varphi\big(\hat f_n\big) - R_\varphi^* \;\le\; \frac{8 L_\varphi \kappa B}{\sqrt n} \;+\; \left(\inf_{f\in\mathcal F_B} R_\varphi(f) - R_\varphi^* \right).$$</p>
 </div>
 
 <div class="box rmk"><span class="box-title">Remarks</span>
@@ -262,14 +262,14 @@ $$\mathbb E\, R_\varphi\big(\hat f_n\big) - R_\varphi^* \;\le\; \frac{8 L_\varph
 $$\widehat{\mathrm{Rad}}_n(\mathcal F_B) \;\le\; \frac{2B}{n}\sqrt{\sum_{i=1}^n K(X_i,X_i)} \;=\; \frac{2B}{n}\sqrt{\operatorname{tr}\mathbf K},$$
 where \(\mathbf K = \big(K(X_i,X_j)\big)_{i,j}\) is the kernel matrix. This is computable from the data alone: it replaces the population diagonal \(\mathbb E\, K(X,X)\) by the empirical trace of the Gram matrix, and it exposes the operational meaning of regularization. A learned function \(f = \sum_i \alpha_i K_{X_i}\) has norm \(\lVert f\rVert_{\mathcal H} = \sqrt{\alpha^\top \mathbf K \alpha}\), so shrinking \(\alpha^\top \mathbf K \alpha\) literally shrinks the radius \(B\) of the ball the solution occupies, and with it the capacity term.</p>
 <p>It is instructive that the pre-Rademacher theory reached the same verdict by a wholly combinatorial route. Vapnik controlled capacity through the VC dimension, the largest number of points a class can label in all possible ways, and for large-margin hyperplanes he proved a bound that echoes ours exactly. In the account of <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, the canonical hyperplanes \(x \mapsto \langle w, x\rangle\) with \(\lVert w\rVert \le \Lambda\), acting on data contained in a ball of radius \(R\) about the origin, have VC dimension
-$$h \;\le\; R^2 \Lambda^2 .$$
+$$h \;\le\; R^2 \Lambda^2.$$
 The message is the one the RKHS-ball bound delivers: capacity is governed not by the ambient dimension, which may be infinite, but by the product of a size of the data, \(R^2\) or \(\mathbb E\, K(X,X)\), and a budget on the norm, \(\Lambda^2\) or \(B^2\). Constraining \(\lVert w\rVert\), equivalently \(\lVert f\rVert_{\mathcal H}\), is what makes an infinite-dimensional class learnable, and it is why the support vector machine of the next chapter minimizes the norm at all.</p>
 </div>
 
 <h2 id="from-constraints-to-penalties">From constrained ERM to penalized ERM: regularization</h2>
 
 <p>The theory above analyzes ERM over the ball \(\mathcal F_B\), which is the constrained minimization problem
-$$\begin{cases} \displaystyle \min_{f\in\mathcal H}\; \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) \\[2pt] \text{subject to}\;\; \lVert f\rVert_{\mathcal H} \le B . \end{cases}$$
+$$\begin{cases} \displaystyle \min_{f\in\mathcal H}\; \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) \\[2pt] \text{subject to}\;\; \lVert f\rVert_{\mathcal H} \le B. \end{cases}$$
 The algorithms of the previous chapter solve something else: an unconstrained problem with a norm penalty. The bridge between the two is convex duality. To make the problem practical we assume that \(\varphi\) is convex. The objective is then convex in \(f\), since each map \(f \mapsto \varphi(y_i \langle f, K_{x_i}\rangle_{\mathcal H})\) composes the convex \(\varphi\) with a continuous linear functional of \(f\), and the constraint set is a convex ball. The problem is thus a convex problem in \(f\) for which strong duality holds (the interlude below develops the machinery; Slater's condition is trivially satisfied here since the constraint can be made strict). In particular, \(f\) solves the constrained problem if and only if it solves, for some dual parameter \(\lambda \ge 0\), the unconstrained problem
 $$\min_{f\in\mathcal H}\; \left\{ \frac{1}{n}\sum_{i=1}^n \varphi\big(y_i f(x_i)\big) + \lambda\, \lVert f\rVert_{\mathcal H}^2 \right\}.$$
 The penalized formulation is the one used in practice: it is unconstrained, the representer theorem reduces it to a finite-dimensional convex program in the coefficients of \(f = \sum_i \alpha_i K_{x_i}\), and the parameter \(\lambda\) plays the role of \(1/B\): larger \(\lambda\) means a smaller effective ball. The learning bounds for \(\mathcal F_B\) therefore transfer to the penalized estimators our algorithms compute, and they explain <em>why</em> regularization works: the penalty is not a numerical convenience but a capacity constraint, and the corollary above prices exactly how much statistical safety each unit of \(\lVert f\rVert_{\mathcal H}\) costs.</p>
@@ -307,7 +307,7 @@ making no assumption on \(f\), \(g\) and \(h\). Denote by \(f^\star\) the optima
 <p>The <em>Lagrangian</em> of this problem is the function \(L : \mathcal X \times \mathbb R^m \times \mathbb R^r \to \mathbb R\) defined by
 $$L(x, \lambda, \mu) = f(x) + \sum_{i=1}^m \lambda_i h_i(x) + \sum_{j=1}^r \mu_j g_j(x).$$
 The <em>Lagrange dual function</em> \(q : \mathbb R^m \times \mathbb R^r \to \mathbb R \cup \{-\infty\}\) is
-$$q(\lambda,\mu) = \inf_{x\in\mathcal X} L(x,\lambda,\mu) = \inf_{x\in\mathcal X}\left( f(x) + \sum_{i=1}^m \lambda_i h_i(x) + \sum_{j=1}^r \mu_j g_j(x) \right).$$</p>
+$$q(\lambda,\mu) = \inf_{x\in\mathcal X} L(x,\lambda,\mu) = \inf_{x\in\mathcal X}\left(f(x) + \sum_{i=1}^m \lambda_i h_i(x) + \sum_{j=1}^r \mu_j g_j(x) \right).$$</p>
 </div>
 
 <p>The multipliers \(\lambda_i\) and \(\mu_j\) price the constraints: the Lagrangian relaxes the hard constraints into linear charges on their violation. For the primal problem above, the <em>Lagrange dual problem</em> is
@@ -364,7 +364,7 @@ $$g_j(x) \lt 0, \quad j = 1,\dots,r, \qquad Ax = b.$$</p>
 <h3 id="complementary-slackness">Dual optimal pairs and complementary slackness</h3>
 
 <p>Suppose that strong duality holds, \(x^\star\) is primal optimal, and \((\lambda^\star, \mu^\star)\) is dual optimal. Then we have
-$$\begin{aligned} f(x^\star) = q(\lambda^\star, \mu^\star) &= \inf_{x} \left( f(x) + \sum_{i=1}^m \lambda_i^\star h_i(x) + \sum_{j=1}^r \mu_j^\star g_j(x) \right) \\ &\le f(x^\star) + \sum_{i=1}^m \lambda_i^\star h_i(x^\star) + \sum_{j=1}^r \mu_j^\star g_j(x^\star) \\ &\le f(x^\star), \end{aligned}$$
+$$\begin{aligned} f(x^\star) = q(\lambda^\star, \mu^\star) &= \inf_{x} \left(f(x) + \sum_{i=1}^m \lambda_i^\star h_i(x) + \sum_{j=1}^r \mu_j^\star g_j(x) \right) \\ &\le f(x^\star) + \sum_{i=1}^m \lambda_i^\star h_i(x^\star) + \sum_{j=1}^r \mu_j^\star g_j(x^\star) \\ &\le f(x^\star), \end{aligned}$$
 where the last step uses \(h_i(x^\star) = 0\), \(\mu_j^\star \ge 0\) and \(g_j(x^\star) \le 0\). Hence both inequalities are in fact equalities, and each carries information.</p>
 
 <p>The first equality, read at the point \(x^\star\), shows that
@@ -388,6 +388,38 @@ $$\mu_j^\star\, g_j(x^\star) = 0, \qquad j = 1,\dots,r.$$</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
 <p>The statistical learning theory behind these bounds is developed in <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>, <em>Learning with Kernels</em>, chapter 5, and in <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a>, <em>Kernel Methods for Pattern Analysis</em>, chapter 4. For the Rademacher-complexity machinery and its use for kernel classes see <a class="cite" href="bibliography.html#bartlett2002" data-ref="Bartlett, P. L. and Mendelson, S. (2002) Rademacher and Gaussian complexities: risk bounds and structural results. Journal of Machine Learning Research 3, 463-482.">Bartlett and Mendelson (2002)</a>, and for the surrogate-loss calibration theory <a class="cite" href="bibliography.html#bartlett2006" data-ref="Bartlett, P. L., Jordan, M. I., and McAuliffe, J. D. (2006) Convexity, classification, and risk bounds. Journal of the American Statistical Association 101(473), 138-156.">Bartlett, Jordan, and McAuliffe (2006)</a>. A comprehensive account is <a class="cite" href="bibliography.html#steinwart2008" data-ref="Steinwart, I. and Christmann, A. (2008) Support Vector Machines. Springer.">Steinwart and Christmann (2008)</a>, <em>Support Vector Machines</em>.</p></div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+
+<li><span class="ex-tag">warm-up</span> The calibration theorem asks that \(\varphi\) be convex, non-increasing, differentiable at \(0\), with \(\varphi'(0) \lt 0\). For each of the four standard surrogates, the hinge loss \(\varphi(u) = \max(1-u, 0)\), the logistic loss \(\varphi(u) = \log(1 + e^{-u})\), the squared loss \(\varphi(u) = (1-u)^2\), and the exponential loss \(\varphi(u) = e^{-u}\), compute \(\varphi'(0)\) and confirm that each hypothesis holds. Then consider the one-sided loss \(\varphi_0(u) = \max(-u, 0)\), which charges nothing once the margin is positive. Show that its right derivative at \(0\) is \(0\), so it fails the hypothesis \(\varphi'(0) \lt 0\), and explain in one sentence, using the conditional risk \(C_\eta(\alpha) = \eta\,\varphi(\alpha) + (1-\eta)\,\varphi(-\alpha)\), why a function that hedges to \(\alpha = 0\) at an input with \(\eta(x) \ne \tfrac12\) is then not penalized for choosing the wrong sign.</li>
+
+<li><span class="ex-tag">concept</span> Rademacher complexity measures how well a class can correlate with pure noise. (a) Explain why the inner quantity \(\frac{2}{n}\sum_{i=1}^n \sigma_i f(X_i)\) is, up to the factor of two, the empirical correlation between the values of \(f\) and a random relabeling of the sample. (b) For the single-function class \(\mathcal F = \{f\}\), show directly from the definition that \(\mathrm{Rad}_n(\mathcal F) = 0\), using only \(\mathbb E[\sigma_i] = 0\) and the independence of the signs from the data; interpret this as "a fixed pattern is free to trust." (c) In one paragraph, connect the birthday paradox of <a class="cite" href="bibliography.html#shawe2004" data-ref="Shawe-Taylor, J. and Cristianini, N. (2004) Kernel Methods for Pattern Analysis. Cambridge University Press.">Shawe-Taylor and Cristianini (2004)</a> to this quantity: why does searching a class over the \(2^n\) sign patterns turn a coincidence into an expectation, and why is that search exactly what \(\mathrm{Rad}_n\) prices?</li>
+
+<li><span class="ex-tag">proof</span> This is the geometric heart of the RKHS-ball capacity bound. Fix a vector \(g \in \mathcal H\) and let \(\mathcal F_B = \{ f \in \mathcal H : \lVert f\rVert_{\mathcal H} \le B\}\). Prove that
+$$\sup_{f \in \mathcal F_B} \langle f, g\rangle_{\mathcal H} = B\,\lVert g\rVert_{\mathcal H},$$
+by showing \(\le\) with the Cauchy-Schwarz inequality and \(\ge\) by exhibiting a specific \(f \in \mathcal F_B\) that attains the value (treat \(g = 0\) separately). Then explain in one line how, applied with \(g = \frac{2}{n}\sum_{i=1}^n \sigma_i K_{X_i}\), this identity converts the supremum over the ball inside \(\mathrm{Rad}_n(\mathcal F_B)\) into the norm \(\frac{2B}{n}\big\lVert \sum_i \sigma_i K_{X_i}\big\rVert_{\mathcal H}\), the step that removes \(f\) from the problem entirely.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>For the reverse inequality, when \(g \ne 0\) take \(f = B\, g / \lVert g\rVert_{\mathcal H}\); check that \(\lVert f\rVert_{\mathcal H} = B\) so \(f \in \mathcal F_B\), and compute \(\langle f, g\rangle_{\mathcal H} = B\,\lVert g\rVert_{\mathcal H}\). When \(g = 0\) both sides are \(0\).</p></div></details></li>
+
+<li><span class="ex-tag">proof</span> Show that bounding a single number, the norm, controls a whole infinite-dimensional class pointwise. Using the reproducing property \(f(x) = \langle f, K_x\rangle_{\mathcal H}\) and Cauchy-Schwarz, prove that every \(f \in \mathcal F_B\) satisfies
+$$\big|f(x)\big| \le B\,\sqrt{K(x,x)} \qquad\text{and}\qquad \big|f(x) - f(x')\big| \le B\,\lVert K_x - K_{x'}\rVert_{\mathcal H}$$
+for all \(x, x' \in \mathcal X\). Conclude that if \(K(x,x) \le \kappa^2\) everywhere then the whole ball is uniformly bounded by \(B\kappa\), and interpret the second inequality as a smoothness budget: two inputs with nearby feature vectors must receive nearby values, with the allowed gap scaled by the radius \(B\). Finally, expand \(\lVert K_x - K_{x'}\rVert_{\mathcal H}^2\) in terms of \(K\) to express the variation bound using kernel evaluations alone.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>For the second inequality write \(f(x) - f(x') = \langle f, K_x - K_{x'}\rangle_{\mathcal H}\) and apply Cauchy-Schwarz. Then \(\lVert K_x - K_{x'}\rVert_{\mathcal H}^2 = \langle K_x - K_{x'}, K_x - K_{x'}\rangle_{\mathcal H} = K(x,x) - 2K(x,x') + K(x',x')\).</p></div></details></li>
+
+<li><span class="ex-tag">proof</span> The concentration step of the learning bound rests on McDiarmid's inequality applied to the uniform deviation. Assume the loss takes values in \([0, M]\), and define, on the sample \(S_n = (Z_1,\dots,Z_n)\) with \(Z_i = (X_i, Y_i)\),
+$$F(Z_1,\dots,Z_n) = \sup_{f \in \mathcal F}\Big(R_\varphi(f) - \tfrac{1}{n}\textstyle\sum_{i=1}^n \varphi(Y_i f(X_i))\Big).$$
+(a) Show that replacing a single example \(Z_i\) by any \(\hat Z_i\) changes \(F\) by at most \(c_i = M/n\); that is, \(F\) has the bounded-differences property with these constants. (b) Feed \(c_i = M/n\) into McDiarmid's inequality and conclude that, for every \(\varepsilon \gt 0\),
+$$P\big\{ F - \mathbb E\, F \ge \varepsilon\big\} \le \exp\!\left(\frac{-2 n \varepsilon^2}{M^2}\right),$$
+so that the uniform deviation concentrates around its expectation at the rate \(1/\sqrt n\). (c) State which later step of the argument rewrites \(\mathbb E\, F\) as a Rademacher complexity.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>For (a), use that for any two functions \(a(f), b(f)\), one has \(\big|\sup_f a(f) - \sup_f b(f)\big| \le \sup_f |a(f) - b(f)|\). Only the single term \(\frac{1}{n}\varphi(Y_i f(X_i))\) changes, and it lies in \([0, M/n]\), so the empirical average moves by at most \(M/n\). For (b), \(\sum_i c_i^2 = n (M/n)^2 = M^2/n\). The expectation is bounded by the Rademacher complexity through the symmetrization device.</p></div></details></li>
+
+<li><span class="ex-tag">exploration</span> Open the interactive kernel fit for this chapter (the \(\lambda\) slider on the figure in the regularization section, <span class="ex-ref">data-widget "kernel-lab"</span>). The penalized problem it solves has \(\lambda\) playing the role of \(1/B\): larger \(\lambda\) means a smaller effective RKHS ball. (a) Slide \(\lambda\) toward \(0\) and describe how the fitted curve behaves; slide it up and describe the change. Which regime corresponds to a large radius \(B\), and which to a small one? (b) The corollary bounds the estimation error by \(8 L_\varphi \kappa B / \sqrt n\). Predict, before moving the slider, what should happen to the gap between training fit and out-of-sample behavior as you shrink the ball, and check it against the figure. (c) Using the empirical norm identity \(\lVert f\rVert_{\mathcal H} = \sqrt{\alpha^\top \mathbf K \alpha}\) for \(f = \sum_i \alpha_i K_{x_i}\), explain why increasing \(\lambda\) literally shrinks the radius of the ball the solution occupies.</li>
+
+<li><span class="ex-tag">challenge</span> The theory analyzes constrained ERM over \(\mathcal F_B\), but the algorithms solve the penalized problem. Using the Lagrangian duality interlude, make the reduction precise. (a) Write the constrained problem "minimize \(\frac{1}{n}\sum_i \varphi(y_i f(x_i))\) subject to \(\lVert f\rVert_{\mathcal H}^2 \le B^2\)" with its single inequality constraint \(g(f) = \lVert f\rVert_{\mathcal H}^2 - B^2 \le 0\), form the Lagrangian, and identify the penalized objective \(\frac{1}{n}\sum_i \varphi(y_i f(x_i)) + \lambda \lVert f\rVert_{\mathcal H}^2\) as the minimization of \(L(f, \lambda)\) over \(f\) at a fixed multiplier \(\lambda \ge 0\). (b) Verify that Slater's condition holds, so strong duality gives an optimal \(\lambda^\star \ge 0\) for which the constrained and penalized minimizers coincide. (c) Invoke complementary slackness \(\lambda^\star g(f^\star) = 0\) to show that either the norm constraint is active (\(\lVert f^\star\rVert_{\mathcal H} = B\)) or \(\lambda^\star = 0\); interpret the second case as the unregularized minimizer already lying inside the ball. (d) Finally, relate this norm-budget picture to the margin-VC ancestor \(h \le R^2 \Lambda^2\) of <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">Schölkopf and Smola (2002)</a>: argue that constraining \(\lVert f\rVert_{\mathcal H} \le B\) plays the role of the bound \(\lVert w\rVert \le \Lambda\), and \(\mathbb E\, K(X,X)\) plays the role of the data radius \(R^2\), so both theories charge capacity as (data size) \(\times\) (norm budget), never as ambient dimension.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>The Lagrangian is \(L(f,\lambda) = \frac{1}{n}\sum_i \varphi(y_i f(x_i)) + \lambda\big(\lVert f\rVert_{\mathcal H}^2 - B^2\big)\); the constant \(-\lambda B^2\) does not affect the minimizer over \(f\), so \(\arg\min_f L(f,\lambda)\) is exactly the penalized solution. For Slater, any \(f\) with \(\lVert f\rVert_{\mathcal H} \lt B\) (for instance \(f = 0\)) is strictly feasible. For (c), the product of the non-negative \(\lambda^\star\) and the non-positive \(g(f^\star)\) can vanish only if one factor is zero.</p></div></details></li>
+
+</ol>
+</section>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Bartlett, P. L., Jordan, M. I., and McAuliffe, J. D.</span> <span class="bib-year">(2006)</span> <span class="bib-title">Convexity, classification, and risk bounds</span>. <span class="bib-venue">Journal of the American Statistical Association 101(473), 138-156.</span></li>
 <li ><span class="bib-authors">Vapnik, V. N.</span> <span class="bib-year">(1995)</span> <span class="bib-title">The Nature of Statistical Learning Theory</span>. <span class="bib-venue">Springer.</span></li>
 <li ><span class="bib-authors">Bartlett, P. L. and Mendelson, S.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Rademacher and Gaussian complexities: risk bounds and structural results</span>. <span class="bib-venue">Journal of Machine Learning Research 3, 463-482.</span></li>
@@ -414,7 +446,8 @@ $$\mu_j^\star\, g_j(x^\star) = 0, \qquad j = 1,\dots,r.$$</p>
 <a class="l3" href="#lagrangian-duality">The Lagrangian and the dual function</a>
 <a class="l3" href="#weak-and-strong-duality">Weak and strong duality</a>
 <a class="l3" href="#complementary-slackness">Dual optimal pairs and complementary slackness</a>
-<a class="l2" href="#towards-support-vector-machines">Looking ahead: support vector machines</a></aside></main>
+<a class="l2" href="#towards-support-vector-machines">Looking ahead: support vector machines</a>
+<a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>

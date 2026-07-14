@@ -282,7 +282,7 @@ positive semidefinite), so it is minimized wherever its gradient vanishes:
 $$
 \nabla_\alpha L
 = 2\lambda K \alpha - K\, \mathrm{diag}(y)\, \mu
-= K \big( 2\lambda \alpha - \mathrm{diag}(y)\,\mu \big).
+= K \big(2\lambda \alpha - \mathrm{diag}(y)\,\mu \big).
 $$
 The following choice solves \(\nabla_\alpha L = 0\):
 $$
@@ -443,7 +443,7 @@ harmless nonzero factors, this becomes
 $$
 \begin{cases}
 \alpha_i \big[ y_i f(x_i) + \xi_i - 1 \big] = 0, \\[1mm]
-\left( \alpha_i - \dfrac{y_i}{2\lambda n} \right) \xi_i = 0.
+\left(\alpha_i - \dfrac{y_i}{2\lambda n} \right) \xi_i = 0.
 \end{cases}
 $$
 </p>
@@ -876,6 +876,45 @@ chapter 7 with an emphasis on the margin-based statistical analysis that justifi
 construction. Both books situate the SVM inside the same broad RKHS and regularization
 framework used throughout this chapter.
 </div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">warm-up</span> Evaluate the hinge loss \(\varphi_{\text{hinge}}(u) = \max(1-u,\,0)\) at the margins \(u = y f(x) \in \{-1,\,0,\,\tfrac12,\,1,\,2\}\), and say which of these points pay no penalty. The loss has a kink at \(u = 1\): write down its derivative on each side of the kink, and give one valid subgradient at \(u = 1\) itself. Finally, explain in a sentence why fixing the target margin at \(1\), rather than at some other positive number, costs no generality.</li>
+
+<li><span class="ex-tag">warm-up</span> The chapter shows that the \(C\)-SVM and the \(\lambda\)-form are the same machine, related by \(C = 1/(2n\lambda)\). For a training set of \(n = 100\) points regularized with \(\lambda = 10^{-2}\), compute \(C\) and the width \(1/(2\lambda n)\) of the dual box \(0 \le y_i \alpha_i \le 1/(2\lambda n)\). Does raising \(\lambda\) widen or narrow this box, and does that correspond to a harder or a softer margin? Reconcile your answer with the rule that large \(C\) means weak regularization.</li>
+
+<li><span class="ex-tag">computation</span> Take the linear kernel \(K(x,x') = \langle x, x'\rangle\) on \(\mathbb{R}^2\) and three training points: \(x_1 = (1,0)\) with \(y_1 = +1\), \(x_2 = (-1,0)\) with \(y_2 = -1\), and \(x_3 = (3,0)\) with \(y_3 = +1\). Assume weak regularization, so the upper box cap \(1/(2\lambda n)\) is inactive. The classifier \(f(x) = \sum_i \alpha_i \langle x_i, x\rangle = \langle w, x\rangle\) carries no offset, so its boundary passes through the origin. Argue from the two nearest opposite-class points that the boundary is the vertical axis and \(w = (1,0)\). Then find every coefficient \(\alpha_i\), identify the support vectors, report the geometric margin \(2/\|w\|\), and confirm that \(x_3\) falls in the \(\alpha_i = 0\) regime of the KKT trichotomy.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">By symmetry about the vertical axis, \(x_1\) and \(x_2\) play the role of the chapter's two-point example, giving \(\alpha_1 = \tfrac12\), \(\alpha_2 = -\tfrac12\). Since \(w = \alpha_1 x_1 + \alpha_2 x_2 + \alpha_3 x_3\), the well-separated point contributes only if \(\alpha_3 \ne 0\). Check its margin: \(y_3 f(x_3) = 3 \gt 1\), so it lies strictly outside the band, which by the trichotomy forces \(\alpha_3 = 0\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> The chapter states the dual of the 2-SVM, built on the squared hinge \(\varphi_{\text{hinge}}\big(y_i f(x_i)\big)^2\), but leaves the derivation as an exercise. Supply it. Introduce one slack \(\xi_i \ge \varphi_{\text{hinge}}\big(y_i[K\alpha]_i\big)\) per point, so the primal reads
+$$
+\min_{\alpha,\,\xi}\; \frac{1}{n}\sum_{i=1}^n \xi_i^2 + \lambda\, \alpha^\top K \alpha
+\quad \text{s.t.} \quad y_i[K\alpha]_i + \xi_i - 1 \ge 0,\;\; \xi_i \ge 0.
+$$
+Form the Lagrangian with multipliers \(\mu, \nu \ge 0\), minimize over \(\alpha\) and \(\xi\), and show the dual is
+$$
+\max_{\alpha \in \mathbb{R}^n}\; 2\,\alpha^\top y - \alpha^\top (K + n\lambda I)\,\alpha
+\quad \text{s.t.} \quad 0 \le y_i \alpha_i,\;\; i = 1,\dots,n.
+$$
+Explain why the upper box constraint has disappeared, so that the 2-SVM behaves like the ordinary SVM with kernel \(K + n\lambda I\) and \(C = +\infty\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Minimizing over \(\alpha\) still gives \(\alpha^* = \mathrm{diag}(y)\mu/2\lambda\). The change is in \(\xi\): the objective is now quadratic in \(\xi_i\), so \(\partial_{\xi_i} L = (2/n)\xi_i - \mu_i - \nu_i = 0\) has a finite solution \(\xi_i^* = n(\mu_i + \nu_i)/2\) for every \(\mu_i \ge 0\). There is no longer a linear-in-\(\xi\) condition \(\mu + \nu = \mathbf{1}/n\) capping \(\mu\), which is why the ceiling on \(y_i\alpha_i\) vanishes; substituting \(\xi_i^*\) back contributes the diagonal shift \(n\lambda I\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> Work directly from the complementary slackness conditions
+$$
+\alpha_i\big[y_i f(x_i) + \xi_i - 1\big] = 0, \qquad \Big(\alpha_i - \tfrac{y_i}{2\lambda n}\Big)\xi_i = 0,
+$$
+together with primal feasibility \(y_i f(x_i) + \xi_i \ge 1\), \(\xi_i \ge 0\) and the box \(0 \le y_i\alpha_i \le 1/(2\lambda n)\). Prove: (a) any point strictly outside its margin band, \(y_i f(x_i) \gt 1\), must have \(\alpha_i = 0\), hence is not a support vector; (b) any point whose coefficient sits strictly inside the box, \(0 \lt y_i\alpha_i \lt 1/(2\lambda n)\), lies exactly on the margin, \(y_i f(x_i) = 1\). Conclude that the support vectors are precisely the points that touch or cross the margin.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a): if \(y_i f(x_i) \gt 1\) then feasibility with \(\xi_i \ge 0\) makes the bracket \(y_i f(x_i) + \xi_i - 1\) strictly positive, so the first condition forces \(\alpha_i = 0\). For (b): \(0 \lt y_i\alpha_i\) makes the first bracket vanish, while \(y_i\alpha_i \lt 1/(2\lambda n)\) makes the factor \(\alpha_i - y_i/(2\lambda n) \ne 0\) in the second, forcing \(\xi_i = 0\); combine the two.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Prove the two counting bounds of the \(\nu\)-property. At a \(\nu\)-SVM optimum with \(\rho \gt 0\), the constraint \(\sum_i \mu_i \ge \nu\) is tight, so \(\sum_i \mu_i = \nu\), with the box \(0 \le \mu_i \le 1/n\) in force. A margin error (a point with \(\xi_i \gt 0\)) has its price pinned to the ceiling, \(\mu_i = 1/n\), whereas every support vector merely has \(\mu_i \gt 0\). From these facts alone, show that the fraction of margin errors is at most \(\nu\) and the fraction of support vectors is at least \(\nu\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">If \(n_{\text{err}}\) points are margin errors, they alone contribute \(n_{\text{err}}/n\) to the sum \(\sum_i \mu_i = \nu\), and the remaining prices are nonnegative, giving \(n_{\text{err}}/n \le \nu\). For the support vectors, note that only points with \(\mu_i \gt 0\) contribute anything to \(\sum_i \mu_i = \nu\), and each such contribution is at most \(1/n\), so \(\nu \le n_{\text{SV}}/n\).</div></details></li>
+
+<li><span class="ex-tag">exploration</span> Open the interactive SVM figure above and drag the training points. Begin with two well-separated clouds and note which points light up as support vectors, those sitting on or inside the margin band, and which drop out with \(\alpha_i = 0\). Now drag a single point across the boundary into the opposing cloud and watch it become a margin error pinned against the top of the box. Next sweep the \(C\) control: raise \(C\) (weaken regularization) and describe how the band narrows and the support set shrinks toward the borderline points; lower \(C\) and watch the band widen and gather more support vectors. Finally switch the kernel from linear to Gaussian and observe how the boundary bends around each cloud. Match each behaviour you see to one of the three KKT regimes.</li>
+
+<li><span class="ex-tag">challenge</span> The upper box cap is \(1/(2\lambda n)\), and the chapter notes that sending \(\lambda \to 0\) (equivalently \(C \to \infty\)) lifts this ceiling to infinity and recovers the hard-margin machine. (a) Argue from the box constraint alone why, in this limit, a single point that cannot be cleanly separated can acquire an unbounded coefficient \(\alpha_i\), and hence dominate \(\hat f = \sum_i \alpha_i K(x_i,\cdot)\). (b) Show that with finite \(\lambda\) no coefficient can exceed \(1/(2\lambda n)\) in magnitude, and interpret this cap as the mechanism by which the soft-margin machine absorbs an outlier rather than being ruled by it. (c) Connect this to the \(\nu\)-SVM reading, in which the points pinned at the top of the box are exactly the margin errors and \(\nu\) is the dial that bounds how many of them there may be.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), an unseparable point keeps its margin constraint tight while wanting more slack, so nothing stops its price, and hence \(y_i\alpha_i\), from growing once the ceiling is removed. For (b), the cap is literally the box inequality \(0 \le y_i\alpha_i \le 1/(2\lambda n)\); since \(y_i^2 = 1\), \(|\alpha_i| = |y_i\alpha_i|\) is bounded by the same number. For (c), recall from the previous exercise that margin errors carry \(\mu_i = 1/n\), the top of the box.</div></details></li>
+</ol>
+</section>
 <section class="chapter-refs"><h2 id="references">References</h2><ul class="bib-list"><li ><span class="bib-authors">Boser, B. E., Guyon, I. M., and Vapnik, V. N.</span> <span class="bib-year">(1992)</span> <span class="bib-title">A training algorithm for optimal margin classifiers</span>. <span class="bib-venue">COLT.</span></li>
 <li ><span class="bib-authors">Cortes, C. and Vapnik, V.</span> <span class="bib-year">(1995)</span> <span class="bib-title">Support-vector networks</span>. <span class="bib-venue">Machine Learning 20(3), 273-297.</span></li>
 <li ><span class="bib-authors">Vapnik, V. N.</span> <span class="bib-year">(1995)</span> <span class="bib-title">The Nature of Statistical Learning Theory</span>. <span class="bib-venue">Springer.</span></li>
@@ -909,7 +948,8 @@ framework used throughout this chapter.
 <a class="l3" href="#c-svm">The C-SVM parameterization</a>
 <a class="l3" href="#nu-svm">The \nu-SVM</a>
 <a class="l3" href="#two-svm">The 2-SVM</a>
-<a class="l2" href="#summary">Summary</a></aside></main>
+<a class="l2" href="#summary">Summary</a>
+<a class="l2" href="#exercises">Exercises</a></aside></main>
 </div>
 <script defer src="assets/viz.js"></script>
 <script defer src="assets/nav.js"></script>
