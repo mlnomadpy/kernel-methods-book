@@ -1,0 +1,38 @@
+{
+  "symbols": [
+    {"sym": "k(x, x')", "def": "A kernel: a symmetric similarity function between two examples. Positive definite kernels are the ones this book studies.", "slug": "kernels-and-rkhs"},
+    {"sym": "\\mathbf{K},\\; K_{ij}=k(x_i,x_j)", "def": "The Gram matrix, the table of pairwise kernel values on a sample. Positive definiteness of the kernel means every Gram matrix is positive semidefinite.", "slug": "kernels-and-rkhs"},
+    {"sym": "\\Phi(x)", "def": "The feature map sending an example into the feature space, with k(x,x') = \\langle\\Phi(x),\\Phi(x')\\rangle.", "slug": "kernels-and-rkhs"},
+    {"sym": "\\mathcal{H}", "def": "The reproducing kernel Hilbert space (RKHS) associated with a kernel: the space of functions in which the kernel acts as an inner product.", "slug": "kernels-and-rkhs"},
+    {"sym": "\\langle f, g\\rangle_{\\mathcal H},\\; \\lVert f\\rVert_{\\mathcal H}", "def": "The RKHS inner product and norm. The norm measures smoothness: a small norm means a slowly varying function.", "slug": "kernels-and-rkhs"},
+    {"sym": "k(\\cdot, x) = K_x", "def": "The representer of evaluation at x: the function whose RKHS inner product with any f returns f(x), the reproducing property.", "slug": "kernels-and-rkhs"},
+    {"sym": "\\alpha,\\; f=\\sum_i \\alpha_i k(\\cdot, x_i)", "def": "The dual coefficients of a kernel machine. The representer theorem guarantees the solution has this finite form.", "slug": "kernel-tricks"},
+    {"sym": "\\lambda", "def": "The regularization parameter weighting the RKHS-norm penalty against the data-fitting loss.", "slug": "kernel-ridge-and-friends"},
+    {"sym": "\\ell(y, f(x))", "def": "A loss function scoring the fit of a prediction. Different losses (squared, hinge, logistic, epsilon-insensitive) give different algorithms.", "slug": "kernel-ridge-and-friends"},
+    {"sym": "\\xi_i,\\; C,\\; \\nu", "def": "SVM slack variables and the trade-off parameters: C prices margin violations, and nu bounds the fraction of margin errors and support vectors.", "slug": "support-vector-machines"},
+    {"sym": "\\lambda_i,\\; \\psi_i", "def": "The eigenvalues and eigenfunctions of the kernel integral operator (Mercer's theorem). Their decay measures the smoothness the kernel enforces.", "slug": "mercer-and-rates"},
+    {"sym": "\\mu_P = \\mathbb{E}_{X\\sim P}[k(\\cdot, X)]", "def": "The kernel mean embedding of a probability distribution P into the RKHS.", "slug": "kernel-mean-embeddings"},
+    {"sym": "\\mathrm{MMD}(P, Q)", "def": "The maximum mean discrepancy, the RKHS distance between the mean embeddings of P and Q.", "slug": "kernel-mean-embeddings"}
+  ],
+  "terms": [
+    {"term": "Positive definite kernel", "def": "A symmetric function whose Gram matrix is positive semidefinite for every finite sample; equivalently, an inner product after a feature map.", "slug": "kernels-and-rkhs"},
+    {"term": "Reproducing kernel Hilbert space (RKHS)", "def": "A Hilbert space of functions in which evaluation is continuous and is carried out by an inner product with the kernel. Every positive definite kernel has a unique RKHS (Aronszajn).", "slug": "kernels-and-rkhs"},
+    {"term": "Kernel trick", "def": "Replacing every inner product in an algorithm by a kernel evaluation, so the algorithm runs in a feature space it never builds.", "slug": "kernel-tricks"},
+    {"term": "Representer theorem", "def": "The minimizer of a regularized empirical risk over an RKHS lies in the span of the kernel functions at the training points, collapsing an infinite search to n coefficients.", "slug": "kernel-tricks"},
+    {"term": "Kernel ridge regression", "def": "Least-squares regression in an RKHS with a norm penalty; its solution is a linear system over the Gram matrix.", "slug": "kernel-ridge-and-friends"},
+    {"term": "Support vector machine", "def": "A margin-maximizing classifier: the hinge loss plus an RKHS penalty, whose solution depends only on the support vectors.", "slug": "support-vector-machines"},
+    {"term": "Support vector", "def": "A training point with nonzero dual coefficient; the only points that determine an SVM's decision boundary.", "slug": "support-vector-machines"},
+    {"term": "Rademacher complexity", "def": "A data-dependent capacity measure: how well a function class can correlate with random noise. Controls generalization for RKHS balls.", "slug": "learning-theory"},
+    {"term": "Kernel PCA", "def": "Principal component analysis run through the kernel: the eigendecomposition of the centered Gram matrix.", "slug": "unsupervised-kernel-methods"},
+    {"term": "Mercer's theorem", "def": "A continuous positive definite kernel on a compact domain expands as a uniformly convergent sum of its eigenfunctions, giving an explicit feature map.", "slug": "mercer-and-rates"},
+    {"term": "Bochner's theorem", "def": "A continuous translation-invariant kernel is the Fourier transform of a nonnegative measure; the basis of random Fourier features.", "slug": "kernel-families"},
+    {"term": "Conditionally positive definite kernel", "def": "A kernel whose quadratic form is nonnegative on zero-sum coefficient vectors; k is CPD iff exp(tk) is positive definite for all t>0.", "slug": "kernel-families"},
+    {"term": "Convolution (R-)kernel", "def": "Haussler's framework building a kernel on structured objects by summing a kernel over all ways of decomposing them into parts; the umbrella over string, tree, and graph kernels.", "slug": "graph-kernels"},
+    {"term": "Characteristic kernel", "def": "A kernel whose mean embedding is injective, so MMD(P,Q)=0 only when P=Q; guaranteed by universality.", "slug": "kernel-mean-embeddings"},
+    {"term": "Maximum mean discrepancy (MMD)", "def": "The RKHS distance between two distributions' mean embeddings, estimable from samples and used for two-sample testing.", "slug": "kernel-mean-embeddings"},
+    {"term": "Nyström approximation", "def": "A low-rank approximation of the Gram matrix from a subset of columns, one of the two main routes past the quadratic-memory wall.", "slug": "large-scale-kernels"},
+    {"term": "Random Fourier features", "def": "A finite random feature map whose inner products approximate a translation-invariant kernel (via Bochner), reducing the kernel machine to a linear model.", "slug": "large-scale-kernels"},
+    {"term": "Multiple kernel learning", "def": "Learning a convex combination of several kernels jointly with the predictor, a group-lasso over kernels.", "slug": "multiple-kernel-learning"},
+    {"term": "Neural tangent kernel (NTK)", "def": "The kernel governing an infinitely wide network's training in the lazy regime; one way deep networks connect to kernel machines.", "slug": "kernels-and-deep-learning"}
+  ]
+}

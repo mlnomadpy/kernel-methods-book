@@ -48,9 +48,46 @@ def toc_html(current_slug=None):
             cls = ' class="here"' if ch["slug"] == current_slug else ""
             rows.append(f'<a href="{ch["slug"]}.html"{cls}>{n}. {html.escape(ch["title"])}</a>')
     rows.append('<div class="part">End matter</div>')
+    gcls = ' class="here"' if current_slug == "glossary" else ""
+    rows.append(f'<a href="glossary.html"{gcls}>Notation &amp; Glossary</a>')
     bcls = ' class="here"' if current_slug == "bibliography" else ""
     rows.append(f'<a href="bibliography.html"{bcls}>Bibliography</a>')
     return "\n".join(rows)
+
+
+def glossary_html():
+    p = os.path.join(ROOT, "glossary.json")
+    if not os.path.exists(p):
+        return None
+    g = json.load(open(p))
+    ch_title = {}
+    for part in BOOK["parts"]:
+        for ch in part["chapters"]:
+            ch_title[ch["slug"]] = ch["title"]
+
+    def linkto(slug):
+        t = ch_title.get(slug, slug)
+        return f'<a href="{slug}.html">{html.escape(t)}</a>'
+
+    srows = []
+    for e in g.get("symbols", []):
+        srows.append(f'<tr><td class="gsym">\\({e["sym"]}\\)</td>'
+                     f'<td>{html.escape(e["def"])} <span class="gsrc">{linkto(e["slug"])}</span></td></tr>')
+    trows = []
+    for e in sorted(g.get("terms", []), key=lambda x: x["term"].lower()):
+        trows.append(f'<tr><td class="gterm">{html.escape(e["term"])}</td>'
+                     f'<td>{html.escape(e["def"])} <span class="gsrc">{linkto(e["slug"])}</span></td></tr>')
+    return f"""<h1><span class="chno">End matter</span>Notation and Glossary</h1>
+<p class="lead">A quick reference for the symbols and terms used across the book. The last
+column links to the chapter where each is introduced.</p>
+<h2 id="notation">Notation</h2>
+<table class="gloss"><tbody>
+{chr(10).join(srows)}
+</tbody></table>
+<h2 id="glossary">Glossary</h2>
+<table class="gloss"><tbody>
+{chr(10).join(trows)}
+</tbody></table>"""
 
 
 def onpage_nav(body):
@@ -285,6 +322,13 @@ entries are standard primary sources for the results discussed.</p>
     open(os.path.join(OUT, "bibliography.html"), "w").write(
         page(f'Bibliography · {BOOK["title"]}', toc_html("bibliography"), bibbody,
              desc="Bibliography for " + BOOK["title"]))
+
+    # glossary page
+    gbody = glossary_html()
+    if gbody:
+        open(os.path.join(OUT, "glossary.html"), "w").write(
+            page(f'Notation & Glossary · {BOOK["title"]}', toc_html("glossary"), gbody,
+                 desc="Notation and glossary for " + BOOK["title"]))
 
     print(f"built {len(chs) - len(missing)}/{len(chs)} chapters + cover + bibliography ({len(entries)} refs) -> docs/")
     print(f"linked {ncites} in-prose citations to the bibliography")

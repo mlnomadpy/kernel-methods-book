@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notation &amp; Glossary · Machine Learning with Kernel Methods</title>
+<meta name="description" content="Notation and glossary for Machine Learning with Kernel Methods">
+<link rel="stylesheet" href="assets/book.css">
+<link rel="stylesheet" href="assets/viz.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],throwOnError:false});"></script>
+
+</head>
+<body>
+<div class="book">
+<nav class="toc">
+<div class="booktitle"><a href="index.html">Machine Learning with Kernel Methods</a></div>
+<div class="bookmeta">A book-form synthesis of the kernel-methods literature</div>
+<div class="part">I · The Idea</div>
+<a href="introduction.html">1. Introduction: Learning by Comparison</a>
+<a href="kernels-and-rkhs.html">2. Positive Definite Kernels and RKHS</a>
+<a href="kernel-tricks.html">3. The Kernel Trick and the Representer Theorem</a>
+<div class="part">II · Learning with a Fixed Kernel</div>
+<a href="kernel-ridge-and-friends.html">4. Kernel Ridge Regression and Smooth Losses</a>
+<a href="support-vector-machines.html">5. Support Vector Machines</a>
+<a href="learning-theory.html">6. Learning Theory in RKHS Balls</a>
+<div class="part">III · Discovering Structure</div>
+<a href="unsupervised-kernel-methods.html">7. Kernel PCA, Clustering, and CCA</a>
+<div class="part">IV · The Geometry of the Space</div>
+<a href="mercer-and-rates.html">8. Mercer&#x27;s Theorem, Spectra, and Rates</a>
+<div class="part">V · Designing Kernels for Data</div>
+<a href="kernel-families.html">9. Translation-Invariant, Semigroup, and Probabilistic Kernels</a>
+<a href="string-kernels.html">10. Kernels for Sequences</a>
+<a href="graph-kernels.html">11. Kernels for and on Graphs</a>
+<div class="part">VI · Kernels and Distributions</div>
+<a href="kernel-mean-embeddings.html">12. Mean Embeddings, MMD, and Characteristic Kernels</a>
+<div class="part">VII · Scaling and the Modern View</div>
+<a href="large-scale-kernels.html">13. Large-Scale Kernel Machines</a>
+<a href="multiple-kernel-learning.html">14. Multiple Kernel Learning</a>
+<a href="kernels-and-deep-learning.html">15. Deep Learning from a Kernel Point of View</a>
+<div class="part">End matter</div>
+<a href="glossary.html" class="here">Notation &amp; Glossary</a>
+<a href="bibliography.html">Bibliography</a>
+</nav>
+<main><div class="page">
+<h1><span class="chno">End matter</span>Notation and Glossary</h1>
+<p class="lead">A quick reference for the symbols and terms used across the book. The last
+column links to the chapter where each is introduced.</p>
+<h2 id="notation">Notation</h2>
+<table class="gloss"><tbody>
+<tr><td class="gsym">\(k(x, x')\)</td><td>A kernel: a symmetric similarity function between two examples. Positive definite kernels are the ones this book studies. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gsym">\(\mathbf{K},\; K_{ij}=k(x_i,x_j)\)</td><td>The Gram matrix, the table of pairwise kernel values on a sample. Positive definiteness of the kernel means every Gram matrix is positive semidefinite. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gsym">\(\Phi(x)\)</td><td>The feature map sending an example into the feature space, with k(x,x&#x27;) = \langle\Phi(x),\Phi(x&#x27;)\rangle. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gsym">\(\mathcal{H}\)</td><td>The reproducing kernel Hilbert space (RKHS) associated with a kernel: the space of functions in which the kernel acts as an inner product. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gsym">\(\langle f, g\rangle_{\mathcal H},\; \lVert f\rVert_{\mathcal H}\)</td><td>The RKHS inner product and norm. The norm measures smoothness: a small norm means a slowly varying function. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gsym">\(k(\cdot, x) = K_x\)</td><td>The representer of evaluation at x: the function whose RKHS inner product with any f returns f(x), the reproducing property. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gsym">\(\alpha,\; f=\sum_i \alpha_i k(\cdot, x_i)\)</td><td>The dual coefficients of a kernel machine. The representer theorem guarantees the solution has this finite form. <span class="gsrc"><a href="kernel-tricks.html">The Kernel Trick and the Representer Theorem</a></span></td></tr>
+<tr><td class="gsym">\(\lambda\)</td><td>The regularization parameter weighting the RKHS-norm penalty against the data-fitting loss. <span class="gsrc"><a href="kernel-ridge-and-friends.html">Kernel Ridge Regression and Smooth Losses</a></span></td></tr>
+<tr><td class="gsym">\(\ell(y, f(x))\)</td><td>A loss function scoring the fit of a prediction. Different losses (squared, hinge, logistic, epsilon-insensitive) give different algorithms. <span class="gsrc"><a href="kernel-ridge-and-friends.html">Kernel Ridge Regression and Smooth Losses</a></span></td></tr>
+<tr><td class="gsym">\(\xi_i,\; C,\; \nu\)</td><td>SVM slack variables and the trade-off parameters: C prices margin violations, and nu bounds the fraction of margin errors and support vectors. <span class="gsrc"><a href="support-vector-machines.html">Support Vector Machines</a></span></td></tr>
+<tr><td class="gsym">\(\lambda_i,\; \psi_i\)</td><td>The eigenvalues and eigenfunctions of the kernel integral operator (Mercer&#x27;s theorem). Their decay measures the smoothness the kernel enforces. <span class="gsrc"><a href="mercer-and-rates.html">Mercer&#x27;s Theorem, Spectra, and Rates</a></span></td></tr>
+<tr><td class="gsym">\(\mu_P = \mathbb{E}_{X\sim P}[k(\cdot, X)]\)</td><td>The kernel mean embedding of a probability distribution P into the RKHS. <span class="gsrc"><a href="kernel-mean-embeddings.html">Mean Embeddings, MMD, and Characteristic Kernels</a></span></td></tr>
+<tr><td class="gsym">\(\mathrm{MMD}(P, Q)\)</td><td>The maximum mean discrepancy, the RKHS distance between the mean embeddings of P and Q. <span class="gsrc"><a href="kernel-mean-embeddings.html">Mean Embeddings, MMD, and Characteristic Kernels</a></span></td></tr>
+</tbody></table>
+<h2 id="glossary">Glossary</h2>
+<table class="gloss"><tbody>
+<tr><td class="gterm">Bochner&#x27;s theorem</td><td>A continuous translation-invariant kernel is the Fourier transform of a nonnegative measure; the basis of random Fourier features. <span class="gsrc"><a href="kernel-families.html">Translation-Invariant, Semigroup, and Probabilistic Kernels</a></span></td></tr>
+<tr><td class="gterm">Characteristic kernel</td><td>A kernel whose mean embedding is injective, so MMD(P,Q)=0 only when P=Q; guaranteed by universality. <span class="gsrc"><a href="kernel-mean-embeddings.html">Mean Embeddings, MMD, and Characteristic Kernels</a></span></td></tr>
+<tr><td class="gterm">Conditionally positive definite kernel</td><td>A kernel whose quadratic form is nonnegative on zero-sum coefficient vectors; k is CPD iff exp(tk) is positive definite for all t&gt;0. <span class="gsrc"><a href="kernel-families.html">Translation-Invariant, Semigroup, and Probabilistic Kernels</a></span></td></tr>
+<tr><td class="gterm">Convolution (R-)kernel</td><td>Haussler&#x27;s framework building a kernel on structured objects by summing a kernel over all ways of decomposing them into parts; the umbrella over string, tree, and graph kernels. <span class="gsrc"><a href="graph-kernels.html">Kernels for and on Graphs</a></span></td></tr>
+<tr><td class="gterm">Kernel PCA</td><td>Principal component analysis run through the kernel: the eigendecomposition of the centered Gram matrix. <span class="gsrc"><a href="unsupervised-kernel-methods.html">Kernel PCA, Clustering, and CCA</a></span></td></tr>
+<tr><td class="gterm">Kernel ridge regression</td><td>Least-squares regression in an RKHS with a norm penalty; its solution is a linear system over the Gram matrix. <span class="gsrc"><a href="kernel-ridge-and-friends.html">Kernel Ridge Regression and Smooth Losses</a></span></td></tr>
+<tr><td class="gterm">Kernel trick</td><td>Replacing every inner product in an algorithm by a kernel evaluation, so the algorithm runs in a feature space it never builds. <span class="gsrc"><a href="kernel-tricks.html">The Kernel Trick and the Representer Theorem</a></span></td></tr>
+<tr><td class="gterm">Maximum mean discrepancy (MMD)</td><td>The RKHS distance between two distributions&#x27; mean embeddings, estimable from samples and used for two-sample testing. <span class="gsrc"><a href="kernel-mean-embeddings.html">Mean Embeddings, MMD, and Characteristic Kernels</a></span></td></tr>
+<tr><td class="gterm">Mercer&#x27;s theorem</td><td>A continuous positive definite kernel on a compact domain expands as a uniformly convergent sum of its eigenfunctions, giving an explicit feature map. <span class="gsrc"><a href="mercer-and-rates.html">Mercer&#x27;s Theorem, Spectra, and Rates</a></span></td></tr>
+<tr><td class="gterm">Multiple kernel learning</td><td>Learning a convex combination of several kernels jointly with the predictor, a group-lasso over kernels. <span class="gsrc"><a href="multiple-kernel-learning.html">Multiple Kernel Learning</a></span></td></tr>
+<tr><td class="gterm">Neural tangent kernel (NTK)</td><td>The kernel governing an infinitely wide network&#x27;s training in the lazy regime; one way deep networks connect to kernel machines. <span class="gsrc"><a href="kernels-and-deep-learning.html">Deep Learning from a Kernel Point of View</a></span></td></tr>
+<tr><td class="gterm">Nyström approximation</td><td>A low-rank approximation of the Gram matrix from a subset of columns, one of the two main routes past the quadratic-memory wall. <span class="gsrc"><a href="large-scale-kernels.html">Large-Scale Kernel Machines</a></span></td></tr>
+<tr><td class="gterm">Positive definite kernel</td><td>A symmetric function whose Gram matrix is positive semidefinite for every finite sample; equivalently, an inner product after a feature map. <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gterm">Rademacher complexity</td><td>A data-dependent capacity measure: how well a function class can correlate with random noise. Controls generalization for RKHS balls. <span class="gsrc"><a href="learning-theory.html">Learning Theory in RKHS Balls</a></span></td></tr>
+<tr><td class="gterm">Random Fourier features</td><td>A finite random feature map whose inner products approximate a translation-invariant kernel (via Bochner), reducing the kernel machine to a linear model. <span class="gsrc"><a href="large-scale-kernels.html">Large-Scale Kernel Machines</a></span></td></tr>
+<tr><td class="gterm">Representer theorem</td><td>The minimizer of a regularized empirical risk over an RKHS lies in the span of the kernel functions at the training points, collapsing an infinite search to n coefficients. <span class="gsrc"><a href="kernel-tricks.html">The Kernel Trick and the Representer Theorem</a></span></td></tr>
+<tr><td class="gterm">Reproducing kernel Hilbert space (RKHS)</td><td>A Hilbert space of functions in which evaluation is continuous and is carried out by an inner product with the kernel. Every positive definite kernel has a unique RKHS (Aronszajn). <span class="gsrc"><a href="kernels-and-rkhs.html">Positive Definite Kernels and RKHS</a></span></td></tr>
+<tr><td class="gterm">Support vector</td><td>A training point with nonzero dual coefficient; the only points that determine an SVM&#x27;s decision boundary. <span class="gsrc"><a href="support-vector-machines.html">Support Vector Machines</a></span></td></tr>
+<tr><td class="gterm">Support vector machine</td><td>A margin-maximizing classifier: the hinge loss plus an RKHS penalty, whose solution depends only on the support vectors. <span class="gsrc"><a href="support-vector-machines.html">Support Vector Machines</a></span></td></tr>
+</tbody></table>
+</div></main>
+</div>
+<script defer src="assets/viz.js"></script>
+<script defer src="assets/nav.js"></script>
+</body>
+</html>

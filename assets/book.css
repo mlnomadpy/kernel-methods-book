@@ -188,3 +188,12 @@ aside.onpage a.l3 { padding-left: 22px; font-size: 11.5px; }
 aside.onpage a:hover { color: var(--accent); }
 aside.onpage a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
 @media (max-width: 1380px) { aside.onpage { display: none; } }
+
+/* glossary / notation tables */
+table.gloss { width: 100%; border-collapse: collapse; }
+table.gloss td { border: none; border-bottom: 1px solid var(--rule); padding: 10px 8px; vertical-align: top; }
+table.gloss td.gsym { width: 30%; font-size: .95em; white-space: nowrap; }
+table.gloss td.gterm { width: 26%; font-weight: 650; }
+table.gloss .gsrc { display: inline-block; margin-left: 4px; font-family: ui-sans-serif, system-ui; font-size: .8em; white-space: nowrap; }
+table.gloss .gsrc a { color: var(--faint); }
+table.gloss .gsrc a:hover { color: var(--accent); }
