@@ -23,7 +23,7 @@ the supervised learning problem is to estimate a function \(h : \mathcal{X} \to 
 <li><strong>Structured output</strong> regression or classification, when \(\mathcal{Y}\) is more general.</li>
 </ul>
 
-<p>Three examples from the course illustrate how varied the spaces \(\mathcal{X}\) and \(\mathcal{Y}\) can be, and why a framework that never manipulates inputs directly, only through a kernel, is attractive.</p>
+<p>Three examples illustrate how varied the spaces \(\mathcal{X}\) and \(\mathcal{Y}\) can be, and why a framework that never manipulates inputs directly, only through a kernel, is attractive.</p>
 
 <div class="box ex"><span class="box-title">Example (regression)</span>
 Task: predict the capacity of a small molecule to inhibit a drug target. Here \(\mathcal{X}\) is a set of molecular structures, naturally represented as graphs rather than vectors, and \(\mathcal{Y} = \mathbb{R}\). The inputs live in a discrete, combinatorial space; no coordinate representation is given a priori.
@@ -65,7 +65,7 @@ Three observations explain the appeal of this template.
 <ul>
 <li><strong>Regularization is important</strong>, particularly in high dimension, to prevent overfitting: without the penalty, a rich \(\mathcal{H}\) can interpolate the training data and generalize poorly.</li>
 <li><strong>It contains linear models as a special case.</strong> When \(\mathcal{Z} = \mathbb{R}^d\) and \(K\) is the linear kernel, every \(f \in \mathcal{H}\) is a linear model \(f = f_{\mathbf{w}}\) with \(f_{\mathbf{w}}(x) = \mathbf{w}^\top x\), and the regularization is exactly the familiar \(\|\mathbf{w}\|^2\).</li>
-<li><strong>It goes far beyond linear models.</strong> Using more general spaces \(\mathcal{Z}\) and kernels \(K\) lets us learn non-linear functions over a functional space endowed with a natural regularization (recall from the RKHS chapter that a small norm in the RKHS means a smooth function), and lets us learn functions over non-vectorial data such as strings and graphs, since the kernel is the only interface to the data.</li>
+<li><strong>It goes far beyond linear models.</strong> Using more general spaces \(\mathcal{Z}\) and kernels \(K\) lets us learn non-linear functions over a functional space endowed with a natural regularization (recall from [[ch:kernels-and-rkhs]] that a small norm in the RKHS means a smooth function), and lets us learn functions over non-vectorial data such as strings and graphs, since the kernel is the only interface to the data.</li>
 </ul>
 </div>
 
@@ -81,7 +81,7 @@ Three observations explain the appeal of this template.
 <li>\(\mathcal{Y} = \mathbb{R}\), real-valued outputs;</li>
 <li>\(S_n = (x_i, y_i)_{i=1,\dots,n} \in (\mathcal{X} \times \mathbb{R})^n\), a training set of \(n\) pairs.</li>
 </ul>
-<p>The goal is to find a function \(f : \mathcal{X} \to \mathbb{R}\) that predicts \(y\) by \(f(x)\). The running example in the course is a one-dimensional cloud of noisy points \((x_i, y_i)\) with \(x\) ranging over \([0, 10]\), through which we want to pass a sensible curve.</p>
+<p>The goal is to find a function \(f : \mathcal{X} \to \mathbb{R}\) that predicts \(y\) by \(f(x)\). A convenient running example is a one-dimensional cloud of noisy points \((x_i, y_i)\) with \(x\) ranging over \([0, 10]\), through which we want to pass a sensible curve.</p>
 
 <p>The most classical way to quantify the error made when \(f\) predicts \(f(x)\) instead of \(y\) is the squared error:
 $$ \ell\big(f(x), y\big) = \big(y - f(x)\big)^2. $$
@@ -129,7 +129,7 @@ solves the KRR problem, and \(\hat f(x) = \sum_{i=1}^n \alpha_i K(x_i, x)\) is t
 The objective
 $$ J(\alpha) = \frac{1}{n} (\mathbf{K}\alpha - \mathbf{y})^\top (\mathbf{K}\alpha - \mathbf{y}) + \lambda \, \alpha^\top \mathbf{K} \alpha $$
 is a convex and differentiable function of \(\alpha\): the first term is a convex quadratic composed with a linear map, and the second is convex because \(\mathbf{K}\) is positive semidefinite. Its minimum is therefore attained exactly where the gradient in \(\alpha\) vanishes. Differentiating,
-$$ 0 = \nabla J(\alpha) = \frac{2}{n} \mathbf{K} (\mathbf{K}\alpha - \mathbf{y}) + 2 \lambda \mathbf{K} \alpha = \mathbf{K} \big[ (\mathbf{K} + \lambda n I) \alpha - \mathbf{y} \big]. $$
+$$ 0 = \nabla J(\alpha) = \frac{2}{n} \mathbf{K} (\mathbf{K}\alpha - \mathbf{y}) + 2 \lambda \mathbf{K} \alpha = \frac{2}{n}\, \mathbf{K} \big[ (\mathbf{K} + \lambda n I) \alpha - \mathbf{y} \big]. $$
 For \(\lambda \gt 0\), the matrix \(\mathbf{K} + \lambda n I\) is invertible: \(\mathbf{K}\) is positive semidefinite, so every eigenvalue of \(\mathbf{K} + \lambda n I\) is at least \(\lambda n \gt 0\). Hence one solution of the stationarity equation is obtained by making the bracket itself vanish:
 $$ \alpha = (\mathbf{K} + \lambda n I)^{-1} \mathbf{y}. $$
 <span class="qed">\(\square\)</span>
@@ -155,7 +155,7 @@ The fitted curve is \(\hat f(x) = 0.71\, K(x, 0) - 0.17\, K(x, 2)\). Evaluating 
 
 <h3 id="rbf-example">Worked example: KRR with the Gaussian RBF kernel</h3>
 
-<p>The course illustrates KRR on the one-dimensional noisy dataset described above, using the Gaussian RBF kernel
+<p>It is instructive to run KRR on the one-dimensional noisy dataset described above, using the Gaussian RBF kernel
 $$ K(x, x') = \exp\!\Big(-\frac{(x - x')^2}{2\sigma^2} \Big), $$
 and sweeping the regularization parameter over ten orders of magnitude, \(\lambda = 10^{3}, 10^{2}, 10, 1, 10^{-1}, 10^{-2}, \dots, 10^{-7}\). Each value of \(\lambda\) gives one linear system and one fitted curve overlaid on the data, and the sequence of plots tells the whole bias-variance story of the method:</p>
 <ul>
@@ -206,9 +206,10 @@ This is standard ridge regression. Setting the gradient to zero,
 $$ -\frac{2}{n}\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\mathbf{w}) + 2\lambda \mathbf{w} = 0 \quad\Longrightarrow\quad \mathbf{w}_{\mathrm{RR}} = \big(\mathbf{X}^\top\mathbf{X} + \lambda n I \big)^{-1} \mathbf{X}^\top \mathbf{y}. $$
 At first sight this looks different from \(\mathbf{w}_{\mathrm{KRR}} = \mathbf{X}^\top(\mathbf{X}\mathbf{X}^\top + \lambda n I)^{-1}\mathbf{y}\): the inverted matrix is \(d \times d\) in one case and \(n \times n\) in the other. The two are reconciled by a classical identity.</p>
 
-<div class="box lem"><span class="box-title">Lemma (matrix inversion lemma)</span>
+<div class="box lem"><span class="box-title">Lemma (push-through identity)</span>
 For any matrices \(B\) and \(C\), and \(\gamma \gt 0\), the following holds (whenever the products and inverses make sense):
 $$ B (CB + \gamma I)^{-1} = (BC + \gamma I)^{-1} B. $$
+This is the push-through identity: it pushes the factor \(B\) through the inverse, exchanging \(CB\) for \(BC\) inside it. It is not the Sherman-Morrison-Woodbury matrix inversion lemma, which rewrites the inverse of a low-rank update; here nothing is inverted twice, and the two sides simply relate the \(d \times d\) and \(n \times n\) resolvents.
 </div>
 
 <div class="box proof"><span class="box-title">Proof</span>
@@ -233,6 +234,34 @@ This is a first instance of a recurring theme: kernelization trades the dimensio
 
 <div class="box rmk"><span class="box-title">Remark (a stability bound for ridge regression)</span>
 The Gram-matrix reading of ridge regression is also the natural setting for a generalization guarantee. Shawe-Taylor and Cristianini (2004) show, through a stability analysis of the least-squares fit, that the expected squared error of the learned function is bounded by its empirical squared error on the training set plus a complexity term that grows with the trace of the kernel matrix, \(\operatorname{tr}(\mathbf{K}) = \sum_i K(x_i, x_i)\), and with the bound \(B\) imposed on the RKHS norm through \(\|f\|_{\mathcal{H}} \le B\). The shape of the bound is the whole justification for regularizing: shrinking \(B\) shrinks the complexity term, so controlling the norm controls the gap between training error and test error, which is precisely the overfitting the penalty \(\lambda\|f\|_{\mathcal{H}}^2\) is there to prevent. The learning-theoretic reason to regularize and the numerical reason, a well-conditioned linear system, are two views of the same parameter \(\lambda\).
+</div>
+
+<h3 id="gp-df-cv">Three readings of the smoother: Gaussian processes, degrees of freedom, cross-validation</h3>
+
+<p>The KRR fit is a linear function of the outputs. Writing the training predictions as
+$$ \hat{\mathbf{y}} = \mathbf{K}\alpha = \mathbf{K}(\mathbf{K} + \lambda n I)^{-1}\mathbf{y} =: \mathbf{S}_\lambda\, \mathbf{y}, $$
+introduces the smoother matrix \(\mathbf{S}_\lambda\), which maps observed outputs to fitted values. Three standard readings of \(\mathbf{S}_\lambda\) round out the picture and, in the last case, hand us a way to choose \(\lambda\).</p>
+
+<div class="box rmk"><span class="box-title">Remark (kernel ridge regression is a Gaussian process posterior mean)</span>
+Place a Gaussian process prior \(f \sim \mathcal{GP}(0, K)\) on the unknown function, so that any finite collection of values \((f(x_1), \dots, f(x_n))\) is jointly Gaussian with covariance \(\mathbf{K}\), and suppose the outputs are noisy observations \(y_i = f(x_i) + \varepsilon_i\) with \(\varepsilon_i \sim \mathcal{N}(0, \sigma^2)\) independent. The posterior mean of \(f\) at a test point \(x\) is then
+$$ \mathbb{E}\big[f(x) \mid S_n\big] = \mathbf{k}(x)^\top (\mathbf{K} + \sigma^2 I)^{-1}\mathbf{y}, \qquad \mathbf{k}(x) = \big(K(x_1, x), \dots, K(x_n, x)\big)^\top. $$
+This is exactly the KRR predictor \(\hat f(x) = \sum_i \alpha_i K(x_i, x) = \mathbf{k}(x)^\top(\mathbf{K} + \lambda n I)^{-1}\mathbf{y}\) once we set the observation-noise variance to \(\sigma^2 = \lambda n\). Kernel ridge regression is therefore the posterior mean of a Gaussian process with covariance kernel \(K\), and the regularization parameter is a noise level: more assumed noise means more smoothing. The full Bayesian treatment, which also delivers the posterior variance as an error bar, is developed by Rasmussen and Williams (2006).
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (effective degrees of freedom)</span>
+Since \(\mathbf{S}_\lambda\) plays the role that the projection onto the fitted subspace plays in ordinary least squares, its trace measures how many parameters the fit effectively spends. The effective degrees of freedom of KRR is
+$$ \mathrm{df}(\lambda) = \operatorname{tr}\big(\mathbf{S}_\lambda\big) = \operatorname{tr}\big(\mathbf{K}(\mathbf{K} + \lambda n I)^{-1}\big) = \sum_{i=1}^{n} \frac{\mu_i}{\mu_i + \lambda n}, $$
+where the \(\mu_i\) are the eigenvalues of \(\mathbf{K}\). Each term is the spectral-filter factor of one eigendirection, so \(\mathrm{df}(\lambda)\) counts the directions the data actually determines: it ranges from \(n\) as \(\lambda \to 0\) (every direction fitted) down to \(0\) as \(\lambda \to \infty\) (the flat fit), and it is the honest replacement for the number of parameters when comparing fits at different \(\lambda\).
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (leave-one-out cross-validation in closed form)</span>
+Because the fit is linear in the outputs, its leave-one-out error needs no refitting. For a linear smoother the leave-one-out residual at point \(i\) equals the ordinary residual rescaled by one minus the \(i\)th diagonal entry of the smoother,
+$$ y_i - \hat f^{(-i)}(x_i) = \frac{y_i - \hat f(x_i)}{1 - [\mathbf{S}_\lambda]_{ii}}, $$
+so the leave-one-out score is
+$$ \mathrm{LOO}(\lambda) = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{y_i - \hat f(x_i)}{1 - [\mathbf{S}_\lambda]_{ii}} \right)^2, $$
+computed from a single fit at each \(\lambda\). Replacing every diagonal \([\mathbf{S}_\lambda]_{ii}\) by their average \(\operatorname{tr}(\mathbf{S}_\lambda)/n = \mathrm{df}(\lambda)/n\) gives generalized cross-validation,
+$$ \mathrm{GCV}(\lambda) = \frac{1}{n} \sum_{i=1}^{n} \frac{\big(y_i - \hat f(x_i)\big)^2}{\big(1 - \mathrm{df}(\lambda)/n\big)^2}, $$
+which ties the model-selection criterion directly to the degrees of freedom above. Either score lets \(\lambda\) be tuned by a one-dimensional search without ever holding out data by hand.
 </div>
 
 <h3 id="robust-regression">Beyond the squared loss: robust regression</h3>
@@ -312,7 +341,7 @@ However, this direct approach fails for three compounding reasons:</p>
 
 <p>An alternative is to define a probabilistic model of \(y\) parametrized by \(f(x)\). Let \(\sigma\) denote the sigmoid function, and model
 $$ \forall y \in \{-1, 1\}, \qquad p\big(y \mid f(x)\big) = \frac{1}{1 + e^{-y f(x)}} = \sigma\big(y f(x) \big). $$
-This is a bona fide conditional distribution: \(\sigma(u) + \sigma(-u) = 1\), so the two probabilities \(p(1 \mid f(x)) = \sigma(f(x))\) and \(p(-1 \mid f(x)) = \sigma(-f(x))\) sum to one. Large positive \(f(x)\) means the model is confident that \(y = 1\); \(f(x) = 0\) means indifference. The course plots \(\sigma(u)\) and \(\sigma(-u)\), two mirror-image S-shaped curves crossing at height \(1/2\) at \(u = 0\).</p>
+This is a bona fide conditional distribution: \(\sigma(u) + \sigma(-u) = 1\), so the two probabilities \(p(1 \mid f(x)) = \sigma(f(x))\) and \(p(-1 \mid f(x)) = \sigma(-f(x))\) sum to one. Large positive \(f(x)\) means the model is confident that \(y = 1\); \(f(x) = 0\) means indifference. Plotting \(\sigma(u)\) and \(\sigma(-u)\) gives two mirror-image S-shaped curves crossing at height \(1/2\) at \(u = 0\).</p>
 
 <p>The <em>logistic loss</em> is the negative conditional log-likelihood of this model:
 $$ \ell_{\mathrm{logistic}}\big(f(x), y\big) = -\ln p\big(y \mid f(x)\big) = \ln\big(1 + e^{-y f(x)} \big). $$
@@ -322,7 +351,7 @@ It is a smooth, convex, decreasing function of the product \(y f(x)\): confident
 
 <div class="box def"><span class="box-title">Definition (kernel logistic regression)</span>
 Kernel logistic regression (KLR) estimates
-$$ \hat f = \arg\min_{f \in \mathcal{H}} \frac{1}{n} \sum_{i=1}^{n} \ell_{\mathrm{logistic}}\big(f(x_i), y_i\big) + \frac{\lambda}{2} \|f\|_{\mathcal{H}}^2 = \arg\min_{f \in \mathcal{H}} \frac{1}{n} \sum_{i=1}^{n} \ln\big(1 + e^{-y_i f(x_i)} \big) + \frac{\lambda}{2} \|f\|_{\mathcal{H}}^2. $$
+$$ \hat f = \arg\min_{f \in \mathcal{H}} \frac{1}{n} \sum_{i=1}^{n} \ell_{\mathrm{logistic}}\big(f(x_i), y_i\big) + \lambda \|f\|_{\mathcal{H}}^2 = \arg\min_{f \in \mathcal{H}} \frac{1}{n} \sum_{i=1}^{n} \ln\big(1 + e^{-y_i f(x_i)} \big) + \lambda \|f\|_{\mathcal{H}}^2. $$
 </div>
 
 <p>Two remarks on this objective. First, it can be interpreted as a regularized conditional maximum likelihood estimator: minimizing the average negative log-likelihood is maximizing the likelihood of the observed labels under the sigmoid model, and the norm penalty plays the role of a prior favoring smooth score functions. Second, unlike KRR there is no explicit solution, but the problem is a smooth convex optimization problem that can be solved numerically, and we will see that the numerics are pleasantly structured. The kernelized form of the estimator is due to Zhu and Hastie (2005), and it inherits a well-established algorithmic idea, namely the iteratively reweighted least-squares scheme long used to fit generalized linear models (Green, 1984), which we develop next.</p>
@@ -334,7 +363,7 @@ $$ \hat f(x) = \sum_{i=1}^{n} \alpha_i K(x_i, x), $$
 and as always,
 $$ \big(\hat f(x_1), \dots, \hat f(x_n) \big)^\top = \mathbf{K}\alpha \qquad \text{and} \qquad \|\hat f\|_{\mathcal{H}}^2 = \alpha^\top \mathbf{K} \alpha. $$
 To find \(\alpha\) we therefore need to solve
-$$ \min_{\alpha \in \mathbb{R}^n} \; \frac{1}{n} \sum_{i=1}^{n} \ln\Big(1 + e^{-y_i [\mathbf{K}\alpha]_i} \Big) + \frac{\lambda}{2} \alpha^\top \mathbf{K} \alpha. $$</p>
+$$ \min_{\alpha \in \mathbb{R}^n} \; \frac{1}{n} \sum_{i=1}^{n} \ln\Big(1 + e^{-y_i [\mathbf{K}\alpha]_i} \Big) + \lambda \alpha^\top \mathbf{K} \alpha. $$</p>
 
 <p>Before attacking this problem, we record the calculus facts about the sigmoid and the logistic loss that make everything below mechanical. Write \(\ell_{\mathrm{logistic}}(u) = \ln(1 + e^{-u})\) for the loss as a function of the margin variable \(u = y f(x)\).</p>
 
@@ -356,7 +385,7 @@ That \(\sigma(-u) = 1 - \sigma(u)\) follows by direct computation: \(\sigma(u) +
 <h3 id="newton-klr">Newton's method and the quadratic approximation</h3>
 
 <p>Write the objective as
-$$ J(\alpha) = \frac{1}{n} \sum_{i=1}^{n} \ell_{\mathrm{logistic}}\big(y_i [\mathbf{K}\alpha]_i \big) + \frac{\lambda}{2} \alpha^\top \mathbf{K} \alpha. $$
+$$ J(\alpha) = \frac{1}{n} \sum_{i=1}^{n} \ell_{\mathrm{logistic}}\big(y_i [\mathbf{K}\alpha]_i \big) + \lambda \alpha^\top \mathbf{K} \alpha. $$
 This is a smooth convex optimization problem that many numerical methods can solve. Let us make one of them explicit: Newton's method, which iteratively approximates \(J\) by a quadratic function and solves the quadratic problem. The quadratic approximation of \(J\) near a point \(\alpha^0\) is
 $$ J_q(\alpha) = J(\alpha^0) + (\alpha - \alpha^0)^\top \nabla J(\alpha^0) + \frac{1}{2} (\alpha - \alpha^0)^\top \nabla^2 J(\alpha^0)\, (\alpha - \alpha^0), $$
 and one Newton step replaces \(\alpha^0\) by the minimizer of \(J_q\). We need the gradient and the Hessian.</p>
@@ -364,23 +393,23 @@ and one Newton step replaces \(\alpha^0\) by the minimizer of \(J_q\). We need t
 <p><strong>Gradient.</strong> By the chain rule, using \([\mathbf{K}\alpha]_i = \sum_j K_{ij}\alpha_j\),
 $$ \frac{\partial J}{\partial \alpha_j} = \frac{1}{n} \sum_{i=1}^{n} \underbrace{\ell'_{\mathrm{logistic}}\big(y_i [\mathbf{K}\alpha]_i \big)}_{P_i(\alpha)} \, y_i \, K_{ij} \; + \; \lambda [\mathbf{K}\alpha]_j, $$
 therefore, collecting the per-example derivatives into the diagonal matrix \(\mathbf{P}(\alpha) = \operatorname{diag}\big(P_1(\alpha), \dots, P_n(\alpha)\big)\) and using the symmetry of \(\mathbf{K}\),
-$$ \nabla J(\alpha) = \frac{1}{n} \mathbf{K} \mathbf{P}(\alpha) \mathbf{y} + \lambda \mathbf{K} \alpha. $$</p>
+$$ \nabla J(\alpha) = \frac{1}{n} \mathbf{K} \mathbf{P}(\alpha) \mathbf{y} + 2\lambda \mathbf{K} \alpha. $$</p>
 
 <p><strong>Hessian.</strong> Differentiating once more, and using \(y_i^2 = 1\),
-$$ \frac{\partial^2 J}{\partial \alpha_j \partial \alpha_l} = \frac{1}{n} \sum_{i=1}^{n} \underbrace{\ell''_{\mathrm{logistic}}\big(y_i [\mathbf{K}\alpha]_i \big)}_{W_i(\alpha)} \, y_i K_{ij} \, y_i K_{il} + \lambda K_{jl}, $$
+$$ \frac{\partial^2 J}{\partial \alpha_j \partial \alpha_l} = \frac{1}{n} \sum_{i=1}^{n} \underbrace{\ell''_{\mathrm{logistic}}\big(y_i [\mathbf{K}\alpha]_i \big)}_{W_i(\alpha)} \, y_i K_{ij} \, y_i K_{il} + 2\lambda K_{jl}, $$
 therefore, with \(\mathbf{W}(\alpha) = \operatorname{diag}\big(W_1(\alpha), \dots, W_n(\alpha)\big)\),
-$$ \nabla^2 J(\alpha) = \frac{1}{n} \mathbf{K} \mathbf{W}(\alpha) \mathbf{K} + \lambda \mathbf{K}. $$
+$$ \nabla^2 J(\alpha) = \frac{1}{n} \mathbf{K} \mathbf{W}(\alpha) \mathbf{K} + 2\lambda \mathbf{K}. $$
 Note that each curvature weight \(W_i(\alpha) = \sigma\big([\mathbf{K}\alpha]_i\big)\sigma\big(-[\mathbf{K}\alpha]_i\big)\) is strictly positive, and largest for points near the decision boundary, where the model is most uncertain.</p>
 
 <p><strong>Assembling the quadratic model.</strong> Fix \(\alpha^0\) and abbreviate \(\mathbf{P} = \mathbf{P}(\alpha^0)\), \(\mathbf{W} = \mathbf{W}(\alpha^0)\). In \(J_q(\alpha)\), let us isolate the terms that depend on \(\alpha\) (all others are constants for the minimization):
-$$ \alpha^\top \nabla J(\alpha^0) = \frac{1}{n} \alpha^\top \mathbf{K} \mathbf{P} \mathbf{y} + \lambda\, \alpha^\top \mathbf{K} \alpha^0, $$
-$$ \frac{1}{2} \alpha^\top \nabla^2 J(\alpha^0)\, \alpha = \frac{1}{2n} \alpha^\top \mathbf{K}\mathbf{W}\mathbf{K}\alpha + \frac{\lambda}{2} \alpha^\top \mathbf{K}\alpha, $$
-$$ - \alpha^\top \nabla^2 J(\alpha^0)\, \alpha^0 = -\frac{1}{n} \alpha^\top \mathbf{K}\mathbf{W}\mathbf{K}\alpha^0 - \lambda\, \alpha^\top \mathbf{K}\alpha^0. $$
-Summing the three contributions (the cross terms \(\lambda \alpha^\top \mathbf{K}\alpha^0\) cancel) and multiplying by 2, we obtain, up to an additive constant \(C\) independent of \(\alpha\):
-$$ 2 J_q(\alpha) = -\frac{2}{n} \alpha^\top \mathbf{K}\mathbf{W} \underbrace{\big(\mathbf{K}\alpha^0 - \mathbf{W}^{-1}\mathbf{P}\mathbf{y} \big)}_{:=\, \mathbf{z}} + \frac{1}{n} \alpha^\top \mathbf{K}\mathbf{W}\mathbf{K}\alpha + \lambda\, \alpha^\top \mathbf{K}\alpha + C. $$
+$$ \alpha^\top \nabla J(\alpha^0) = \frac{1}{n} \alpha^\top \mathbf{K} \mathbf{P} \mathbf{y} + 2\lambda\, \alpha^\top \mathbf{K} \alpha^0, $$
+$$ \frac{1}{2} \alpha^\top \nabla^2 J(\alpha^0)\, \alpha = \frac{1}{2n} \alpha^\top \mathbf{K}\mathbf{W}\mathbf{K}\alpha + \lambda\, \alpha^\top \mathbf{K}\alpha, $$
+$$ - \alpha^\top \nabla^2 J(\alpha^0)\, \alpha^0 = -\frac{1}{n} \alpha^\top \mathbf{K}\mathbf{W}\mathbf{K}\alpha^0 - 2\lambda\, \alpha^\top \mathbf{K}\alpha^0. $$
+Summing the three contributions (the cross terms \(2\lambda \alpha^\top \mathbf{K}\alpha^0\) cancel) and multiplying by 2, we obtain, up to an additive constant \(C\) independent of \(\alpha\):
+$$ 2 J_q(\alpha) = -\frac{2}{n} \alpha^\top \mathbf{K}\mathbf{W} \underbrace{\big(\mathbf{K}\alpha^0 - \mathbf{W}^{-1}\mathbf{P}\mathbf{y} \big)}_{:=\, \mathbf{z}} + \frac{1}{n} \alpha^\top \mathbf{K}\mathbf{W}\mathbf{K}\alpha + 2\lambda\, \alpha^\top \mathbf{K}\alpha + C. $$
 Completing the square in the first two terms against the vector \(\mathbf{z}\) (which only changes the constant),
-$$ 2 J_q(\alpha) = \frac{1}{n} (\mathbf{K}\alpha - \mathbf{z})^\top \mathbf{W} (\mathbf{K}\alpha - \mathbf{z}) + \lambda\, \alpha^\top \mathbf{K}\alpha + C. $$
-This is exactly a weighted kernel ridge regression (WKRR) problem: the Newton step for KLR is a weighted least-squares fit of the working responses \(\mathbf{z}\) with weights \(\mathbf{W}\), and we already know its closed-form solution from the previous section.</p>
+$$ 2 J_q(\alpha) = \frac{1}{n} (\mathbf{K}\alpha - \mathbf{z})^\top \mathbf{W} (\mathbf{K}\alpha - \mathbf{z}) + 2\lambda\, \alpha^\top \mathbf{K}\alpha + C. $$
+This is exactly a weighted kernel ridge regression (WKRR) problem, with regularization parameter \(2\lambda\): the Newton step for KLR is a weighted least-squares fit of the working responses \(\mathbf{z}\) with weights \(\mathbf{W}\), and we already know its closed-form solution from the previous section.</p>
 
 <h3 id="irls">Solving KLR by iteratively reweighted least squares</h3>
 
@@ -396,8 +425,8 @@ Repeat for t = 0, 1, 2,... until convergence:
  W_i^t &lt;- l''(y_i m_i) = sigma(m_i) sigma(-m_i) # curvature weights
  z_i^t &lt;- m_i - P_i^t y_i / W_i^t = m_i + y_i / sigma(y_i m_i)
  # Newton step = one weighted kernel ridge regression
- alpha_{t+1} &lt;- solveWKRR(K, W^t, z^t)
- = (W^t)^{1/2} ((W^t)^{1/2} K (W^t)^{1/2} + n lambda I)^{-1} (W^t)^{1/2} z^t
+ alpha_{t+1} &lt;- solveWKRR(K, W^t, z^t) with regularization 2 lambda
+ = (W^t)^{1/2} ((W^t)^{1/2} K (W^t)^{1/2} + 2 n lambda I)^{-1} (W^t)^{1/2} z^t
 Output: f(x) = sum_i alpha_i K(x_i, x)
 </code></pre>
 
@@ -442,7 +471,7 @@ Correct confident predictions are cheap; wrong confident predictions are expensi
 <p>Reading the table as four ways to be gentle on confident correct predictions and harsh on confident mistakes is the quickest way to see what unites these methods, and reading the differences tells you how each one behaves. All four are non-increasing in the margin \(u = y f(x)\), so all four reward a large positive margin. Where they differ is in how they treat the two ends of the axis.</p>
 <ul>
 <li><strong>Logistic loss</strong>, \(\ln(1 + e^{-u})\): smooth everywhere, strictly positive even for large \(u\), and asymptotically linear in \(-u\) on the wrong side. It never quite reaches zero, so every point keeps nudging the fit, which is why the solution is not sparse.</li>
-<li><strong>Hinge loss</strong> (1-SVM), \(\max(1 - u, 0)\): exactly zero once the margin exceeds \(1\), then linear below it. The flat region is what makes the SVM solution depend only on the points near the boundary, the support vectors; the kink at \(u = 1\) is also what makes the loss non-differentiable and forces the dual treatment of the next chapter.</li>
+<li><strong>Hinge loss</strong> (1-SVM), \(\max(1 - u, 0)\): exactly zero once the margin exceeds \(1\), then linear below it. The flat region is what makes the SVM solution depend only on the points near the boundary, the support vectors; the kink at \(u = 1\) is also what makes the loss non-differentiable and forces the dual treatment of [[ch:support-vector-machines|the next chapter]].</li>
 <li><strong>Squared hinge</strong> (2-SVM), \(\max(1 - u, 0)^2\): same flat region beyond the margin, but the penalty on violations grows quadratically and, being smooth at the kink, it can be handled by the same Newton-type machinery as the logistic loss.</li>
 <li><strong>Exponential loss</strong> (boosting), \(e^{-u}\): the most aggressive of the four, punishing wrong-side margins exponentially. That severity makes boosting sensitive to mislabeled points, which is the flip side of its fast early progress.</li>
 </ul>
@@ -463,7 +492,7 @@ $$ \min_{f \in \mathcal{H}} \frac{1}{n} \sum_{i=1}^{n} \varphi\big(y_i f(x_i) \b
 <li>Can we solve the optimization problem for other \(\varphi\)'s, in particular the non-differentiable hinge loss of the SVM?</li>
 <li>Is it a good idea to optimize this objective at all, if at the end of the day we are interested in the 0/1 loss, that is, in learning models that make few errors?</li>
 </ol>
-<p>The first question is algorithmic and occupies the next chapter, via convex duality and the support vector machine. The second is statistical, and we set up its vocabulary now.</p>
+<p>The first question is algorithmic and occupies [[ch:support-vector-machines|the next chapter]], via convex duality and the support vector machine. The second is statistical, and we set up its vocabulary now.</p>
 
 <h3 id="solving-large-margin">Solving large-margin classifiers in general</h3>
 
@@ -501,10 +530,10 @@ $$ R_n^{\varphi}(f) = \frac{1}{n} \sum_{i=1}^{n} \varphi\big(Y_i f(X_i) \big), $
 which is the empirical version of the <em>\(\varphi\)-risk</em>
 $$ R_{\varphi}(f) = \mathbb{E}\big[ \varphi\big(Y f(X) \big) \big]. $$</p>
 
-<p>The question left hanging, and answered in the next chapter's development of learning theory for large-margin classifiers, is the following: can we hope to have a small risk \(R(f)\) if we focus instead on the \(\varphi\)-risk \(R_{\varphi}(f)\)? In other words, does driving the surrogate risk toward its minimum drive the true probability of error toward the Bayes risk \(R^*\)? For the convex margin losses in the table above the answer will turn out to be yes: the surrogate losses are what the literature calls classification-calibrated, so driving the \(\varphi\)-risk to its minimum does drive the true risk to the Bayes risk (Zhang, 2004; Bartlett, Jordan, and McAuliffe, 2006). This is what ultimately justifies the practical program of this chapter: replace the intractable 0/1 objective by a convex margin loss, solve the resulting finite-dimensional convex problem through the representer theorem, and, for smooth losses, do it with nothing more exotic than a sequence of ridge regressions.</p>
+<p>The question left hanging, and answered in [[ch:support-vector-machines|the next chapter]]'s development of learning theory for large-margin classifiers, is the following: can we hope to have a small risk \(R(f)\) if we focus instead on the \(\varphi\)-risk \(R_{\varphi}(f)\)? In other words, does driving the surrogate risk toward its minimum drive the true probability of error toward the Bayes risk \(R^*\)? For the convex margin losses in the table above the answer will turn out to be yes: the surrogate losses are what the literature calls classification-calibrated, so driving the \(\varphi\)-risk to its minimum does drive the true risk to the Bayes risk (Zhang, 2004; Bartlett, Jordan, and McAuliffe, 2006). This is what ultimately justifies the practical program of this chapter: replace the intractable 0/1 objective by a convex margin loss, solve the resulting finite-dimensional convex problem through the representer theorem, and, for smooth losses, do it with nothing more exotic than a sequence of ridge regressions.</p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
-The regularized-risk viewpoint of this chapter, with the RKHS norm as the penalty, is developed at length by Schölkopf and Smola (2002), Learning with Kernels, whose chapter 4 treats regularization and the link between penalties, priors, and smoothness, and whose regression material covers kernel ridge regression and its variants in detail. Shawe-Taylor and Cristianini (2004), Kernel Methods for Pattern Analysis, give a complementary pattern-analysis account: their chapter 7 builds least-squares and ridge regression directly from the Gram matrix and places them among the other kernel pattern-analysis algorithms. Both are the standard textbook treatments of the material here, and each carries the large-margin and logistic-loss threads forward into the support vector machines of the next chapter.
+The regularized-risk viewpoint of this chapter, with the RKHS norm as the penalty, is developed at length by Schölkopf and Smola (2002), Learning with Kernels, whose chapter 4 treats regularization and the link between penalties, priors, and smoothness, and whose regression material covers kernel ridge regression and its variants in detail. Shawe-Taylor and Cristianini (2004), Kernel Methods for Pattern Analysis, give a complementary pattern-analysis account: their chapter 7 builds least-squares and ridge regression directly from the Gram matrix and places them among the other kernel pattern-analysis algorithms. Both are the standard textbook treatments of the material here, and each carries the large-margin and logistic-loss threads forward into the support vector machines of [[ch:support-vector-machines|the next chapter]].
 </div>
 
 <section class="exercises"><h2 id="exercises">Exercises</h2>
@@ -512,7 +541,7 @@ The regularized-risk viewpoint of this chapter, with the RKHS norm as the penalt
 
 <li><span class="ex-tag">warm-up</span> <strong>Ridge as a spectral filter.</strong> The KRR predictions at the training points are \(\mathbf{K}\alpha = \mathbf{K}(\mathbf{K} + \lambda n I)^{-1}\mathbf{y}\). Diagonalize \(\mathbf{K} = \sum_k \mu_k u_k u_k^\top\) in an orthonormal eigenbasis, with eigenvalues \(\mu_k \ge 0\). (a) Show that the component of the fitted training values along \(u_k\) is the component of \(\mathbf{y}\) along \(u_k\) multiplied by the factor \(\mu_k / (\mu_k + \lambda n)\). (b) What are the limits of this factor as \(\lambda \to 0^+\) and as \(\lambda \to \infty\)? (c) For fixed \(\lambda\), explain in one sentence why the factor is close to \(1\) for large \(\mu_k\) and close to \(0\) for small \(\mu_k\), and connect this to the claim that ridge regression keeps the smooth, well-supported directions and damps the noisy ones.</li>
 
-<li><span class="ex-tag">computation</span> <strong>A ridge fit by hand, two ways.</strong> Take \(\mathcal{X} = \mathbb{R}\), the linear kernel \(K(x, x') = x x'\), and three points \(x_1 = 1, x_2 = 2, x_3 = 3\) with outputs \(\mathbf{y} = (1, 2, 2)^\top\). Fix the regularization so that \(\lambda n = 7\). (a) Using the primal ridge form \(\mathbf{w}_{\mathrm{RR}} = (\mathbf{X}^\top\mathbf{X} + \lambda n I)^{-1}\mathbf{X}^\top\mathbf{y}\) with the \(3 \times 1\) design matrix \(\mathbf{X} = (1,2,3)^\top\), show that the scalar weight is \(w = 11/21 \approx 0.52\), and compare it with the unregularized least-squares slope \(11/14 \approx 0.79\). (b) The matrix inversion lemma says the same predictor is \(\mathbf{w}_{\mathrm{KRR}} = \mathbf{X}^\top(\mathbf{K} + \lambda n I)^{-1}\mathbf{y}\) with the \(3 \times 3\) Gram matrix \(\mathbf{K} = \mathbf{X}\mathbf{X}^\top\). Without inverting the \(3 \times 3\) matrix, argue from the lemma why the two formulas must give the same \(w\), and state which one you would actually compute here and why.</li>
+<li><span class="ex-tag">computation</span> <strong>A ridge fit by hand, two ways.</strong> Take \(\mathcal{X} = \mathbb{R}\), the linear kernel \(K(x, x') = x x'\), and three points \(x_1 = 1, x_2 = 2, x_3 = 3\) with outputs \(\mathbf{y} = (1, 2, 2)^\top\). Fix the regularization so that \(\lambda n = 7\). (a) Using the primal ridge form \(\mathbf{w}_{\mathrm{RR}} = (\mathbf{X}^\top\mathbf{X} + \lambda n I)^{-1}\mathbf{X}^\top\mathbf{y}\) with the \(3 \times 1\) design matrix \(\mathbf{X} = (1,2,3)^\top\), show that the scalar weight is \(w = 11/21 \approx 0.52\), and compare it with the unregularized least-squares slope \(11/14 \approx 0.79\). (b) The push-through identity says the same predictor is \(\mathbf{w}_{\mathrm{KRR}} = \mathbf{X}^\top(\mathbf{K} + \lambda n I)^{-1}\mathbf{y}\) with the \(3 \times 3\) Gram matrix \(\mathbf{K} = \mathbf{X}\mathbf{X}^\top\). Without inverting the \(3 \times 3\) matrix, argue from the lemma why the two formulas must give the same \(w\), and state which one you would actually compute here and why.</li>
 
 <li><span class="ex-tag">proof</span> <strong>Deriving the KRR closed form.</strong> Starting from the representer-theorem expansion \(\hat f = \sum_i \alpha_i K(x_i, \cdot)\), the KRR objective becomes
 $$ J(\alpha) = \frac{1}{n}(\mathbf{K}\alpha - \mathbf{y})^\top(\mathbf{K}\alpha - \mathbf{y}) + \lambda\, \alpha^\top \mathbf{K}\alpha. $$
@@ -528,10 +557,10 @@ Show that \(h_\delta\) is continuous and continuously differentiable at \(|r| = 
 
 <li><span class="ex-tag">exploration</span> <strong>Feeling the two knobs.</strong> Use the interactive kernel-lab figure in the section "Solving KRR: a single linear system" (the live solver of \(\alpha = (\mathbf{K} + \lambda n I)^{-1}\mathbf{y}\)). Keep the data points fixed and vary the two controls in turn. (a) With the bandwidth \(\sigma\) held fixed, push \(\lambda\) from large to small and describe what happens to the curve: where does it start (nearly flat) and where does it end (sharp wiggles chasing individual points)? Name which regime is high bias and which is high variance. (b) Now hold \(\lambda\) fixed and vary \(\sigma\): explain why a small \(\sigma\) lets the curve turn quickly while a large \(\sigma\) forces a smooth, slowly varying fit. (c) Find a pair \((\sigma, \lambda)\) you would call a good fit, then show that you can partly undo an increase in \(\lambda\) by decreasing \(\sigma\) (or vice versa). Write two or three sentences on how the two knobs together control the smoothness of the fitted function.</li>
 
-<li><span class="ex-tag">proof</span> <strong>One Newton step of KLR is a weighted ridge regression.</strong> For kernel logistic regression the finite-dimensional objective is \(J(\alpha) = \frac{1}{n}\sum_i \ell_{\mathrm{logistic}}(y_i[\mathbf{K}\alpha]_i) + \frac{\lambda}{2}\alpha^\top\mathbf{K}\alpha\), with \(\ell_{\mathrm{logistic}}(u) = \ln(1 + e^{-u})\). Write \(m_i = [\mathbf{K}\alpha^0]_i\), \(P_i = \ell'_{\mathrm{logistic}}(y_i m_i) = -\sigma(-y_i m_i)\), \(W_i = \ell''_{\mathrm{logistic}}(y_i m_i) = \sigma(m_i)\sigma(-m_i)\), and set \(\mathbf{P} = \operatorname{diag}(P_i)\), \(\mathbf{W} = \operatorname{diag}(W_i)\). (a) Derive \(\nabla J(\alpha) = \frac{1}{n}\mathbf{K}\mathbf{P}\mathbf{y} + \lambda\mathbf{K}\alpha\) and \(\nabla^2 J(\alpha) = \frac{1}{n}\mathbf{K}\mathbf{W}\mathbf{K} + \lambda\mathbf{K}\) (use \(y_i^2 = 1\)). (b) Substitute these into the quadratic model \(J_q\) around \(\alpha^0\) and, by completing the square, show that minimizing \(J_q\) is exactly the weighted KRR problem
-$$ \min_{\alpha}\; \frac{1}{n}(\mathbf{K}\alpha - \mathbf{z})^\top\mathbf{W}(\mathbf{K}\alpha - \mathbf{z}) + \lambda\, \alpha^\top\mathbf{K}\alpha, \qquad \mathbf{z} = \mathbf{K}\alpha^0 - \mathbf{W}^{-1}\mathbf{P}\mathbf{y}. $$
+<li><span class="ex-tag">proof</span> <strong>One Newton step of KLR is a weighted ridge regression.</strong> For kernel logistic regression the finite-dimensional objective is \(J(\alpha) = \frac{1}{n}\sum_i \ell_{\mathrm{logistic}}(y_i[\mathbf{K}\alpha]_i) + \lambda\,\alpha^\top\mathbf{K}\alpha\), with \(\ell_{\mathrm{logistic}}(u) = \ln(1 + e^{-u})\). Write \(m_i = [\mathbf{K}\alpha^0]_i\), \(P_i = \ell'_{\mathrm{logistic}}(y_i m_i) = -\sigma(-y_i m_i)\), \(W_i = \ell''_{\mathrm{logistic}}(y_i m_i) = \sigma(m_i)\sigma(-m_i)\), and set \(\mathbf{P} = \operatorname{diag}(P_i)\), \(\mathbf{W} = \operatorname{diag}(W_i)\). (a) Derive \(\nabla J(\alpha) = \frac{1}{n}\mathbf{K}\mathbf{P}\mathbf{y} + 2\lambda\mathbf{K}\alpha\) and \(\nabla^2 J(\alpha) = \frac{1}{n}\mathbf{K}\mathbf{W}\mathbf{K} + 2\lambda\mathbf{K}\) (use \(y_i^2 = 1\)). (b) Substitute these into the quadratic model \(J_q\) around \(\alpha^0\) and, by completing the square, show that minimizing \(J_q\) is exactly the weighted KRR problem
+$$ \min_{\alpha}\; \frac{1}{n}(\mathbf{K}\alpha - \mathbf{z})^\top\mathbf{W}(\mathbf{K}\alpha - \mathbf{z}) + 2\lambda\, \alpha^\top\mathbf{K}\alpha, \qquad \mathbf{z} = \mathbf{K}\alpha^0 - \mathbf{W}^{-1}\mathbf{P}\mathbf{y}. $$
 (c) Using the technical facts, simplify the working response to \(z_i = m_i + y_i / \sigma(y_i m_i)\), and interpret it: in which direction, and by how much, does \(z_i\) move the current score when the model is confidently wrong versus confidently right?
-<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (b), keep only the \(\alpha\)-dependent terms of \(J_q(\alpha) = J(\alpha^0) + (\alpha - \alpha^0)^\top\nabla J(\alpha^0) + \frac12(\alpha - \alpha^0)^\top\nabla^2 J(\alpha^0)(\alpha - \alpha^0)\); the cross terms \(\lambda\alpha^\top\mathbf{K}\alpha^0\) cancel, leaving a form you can complete the square against \(\mathbf{z}\). For (c), \(P_i/W_i = -\sigma(-u_i)/[\sigma(u_i)\sigma(-u_i)] = -1/\sigma(u_i)\) with \(u_i = y_i m_i\), and \(y_i^2 = 1\).</div></details></li>
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (b), keep only the \(\alpha\)-dependent terms of \(J_q(\alpha) = J(\alpha^0) + (\alpha - \alpha^0)^\top\nabla J(\alpha^0) + \frac12(\alpha - \alpha^0)^\top\nabla^2 J(\alpha^0)(\alpha - \alpha^0)\); the cross terms \(2\lambda\alpha^\top\mathbf{K}\alpha^0\) cancel, leaving a form you can complete the square against \(\mathbf{z}\). For (c), \(P_i/W_i = -\sigma(-u_i)/[\sigma(u_i)\sigma(-u_i)] = -1/\sigma(u_i)\) with \(u_i = y_i m_i\), and \(y_i^2 = 1\).</div></details></li>
 
 <li><span class="ex-tag">challenge</span> <strong>Flat loss regions, sparsity, and what is not a likelihood.</strong> (a) Suppose a convex regression loss \(\ell\) is differentiable and identically zero on an interval, as with the \(\varepsilon\)-insensitive loss \(\ell(r) = \max(|r| - \varepsilon, 0)\) on \([-\varepsilon, \varepsilon]\). Argue at the level of the stationarity conditions why a training point whose residual lands strictly inside the flat region can be assigned coefficient \(\alpha_i = 0\), so that it is not a support vector, and contrast this with the squared loss, whose derivative \(2r\) vanishes only at \(r = 0\) and which therefore yields a dense expansion. (b) Show that the hinge loss \(\varphi(u) = \max(1 - u, 0)\) is not the negative log-likelihood of any conditional model of \(y \in \{-1, 1\}\) given \(f(x)\): if \(p(y \mid f) = e^{-\varphi(y f)}/Z\) were such a model, the requirement \(p(1 \mid f) + p(-1 \mid f) = 1\) for every \(f\) would have to hold; exhibit values of \(f\) where \(e^{-\varphi(f)} + e^{-\varphi(-f)}\) is not constant, so no single normalization \(Z\) works. Conclude why kernel logistic regression yields calibrated class probabilities while the SVM does not.
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), the point contributes a term with derivative \(\ell'(r_i) = 0\) to the optimality condition, so removing it (setting \(\alpha_i = 0\)) leaves the conditions satisfied. For (b), evaluate \(g(f) = e^{-\varphi(f)} + e^{-\varphi(-f)}\) at \(f = 0\), \(f = 1\), and \(f = 2\): for \(f \ge 1\), \(\varphi(f) = 0\) and \(\varphi(-f) = 1 + f\), so \(g(f) = 1 + e^{-(1+f)}\) is not constant in \(f\).</div></details></li>

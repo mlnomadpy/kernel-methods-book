@@ -5,7 +5,7 @@
 string over four; a document is a string over the characters of a language. This
 chapter builds kernels directly on such strings. We start from the biology that
 made the problem urgent, then develop three families: kernels from explicit
-feature maps indexed by short substrings (the spectrum, mismatch, and substring
+feature maps indexed by short substrings (the spectrum, mismatch, and subsequence
 kernels, with their string-algorithm implementations), kernels derived from
 generative models of sequences (context-tree models, hidden Markov models, and
 stochastic context-free grammars for RNA), and finally the local alignment
@@ -64,7 +64,7 @@ biological similarity so that it actually performs.</li>
 <p>There is no single best answer. Kernel engineering for sequences has produced
 three broad strategies, which organize the rest of this chapter: define an
 explicit, possibly very high dimensional, feature space (physico-chemical
-kernels; the spectrum, mismatch, and substring kernels; motif and pairwise
+kernels; the spectrum, mismatch, and subsequence kernels; motif and pairwise
 kernels); derive a kernel from a generative model (the Fisher kernel, mutual
 information kernels, and marginalized kernels); or derive a kernel from a
 similarity measure (the local alignment kernel).</p>
@@ -170,7 +170,7 @@ $$ \Phi(x) \;=\; \bigl(\Phi_u(x) \bigr)_{u \in \mathcal{A}^k},
 <li>the number of occurrences of \(u\) up to \(m\) mismatches, without gaps, gives
 the <em>mismatch kernel</em> (Leslie et al., 2004);</li>
 <li>the number of occurrences of \(u\) allowing gaps, each occurrence weighted by
-an exponentially decaying factor of the gap length, gives the <em>substring
+an exponentially decaying factor of the gap length, gives the <em>subsequence
 kernel</em> (Lodhi et al., 2002).</li>
 </ul>
 
@@ -254,24 +254,37 @@ nodes are \(AA, AC, CG, GT, TA, TT\), and so on down to the \(k\)-mers at the
 leaves. Traversing both strings through a shared trie computes \(K(x,x')\) in
 \(O\!\left(k(|x| + |x'|)\right)\). A <em>suffix tree</em> compresses this further
 and restores the linear \(O(|x| + |x'|)\) bound, at the price of a larger
-constant. The table below summarizes the trade-offs.</p>
+constant.</p>
+
+<p>The \((k,m)\)-mismatch kernel reuses this tree but is more expensive, because
+each observed \(k\)-mer now matches not one leaf but its entire
+<em>mismatch neighbourhood</em>, the set of words within \(m\) substitutions. The
+mismatch-tree algorithm of Leslie and Kuang (2004) enumerates that neighbourhood
+by depth-first traversal of a trie of depth \(k\), allowing up to \(m\) mismatched
+branches along each root-to-leaf path; the number of feasible paths is
+\(O\!\left(k^{m}|\mathcal{A}|^{m}\right)\), and processing the \(O(|x| + |x'|)\)
+input \(k\)-mers against them gives the standard bound
+$$ O\!\left(k^{m+1}\,|\mathcal{A}|^{m}\,(|x| + |x'|)\right), $$
+which reduces to the spectrum cost \(O(k(|x| + |x'|))\) when \(m = 0\). The table
+below summarizes the trade-offs.</p>
 
 <table>
 <thead>
 <tr><th>Kernel</th><th>Data structure</th><th>Time and memory</th></tr>
 </thead>
 <tbody>
-<tr><td>spectrum / mismatch</td><td>pre-indexation or suffix tree</td><td>\(O(|x| + |x'|)\)</td></tr>
-<tr><td>spectrum / mismatch</td><td>trie</td><td>\(O(k(|x| + |x'|))\)</td></tr>
-<tr><td>substring (gapped)</td><td>dynamic programming</td><td>\(O(k\,|x|\,|x'|)\)</td></tr>
+<tr><td>spectrum</td><td>pre-indexation or suffix tree</td><td>\(O(|x| + |x'|)\)</td></tr>
+<tr><td>spectrum</td><td>trie</td><td>\(O(k(|x| + |x'|))\)</td></tr>
+<tr><td>\((k,m)\)-mismatch</td><td>mismatch tree (trie)</td><td>\(O\!\left(k^{m+1}|\mathcal{A}|^{m}(|x| + |x'|)\right)\)</td></tr>
+<tr><td>subsequence (gapped)</td><td>dynamic programming</td><td>\(O(k\,|x|\,|x'|)\)</td></tr>
 </tbody>
 </table>
 
-<h2 id="substring-kernel">The substring kernel and its dynamic program</h2>
+<h2 id="substring-kernel">The subsequence kernel and its dynamic program</h2>
 
 <p>The spectrum kernel demands that a \(k\)-mer appear as an <em>uninterrupted</em>
 block. Biological similarity is more forgiving: the same motif may recur with
-insertions between its letters. The substring kernel rewards such gapped matches,
+insertions between its letters. The subsequence kernel rewards such gapped matches,
 but penalizes gaps by an exponential decay, so that a spread-out match counts for
 less than a tight one.</p>
 
@@ -281,7 +294,7 @@ less than a tight one.</p>
 \(\mathcal{I}(k,n)\) be the set of strictly increasing index sequences
 \(\mathbf{i} = (i_1, \dots, i_k)\) with \(1 \le i_1 \lt i_2 \lt \dots \lt i_k \le n\).
 For a string \(x = x_1 \dots x_n\) and \(\mathbf{i} \in \mathcal{I}(k,|x|)\), the
-selected substring and its span are</p>
+selected subsequence and its span are</p>
 
 $$ x(\mathbf{i}) \;=\; x_{i_1} x_{i_2} \dots x_{i_k},
  \qquad
@@ -297,13 +310,13 @@ In \(x = \texttt{ABRACADABRA}\), the index sequence
 \(l(\mathbf{i}) = 10 - 3 + 1 = 8\), so three positions were skipped.
 </div>
 
-<div class="box def"><span class="box-title">Definition (substring kernel)</span>
+<div class="box def"><span class="box-title">Definition (subsequence kernel)</span>
 Fix \(k \in \mathbb{N}\) and a decay \(\lambda \in (0,1]\). For every
 \(u \in \mathcal{A}^k\) define the feature
 $$ \Phi_u(x) \;=\; \sum_{\mathbf{i} \in \mathcal{I}(k,|x|)\,:\, x(\mathbf{i}) = u}
  \lambda^{\,l(\mathbf{i})}, $$
 so each gapped occurrence of \(u\) contributes \(\lambda^{\text{span}}\). The
-substring kernel is
+subsequence kernel is
 $$ K_{k,\lambda}(x,x') \;=\; \sum_{u \in \mathcal{A}^k} \Phi_u(x)\, \Phi_u(x'). $$
 </div>
 
@@ -584,7 +597,7 @@ it.</p>
 <div class="box ex"><span class="box-title">Example</span>
 For a suitable tree,
 $$ P(\texttt{AABACBACC}) = P(\texttt{AAB})\,\theta_{AB}(A)\,\theta_{A}(C)\,
- \theta_{C}(B)\,\theta_{ACB}(A)\,\theta_{A}(C)\,\theta_{C}(A), $$
+ \theta_{C}(B)\,\theta_{ACB}(A)\,\theta_{A}(C)\,\theta_{C}(C), $$
 each factor conditioning on just enough preceding context (here \(AB\), \(A\),
 \(C\), \(ACB\), and so on) to predict the next letter.
 </div>
@@ -670,8 +683,9 @@ Each posterior marginal \(P(y_i = s \mid x)\) is computed by the standard
 forward-backward algorithm, so the whole feature vector, and hence the kernel, is
 obtained in time linear in the sequence length times the number of hidden states.
 This same recipe underlies the spectrum kernel on the hidden states of a protein
-HMM (Tsuda et al., 2002), random-walk kernels on graphs (Kashima et al., 2004),
-and phylogenetic kernels on multiple alignments (Vert et al., 2006).</p>
+HMM (Tsuda et al., 2002), the marginalized kernels on labeled sequences and graphs
+of Kashima, Tsuda, and Inokuchi (2003), and phylogenetic kernels on multiple
+alignments (Vert et al., 2006).</p>
 
 <h3 id="hmm-kernels">Fixed-length and pair hidden Markov model kernels</h3>
 
@@ -737,34 +751,27 @@ components separates the three classes, evidence that the grammar-based kernel
 captures the folded structure that defines the families.
 </div>
 
-<h3 id="fisher-kernel">The Fisher kernel</h3>
+<h3 id="fisher-kernel-sequences">The Fisher kernel for sequences</h3>
 
 <p>The marginalized and HMM kernels average over a discrete set of hidden paths.
-The Fisher kernel of Jaakkola and Haussler (2000) exploits the model's
+The Fisher kernel of Jaakkola and Haussler (1999) exploits the model's
 <em>smooth</em> parameters instead, and it is the last strategy named in the
-chapter's opening that we still owe a definition. Fix a parametric model
-\(P_\theta\) already fitted to the data, at parameters \(\theta_0\). To incorporate
-a new sequence we would nudge \(\theta\) to raise its likelihood; the direction of
-that nudge, the gradient of the log-likelihood, records how each parameter would
-move. Two sequences are alike, in this view, when they stretch the model the same
-way: a prototypical sequence needs little adjustment, an unusual one pulls hard on
-the parameters that explain its oddity.</p>
+chapter's opening that we still owe a treatment. Its general construction is
+developed in [[ch:kernel-families]]: fit a parametric model \(P_\theta\) to the
+data at \(\theta_0\), take the <em>Fisher score</em>
+\(g(\theta_0,x) = \nabla_\theta \log P_\theta(x)\big|_{\theta=\theta_0}\), one
+coordinate per parameter, and whiten it by the Fisher information
+\(I = \mathbb{E}\bigl[\,g(\theta_0,x)\,g(\theta_0,x)^\top\bigr]\) to obtain
+\(K(x,z) = g(\theta_0,x)^\top I^{-1} g(\theta_0,z)\). We recall only what carries
+over here: the feature map \(\Phi(x) = g(\theta_0,x)\) has fixed dimension whatever
+the length of \(x\), and in practice \(I\) is replaced by the identity or by the
+empirical covariance of the scores. Two sequences are alike, in this view, when
+they stretch the model the same way: a prototypical sequence needs little
+adjustment, an unusual one pulls hard on the parameters that explain its oddity.
+What is specific to sequences is which generative model supplies the score, and
+what the resulting coordinates count.</p>
 
-<div class="box def"><span class="box-title">Definition (Fisher score and Fisher kernel)</span>
-The <em>Fisher score</em> of a sequence \(x\) at \(\theta_0\) is the gradient
-$$ g(\theta_0, x) = \nabla_\theta \log P_\theta(x)\big|_{\theta = \theta_0}
- \in \mathbb{R}^N, $$
-one coordinate per parameter. With the Fisher information matrix
-\(I = \mathbb{E}\bigl[\, g(\theta_0,x)\, g(\theta_0,x)^\top \bigr]\), the
-<em>Fisher kernel</em> is
-$$ K(x,z) = g(\theta_0,x)^\top\, I^{-1}\, g(\theta_0,z). $$
-Its feature map \(\Phi(x) = g(\theta_0,x)\) has fixed dimension \(N\), whatever the
-length of \(x\); in practice \(I\) is replaced by the identity or by the empirical
-covariance of the scores, which amounts to whitening them.
-</div>
-
-<p>The construction is not as foreign to the rest of the chapter as it looks. Take
-the generative model to be a Markov chain over \(k\)-mers, with parameters
+<p>Take the generative model to be a Markov chain over \(k\)-mers, with parameters
 \(a_{u \to \sigma}\) governing the transition from a length-\(k\) context \(u\) to
 the next symbol \(\sigma\). Shawe-Taylor and Cristianini (2004) compute the Fisher
 score at the flat setting where every transition is equally likely, and find that
@@ -776,10 +783,11 @@ The first term counts the occurrences of the \((k{+}1)\)-mer \(u\sigma\) in \(s\
 up to the centering correction of the second term, the Fisher kernel of this
 elementary sequence model <em>is</em> the \((k{+}1)\)-spectrum kernel, so the two
 families that open and close this chapter meet at this identity. For a genuine
-hidden Markov model the Fisher scores become expectations rather than hard counts,
-supplied in one pass by the forward-backward algorithm. This is the SVM-Fisher
-baseline that the remote homology benchmark below pits against the local alignment
-kernel.</p>
+hidden Markov model of a protein family the score is taken with respect to the
+emission and transition parameters, and its hard \(k\)-mer counts soften into
+expected state-occupancy and transition counts, each supplied in one pass by the
+forward-backward algorithm. This is the SVM-Fisher baseline that the remote
+homology benchmark below pits against the local alignment kernel.</p>
 
 <h2 id="local-alignment">The local alignment kernel</h2>
 
@@ -1114,9 +1122,10 @@ the whole soft ensemble of local alignments, it turns out, sees homology that
 <h2 id="summary">Summary</h2>
 
 <p>A single alphabet, three routes to a kernel. From explicit feature maps we
-obtained the spectrum kernel and its mismatch variant, computable in
-\(O(|x|+|x'|)\) with suffix trees or \(O(k(|x|+|x'|))\) with tries, and the gapped
-substring kernel, computable in \(O(k\,|x|\,|x'|)\) by a two-table dynamic
+obtained the spectrum kernel, computable in \(O(|x|+|x'|)\) with suffix trees or
+\(O(k(|x|+|x'|))\) with tries, its \((k,m)\)-mismatch variant, computable in
+\(O(k^{m+1}|\mathcal{A}|^{m}(|x|+|x'|))\) by a mismatch-tree traversal, and the
+gapped subsequence kernel, computable in \(O(k\,|x|\,|x'|)\) by a two-table dynamic
 program. From generative models we obtained context-tree kernels and, through the
 marginalized-kernel construction with forward-backward and inside-outside, kernels
 that inherit the biology of hidden Markov models and RNA grammars. From the
@@ -1188,7 +1197,7 @@ returns the same value as part (a).</li>
 \(k\)-spectrum kernel is positive definite: for any strings \(x_1,\dots,x_n\) and
 any reals \(c_1,\dots,c_n\), show that
 \(\sum_{i,j} c_i c_j\, K(x_i,x_j) \ge 0\). Identify the vector whose squared norm
-this quadratic form equals. Explain why the mismatch and gap-weighted substring
+this quadratic form equals. Explain why the mismatch and gap-weighted subsequence
 kernels inherit positive definiteness by the very same one-line argument, and why
 that argument breaks for the Smith-Waterman score \(\mathrm{SW}_{S,g}(x,y)\).</li>
 

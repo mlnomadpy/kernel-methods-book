@@ -50,6 +50,32 @@ SEARCH_OVERLAY = """
 """
 
 
+def chapter_map():
+    """slug -> (display label like 'Chapter 8', title). Preliminaries is unnumbered.
+    Drives the [[ch:slug]] cross-reference tokens so numbering can never drift."""
+    m, i = {}, 0
+    for part in BOOK["parts"]:
+        for ch in part["chapters"]:
+            label = "the Preliminaries" if ch["src"] == "ch-prelim" else f"Chapter {i}"
+            m[ch["slug"]] = (label, ch["title"])
+            i += 1
+    return m
+
+
+def expand_chrefs(body, cmap):
+    """Replace [[ch:slug]] and [[ch:slug|custom text]] with a numbered link, so
+    prose never hardcodes a chapter number that a later reorder would break."""
+    def repl(mo):
+        slug = mo.group(1)
+        custom = mo.group(2)
+        if slug not in cmap:
+            return mo.group(0)  # leave unknown tokens visible for debugging
+        label, title = cmap[slug]
+        text = custom if custom else label
+        return f'<a class="chref" href="{slug}.html" title="{html.escape(title)}">{html.escape(text)}</a>'
+    return re.sub(r"\[\[ch:([a-z0-9-]+)(?:\|([^\]]+))?\]\]", repl, body)
+
+
 def chapters_flat():
     out = []
     for part in BOOK["parts"]:
@@ -286,6 +312,7 @@ def main():
     for a in ("book.css", "viz.css", "viz.js", "nav.js"):
         shutil.copy(os.path.join(ROOT, "assets", a), os.path.join(OUT, "assets", a))
     bib = load_bib()
+    cmap = chapter_map()
 
     chs = chapters_flat()
     missing = []
@@ -326,6 +353,7 @@ def main():
         # link in-prose citations to the bibliography (before the refs list is appended)
         keyfile = os.path.join(ROOT, "chapters", "refs", f"{ch['src']}.json")
         chkeys = json.load(open(keyfile)) if os.path.exists(keyfile) else []
+        body = expand_chrefs(body, cmap)
         body, nc = link_citations(body, chkeys, bib)
         ncites += nc
         onpage = onpage_nav(body)

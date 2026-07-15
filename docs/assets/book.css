@@ -611,3 +611,7 @@ details.ex-hint .hint-body { font-size: 0.95em; color: var(--muted); border-left
 
 /* keep the sticky top bar from hiding an anchored heading on mobile */
 @media (max-width: 900px) { h2, h3 { scroll-margin-top: 64px; } }
+
+/* cross-chapter reference links */
+a.chref { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); white-space: nowrap; }
+a.chref:hover { border-bottom-color: var(--accent); }

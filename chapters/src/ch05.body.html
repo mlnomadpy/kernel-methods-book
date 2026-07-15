@@ -1,7 +1,7 @@
 <h1>Support Vector Machines</h1>
 
 <p class="lead">
-Kernel ridge regression taught us a recipe: pick a convex loss, add a squared RKHS norm,
+[[ch:kernel-ridge-and-friends|Kernel ridge regression]] taught us a recipe: pick a convex loss, add a squared RKHS norm,
 and let the representer theorem collapse the infinite-dimensional problem to a
 finite-dimensional one. This chapter applies the recipe to classification with a loss
 built for margins, the hinge loss, and obtains the support vector machine. The hinge loss
@@ -444,10 +444,9 @@ $$
 the \(i\)-th partial derivative is the residual of the current function at the \(i\)-th
 training point. Now fix a coordinate \(i\), assume \(y_i = 1\) (the case \(y_i = -1\) is
 symmetric), and consider the one-dimensional restriction of \(q\) to \(\alpha_i\) over the
-interval \([0, C]\), a convex parabola. The slides illustrate each case with this parabola
-and the position of the constrained minimizer \(\alpha_i^\star\) on the interval; the
-picture translates into three statements about the sign of the partial derivative at the
-optimum.
+interval \([0, C]\), a convex parabola. Locating the constrained minimizer
+\(\alpha_i^\star\) on this interval translates into three statements about the sign of the
+partial derivative at the optimum.
 </p>
 
 <ul>
@@ -476,8 +475,8 @@ minimizing a parabola over an interval.
 <h2 id="geometric-interpretation">Geometric interpretation</h2>
 
 <p>
-The slides accompany this analysis with a sequence of pictures of a two-class point cloud;
-let us reconstruct what they show. Draw the level sets \(f(x) = 0\) (the decision
+A picture of a two-class point cloud makes this analysis concrete. Draw the level sets
+\(f(x) = 0\) (the decision
 boundary) and \(f(x) = +1\), \(f(x) = -1\) (the edges of the <em>margin band</em>). The
 three regimes of the previous section stratify the training set geometrically:
 </p>
@@ -547,17 +546,19 @@ from the boundary can be perturbed by any displacement smaller than that width w
 crossing to the wrong side, so a large geometric margin is a quantitative promise that small
 changes in the input, or the arrival of a nearby unseen test point, will not flip the
 prediction. This is the geometric shadow of the statistical fact, placed by Vapnik (1995)
-inside learning theory, that the margin controls generalization: the objective is not merely
-fitting the training labels but fitting them with room to spare.
+inside learning theory and developed in full in [[ch:learning-theory]], that the margin
+controls generalization: the objective is not merely fitting the training labels but fitting
+them with room to spare.
 </p>
 
 <h3 id="margin-generalization">Why a wide margin generalizes</h3>
 
 <p>
-The robustness argument is the geometric shadow of a genuine generalization guarantee, and it
-is worth stating one such bound precisely so that "the margin controls generalization" acquires
-content beyond intuition. Schölkopf and Smola (2002) record the following, whose striking
-feature is that it never mentions the dimension of the feature space.
+The robustness argument is the geometric shadow of a genuine generalization guarantee.
+[[ch:learning-theory]] develops such guarantees in full; it is worth previewing one bound here
+so that "the margin controls generalization" acquires content beyond intuition. Schölkopf and
+Smola (2002) record the following, whose striking feature is that it never mentions the
+dimension of the feature space.
 </p>
 
 <div class="box thm"><span class="box-title">Theorem (margin error bound, Schölkopf and Smola 2002)</span>
@@ -778,7 +779,7 @@ $$
 \varphi_{\text{hinge}}\big(y_i f(x_i)\big)^2 \;+\; \lambda \|f\|_{\mathcal{H}}^2 \right\}.
 $$
 After some computation (following the same slack-variable and Lagrangian steps as above,
-and left as an exercise in the course), the dual problem of the 2-SVM turns out to be
+and left as an exercise below), the dual problem of the 2-SVM turns out to be
 $$
 \max_{\alpha \in \mathbb{R}^n}\;
 2\, \alpha^\top y - \alpha^\top (K + n\lambda I)\, \alpha,

@@ -81,7 +81,7 @@ $$
 
 <figure class="viz" data-widget="rff-converge"></figure>
 
-<p>This is the population inner product of the random features, and the finite network approximates it with \(m\) Monte Carlo samples. Chapter 8 met such integral representations for translation-invariant kernels, where the features were random Fourier modes. The point here is that they are available for many dot-product kernels too. Cho and Saul (2009b) give the family</p>
+<p>This is the population inner product of the random features, and the finite network approximates it with \(m\) Monte Carlo samples. [[ch:large-scale-kernels]] met such integral representations for translation-invariant kernels, where the features were random Fourier modes. The point here is that they are available for many dot-product kernels too. Cho and Saul (2009b) give the family</p>
 $$
 k_n(\mathbf{x}, \mathbf{y}) = \frac{1}{\pi} \lVert \mathbf{x} \rVert^n \, \lVert \mathbf{y} \rVert^n \, J_n(\theta),
 \qquad
@@ -384,7 +384,7 @@ $$
 
 <h3 id="generalization">Link with generalization</h3>
 
-<p>Because the trained CNN is now a function in an RKHS ball, the classical generalization theory of Chapter 4 applies with no modification. For the ball \(\mathcal{F}_B = \{ f \in \mathcal{H}_K : \lVert f \rVert \leq B \}\), the Rademacher complexity over \(N\) samples of radius \(R\) is</p>
+<p>Because the trained CNN is now a function in an RKHS ball, the classical generalization theory of [[ch:learning-theory]] applies with no modification. For the ball \(\mathcal{F}_B = \{ f \in \mathcal{H}_K : \lVert f \rVert \leq B \}\), the Rademacher complexity over \(N\) samples of radius \(R\) is</p>
 $$
 \operatorname{Rad}_N(\mathcal{F}_B) \leq O\!\left(\frac{B R}{\sqrt{N}} \right),
 $$
@@ -509,7 +509,7 @@ $$
 
 <h3 id="rkn">Gapped k-mers and recurrent kernel networks</h3>
 
-<p>Biological motifs tolerate insertions, so we want to compare \(k\)-mers <em>with gaps</em>. For a sequence \(\mathbf{x} = x_1 \ldots x_n\) and an ordered index tuple \(\imath = (i_1, \ldots, i_k)\), define the \(k\)-substring \(\mathbf{x}[\imath] = x_{i_1} x_{i_2} \ldots x_{i_k}\) and let \(\operatorname{gaps}(\imath)\) count the gaps it skips. For example, in \(\mathbf{x} = \texttt{ABRACADABRA}\) the indices \(\imath = (4,5,8,9,11)\) read off \(\mathbf{x}[\imath] = \texttt{RADAR}\) with \(\operatorname{gaps}(\imath) = 3\). The recurrent kernel network compares all gapped \(k\)-mers, penalizing gaps geometrically with a factor \(\lambda \in (0,1)\),</p>
+<p>Biological motifs tolerate insertions, so we want to compare \(k\)-mers <em>with gaps</em>. For a sequence \(\mathbf{x} = x_1 \ldots x_n\) and an ordered index tuple \(\imath = (i_1, \ldots, i_k)\), define the \(k\)-substring \(\mathbf{x}[\imath] = x_{i_1} x_{i_2} \ldots x_{i_k}\) and let \(\operatorname{gaps}(\imath)\) count the gaps it skips. For example, in \(\mathbf{x} = \texttt{ABRACADABRA}\) the indices \(\imath = (3,4,7,8,10)\) read off \(\mathbf{x}[\imath] = \texttt{RADAR}\) with \(\operatorname{gaps}(\imath) = 3\). The recurrent kernel network compares all gapped \(k\)-mers, penalizing gaps geometrically with a factor \(\lambda \in (0,1)\),</p>
 $$
 K_{\mathrm{RKN}}(\mathbf{x}, \mathbf{x}') = \sum_{\imath \in \mathcal{I}(k, |\mathbf{x}|)} \sum_{\jmath \in \mathcal{I}(k, |\mathbf{x}'|)} \lambda^{\operatorname{gaps}(\imath)} \lambda^{\operatorname{gaps}(\jmath)} K_0\!\left(\mathbf{x}[\imath], \mathbf{x}'[\jmath] \right),
 \qquad
@@ -555,7 +555,7 @@ $$ \frac{\partial \phi_c(x)}{\partial c} = \frac{x - c}{\sigma^2}\, \phi_c(x), $
 <p>These failures share one root, and it is the same duality this book has celebrated from the start. A kernel is a <em>fixed</em> similarity, an inner product in a feature space you do not get to reshape. That is exactly what you want in the <em>last</em> layer, the readout, where the representer theorem applies, the problem stays convex, and the fixed geometry is the source of the guarantees in Parts II through IV. A hidden layer has the opposite job: it must <em>learn a representation</em>, which means transporting its nonlinearity's sensitive region to wherever the data actually is. A rectifier's sensitive region is a hyperplane whose gradient is constant on the active side, so gradient descent moves it freely; a Gaussian's sensitive region is a small fixed ball whose gradient vanishes the moment the ball is in the wrong place, so gradient descent cannot move it there. The neural tangent kernel view of this chapter says the same thing from the other end: in the wide, lazy regime the features do not move at all, and for a Gaussian layer that immobility is not a limit reached only at infinite width but the operating condition at every width, imposed by the vanishing signal.</p>
 
 <div class="box rmk"><span class="box-title">The modern reading</span>
-<p>None of this says kernels and deep learning are incompatible; the whole chapter argues the reverse. It says that the naive substitution, a fixed local kernel dropped in where a rectifier goes, asks the kernel to do the one thing a fixed kernel cannot, learn its own geometry. The convolutional kernel networks of this chapter succeed as deep kernel machines precisely because they do not make that substitution: they keep the kernel as a fixed, well-conditioned local embedding and learn a small set of anchor points through the Nyström projection, so the representation is shaped by end-to-end training while the kernel supplies the geometry. The lesson is not that the kernel neuron was a bad idea but that a hidden unit must be able to move its own attention, and a fixed bump cannot. The theoretical statement of this gap, the mean-field limit in which hidden units do move and the larger-than-RKHS function space they explore, is the subject of the next chapter, <a href="kernels-now.html">Kernels in the Modern World</a>.</p></div>
+<p>None of this says kernels and deep learning are incompatible; the whole chapter argues the reverse. It says that the naive substitution, a fixed local kernel dropped in where a rectifier goes, asks the kernel to do the one thing a fixed kernel cannot, learn its own geometry. The convolutional kernel networks of this chapter succeed as deep kernel machines precisely because they do not make that substitution: they keep the kernel as a fixed, well-conditioned local embedding and learn a small set of anchor points through the Nyström projection, so the representation is shaped by end-to-end training while the kernel supplies the geometry. The lesson is not that the kernel neuron was a bad idea but that a hidden unit must be able to move its own attention, and a fixed bump cannot. The theoretical statement of this gap, the mean-field limit in which hidden units do move and the larger-than-RKHS function space they explore, is the subject of the next chapter, [[ch:kernels-now|Kernels in the Modern World]].</p></div>
 
 <h2 id="conclusion">Conclusion</h2>
 

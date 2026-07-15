@@ -537,7 +537,7 @@ Then \(K\) admits a uniformly convergent expansion \(K(x,z) = \sum_{j} \phi_j(x)
 </div>
 
 <p>
-The proof is constructive and follows Mercer's original 1909 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of the first chapter, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
+The proof is constructive and follows Mercer's original 1909 argument. It repeatedly plays the two Hilbert spaces in the picture against each other: \(L^2_\nu(\mathcal X)\), where the spectral theorem lives, and the RKHS \(\mathcal H\) of \(K\), whose existence we know from the Aronszajn theory of <a class="chref" href="kernels-and-rkhs.html" title="Positive Definite Kernels and RKHS">Chapter 2</a>, where evaluation functionals are continuous. Throughout, \(C_K = \max_{x,t} \lvert K(x,t)\rvert\).
 </p>
 
 <details class="proof-details"><summary>Proof (six steps)</summary>
@@ -671,6 +671,18 @@ which tends to zero as \(t \to x\) by continuity of \(K\).
 </p>
 </div>
 
+<div class="box rmk"><span class="box-title">Remark (a Mercer kernel is trace class)</span>
+<p>
+Integrating the diagonal identity \(K(x,x) = \sum_k \lambda_k\, \psi_k(x)^2\) against \(\nu\) and using that the \(\psi_k\) are \(L^2_\nu\)-normalized gives
+</p>
+$$
+\sum_{k=1}^{\infty} \lambda_k = \int_{\mathcal X} K(x,x)\, d\nu(x) \;\leq\; C_K\, \nu(\mathcal X) \lt \infty.
+$$
+<p>
+So the eigenvalues of a Mercer kernel are not merely nonnegative and summable-in-square: their sum itself is finite, which is the statement that \(L_K\) is <em>trace class</em>. This finite trace is the standing hypothesis behind the operator theory of this chapter, and it is exactly what will let us control tail sums \(\sum_{i \gt J} \lambda_i\) in the rate analysis.
+</p>
+</div>
+
 <div class="box rmk"><span class="box-title">Remark (effective dimension: the mapped data lie in a shrinking box)</span>
 <p>
 The feature map \(\Phi(x) = \left(\sqrt{\lambda_k}\, \psi_k(x) \right)_{k \in \mathbb N}\) confines the data to a very particular region of \(\ell^2\). Its \(k\)-th coordinate never leaves the interval \(\left[ -\sqrt{l_k},\, \sqrt{l_k} \right]\) with \(l_k = \sup_{x \in \mathcal X} \lambda_k\, \psi_k(x)^2\), so \(\Phi(\mathcal X)\) sits inside an axis-parallel box with side lengths \(2 \sqrt{l_k}\). Whenever the eigenfunctions are uniformly bounded, \(\sup_x \psi_k(x)^2 \leq C\), the sides shrink as fast as the spectrum, \(l_k \leq C\, \lambda_k\) <a class="cite" href="bibliography.html#scholkopf2002" data-ref="Schölkopf, B. and Smola, A. J. (2002) Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond. MIT Press.">(Schölkopf and Smola, 2002)</a>. Although the feature space is infinite-dimensional, the mapped data therefore occupy only a thin, rapidly narrowing sliver of it.
@@ -698,7 +710,7 @@ $$
 $$
 
 <p>
-need not have a countable family of eigenvalues, and Mercer's theorem does not hold. Other tools are then required, notably the Fourier transform for shift-invariant kernels, which is the subject of the next chapter.
+need not have a countable family of eigenvalues, and Mercer's theorem does not hold. Other tools are then required, notably the Fourier transform for shift-invariant kernels, which is the subject of <a class="chref" href="kernel-families.html" title="Translation-Invariant, Semigroup, and Probabilistic Kernels">Chapter 9</a>.
 </p>
 
 <h2 id="example-the-unit-interval">Worked example 1: periodic kernels on \([0,1]\)</h2>
@@ -801,10 +813,10 @@ so that the Mercer eigenvalues decay polynomially, \(\hat\kappa_{2n}/\sqrt 2 = n
 </p>
 $$
 \forall x, t \in [0,1], \quad
-K(x,t) = \frac{1}{(2\beta)!}\, B_{2\beta}\!\left(x - t - \lfloor x - t \rfloor \right),
+K(x,t) = \frac{(-1)^{\beta-1}}{(2\beta)!}\, B_{2\beta}\!\left(x - t - \lfloor x - t \rfloor \right),
 $$
 <p>
-where \(B_{2\beta}\) is the \((2\beta)\)-th Bernoulli polynomial, e.g., \(B_2(x) = x^2 - x + 1/6\) and \(B_4(x) = x^4 - 2x^3 + x^2 - 1/30\). The proof is left as an exercise: check the Fourier expansion of the Bernoulli polynomials.
+where \(B_{2\beta}\) is the \((2\beta)\)-th Bernoulli polynomial, e.g., \(B_2(x) = x^2 - x + 1/6\) and \(B_4(x) = x^4 - 2x^3 + x^2 - 1/30\). The sign factor \((-1)^{\beta-1}\) is essential: the Fourier expansion of \(B_{2\beta}(\{u\})\) carries the alternating sign \((-1)^{\beta-1}\), so it is exactly this factor that makes all the Fourier coefficients \(\hat\kappa_{2n}\) positive, hence the kernel positive definite. Dropping it would give negative eigenvalues for even \(\beta\), and the resulting kernel would not be positive definite. The proof is left as an exercise: check the Fourier expansion of the Bernoulli polynomials.
 </p>
 </div>
 
@@ -1096,7 +1108,7 @@ $$
 \| \psi_i \|_{\mathcal H} = \frac{1}{\sqrt{\lambda_i}}.
 $$
 Directions with small eigenvalues are expensive: representing a unit of \(\psi_i\) costs \(1/\sqrt{\lambda_i}\) in RKHS norm.</li>
-<li>Summarizing the picture the course draws at this point: the unit ball of \(\mathcal H\), seen inside \(L^2_\nu(\mathcal X)\), is a well-defined ellipsoid whose principal axes are the eigenfunctions \(\psi_k\), with semi-axis lengths \(\sqrt{\lambda_k}\). A rapidly decaying spectrum means a thin, strongly anisotropic ellipsoid: the kernel deems only a few directions cheap, and that is exactly what regularization exploits.</li>
+<li>Summarizing the picture that has emerged: the unit ball of \(\mathcal H\), seen inside \(L^2_\nu(\mathcal X)\), is a well-defined ellipsoid whose principal axes are the eigenfunctions \(\psi_k\), with semi-axis lengths \(\sqrt{\lambda_k}\). A rapidly decaying spectrum means a thin, strongly anisotropic ellipsoid: the kernel deems only a few directions cheap, and that is exactly what regularization exploits.</li>
 </ul>
 
 <p>
@@ -1115,10 +1127,10 @@ For \(\beta \in \mathbb{N}^*\), consider the Mercer kernel with polynomially dec
 </p>
 $$
 \forall x, t \in [0,1], \quad
-K(x,t) = \frac{1}{(2\beta)!}\, B_{2\beta}\!\left(x - t - \lfloor x - t \rfloor \right),
+K(x,t) = \frac{(-1)^{\beta-1}}{(2\beta)!}\, B_{2\beta}\!\left(x - t - \lfloor x - t \rfloor \right),
 $$
 <p>
-where \(B_{2\beta}\) is the \((2\beta)\)-th Bernoulli polynomial. Then the RKHS is the set of functions \(f : [0,1] \to \mathbb{R}\) whose Fourier coefficients satisfy
+where \(B_{2\beta}\) is the \((2\beta)\)-th Bernoulli polynomial and the sign factor \((-1)^{\beta-1}\) keeps the eigenvalues \(n^{-2\beta}\) positive, as noted above. Then the RKHS is the set of functions \(f : [0,1] \to \mathbb{R}\) whose Fourier coefficients satisfy
 </p>
 $$
 \| f \|^2_{\mathcal H} := \sum_{n=1}^{\infty} \left(\hat f_{2n-1}^2 + \hat f_{2n}^2 \right) n^{2\beta} \lt +\infty.
@@ -1334,7 +1346,7 @@ $$
 $$
 
 <p>
-so \(\Phi_n^\top \Phi_n \approx n T\). We now study the bias and the variance under the substitution \(\Phi_n^\top \Phi_n = nT\), and write \(\tilde B_\lambda\) and \(\tilde V_\lambda\) for the corresponding approximations. The difference between \(B_\lambda\) and \(\tilde B_\lambda\) (respectively \(V_\lambda\) and \(\tilde V_\lambda\)) can be studied rigorously and does not change much the main results below; see Dicker et al. (2015) for details.
+so \(\Phi_n^\top \Phi_n \approx n T\). We now study the bias and the variance under the substitution \(\Phi_n^\top \Phi_n = nT\), and write \(\tilde B_\lambda\) and \(\tilde V_\lambda\) for the corresponding approximations. The difference between \(B_\lambda\) and \(\tilde B_\lambda\) (respectively \(V_\lambda\) and \(\tilde V_\lambda\)) can be studied rigorously and does not change much the main results below; see <a class="cite" href="bibliography.html#dicker2015" data-ref="Dicker, L. H., Foster, D. P., and Hsu, D. (2015) Kernel ridge vs. principal component regression: minimax bounds and the qualification problem. Electronic Journal of Statistics 11(1) (2017).">Dicker et al. (2015)</a> for details.
 </p>
 
 <h3 id="bounds-on-bias-and-variance">Upper bounds on bias and variance</h3>
@@ -1351,6 +1363,19 @@ $$
 <p>
 The free integer \(J\) splits the spectrum into a head, where the regularization barely bites but each direction contributes noise, and a tail, where the eigenvalues themselves are small. Both \(J\) and \(\lambda\) will be optimized in the corollary below, depending on the assumptions made on \(f^*\) and on the decrease of the \(\lambda_i\).
 </p>
+
+<div class="box rmk"><span class="box-title">Remark (effective dimension)</span>
+<p>
+The head-tail split is a discrete stand-in for a single continuous spectral quantity, the <em>effective dimension</em> at regularization level \(\lambda\),
+</p>
+$$
+N(\lambda) = \mathrm{tr}\!\left(\mathbf K \left(\mathbf K + n\lambda I \right)^{-1} \right)
+= \sum_{i \geq 1} \frac{\lambda_i}{\lambda_i + \lambda},
+$$
+<p>
+the finite-sample trace on the left agreeing with the operator eigenvalue form on the right once \(\mathbf K \approx n\, T\). Each term \(\lambda_i / (\lambda_i + \lambda)\) is close to one when \(\lambda_i \gg \lambda\) and close to zero when \(\lambda_i \ll \lambda\), so \(N(\lambda)\) counts, softly, the eigenvalues above the threshold \(\lambda\): it is the number of directions the estimator can actually resolve. A fast-decaying spectrum has a small \(N(\lambda)\), and it is \(N(\lambda)\), rather than the ambient dimension, that sets the size of the variance and therefore the learning rate. The bound \(\tilde V_\lambda \leq \frac{\sigma^2}{n}\big[ J + \frac{1}{4\lambda}\sum_{i \gt J}\lambda_i \big]\) is one explicit way of writing \(\tilde V_\lambda \lesssim \sigma^2 N(\lambda)/n\).
+</p>
+</div>
 
 <details class="proof-details"><summary>Proof</summary>
 <div class="box proof">
@@ -1540,6 +1565,8 @@ Taking \(\lambda = n^{-1}\) and summing these inequalities gives the result.
 <li>The same rates hold for the exact quantities \(B_\lambda + V_\lambda\), without the substitution \(\Phi_n^\top\Phi_n = nT\); see Dicker et al. (2015, Corollaries 1 to 4), whose proof we followed and adapted. The constants hidden in the big-\(O\) notation depend only on the kernel \(K\) and the measure \(d\nu(x)\).</li>
 <li>These rates are minimax optimal (Caponnetto and De Vito, 2007): no estimator can uniformly improve on them over the corresponding classes of target functions.</li>
 <li>The polynomial case connects back to classical nonparametric statistics. For \(s = 2q\), the ball of the RKHS sits inside \(L^2_\nu(\mathcal X)\) as a Sobolev-type class of functions that are \(q - 1\) times differentiable with absolutely continuous derivatives and \(\| f^{(q)} \|_{L^2_\nu(\mathcal X)} \lt +\infty\), as the periodic Sobolev example made explicit with eigenvalues \(n^{-2\beta}\) and \(q = \beta\). The rate \(n^{-\frac{s}{s+1}} = n^{-\frac{2q}{2q+1}}\) is then exactly the standard optimal convergence rate of nonparametric regression <a class="cite" href="bibliography.html#tsybakov2009" data-ref="Tsybakov, A. B. (2009) Introduction to Nonparametric Estimation. Springer, Springer Series in Statistics.">(Tsybakov, 2009)</a>.</li>
+<li>The rate depends not only on the spectrum but on how smooth the target \(f^*\) is <em>relative to the kernel</em>. This is made precise by a <em>source condition</em>: one assumes \(f^* = T^r g\) for some \(g \in L^2_\nu(\mathcal X)\) and an exponent \(r \gt 0\), where \(T\) is the integral operator. A larger \(r\) means \(f^*\) lives deeper inside the range of \(T\), hence its coordinates \(\beta^*_i\) decay faster relative to \(\lambda_i\), and the achievable rate improves accordingly; the case treated above corresponds to \(r = \tfrac12\), for which \(f^* \in \mathcal H\). The source-condition exponent and the eigenvalue-decay exponent together fix the minimax rate (Caponnetto and De Vito, 2007).</li>
+
 <li>Under additional assumptions on \(f^*\), for instance requiring not only \(\sum_{i\geq 1}(\beta^*_i)^2 \lt \infty\) but also \(\sum_{i \geq 1} i^{\tau} (\beta^*_i)^2 \lt \infty\) for some \(\tau \gt 0\), or \(\beta^*_i = 0\) for \(i \gt J\), one obtains faster convergence rates, which are again minimax optimal for the class of functions considered. In this sense KRR is <em>adaptive</em>: the same estimator, with a properly tuned \(\lambda\), achieves the optimal rate over a range of regularity classes (Caponnetto and De Vito, 2007; Dicker et al., 2015).</li>
 </ul>
 
@@ -1550,7 +1577,7 @@ Everything in this chapter leaned on two hypotheses: \(\mathcal X\) compact and 
 </p>
 
 <p>
-The simplest instance already displays the whole mechanism. Call a kernel \(K : \mathbb{Z} \times \mathbb{Z} \to \mathbb{R}\) translation invariant (or shift-invariant) if it depends only on the difference of its arguments, \(K(x,y) = a_{x-y}\) for some sequence \((a_n)_{n \in \mathbb Z}\), the sequence being called positive definite when the kernel is. A classical theorem of Herglotz states that a sequence \((a_n)_{n \in \mathbb Z}\) is positive definite if and only if it is the Fourier-Stieltjes transform of a positive measure \(\mu \in M(\mathbb T)\), the set of finite Borel measures on the torus \([0, 2\pi]\) with \(0\) and \(2\pi\) identified. The countable spectrum of eigenvalues has become a spectral measure. The next chapter develops this theme: Herglotz on \(\mathbb Z\), Bochner's theorem on \(\mathbb{R}^d\), the RKHS of shift-invariant kernels, and the generalization to semigroups.
+The simplest instance already displays the whole mechanism. Call a kernel \(K : \mathbb{Z} \times \mathbb{Z} \to \mathbb{R}\) translation invariant (or shift-invariant) if it depends only on the difference of its arguments, \(K(x,y) = a_{x-y}\) for some sequence \((a_n)_{n \in \mathbb Z}\), the sequence being called positive definite when the kernel is. A classical theorem of Herglotz states that a sequence \((a_n)_{n \in \mathbb Z}\) is positive definite if and only if it is the Fourier-Stieltjes transform of a positive measure \(\mu \in M(\mathbb T)\), the set of finite Borel measures on the torus \([0, 2\pi]\) with \(0\) and \(2\pi\) identified. The countable spectrum of eigenvalues has become a spectral measure. <a class="chref" href="kernel-families.html" title="Translation-Invariant, Semigroup, and Probabilistic Kernels">The next chapter</a> develops this theme: Herglotz on \(\mathbb Z\), Bochner's theorem on \(\mathbb{R}^d\), the RKHS of shift-invariant kernels, and the generalization to semigroups.
 </p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>
@@ -1612,6 +1639,7 @@ so that truncating \(\Phi\) at \(n\) coordinates reproduces the kernel on the di
 <li ><span class="bib-authors">Bach, F.</span> <span class="bib-year">(2013)</span> <span class="bib-title">Sharp analysis of low-rank kernel matrix approximations</span>. <span class="bib-venue">Proceedings of the 26th Annual Conference on Learning Theory (COLT), PMLR 30, 185-209.</span></li>
 <li ><span class="bib-authors">Steinwart, I. and Christmann, A.</span> <span class="bib-year">(2008)</span> <span class="bib-title">Support Vector Machines</span>. <span class="bib-venue">Springer.</span></li>
 <li ><span class="bib-authors">Tsybakov, A. B.</span> <span class="bib-year">(2009)</span> <span class="bib-title">Introduction to Nonparametric Estimation</span>. <span class="bib-venue">Springer, Springer Series in Statistics.</span></li>
+<li ><span class="bib-authors">Dicker, L. H., Foster, D. P., and Hsu, D.</span> <span class="bib-year">(2015)</span> <span class="bib-title">Kernel ridge vs. principal component regression: minimax bounds and the qualification problem</span>. <span class="bib-venue">Electronic Journal of Statistics 11(1) (2017).</span></li>
 <li ><span class="bib-authors">Schölkopf, B. and Smola, A. J.</span> <span class="bib-year">(2002)</span> <span class="bib-title">Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond</span>. <span class="bib-venue">MIT Press.</span> <a href="https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf">https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf</a></li>
 <li ><span class="bib-authors">Shawe-Taylor, J. and Cristianini, N.</span> <span class="bib-year">(2004)</span> <span class="bib-title">Kernel Methods for Pattern Analysis</span>. <span class="bib-venue">Cambridge University Press.</span> <a href="https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf">https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf</a></li></ul><p class="hint">Full details, with every work cited across the book, are in the <a href="bibliography.html">bibliography</a>.</p></section><nav class="chnav" aria-label="Chapter navigation">
 <a class="nav-card prev" href="unsupervised-kernel-methods.html"><span class="dir">&larr; Previous</span><span class="nav-title">7. Kernel PCA, Clustering, and CCA</span></a>

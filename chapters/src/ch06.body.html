@@ -70,7 +70,7 @@ $$
 $$
 
 <div class="box def"><span class="box-title">Definition (kernel principal directions)</span>
-The \(i\)-th principal direction \(f_i\), for \(i = 1, \ldots, d\), is defined by
+The \(i\)-th principal direction \(f_i\), for \(i = 1, \ldots, n\), is defined by
 $$
 f_i = \arg\max_{f \perp \{f_1, \ldots, f_{i-1}\}} \sum_{i=1}^n f(\mathbf{x}_i)^2 \quad \text{s.t.} \quad \lVert f \rVert_{\mathcal{H}} = 1,
 $$
@@ -91,7 +91,7 @@ $$
 
 <h3 id="kpca-representer">The representer argument</h3>
 
-<p>The optimization over \(f \in \mathcal{H}\) looks infinite-dimensional, but the representer theorem rescues us, just as it did in the supervised setting. The objective \(\sum_i f(\mathbf{x}_i)^2\) depends on \(f\) only through its values at the data points, and the constraint involves only the RKHS norm; the same is true of the orthogonality constraints once the previous \(f_j\) are known to be spanned by the \(\varphi(\mathbf{x}_j)\). Checking that the representer theorem indeed applies to this constrained maximization is a worthwhile exercise (the slides leave it as one): any component of \(f\) orthogonal to the span of \(\{\varphi(\mathbf{x}_1), \ldots, \varphi(\mathbf{x}_n)\}\) does not change any \(f(\mathbf{x}_i)\) and can only waste norm, so at the optimum it vanishes. Hence for each \(i = 1, \ldots, d\) we may write</p>
+<p>The optimization over \(f \in \mathcal{H}\) looks infinite-dimensional, but the representer theorem rescues us, just as it did in the supervised setting. The objective \(\sum_i f(\mathbf{x}_i)^2\) depends on \(f\) only through its values at the data points, and the constraint involves only the RKHS norm; the same is true of the orthogonality constraints once the previous \(f_j\) are known to be spanned by the \(\varphi(\mathbf{x}_j)\). Checking that the representer theorem indeed applies to this constrained maximization is a worthwhile exercise, and we leave it as one: any component of \(f\) orthogonal to the span of \(\{\varphi(\mathbf{x}_1), \ldots, \varphi(\mathbf{x}_n)\}\) does not change any \(f(\mathbf{x}_i)\) and can only waste norm, so at the optimum it vanishes. Hence for each \(i = 1, \ldots, n\) we may write</p>
 $$
 \forall \mathbf{x} \in \mathcal{X}, \quad f_i(\mathbf{x}) = \sum_{j=1}^n \alpha_{i,j} K(\mathbf{x}_j, \mathbf{x}),
 $$
@@ -174,7 +174,7 @@ In this formulation we diagonalize the \(n \times n\) centered kernel Gram matri
 Diagonalizing the \(n \times n\) Gram matrix rather than a \(d \times d\) covariance matrix has a consequence classical PCA cannot match. Linear PCA on data in \(\mathbb{R}^d\) has at most \(d\) nonzero eigenvalues, so it extracts at most \(d\) components no matter how many points it is given. Kernel PCA can produce up to \(n\) nonzero eigenvalues, and so may extract far more components than the input has coordinates, because the feature map opens up many more directions of variation than there are input dimensions (there are many more monomials than pixels, for a polynomial kernel on images). Schölkopf and Smola (2002) note that this is exactly why kernel PCA cannot be carried out on the covariance matrix directly: the informative components can lie outside the \(d\)-dimensional input span entirely.
 </div>
 
-<p>The applications are exactly what the generality suggests: nonlinear PCA of vector data with nonlinear kernels, and PCA of non-vector objects such as strings or graphs using the structured kernels of later chapters. A classical illustration comes from computational biology: a set of 74 human tRNA sequences, analyzed with a kernel for sequences (a second-order marginalized kernel based on stochastic context-free grammars), projected onto its first two kernel principal components. The set contains three classes of tRNAs, called Ala-AGC, Asn-GTT, and Cys-GCA, and the three groups separate visibly in the plane of the first two kernel principal components (Tsuda et al., 2003). No feature vector was ever formed; the kernel did all the work.</p>
+<p>The applications are exactly what the generality suggests: nonlinear PCA of vector data with nonlinear kernels, and PCA of non-vector objects such as strings or graphs using the structured kernels of later chapters ([[ch:string-kernels]], [[ch:graph-kernels]]). A classical illustration comes from computational biology: a set of 74 human tRNA sequences, analyzed with a kernel for sequences (a second-order marginalized kernel based on stochastic context-free grammars), projected onto its first two kernel principal components. The set contains three classes of tRNAs, called Ala-AGC, Asn-GTT, and Cys-GCA, and the three groups separate visibly in the plane of the first two kernel principal components (Tsuda et al., 2003). No feature vector was ever formed; the kernel did all the work.</p>
 
 <h3 id="kpca-reconstruction">Reconstruction error: the second face of the spectrum</h3>
 
@@ -367,7 +367,7 @@ is given by the \(n \times k\) matrix whose columns are the eigenvectors of \(K\
 
 <h3 id="spectral-rounding">From eigenvectors back to a partition</h3>
 
-<p>The relaxed solution \(Z^\star\) is a real matrix, not a valid assignment matrix, so we must round it back. The slides list several ways to do this, reflecting that the rounding is a design choice rather than a theorem.</p>
+<p>The relaxed solution \(Z^\star\) is a real matrix, not a valid assignment matrix, so we must round it back. There are several ways to do this, reflecting that the rounding is a design choice rather than a theorem.</p>
 
 <p>A first, direct answer uses the shape the original constraints would have imposed: with \((\star)\) in force each row of \(A\) has a single nonzero entry, so we simply read off, for each row of \(Z^\star\), the index of its largest entry and assign the point to that cluster. A second, more robust and by far the most common answer normalizes each row of \(Z^\star\) to unit \(\ell_2\) norm and then runs ordinary K-means on the \(n\) rows, treating each row as a \(k\)-dimensional feature vector for its point. The reason this is more than a heuristic is that the top eigenvectors give each point a short coordinate, and when the data really do fall into \(k\) well-separated groups these coordinates are nearly constant within a group, so the rows collect into \(k\) tight clusters that even plain K-means resolves cleanly; this is the observation behind the algorithm of Ng, Jordan, and Weiss (2002). This last procedure, eigendecompose the (kernel or affinity) matrix, take the top \(k\) eigenvectors, normalize the rows, and cluster them, is what is usually meant by <em>spectral clustering</em>. Other variants differ in normalization and in how many eigenvectors are used, but all share the same skeleton: relax to an eigenproblem, solve it exactly, and round.</p>
 
@@ -381,7 +381,7 @@ The relaxation above diagonalizes the kernel matrix \(K\) itself, but many spect
 
 <h3 id="cca-classical">Classical CCA</h3>
 
-<p>Given two views \(X = [\mathbf{x}_1, \ldots, \mathbf{x}_n] \in \mathbb{R}^{p \times n}\) and \(Y = [\mathbf{y}_1, \ldots, \mathbf{y}_n] \in \mathbb{R}^{d \times n}\) of the same \(n\) objects (so \(\mathbf{x}_i\) and \(\mathbf{y}_i\) are the two descriptions of object \(i\)), and assuming both views centered, CCA seeks directions \(\mathbf{w}_a \in \mathbb{R}^p\) and \(\mathbf{w}_b \in \mathbb{R}^d\) maximizing the empirical correlation of the projections \(\mathbf{w}_a^\top \mathbf{x}_i\) and \(\mathbf{w}_b^\top \mathbf{y}_i\):</p>
+<p>Given two views collected as data matrices \(X \in \mathbb{R}^{n \times p}\), whose rows are \(\mathbf{x}_1^\top, \ldots, \mathbf{x}_n^\top\), and \(Y \in \mathbb{R}^{n \times d}\), whose rows are \(\mathbf{y}_1^\top, \ldots, \mathbf{y}_n^\top\), of the same \(n\) objects (so \(\mathbf{x}_i \in \mathbb{R}^p\) and \(\mathbf{y}_i \in \mathbb{R}^d\) are the two descriptions of object \(i\)), and assuming both views centered, CCA seeks directions \(\mathbf{w}_a \in \mathbb{R}^p\) and \(\mathbf{w}_b \in \mathbb{R}^d\) maximizing the empirical correlation of the projections \(\mathbf{w}_a^\top \mathbf{x}_i\) and \(\mathbf{w}_b^\top \mathbf{y}_i\):</p>
 $$
 \max_{\mathbf{w}_a \in \mathbb{R}^p,\ \mathbf{w}_b \in \mathbb{R}^d} \ \frac{\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \, \mathbf{y}_i^\top \mathbf{w}_b}{\big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \mathbf{x}_i^\top \mathbf{w}_a\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_b^\top \mathbf{y}_i \mathbf{y}_i^\top \mathbf{w}_b\big)^{1/2}}.
 $$
@@ -461,7 +461,7 @@ $$
 
 <p>It is worth stepping back to see that the unsupervised methods of this chapter are the same construction tuned by a single choice: what we ask of a pair of directions. Shawe-Taylor and Cristianini (2004) organize their whole treatment this way. Given one view, asking for the direction of maximal variance gives PCA, the eigenvectors of the covariance matrix. Given two paired views \(X\) and \(Y\), we can instead ask for a pair of directions \((\mathbf{w}_a, \mathbf{w}_b)\) maximizing the raw covariance of the projections,</p>
 $$
-\max_{\lVert \mathbf{w}_a \rVert = \lVert \mathbf{w}_b \rVert = 1} \ \mathbf{w}_a^\top C_{XY} \mathbf{w}_b, \qquad C_{XY} = \tfrac{1}{n} X Y^\top,
+\max_{\lVert \mathbf{w}_a \rVert = \lVert \mathbf{w}_b \rVert = 1} \ \mathbf{w}_a^\top C_{XY} \mathbf{w}_b, \qquad C_{XY} = \tfrac{1}{n} X^\top Y,
 $$
 <p>whose solution is the leading pair of singular vectors of the cross-covariance matrix \(C_{XY}\), the covariance itself being the top singular value, with subsequent pairs found by deflation. Or we can ask for the directions of maximal correlation, dividing that same covariance by the projected standard deviations, and we are back to CCA and its generalized eigenproblem. Variance is a self-covariance diagonalized, covariance is a cross-term factorized by singular value decomposition, and correlation is covariance normalized by variance; the eigen-decomposition machinery is identical, and only the matrix in the quadratic form changes.</p>
 

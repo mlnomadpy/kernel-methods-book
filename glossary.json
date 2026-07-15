@@ -33,6 +33,13 @@
     {"term": "Nyström approximation", "def": "A low-rank approximation of the Gram matrix from a subset of columns, one of the two main routes past the quadratic-memory wall.", "slug": "large-scale-kernels"},
     {"term": "Random Fourier features", "def": "A finite random feature map whose inner products approximate a translation-invariant kernel (via Bochner), reducing the kernel machine to a linear model.", "slug": "large-scale-kernels"},
     {"term": "Multiple kernel learning", "def": "Learning a convex combination of several kernels jointly with the predictor, a group-lasso over kernels.", "slug": "multiple-kernel-learning"},
-    {"term": "Neural tangent kernel (NTK)", "def": "The kernel governing an infinitely wide network's training in the lazy regime; one way deep networks connect to kernel machines.", "slug": "kernels-and-deep-learning"}
+    {"term": "Neural tangent kernel (NTK)", "def": "The kernel governing an infinitely wide network's training in the lazy regime; one way deep networks connect to kernel machines.", "slug": "kernels-and-deep-learning"},
+    {"term": "Neural network Gaussian process (NNGP)", "def": "The Gaussian process a randomly initialized infinite-width network converges to at its output, before any training; the network's function prior read as a kernel.", "slug": "kernels-and-deep-learning"},
+    {"term": "Gaussian process", "def": "A distribution over functions in which any finite set of values is jointly Gaussian, specified by a mean and a covariance kernel; kernel ridge regression is its posterior mean with noise variance lambda·n.", "slug": "kernel-ridge-and-friends"},
+    {"term": "Universal kernel", "def": "A kernel whose RKHS is dense in the continuous functions on a compact domain, so it can approximate any target arbitrarily well; universality implies the kernel is characteristic.", "slug": "mercer-and-rates"},
+    {"term": "Margin", "def": "The signed distance from a labeled point to a classifier's decision boundary; the SVM maximizes the smallest margin, and margin bounds control generalization.", "slug": "support-vector-machines"},
+    {"term": "Conditional mean embedding", "def": "The RKHS operator mapping the embedding of a conditioning variable to the mean embedding of a conditional distribution, extending mean embeddings to conditional laws.", "slug": "kernel-mean-embeddings"},
+    {"term": "Kernel Stein discrepancy", "def": "A discrepancy between a sample and a target density that needs only the target's score function, built from a Stein operator acting on the RKHS; used for goodness-of-fit testing.", "slug": "kernel-mean-embeddings"},
+    {"term": "Double descent", "def": "The generalization error curve that, past the interpolation threshold where a model fits the data exactly, descends a second time as capacity grows; the phenomenon that revised the classical bias-variance picture.", "slug": "kernels-now"}
   ]
 }

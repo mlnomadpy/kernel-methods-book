@@ -1,10 +1,10 @@
 <h1>Positive Definite Kernels and RKHS</h1>
 
-<p class="lead">Machine learning algorithms are usually written for vectors. Real data are strings, graphs, images, molecules, time series. Kernel methods resolve this mismatch with one idea: never touch the data directly, only compare pairs of points. This chapter develops the mathematical foundation of that idea. We define positive definite kernels, prove Aronszajn's theorem identifying every such kernel with an inner product after an embedding into a Hilbert space, construct the reproducing kernel Hilbert space (RKHS) that realizes this embedding canonically as a space of functions, build a toolbox for combining and recognizing kernels, work out the RKHS of the classical examples, and show that the RKHS norm measures the smoothness of a function. Everything that follows in this course rests on these objects.</p>
+<p class="lead">Machine learning algorithms are usually written for vectors. Real data are strings, graphs, images, molecules, time series. Kernel methods resolve this mismatch with one idea: never touch the data directly, only compare pairs of points. This chapter develops the mathematical foundation of that idea. We define positive definite kernels, prove Aronszajn's theorem identifying every such kernel with an inner product after an embedding into a Hilbert space, construct the reproducing kernel Hilbert space (RKHS) that realizes this embedding canonically as a space of functions, build a toolbox for combining and recognizing kernels, work out the RKHS of the classical examples, and show that the RKHS norm measures the smoothness of a function. Everything that follows in this book rests on these objects.</p>
 
 <h2 id="why-pairwise-comparisons">Why pairwise comparisons?</h2>
 
-<p>We want versatile algorithms: methods that process and analyze data without making any assumption on the type of the data, whether vectors, strings, graphs or images. The approach of this course is to develop methods based on pairwise comparisons. By imposing constraints on the pairwise comparison function, the positive definiteness studied below, we will obtain a general framework for learning from data, namely optimization in a reproducing kernel Hilbert space.</p>
+<p>We want versatile algorithms: methods that process and analyze data without making any assumption on the type of the data, whether vectors, strings, graphs or images. The approach developed here is to build methods on pairwise comparisons. By imposing constraints on the pairwise comparison function, the positive definiteness studied below, we will obtain a general framework for learning from data, namely optimization in a reproducing kernel Hilbert space.</p>
 
 <p>Concretely, we define a comparison function \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) on the data space \(\mathcal{X}\), and we represent a set of \(n\) data points \(\mathcal{S} = \{x_1, x_2, \dots, x_n\}\) by the \(n \times n\) matrix of all pairwise comparisons:</p>
 
@@ -17,7 +17,7 @@ $$[\mathbf{K}]_{ij} := K(x_i, x_j).$$
 <ul>
 <li><strong>Genericity.</strong> The matrix \(\mathbf{K}\) is always an \(n \times n\) matrix of real numbers, whatever the nature of the data. The same algorithm will therefore work for any type of data: vectors, strings, graphs, and so on.</li>
 <li><strong>Modularity.</strong> There is total modularity between the choice of the comparison function \(K\), which encodes what we know about the data, and the choice of the learning algorithm, which operates only on the matrix.</li>
-<li><strong>Scalability.</strong> The price is poor scalability with respect to the dataset size: the matrix takes \(n^2\) operations to compute and \(n^2\) memory to store. Later parts of the course show how to deal with large-scale problems; for now we accept the cost.</li>
+<li><strong>Scalability.</strong> The price is poor scalability with respect to the dataset size: the matrix takes \(n^2\) operations to compute and \(n^2\) memory to store. [[ch:large-scale-kernels]] shows how to deal with large-scale problems; for now we accept the cost.</li>
 </ul>
 
 <p>Not every comparison function will do. We now restrict ourselves to a particular class of pairwise comparison functions, and this restriction is the source of all the structure to come.</p>
@@ -91,7 +91,7 @@ $$\sum_{i=1}^{N} \sum_{j=1}^{N} a_i a_j \big\langle \Phi(x_i), \Phi(x_j) \big\ra
 <span class="qed">\(\square\)</span>
 </div>
 
-<p>This lemma is the picture to keep in mind for the whole course: points \(x\) in an arbitrary set \(\mathcal{X}\) are mapped by a feature map \(\Phi\) into a space where inner products make sense, and the kernel is the inner product of the images. The remarkable fact, proved below, is that <em>every</em> p.d. kernel arises this way.</p>
+<p>This lemma is the picture to keep in mind throughout: points \(x\) in an arbitrary set \(\mathcal{X}\) are mapped by a feature map \(\Phi\) into a space where inner products make sense, and the kernel is the inner product of the images. The remarkable fact, proved below, is that <em>every</em> p.d. kernel arises this way.</p>
 
 <h3 id="a-first-nonlinear-example">A first nonlinear example: the polynomial kernel</h3>
 
@@ -159,7 +159,7 @@ $$\Phi(x_i) = \begin{pmatrix} \sqrt{\lambda_1}\, [u_1]_i \\ \vdots \\ \sqrt{\lam
 
 <h3 id="general-case-history">The general case: a short history</h3>
 
-<p>For infinite \(\mathcal{X}\) the result was established in stages: Mercer (1909) proved it for \(\mathcal{X} = [a, b] \subset \mathbb{R}\), and more generally for \(\mathcal{X}\) compact, with \(K\) continuous; Kolmogorov (1941) for \(\mathcal{X}\) countable; and Aronszajn (1944, 1950) in the general case. We will go through the proof of the general case by introducing the concept at the heart of this course, the reproducing kernel Hilbert space, which provides a canonical choice of \(\mathcal{H}\) valid without any restriction on \(\mathcal{X}\) or on \(K\).</p>
+<p>For infinite \(\mathcal{X}\) the result was established in stages: Mercer (1909) proved it for \(\mathcal{X} = [a, b] \subset \mathbb{R}\), and more generally for \(\mathcal{X}\) compact, with \(K\) continuous; Kolmogorov (1941) for \(\mathcal{X}\) countable; and Aronszajn (1944, 1950) in the general case. We will go through the proof of the general case by introducing the concept at the heart of the theory, the reproducing kernel Hilbert space, which provides a canonical choice of \(\mathcal{H}\) valid without any restriction on \(\mathcal{X}\) or on \(K\).</p>
 
 <p>Mercer's special case deserves a closer look, because it produces the embedding by a route that is the exact continuous analogue of the finite spectral construction: eigenvectors are replaced by eigenfunctions. Both Schölkopf and Smola (2002) and Shawe-Taylor and Cristianini (2004) develop it, and it is the standard way to see a kernel as a weighted sum of feature coordinates.</p>
 
@@ -168,7 +168,7 @@ Let \(\mathcal{X}\) be a compact subset of \(\mathbb{R}^n\) and let \(K : \mathc
 $$\int_{\mathcal{X} \times \mathcal{X}} K(x, x')\, f(x)\, f(x')\, dx\, dx' \ge 0 \quad \text{for all } f \in L^2(\mathcal{X}).$$
 Then \(K\) admits a uniformly convergent expansion
 $$K(x, x') = \sum_{j=1}^{\infty} \phi_j(x)\, \phi_j(x'),$$
-where the functions \((\phi_j)_{j \ge 1}\) are orthonormal in \(L^2(\mathcal{X})\); equivalently \(\phi_j = \sqrt{\mu_j}\, \psi_j\) for the eigenvalues \(\mu_j \ge 0\) and orthonormal eigenfunctions \(\psi_j\) of the operator.
+where the feature coordinates are \(\phi_j = \sqrt{\mu_j}\, \psi_j\), built from the eigenvalues \(\mu_j \ge 0\) and the eigenfunctions \(\psi_j\) of the integral operator. The eigenfunctions \((\psi_j)_{j \ge 1}\) are orthonormal in \(L^2(\mathcal{X})\); the scaled coordinates \((\phi_j)_{j \ge 1}\) are therefore orthogonal, but not orthonormal, with squared norm \(\lVert \phi_j \rVert_{L^2}^2 = \mu_j\).
 </div>
 
 <p>The expansion is the promised embedding: the map \(x \mapsto (\phi_1(x), \phi_2(x), \dots)\) into the sequence space \(\ell^2\) realizes \(K\) as an inner product, exactly as the map \(x_i \mapsto (\sqrt{\lambda_l}\, [u_l]_i)_l\) did in the finite case, with the eigenfunctions \(\psi_j\) now playing the role of the principal axes \(u_l\) and the eigenvalues \(\mu_j\) the role of the \(\lambda_l\). This is the Mercer route to the feature space. Its price is the hypotheses it needs, compactness of \(\mathcal{X}\), continuity of \(K\), and a reference measure; the RKHS route developed below reaches the same conclusion while asking for none of them.</p>
@@ -268,7 +268,7 @@ $$\lVert K_x - K'_x \rVert_{\mathcal{H}}^2 = K_x(x) - K'_x(x) - K_x(x) + K'_x(x)
 This shows that \(K_x = K'_x\) as functions, i.e., \(K_x(y) = K'_x(y)\) for any \(y \in \mathcal{X}\). In other words, \(K = K'\). <span class="qed">\(\square\)</span>
 </div>
 
-<p>The converse statement, that the RKHS of a given r.k. is unique, is left as an exercise in the course; here is the idea. If \(\mathcal{H}_1\) and \(\mathcal{H}_2\) are two RKHS with the same kernel \(K\), both contain the linear span \(\mathcal{H}_0\) of the functions \(\{K_x\}_{x \in \mathcal{X}}\), and on \(\mathcal{H}_0\) both inner products are computed from \(K\) alone, since \(\langle K_x, K_y \rangle = K(x, y)\) in each space. Moreover \(\mathcal{H}_0\) is dense in each space: a function \(f\) orthogonal to every \(K_x\) satisfies \(f(x) = \langle f, K_x \rangle = 0\) for all \(x\), hence \(f = 0\). Since evaluation functionals are continuous, norm limits of sequences in \(\mathcal{H}_0\) are determined pointwise, so the two completions coincide as sets of functions and carry the same norm.</p>
+<p>The converse statement, that the RKHS of a given r.k. is unique, is left as an exercise; here is the idea. If \(\mathcal{H}_1\) and \(\mathcal{H}_2\) are two RKHS with the same kernel \(K\), both contain the linear span \(\mathcal{H}_0\) of the functions \(\{K_x\}_{x \in \mathcal{X}}\), and on \(\mathcal{H}_0\) both inner products are computed from \(K\) alone, since \(\langle K_x, K_y \rangle = K(x, y)\) in each space. Moreover \(\mathcal{H}_0\) is dense in each space: a function \(f\) orthogonal to every \(K_x\) satisfies \(f(x) = \langle f, K_x \rangle = 0\) for all \(x\), hence \(f = 0\). Since evaluation functionals are continuous, norm limits of sequences in \(\mathcal{H}_0\) are determined pointwise, so the two completions coincide as sets of functions and carry the same norm.</p>
 
 <div class="box rmk"><span class="box-title">Consequence</span>
 We can talk of "the" kernel of a RKHS, and of "the" RKHS of a kernel.
@@ -276,7 +276,7 @@ We can talk of "the" kernel of a RKHS, and of "the" RKHS of a kernel.
 
 <h2 id="pd-equals-reproducing">The equivalence: positive definite equals reproducing</h2>
 
-<p>We now connect the two notions introduced so far, and this single theorem simultaneously proves Aronszajn's theorem and constructs the canonical feature space.</p>
+<p>We now connect the two notions introduced so far. This single result, due to Moore and Aronszajn and known as the Moore-Aronszajn theorem, simultaneously proves Aronszajn's embedding theorem and constructs the canonical feature space.</p>
 
 <div class="box thm"><span class="box-title">Theorem</span>
 A function \(K : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\) is p.d. if and only if it is a r.k.
@@ -326,7 +326,7 @@ For any Cauchy sequence \((f_n)_{n \ge 0}\) in \((\mathcal{H}_0, \langle \cdot, 
 $$\forall (x, m, n) \in \mathcal{X} \times \mathbb{N}^2, \quad |f_m(x) - f_n(x)| \le \lVert f_m - f_n \rVert_{\mathcal{H}_0} \cdot K(x, x)^{1/2}.$$
 Therefore, for any \(x\), the real sequence \((f_n(x))_{n \ge 0}\) is Cauchy in \(\mathbb{R}\) and has a limit; call it \(f(x)\). Let \(\mathcal{H}\) be the space obtained by adding to \(\mathcal{H}_0\) all functions defined as such pointwise limits of Cauchy sequences. The inner product extends to \(\mathcal{H}\) by \(\langle f, g \rangle_{\mathcal{H}} := \lim_n \langle f_n, g_n \rangle_{\mathcal{H}_0}\) for Cauchy sequences \((f_n)\), \((g_n)\) converging pointwise to \(f\), \(g\); one checks that this limit exists, does not depend on the chosen sequences, and defines an inner product for which \(\mathcal{H}\) is complete, so that \(\mathcal{H}\) is a Hilbert space in which \(\mathcal{H}_0\) is dense. Finally, the reproducing property passes to the limit: for \(f \in \mathcal{H}\) obtained from the Cauchy sequence \((f_n)\),
 $$f(x) = \lim_n f_n(x) = \lim_n \langle f_n, K_x \rangle_{\mathcal{H}_0} = \langle f, K_x \rangle_{\mathcal{H}},$$
-so \(K\) is a r.k. of \(\mathcal{H}\) (up to a few technicalities in the verification of the completion, left as an exercise in the course). <span class="qed">\(\square\)</span></p>
+so \(K\) is a r.k. of \(\mathcal{H}\) (up to a few technicalities in the verification of the completion, left as an exercise). <span class="qed">\(\square\)</span></p>
 </div>
 </details>
 
@@ -396,7 +396,7 @@ $$\mathcal{H} = \Big\{ f_S : x \mapsto \big\langle S,\, x x^\top \big\rangle_F =
 <p>where \(\mathcal{S}^{d \times d}\) is the set of <em>symmetric</em> matrices in \(\mathbb{R}^{d \times d}\), endowed with the inner product \(\langle f_{S_1}, f_{S_2} \rangle_{\mathcal{H}} = \langle S_1, S_2 \rangle_F\).</p>
 
 <div class="box rmk"><span class="box-title">Remark (why symmetric matrices?)</span>
-The restriction to symmetric matrices, flagged as a question in the course, is what makes the inner product well defined. A general matrix \(S\) and its symmetrization \((S + S^\top)/2\) define the same quadratic function \(x \mapsto x^\top S x\), so on all of \(\mathbb{R}^{d \times d}\) the map \(S \mapsto f_S\) is not injective, and \(\langle S_1, S_2 \rangle_F\) would depend on the matrix representative rather than on the function. On \(\mathcal{S}^{d \times d}\) the map is one-to-one: if \(x^\top S x = x^\top S' x\) for all \(x\) with \(S, S'\) symmetric, then \(S = S'\) (polarize).
+The restriction to symmetric matrices is what makes the inner product well defined. A general matrix \(S\) and its symmetrization \((S + S^\top)/2\) define the same quadratic function \(x \mapsto x^\top S x\), so on all of \(\mathbb{R}^{d \times d}\) the map \(S \mapsto f_S\) is not injective, and \(\langle S_1, S_2 \rangle_F\) would depend on the matrix representative rather than on the function. On \(\mathcal{S}^{d \times d}\) the map is one-to-one: if \(x^\top S x = x^\top S' x\) for all \(x\) with \(S, S'\) symmetric, then \(S = S'\) (polarize).
 </div>
 
 <p><strong>Third step: check that the candidate is a Hilbert space.</strong> This step is trivial in the present case, since \(\mathcal{H}\) is a finite-dimensional Euclidean space, isomorphic to \(\mathcal{S}^{d \times d}\) via \(\Phi : S \mapsto f_S\). Sometimes things are not so simple, and completeness must be proved explicitly.</p>
@@ -426,7 +426,7 @@ What is the RKHS of the general polynomial kernel \(K(x, y) = \langle x, y \rang
 
 $$K(x, y) = e^{-\frac{1}{2\alpha^2}(x - y)^2},$$
 
-<p>is the kernel behind the bump picture that opened the RKHS section: its canonical feature map sends each point \(x\) to the Gaussian function \(K_x\) centered at \(x\). It is indeed p.d.; the proof is a two-line application of the combination rules of the next section, so we present it in the worked quiz below. Its RKHS contains far more than the Gaussian bumps themselves, and its precise description is postponed to later parts of the course; what matters already is that the general theory guarantees this space exists, is unique, and satisfies \(f(x) = \langle f, K_x \rangle_{\mathcal{H}}\) for all its members.</p>
+<p>is the kernel behind the bump picture that opened the RKHS section: its canonical feature map sends each point \(x\) to the Gaussian function \(K_x\) centered at \(x\). It is indeed p.d.; the proof is a two-line application of the combination rules of the next section, so we present it in the worked quiz below. Its RKHS contains far more than the Gaussian bumps themselves, and its precise description is postponed to a later chapter; what matters already is that the general theory guarantees this space exists, is unique, and satisfies \(f(x) = \langle f, K_x \rangle_{\mathcal{H}}\) for all its members.</p>
 
 <div class="box rmk"><span class="box-title">Remark (geometry of the Gaussian embedding)</span>
 Schölkopf and Smola (2002) record three facts about this feature map that are worth keeping in mind. First, since \(K(x, x) = 1\) for every \(x\), each point maps to a unit-length element of \(\mathcal{H}\): the Gaussian embedding sends all of \(\mathcal{X}\) to the unit sphere of the RKHS. Second, since \(K(x, x') \gt 0\) for all \(x, x'\), the cosine of the angle between any two images, \(\langle \Phi(x), \Phi(x') \rangle_{\mathcal{H}}\), is strictly positive, so the images all sit within a single orthant, subtending pairwise angles below \(\pi/2\). Third, pulling the other way, for any finite set of distinct points the Gaussian Gram matrix has full rank, so the images \(\Phi(x_1), \dots, \Phi(x_m)\) are always linearly independent. A Gaussian kernel on an infinite domain therefore has an infinite-dimensional RKHS: no finite feature space can reproduce it. The apparent tension, images confined to a patch of a sphere yet never linearly dependent, is resolved by the rapid decay of the eigenvalues, which stacks ever more dimensions into an ever thinner shell.
@@ -448,7 +448,7 @@ $$\forall (x, x') \in \mathcal{X}^2, \quad K(x, x') = \lim_{i \to \infty} K_i(x,
 then \(K\) is also a p.d. kernel.
 </div>
 
-<p>The sum, scaling and limit statements are left as exercises in the course, and they are one-liners from the definition: the quadratic form \(\sum_{i,j} a_i a_j K(x_i, x_j)\) is additive in \(K\), homogeneous under \(K \mapsto cK\), and passes to pointwise limits since a limit of nonnegative numbers is nonnegative (symmetry also passes to the limit). Together they say that the p.d. kernels on \(\mathcal{X}\) form a <em>convex cone, closed under pointwise convergence</em>, and the product rule adds that this cone is stable under multiplication. This cone is the playground of kernel design: the entire kernel jungle of the later chapters lives inside it.</p>
+<p>The sum, scaling and limit statements are left as exercises, and they are one-liners from the definition: the quadratic form \(\sum_{i,j} a_i a_j K(x_i, x_j)\) is additive in \(K\), homogeneous under \(K \mapsto cK\), and passes to pointwise limits since a limit of nonnegative numbers is nonnegative (symmetry also passes to the limit). Together they say that the p.d. kernels on \(\mathcal{X}\) form a <em>convex cone, closed under pointwise convergence</em>, and the product rule adds that this cone is stable under multiplication. This cone is the playground of kernel design: the entire kernel jungle of the later chapters lives inside it.</p>
 
 <p>The only nontrivial statement is the product, a result also known as the Schur product theorem. The proof is a factorization argument.</p>
 
@@ -484,7 +484,7 @@ Each power \(K^i\) is p.d. by the product rule (and \(K^0 = 1\) is p.d., being t
 
 <h2 id="a-kernel-quiz">Worked examples: a kernel quiz</h2>
 
-<p>The course poses a quiz: which of the following thirteen functions are p.d. kernels? The answers exercise every tool assembled so far, embeddings, closure rules, and the humble necessary conditions hidden in the definition. Before reading the solutions, recall the two cheapest ways to disqualify a candidate: taking \(N = 1\) in the definition shows that a p.d. kernel must satisfy \(K(x, x) \ge 0\) on the diagonal, and taking \(N = 2\) shows that every \(2 \times 2\) similarity matrix must be p.s.d., i.e., \(K(x, x) \, K(x', x') \ge K(x, x')^2\).</p>
+<p>Here is a quiz: which of the following thirteen functions are p.d. kernels? The answers exercise every tool assembled so far, embeddings, closure rules, and the humble necessary conditions hidden in the definition. Before reading the solutions, recall the two cheapest ways to disqualify a candidate: taking \(N = 1\) in the definition shows that a p.d. kernel must satisfy \(K(x, x) \ge 0\) on the diagonal, and taking \(N = 2\) shows that every \(2 \times 2\) similarity matrix must be p.s.d., i.e., \(K(x, x) \, K(x', x') \ge K(x, x')^2\).</p>
 
 <table>
 <thead>
@@ -569,7 +569,7 @@ whose determinant is \(\log 2 \cdot \log 5 - (\log 3)^2 \approx 1.1156 - 1.2069 
 
 <p>We closed the definition of the RKHS with a learning objective penalized by \(\lVert f \rVert_{\mathcal{H}}^2\). Why is this norm a sensible thing to penalize? Because the RKHS norm measures how fast a function can vary.</p>
 
-<p>Remember the RKHS of the linear kernel: for \(K_{\mathrm{lin}}(x, x') = x^\top x'\), the functions are \(f(x) = w^\top x\) with \(\lVert f \rVert_{\mathcal{H}} = \lVert w \rVert_2\). The course illustrates this with the level lines of \(f\) drawn for \(\lVert f \rVert = 0.5\), \(1\) and \(2\): the larger the norm, the steeper the linear function and the more tightly packed its level sets, while a small-norm function is nearly flat. The general phenomenon is a direct consequence of the reproducing property.</p>
+<p>Remember the RKHS of the linear kernel: for \(K_{\mathrm{lin}}(x, x') = x^\top x'\), the functions are \(f(x) = w^\top x\) with \(\lVert f \rVert_{\mathcal{H}} = \lVert w \rVert_2\). Picture the level lines of \(f\) drawn for \(\lVert f \rVert = 0.5\), \(1\) and \(2\): the larger the norm, the steeper the linear function and the more tightly packed its level sets, while a small-norm function is nearly flat. The general phenomenon is a direct consequence of the reproducing property.</p>
 
 <p>By Cauchy-Schwarz we have, for any function \(f \in \mathcal{H}\) and any two points \(x, x' \in \mathcal{X}\):</p>
 
