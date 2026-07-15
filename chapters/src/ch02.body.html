@@ -90,6 +90,22 @@ $$
 <p>As a function of the Euclidean distance \(\lVert x - y \rVert\), this grows from \(0\), is approximately proportional to \(\lVert x - y \rVert / \sigma\) for nearby points, and saturates at \(\sqrt{2}\) as the points move far apart: beyond a few bandwidths, all pairs look maximally dissimilar. The bandwidth \(\sigma\) sets the scale at which the feature-space geometry stops resolving distances in the input space.</p>
 </div>
 
+<p>The Gaussian example is abstract because its feature map is infinite-dimensional. To watch the trick actually reproduce a feature-space computation, we take a kernel whose feature map is small enough to write down, and compute the same two quantities both ways.</p>
+
+<div class="box ex"><span class="box-title">Example (the kernel trick on a polynomial kernel, two ways)</span>
+<div class="wex">
+<div class="wex-setup">Take the homogeneous quadratic kernel \(K(x, y) = \langle x, y \rangle^2\) on \(\mathbb{R}^2\) and the two points \(x_a = (1, 2)\) and \(x_b = (2, 1)\). This kernel has an explicit finite feature map \(\Phi(x) = (x_1^2,\ \sqrt{2}\, x_1 x_2,\ x_2^2) \in \mathbb{R}^3\), because \(\langle \Phi(x), \Phi(y) \rangle = x_1^2 y_1^2 + 2 x_1 x_2 y_1 y_2 + x_2^2 y_2^2 = \langle x, y \rangle^2\). We compute one inner product and one distance both through \(\Phi\) and directly through \(K\), and watch them agree.</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Build the feature vectors.</span> \(\Phi(x_a) = (1,\ 2\sqrt{2},\ 4) \approx (1,\ 2.828,\ 4)\) and \(\Phi(x_b) = (4,\ 2\sqrt{2},\ 1) \approx (4,\ 2.828,\ 1)\).</li>
+<li><span class="wex-op">Inner product, route A (explicit).</span> In the feature space, \(\langle \Phi(x_a), \Phi(x_b) \rangle = 1\cdot 4 + (2\sqrt{2})^2 + 4\cdot 1 = 4 + 8 + 4 = 16\).</li>
+<li><span class="wex-op">Inner product, route B (kernel).</span> Through the kernel, \(\langle x_a, x_b \rangle = 1\cdot 2 + 2\cdot 1 = 4\), so \(K(x_a, x_b) = 4^2 = 16\). The two routes match, and route B never built the \(3\)-vector.</li>
+<li><span class="wex-op">Assemble the diagonal.</span> \(K(x_a, x_a) = (1 + 4)^2 = 25\) and \(K(x_b, x_b) = (4 + 1)^2 = 25\).</li>
+<li><span class="wex-op">Distance, both ways.</span> The kernel formula gives \(d_K(x_a, x_b)^2 = 25 + 25 - 2\cdot 16 = 18\); the explicit vectors give \(\lVert \Phi(x_a) - \Phi(x_b) \rVert^2 = (1 - 4)^2 + 0 + (4 - 1)^2 = 9 + 9 = 18\). Hence \(d_K(x_a, x_b) = \sqrt{18} \approx 4.243\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Every feature-space quantity the trick promises, an inner product here and a distance there, is reproduced exactly by kernel evaluations that never inspect the coordinates of \(\Phi\). For this quadratic kernel we could still afford to write \(\Phi\) down; the force of the identity \(K(x, y) = \langle \Phi(x), \Phi(y) \rangle\) is that for the Gaussian kernel, whose \(\Phi\) is infinite-dimensional, the kernel column is the only one we could ever compute, and it suffices.</p>
+</div>
+</div>
+
 <div class="box rmk"><span class="box-title">Remark (normalisation puts every image on the unit sphere)</span>
 <p>The Gaussian kernel landed every image on the unit sphere for free, because \(K(x, x) = 1\). We can arrange the same thing for any kernel by <em>normalisation</em>: replace \(K\) by</p>
 $$
@@ -351,6 +367,22 @@ $$
 <p>It is worth pausing on what was and was not assumed. We never needed a formula for \(\Psi\); we needed only that the objective sees \(f\) through its \(n\) values at the training points and through its norm, and both of those turned into functions of \(\alpha\) and \(\mathbf{K}\). When the loss is nice enough the finite problem even has a closed form. Take the squared loss \(\ell(y, t) = (y - t)^2\) with regularizer \(\lambda \lVert f \rVert_{\mathcal{H}}^2\): the objective becomes \(\frac{1}{n}\lVert y - \mathbf{K}\alpha \rVert^2 + \lambda\, \alpha^\top \mathbf{K}\alpha\), a convex quadratic in \(\alpha\) whose gradient vanishes at the solution of the linear system \((\mathbf{K} + n\lambda I)\,\alpha = y\). That is kernel ridge regression, the subject of [[ch:kernel-ridge-and-friends|the next chapter]], already dropping out of the recipe.</p>
 
 <p>This problem can usually be solved analytically or by numerical methods; the following chapters work through many examples, kernel ridge regression and the support vector machine chief among them. An infinite-dimensional variational problem has become a finite-dimensional one whose data are exactly the \(n \times n\) Gram matrix: once again, the algorithm touches the data only through pairwise kernel evaluations.</p>
+
+<p>It is worth carrying out the reduction once with numbers, on a kernel small enough that we can also stand outside the RKHS and check the same predictor as a plain inner product in the feature space.</p>
+
+<div class="box ex"><span class="box-title">Example (the representer expansion is a feature-space inner product)</span>
+<div class="wex">
+<div class="wex-setup">Reuse the quadratic kernel \(K(x, y) = \langle x, y \rangle^2\) on \(\mathbb{R}^2\), with feature map \(\Phi(x) = (x_1^2,\ \sqrt{2}\, x_1 x_2,\ x_2^2)\). Take three training points \(x_1 = (1, 0)\), \(x_2 = (0, 1)\), \(x_3 = (1, 1)\) with targets \(y = (1, 2, 3)\), and a fresh test point \(x_\star = (2, 1)\). The minimum-norm interpolant supplied by the representer theorem has the form \(f = \sum_i \alpha_i K(x_i, \cdot)\) with coefficients solving \(\mathbf{K}\alpha = y\). We evaluate \(f(x_\star)\) both as a kernel expansion and as an honest inner product in \(\mathbb{R}^3\).</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Form the Gram matrix.</span> With \(K(x_i, x_j) = \langle x_i, x_j \rangle^2\), the entries are \(\mathbf{K} = \left[\begin{smallmatrix} 1 & 0 & 1 \\ 0 & 1 & 1 \\ 1 & 1 & 4 \end{smallmatrix}\right]\), which has \(\det \mathbf{K} = 2 \ne 0\).</li>
+<li><span class="wex-op">Solve for the weights.</span> The system \(\mathbf{K}\alpha = y = (1, 2, 3)\) gives \(\alpha = (1, 2, 0)\); indeed \(\mathbf{K}\alpha = (1, 2, 3)\) reproduces the targets, so \(f\) interpolates the data.</li>
+<li><span class="wex-op">Evaluate through the kernel (route 1).</span> The kernel row at \(x_\star\) is \(k_\star = \big(K(x_1, x_\star), K(x_2, x_\star), K(x_3, x_\star)\big) = (4, 1, 9)\), so \(f(x_\star) = k_\star^\top \alpha = 4 + 2 + 0 = 6\).</li>
+<li><span class="wex-op">Evaluate through the feature space (route 2).</span> Assemble \(w = \sum_i \alpha_i \Phi(x_i) = 1\cdot(1, 0, 0) + 2\cdot(0, 0, 1) + 0 = (1, 0, 2)\). With \(\Phi(x_\star) = (4,\ 2\sqrt{2},\ 1)\), \(\langle \Phi(x_\star), w \rangle = 4 + 0 + 2 = 6\), the same value.</li>
+<li><span class="wex-op">Check the norm identity.</span> The RKHS norm reads off both ways: \(\alpha^\top \mathbf{K}\alpha = 5\) and \(\lVert w \rVert^2 = 1^2 + 0 + 2^2 = 5\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The predictor \(f = \sum_i \alpha_i K(x_i, \cdot)\) that the representer theorem hands us is nothing but the linear form \(x \mapsto \langle \Phi(x), w \rangle\) with weight vector \(w = \sum_i \alpha_i \Phi(x_i)\) living in the span of the training images: \(f(x_\star) = k_\star^\top \alpha = \langle \Phi(x_\star), w \rangle\) and \(\lVert f \rVert_{\mathcal{H}}^2 = \alpha^\top \mathbf{K}\alpha = \lVert w \rVert^2\). The \(n\) coefficients \(\alpha\) and the feature-space vector \(w\) are two encodings of one function, and the Gram matrix is the dictionary between them.</p>
+</div>
+</div>
 
 <h2 id="a-recipe-for-kernelizing-an-algorithm">A general recipe for kernelizing an algorithm</h2>
 
