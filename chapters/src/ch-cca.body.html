@@ -1,0 +1,108 @@
+<h1>Kernel CCA and Correlation Analysis</h1>
+
+<p class="lead">Often every object comes with two representations at once: an image and its caption, a gene's sequence and its expression profile, an audio clip and its transcript. Canonical correlation analysis looks for a direction in each view so that the two projected signals track each other as closely as possible, extracting the structure the two views share. This chapter kernelizes that search, meets an instructive failure along the way (without regularization the kernelized problem reports perfect correlation on any data), and shows how penalizing rough directions repairs it and ties correlation, covariance, and variance together as one eigen-decomposition family.</p>
+
+<h2 id="kernel-cca">Kernel canonical correlation analysis</h2>
+
+<p>The last method in this chapter relates two views of the same objects rather than analyzing one. Suppose every object comes with two representations: an image and its caption, a gene's sequence and its expression profile, an audio clip and its transcript. Canonical correlation analysis (CCA) looks for a direction in each view such that the two projected signals are maximally correlated, extracting the shared structure between the views.</p>
+
+<h3 id="cca-classical">Classical CCA</h3>
+
+<p>Given two views collected as data matrices \(X \in \mathbb{R}^{n \times p}\), whose rows are \(\mathbf{x}_1^\top, \ldots, \mathbf{x}_n^\top\), and \(Y \in \mathbb{R}^{n \times d}\), whose rows are \(\mathbf{y}_1^\top, \ldots, \mathbf{y}_n^\top\), of the same \(n\) objects (so \(\mathbf{x}_i \in \mathbb{R}^p\) and \(\mathbf{y}_i \in \mathbb{R}^d\) are the two descriptions of object \(i\)), and assuming both views centered, CCA seeks directions \(\mathbf{w}_a \in \mathbb{R}^p\) and \(\mathbf{w}_b \in \mathbb{R}^d\) maximizing the empirical correlation of the projections \(\mathbf{w}_a^\top \mathbf{x}_i\) and \(\mathbf{w}_b^\top \mathbf{y}_i\):</p>
+$$
+\max_{\mathbf{w}_a \in \mathbb{R}^p,\ \mathbf{w}_b \in \mathbb{R}^d} \ \frac{\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \, \mathbf{y}_i^\top \mathbf{w}_b}{\big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_a^\top \mathbf{x}_i \mathbf{x}_i^\top \mathbf{w}_a\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \mathbf{w}_b^\top \mathbf{y}_i \mathbf{y}_i^\top \mathbf{w}_b\big)^{1/2}}.
+$$
+<p>Interpreting the sums as sample covariance and variances, this is the population objective</p>
+$$
+\max_{\mathbf{w}_a, \mathbf{w}_b} \ \frac{\operatorname{cov}(\mathbf{w}_a^\top X, \mathbf{w}_b^\top Y)}{\sqrt{\operatorname{var}(\mathbf{w}_a^\top X)} \, \sqrt{\operatorname{var}(\mathbf{w}_b^\top Y)}},
+$$
+<p>the correlation coefficient between the two one-dimensional projections. In matrix notation the objective is</p>
+$$
+\max_{\mathbf{w}_a, \mathbf{w}_b} \ \frac{\mathbf{w}_a^\top X^\top Y \mathbf{w}_b}{\big(\mathbf{w}_a^\top X^\top X \mathbf{w}_a\big)^{1/2} \big(\mathbf{w}_b^\top Y^\top Y \mathbf{w}_b\big)^{1/2}}.
+$$
+<p>This first optimum gives the first pair of canonical directions; subsequent pairs are found by solving the same problem under the constraint of orthogonality to the directions already found.</p>
+
+<h3 id="cca-eigenproblem">CCA is a generalized eigenvalue problem</h3>
+
+<p>The ratio is invariant to rescaling \(\mathbf{w}_a\) and \(\mathbf{w}_b\), so we may fix the scale by demanding unit projected variance and maximize only the numerator:</p>
+$$
+\max_{\mathbf{w}_a, \mathbf{w}_b} \ \mathbf{w}_a^\top X^\top Y \mathbf{w}_b \quad \text{s.t.} \quad \mathbf{w}_a^\top X^\top X \mathbf{w}_a = 1 \ \text{ and } \ \mathbf{w}_b^\top Y^\top Y \mathbf{w}_b = 1.
+$$
+<p>Introducing multipliers \(\lambda_a, \lambda_b\) for the two constraints, the stationarity conditions of the Lagrangian</p>
+$$
+\min_{\mathbf{w}_a, \mathbf{w}_b} \ -\mathbf{w}_a^\top X^\top Y \mathbf{w}_b + \frac{\lambda_a}{2}\big(\mathbf{w}_a^\top X^\top X \mathbf{w}_a - 1\big) + \frac{\lambda_b}{2}\big(\mathbf{w}_b^\top Y^\top Y \mathbf{w}_b - 1\big)
+$$
+<p>are obtained by setting the gradients to zero:</p>
+$$
+-X^\top Y \mathbf{w}_b + \lambda_a X^\top X \mathbf{w}_a = 0, \qquad -Y^\top X \mathbf{w}_a + \lambda_b Y^\top Y \mathbf{w}_b = 0.
+$$
+<p>Left-multiplying the first by \(\mathbf{w}_a^\top\) and the second by \(\mathbf{w}_b^\top\) and subtracting, the numerator terms cancel and the constraints give \(\lambda_a \mathbf{w}_a^\top X^\top X \mathbf{w}_a = \lambda_b \mathbf{w}_b^\top Y^\top Y \mathbf{w}_b\), hence \(\lambda_a = \lambda_b =: \lambda\). The two stationarity equations then assemble into a single generalized eigenvalue problem:</p>
+$$
+\begin{pmatrix} 0 & X^\top Y \\ Y^\top X & 0 \end{pmatrix} \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix} = \lambda \begin{pmatrix} X^\top X & 0 \\ 0 & Y^\top Y \end{pmatrix} \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix}.
+$$
+<p>Writing \(\Sigma_A = \begin{pmatrix} 0 & X^\top Y \\ Y^\top X & 0 \end{pmatrix}\), \(\Sigma_B = \begin{pmatrix} X^\top X & 0 \\ 0 & Y^\top Y \end{pmatrix}\), and \(\mathbf{w} = \begin{pmatrix} \mathbf{w}_a \\ \mathbf{w}_b \end{pmatrix}\), this is \(\Sigma_A \mathbf{w} = \lambda \Sigma_B \mathbf{w}\). If the block covariances are invertible, multiplying through and substituting \(\mathbf{v} = \Sigma_B^{1/2} \mathbf{w}\) turns it into the ordinary symmetric eigenproblem</p>
+$$
+\Sigma_B^{-1/2} \Sigma_A \Sigma_B^{-1/2} \, \mathbf{v} = \lambda \, \mathbf{v},
+$$
+<p>whose eigenvalues are the canonical correlations and whose eigenvectors, transformed back, give the canonical directions. The derivation follows Section 6.5 of Shawe-Taylor and Cristianini (2004).</p>
+
+<h3 id="kernel-cca-formulation">Kernelizing CCA</h3>
+
+<p>Exactly as with PCA, we can replace each view by an RKHS embedding. Take two p.d. kernels \(K_a, K_b : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\), with embeddings \(\varphi_a : \mathcal{X} \to \mathcal{H}_a\) and \(\varphi_b : \mathcal{X} \to \mathcal{H}_b\), giving two views \((\varphi_a(\mathbf{x}_i))_i\) and \((\varphi_b(\mathbf{x}_i))_i\) of the dataset. We look for directions \(f_a \in \mathcal{H}_a\) and \(f_b \in \mathcal{H}_b\) maximizing</p>
+$$
+\max_{f_a \in \mathcal{H}_a,\ f_b \in \mathcal{H}_b} \ \frac{\frac{1}{n} \sum_{i=1}^n \langle f_a, \varphi_a(\mathbf{x}_i) \rangle_{\mathcal{H}_a} \langle \varphi_b(\mathbf{x}_i), f_b \rangle_{\mathcal{H}_b}}{\big(\frac{1}{n} \sum_{i=1}^n \langle f_a, \varphi_a(\mathbf{x}_i) \rangle_{\mathcal{H}_a}^2\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n \langle f_b, \varphi_b(\mathbf{x}_i) \rangle_{\mathcal{H}_b}^2\big)^{1/2}},
+$$
+<p>and again the reproducing property replaces every inner product by a function evaluation, \(\langle f_a, \varphi_a(\mathbf{x}_i)\rangle_{\mathcal{H}_a} = f_a(\mathbf{x}_i)\), giving</p>
+$$
+\max_{f_a \in \mathcal{H}_a,\ f_b \in \mathcal{H}_b} \ \frac{\frac{1}{n} \sum_{i=1}^n f_a(\mathbf{x}_i) f_b(\mathbf{x}_i)}{\big(\frac{1}{n} \sum_{i=1}^n f_a(\mathbf{x}_i)^2\big)^{1/2} \big(\frac{1}{n} \sum_{i=1}^n f_b(\mathbf{x}_i)^2\big)^{1/2}}.
+$$
+<p>Up to a few technical details (again left as an exercise), the representer theorem applies, and we seek solutions of the form \(f_a(\cdot) = \sum_{i=1}^n \alpha_i K_a(\mathbf{x}_i, \cdot)\) and \(f_b(\cdot) = \sum_{i=1}^n \beta_i K_b(\mathbf{x}_i, \cdot)\). Then \(f_a(\mathbf{x}_i) = [K_a \boldsymbol{\alpha}]_i\) and \(f_b(\mathbf{x}_i) = [K_b \boldsymbol{\beta}]_i\), and the objective becomes finite-dimensional:</p>
+$$
+\max_{\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^n} \ \frac{\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}}{\big(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha}\big)^{1/2} \big(\boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta}\big)^{1/2}}.
+$$
+<p>Removing the scaling ambiguity as before, this is</p>
+$$
+\max_{\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^n} \ \boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta} \quad \text{s.t.} \quad \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1 \ \text{ and } \ \boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta} = 1,
+$$
+<p>which, by the same Lagrangian argument as in the linear case, leads to a generalized eigenvalue problem. Subsequent canonical directions come from the same problem with added orthogonality constraints.</p>
+
+<h3 id="kernel-cca-overfitting">What goes wrong, and why we must regularize</h3>
+
+<p>There is a serious flaw hiding in the kernelized problem. Suppose \(K_a\) and \(K_b\) are invertible, and change variables to \(\boldsymbol{\alpha}' = K_a \boldsymbol{\alpha}\) and \(\boldsymbol{\beta}' = K_b \boldsymbol{\beta}\). The objective and constraints turn into</p>
+$$
+\max_{\boldsymbol{\alpha}', \boldsymbol{\beta}' \in \mathbb{R}^n} \ \boldsymbol{\alpha}'^\top \boldsymbol{\beta}' \quad \text{s.t.} \quad \boldsymbol{\alpha}'^\top \boldsymbol{\alpha}' = 1 \ \text{ and } \ \boldsymbol{\beta}'^\top \boldsymbol{\beta}' = 1.
+$$
+<p>This is maximized, at value \(1\), by any \(\boldsymbol{\alpha}' = \boldsymbol{\beta}'\) on the unit sphere. In other words the maximal correlation is always attainable and the solution is completely undetermined: the method reports perfect correlation between the two views no matter what data it is fed. This is not a numerical accident but the RKHS version of a familiar disease. In high or infinite dimension it is trivially easy to find directions that make any two finite samples look perfectly correlated, precisely the phenomenon of <em>spurious correlations</em> that populate collections like Tyler Vigen's gallery of nonsense coincidences. Unregularized kernel CCA overfits by construction.</p>
+
+<p>It is worth saying plainly where the free lunch comes from. When \(K_a\) is invertible the map \(\boldsymbol{\alpha} \mapsto K_a \boldsymbol{\alpha}\) is a bijection of \(\mathbb{R}^n\), so the vector of projected values \((f_a(\mathbf{x}_1), \ldots, f_a(\mathbf{x}_n))\) can be steered to any pattern we like by choosing \(\boldsymbol{\alpha}\); the same holds for the second view. Two arbitrary patterns can then be matched exactly, which is why the correlation saturates at its maximum of one. The kernel has handed each view as many adjustable directions as there are data points, and with that much freedom the two samples can always be fitted together, whether or not any real dependence links them. Regularization works by making some of those directions expensive: the added \(\lVert f_a \rVert_{\mathcal{H}_a}^2\) term charges for wiggly, high-norm functions, so only shared structure smooth enough to be worth the price survives.</p>
+
+<p>The failure has two faces. It is an overfitting problem, since the fit is perfect for reasons having nothing to do with genuine shared structure, and it is a numerical instability problem, since the derivation needed to invert the kernel matrices, which are typically ill-conditioned. Both are cured by the same remedy: regularize by preferring smooth directions, penalizing the RKHS norms \(\lVert f_a \rVert_{\mathcal{H}_a}\) and \(\lVert f_b \rVert_{\mathcal{H}_b}\). Concretely, recall \(\lVert f_a \rVert_{\mathcal{H}_a}^2 = \boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}\), and replace the constraint \(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1\) by the convex combination</p>
+$$
+(1 - \tau)\, \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau \, \underbrace{\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}}_{\lVert f_a \rVert_{\mathcal{H}_a}^2} = 1,
+$$
+<p>and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau \in [0, 1]\) interpolates between the raw, degenerate problem at \(\tau = 0\) and a pure norm penalty at \(\tau = 1\). The added term makes the constraint matrices strictly positive definite, curing the numerical instability, and it forbids the wild, wiggly directions responsible for spurious correlations, curing the overfitting. Reading the penalty this way, as a preference for directions of small RKHS norm and therefore for smooth, slowly varying functions, is what ties the fix back to the regularization that ran through the supervised chapters: there we penalized \(\lVert f \rVert_{\mathcal{H}}\) to keep a fitted function from chasing noise, and here we do the same to keep a canonical direction from manufacturing correlation. The regularized problem is again a generalized eigenvalue problem, now well posed; this form of kernel CCA, together with its use as a kernel measure of dependence, is due to Bach and Jordan (2002).</p>
+
+<p>Kernel CCA in this regularized form is a practical tool for learning shared representations across modalities. A representative application is finding a joint latent representation of images and their text tags, aligning the visual and textual views of a collection so that the two can be compared or retrieved against each other (Gong and Lazebnik, 2014).</p>
+
+<h3 id="cca-covariance-family">Variance, covariance, and correlation as one family</h3>
+
+<p>It is worth stepping back to see that the unsupervised methods of this chapter are the same construction tuned by a single choice: what we ask of a pair of directions. Shawe-Taylor and Cristianini (2004) organize their whole treatment this way. Given one view, asking for the direction of maximal variance gives PCA, the eigenvectors of the covariance matrix. Given two paired views \(X\) and \(Y\), we can instead ask for a pair of directions \((\mathbf{w}_a, \mathbf{w}_b)\) maximizing the raw covariance of the projections,</p>
+$$
+\max_{\lVert \mathbf{w}_a \rVert = \lVert \mathbf{w}_b \rVert = 1} \ \mathbf{w}_a^\top C_{XY} \mathbf{w}_b, \qquad C_{XY} = \tfrac{1}{n} X^\top Y,
+$$
+<p>whose solution is the leading pair of singular vectors of the cross-covariance matrix \(C_{XY}\), the covariance itself being the top singular value, with subsequent pairs found by deflation. Or we can ask for the directions of maximal correlation, dividing that same covariance by the projected standard deviations, and we are back to CCA and its generalized eigenproblem. Variance is a self-covariance diagonalized, covariance is a cross-term factorized by singular value decomposition, and correlation is covariance normalized by variance; the eigen-decomposition machinery is identical, and only the matrix in the quadratic form changes.</p>
+
+<p>This taxonomy also clarifies what regularization does to kernel CCA. The penalized constraint \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\) does more than restore invertibility: as \(\tau\) runs from \(0\) to \(1\) it slides the objective smoothly from pure correlation toward pure covariance (Shawe-Taylor and Cristianini, 2004). At \(\tau = 0\) we have the degenerate correlation problem that reports a perfect match on any data; as \(\tau\) grows, the projected-variance term is progressively replaced by a plain norm, and in the limit the method rewards directions of large covariance rather than large correlation, which is exactly the well-posed maximal-covariance problem above. The regularizer is thus not an ad hoc patch but a dial between two members of the same family, and a modest \(\tau\) buys the numerical stability and the resistance to spurious correlation that pure correlation lacks.</p>
+
+<div class="box rmk"><span class="box-title">Further reading</span>
+For a book-length treatment of the methods in this chapter, Schölkopf and Smola (2002), <em>Learning with Kernels</em>, develops kernel PCA in its chapter 14 and takes up the related kernel feature-extraction methods in the neighbouring chapters, with the pre-image problem and kernel-PCA denoising worked out in detail. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, covers the same territory from the pattern-analysis viewpoint: its chapters 5 and 6 treat the spectral methods, kernel PCA, and canonical correlation analysis, and Section 6.5 is the source of the generalized-eigenvalue derivation of CCA used above. Both books also situate these unsupervised methods within the wider representer-theorem program that organizes these chapters.
+</div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">proof</span> Show why unregularized kernel CCA saturates at correlation \(1\). Assume \(K_a\) and \(K_b\) are invertible and substitute \(\boldsymbol{\alpha}' = K_a \boldsymbol{\alpha}\), \(\boldsymbol{\beta}' = K_b \boldsymbol{\beta}\) into the finite-dimensional objective \(\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}\) with constraints \(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = 1\) and \(\boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta} = 1\). Show the problem becomes \(\max\, \boldsymbol{\alpha}'^\top \boldsymbol{\beta}'\) subject to \(\lVert\boldsymbol{\alpha}'\rVert = \lVert\boldsymbol{\beta}'\rVert = 1\), whose maximum is \(1\), attained by any \(\boldsymbol{\alpha}' = \boldsymbol{\beta}'\) on the unit sphere. Interpret the result: the map \(\boldsymbol{\alpha} \mapsto K_a\boldsymbol{\alpha}\) being a bijection means the projected values \((f_a(\mathbf{x}_1), \ldots, f_a(\mathbf{x}_n))\) can be steered to any pattern, so any two samples can be matched exactly. Then explain how replacing the constraint by \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\) breaks the degeneracy.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The Cauchy-Schwarz inequality bounds \(\boldsymbol{\alpha}'^\top\boldsymbol{\beta}' \le \lVert\boldsymbol{\alpha}'\rVert\,\lVert\boldsymbol{\beta}'\rVert = 1\), with equality exactly when the two unit vectors coincide. For the regularization step, note that \(\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = \lVert f_a\rVert_{\mathcal{H}_a}^2\) is the RKHS norm of the direction: adding \(\tau \gt 0\) of it makes the constraint matrix strictly positive definite and charges for high-norm, wiggly directions, so the change of variable no longer decouples the problem.</div></details></li>
+
+<li><span class="ex-tag">challenge</span> The chapter argues that variance, covariance, and correlation are one eigen-decomposition family tuned by a single choice. Fill in the family for a pair of centered views \(X, Y\): (a) which matrix's eigenvectors solve the single-view maximal-variance problem (PCA); (b) which matrix's singular vectors solve the maximal-covariance problem \(\max_{\lVert\mathbf{w}_a\rVert = \lVert\mathbf{w}_b\rVert = 1} \mathbf{w}_a^\top C_{XY}\mathbf{w}_b\); and (c) which generalized eigenproblem solves maximal correlation (CCA). Then explain, using the regularized constraint \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\), why sending \(\tau\) from \(0\) to \(1\) slides kernel CCA from pure correlation toward pure covariance, and why a modest \(\tau\) is what buys resistance to spurious correlation.</li>
+</ol>
+</section>

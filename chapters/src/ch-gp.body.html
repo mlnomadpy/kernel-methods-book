@@ -1,0 +1,202 @@
+<h1>Gaussian Processes and the RVM</h1>
+
+<p class="lead">Every method so far has been built by writing down a loss, adding a regularizer, and minimizing. The Bayesian route reaches the same algorithms from the opposite side: it places a probability distribution over functions before any data arrive, then updates that belief with Bayes' rule once the data are in. The payoff is twofold. First, the answer is no longer a single curve but a whole posterior distribution, so every prediction comes with an honest error bar. Second, the regularizer that seemed like a free modelling choice turns into a prior, and the object doing the work is again a kernel, this time read as a covariance. The centerpiece of this chapter is a single identity: the Gaussian process posterior mean is exactly the kernel ridge regression fit of [[ch:kernel-ridge-and-friends|the ridge chapter]], with the noise variance playing the role of the regularization strength. Around that identity we develop marginal-likelihood learning of hyperparameters, Gaussian process classification, and the sparse Bayesian prior behind the Relevance Vector Machine.</p>
+
+<h2 id="bayesian-view">The Bayesian view: a prior over functions</h2>
+
+<p>The framework of risk minimization asks which function best fits the data under a complexity penalty. The Bayesian framework asks a different question: given a prior belief about which functions are plausible, and given a model of how observations are generated from a function, how plausible is each function after we see the data? The two ingredients are a likelihood and a prior, and the machinery that combines them is Bayes' rule. This account follows Schölkopf and Smola (2002) and MacKay (1992).</p>
+
+<p>Suppose we observe inputs \(X=(x_1,\dots,x_m)\) and targets \(Y=(y_1,\dots,y_m)\), and we posit a hypothesis \(f\) together with a model \(P(y\mid x,f(x))\) of how each label is produced from the underlying value \(f(x)\). The prototypical case is additive noise, \(y=f(x)+\xi\), so that \(P(y\mid x, f(x))=P(y-f(x))\). Under the usual independence assumption the likelihood factorizes,
+$$P(Y\mid X,f)=\prod_{i=1}^m P(y_i\mid x_i,f(x_i)).$$
+The likelihood tells us how probable the observed sample is if \(f\) is responsible for it. The prior \(p(f)\) encodes what we believe before seeing data: a preference for smooth functions, for small values, or for a particular correlation structure among the values \(f(x_i)\).</p>
+
+<p>Bayes' rule turns the likelihood around. Since \(p(Y\mid f,X)p(f)=p(f\mid X,Y)\,p(Y)\), and \(p(Y)\) does not depend on \(f\), the posterior over hypotheses is
+$$p(f\mid X,Y)\ \propto\ p(Y\mid f,X)\,p(f).$$
+To predict at a new location \(x\) we integrate the label model against the posterior,
+$$p(y\mid X,Y,x)=\int p(y\mid f,x)\,p(f\mid X,Y)\,df,$$
+which yields not a point estimate but a predictive distribution. When this integral is intractable, a common shortcut is the maximum a posteriori (MAP) estimate, the mode of the posterior,
+$$f_{\mathrm{MAP}}=\arg\min_f\big[-\ln p(Y\mid f,X)-\ln p(f)\big].$$
+Read the two terms: the negative log likelihood is a data-fit term and the negative log prior is a penalty independent of the data. This is precisely the regularized risk functional \(R_{\mathrm{emp}}[f]+\Omega[f]\), with the loss identified as the negative log likelihood and the regularizer as the negative log prior. Squared loss corresponds to Gaussian noise, and a quadratic RKHS penalty corresponds to a Gaussian prior. The correspondence is exact at the level of the mode; the Bayesian side additionally offers the mean and the variance, which risk minimization has no counterpart for.</p>
+
+<h2 id="gaussian-processes">The Gaussian process</h2>
+
+<p>To put a prior on a function we cannot write down a density on an infinite-dimensional space directly. The trick, going back to Neal (1996) and Williams and Rasmussen (1996), is to specify the prior only through the joint distribution of the function values at any finite set of points, and to make that joint distribution Gaussian. A collection of function values that is jointly Gaussian for every finite subset of locations is a Gaussian process.</p>
+
+<div class="box def"><span class="box-title">Definition (Gaussian process)</span>
+<p>A stochastic process \(t(x)\) indexed by \(x\in\mathcal X\) is a <em>Gaussian process</em> if, for every finite set \(x_1,\dots,x_m\in\mathcal X\), the vector \((t(x_1),\dots,t(x_m))\) is normally distributed. It is determined by a mean function \(\mu(x)=\mathbb E[t(x)]\) and a covariance function
+$$k(x,x')=\operatorname{cov}\big(t(x),t(x')\big),\qquad K_{ij}=k(x_i,x_j).$$
+We write \((t(x_1),\dots,t(x_m))\sim\mathcal N(\mu,K)\), and take \(\mu\equiv 0\) unless stated otherwise.</p>
+</div>
+
+<p>The covariance function is not an arbitrary symmetric function. For any coefficients \(c\in\mathbb R^m\) the variance of the linear combination \(\sum_i c_i t(x_i)\) is nonnegative,
+$$0\le\operatorname{Var}\Big(\sum_i c_i t(x_i)\Big)=\sum_{i,j}c_i c_j\operatorname{cov}\big(t(x_i),t(x_j)\big)=c^\top K c,$$
+so \(K\) is positive semidefinite for every choice of points. In other words the covariance function of a Gaussian process is exactly a positive definite kernel in the sense of [[ch:kernels-now|the kernel chapter]], and every Mercer kernel is a legitimate covariance. This is the bridge: choosing a covariance is choosing a kernel, and the smoothness properties the kernel enforces in an RKHS reappear as the correlation structure of the prior. A zero-mean prior on the values \(t=(t(x_1),\dots,t(x_m))\) reads
+$$p(t)=(2\pi)^{-m/2}(\det K)^{-1/2}\exp\!\Big(-\tfrac12 t^\top K^{-1}t\Big),$$
+and \(-\ln p(t)=\tfrac12 t^\top K^{-1}t+\text{const}\) is the same quadratic form that the RKHS regularizer \(\|f\|_{\mathcal H}^2\) produces (Schölkopf and Smola 2002). Kernels favoring slowly varying functions, such as the Gaussian covariance \(k(x,x')=\exp(-\|x-x'\|^2/2\ell^2)\), give priors that assign high probability to smooth realizations, as one sees by expanding \(t\) in the eigenvectors of \(K\): directions with large eigenvalue \(\lambda_i\) are cheap because \(t^\top K^{-1}t\) weights them by \(1/\lambda_i\), so the prior prefers the smooth, large-eigenvalue modes. The link back to [[ch:mercer-and-rates|the Mercer eigen-analysis]] is direct: the spectrum of \(K\) ranks hypotheses by prior plausibility.</p>
+
+<h2 id="gp-regression">Gaussian process regression</h2>
+
+<p>In regression we do not observe the latent function directly. We observe it through additive Gaussian noise, \(y_i=t(x_i)+\xi_i\) with \(\xi_i\sim\mathcal N(0,\sigma^2)\) independent. Because a sum of independent Gaussians is Gaussian, the observed vector \(y\) and any future latent value are jointly Gaussian, and everything we need follows from one fact about Gaussians: conditioning a joint Gaussian on part of its coordinates produces another Gaussian, with closed-form mean and covariance.</p>
+
+<p>Write \(k_*=(k(x_1,x_*),\dots,k(x_m,x_*))^\top\) for the vector of covariances between the training points and a test point \(x_*\), and \(k_{**}=k(x_*,x_*)\). Since \(y_i=t(x_i)+\xi_i\), the training observations have covariance \(K+\sigma^2 I\), while the latent test value \(f_*=t(x_*)\) has covariance \(k_*\) with the training values and variance \(k_{**}\) with itself. The joint law is
+$$\begin{pmatrix} y\\ f_*\end{pmatrix}\sim\mathcal N\!\left(0,\ \begin{pmatrix} K+\sigma^2 I & k_*\\ k_*^\top & k_{**}\end{pmatrix}\right).$$
+The Gaussian conditioning formula, that \((a\mid b)\) has mean \(\Sigma_{ab}\Sigma_{bb}^{-1}b\) and covariance \(\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}\), gives the predictive distribution of \(f_*\) given the data at once.</p>
+
+<div class="box thm"><span class="box-title">Theorem (GP predictive equations)</span>
+<p>Under a zero-mean Gaussian process prior with covariance \(k\) and additive Gaussian noise of variance \(\sigma^2\), the posterior over the latent value at a test point \(x_*\) is Gaussian, \(f_*\mid X,Y,x_*\sim\mathcal N(\bar m(x_*),v(x_*))\), with
+$$\bar m(x_*)=k_*^\top (K+\sigma^2 I)^{-1}y,\qquad v(x_*)=k_{**}-k_*^\top (K+\sigma^2 I)^{-1}k_*.$$
+The predictive distribution of a noisy observation \(y_*\) adds \(\sigma^2\) to \(v(x_*)\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Apply the conditioning identity with \(a=f_*\) and \(b=y\), reading the blocks off the joint covariance: \(\Sigma_{bb}=K+\sigma^2 I\), \(\Sigma_{ab}=k_*^\top\), \(\Sigma_{aa}=k_{**}\). The conditional mean is \(\Sigma_{ab}\Sigma_{bb}^{-1}b=k_*^\top(K+\sigma^2 I)^{-1}y\) and the conditional variance is \(\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}=k_{**}-k_*^\top(K+\sigma^2 I)^{-1}k_*\). For a noisy observation \(y_*=f_*+\xi_*\) with independent \(\xi_*\sim\mathcal N(0,\sigma^2)\), the variance of \(f_*\) and \(\xi_*\) add, giving \(v(x_*)+\sigma^2\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>Three features of these equations deserve emphasis. The mean is a linear combination of kernel functions centered at the training points, \(\bar m(x_*)=\sum_i \alpha_i k(x_i,x_*)\) with \(\alpha=(K+\sigma^2 I)^{-1}y\), so the posterior mean lives in the span of the training kernels exactly as the representer theorem predicts. The variance does not depend on the observed targets \(y\) at all, only on where the data were taken: it shrinks near training points and grows in the gaps, which is what a principled error bar should do. And the noise variance \(\sigma^2\) is added to the diagonal of \(K\), which is what keeps the inverse well conditioned. Rasmussen and Williams (2006) is the standard reference for this development.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (GP regression)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> Training data \(X,y\); covariance function \(k\) with hyperparameters \(\theta\); noise variance \(\sigma^2\); test point \(x_*\).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> Predictive mean \(\bar m(x_*)\), variance \(v(x_*)\), and (optionally) a hyperparameter gradient step.</p>
+</div>
+<ol class="algo-steps">
+<li>Form the Gram matrix \(K\) with \(K_{ij}=k(x_i,x_j)\) and set \(A=K+\sigma^2 I\).</li>
+<li>Compute the Cholesky factor \(A=LL^\top\) (numerically stabler than inverting \(A\)).</li>
+<li>Solve \(A\alpha=y\) by two triangular solves against \(L\).</li>
+<li>Form \(k_*=(k(x_1,x_*),\dots,k(x_m,x_*))^\top\); return \(\bar m(x_*)=k_*^\top\alpha\).</li>
+<li>Solve \(Lw=k_*\); return \(v(x_*)=k(x_*,x_*)-w^\top w\).</li>
+<li class="algo-loop">To learn hyperparameters, compute the log marginal likelihood \(\mathcal L(\theta,\sigma^2)\) and its gradient \(\partial\mathcal L/\partial\theta_j=\tfrac12\,y^\top A^{-1}(\partial A/\partial\theta_j)A^{-1}y-\tfrac12\operatorname{tr}\!\big(A^{-1}\partial A/\partial\theta_j\big)\), take a gradient-ascent step, and repeat from step 1.</li>
+</ol>
+</div>
+
+<div class="box ex"><span class="box-title">Example (GP posterior on three points)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Training inputs \(x=(0,1,2)\), targets \(y=(1,\ 0.5,\ -0.5)\), Gaussian kernel \(k(x,x')=e^{-(x-x')^2/2}\) (length scale \(\ell=1\)), noise variance \(\sigma^2=0.1\). Predict at \(x_*=0.5\). All numbers from <code>checks/ch-gp-ex1.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Form the Gram matrix.</span> With \(e^{-1/2}=0.6065\) and \(e^{-2}=0.1353\),
+$$K=\begin{pmatrix}1&0.6065&0.1353\\0.6065&1&0.6065\\0.1353&0.6065&1\end{pmatrix},\qquad A=K+0.1\,I.$$</li>
+<li><span class="wex-op">Solve for the coefficients.</span> \(\alpha=A^{-1}y=(0.7321,\ 0.5046,\ -0.8228)\).</li>
+<li><span class="wex-op">Evaluate the test covariances.</span> \(k_*=(e^{-1/8},e^{-1/8},e^{-9/8})=(0.8825,\ 0.8825,\ 0.3247)\).</li>
+<li><span class="wex-op">Read off the mean.</span> \(\bar m(x_*)=k_*^\top\alpha=0.8242\).</li>
+<li><span class="wex-op">Read off the variance.</span> \(v(x_*)=k_{**}-k_*^\top A^{-1}k_*=1-0.9176=0.0824\), so the posterior standard deviation is \(0.287\).</li>
+<li><span class="wex-op">Score the fit.</span> The log marginal likelihood is \(-\tfrac12 y^\top A^{-1}y-\tfrac12\ln\det A-\tfrac{3}{2}\ln 2\pi=-3.2002\), using \(y^\top A^{-1}y=1.3958\) and \(\ln\det A=-0.509\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The prediction at \(x_*=0.5\) is \(0.82\pm0.29\). The error bar is tight here because \(x_*\) sits close to two training points; it would widen in a region with no data, since the variance ignores \(y\) and tracks only the geometry of the inputs.</p>
+</div>
+</div>
+
+<h2 id="krr-gp">Kernel ridge regression is the GP posterior mean</h2>
+
+<p>The coefficient vector \(\alpha=(K+\sigma^2 I)^{-1}y\) should look familiar. In [[ch:kernel-ridge-and-friends|the ridge chapter]] the kernel ridge solution was \(\alpha=(K+\lambda n I)^{-1}y\), where \(n\) is the number of training points and \(\lambda\) the regularization strength, and the fitted function was \(\hat f(x_*)=\sum_i\alpha_i k(x_i,x_*)=k_*^\top\alpha\). The GP posterior mean is the identical expression with \(\sigma^2\) in place of \(\lambda n\). This is not a coincidence; it is the MAP-equals-mean phenomenon made concrete.</p>
+
+<div class="box prop"><span class="box-title">Proposition (KRR / GP correspondence)</span>
+<p>Kernel ridge regression with regularization parameter \(\lambda\) on \(n\) points produces the same predictor as the Gaussian process posterior mean with noise variance
+$$\sigma^2=\lambda n.$$
+Concretely, \(\hat f_{\mathrm{KRR}}(x_*)=k_*^\top(K+\lambda n I)^{-1}y=k_*^\top(K+\sigma^2 I)^{-1}y=\bar m(x_*)\) for every \(x_*\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>With additive Gaussian noise the negative log posterior in coefficient space is, up to constants,
+$$-\ln p(t\mid y)=\frac{1}{2\sigma^2}\|y-K\alpha\|^2+\frac12\alpha^\top K\alpha,$$
+writing \(t=K\alpha\). This is the regularized least-squares objective whose stationarity condition is \(K[(K+\sigma^2 I)\alpha-y]=0\), solved by \(\alpha=(K+\sigma^2 I)^{-1}y\). The ridge objective \(\tfrac1n\|K\alpha-y\|^2+\lambda\,\alpha^\top K\alpha\) has stationarity condition \(K[(K+\lambda n I)\alpha-y]=0\), solved by \(\alpha=(K+\lambda n I)^{-1}y\). The two coincide iff \(\sigma^2=\lambda n\), and since the predictor is \(k_*^\top\alpha\) in both cases, the functions agree everywhere. Because the noise is Gaussian the posterior is Gaussian, so its mode and mean coincide, which is why the MAP fit (ridge) equals the posterior mean (GP). <span class="qed">\(\square\)</span></p>
+</div>
+
+<div class="box ex"><span class="box-title">Example (the two fits agree)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Same kernel \(k(x,x')=e^{-(x-x')^2/2}\) on \(x=(0,1,2)\), now with \(y=(1,0,-1)\). Ridge parameter \(\lambda=0.05\), \(n=3\), so \(\lambda n=0.15\); set the GP noise variance to the matched value \(\sigma^2=0.15\). Numbers from <code>checks/ch-gp-ex2.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Solve the ridge system.</span> \(\alpha_{\mathrm{KRR}}=(K+0.15\,I)^{-1}y=(0.9855,\ 0,\ -0.9855)\). The middle coefficient vanishes because both \(y\) and the geometry are antisymmetric about \(x=1\).</li>
+<li><span class="wex-op">Solve the GP system.</span> \(\alpha_{\mathrm{GP}}=(K+0.15\,I)^{-1}y=(0.9855,\ 0,\ -0.9855)\); the maximum coefficient difference is exactly \(0\).</li>
+<li><span class="wex-op">Predict at two test points.</span> At \(x_*=0.5\): \(\hat f_{\mathrm{KRR}}=\bar m=0.549782\). At \(x_*=1.5\): \(\hat f_{\mathrm{KRR}}=\bar m=-0.549782\). The differences are \(0\) to machine precision.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The two algorithms, derived from a loss-plus-penalty on one side and from Bayes' rule on the other, return the same numbers to the last digit. The Gaussian process adds only what ridge cannot supply: a variance at each test point.</p>
+</div>
+</div>
+
+<h2 id="marginal-likelihood">The marginal likelihood and hyperparameter learning</h2>
+
+<p>A kernel comes with knobs: the length scale of a Gaussian covariance, the noise level \(\sigma^2\), an overall amplitude. In risk minimization these are set by cross-validation. The Bayesian framework offers an internal alternative. Collect the hyperparameters into \(\theta\) and integrate the latent function out of the joint distribution; because the prior on \(t\) is Gaussian and the noise is Gaussian, the marginal distribution of the data is Gaussian too, \(y\mid\theta\sim\mathcal N(0,\,K_\theta+\sigma^2 I)\). Its density, viewed as a function of \(\theta\), is the marginal likelihood, or evidence, and maximizing it is the type-II maximum likelihood estimate (MacKay 1992).</p>
+
+<div class="box def"><span class="box-title">Definition (log marginal likelihood)</span>
+<p>With \(A=K_\theta+\sigma^2 I\), the log marginal likelihood is
+$$\mathcal L(\theta)=\ln p(y\mid X,\theta)=-\frac12\,y^\top A^{-1}y-\frac12\ln\det A-\frac{n}{2}\ln(2\pi).$$
+</p>
+</div>
+
+<p>The three terms tell the whole story of why this works. The quadratic term \(-\tfrac12 y^\top A^{-1}y\) rewards fitting the data. The log-determinant term \(-\tfrac12\ln\det A\) is a complexity penalty: a flexible covariance that could explain almost anything has a large determinant and is charged for it. Maximizing their sum trades fit against complexity automatically, an instance of Occam's razor built into the arithmetic, with no held-out set required. Differentiating with respect to a hyperparameter \(\theta_j\) gives, by the standard identities \(\partial\ln\det A=\operatorname{tr}(A^{-1}\partial A)\) and \(\partial A^{-1}=-A^{-1}(\partial A)A^{-1}\),
+$$\frac{\partial\mathcal L}{\partial\theta_j}=\frac12\,y^\top A^{-1}\frac{\partial A}{\partial\theta_j}A^{-1}y-\frac12\operatorname{tr}\!\Big(A^{-1}\frac{\partial A}{\partial\theta_j}\Big),$$
+which is the gradient step in the GP regression algorithm above. Gradient ascent or a Newton method then finds a (local) evidence maximum. The cost is dominated by the \(O(n^3)\) factorization of \(A\), which is why scalable approximations, sparse and low-rank, are the subject of [[ch:large-scale-kernels|the large-scale chapter]].</p>
+
+<p>A refinement of this idea is automatic relevance determination. Give each input dimension its own length scale, \(k(x,x')=\exp\!\big(-\sum_{d}(x_d-x'_d)^2/2\ell_d^2\big)\), and let the evidence choose them. A dimension that is irrelevant to the target drives its \(1/\ell_d^2\) toward zero, effectively removing that input. The same principle, applied not to input dimensions but to basis functions, is what makes the Relevance Vector Machine sparse.</p>
+
+<h2 id="gp-classification">Gaussian process classification</h2>
+
+<p>For classification the target is a label \(y\in\{-1,+1\}\), and the additive-Gaussian story breaks: a Gaussian latent value cannot be a Bernoulli label. We keep the Gaussian process prior on a latent function \(t(x)\) but squash it through a non-Gaussian link, typically the logistic \(P(y=1\mid t)=\sigma(t)=(1+e^{-t})^{-1}\) or the probit \(P(y=1\mid t)=\Phi(t)\). The posterior over the latent values is now
+$$p(t\mid X,Y)\ \propto\ \Big[\prod_{i=1}^m p(y_i\mid t(x_i))\Big]\exp\!\Big(-\tfrac12 t^\top K^{-1}t\Big),$$
+which is no longer Gaussian, and the predictive integral has no closed form. Two approximations dominate.</p>
+
+<p>The <em>Laplace approximation</em> (Williams and Rasmussen 1996) fits a Gaussian to the posterior at its mode. Writing the negative log posterior as \(\Psi(t)=-\sum_i\ln p(y_i\mid t(x_i))+\tfrac12 t^\top K^{-1}t\), one finds the mode by Newton's method: with \(c\) the gradient of the log likelihood and \(C=-\nabla^2\ln p(y\mid t)\) its (diagonal) negative Hessian, the update is
+$$t_{\mathrm{new}}=(K^{-1}+C)^{-1}(C\,t_{\mathrm{old}}+c),$$
+equivalent in coefficient form to \(\alpha_{\mathrm{new}}=(KC+I)^{-1}(KC\,\alpha_{\mathrm{old}}+c)\). The curvature \(C\) at the mode then supplies the covariance of the Gaussian approximation, from which predictive probabilities follow. Because the logistic likelihood is log-concave, \(\Psi\) is convex and the mode is unique. A second option replaces the intractable posterior with the best matching Gaussian in a moment-matching sense rather than a curvature sense; expectation propagation is the standard such scheme, and it is generally more accurate than Laplace for the probit link, at comparable cost. A variational method of Jaakkola and Jordan, which sandwiches the logistic between tractable quadratic bounds, is a third route (Schölkopf and Smola 2002). In every case the approximation reduces classification to a sequence of the same linear-algebra operations that regression required, an \(n\times n\) solve per iteration.</p>
+
+<h2 id="laplacian-rvm">Sparse Bayesian priors and the Relevance Vector Machine</h2>
+
+<p>The Gaussian process prior spreads its belief smoothly, and its posterior mean uses every training point: \(\alpha=(K+\sigma^2 I)^{-1}y\) is generically dense. Sometimes we want the opposite, a prediction supported on a handful of basis functions. Sparsity is a statement about the prior, and there are two ways to build it in.</p>
+
+<p>The first keeps a single prior and changes its shape. A <em>Laplacian process</em> (Schölkopf and Smola 2002) places an independent Laplace prior on the expansion coefficients of \(f(x)=\sum_i\alpha_i k(x_i,x)\), so that \(-\ln p(\alpha)\propto\sum_i|\alpha_i|\). The MAP estimate then minimizes a data-fit term plus an \(\ell_1\) penalty, a linear or quadratic program whose solutions are genuinely sparse, in the spirit of basis pursuit and the LASSO. Because the prior depends on the data locations through the kernel expansion it is a data-dependent prior, a mild departure from the textbook Bayesian setup, but a fruitful one: it imports \(\ell_1\) sparsity into the kernel world while retaining error bars.</p>
+
+<p>The second way, and the one we develop in detail, is the Relevance Vector Machine of Tipping (2001). Rather than fix the prior variance of the coefficients, give every coefficient its own variance, controlled by its own hyperparameter, and let the evidence decide which variances to shrink to zero.</p>
+
+<div class="box def"><span class="box-title">Definition (RVM prior)</span>
+<p>Model the target as \(t=K\alpha\) with independent Gaussian noise of variance \(\sigma^2\). Place on each coefficient an independent zero-mean Gaussian prior with its own precision \(s_i\gt 0\),
+$$p(\alpha_i\mid s_i)=\sqrt{\tfrac{s_i}{2\pi}}\,\exp\!\Big(-\tfrac12 s_i\alpha_i^2\Big),\qquad p(\alpha\mid s)=\mathcal N(0,\,S^{-1}),\ \ S=\operatorname{diag}(s_1,\dots,s_m),$$
+with a flat hyperprior on \(\ln s_i\) (or a broad Gamma prior). Each \(s_i\) is an automatic relevance determination hyperparameter for one basis function.</p>
+</div>
+
+<p>The precision \(s_i\) is the inverse prior variance of \(\alpha_i\): a large \(s_i\) means \(\alpha_i\) is pinned tightly to zero, a small \(s_i\) lets it roam. With the noise variance \(\sigma^2\) and Gaussian prior fixed, the posterior over \(\alpha\) is Gaussian with covariance and mean
+$$\Sigma=\big(\sigma^{-2}K^\top K+S\big)^{-1},\qquad \mu=\sigma^{-2}\Sigma K^\top y.$$
+Learning the \(s_i\) proceeds by type-II maximum likelihood, exactly as for GP hyperparameters: the coefficients are integrated out to give the marginal likelihood \(p(y\mid s,\sigma^2)=\mathcal N(0,\ \sigma^2 I+K S^{-1}K^\top)\), which is then maximized over \(s\) and \(\sigma^2\). Setting derivatives to zero yields fixed-point updates.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (RVM update)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> Design matrix \(K\) (\(K_{ij}=k(x_i,x_j)\)), targets \(y\); initial precisions \(s\), noise \(\sigma^2\).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> Sparse mean coefficients \(\mu\); most \(\mu_i=0\).</p>
+</div>
+<ol class="algo-steps">
+<li>Form the posterior covariance \(\Sigma=(\sigma^{-2}K^\top K+S)^{-1}\) and mean \(\mu=\sigma^{-2}\Sigma K^\top y\).</li>
+<li>For each \(i\), compute the well-determinedness \(\gamma_i=1-s_i\Sigma_{ii}\in[0,1]\).</li>
+<li>Update each precision \(s_i\leftarrow\dfrac{\gamma_i}{\mu_i^2}=\dfrac{1-s_i\Sigma_{ii}}{\mu_i^2}\).</li>
+<li>Update the noise \(\sigma^2\leftarrow\dfrac{\|y-K\mu\|^2}{m-\sum_i\gamma_i}\).</li>
+<li class="algo-loop">Whenever \(s_i\to\infty\) (numerically, exceeds a large threshold), prune basis \(i\): delete its row and column and continue. Repeat from step 1 until \(\mu\) stabilizes.</li>
+</ol>
+</div>
+
+<p>Why does this produce sparsity? The update \(s_i\leftarrow(1-s_i\Sigma_{ii})/\mu_i^2\) is the mechanism. If a basis function contributes little to explaining \(y\), its posterior mean \(\mu_i\) is small while its posterior variance \(\Sigma_{ii}\) stays near the prior variance \(1/s_i\), so \(\gamma_i=1-s_i\Sigma_{ii}\) is near zero and the numerator collapses faster than the denominator: \(s_i\) is driven upward, which shrinks \(\mu_i\) further, which pushes \(s_i\) higher still. The feedback runs away, \(s_i\to\infty\), the prior variance \(1/s_i\to 0\), and \(\alpha_i\) is clamped exactly at zero and removed. Only the basis functions the data genuinely demand survive; Tipping (2001) calls the survivors the relevance vectors. An equivalent view integrates the hyperparameter out: with a Gamma hyperprior, \(\int p(\alpha_i\mid s_i)p(s_i)\,ds_i\) is a Student-\(t\) distribution over \(\alpha_i\), sharply peaked at zero with heavy tails, and a MAP estimate under such a prior naturally sends most coefficients to zero while letting a few grow large. The effect is like the support vectors of an SVM, but the retained points need not lie near the decision boundary, and the solution is typically far sparser. In the large-sample limit the RVM converges to a Gaussian process with a data-dependent covariance, closing the loop with the start of the chapter (Schölkopf and Smola 2002).</p>
+
+<p>The price of this elegance is that the marginal likelihood over the \(s_i\) is highly multimodal, so the fixed-point iteration finds a local optimum and the training is heavier than an SVM's on large data. The reward is a probabilistic, extremely sparse predictor that still carries the full apparatus of Bayesian error bars, and whose predictive mean and variance,
+$$\bar y(x_*)=k_*^\top\mu,\qquad v(x_*)=\sigma^2+k_*^\top\Sigma k_*,$$
+mirror the Gaussian process formulas of the regression section, now built on only the relevance vectors.</p>
+
+<h2 id="exercises">Exercises</h2>
+
+<ol>
+<li><strong>(Conditioning a bivariate normal.)</strong> Let \((f_1,f_2)\) be zero-mean Gaussian with covariance \(K=\begin{pmatrix}1&0.75\\0.75&1\end{pmatrix}\). Compute the conditional mean and variance of \(f_2\) given \(f_1=1\). Verify that observing \(f_1\) reduces the variance of \(f_2\) from \(1\) to \(1-0.75^2\).</li>
+
+<li><strong>(Noise-free limit.)</strong> Show that as \(\sigma^2\to 0\) the GP posterior mean interpolates the data exactly, \(\bar m(x_i)=y_i\) for every training point, and that \(v(x_i)\to 0\) there. Why does this make \(\sigma^2\) the analogue of the ridge parameter \(\lambda n\)?</li>
+
+<li><strong>(KRR equals GP, symbolically.)</strong> Starting from the ridge objective \(\tfrac1n\|K\alpha-y\|^2+\lambda\alpha^\top K\alpha\), derive the normal equations and confirm the solution \(\alpha=(K+\lambda n I)^{-1}y\). State precisely why the GP posterior mean coincides with this fit but the GP additionally yields a variance. <em>Hint: identify the loss with the negative log Gaussian likelihood and the penalty with the negative log Gaussian prior.</em></li>
+
+<li><strong>(Marginal-likelihood gradient.)</strong> With \(A=K_\theta+\sigma^2 I\), verify the identities \(\partial\ln\det A=\operatorname{tr}(A^{-1}\partial A)\) and \(\partial A^{-1}=-A^{-1}(\partial A)A^{-1}\), and use them to derive \(\partial\mathcal L/\partial\theta_j\). Then specialize to \(\theta_j=\sigma^2\), where \(\partial A/\partial\sigma^2=I\). <em>Hint: for the determinant identity differentiate \(\ln\det A=\operatorname{tr}\ln A\).</em></li>
+
+<li><strong>(Occam factor.)</strong> Take a Gaussian covariance with amplitude \(a\) and length scale \(\ell\), so \(K_\theta=a\,K_1(\ell)\). Explain qualitatively how the two terms of \(\mathcal L\) move as \(\ell\) shrinks toward zero (a very flexible prior) and as \(\ell\) grows large (a very rigid one), and argue that the maximizer sits between the extremes. <em>Difficulty: medium.</em></li>
+
+<li><strong>(RVM fixed point.)</strong> Show that the update \(s_i\leftarrow(1-s_i\Sigma_{ii})/\mu_i^2\) has \(s_i=\infty\), \(\mu_i=0\) as a fixed point, and argue that a basis function with small posterior mean and near-prior posterior variance is attracted to it. Interpret \(\gamma_i=1-s_i\Sigma_{ii}\) as the number of well-determined parameters contributed by basis \(i\). <em>Difficulty: hard. Hint: track how \(\gamma_i\to 0\) and \(\mu_i\to 0\) reinforce each other across iterations.</em></li>
+
+<li><strong>(Laplace vs. Gaussian prior.)</strong> Contrast the MAP estimate under a Gaussian coefficient prior (\(-\ln p\propto\sum_i\alpha_i^2\)) with that under a Laplace prior (\(-\ln p\propto\sum_i|\alpha_i|\)). Explain why only the second yields exactly-zero coefficients, using the shape of the penalty near the origin. <em>Difficulty: medium.</em></li>
+
+<li><strong>(GP classification curvature.)</strong> For the logistic likelihood \(p(y\mid t)=\sigma(yt)\), compute \(c_i=\partial_{t_i}\ln p(y_i\mid t_i)\) and \(C_{ii}=-\partial_{t_i}^2\ln p(y_i\mid t_i)\), and confirm \(0\lt C_{ii}\le\tfrac14\). Explain why log-concavity guarantees the Laplace-approximation mode is unique. <em>Difficulty: hard. Hint: \(\sigma'=\sigma(1-\sigma)\).</em></li>
+</ol>

@@ -106,6 +106,20 @@ k_n(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\l
 $$
 </div>
 
+<p>The theorem is not merely asserted here; both low-order cases can be derived by hand from a two-dimensional Gaussian integral, and it is worth doing so once, because the same integral is the engine of the depth recursion below.</p>
+
+<div class="box proof"><span class="box-title">Proof (arc-cosine \(k_0\) and \(k_1\))</span>
+<p>Both kernels are expectations over \(\mathbf{w} \sim \mathcal{N}(0, I)\) of a product of activations, and both depend on the inputs only through their norms and the angle \(\theta\), so fix the plane spanned by \(\mathbf{x}\) and \(\mathbf{y}\) and integrate the in-plane part of \(\mathbf{w}\) there. Write it in polar form, radius \(r\) with density \(r\,e^{-r^2/2}\) on \([0, \infty)\) and angle \(\varphi\) uniform on \([0, 2\pi)\), independent. Aligning \(\mathbf{x}\) with \(\varphi = 0\) and placing \(\mathbf{y}\) at angle \(\theta\),</p>
+$$ \mathbf{w}^\top \mathbf{x} = r\lVert\mathbf{x}\rVert\cos\varphi, \qquad \mathbf{w}^\top \mathbf{y} = r\lVert\mathbf{y}\rVert\cos(\varphi - \theta). $$
+<p>For degree zero, \(\sigma(u) = \sqrt{2}\,\Theta(u)\) with \(\Theta\) the Heaviside step, so the product \(\sigma(\mathbf{w}^\top\mathbf{x})\,\sigma(\mathbf{w}^\top\mathbf{y})\) equals \(2\) when both cosines are positive and \(0\) otherwise. Both are positive exactly for \(\varphi \in (\theta - \tfrac{\pi}{2}, \tfrac{\pi}{2})\), an arc of length \(\pi - \theta\), so with \(\varphi\) uniform</p>
+$$ k_0(\mathbf{x}, \mathbf{y}) = 2\,\mathbb{P}\!\left(\cos\varphi \gt 0,\ \cos(\varphi - \theta) \gt 0\right) = 2\cdot\frac{\pi - \theta}{2\pi} = \frac{\pi - \theta}{\pi} = \frac{J_0(\theta)}{\pi}. $$
+<p>For degree one, \(\sigma(u) = \sqrt{2}\,\max(0, u)\), and the radius and angle separate,</p>
+$$ k_1(\mathbf{x}, \mathbf{y}) = 2\,\mathbb{E}[r^2]\,\lVert\mathbf{x}\rVert\,\lVert\mathbf{y}\rVert \cdot \frac{1}{2\pi}\int_{\theta - \pi/2}^{\pi/2} \cos\varphi\,\cos(\varphi - \theta)\,d\varphi. $$
+<p>The radial moment is \(\mathbb{E}[r^2] = \int_0^\infty r^2\cdot r\,e^{-r^2/2}\,dr = 2\). Using \(\cos\varphi\cos(\varphi-\theta) = \tfrac{1}{2}[\cos\theta + \cos(2\varphi - \theta)]\), the angular integral over the arc of length \(\pi - \theta\) equals \(\tfrac{1}{2}\big[\sin\theta + (\pi - \theta)\cos\theta\big] = \tfrac{1}{2}J_1(\theta)\). Collecting the constants \(2\cdot 2\cdot\tfrac{1}{2\pi}\cdot\tfrac{1}{2} = \tfrac{1}{\pi}\),</p>
+$$ k_1(\mathbf{x}, \mathbf{y}) = \frac{\lVert\mathbf{x}\rVert\,\lVert\mathbf{y}\rVert}{\pi}\,J_1(\theta), $$
+<p>which on the unit sphere is \(k_1 = J_1(\theta)/\pi\). The same polar reduction with \(\sigma(u) = \sqrt{2}\,u^n\) for \(u \gt 0\) yields \(J_n\) for every \(n\). <span class="qed">\(\square\)</span></p>
+</div>
+
 <p>The case \(n = 1\) is the one to remember, because there the rectified power is proportional to the rectified linear unit and</p>
 $$
 k_1(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w} \sim \mathcal{N}(0, I)}\!\left[ \operatorname{ReLU}(\mathbf{w}^\top \mathbf{x}) \, \operatorname{ReLU}(\mathbf{w}^\top \mathbf{y}) \right].
@@ -113,6 +127,48 @@ $$
 <p>A layer of infinitely many random ReLU neurons computes, in expectation, the degree-1 arc-cosine kernel. This identity is one of the fundamental tools for analyzing ReLU networks, and it makes the arc-cosine kernel the canonical dot-product kernel of the deep-learning era.</p>
 
 <p>There is a vivid geometric reading behind these formulas. Draw a random hyperplane through the origin with normal \(\mathbf{w} \sim \mathcal{N}(0, I)\). The degree-0 arc-cosine kernel measures the probability that \(\mathbf{x}\) and \(\mathbf{y}\) land on the same side of it, and this depends only on the angle \(\theta\) between them: the closer their directions, the fewer random hyperplanes fall between them, and indeed \(J_0(\theta) = \pi - \theta\) decreases linearly as the angle opens from \(0\) to \(\pi\). Raising the degree to \(n = 1\) keeps this same counting of sign agreements but weights each agreement by how strongly both points activate the neuron, which is exactly what a random ReLU unit does. The angle, not the raw coordinates, is the only thing these kernels ever see, matching the invariance a rectified neuron has to rotations of its weight vector and giving a concrete geometric meaning to what it means to embed data by a random layer.</p>
+
+<h3 id="nngp-recursion">The deep limit: the NNGP covariance recursion</h3>
+
+<p>Neal's argument was for a single hidden layer, but the same central-limit mechanism applies at every layer of a deep network, and this is what turns one random-feature kernel into a recursion on depth (Lee et al., 2018; Matthews et al., 2018). Consider a fully connected network whose pre-activations at layer \(\ell\) are \(h^{(\ell)}\), with weights drawn as \(\mathcal{N}(0, \sigma_w^2/n_{\ell-1})\) and biases as \(\mathcal{N}(0, \sigma_b^2)\). As each hidden width runs to infinity, the pre-activations at layer \(\ell\), evaluated at any finite set of inputs, become jointly Gaussian, and their covariance is propagated from the layer below by a single scalar rule.</p>
+
+<div class="box prop"><span class="box-title">Proposition (NNGP covariance recursion)</span>
+The infinite-width pre-activation covariance obeys \(K^{(0)}(\mathbf{x}, \mathbf{y}) = \sigma_w^2\,\dfrac{\mathbf{x}^\top\mathbf{y}}{n_0} + \sigma_b^2\) and, for \(\ell \geq 1\),
+$$ K^{(\ell)}(\mathbf{x}, \mathbf{y}) = \sigma_b^2 + \sigma_w^2\, \mathbb{E}_{(u,v)\sim\mathcal{N}(0,\, \Lambda^{(\ell-1)})}\!\left[\phi(u)\,\phi(v)\right], \qquad \Lambda^{(\ell-1)} = \begin{pmatrix} K^{(\ell-1)}(\mathbf{x},\mathbf{x}) & K^{(\ell-1)}(\mathbf{x},\mathbf{y}) \\ K^{(\ell-1)}(\mathbf{x},\mathbf{y}) & K^{(\ell-1)}(\mathbf{y},\mathbf{y}) \end{pmatrix}. $$
+The map \(K^{(\ell-1)} \mapsto K^{(\ell)}\) depends on the previous kernel only through the three covariances in \(\Lambda^{(\ell-1)}\), and the expectation it applies is the <em>dual activation</em> of \(\phi\).
+</div>
+
+<p>The recursion is Neal's central-limit argument repeated layer by layer. Condition on layer \(\ell - 1\): its outputs \(\phi(h^{(\ell-1)}(\mathbf{x}))\) are fixed vectors, and a unit at layer \(\ell\) forms \(h_i^{(\ell)}(\mathbf{x}) = \sum_j W_{ij}\,\phi(h_j^{(\ell-1)}(\mathbf{x})) + b_i\), a sum of many independent zero-mean terms, hence Gaussian as \(n_{\ell-1} \to \infty\). Its covariance across two inputs is \(\sigma_w^2\) times the empirical average of \(\phi(h_j(\mathbf{x}))\,\phi(h_j(\mathbf{y}))\) over units \(j\), which by the law of large numbers converges to the expectation under the layer's own Gaussian law \(\mathcal{N}(0, \Lambda^{(\ell-1)})\), plus the bias variance. Because each layer hands the next one a Gaussian law, the argument iterates, and the covariance is carried through the whole network by the dual activation alone.</p>
+
+<p>For the ReLU \(\phi = \max(0, \cdot)\), the dual-activation expectation is exactly the arc-cosine kernel \(k_1\) derived above, so the NNGP recursion is nothing but the arc-cosine composition of the opening section. On normalized inputs, where each layer is rescaled to keep \(K^{(\ell)}(\mathbf{x}, \mathbf{x}) = 1\), it collapses to a one-dimensional map on the correlation \(c = K(\mathbf{x}, \mathbf{y})\),</p>
+$$ c^{(\ell)} = \frac{1}{\pi}\Big(\sqrt{1 - (c^{(\ell-1)})^2} + (\pi - \arccos c^{(\ell-1)})\,c^{(\ell-1)}\Big) = \frac{J_1(\arccos c^{(\ell-1)})}{\pi}. $$
+<p>This is the precise sense in which a deep random ReLU network is a Gaussian process whose kernel is a fixed function of depth; the Gaussian-process viewpoint that makes such a prior over functions computable is developed in [[ch:gaussian-processes-and-rvm]]. The recursion is easy to run by hand.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (NNGP / arc-cosine kernel by depth)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> unit inputs \(\mathbf{x}, \mathbf{y}\) on the sphere, depth \(L\), ReLU dual activation.</p>
+<p class="algo-out"><span class="algo-lab">Output</span> NNGP correlation \(c^{(L)}\) at depth \(L\).</p>
+</div>
+<ol class="algo-steps">
+<li>Set \(c^{(0)} = \mathbf{x}^\top \mathbf{y}\).</li>
+<li class="algo-loop">For \(\ell = 1, \ldots, L\): let \(\theta = \arccos c^{(\ell-1)}\) and set \(c^{(\ell)} = \tfrac{1}{\pi}\big(\sin\theta + (\pi - \theta)\cos\theta\big)\).</li>
+<li>Return \(c^{(L)}\). For a general activation replace the update by \(\mathbb{E}_{\mathcal{N}(0,\Lambda)}[\phi(u)\phi(v)]\) normalized by the running diagonal.</li>
+</ol>
+</div>
+
+<div class="box ex"><span class="box-title">Example (arc-cosine kernel and its depth recursion)</span>
+<div class="wex">
+<p class="wex-setup">Two unit vectors \(\mathbf{z} = (1, 0)\) and \(\mathbf{z}' = \big(\tfrac{1}{2}, \tfrac{\sqrt{3}}{2}\big)\), so \(\langle \mathbf{z}, \mathbf{z}'\rangle = 0.5\) and \(\theta_0 = \arccos 0.5 = \pi/3 = 60^\circ\); activation ReLU, weights \(\mathbf{w}\sim\mathcal{N}(0, I)\).</p>
+<ol class="wex-steps">
+<li><span class="wex-op">Evaluate the angular parts.</span> At \(\theta_0 = 60^\circ\), \(J_0 = \pi - \theta_0 = 2.094395\) and \(J_1 = \sin\theta_0 + (\pi - \theta_0)\cos\theta_0 = 0.866025 + 2.094395\cdot 0.5 = 1.913223\).</li>
+<li><span class="wex-op">Read off the two kernels.</span> \(k_0 = J_0/\pi = 0.666667\) and \(k_1 = J_1/\pi = 0.608998\). The half-space overlap probability is \(\mathbb{P}(\text{both} \gt 0) = (\pi - \theta_0)/(2\pi) = 0.333333\), and indeed \(k_0 = 2\cdot 0.333333\).</li>
+<li><span class="wex-op">Cross-check against random features.</span> With \(4{,}000{,}000\) draws \(\mathbf{w}\sim\mathcal{N}(0, I)\): \(\mathbb{E}[\operatorname{ReLU}\cdot\operatorname{ReLU}] \approx 0.3046\) against the closed \(J_1/(2\pi) = 0.3045\), so \(2\times\) that \(\approx 0.6093\) matches \(k_1 = 0.609\); and the empirical \(\mathbb{P}(\text{both}\gt 0) \approx 0.3335\) matches \(0.3333\).</li>
+<li><span class="wex-op">Propagate through depth.</span> Apply \(c \mapsto J_1(\arccos c)/\pi\): \(c^{(0)} = 0.5 \to c^{(1)} = 0.608998 \to c^{(2)} = 0.683906 \to c^{(3)} = 0.738128\). The correlation climbs monotonically with depth.</li>
+<li><span class="wex-op">Locate the fixed point.</span> Iterating the map to convergence gives \(c^\star \approx 0.999034\), so depth drives every pair of distinct directions toward perfect correlation.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> One layer of infinitely many random ReLUs turns \(\cos 60^\circ = 0.5\) into \(0.609\), and the Monte Carlo layer of \(4\) million neurons reproduces the closed form to three decimals, the finite-width estimate of the exact kernel. Stacking layers pushes correlations toward \(1\): this is the degeneracy that makes very deep ReLU NNGP kernels lose discriminative power unless the scale is managed carefully.</p>
+</div>
+</div>
 
 <h2 id="neural-tangent-kernels">Neural tangent kernels: the trajectory of gradient descent</h2>
 
@@ -142,7 +198,34 @@ K_{\mathrm{NTK}}(\mathbf{x}, \mathbf{y}) = \mathbb{E}_{\mathbf{w}}\!\left[ \sigm
 $$
 <p>The first term is exactly the random feature kernel from differentiating with respect to the output weights; the second, from differentiating with respect to the hidden weights, brings in the derivative \(\sigma'\) and an explicit \(\mathbf{x}^\top \mathbf{y}\) factor. With ReLU networks \(\sigma'\) is a step function, both expectations are functions of the angle alone, and \(K_{\mathrm{NTK}}\) is again a dot-product kernel, assembled from the arc-cosine kernels of the previous section.</p>
 
-<p>The decomposition also sharpens the difference between the two limits. Freezing the hidden layer keeps only the first term, the random feature kernel, because the hidden weights contribute no gradient; training all the parameters adds the second term, which is precisely the extra similarity carried by the hidden weights being allowed to move a little. That the two limits give different kernels is the whole point: the random feature kernel describes a network that never adapts its features, while the neural tangent kernel describes one whose features do move, but only infinitesimally, so that the movement is still captured by a fixed linear model. Neither limit performs genuine feature learning, in which the representation would reorganize itself around the data. That is what makes both objects tractable and, at the same time, what marks the boundary of what these kernels can explain about finite networks, which do learn their features. The lesson to carry forward is that the very same wide network yields a kernel whether we freeze it or train it; only which kernel changes.</p>
+<p>The decomposition also sharpens the difference between the two limits. Freezing the hidden layer keeps only the first term, the random feature kernel, because the hidden weights contribute no gradient; training all the parameters adds the second term, which is precisely the extra similarity carried by the hidden weights being allowed to move a little. That the two limits give different kernels is the whole point: the random feature kernel describes a network that never adapts its features, while the neural tangent kernel describes one whose features do move, but only infinitesimally, so that the movement is still captured by a fixed linear model. Neither limit performs genuine feature learning, in which the representation would reorganize itself around the data; that reorganization is the subject of [[ch:the-frontier]]. That is what makes both objects tractable and, at the same time, what marks the boundary of what these kernels can explain about finite networks, which do learn their features. The lesson to carry forward is that the very same wide network yields a kernel whether we freeze it or train it; only which kernel changes.</p>
+
+<h3 id="ntk-recursion">Depth: the neural tangent kernel recursion</h3>
+
+<p>The two-term formula was written for a single hidden layer, but for a deep network the tangent kernel obeys its own recursion, assembled from the same dual activations that drove the NNGP recursion (Jacot et al., 2018; Arora et al., 2019). Alongside the NNGP kernel \(\Sigma^{(\ell)}\), which is the dual activation of \(\sigma\), one needs the <em>derivative kernel</em> \(\dot\Sigma^{(\ell)}\), the dual activation of \(\sigma'\), because backpropagating a gradient through a layer multiplies by \(\sigma'\).</p>
+
+<div class="box prop"><span class="box-title">Proposition (deep NTK recursion)</span>
+For an \(L\)-layer network with activation \(\sigma\), let \(\Sigma^{(\ell)}\) be the NNGP kernels of the previous recursion and define the derivative kernels
+$$ \dot\Sigma^{(\ell)}(\mathbf{x},\mathbf{y}) = \mathbb{E}_{(u,v)\sim\mathcal{N}(0,\, \Lambda^{(\ell-1)})}\!\left[\sigma'(u)\,\sigma'(v)\right], \qquad \Lambda^{(\ell-1)} \text{ built from } \Sigma^{(\ell-1)}. $$
+Then the neural tangent kernel is assembled by
+$$ \Theta^{(0)} = \Sigma^{(0)}, \qquad \Theta^{(\ell)}(\mathbf{x},\mathbf{y}) = \Sigma^{(\ell)}(\mathbf{x},\mathbf{y}) + \Theta^{(\ell-1)}(\mathbf{x},\mathbf{y})\,\dot\Sigma^{(\ell)}(\mathbf{x},\mathbf{y}). $$
+For ReLU the two dual activations are the arc-cosine kernels: \(\Sigma^{(\ell)}\) uses \(k_1\) and \(\dot\Sigma^{(\ell)}\) uses \(k_0\).
+</div>
+
+<p>Each layer contributes one block to the parameter gradient. Differentiating the output with respect to the weights of layer \(\ell\) produces the product of the representation feeding into that layer, whose inner product is the NNGP kernel \(\Sigma^{(\ell-1)}\), with the Jacobian backpropagated from \(\ell\) to the top, whose inner product is a running product of derivative kernels. Summing the per-layer contributions and grouping them telescopes into the recursion above: each deeper layer multiplies the accumulated tangent kernel by the local derivative kernel \(\dot\Sigma^{(\ell)}\) and adds the fresh NNGP term \(\Sigma^{(\ell)}\). The two-term formula for one hidden layer is exactly the case \(L = 1\), whose summands \(\Sigma^{(1)}\) and \(\Theta^{(0)}\dot\Sigma^{(1)} = (\mathbf{x}^\top\mathbf{y})\,\mathbb{E}[\sigma'\sigma']\) are the two terms above. Because \(\sigma' = \Theta\) for ReLU, the derivative kernel is the degree-0 arc-cosine kernel and the NNGP kernel is the degree-1, so the whole deep NTK is built from the closed forms of the opening section; its spectral behavior, which governs what such a kernel can learn, is the concern of [[ch:mercer-and-rates]], and its finite approximation that of [[ch:large-scale-kernels]].</p>
+
+<div class="box ex"><span class="box-title">Example (deep ReLU NTK by recursion)</span>
+<div class="wex">
+<p class="wex-setup">The same two unit vectors, \(c^{(0)} = 0.5\), \(\theta_0 = 60^\circ\). He normalization (a factor \(2\) in each dual activation) keeps the diagonal at \(1\), so on the sphere \(\Sigma^{(\ell)} = J_1(\theta_{\ell-1})/\pi\) and \(\dot\Sigma^{(\ell)} = (\pi - \theta_{\ell-1})/\pi\) with \(\theta_{\ell-1} = \arccos c^{(\ell-1)}\). Depth \(L = 3\).</p>
+<ol class="wex-steps">
+<li><span class="wex-op">Layer 1.</span> From \(c^{(0)} = 0.5\): \(\Sigma^{(1)} = 0.608998\), \(\dot\Sigma^{(1)} = 0.666667\), so \(\Theta^{(1)} = \Sigma^{(1)} + \Theta^{(0)}\dot\Sigma^{(1)} = 0.608998 + 0.5\cdot 0.666667 = 0.942331\).</li>
+<li><span class="wex-op">Layer 2.</span> Now \(c^{(1)} = 0.608998\): \(\Sigma^{(2)} = 0.683906\), \(\dot\Sigma^{(2)} = 0.708428\), so \(\Theta^{(2)} = 0.683906 + 0.942331\cdot 0.708428 = 1.351480\).</li>
+<li><span class="wex-op">Layer 3.</span> Now \(c^{(2)} = 0.683906\): \(\Sigma^{(3)} = 0.738128\), \(\dot\Sigma^{(3)} = 0.739720\), so \(\Theta^{(3)} = 0.738128 + 1.351480\cdot 0.739720 = 1.737845\).</li>
+<li><span class="wex-op">Normalize.</span> On the diagonal every dual activation is \(1\), so \(\Theta^{(L)}(\mathbf{x},\mathbf{x}) = L + 1 = 4\); the NTK correlation is \(1.737845 / 4 = 0.434461\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The tangent kernel is assembled from the same arc-cosine pieces as the NNGP kernel, but the accumulation \(\Theta^{(\ell)} = \Sigma^{(\ell)} + \Theta^{(\ell-1)}\dot\Sigma^{(\ell)}\) makes it grow with depth. After three layers two inputs at \(60^\circ\) have NTK correlation \(0.434\), well below the NNGP correlation \(0.738\) at the same depth, because the tangent kernel keeps a memory of every layer's contribution rather than only the last one.</p>
+</div>
+</div>
 
 <h2 id="nystrom-and-end-to-end">The Nyström bridge and end-to-end learning</h2>
 
