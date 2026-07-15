@@ -1,0 +1,27 @@
+---
+import Book from "../layouts/Book.astro";
+import { BOOK, buildBook, fmtRef, tocHtml } from "../lib/book.js";
+
+const { bibEntries } = buildBook();
+const blist = bibEntries.map(([k, r]) => fmtRef(k, r)).join("\n");
+const body = `<h1><span class="chno">End matter</span>Bibliography</h1>
+<p class="lead">Every work cited across the book, ${bibEntries.length} entries. The chapters that
+draw on the Mairal and Vert lecture course follow its attributions; the additional
+entries are standard primary sources for the results discussed.</p>
+<p>The organizing source is the lecture course itself:</p>
+<ul class="bib-list"><li><span class="bib-authors">Mairal, J. and Vert, J.-P.</span>
+<span class="bib-title">Machine Learning with Kernel Methods</span>. Lecture slides,
+<a href="https://kernel-learning.github.io/">kernel-learning.github.io</a>.</li></ul>
+<h2 id="all">All references</h2>
+<ul class="bib-list">
+${blist}
+</ul>`;
+---
+
+<Book
+  title={`Bibliography · ${BOOK.title}`}
+  desc={`Bibliography for ${BOOK.title}`}
+  toc={tocHtml("bibliography")}
+>
+  <Fragment set:html={body} />
+</Book>

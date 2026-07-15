@@ -1,0 +1,48 @@
+---
+import Book from "../layouts/Book.astro";
+import { BOOK, escapeHtml, tocHtml } from "../lib/book.js";
+
+// contents list: Preliminaries unnumbered, then 1..N
+const items = [];
+let gi = 0;
+for (const part of BOOK.parts) {
+  items.push(`<div class="part">${escapeHtml(part.part)}</div>`);
+  if (part.intro) items.push(`<p class="part-intro">${escapeHtml(part.intro)}</p>`);
+  for (const ch of part.chapters) {
+    const marker = ch.src === "ch-prelim" ? "&middot;" : String(gi);
+    items.push(
+      `<li><span class="n">${marker}</span><a href="${ch.slug}.html">${escapeHtml(ch.title)}</a></li>`,
+    );
+    gi++;
+  }
+}
+
+// the signature: a real Gaussian Gram matrix, K_ij = exp(-(i-j)^2 / 2 sigma^2)
+const N = 13;
+const sigma = 3.1;
+let gcells = "";
+for (let i = 0; i < N; i++) {
+  for (let j = 0; j < N; j++) {
+    gcells += `<i style="--o:${Math.exp(-((i - j) ** 2) / (2 * sigma * sigma)).toFixed(2)}"></i>`;
+  }
+}
+---
+
+<Book title={BOOK.title} desc={BOOK.subtitle} toc={tocHtml()}>
+  <div class="cover">
+    <div class="cover-hero">
+      <div class="cover-lead">
+        <h1>{BOOK.title}</h1>
+        <p class="subtitle">{BOOK.subtitle}</p>
+        <p class="attribution">{BOOK.source}</p>
+      </div>
+      <div class="gram-wrap">
+        <div class="gram-hero" style={`--n:${N}`} aria-hidden="true"><Fragment set:html={gcells} /></div>
+        <span class="gram-cap">{"\\(K_{ij}=e^{-(i-j)^2/2\\sigma^2}\\), the object this book is about"}</span>
+      </div>
+    </div>
+    <ol class="contents">
+      <Fragment set:html={items.join("\n")} />
+    </ol>
+  </div>
+</Book>

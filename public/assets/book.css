@@ -288,28 +288,98 @@ em { font-style: italic; }
 
 /* ── boxed environments ──────────────────────────────────────────────── */
 .box {
-  margin: 1.6em 0; padding: 15px 19px 13px;
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--muted);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--card) 78%, var(--paper) 22%);
+  --kind: var(--muted);
+  margin: 1.7em 0; padding: 14px 19px 14px;
+  border: 1px solid color-mix(in srgb, var(--kind) 22%, var(--rule));
+  border-left: 3px solid var(--kind);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--kind) 4%, var(--card));
+  scroll-margin-top: 70px;
 }
 .box > :last-child { margin-bottom: 0; }
+.box.def  { --kind: var(--def); }
+.box.thm, .box.lem, .box.prop, .box.cor { --kind: var(--thm); }
+.box.ex   { --kind: var(--ex); }
+.box.rmk  { --kind: var(--rmk); }
+
+/* structured header: kind chip (self-link) + attribution */
+.box-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+  margin: 0 0 0.55em;
+}
+.box-kind {
+  font-family: var(--sans);
+  font-size: 0.74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--kind); text-decoration: none;
+  white-space: nowrap;
+}
+a.box-kind::after {
+  content: "#"; margin-left: 6px; font-weight: 600;
+  color: color-mix(in srgb, var(--kind) 55%, transparent);
+  opacity: 0; transition: opacity 0.12s ease;
+}
+.box:hover a.box-kind::after, a.box-kind:focus-visible::after { opacity: 1; }
+.box-ann { font-style: italic; color: var(--muted); font-size: 0.95em; }
+.box-ann .cite { font-style: normal; }
+
+/* arriving via a #thm-4-2 link lights the box up */
+.box:target {
+  border-color: color-mix(in srgb, var(--kind) 55%, var(--rule));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--kind) 16%, transparent);
+}
+
+/* legacy title span (unconverted fragments) */
 .box-title {
   display: block; font-family: var(--sans);
   font-size: 0.76rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.08em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5em; color: var(--kind);
 }
-.box.def { border-left-color: var(--def); } .box.def .box-title { color: var(--def); }
-.box.thm, .box.lem, .box.prop, .box.cor { border-left-color: var(--thm); }
-.box.thm .box-title, .box.lem .box-title, .box.prop .box-title, .box.cor .box-title { color: var(--thm); }
-.box.ex { border-left-color: var(--ex); } .box.ex .box-title { color: var(--ex); }
-.box.rmk { border-left-color: var(--rmk); } .box.rmk .box-title { color: var(--rmk); }
-.box.proof { border-left-color: var(--proof); background: transparent; }
-.box.proof .box-title { color: var(--proof); }
-.box.proof .qed { float: right; }
 
+/* ── proofs: collapsible, skimmable ──────────────────────────────────── */
+details.proof {
+  margin: 1.4em 0;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+}
+details.proof > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px;
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--proof);
+  user-select: none;
+}
+details.proof > summary::-webkit-details-marker { display: none; }
+details.proof > summary::after {
+  content: "show"; margin-left: 2px;
+  font-weight: 500; text-transform: none; letter-spacing: 0;
+  font-size: 0.76rem; color: var(--faint);
+}
+details.proof[open] > summary::after { content: "hide"; }
+details.proof > summary .proof-toggle {
+  margin-left: auto; flex: none;
+  width: 8px; height: 8px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.15s ease;
+  opacity: 0.7;
+}
+details.proof[open] > summary .proof-toggle { transform: rotate(225deg) translate(-1px, 1px); }
+details.proof > summary:hover { color: var(--accent); background: color-mix(in srgb, var(--card) 60%, transparent); }
+details.proof .proof-body {
+  padding: 4px 18px 14px;
+  border-top: 1px dashed var(--rule);
+  color: color-mix(in srgb, var(--ink) 88%, var(--muted));
+}
+details.proof .proof-body > :first-child { margin-top: 0.8em; }
+details.proof .proof-body > :last-child { margin-bottom: 0; }
+.qed { float: right; color: var(--proof); font-weight: 600; }
+
+/* older inline collapsibles, matched to the proof style */
 details.proof-details { margin: 1.2em 0; }
 details.proof-details summary {
   cursor: pointer; font-family: var(--sans);
@@ -543,22 +613,59 @@ table.gloss .gsrc a:hover { color: var(--accent); }
 
 section.exercises { margin-top: 3em; padding-top: 1.5em; border-top: 1px solid var(--rule); }
 section.exercises h2 { font-size: 1.3rem; }
-ol.exlist { padding-left: 1.6em; }
-ol.exlist > li { margin: 0 0 1.15em; padding-left: 0.3em; }
-ol.exlist > li::marker { color: var(--accent); font-family: var(--sans); font-weight: 700; font-size: 0.9em; }
+ol.exlist { padding-left: 0; list-style: none; counter-reset: exercise; }
+ol.exlist > li {
+  counter-increment: exercise;
+  position: relative;
+  margin: 0 0 14px; padding: 14px 18px 14px 58px;
+  border: 1px solid var(--rule); border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 62%, var(--paper));
+}
+ol.exlist > li::before {
+  content: counter(exercise);
+  position: absolute; left: 16px; top: 15px;
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  font-family: var(--sans); font-weight: 700; font-size: 0.82rem;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+ol.exlist > li:hover { border-color: color-mix(in srgb, var(--accent) 30%, var(--rule)); }
 .ex-tag {
+  --tag: var(--faint);
   display: inline-block; font-family: var(--sans);
   font-size: 0.64rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--faint); border: 1px solid var(--rule);
-  border-radius: 5px; padding: 1.5px 7px; margin-right: 8px; vertical-align: 1.5px;
-  background: var(--card);
+  color: var(--tag); border: 1px solid color-mix(in srgb, var(--tag) 35%, transparent);
+  border-radius: 999px; padding: 1.5px 9px; margin-right: 8px; vertical-align: 1.5px;
+  background: color-mix(in srgb, var(--tag) 7%, transparent);
 }
-details.ex-hint { margin-top: 0.5em; }
-details.ex-hint summary { cursor: pointer; font-family: var(--sans); font-size: 0.8rem; color: var(--muted); width: fit-content; }
-details.ex-hint summary:hover { color: var(--accent); }
-details.ex-hint[open] summary { margin-bottom: 0.4em; }
-details.ex-hint .hint-body { font-size: 0.95em; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 12px; }
+.ex-tag.t-warm-up      { --tag: var(--def); }
+.ex-tag.t-computation  { --tag: var(--ex); }
+.ex-tag.t-proof        { --tag: var(--thm); }
+.ex-tag.t-concept      { --tag: var(--rmk); }
+.ex-tag.t-exploration  { --tag: var(--rmk); }
+.ex-tag.t-challenge    { --tag: var(--accent); }
+details.ex-hint { margin-top: 0.7em; }
+details.ex-hint summary {
+  list-style: none; cursor: pointer; width: fit-content;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--sans); font-size: 0.76rem; font-weight: 600;
+  color: var(--muted);
+  padding: 3.5px 11px; border: 1px solid var(--rule); border-radius: 999px;
+  background: var(--card);
+  user-select: none;
+}
+details.ex-hint summary::-webkit-details-marker { display: none; }
+details.ex-hint summary::before { content: "◦"; color: var(--accent); font-weight: 700; }
+details.ex-hint summary:hover { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+details.ex-hint[open] summary { margin-bottom: 0.55em; }
+details.ex-hint .hint-body {
+  font-size: 0.95em; color: var(--muted);
+  border-left: 2px solid color-mix(in srgb, var(--accent) 35%, var(--rule));
+  padding: 2px 0 2px 12px;
+}
 
 /* ── motion & print ──────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

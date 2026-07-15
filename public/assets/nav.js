@@ -287,10 +287,33 @@
     });
   }
 
+  // ---- details: open a targeted proof; open everything for print ---------------------
+  function initDetails() {
+    // following a link into a collapsed proof should reveal it
+    function openTarget() {
+      var el = location.hash && document.getElementById(location.hash.slice(1));
+      if (!el) return;
+      var d = el.closest("details");
+      if (d) d.open = true;
+    }
+    openTarget();
+    window.addEventListener("hashchange", openTarget);
+    // closed <details> print as empty; open them all for the print run
+    var reopened = [];
+    window.addEventListener("beforeprint", function () {
+      reopened = $$("details:not([open])");
+      reopened.forEach(function (d) { d.open = true; });
+    });
+    window.addEventListener("afterprint", function () {
+      reopened.forEach(function (d) { d.open = false; });
+      reopened = [];
+    });
+  }
+
   function boot() {
     initTheme(); initDrawer(); initSearch();
     wireCites(); wireSpy(); initAnchors();
-    initProgress(); initBacktop(); initKeys(); initTables();
+    initProgress(); initBacktop(); initKeys(); initTables(); initDetails();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();

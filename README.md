@@ -12,13 +12,20 @@ cite.
 
 - `book.json` — title, parts, chapter list (order defines navigation)
 - `chapters/src/chNN.body.html` — chapter body fragments (see `chapters/CONTRACT.md`)
-- `assets/book.css` — the shared stylesheet
-- `build.py` — assembles `docs/` (cover + one page per chapter, KaTeX via CDN)
-- `docs/` — the built book, ready for GitHub Pages (serve locally with
-  `python3 -m http.server -d docs`)
+- `chapters/refs/chNN.json` — per-chapter bibliography keys (drives citation linking)
+- `bibliography.json`, `glossary.json` — the end matter
+- `src/lib/book.js` — the content pipeline: cross-reference tokens, statement-box
+  numbering, collapsible proofs, citation linking, the search index
+- `src/layouts/`, `src/pages/` — the Astro site (one page per chapter, KaTeX via CDN)
+- `public/assets/` — stylesheet, viz engine, reading chrome
 
 ## Build
 
 ```
-python3 build.py
+npm install
+npm run dev      # local preview
+npm run build    # emits dist/
 ```
+
+Deploys to GitHub Pages automatically on push to `main`
+(`.github/workflows/deploy.yml`).

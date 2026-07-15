@@ -1,0 +1,22 @@
+---
+import Book from "../layouts/Book.astro";
+import { BOOK, buildBook, tocHtml } from "../lib/book.js";
+
+export function getStaticPaths() {
+  const { chapters } = buildBook();
+  return chapters.map((ch) => ({ params: { slug: ch.slug }, props: { ch } }));
+}
+
+const { ch } = Astro.props;
+---
+
+<Book
+  title={`${ch.title} · ${BOOK.title}`}
+  desc={`${ch.title}, from ${BOOK.title}.`}
+  toc={tocHtml(ch.slug)}
+  onpage={ch.onpage}
+  prevHref={ch.prevHref}
+  nextHref={ch.nextHref}
+>
+  <Fragment set:html={ch.body} />
+</Book>
