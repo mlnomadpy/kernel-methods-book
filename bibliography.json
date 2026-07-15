@@ -89,6 +89,12 @@
     "title": "Reconciling modern machine-learning practice and the classical bias-variance trade-off",
     "venue": "Proceedings of the National Academy of Sciences 116(32), 15849-15854"
   },
+  "bendavid2002": {
+    "authors": "Ben-David, S., Eiron, N. and Simon, H. U.",
+    "year": 2002,
+    "title": "The computational complexity of densest region detection",
+    "venue": "Journal of Computer and System Sciences 64(1), 22-47"
+  },
   "bengio2006local": {
     "authors": "Bengio, Y., Delalleau, O., and Le Roux, N.",
     "year": 2006,
@@ -239,6 +245,18 @@
     "title": "Can learning kernels help performance? (invited talk)",
     "venue": "ICML"
   },
+  "crammer2002": {
+    "authors": "Crammer, K. and Singer, Y.",
+    "year": 2002,
+    "title": "Pranking with ranking",
+    "venue": "Advances in Neural Information Processing Systems 14 (NIPS), 641-647"
+  },
+  "cristianini2002lsk": {
+    "authors": "Cristianini, N., Shawe-Taylor, J., and Lodhi, H.",
+    "year": 2002,
+    "title": "Latent semantic kernels",
+    "venue": "Journal of Intelligent Information Systems 18(2-3), 127-152"
+  },
   "cuckersmale2002": {
     "authors": "Cucker, F. and Smale, S.",
     "year": 2002,
@@ -323,6 +341,24 @@
     "title": "The use of multiple measurements in taxonomic problems",
     "venue": "Annals of Eugenics 7(2), 179-188"
   },
+  "freund1999voted": {
+    "authors": "Freund, Y. and Schapire, R. E.",
+    "year": 1999,
+    "title": "Large margin classification using the perceptron algorithm",
+    "venue": "Machine Learning 37(3), 277-296"
+  },
+  "freund2003rank": {
+    "authors": "Freund, Y., Iyer, R., Schapire, R. E., and Singer, Y.",
+    "year": 2003,
+    "title": "An efficient boosting algorithm for combining preferences",
+    "venue": "Journal of Machine Learning Research 4, 933-969"
+  },
+  "friess1998": {
+    "authors": "Frieß, T.-T., Cristianini, N., and Campbell, C.",
+    "year": 1998,
+    "title": "The kernel-adatron algorithm: a fast and simple learning procedure for support vector machines",
+    "venue": "Proceedings of the 15th International Conference on Machine Learning (ICML), 188-196"
+  },
   "fukumizu2008": {
     "authors": "Fukumizu, K., Gretton, A., Sun, X., and Schölkopf, B.",
     "year": 2008,
@@ -401,6 +437,12 @@
     "title": "Gaussian processes for big data",
     "venue": "UAI"
   },
+  "herbrich2000": {
+    "authors": "Herbrich, R., Graepel, T., and Obermayer, K.",
+    "year": 2000,
+    "title": "Large margin rank boundaries for ordinal regression",
+    "venue": "Advances in Large Margin Classifiers, MIT Press, 115-132"
+  },
   "herglotz1911": {
     "authors": "Herglotz, G.",
     "year": 1911,
@@ -449,11 +491,23 @@
     "title": "Neural tangent kernel: convergence and generalization in neural networks",
     "venue": "NeurIPS 31"
   },
+  "joachims1998text": {
+    "authors": "Joachims, T.",
+    "year": 1998,
+    "title": "Text categorization with support vector machines: learning with many relevant features",
+    "venue": "Proceedings of the European Conference on Machine Learning (ECML), 137-142"
+  },
   "joachims1999": {
     "authors": "Joachims, T.",
     "year": 1999,
     "title": "Making large-scale SVM learning practical",
     "venue": "Advances in Kernel Methods: Support Vector Learning, MIT Press, 169-184"
+  },
+  "joachims2002": {
+    "authors": "Joachims, T.",
+    "year": 2002,
+    "title": "Optimizing search engines using clickthrough data",
+    "venue": "Proceedings of the 8th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD), 133-142"
   },
   "johnson2013": {
     "authors": "Johnson, R. and Zhang, T.",
@@ -484,6 +538,12 @@
     "year": 1971,
     "title": "Some results on Tchebycheffian spline functions",
     "venue": "Journal of Mathematical Analysis and Applications 33(1), 82-95"
+  },
+  "kivinen2004": {
+    "authors": "Kivinen, J., Smola, A. J., and Williamson, R. C.",
+    "year": 2004,
+    "title": "Online learning with kernels",
+    "venue": "IEEE Transactions on Signal Processing 52(8), 2165-2176"
   },
   "kloft2011": {
     "authors": "Kloft, M., Brefeld, U., Sonnenburg, S., and Zien, A.",
@@ -671,6 +731,12 @@
     "title": "On spectral clustering: analysis and an algorithm",
     "venue": "Advances in Neural Information Processing Systems 14, 849-856"
   },
+  "novikoff1962": {
+    "authors": "Novikoff, A. B. J.",
+    "year": 1962,
+    "title": "On convergence proofs on perceptrons",
+    "venue": "Proceedings of the Symposium on the Mathematical Theory of Automata 12, 615-622, Polytechnic Institute of Brooklyn"
+  },
   "osuna1997": {
     "authors": "Osuna, E., Freund, R., and Girosi, F.",
     "year": 1997,
@@ -719,6 +785,12 @@
     "title": "A stochastic approximation method",
     "venue": "Annals of Mathematical Statistics 22(3), 400-407"
   },
+  "rosenblatt1958": {
+    "authors": "Rosenblatt, F.",
+    "year": 1958,
+    "title": "The perceptron: A probabilistic model for information storage and organization in the brain",
+    "venue": "Psychological Review 65(6), 386-408"
+  },
   "rosipal2001": {
     "authors": "Rosipal, R. and Trejo, L. J.",
     "year": 2001,
@@ -754,6 +826,12 @@
     "year": 1975,
     "title": "A vector space model for automatic indexing",
     "venue": "Communications of the ACM 18(11), 613-620"
+  },
+  "salton1988": {
+    "authors": "Salton, G.",
+    "year": 1988,
+    "title": "Automatic Text Processing: The Transformation, Analysis, and Retrieval of Information by Computer",
+    "venue": "Addison-Wesley"
   },
   "sauer1972": {
     "authors": "Sauer, N.",
@@ -796,6 +874,12 @@
     "year": 2001,
     "title": "A generalized representer theorem",
     "venue": "COLT/EuroCOLT, LNCS 2111, 416-426"
+  },
+  "scholkopf2001oneclass": {
+    "authors": "Schölkopf, B., Platt, J. C., Shawe-Taylor, J., Smola, A. J. and Williamson, R. C.",
+    "year": 2001,
+    "title": "Estimating the support of a high-dimensional distribution",
+    "venue": "Neural Computation 13(7), 1443-1471"
   },
   "scholkopf2002": {
     "authors": "Schölkopf, B. and Smola, A. J.",
@@ -883,6 +967,12 @@
     "title": "Learning theory for distribution regression",
     "venue": "Journal of Machine Learning Research 17(152), 1-40"
   },
+  "tax2004": {
+    "authors": "Tax, D. M. J. and Duin, R. P. W.",
+    "year": 2004,
+    "title": "Support vector data description",
+    "venue": "Machine Learning 54(1), 45-66"
+  },
   "tikhonov1977": {
     "authors": "Tikhonov, A. N. and Arsenin, V. Y.",
     "year": 1977,
@@ -954,6 +1044,12 @@
     "year": 1971,
     "title": "On the uniform convergence of relative frequencies of events to their probabilities",
     "venue": "Theory of Probability and Its Applications 16(2), 264-280"
+  },
+  "vishwanathan2003": {
+    "authors": "Vishwanathan, S. V. N. and Smola, A. J.",
+    "year": 2003,
+    "title": "Fast kernels for string and tree matching",
+    "venue": "Advances in Neural Information Processing Systems 15, 585-592"
   },
   "watkins2000": {
     "authors": "Watkins, C.",

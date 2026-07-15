@@ -1,4 +1,241 @@
 <h1>Kernels for Text</h1>
-<p class="lead">STUB. This chapter is being written for the depth-upgrade pass. Its scope: see book.json.</p>
-<h2 id="overview">Overview</h2>
-<p>Placeholder body pending authoring.</p>
+
+<p class="lead">Natural language text is, after tabular data, the most common thing we ask a machine to analyse, and it arrives in a form that no dot product will accept: a stream of words. This chapter builds the bridge that the information retrieval community discovered decades ago and that turns out to be a kernel all along. We start from the bag of words and the vector space model, weight the coordinates with tf-idf so that informative terms count and function words do not, and read the resulting document similarity as a kernel. We then confront the model's central weakness, that documents sharing no words are declared perfectly dissimilar even when they discuss the same topic, and repair it three ways: a hand-built proximity matrix, the generalised vector space model that learns term relatedness from co-occurrence, and the latent semantic kernel that finds concepts by a singular value decomposition. Throughout, one theme recurs, the duality between representing a document by its terms and representing a term by the documents it lives in, and it is exactly the primal-dual duality of kernel methods seen through a new window. The whole development is concrete: a corpus of four tiny documents carries every idea, and every number is computed.</p>
+
+<h2 id="bag-of-words">From documents to vectors: the bag of words</h2>
+
+<p>To measure how similar two documents are we first need to place them in a space where similarity means something. The simplest and still the most widely used device for this is the vector space model, introduced for retrieval by Salton, Wong, and Yang (1975) and developed at length by Salton (1988). Its founding simplification is to forget word order and keep only word counts: a document becomes a <em>bag of words</em>, a set that remembers multiplicities but not sequence. The phrase "dog bites man" and "man bites dog" collapse to the same bag, and the meaning of "bread winner" is lost when it splits into "bread" and "winner". This throws away real linguistic structure, yet for judging what a document is <em>about</em> it keeps enough, and it buys us a vector.</p>
+
+<div class="box def"><span class="box-title">Definition (vector space model)</span>
+<p>A <em>term</em> is a word: a maximal string of letters between separators. The set of all terms occurring in the collection of documents, the <em>corpus</em>, is the <em>dictionary</em>, of size \(T\). Each document \(d\) is mapped to the feature vector
+$$\phi(d)=\big(\mathrm{tf}(t_1,d),\,\mathrm{tf}(t_2,d),\,\dots,\,\mathrm{tf}(t_T,d)\big)\in\mathbb{R}^T,$$
+where \(\mathrm{tf}(t,d)\) is the <em>term frequency</em>, the number of times term \(t\) appears in \(d\). The coordinate axes are the terms; a document is a point whose coordinates count its words.</p>
+</div>
+
+<p>Stacking these row vectors for a corpus of \(N\) documents gives the <em>document-term matrix</em> \(D\in\mathbb{R}^{N\times T}\), with \(D_{it}=\mathrm{tf}(t,d_i)\). This single object supports the duality that organizes the whole chapter. Read across a row and you have a document described by its terms; read down a column and you have a term described by the documents it occurs in. A method stated in the intuitive term representation can therefore be dualised into a document-based implementation, exactly as a primal weight vector becomes a dual expansion in kernel methods.</p>
+
+<p>The similarity of two documents is their inner product in this space, and that inner product is our first kernel.</p>
+
+<div class="box def"><span class="box-title">Definition (vector space kernel)</span>
+<p>The <em>vector space kernel</em> is the dot product of document vectors,
+$$\kappa(d_1,d_2)=\langle\phi(d_1),\phi(d_2)\rangle=\sum_{t}\mathrm{tf}(t,d_1)\,\mathrm{tf}(t,d_2).$$
+Its value is large when the two documents share many terms with high frequency, and zero when they share none.</p>
+</div>
+
+<p>Because a document uses only a handful of the many thousands of terms in the dictionary, \(\phi(d)\) is extremely sparse. We never store it explicitly. Tokenisation converts each document into a sorted list \(L(d)\) of (term-number, frequency) pairs, and the kernel is evaluated by a merge that walks the two lists in step and multiplies frequencies whenever the term numbers coincide. The cost is proportional to the document lengths,
+$$\kappa(d_1,d_2)=A\big(L(d_1),L(d_2)\big),\qquad \text{time } O(|d_1|+|d_2|),$$
+never to the dimension \(T\) of the space we are notionally working in. This is the kernel trick wearing an information-retrieval hat: we compute an inner product in a huge space without ever forming a vector in it. Joachims (1998) made exactly this observation to run support vector machines on text, taking the vector space kernel as the base similarity.</p>
+
+<p>Two normalisations are almost always applied. Long documents have larger term counts and hence larger norms, which conflates length with content; if length is irrelevant to the task we divide it out, using the cosine normalisation of any kernel,
+$$\hat\kappa(d_1,d_2)=\frac{\kappa(d_1,d_2)}{\sqrt{\kappa(d_1,d_1)\,\kappa(d_2,d_2)}},$$
+so that \(\hat\kappa(d,d)=1\) and similarity becomes the cosine of the angle between document vectors. And uninformative words such as "the", "of", "and", the <em>stop words</em>, are dropped from the dictionary altogether, which is the same as giving them weight zero. Weighting the remaining terms is the subject of the next section.</p>
+
+<h2 id="weighting">Term weighting and tf-idf</h2>
+
+<p>Not all terms deserve equal say. A term that occurs in almost every document, even after stop words are removed, cannot help tell documents apart, while a term confined to a few documents is highly diagnostic of their topic. We would like the coordinate for a term to be scaled up when the term is rare across the corpus and down when it is common. The classical device, standard since Salton (1988), is the <em>inverse document frequency</em>.</p>
+
+<p>Let \(\mathrm{df}(t)\) be the number of documents containing term \(t\), the document frequency, and let \(N\) be the corpus size. The idf weight is
+$$w(t)=\ln\frac{N}{\mathrm{df}(t)}.$$
+A term in every document has \(\mathrm{df}=N\) and weight \(\ln 1=0\); a term in a single document has the maximal weight \(\ln N\). The logarithm is what keeps the scale gentle: without it a term appearing in one document out of a million would swamp everything, whereas \(\ln\) compresses the range so that a term occurring in roughly half the documents is only a constant factor less important than the rarest. Combining this corpus-level weight with the document-level term frequency gives the <em>tf-idf</em> weight \(w(t)\,\mathrm{tf}(t,d)\) for term \(t\) in document \(d\).</p>
+
+<p>In kernel form the weighting is a diagonal linear map. Let \(R\) be the diagonal matrix with \(R_{tt}=w(t)\), so that the reweighted embedding is \(\phi(d)R\). The associated kernel is
+$$\tilde\kappa(d_1,d_2)=\phi(d_1)\,R R^\top\phi(d_2)^\top=\sum_{t}w(t)^2\,\mathrm{tf}(t,d_1)\,\mathrm{tf}(t,d_2),$$
+the vector space kernel with each term's contribution scaled by \(w(t)^2\). It is computed by the same list merge as before, now carrying the squared weights, so the tf-idf kernel costs no more than the plain one. Because idf uses no label information, it can even be estimated from a large external unlabelled corpus that supplies background knowledge about which terms are rare.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (tf-idf document-term matrix and vector space kernel)</span>
+<div class="algo-io">
+  <p class="algo-in"><span class="algo-lab">Input</span> corpus \(d_1,\dots,d_N\); a stop list.</p>
+  <p class="algo-out"><span class="algo-lab">Output</span> tf-idf Gram matrix \(K\in\mathbb{R}^{N\times N}\) with \(K_{ij}=\tilde\kappa(d_i,d_j)\).</p>
+</div>
+<ol class="algo-steps">
+  <li>Tokenise each \(d_i\) into terms, discard stop words, and assign every distinct term a number; build the dictionary of size \(T\).</li>
+  <li>Form the sorted list \(L(d_i)\) of (term-number, \(\mathrm{tf}\)) pairs, equivalently the row \(D_{i\cdot}\) of the document-term matrix.</li>
+  <li>Compute document frequencies \(\mathrm{df}(t)=|\{i:D_{it}\gt 0\}|\) and weights \(w(t)=\ln\!\big(N/\mathrm{df}(t)\big)\).</li>
+  <li>For each pair \((i,j)\), merge \(L(d_i)\) and \(L(d_j)\), accumulating \(\sum_t w(t)^2\,\mathrm{tf}(t,d_i)\,\mathrm{tf}(t,d_j)\) over matching term numbers; store as \(K_{ij}\).</li>
+  <li class="algo-loop">Optionally cosine-normalise: \(K_{ij}\leftarrow K_{ij}/\sqrt{K_{ii}K_{jj}}\).</li>
+</ol>
+</div>
+
+<p>We now make all of this concrete on a corpus we will reuse for the rest of the chapter.</p>
+
+<div class="box ex"><span class="box-title">Example (tf-idf and the vector space kernel on a tiny corpus)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Four documents over the six-term dictionary \(\{\text{cat},\text{kitten},\text{dog},\text{puppy},\text{car},\text{engine}\}\):</p>
+<p>\(d_1=\) "cat kitten", \(\ d_2=\) "cat kitten kitten dog dog puppy", \(\ d_3=\) "dog puppy", \(\ d_4=\) "car car engine".</p>
+<p>Document-term matrix \(D\) of raw term frequencies:</p>
+<table class="dp">
+<thead><tr><th></th><th>cat</th><th>kitten</th><th>dog</th><th>puppy</th><th>car</th><th>engine</th></tr></thead>
+<tbody>
+<tr><th>\(d_1\)</th><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><th>\(d_2\)</th><td>1</td><td>2</td><td>2</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><th>\(d_3\)</th><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><th>\(d_4\)</th><td>0</td><td>0</td><td>0</td><td>0</td><td>2</td><td>1</td></tr>
+</tbody>
+</table>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Count document frequencies.</span> Each pet term appears in exactly two documents and each vehicle term in one, so \(\mathrm{df}=(2,2,2,2,1,1)\) across the dictionary, with \(N=4\).</li>
+<li><span class="wex-op">Weight by idf.</span> \(w(t)=\ln(4/\mathrm{df}(t))\) gives \(\ln 2=0.693\) for the four pet terms and \(\ln 4=1.386\) for "car" and "engine". Rare vehicle terms are worth twice as much as the shared pet terms.</li>
+<li><span class="wex-op">Form the tf-idf Gram matrix.</span> With \(\tilde\kappa(d_i,d_j)=\sum_t w(t)^2\,\mathrm{tf}(t,d_i)\,\mathrm{tf}(t,d_j)\),
+<table class="dp">
+<thead><tr><th>\(K\)</th><th>\(d_1\)</th><th>\(d_2\)</th><th>\(d_3\)</th><th>\(d_4\)</th></tr></thead>
+<tbody>
+<tr><th>\(d_1\)</th><td>0.961</td><td>1.441</td><td>0</td><td>0</td></tr>
+<tr><th>\(d_2\)</th><td>1.441</td><td>4.805</td><td>1.441</td><td>0</td></tr>
+<tr><th>\(d_3\)</th><td>0</td><td>1.441</td><td>0.961</td><td>0</td></tr>
+<tr><th>\(d_4\)</th><td>0</td><td>0</td><td>0</td><td>9.609</td></tr>
+</tbody>
+</table>
+For instance \(\tilde\kappa(d_1,d_2)=w(\text{cat})^2(1)(1)+w(\text{kitten})^2(1)(2)=0.693^2(1+2)=1.441\).</li>
+<li><span class="wex-op">Normalise to cosines.</span> Dividing by \(\sqrt{K_{ii}K_{jj}}\) gives \(\hat\kappa(d_1,d_2)=1.441/\sqrt{0.961\cdot 4.805}=0.671\), and likewise \(\hat\kappa(d_2,d_3)=0.671\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The kernel sees \(d_1\) and \(d_2\) as related and \(d_1\) and \(d_3\) as completely unrelated, because \(K_{13}=0\): the two documents share no term. Yet both are about pets. The vector space kernel cannot possibly know this, and \(d_4\) sits in its own orthogonal corner. Fixing the \(K_{13}=0\) blind spot is the task of the rest of the chapter.</p>
+</div>
+</div>
+
+<h2 id="semantic-smoothing">Semantic smoothing with a proximity matrix</h2>
+
+<p>The example exposes the flaw plainly. Synonyms and topically related words occupy distinct, orthogonal coordinates, so two documents that say the same thing in different words are declared dissimilar. The vector space model retains no notion that "cat" and "kitten" are related. The only way to inject such a notion is to make the coordinate axes themselves non-orthogonal, so that placing mass on one term spills a little onto its relatives. This is done with a <em>proximity matrix</em> \(P\in\mathbb{R}^{T\times T}\), whose off-diagonal entry \(P_{ij}\gt 0\) records the semantic relatedness of terms \(i\) and \(j\). The document is re-embedded as \(\phi(d)P\), a less sparse vector that now has mass on every term related to one the document actually uses, and the kernel becomes
+$$\tilde\kappa(d_1,d_2)=\phi(d_1)\,PP^\top\phi(d_2)^\top.$$
+The matrix \(Q=PP^\top\) is a symmetric term-term similarity: \(Q_{ij}\) says how much credit a document earns for containing term \(i\) when compared against a document containing term \(j\). Because it factors as \(PP^\top\), the kernel \(\tilde\kappa\) is positive semidefinite for every choice of \(P\), with feature map \(\phi(d)P\); it is a bona fide Mercer kernel in the sense of [[ch:mercer-and-rates]], so all the generalization theory applies unchanged. Two documents can now be judged similar even with no shared term, provided their terms are related through \(P\). Note that idf weighting is the special case \(P=R\) diagonal, and the plain vector space kernel is \(P=I\).</p>
+
+<p>Where does \(P\) come from? One route is external knowledge. A semantic network such as WordNet arranges the dictionary in a hierarchy, with general terms above the specific ones they subsume, so that "spouse" sits above "husband" and "wife". The length of the shortest path between two terms in this tree measures their dissimilarity, and setting \(P_{ij}\) to the inverse of that path length turns the hierarchy into a proximity matrix. This hand-crafting works but demands a curated resource for every domain and language. The more autonomous route, and the one that dominates modern practice, is to let the corpus itself reveal which terms are related, through the statistics of their co-occurrence. That is the generalised vector space model.</p>
+
+<h2 id="gvsm">The generalised vector space model</h2>
+
+<p>The guiding intuition is a second application of the same duality. We already regard two documents as similar when they share terms; dually, we may regard two terms as similar when they co-occur in many documents. The generalised vector space model (GVSM) builds a proximity matrix from exactly this. Two terms are related to the extent that they appear together across the corpus, and the natural bookkeeping of co-occurrence is the matrix \(D^\top D\), whose \((i,j)\) entry counts the documents in which terms \(i\) and \(j\) both occur (weighted by their frequencies). Taking the proximity matrix to be \(P=D^\top\) re-embeds a document by its vector of similarities to every document in the corpus,
+$$\bar\phi(d)=\phi(d)\,D^\top,$$
+and the induced kernel is an inner product in this co-occurrence space,
+$$\kappa_{\mathrm{GVSM}}(d_1,d_2)=\phi(d_1)\,D^\top D\,\phi(d_2)^\top.$$</p>
+
+<p>To see why this repairs the blind spot, unfold the product. The middle matrix \(G=D^\top D\) is the term-term co-occurrence matrix, and \(G_{ij}\) is nonzero whenever some document uses both term \(i\) and term \(j\). A document \(d_1\) that never uses term \(j\) still contributes to \(\kappa_{\mathrm{GVSM}}(d_1,d_2)\) through terms \(i\) it does use that co-occur, elsewhere in the corpus, with the terms \(j\) that \(d_2\) uses. The co-occurrences act as bridges: term relatedness is inferred, not supplied. Equivalently, since \(\kappa_{\mathrm{GVSM}}(d_1,d_2)=\langle\phi(d_1)D^\top,\phi(d_2)D^\top\rangle\), a document is represented by which corpus documents it resembles, and two documents are similar when they resemble the same third documents.</p>
+
+<div class="box ex"><span class="box-title">Example (co-occurrence bridges two disjoint documents)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Same corpus as before. The term-term co-occurrence matrix \(G=D^\top D\) has the pet block
+$$G_{\text{pets}}=\begin{pmatrix}2&3&2&1\\3&5&4&2\\2&4&5&3\\1&2&3&2\end{pmatrix}$$
+on \(\{\text{cat},\text{kitten},\text{dog},\text{puppy}\}\), and a separate \(2\times 2\) vehicle block; the two blocks do not interact.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Locate the bridge.</span> The hub document \(d_2\) contains all four pet terms, so every pair among them co-occurs: \(G_{\text{cat},\text{dog}}=2\) even though "cat" and "dog" never share a document other than \(d_2\). The pet block is fully connected off the diagonal.</li>
+<li><span class="wex-op">Form the GVSM Gram matrix.</span> Computing \(K^{\mathrm{GVSM}}=D\,G\,D^\top\) gives
+<table class="dp">
+<thead><tr><th></th><th>\(d_1\)</th><th>\(d_2\)</th><th>\(d_3\)</th><th>\(d_4\)</th></tr></thead>
+<tbody>
+<tr><th>\(d_1\)</th><td>13</td><td>36</td><td>9</td><td>0</td></tr>
+<tr><th>\(d_2\)</th><td>36</td><td>118</td><td>36</td><td>0</td></tr>
+<tr><th>\(d_3\)</th><td>9</td><td>36</td><td>13</td><td>0</td></tr>
+<tr><th>\(d_4\)</th><td>0</td><td>0</td><td>0</td><td>25</td></tr>
+</tbody>
+</table></li>
+<li><span class="wex-op">Read the repaired entry.</span> Where the plain kernel had \(K_{13}=0\), the GVSM kernel has \(K^{\mathrm{GVSM}}_{13}=9\), a cosine similarity of \(9/\sqrt{13\cdot 13}=0.692\). The vehicle document \(d_4\) still has zero similarity to every pet document, correctly, because no term of \(d_4\) co-occurs with any pet term.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Documents \(d_1\) and \(d_3\) share not one word, yet the corpus statistics make them \(0.692\)-similar, because the hub document taught the model that their vocabularies belong together. Meanwhile pets and vehicles stay apart. Co-occurrence has manufactured exactly the semantic link the raw kernel was missing.</p>
+</div>
+</div>
+
+<h2 id="lsi">Latent semantic kernels</h2>
+
+<p>The GVSM uses co-occurrence, but bluntly: \(G=D^\top D\) keeps every fluctuation, including the noise of which particular documents happened to pair which particular words. We would prefer to extract only the strong, repeated patterns of co-occurrence, the handful of underlying <em>concepts</em> that the vocabulary is really tracking, and to measure documents in that low-dimensional concept space. This is latent semantic indexing (LSI), introduced by Deerwester et al. (1990), and cast as a kernel by Cristianini, Shawe-Taylor, and Lodhi (2002). The engine is the singular value decomposition of the document-term matrix.</p>
+
+<p>Write the thin SVD
+$$D=U\,\Sigma\,V^\top,\qquad U\in\mathbb{R}^{N\times r},\ \Sigma=\mathrm{diag}(\sigma_1\ge\cdots\ge\sigma_r),\ V\in\mathbb{R}^{T\times r}.$$
+The columns of \(V\), the right singular vectors, are directions in term space, each a weighted combination of terms; these are the concepts. The corresponding singular value \(\sigma_i\) reports how much of the corpus's variation that concept explains. Because the SVD merges highly correlated coordinates, terms that co-occur frequently line up in the same singular vector, so a concept is precisely a bundle of terms the corpus treats as interchangeable. Keeping only the top \(k\) concepts, the columns \(V_k\) of \(V\), and projecting documents onto them defines the latent semantic kernel.</p>
+
+<div class="box def"><span class="box-title">Definition (latent semantic kernel)</span>
+<p>Fix a rank \(k\le r\) and let \(V_k\in\mathbb{R}^{T\times k}\) hold the top \(k\) right singular vectors of \(D\). The <em>latent semantic kernel</em> projects each document onto the concept space before taking the inner product:
+$$\tilde\kappa(d_1,d_2)=\phi(d_1)\,V_kV_k^\top\,\phi(d_2)^\top=\big\langle\phi(d_1)V_k,\ \phi(d_2)V_k\big\rangle.$$
+It is the vector space kernel with proximity matrix \(P=V_k\), a projection onto the leading directions of term co-occurrence.</p>
+</div>
+
+<p>This form makes the relationship to two earlier objects exact. Setting \(P=V_kV_k^\top\) exhibits LSI as semantic smoothing whose proximity matrix is learned, not hand-built. And projecting onto the top singular directions of the data is precisely principal component analysis in feature space, so the latent semantic kernel is kernel PCA (see [[ch:kernel-pca]]) applied to the bag-of-words embedding. Comparing with the GVSM sharpens the point. The GVSM kernel is \(\phi(d_1)D^\top D\,\phi(d_2)^\top=\phi(d_1)V\Sigma^2V^\top\phi(d_2)^\top\), which keeps every concept and weights it by \(\sigma_i^2\). LSI makes two changes: it truncates to the top \(k\) concepts, discarding the noise directions, and it drops the \(\Sigma^2\) factor, so the retained concepts are treated on an equal, orthonormal footing rather than being dominated by the loudest.</p>
+
+<p>Everything so far is stated in the primal, term representation, and for a dictionary of hundreds of thousands of terms the matrix \(V_k\) is enormous. Duality rescues the computation. The projection can be evaluated entirely from the base kernel matrix \(K=DD^\top\), whose eigenvalue-eigenvector pairs \((\lambda_i,v_i)\) are related to the SVD by \(\lambda_i=\sigma_i^2\). The \(i\)th concept coordinate of a new document \(d\) is then
+$$\big(\phi(d)V_k\big)_i=\lambda_i^{-1/2}\sum_{j=1}^{N}(v_i)_j\,\kappa(d_j,d),$$
+a formula that never touches term space: it needs only base-kernel evaluations \(\kappa(d_j,d)\) against the training documents. This is why the construction is called a latent semantic <em>kernel</em>: the base \(\kappa\) may itself be the tf-idf kernel, or a polynomial or Gaussian kernel over bags of words, and LSI wraps a concept projection around whatever base similarity we started from.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (latent semantic kernel)</span>
+<div class="algo-io">
+  <p class="algo-in"><span class="algo-lab">Input</span> document-term matrix \(D\) (or base Gram matrix \(K=DD^\top\)); rank \(k\).</p>
+  <p class="algo-out"><span class="algo-lab">Output</span> latent kernel value \(\tilde\kappa(d,d')\) for documents \(d,d'\).</p>
+</div>
+<ol class="algo-steps">
+  <li>Compute the SVD \(D=U\Sigma V^\top\); equivalently eigendecompose \(K=DD^\top\) as \((\lambda_i,v_i)\) with \(\sigma_i=\sqrt{\lambda_i}\).</li>
+  <li>Keep the top \(k\) right singular vectors \(V_k\) (the concepts), discarding the rest as noise.</li>
+  <li>Project each document onto concept space: \(\phi(d)\mapsto\phi(d)V_k\), or dually \(\big(\lambda_i^{-1/2}\sum_j(v_i)_j\kappa(d_j,d)\big)_{i=1}^k\).</li>
+  <li>Return the inner product \(\tilde\kappa(d,d')=\langle\phi(d)V_k,\ \phi(d')V_k\rangle\).</li>
+  <li class="algo-loop">Optionally cosine-normalise the result.</li>
+</ol>
+</div>
+
+<div class="box ex"><span class="box-title">Example (rank-2 LSI links documents with no shared terms)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Same document-term matrix \(D\) as above. Its singular values, from \(\texttt{numpy.linalg.svd}\), are
+$$\sigma=(3.440,\ 2.236,\ 1.414,\ 0.411).$$
+The top two right singular vectors are the concept directions
+$$v_1=(0.348,\,0.615,\,0.615,\,0.348,\,0,\,0),\qquad v_2=(0,\,0,\,0,\,0,\,0.894,\,0.447).$$</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Name the concepts.</span> The first concept \(v_1\) loads positively and only on the four pet terms: it is the "pet" concept. The second \(v_2\) loads only on "car" and "engine": the "vehicle" concept. The discarded third direction \((\tfrac12,\tfrac12,-\tfrac12,-\tfrac12,0,0)\) merely splits cats from dogs, corpus-specific noise we drop.</li>
+<li><span class="wex-op">Project onto the two concepts.</span> The concept coordinates \(D V_2\) of the documents are
+<table class="dp">
+<thead><tr><th></th><th>pet</th><th>vehicle</th></tr></thead>
+<tbody>
+<tr><th>\(d_1\)</th><td>0.964</td><td>0</td></tr>
+<tr><th>\(d_2\)</th><td>3.158</td><td>0</td></tr>
+<tr><th>\(d_3\)</th><td>0.964</td><td>0</td></tr>
+<tr><th>\(d_4\)</th><td>0</td><td>2.236</td></tr>
+</tbody>
+</table>
+Documents \(d_1\) and \(d_3\) land on the <em>same</em> point \((0.964,0)\): in a world of two concepts each is a pure pet document.</li>
+<li><span class="wex-op">Form the latent kernel.</span> \(\tilde\kappa(d_i,d_j)=\langle (DV_2)_i,(DV_2)_j\rangle\) gives \(\tilde\kappa(d_1,d_3)=0.964\times 0.964=0.929\), whereas the raw kernel had \(\kappa(d_1,d_3)=0\).</li>
+<li><span class="wex-op">Normalise.</span> The cosine latent similarity is \(0.929/\sqrt{0.929\cdot 0.929}=1.000\) between \(d_1\) and \(d_3\), and \(0\) between \(d_1\) and \(d_4\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Two documents with disjoint vocabularies come out perfectly aligned, because once the corpus is summarised by its two real concepts both documents are seen to be entirely about pets. The vehicle document remains orthogonal. The rank-2 projection has extracted the meaning the surface words hid: this is the payoff that a hand-built proximity matrix promised and that the SVD delivers automatically.</p>
+</div>
+</div>
+
+<h2 id="diffusion">Semantic diffusion kernels</h2>
+
+<p>The GVSM linked documents through one step of co-occurrence, and LSI distilled the strong co-occurrence directions. A further idea pushes the dual reasoning to its limit: if documents that share terms are similar, and terms that co-occur are similar, then documents that share terms which merely co-occur should also count as somewhat similar, and so on through ever longer chains. Iterating this interaction leads to a recurrence. Writing \(K=DD^\top\) for the document kernel and \(G=D^\top D\) for the term co-occurrence matrix, define refined similarities by
+$$\hat K=\mu\,D\hat G D^\top+K,\qquad \hat G=\mu\,D^\top\hat K D+G,$$
+so that each similarity is augmented by the indirect similarity routed through the other. The factor \(\mu\lt\|K\|^{-1}\) makes the longer-range contributions decay geometrically, so the sum converges. The solution has a closed form.</p>
+
+<div class="box prop"><span class="box-title">Proposition (diffusion solution)</span>
+<p>Provided \(\mu\lt\|K\|^{-1}=\|G\|^{-1}\), the document similarity solving the recurrence is
+$$\hat K=K\,(I-\mu G)^{-1}\ \ \text{(the von Neumann kernel over base }K\text{)},\qquad \hat G=G\,(I-\mu G)^{-1}.$$
+Moreover \(\hat K\) is itself a vector space kernel, with proximity matrix \(P=\sqrt{\mu\hat G+I}\), since \(DPP^\top D^\top=D(\mu\hat G+I)D^\top=\mu D\hat G D^\top+K=\hat K\).</p>
+</div>
+
+<p>This is the von Neumann diffusion kernel of the string and graph chapters reappearing on text: \((I-\mu G)^{-1}=\sum_{n\ge 0}\mu^n G^n\) accumulates co-occurrence paths of every length, weighted down by \(\mu^n\). Small \(\mu\) recovers the plain kernel; larger \(\mu\) trusts longer semantic chains. Such semantic spaces are especially powerful across languages: aligning a bilingual corpus and extracting shared concepts by correlation, using the kernel canonical correlation analysis of [[ch:kernel-cca-and-correlation]], yields a language-independent concept representation for cross-lingual retrieval, where a query in one language finds documents in another.</p>
+
+<h2 id="string-kernels-text">String and word-sequence kernels</h2>
+
+<p>Every kernel above discards word order the moment it forms the bag of words. Sometimes order carries the meaning: "the dog bit the man" and "the man bit the dog" have identical bags. String kernels restore order by comparing documents through the substrings, or subsequences, they share, and they apply to text at the character or the word level. A word-sequence kernel treats a document as a string whose alphabet is the dictionary and counts the (possibly gapped) word \(n\)-grams two documents have in common, with longer gaps penalised. Because the number of such subsequences is astronomically large, they are never enumerated; a dynamic program evaluates the kernel directly, in time polynomial in the document lengths and the subsequence length, exactly as for character strings. The construction, its recurrences, and its efficient evaluation belong to the string-kernel development of [[ch:string-kernels]] and [[ch:efficient-string-and-tree-kernels]]; here we note only that they slot into the same framework, another choice of feature map over text, and that they can be combined with the vector space kernels, for example by a polynomial or Gaussian kernel over the normalised bag of words, when both content and a little structure matter.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Text becomes geometry through the bag of words, and the vector space kernel is the inner product of documents so embedded, computed in time linear in document length without ever forming the huge sparse vectors. tf-idf weights the axes so that rare, informative terms speak loudest. The model's one serious defect, blindness to documents that share meaning but not words, is cured by a proximity matrix: hand-built from a semantic network, learned from co-occurrence in the GVSM, or distilled into concepts by the SVD in the latent semantic kernel, which is kernel PCA on bags of words. Diffusion kernels iterate the co-occurrence reasoning to convergence, and string kernels restore the word order the bag threw away. Running through all of it is the primal-dual duality between describing a document by its terms and a term by its documents, the same duality that lets every one of these kernels be computed without visiting the space it lives in.</p>
+
+<h2 id="exercises">Exercises</h2>
+
+<ol class="exercises">
+<li><span class="ex-tag">warm-up</span> Using the corpus of the worked examples, compute by hand the plain (unweighted) vector space Gram matrix \(DD^\top\) and confirm that \(\kappa(d_1,d_3)=0\) while \(\kappa(d_2,d_2)=10\).</li>
+
+<li><span class="ex-tag">warm-up</span> A term appears in every document of a corpus. Show from \(w(t)=\ln(N/\mathrm{df}(t))\) that its tf-idf weight is zero, and explain why this makes stop-word removal a special case of tf-idf weighting.</li>
+
+<li><span class="ex-tag">easy</span> Show that the cosine-normalised kernel \(\hat\kappa(d_1,d_2)=\kappa(d_1,d_2)/\sqrt{\kappa(d_1,d_1)\kappa(d_2,d_2)}\) is itself a valid kernel, by exhibiting its feature map \(\phi(d)/\|\phi(d)\|\). Why does normalisation remove the effect of document length?</li>
+
+<li><span class="ex-tag">medium</span> Let \(P\) be any \(T\times T\) proximity matrix and \(\tilde\kappa(d_1,d_2)=\phi(d_1)PP^\top\phi(d_2)^\top\). Prove that \(\tilde\kappa\) is positive semidefinite for every choice of \(P\), and identify the feature map. Which choices of \(P\) recover (a) the plain vector space kernel, (b) the tf-idf kernel, (c) the latent semantic kernel?</li>
+
+<li><span class="ex-tag">medium</span> Verify the GVSM identity \(\kappa_{\mathrm{GVSM}}(d_1,d_2)=\phi(d_1)D^\top D\phi(d_2)^\top=\langle\phi(d_1)D^\top,\phi(d_2)D^\top\rangle\), and interpret the vector \(\phi(d)D^\top\) in words. Using the term-term matrix \(G\) from the co-occurrence example, recompute \(K^{\mathrm{GVSM}}_{13}=9\). <span class="ex-hint">Hint: \(\phi(d)D^\top\) has one coordinate per corpus document; the coordinate for \(d_j\) is the plain kernel \(\kappa(d,d_j)\).</span></li>
+
+<li><span class="ex-tag">medium</span> Starting from the GVSM kernel \(\phi(d_1)D^\top D\phi(d_2)^\top\), use the SVD \(D=U\Sigma V^\top\) to write it as \(\phi(d_1)V\Sigma^2V^\top\phi(d_2)^\top\). State precisely the two modifications LSI makes to this expression and explain what each one buys. <span class="ex-hint">Hint: one modification changes the sum's range, the other changes the weights \(\sigma_i^2\).</span></li>
+
+<li><span class="ex-tag">hard</span> Show that the latent semantic kernel is kernel PCA on the bag-of-words embedding, by proving the dual projection formula \((\phi(d)V_k)_i=\lambda_i^{-1/2}\sum_j(v_i)_j\kappa(d_j,d)\), where \((\lambda_i,v_i)\) are the eigenpairs of \(K=DD^\top\). <span class="ex-hint">Hint: with \(D=U\Sigma V^\top\), the left singular vectors \(u_i\) are the eigenvectors \(v_i\) of \(K\); the term-space concept is \(V_{\cdot i}=\sigma_i^{-1}D^\top u_i\), and \(\phi(d)V_{\cdot i}=\sigma_i^{-1}\sum_j(u_i)_j\kappa(d_j,d)\).</span></li>
+
+<li><span class="ex-tag">hard</span> Prove the diffusion identity: the recurrences \(\hat K=\mu D\hat G D^\top+K\) and \(\hat G=\mu D^\top\hat K D+G\), with \(K=DD^\top\) and \(G=D^\top D\), are solved by \(\hat K=K(I-\mu G)^{-1}\) and \(\hat G=G(I-\mu G)^{-1}\), provided \(\mu\lt\|G\|^{-1}\). <span class="ex-hint">Hint: substitute the second recurrence into the first, use \(D^\top D=G\) and \(DD^\top=K\), and sum the resulting Neumann series \(\sum_{n\ge0}\mu^nG^n=(I-\mu G)^{-1}\), which converges because \(\mu\|G\|\lt 1\).</span></li>
+</ol>
