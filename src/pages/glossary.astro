@@ -1,0 +1,46 @@
+---
+import Book from "../layouts/Book.astro";
+import { BOOK, GLOSSARY, escapeHtml, tocHtml } from "../lib/book.js";
+
+const chTitle = {};
+for (const part of BOOK.parts) for (const ch of part.chapters) chTitle[ch.slug] = ch.title;
+const linkto = (slug) =>
+  `<a href="${slug}.html">${escapeHtml(chTitle[slug] || slug)}</a>`;
+
+const srows = (GLOSSARY.symbols || [])
+  .map(
+    (e) =>
+      `<tr><td class="gsym">\\(${e.sym}\\)</td>` +
+      `<td>${escapeHtml(e.def)} <span class="gsrc">${linkto(e.slug)}</span></td></tr>`,
+  )
+  .join("\n");
+const trows = (GLOSSARY.terms || [])
+  .slice()
+  .sort((a, b) => a.term.toLowerCase().localeCompare(b.term.toLowerCase()))
+  .map(
+    (e) =>
+      `<tr><td class="gterm">${escapeHtml(e.term)}</td>` +
+      `<td>${escapeHtml(e.def)} <span class="gsrc">${linkto(e.slug)}</span></td></tr>`,
+  )
+  .join("\n");
+
+const body = `<h1><span class="chno">End matter</span>Notation and Glossary</h1>
+<p class="lead">A quick reference for the symbols and terms used across the book. The last
+column links to the chapter where each is introduced.</p>
+<h2 id="notation">Notation</h2>
+<table class="gloss"><tbody>
+${srows}
+</tbody></table>
+<h2 id="glossary">Glossary</h2>
+<table class="gloss"><tbody>
+${trows}
+</tbody></table>`;
+---
+
+<Book
+  title={`Notation & Glossary · ${BOOK.title}`}
+  desc={`Notation and glossary for ${BOOK.title}`}
+  toc={tocHtml("glossary")}
+>
+  <Fragment set:html={body} />
+</Book>
