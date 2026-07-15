@@ -29,12 +29,8 @@ const { title, desc = "", toc, onpage = "", prevHref = "", nextHref = "" } = Ast
     <link rel="stylesheet" href="assets/viz.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
     <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-    <script
-      is:inline
-      defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-      onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});"
-    ></script>
+    <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <script is:inline defer src="assets/katex-boot.js"></script>
   </head>
   <body data-prev={prevHref} data-next={nextHref}>
     <a class="skip" href="#main">Skip to content</a>
