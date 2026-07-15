@@ -1,215 +1,57 @@
 {
+  "aizerman1964": {
+    "authors": "Aizerman, M. A., Braverman, E. M., and Rozonoer, L. I.",
+    "year": 1964,
+    "title": "Theoretical foundations of the potential function method in pattern recognition learning",
+    "venue": "Automation and Remote Control 25, 821-837"
+  },
+  "argyriou2009": {
+    "authors": "Argyriou, A., Micchelli, C. A., and Pontil, M.",
+    "year": 2009,
+    "title": "When is there a representer theorem? Vector versus matrix regularizers",
+    "venue": "Journal of Machine Learning Research 10, 2507-2529"
+  },
   "aronszajn1950": {
     "authors": "Aronszajn, N.",
     "year": 1950,
     "title": "Theory of reproducing kernels",
     "venue": "Transactions of the American Mathematical Society 68(3), 337-404"
   },
-  "mercer1909": {
-    "authors": "Mercer, J.",
-    "year": 1909,
-    "title": "Functions of positive and negative type, and their connection with the theory of integral equations",
-    "venue": "Philosophical Transactions of the Royal Society A 209, 415-446"
+  "arora2019cntk": {
+    "authors": "Arora, S., Du, S. S., Hu, W., Li, Z., Salakhutdinov, R., and Wang, R.",
+    "year": 2019,
+    "title": "On exact computation with an infinitely wide neural net",
+    "venue": "NeurIPS 32"
   },
-  "scholkopf2002": {
-    "authors": "Schölkopf, B. and Smola, A. J.",
+  "bach2002": {
+    "authors": "Bach, F. R. and Jordan, M. I.",
     "year": 2002,
-    "title": "Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond",
-    "venue": "MIT Press",
-    "url": "https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf"
+    "title": "Kernel independent component analysis",
+    "venue": "Journal of Machine Learning Research 3, 1-48"
   },
-  "shawe2004": {
-    "authors": "Shawe-Taylor, J. and Cristianini, N.",
+  "bach2004": {
+    "authors": "Bach, F. R., Lanckriet, G. R. G., and Jordan, M. I.",
     "year": 2004,
-    "title": "Kernel Methods for Pattern Analysis",
-    "venue": "Cambridge University Press",
-    "url": "https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf"
+    "title": "Multiple kernel learning, conic duality, and the SMO algorithm",
+    "venue": "Proceedings of the 21st International Conference on Machine Learning (ICML), 6-13"
   },
-  "steinwart2008": {
-    "authors": "Steinwart, I. and Christmann, A.",
-    "year": 2008,
-    "title": "Support Vector Machines",
-    "venue": "Springer"
+  "bach2013": {
+    "authors": "Bach, F.",
+    "year": 2013,
+    "title": "Sharp analysis of low-rank kernel matrix approximations",
+    "venue": "Proceedings of the 26th Annual Conference on Learning Theory (COLT), PMLR 30, 185-209"
   },
-  "boser1992": {
-    "authors": "Boser, B. E., Guyon, I. M., and Vapnik, V. N.",
-    "year": 1992,
-    "title": "A training algorithm for optimal margin classifiers",
-    "venue": "COLT"
+  "bach2017barron": {
+    "authors": "Bach, F.",
+    "year": 2017,
+    "title": "Breaking the curse of dimensionality with convex neural networks",
+    "venue": "Journal of Machine Learning Research 18(19), 1-53"
   },
-  "cortes1995": {
-    "authors": "Cortes, C. and Vapnik, V.",
-    "year": 1995,
-    "title": "Support-vector networks",
-    "venue": "Machine Learning 20(3), 273-297"
-  },
-  "vapnik1995": {
-    "authors": "Vapnik, V. N.",
-    "year": 1995,
-    "title": "The Nature of Statistical Learning Theory",
-    "venue": "Springer"
-  },
-  "bartlett2006": {
-    "authors": "Bartlett, P. L., Jordan, M. I., and McAuliffe, J. D.",
-    "year": 2006,
-    "title": "Convexity, classification, and risk bounds",
-    "venue": "Journal of the American Statistical Association 101(473), 138-156"
-  },
-  "bochner1933": {
-    "authors": "Bochner, S.",
-    "year": 1933,
-    "title": "Monotone Funktionen, Stieltjessche Integrale und harmonische Analyse",
-    "venue": "Mathematische Annalen 108, 378-410"
-  },
-  "rahimi2007": {
-    "authors": "Rahimi, A. and Recht, B.",
-    "year": 2007,
-    "title": "Random features for large-scale kernel machines",
-    "venue": "NeurIPS 20"
-  },
-  "scholkopf1998": {
-    "authors": "Schölkopf, B., Smola, A., and Müller, K.-R.",
-    "year": 1998,
-    "title": "Nonlinear component analysis as a kernel eigenvalue problem",
-    "venue": "Neural Computation 10(5), 1299-1319"
-  },
-  "gretton2012": {
-    "authors": "Gretton, A., Borgwardt, K. M., Rasch, M. J., Schölkopf, B., and Smola, A.",
-    "year": 2012,
-    "title": "A kernel two-sample test",
-    "venue": "Journal of Machine Learning Research 13, 723-773"
-  },
-  "sriperumbudur2010": {
-    "authors": "Sriperumbudur, B. K., Gretton, A., Fukumizu, K., Schölkopf, B., and Lanckriet, G.",
-    "year": 2010,
-    "title": "Hilbert space embeddings and metrics on probability measures",
-    "venue": "Journal of Machine Learning Research 11, 1517-1561"
-  },
-  "steinwart2001": {
-    "authors": "Steinwart, I.",
-    "year": 2001,
-    "title": "On the influence of the kernel on the consistency of support vector machines",
-    "venue": "Journal of Machine Learning Research 2, 67-93"
-  },
-  "jacot2018": {
-    "authors": "Jacot, A., Gabriel, F., and Hongler, C.",
-    "year": 2018,
-    "title": "Neural tangent kernel: convergence and generalization in neural networks",
-    "venue": "NeurIPS 31"
-  },
-  "cho2009": {
-    "authors": "Cho, Y. and Saul, L. K.",
-    "year": 2009,
-    "title": "Kernel methods for deep learning",
-    "venue": "NeurIPS 22"
-  },
-  "mairal2016": {
-    "authors": "Mairal, J.",
-    "year": 2016,
-    "title": "End-to-end kernel learning with supervised convolutional kernel networks",
-    "venue": "NeurIPS 29"
-  },
-  "lanckriet2004": {
-    "authors": "Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I.",
-    "year": 2004,
-    "title": "Learning the kernel matrix with semidefinite programming",
-    "venue": "Journal of Machine Learning Research 5, 27-72"
-  },
-  "williams2001": {
-    "authors": "Williams, C. K. I. and Seeger, M.",
-    "year": 2001,
-    "title": "Using the Nyström method to speed up kernel machines",
-    "venue": "NeurIPS 13"
-  },
-  "kondor2002": {
-    "authors": "Kondor, R. I. and Lafferty, J.",
-    "year": 2002,
-    "title": "Diffusion kernels on graphs and other discrete input spaces",
-    "venue": "ICML"
-  },
-  "gartner2003": {
-    "authors": "Gärtner, T., Flach, P., and Wrobel, S.",
-    "year": 2003,
-    "title": "On graph kernels: hardness results and efficient alternatives",
-    "venue": "COLT/Kernel Workshop"
-  },
-  "saigo2004": {
-    "authors": "Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T.",
-    "year": 2004,
-    "title": "Protein homology detection using string alignment kernels",
-    "venue": "Bioinformatics 20(11), 1682-1689"
-  },
-  "jaakkola1999": {
-    "authors": "Jaakkola, T. and Haussler, D.",
-    "year": 1999,
-    "title": "Exploiting generative models in discriminative classifiers",
-    "venue": "NeurIPS 11"
-  },
-  "haussler1999": {
-    "authors": "Haussler, D.",
-    "year": 1999,
-    "title": "Convolution kernels on discrete structures",
-    "venue": "Technical Report UCSC-CRL-99-10, UC Santa Cruz"
-  },
-  "kolmogorov1941": {
-    "authors": "Kolmogorov, A. N.",
-    "year": 1941,
-    "title": "Stationary sequences in Hilbert space",
-    "venue": "Bulletin of Moscow State University, Mathematics 2(6), 1-40"
-  },
-  "kimeldorf1971": {
-    "authors": "Kimeldorf, G. and Wahba, G.",
-    "year": 1971,
-    "title": "Some results on Tchebycheffian spline functions",
-    "venue": "Journal of Mathematical Analysis and Applications 33(1), 82-95"
-  },
-  "scholkopf2001": {
-    "authors": "Schölkopf, B., Herbrich, R., and Smola, A. J.",
-    "year": 2001,
-    "title": "A generalized representer theorem",
-    "venue": "COLT/EuroCOLT, LNCS 2111, 416-426"
-  },
-  "hoerl1970": {
-    "authors": "Hoerl, A. E. and Kennard, R. W.",
-    "year": 1970,
-    "title": "Ridge regression: biased estimation for nonorthogonal problems",
-    "venue": "Technometrics 12(1), 55-67"
-  },
-  "saunders1998": {
-    "authors": "Saunders, C., Gammerman, A., and Vovk, V.",
-    "year": 1998,
-    "title": "Ridge regression learning algorithm in dual variables",
-    "venue": "Proceedings of the 15th International Conference on Machine Learning (ICML), 515-521"
-  },
-  "huber1964": {
-    "authors": "Huber, P. J.",
-    "year": 1964,
-    "title": "Robust estimation of a location parameter",
-    "venue": "Annals of Mathematical Statistics 35(1), 73-101"
-  },
-  "zhu2005": {
-    "authors": "Zhu, J. and Hastie, T.",
-    "year": 2005,
-    "title": "Kernel logistic regression and the import vector machine",
-    "venue": "Journal of Computational and Graphical Statistics 14(1), 185-205"
-  },
-  "green1984": {
-    "authors": "Green, P. J.",
-    "year": 1984,
-    "title": "Iteratively reweighted least squares for maximum likelihood estimation, and some robust and resistant alternatives",
-    "venue": "Journal of the Royal Statistical Society, Series B 46(2), 149-192"
-  },
-  "devroye1996": {
-    "authors": "Devroye, L., Györfi, L., and Lugosi, G.",
-    "year": 1996,
-    "title": "A Probabilistic Theory of Pattern Recognition",
-    "venue": "Springer"
-  },
-  "zhang2004": {
-    "authors": "Zhang, T.",
-    "year": 2004,
-    "title": "Statistical behavior and consistency of classification methods based on convex risk minimization",
-    "venue": "Annals of Statistics 32(1), 56-85"
+  "bach2017quadrature": {
+    "authors": "Bach, F.",
+    "year": 2017,
+    "title": "On the equivalence between kernel quadrature rules and random feature expansions",
+    "venue": "Journal of Machine Learning Research 18(21), 1-38"
   },
   "bartlett2002": {
     "authors": "Bartlett, P. L. and Mendelson, S.",
@@ -217,11 +59,101 @@
     "title": "Rademacher and Gaussian complexities: risk bounds and structural results",
     "venue": "Journal of Machine Learning Research 3, 463-482"
   },
-  "ledoux1991": {
-    "authors": "Ledoux, M. and Talagrand, M.",
-    "year": 1991,
-    "title": "Probability in Banach Spaces: Isoperimetry and Processes",
-    "venue": "Springer"
+  "bartlett2006": {
+    "authors": "Bartlett, P. L., Jordan, M. I., and McAuliffe, J. D.",
+    "year": 2006,
+    "title": "Convexity, classification, and risk bounds",
+    "venue": "Journal of the American Statistical Association 101(473), 138-156"
+  },
+  "bartlett2020benign": {
+    "authors": "Bartlett, P. L., Long, P. M., Lugosi, G., and Tsigler, A.",
+    "year": 2020,
+    "title": "Benign overfitting in linear regression",
+    "venue": "Proceedings of the National Academy of Sciences 117(48), 30063-30070"
+  },
+  "baudat2000": {
+    "authors": "Baudat, G. and Anouar, F.",
+    "year": 2000,
+    "title": "Generalized discriminant analysis using a kernel approach",
+    "venue": "Neural Computation 12(10), 2385-2404"
+  },
+  "belkin2018understand": {
+    "authors": "Belkin, M., Ma, S., and Mandal, S.",
+    "year": 2018,
+    "title": "To understand deep learning we need to understand kernel learning",
+    "venue": "ICML"
+  },
+  "belkin2019dd": {
+    "authors": "Belkin, M., Hsu, D., Ma, S., and Mandal, S.",
+    "year": 2019,
+    "title": "Reconciling modern machine-learning practice and the classical bias-variance trade-off",
+    "venue": "Proceedings of the National Academy of Sciences 116(32), 15849-15854"
+  },
+  "bengio2006local": {
+    "authors": "Bengio, Y., Delalleau, O., and Le Roux, N.",
+    "year": 2006,
+    "title": "The curse of highly variable functions for local kernel machines",
+    "venue": "NeurIPS 18"
+  },
+  "berg1984": {
+    "authors": "Berg, C., Christensen, J. P. R., and Ressel, P.",
+    "year": 1984,
+    "title": "Harmonic Analysis on Semigroups: Theory of Positive Definite and Related Functions",
+    "venue": "Springer, Graduate Texts in Mathematics 100"
+  },
+  "bietti2019": {
+    "authors": "Bietti, A. and Mairal, J.",
+    "year": 2019,
+    "title": "Group invariance, stability to deformations, and complexity of deep convolutional representations",
+    "venue": "Journal of Machine Learning Research 20(25), 1-49"
+  },
+  "bochner1933": {
+    "authors": "Bochner, S.",
+    "year": 1933,
+    "title": "Monotone Funktionen, Stieltjessche Integrale und harmonische Analyse",
+    "venue": "Mathematische Annalen 108, 378-410"
+  },
+  "bojanowski2017": {
+    "authors": "Bojanowski, P. and Joulin, A.",
+    "year": 2017,
+    "title": "Unsupervised learning by predicting noise",
+    "venue": "ICML"
+  },
+  "bordelon2020": {
+    "authors": "Bordelon, B., Canatar, A., and Pehlevan, C.",
+    "year": 2020,
+    "title": "Spectrum dependent learning curves in kernel regression and wide neural networks",
+    "venue": "ICML"
+  },
+  "borgwardt2005": {
+    "authors": "Borgwardt, K. M. and Kriegel, H.-P.",
+    "year": 2005,
+    "title": "Shortest-path kernels on graphs",
+    "venue": "ICDM, 74-81"
+  },
+  "borovitskiy2020matern": {
+    "authors": "Borovitskiy, V., Terenin, A., Mostowsky, P., and Deisenroth, M. P.",
+    "year": 2020,
+    "title": "Matérn Gaussian processes on Riemannian manifolds",
+    "venue": "NeurIPS 33"
+  },
+  "borovitskiy2021graph": {
+    "authors": "Borovitskiy, V., Azangulov, I., Terenin, A., Mostowsky, P., Deisenroth, M. P., and Durrande, N.",
+    "year": 2021,
+    "title": "Matérn Gaussian processes on graphs",
+    "venue": "AISTATS"
+  },
+  "boser1992": {
+    "authors": "Boser, B. E., Guyon, I. M., and Vapnik, V. N.",
+    "year": 1992,
+    "title": "A training algorithm for optimal margin classifiers",
+    "venue": "COLT"
+  },
+  "bottou2010": {
+    "authors": "Bottou, L.",
+    "year": 2010,
+    "title": "Large-scale machine learning with stochastic gradient descent",
+    "venue": "Proceedings of COMPSTAT 2010, 177-186"
   },
   "boucheron2005": {
     "authors": "Boucheron, S., Bousquet, O., and Lugosi, G.",
@@ -235,113 +167,17 @@
     "title": "Convex Optimization",
     "venue": "Cambridge University Press"
   },
-  "herglotz1911": {
-    "authors": "Herglotz, G.",
-    "year": 1911,
-    "title": "Über Potenzreihen mit positivem, reellem Teil im Einheitskreis",
-    "venue": "Berichte über die Verhandlungen der Königlich Sächsischen Gesellschaft der Wissenschaften zu Leipzig, Mathematisch-Physische Klasse 63, 501-511"
+  "broomhead1988": {
+    "authors": "Broomhead, D. S. and Lowe, D.",
+    "year": 1988,
+    "title": "Multivariable functional interpolation and adaptive networks",
+    "venue": "Complex Systems 2, 321-355"
   },
-  "berg1984": {
-    "authors": "Berg, C., Christensen, J. P. R., and Ressel, P.",
-    "year": 1984,
-    "title": "Harmonic Analysis on Semigroups: Theory of Positive Definite and Related Functions",
-    "venue": "Springer, Graduate Texts in Mathematics 100"
-  },
-  "rudin1962": {
-    "authors": "Rudin, W.",
-    "year": 1962,
-    "title": "Fourier Analysis on Groups",
-    "venue": "Interscience Publishers (Wiley)"
-  },
-  "cuturi2005": {
-    "authors": "Cuturi, M., Fukumizu, K., and Vert, J.-P.",
-    "year": 2005,
-    "title": "Semigroup kernels on measures",
-    "venue": "Journal of Machine Learning Research 6, 1169-1198"
-  },
-  "jaakkola2000": {
-    "authors": "Jaakkola, T., Diekhans, M., and Haussler, D.",
-    "year": 2000,
-    "title": "A discriminative framework for detecting remote protein homologies",
-    "venue": "Journal of Computational Biology 7(1-2), 95-114"
-  },
-  "tsuda2002tp": {
-    "authors": "Tsuda, K., Kawanabe, M., Rätsch, G., Sonnenburg, S., and Müller, K.-R.",
-    "year": 2002,
-    "title": "A new discriminative kernel from probabilistic models",
-    "venue": "Neural Computation 14(10), 2397-2414"
-  },
-  "perronnin2007": {
-    "authors": "Perronnin, F. and Dance, C.",
-    "year": 2007,
-    "title": "Fisher kernels on visual vocabularies for image categorization",
-    "venue": "CVPR"
-  },
-  "bojanowski2017": {
-    "authors": "Bojanowski, P. and Joulin, A.",
-    "year": 2017,
-    "title": "Unsupervised learning by predicting noise",
-    "venue": "ICML"
-  },
-  "seeger2002": {
-    "authors": "Seeger, M.",
-    "year": 2002,
-    "title": "Covariance kernels from Bayesian generative models",
-    "venue": "NeurIPS 14"
-  },
-  "tsuda2002": {
-    "authors": "Tsuda, K., Kin, T., and Asai, K.",
-    "year": 2002,
-    "title": "Marginalized kernels for biological sequences",
-    "venue": "Bioinformatics 18(Suppl 1), S268-S275"
-  },
-  "platt1998": {
-    "authors": "Platt, J. C.",
-    "year": 1998,
-    "title": "Sequential minimal optimization: a fast algorithm for training support vector machines",
-    "venue": "Microsoft Research Technical Report MSR-TR-98-14"
-  },
-  "tsuda2003": {
-    "authors": "Tsuda, K., Kin, T., and Asai, K.",
-    "year": 2003,
-    "title": "Marginalized kernels for biological sequences",
-    "venue": "Bioinformatics 18(Suppl. 1), S268-S275"
-  },
-  "mika1999": {
-    "authors": "Mika, S., Schölkopf, B., Smola, A., Müller, K.-R., Scholz, M., and Rätsch, G.",
-    "year": 1999,
-    "title": "Kernel PCA and de-noising in feature spaces",
-    "venue": "Advances in Neural Information Processing Systems 11, 536-542"
-  },
-  "dhillon2004": {
-    "authors": "Dhillon, I. S., Guan, Y., and Kulis, B.",
-    "year": 2004,
-    "title": "Kernel k-means, spectral clustering and normalized cuts",
-    "venue": "Proceedings of the 10th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 551-556"
-  },
-  "ng2002": {
-    "authors": "Ng, A. Y., Jordan, M. I., and Weiss, Y.",
-    "year": 2002,
-    "title": "On spectral clustering: analysis and an algorithm",
-    "venue": "Advances in Neural Information Processing Systems 14, 849-856"
-  },
-  "bach2002": {
-    "authors": "Bach, F. R. and Jordan, M. I.",
-    "year": 2002,
-    "title": "Kernel independent component analysis",
-    "venue": "Journal of Machine Learning Research 3, 1-48"
-  },
-  "gong2014": {
-    "authors": "Gong, Y., Ke, Q., Isard, M., and Lazebnik, S.",
-    "year": 2014,
-    "title": "A multi-view embedding space for modeling internet images, tags, and their semantics",
-    "venue": "International Journal of Computer Vision 106(2), 210-233"
-  },
-  "cuckersmale2002": {
-    "authors": "Cucker, F. and Smale, S.",
-    "year": 2002,
-    "title": "On the mathematical foundations of learning",
-    "venue": "Bulletin of the American Mathematical Society 39(1), 1-49"
+  "canatar2021": {
+    "authors": "Canatar, A., Bordelon, B., and Pehlevan, C.",
+    "year": 2021,
+    "title": "Spectral bias and task-model alignment explain generalization in kernel regression and infinitely wide neural networks",
+    "venue": "Nature Communications 12, 2914"
   },
   "caponnetto2007": {
     "authors": "Caponnetto, A. and De Vito, E.",
@@ -349,29 +185,281 @@
     "title": "Optimal rates for the regularized least-squares algorithm",
     "venue": "Foundations of Computational Mathematics 7(3), 331-368"
   },
-  "bach2013": {
-    "authors": "Bach, F.",
-    "year": 2013,
-    "title": "Sharp analysis of low-rank kernel matrix approximations",
-    "venue": "Proceedings of the 26th Annual Conference on Learning Theory (COLT), PMLR 30, 185-209"
+  "chen2020": {
+    "authors": "Chen, D., Jacob, L., and Mairal, J.",
+    "year": 2020,
+    "title": "Convolutional kernel networks for graph-structured data",
+    "venue": "ICML"
   },
-  "tsybakov2009": {
-    "authors": "Tsybakov, A. B.",
+  "chizat2018meanfield": {
+    "authors": "Chizat, L. and Bach, F.",
+    "year": 2018,
+    "title": "On the global convergence of gradient descent for over-parameterized models using optimal transport",
+    "venue": "NeurIPS 31"
+  },
+  "chizat2019": {
+    "authors": "Chizat, L., Oyallon, E., and Bach, F.",
+    "year": 2019,
+    "title": "On lazy training in differentiable programming",
+    "venue": "NeurIPS 32"
+  },
+  "cho2009": {
+    "authors": "Cho, Y. and Saul, L. K.",
     "year": 2009,
-    "title": "Introduction to Nonparametric Estimation",
-    "venue": "Springer, Springer Series in Statistics"
+    "title": "Kernel methods for deep learning",
+    "venue": "NeurIPS 22"
   },
-  "leslie2002": {
-    "authors": "Leslie, C., Eskin, E., and Noble, W. S.",
-    "year": 2002,
-    "title": "The spectrum kernel: a string kernel for SVM protein classification",
-    "venue": "Pacific Symposium on Biocomputing 7, 564-575"
+  "choromanski2021performer": {
+    "authors": "Choromanski, K., Likhosherstov, V., Dohan, D., Song, X., et al.",
+    "year": 2021,
+    "title": "Rethinking attention with Performers",
+    "venue": "ICLR"
   },
-  "lodhi2002": {
-    "authors": "Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C.",
+  "chwialkowski2016ksd": {
+    "authors": "Chwialkowski, K., Strathmann, H., and Gretton, A.",
+    "year": 2016,
+    "title": "A kernel test of goodness of fit",
+    "venue": "ICML"
+  },
+  "collins2002": {
+    "authors": "Collins, M. and Duffy, N.",
     "year": 2002,
-    "title": "Text classification using string kernels",
-    "venue": "Journal of Machine Learning Research 2, 419-444"
+    "title": "Convolution kernels for natural language",
+    "venue": "NeurIPS 14"
+  },
+  "cortes1995": {
+    "authors": "Cortes, C. and Vapnik, V.",
+    "year": 1995,
+    "title": "Support-vector networks",
+    "venue": "Machine Learning 20(3), 273-297"
+  },
+  "cortes2009": {
+    "authors": "Cortes, C.",
+    "year": 2009,
+    "title": "Can learning kernels help performance? (invited talk)",
+    "venue": "ICML"
+  },
+  "cuckersmale2002": {
+    "authors": "Cucker, F. and Smale, S.",
+    "year": 2002,
+    "title": "On the mathematical foundations of learning",
+    "venue": "Bulletin of the American Mathematical Society 39(1), 1-49"
+  },
+  "cuturi2005": {
+    "authors": "Cuturi, M., Fukumizu, K., and Vert, J.-P.",
+    "year": 2005,
+    "title": "Semigroup kernels on measures",
+    "venue": "Journal of Machine Learning Research 6, 1169-1198"
+  },
+  "damianou2013deepgp": {
+    "authors": "Damianou, A. and Lawrence, N. D.",
+    "year": 2013,
+    "title": "Deep Gaussian processes",
+    "venue": "AISTATS"
+  },
+  "deerwester1990": {
+    "authors": "Deerwester, S., Dumais, S. T., Furnas, G. W., Landauer, T. K., and Harshman, R.",
+    "year": 1990,
+    "title": "Indexing by latent semantic analysis",
+    "venue": "Journal of the American Society for Information Science 41(6), 391-407"
+  },
+  "devroye1996": {
+    "authors": "Devroye, L., Györfi, L., and Lugosi, G.",
+    "year": 1996,
+    "title": "A Probabilistic Theory of Pattern Recognition",
+    "venue": "Springer"
+  },
+  "dhillon2004": {
+    "authors": "Dhillon, I. S., Guan, Y., and Kulis, B.",
+    "year": 2004,
+    "title": "Kernel k-means, spectral clustering and normalized cuts",
+    "venue": "Proceedings of the 10th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 551-556"
+  },
+  "dicker2015": {
+    "authors": "Dicker, L. H., Foster, D. P., and Hsu, D.",
+    "year": 2015,
+    "title": "Kernel ridge vs. principal component regression: minimax bounds and the qualification problem",
+    "venue": "Electronic Journal of Statistics 11(1) (2017)"
+  },
+  "drineas2005": {
+    "authors": "Drineas, P. and Mahoney, M. W.",
+    "year": 2005,
+    "title": "On the Nyström method for approximating a Gram matrix for improved kernel-based learning",
+    "venue": "Journal of Machine Learning Research 6, 2153-2175"
+  },
+  "du2019gntk": {
+    "authors": "Du, S. S., Hou, K., Salakhutdinov, R., Póczos, B., Wang, R., and Xu, K.",
+    "year": 2019,
+    "title": "Graph neural tangent kernel: fusing graph neural networks with graph kernels",
+    "venue": "NeurIPS 32"
+  },
+  "durbin1998": {
+    "authors": "Durbin, R., Eddy, S. R., Krogh, A., and Mitchison, G.",
+    "year": 1998,
+    "title": "Biological Sequence Analysis: Probabilistic Models of Proteins and Nucleic Acids",
+    "venue": "Cambridge University Press"
+  },
+  "dziugaite2015": {
+    "authors": "Dziugaite, G. K., Roy, D. M., and Ghahramani, Z.",
+    "year": 2015,
+    "title": "Training generative neural networks via maximum mean discrepancy optimization",
+    "venue": "UAI"
+  },
+  "fan2005": {
+    "authors": "Fan, R.-E., Chen, P.-H., and Lin, C.-J.",
+    "year": 2005,
+    "title": "Working set selection using second order information for training support vector machines",
+    "venue": "Journal of Machine Learning Research 6, 1889-1918"
+  },
+  "feydy2019sinkhorn": {
+    "authors": "Feydy, J., Séjourné, T., Vialard, F.-X., Amari, S., Trouvé, A., and Peyré, G.",
+    "year": 2019,
+    "title": "Interpolating between optimal transport and MMD using Sinkhorn divergences",
+    "venue": "AISTATS"
+  },
+  "fisher1936": {
+    "authors": "Fisher, R. A.",
+    "year": 1936,
+    "title": "The use of multiple measurements in taxonomic problems",
+    "venue": "Annals of Eugenics 7(2), 179-188"
+  },
+  "fukumizu2008": {
+    "authors": "Fukumizu, K., Gretton, A., Sun, X., and Schölkopf, B.",
+    "year": 2008,
+    "title": "Kernel measures of conditional dependence",
+    "venue": "NeurIPS 20, 489-496"
+  },
+  "gartner2003": {
+    "authors": "Gärtner, T., Flach, P., and Wrobel, S.",
+    "year": 2003,
+    "title": "On graph kernels: hardness results and efficient alternatives",
+    "venue": "COLT/Kernel Workshop"
+  },
+  "glorot2010": {
+    "authors": "Glorot, X. and Bengio, Y.",
+    "year": 2010,
+    "title": "Understanding the difficulty of training deep feedforward neural networks",
+    "venue": "AISTATS"
+  },
+  "gonen2011": {
+    "authors": "Gönen, M. and Alpaydın, E.",
+    "year": 2011,
+    "title": "Multiple kernel learning algorithms",
+    "venue": "Journal of Machine Learning Research 12, 2211-2268"
+  },
+  "gong2014": {
+    "authors": "Gong, Y., Ke, Q., Isard, M., and Lazebnik, S.",
+    "year": 2014,
+    "title": "A multi-view embedding space for modeling internet images, tags, and their semantics",
+    "venue": "International Journal of Computer Vision 106(2), 210-233"
+  },
+  "green1984": {
+    "authors": "Green, P. J.",
+    "year": 1984,
+    "title": "Iteratively reweighted least squares for maximum likelihood estimation, and some robust and resistant alternatives",
+    "venue": "Journal of the Royal Statistical Society, Series B 46(2), 149-192"
+  },
+  "gretton2005hsic": {
+    "authors": "Gretton, A., Bousquet, O., Smola, A., and Schölkopf, B.",
+    "year": 2005,
+    "title": "Measuring statistical dependence with Hilbert-Schmidt norms",
+    "venue": "Algorithmic Learning Theory (ALT)"
+  },
+  "gretton2006": {
+    "authors": "Gretton, A., Borgwardt, K. M., Rasch, M., Schölkopf, B., and Smola, A.",
+    "year": 2006,
+    "title": "A kernel method for the two-sample problem",
+    "venue": "NeurIPS 19"
+  },
+  "gretton2012": {
+    "authors": "Gretton, A., Borgwardt, K. M., Rasch, M. J., Schölkopf, B., and Smola, A.",
+    "year": 2012,
+    "title": "A kernel two-sample test",
+    "venue": "Journal of Machine Learning Research 13, 723-773"
+  },
+  "haochen2021": {
+    "authors": "HaoChen, J. Z., Wei, C., Gaidon, A., and Ma, T.",
+    "year": 2021,
+    "title": "Provable guarantees for self-supervised deep learning with spectral contrastive loss",
+    "venue": "NeurIPS 34"
+  },
+  "harchaoui2007": {
+    "authors": "Harchaoui, Z. and Bach, F.",
+    "year": 2007,
+    "title": "Image classification with segmentation graph kernels",
+    "venue": "IEEE Conference on Computer Vision and Pattern Recognition (CVPR)"
+  },
+  "haussler1999": {
+    "authors": "Haussler, D.",
+    "year": 1999,
+    "title": "Convolution kernels on discrete structures",
+    "venue": "Technical Report UCSC-CRL-99-10, UC Santa Cruz"
+  },
+  "hensman2013bigdata": {
+    "authors": "Hensman, J., Fusi, N., and Lawrence, N. D.",
+    "year": 2013,
+    "title": "Gaussian processes for big data",
+    "venue": "UAI"
+  },
+  "herglotz1911": {
+    "authors": "Herglotz, G.",
+    "year": 1911,
+    "title": "Über Potenzreihen mit positivem, reellem Teil im Einheitskreis",
+    "venue": "Berichte über die Verhandlungen der Königlich Sächsischen Gesellschaft der Wissenschaften zu Leipzig, Mathematisch-Physische Klasse 63, 501-511"
+  },
+  "hoeffding1963": {
+    "authors": "Hoeffding, W.",
+    "year": 1963,
+    "title": "Probability inequalities for sums of bounded random variables",
+    "venue": "Journal of the American Statistical Association 58(301), 13-30"
+  },
+  "hoerl1970": {
+    "authors": "Hoerl, A. E. and Kennard, R. W.",
+    "year": 1970,
+    "title": "Ridge regression: biased estimation for nonorthogonal problems",
+    "venue": "Technometrics 12(1), 55-67"
+  },
+  "huber1964": {
+    "authors": "Huber, P. J.",
+    "year": 1964,
+    "title": "Robust estimation of a location parameter",
+    "venue": "Annals of Mathematical Statistics 35(1), 73-101"
+  },
+  "jaakkola1999": {
+    "authors": "Jaakkola, T. and Haussler, D.",
+    "year": 1999,
+    "title": "Exploiting generative models in discriminative classifiers",
+    "venue": "NeurIPS 11"
+  },
+  "jaakkola1999fisher": {
+    "authors": "Jaakkola, T. and Haussler, D.",
+    "year": 1999,
+    "title": "Exploiting generative models in discriminative classifiers",
+    "venue": "NeurIPS 11 (1998)"
+  },
+  "jaakkola2000": {
+    "authors": "Jaakkola, T., Diekhans, M., and Haussler, D.",
+    "year": 2000,
+    "title": "A discriminative framework for detecting remote protein homologies",
+    "venue": "Journal of Computational Biology 7(1-2), 95-114"
+  },
+  "jacot2018": {
+    "authors": "Jacot, A., Gabriel, F., and Hongler, C.",
+    "year": 2018,
+    "title": "Neural tangent kernel: convergence and generalization in neural networks",
+    "venue": "NeurIPS 31"
+  },
+  "joachims1999": {
+    "authors": "Joachims, T.",
+    "year": 1999,
+    "title": "Making large-scale SVM learning practical",
+    "venue": "Advances in Kernel Methods: Support Vector Learning, MIT Press, 169-184"
+  },
+  "johnson2013": {
+    "authors": "Johnson, R. and Zhang, T.",
+    "year": 2013,
+    "title": "Accelerating stochastic gradient descent using predictive variance reduction",
+    "venue": "NeurIPS 26"
   },
   "kashima2003": {
     "authors": "Kashima, H., Tsuda, K., and Inokuchi, A.",
@@ -379,17 +467,367 @@
     "title": "Marginalized kernels between labeled graphs",
     "venue": "ICML, 321-328"
   },
-  "borgwardt2005": {
-    "authors": "Borgwardt, K. M. and Kriegel, H.-P.",
+  "katharopoulos2020": {
+    "authors": "Katharopoulos, A., Vyas, A., Pappas, N., and Fleuret, F.",
+    "year": 2020,
+    "title": "Transformers are RNNs: fast autoregressive transformers with linear attention",
+    "venue": "ICML"
+  },
+  "keerthi2001": {
+    "authors": "Keerthi, S. S., Shevade, S. K., Bhattacharyya, C., and Murthy, K. R. K.",
+    "year": 2001,
+    "title": "Improvements to Platt's SMO algorithm for SVM classifier design",
+    "venue": "Neural Computation 13(3), 637-649"
+  },
+  "kimeldorf1971": {
+    "authors": "Kimeldorf, G. and Wahba, G.",
+    "year": 1971,
+    "title": "Some results on Tchebycheffian spline functions",
+    "venue": "Journal of Mathematical Analysis and Applications 33(1), 82-95"
+  },
+  "kloft2011": {
+    "authors": "Kloft, M., Brefeld, U., Sonnenburg, S., and Zien, A.",
+    "year": 2011,
+    "title": "lp-norm multiple kernel learning",
+    "venue": "Journal of Machine Learning Research 12, 953-997"
+  },
+  "kolmogorov1941": {
+    "authors": "Kolmogorov, A. N.",
+    "year": 1941,
+    "title": "Stationary sequences in Hilbert space",
+    "venue": "Bulletin of Moscow State University, Mathematics 2(6), 1-40"
+  },
+  "kondor2002": {
+    "authors": "Kondor, R. I. and Lafferty, J.",
+    "year": 2002,
+    "title": "Diffusion kernels on graphs and other discrete input spaces",
+    "venue": "ICML"
+  },
+  "lanckriet2004": {
+    "authors": "Lanckriet, G. R. G., Cristianini, N., Bartlett, P., El Ghaoui, L., and Jordan, M. I.",
+    "year": 2004,
+    "title": "Learning the kernel matrix with semidefinite programming",
+    "venue": "Journal of Machine Learning Research 5, 27-72"
+  },
+  "lanckriet2004fusion": {
+    "authors": "Lanckriet, G. R. G., De Bie, T., Cristianini, N., Jordan, M. I., and Noble, W. S.",
+    "year": 2004,
+    "title": "A statistical framework for genomic data fusion",
+    "venue": "Bioinformatics 20(16), 2626-2635"
+  },
+  "le2013fastfood": {
+    "authors": "Le, Q., Sarlós, T., and Smola, A.",
+    "year": 2013,
+    "title": "Fastfood: approximating kernel expansions in loglinear time",
+    "venue": "ICML"
+  },
+  "ledoux1991": {
+    "authors": "Ledoux, M. and Talagrand, M.",
+    "year": 1991,
+    "title": "Probability in Banach Spaces: Isoperimetry and Processes",
+    "venue": "Springer"
+  },
+  "lee2018nngp": {
+    "authors": "Lee, J., Bahri, Y., Novak, R., Schoenholz, S. S., Pennington, J., and Sohl-Dickstein, J.",
+    "year": 2018,
+    "title": "Deep neural networks as Gaussian processes",
+    "venue": "ICLR"
+  },
+  "leslie2002": {
+    "authors": "Leslie, C., Eskin, E., and Noble, W. S.",
+    "year": 2002,
+    "title": "The spectrum kernel: a string kernel for SVM protein classification",
+    "venue": "Pacific Symposium on Biocomputing 7, 564-575"
+  },
+  "leslie2004": {
+    "authors": "Leslie, C., Eskin, E., Cohen, A., Weston, J., and Noble, W. S.",
+    "year": 2004,
+    "title": "Mismatch string kernels for discriminative protein classification",
+    "venue": "Bioinformatics 20(4)"
+  },
+  "li2015gmmn": {
+    "authors": "Li, Y., Swersky, K., and Zemel, R.",
+    "year": 2015,
+    "title": "Generative moment matching networks",
+    "venue": "ICML"
+  },
+  "li2020fno": {
+    "authors": "Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., and Anandkumar, A.",
+    "year": 2020,
+    "title": "Fourier neural operator for parametric partial differential equations",
+    "venue": "ICLR 2021"
+  },
+  "liang2020interpolate": {
+    "authors": "Liang, T. and Rakhlin, A.",
+    "year": 2020,
+    "title": "Just interpolate: kernel ridgeless regression can generalize",
+    "venue": "Annals of Statistics 48(3), 1329-1347"
+  },
+  "liu2016ksd": {
+    "authors": "Liu, Q., Lee, J. D., and Jordan, M. I.",
+    "year": 2016,
+    "title": "A kernelized Stein discrepancy for goodness-of-fit tests",
+    "venue": "ICML"
+  },
+  "liu2016svgd": {
+    "authors": "Liu, Q. and Wang, D.",
+    "year": 2016,
+    "title": "Stein variational gradient descent: a general purpose Bayesian inference algorithm",
+    "venue": "NeurIPS 29"
+  },
+  "lodhi2002": {
+    "authors": "Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C.",
+    "year": 2002,
+    "title": "Text classification using string kernels",
+    "venue": "Journal of Machine Learning Research 2, 419-444"
+  },
+  "ma2017eigenpro": {
+    "authors": "Ma, S. and Belkin, M.",
+    "year": 2017,
+    "title": "Diving into the shallows: a computational perspective on large-scale shallow learning (EigenPro)",
+    "venue": "NeurIPS 30"
+  },
+  "mackay1992": {
+    "authors": "MacKay, D. J. C.",
+    "year": 1992,
+    "title": "Bayesian interpolation",
+    "venue": "Neural Computation 4(3), 415-447"
+  },
+  "mairal2016": {
+    "authors": "Mairal, J.",
+    "year": 2016,
+    "title": "End-to-end kernel learning with supervised convolutional kernel networks",
+    "venue": "NeurIPS 29"
+  },
+  "matthews2018": {
+    "authors": "Matthews, A. G. de G., Rowland, M., Hron, J., Turner, R. E., and Ghahramani, Z.",
+    "year": 2018,
+    "title": "Gaussian process behaviour in wide deep neural networks",
+    "venue": "ICLR"
+  },
+  "mcdiarmid1989": {
+    "authors": "McDiarmid, C.",
+    "year": 1989,
+    "title": "On the method of bounded differences",
+    "venue": "Surveys in Combinatorics 1989, London Mathematical Society Lecture Note Series 141, 148-188, Cambridge University Press"
+  },
+  "mei2018meanfield": {
+    "authors": "Mei, S., Montanari, A., and Nguyen, P.-M.",
+    "year": 2018,
+    "title": "A mean field view of the landscape of two-layer neural networks",
+    "venue": "Proceedings of the National Academy of Sciences 115(33), E7665-E7671"
+  },
+  "mei2022": {
+    "authors": "Mei, S. and Montanari, A.",
+    "year": 2022,
+    "title": "The generalization error of random features regression: precise asymptotics and the double descent curve",
+    "venue": "Communications on Pure and Applied Mathematics 75(4), 667-766"
+  },
+  "mercer1909": {
+    "authors": "Mercer, J.",
+    "year": 1909,
+    "title": "Functions of positive and negative type, and their connection with the theory of integral equations",
+    "venue": "Philosophical Transactions of the Royal Society A 209, 415-446"
+  },
+  "micchelli1986": {
+    "authors": "Micchelli, C. A.",
+    "year": 1986,
+    "title": "Interpolation of scattered data: distance matrices and conditionally positive definite functions",
+    "venue": "Constructive Approximation 2, 11-22"
+  },
+  "micchelli2005": {
+    "authors": "Micchelli, C. A. and Pontil, M.",
     "year": 2005,
-    "title": "Shortest-path kernels on graphs",
-    "venue": "ICDM, 74-81"
+    "title": "Learning the kernel function via regularization",
+    "venue": "Journal of Machine Learning Research 6, 1099-1125"
+  },
+  "mika1999": {
+    "authors": "Mika, S., Schölkopf, B., Smola, A., Müller, K.-R., Scholz, M., and Rätsch, G.",
+    "year": 1999,
+    "title": "Kernel PCA and de-noising in feature spaces",
+    "venue": "Advances in Neural Information Processing Systems 11, 536-542"
+  },
+  "montufar2014": {
+    "authors": "Montufar, G., Pascanu, R., Cho, K., and Bengio, Y.",
+    "year": 2014,
+    "title": "On the number of linear regions of deep neural networks",
+    "venue": "NeurIPS 27"
+  },
+  "muandet2017": {
+    "authors": "Muandet, K., Fukumizu, K., Sriperumbudur, B., and Schölkopf, B.",
+    "year": 2017,
+    "title": "Kernel mean embedding of distributions: a review and beyond",
+    "venue": "Foundations and Trends in Machine Learning 10(1-2), 1-141"
+  },
+  "neal1996": {
+    "authors": "Neal, R. M.",
+    "year": 1996,
+    "title": "Bayesian Learning for Neural Networks",
+    "venue": "Springer, Lecture Notes in Statistics 118"
+  },
+  "ng2002": {
+    "authors": "Ng, A. Y., Jordan, M. I., and Weiss, Y.",
+    "year": 2002,
+    "title": "On spectral clustering: analysis and an algorithm",
+    "venue": "Advances in Neural Information Processing Systems 14, 849-856"
+  },
+  "osuna1997": {
+    "authors": "Osuna, E., Freund, R., and Girosi, F.",
+    "year": 1997,
+    "title": "An improved training algorithm for support vector machines",
+    "venue": "Neural Networks for Signal Processing VII (IEEE Workshop), 276-285"
+  },
+  "perronnin2007": {
+    "authors": "Perronnin, F. and Dance, C.",
+    "year": 2007,
+    "title": "Fisher kernels on visual vocabularies for image categorization",
+    "venue": "CVPR"
+  },
+  "platt1998": {
+    "authors": "Platt, J. C.",
+    "year": 1998,
+    "title": "Sequential minimal optimization: a fast algorithm for training support vector machines",
+    "venue": "Microsoft Research Technical Report MSR-TR-98-14"
+  },
+  "rahimi2007": {
+    "authors": "Rahimi, A. and Recht, B.",
+    "year": 2007,
+    "title": "Random features for large-scale kernel machines",
+    "venue": "NeurIPS 20"
+  },
+  "rakotomamonjy2008": {
+    "authors": "Rakotomamonjy, A., Bach, F. R., Canu, S., and Grandvalet, Y.",
+    "year": 2008,
+    "title": "SimpleMKL",
+    "venue": "Journal of Machine Learning Research 9, 2491-2521"
   },
   "ramon2003": {
     "authors": "Ramon, J. and Gärtner, T.",
     "year": 2003,
     "title": "Expressivity versus efficiency of graph kernels",
     "venue": "First International Workshop on Mining Graphs, Trees and Sequences, 65-74"
+  },
+  "rasmussen2006": {
+    "authors": "Rasmussen, C. E. and Williams, C. K. I.",
+    "year": 2006,
+    "title": "Gaussian Processes for Machine Learning",
+    "venue": "MIT Press"
+  },
+  "robbins1951": {
+    "authors": "Robbins, H. and Monro, S.",
+    "year": 1951,
+    "title": "A stochastic approximation method",
+    "venue": "Annals of Mathematical Statistics 22(3), 400-407"
+  },
+  "rosipal2001": {
+    "authors": "Rosipal, R. and Trejo, L. J.",
+    "year": 2001,
+    "title": "Kernel partial least squares regression in reproducing kernel Hilbert space",
+    "venue": "Journal of Machine Learning Research 2, 97-123"
+  },
+  "rudi2017": {
+    "authors": "Rudi, A. and Rosasco, L.",
+    "year": 2017,
+    "title": "Generalization properties of learning with random features",
+    "venue": "NeurIPS 30"
+  },
+  "rudi2017falkon": {
+    "authors": "Rudi, A., Carratino, L., and Rosasco, L.",
+    "year": 2017,
+    "title": "FALKON: an optimal large scale kernel method",
+    "venue": "NeurIPS 30"
+  },
+  "rudin1962": {
+    "authors": "Rudin, W.",
+    "year": 1962,
+    "title": "Fourier Analysis on Groups",
+    "venue": "Interscience Publishers (Wiley)"
+  },
+  "saigo2004": {
+    "authors": "Saigo, H., Vert, J.-P., Ueda, N., and Akutsu, T.",
+    "year": 2004,
+    "title": "Protein homology detection using string alignment kernels",
+    "venue": "Bioinformatics 20(11), 1682-1689"
+  },
+  "salton1975": {
+    "authors": "Salton, G., Wong, A., and Yang, C. S.",
+    "year": 1975,
+    "title": "A vector space model for automatic indexing",
+    "venue": "Communications of the ACM 18(11), 613-620"
+  },
+  "sauer1972": {
+    "authors": "Sauer, N.",
+    "year": 1972,
+    "title": "On the density of families of sets",
+    "venue": "Journal of Combinatorial Theory, Series A 13(1), 145-147"
+  },
+  "saunders1998": {
+    "authors": "Saunders, C., Gammerman, A., and Vovk, V.",
+    "year": 1998,
+    "title": "Ridge regression learning algorithm in dual variables",
+    "venue": "Proceedings of the 15th International Conference on Machine Learning (ICML), 515-521"
+  },
+  "schmidt2017": {
+    "authors": "Schmidt, M., Le Roux, N., and Bach, F.",
+    "year": 2017,
+    "title": "Minimizing finite sums with the stochastic average gradient",
+    "venue": "Mathematical Programming 162(1-2), 83-112"
+  },
+  "schoenberg1938": {
+    "authors": "Schoenberg, I. J.",
+    "year": 1938,
+    "title": "Metric spaces and positive definite functions",
+    "venue": "Transactions of the American Mathematical Society 44(3), 522-536"
+  },
+  "scholkopf1998": {
+    "authors": "Schölkopf, B., Smola, A., and Müller, K.-R.",
+    "year": 1998,
+    "title": "Nonlinear component analysis as a kernel eigenvalue problem",
+    "venue": "Neural Computation 10(5), 1299-1319"
+  },
+  "scholkopf2000nu": {
+    "authors": "Schölkopf, B., Smola, A. J., Williamson, R. C., and Bartlett, P. L.",
+    "year": 2000,
+    "title": "New support vector algorithms",
+    "venue": "Neural Computation 12(5), 1207-1245"
+  },
+  "scholkopf2001": {
+    "authors": "Schölkopf, B., Herbrich, R., and Smola, A. J.",
+    "year": 2001,
+    "title": "A generalized representer theorem",
+    "venue": "COLT/EuroCOLT, LNCS 2111, 416-426"
+  },
+  "scholkopf2002": {
+    "authors": "Schölkopf, B. and Smola, A. J.",
+    "year": 2002,
+    "title": "Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond",
+    "venue": "MIT Press",
+    "url": "https://mcube.lab.nycu.edu.tw/~cfung/docs/books/scholkopf2002learning_with_kernels.pdf"
+  },
+  "seeger2002": {
+    "authors": "Seeger, M.",
+    "year": 2002,
+    "title": "Covariance kernels from Bayesian generative models",
+    "venue": "NeurIPS 14"
+  },
+  "sejdinovic2013": {
+    "authors": "Sejdinovic, D., Sriperumbudur, B., Gretton, A., and Fukumizu, K.",
+    "year": 2013,
+    "title": "Equivalence of distance-based and RKHS-based statistics in hypothesis testing",
+    "venue": "Annals of Statistics 41(5), 2263-2291"
+  },
+  "shankar2020": {
+    "authors": "Shankar, V., Fang, A., Guo, W., Fridovich-Keil, S., Ragan-Kelley, J., Schmidt, L., and Recht, B.",
+    "year": 2020,
+    "title": "Neural kernels without tangents",
+    "venue": "ICML"
+  },
+  "shawe2004": {
+    "authors": "Shawe-Taylor, J. and Cristianini, N.",
+    "year": 2004,
+    "title": "Kernel Methods for Pattern Analysis",
+    "venue": "Cambridge University Press",
+    "url": "https://pzs.dstu.dp.ua/DataMining/svm/bibl/Kernel_Methods_for_Pattern_Analysis.pdf"
   },
   "shervashidze2011": {
     "authors": "Shervashidze, N., Schweitzer, P., van Leeuwen, E. J., Mehlhorn, K., and Borgwardt, K. M.",
@@ -409,311 +847,35 @@
     "title": "A Hilbert space embedding for distributions",
     "venue": "Algorithmic Learning Theory (ALT), Lecture Notes in Computer Science 4754, Springer, 13-31"
   },
-  "fukumizu2008": {
-    "authors": "Fukumizu, K., Gretton, A., Sun, X., and Schölkopf, B.",
-    "year": 2008,
-    "title": "Kernel measures of conditional dependence",
-    "venue": "NeurIPS 20, 489-496"
-  },
-  "muandet2017": {
-    "authors": "Muandet, K., Fukumizu, K., Sriperumbudur, B., and Schölkopf, B.",
-    "year": 2017,
-    "title": "Kernel mean embedding of distributions: a review and beyond",
-    "venue": "Foundations and Trends in Machine Learning 10(1-2), 1-141"
-  },
-  "lanckriet2004fusion": {
-    "authors": "Lanckriet, G. R. G., De Bie, T., Cristianini, N., Jordan, M. I., and Noble, W. S.",
-    "year": 2004,
-    "title": "A statistical framework for genomic data fusion",
-    "venue": "Bioinformatics 20(16), 2626-2635"
-  },
-  "bach2004": {
-    "authors": "Bach, F. R., Lanckriet, G. R. G., and Jordan, M. I.",
-    "year": 2004,
-    "title": "Multiple kernel learning, conic duality, and the SMO algorithm",
-    "venue": "Proceedings of the 21st International Conference on Machine Learning (ICML), 6-13"
-  },
-  "rakotomamonjy2008": {
-    "authors": "Rakotomamonjy, A., Bach, F. R., Canu, S., and Grandvalet, Y.",
-    "year": 2008,
-    "title": "SimpleMKL",
-    "venue": "Journal of Machine Learning Research 9, 2491-2521"
-  },
-  "yamanishi2004": {
-    "authors": "Yamanishi, Y., Vert, J.-P., and Kanehisa, M.",
-    "year": 2004,
-    "title": "Protein network inference from multiple genomic data: a supervised approach",
-    "venue": "Bioinformatics 20(Suppl 1), i363-i370"
-  },
-  "micchelli2005": {
-    "authors": "Micchelli, C. A. and Pontil, M.",
-    "year": 2005,
-    "title": "Learning the kernel function via regularization",
-    "venue": "Journal of Machine Learning Research 6, 1099-1125"
-  },
-  "gonen2011": {
-    "authors": "Gönen, M. and Alpaydın, E.",
-    "year": 2011,
-    "title": "Multiple kernel learning algorithms",
-    "venue": "Journal of Machine Learning Research 12, 2211-2268"
-  },
-  "harchaoui2007": {
-    "authors": "Harchaoui, Z. and Bach, F.",
-    "year": 2007,
-    "title": "Image classification with segmentation graph kernels",
-    "venue": "IEEE Conference on Computer Vision and Pattern Recognition (CVPR)"
-  },
-  "drineas2005": {
-    "authors": "Drineas, P. and Mahoney, M. W.",
-    "year": 2005,
-    "title": "On the Nyström method for approximating a Gram matrix for improved kernel-based learning",
-    "venue": "Journal of Machine Learning Research 6, 2153-2175"
-  },
-  "bottou2010": {
-    "authors": "Bottou, L.",
-    "year": 2010,
-    "title": "Large-scale machine learning with stochastic gradient descent",
-    "venue": "Proceedings of COMPSTAT 2010, 177-186"
-  },
-  "schmidt2017": {
-    "authors": "Schmidt, M., Le Roux, N., and Bach, F.",
-    "year": 2017,
-    "title": "Minimizing finite sums with the stochastic average gradient",
-    "venue": "Mathematical Programming 162(1-2), 83-112"
-  },
-  "johnson2013": {
-    "authors": "Johnson, R. and Zhang, T.",
-    "year": 2013,
-    "title": "Accelerating stochastic gradient descent using predictive variance reduction",
-    "venue": "NeurIPS 26"
-  },
-  "rudi2017": {
-    "authors": "Rudi, A. and Rosasco, L.",
-    "year": 2017,
-    "title": "Generalization properties of learning with random features",
-    "venue": "NeurIPS 30"
-  },
-  "neal1996": {
-    "authors": "Neal, R. M.",
-    "year": 1996,
-    "title": "Bayesian Learning for Neural Networks",
-    "venue": "Springer, Lecture Notes in Statistics 118"
-  },
-  "chizat2019": {
-    "authors": "Chizat, L., Oyallon, E., and Bach, F.",
-    "year": 2019,
-    "title": "On lazy training in differentiable programming",
-    "venue": "NeurIPS 32"
-  },
-  "bietti2019": {
-    "authors": "Bietti, A. and Mairal, J.",
-    "year": 2019,
-    "title": "Group invariance, stability to deformations, and complexity of deep convolutional representations",
-    "venue": "Journal of Machine Learning Research 20(25), 1-49"
-  },
-  "chen2020": {
-    "authors": "Chen, D., Jacob, L., and Mairal, J.",
-    "year": 2020,
-    "title": "Convolutional kernel networks for graph-structured data",
-    "venue": "ICML"
-  },
-  "tikhonov1977": {
-    "authors": "Tikhonov, A. N. and Arsenin, V. Y.",
-    "year": 1977,
-    "title": "Solutions of Ill-Posed Problems",
-    "venue": "V. H. Winston and Sons, Washington DC"
-  },
-  "scholkopf2000nu": {
-    "authors": "Schölkopf, B., Smola, A. J., Williamson, R. C., and Bartlett, P. L.",
-    "year": 2000,
-    "title": "New support vector algorithms",
-    "venue": "Neural Computation 12(5), 1207-1245"
-  },
-  "williams2002": {
-    "authors": "Williams, C. K. I.",
-    "year": 2002,
-    "title": "On a connection between kernel PCA and metric multidimensional scaling",
-    "venue": "Machine Learning 46(1-3), 11-19"
-  },
-  "collins2002": {
-    "authors": "Collins, M. and Duffy, N.",
-    "year": 2002,
-    "title": "Convolution kernels for natural language",
-    "venue": "NeurIPS 14"
-  },
-  "mcdiarmid1989": {
-    "authors": "McDiarmid, C.",
-    "year": 1989,
-    "title": "On the method of bounded differences",
-    "venue": "Surveys in Combinatorics 1989, London Mathematical Society Lecture Note Series 141, 148-188, Cambridge University Press"
-  },
-  "salton1975": {
-    "authors": "Salton, G., Wong, A., and Yang, C. S.",
-    "year": 1975,
-    "title": "A vector space model for automatic indexing",
-    "venue": "Communications of the ACM 18(11), 613-620"
-  },
-  "deerwester1990": {
-    "authors": "Deerwester, S., Dumais, S. T., Furnas, G. W., Landauer, T. K., and Harshman, R.",
-    "year": 1990,
-    "title": "Indexing by latent semantic analysis",
-    "venue": "Journal of the American Society for Information Science 41(6), 391-407"
-  },
-  "watkins2000": {
-    "authors": "Watkins, C.",
-    "year": 2000,
-    "title": "Dynamic alignment kernels",
-    "venue": "Advances in Large Margin Classifiers, MIT Press, 39-50"
-  },
-  "durbin1998": {
-    "authors": "Durbin, R., Eddy, S. R., Krogh, A., and Mitchison, G.",
-    "year": 1998,
-    "title": "Biological Sequence Analysis: Probabilistic Models of Proteins and Nucleic Acids",
-    "venue": "Cambridge University Press"
-  },
-  "broomhead1988": {
-    "authors": "Broomhead, D. S. and Lowe, D.",
-    "year": 1988,
-    "title": "Multivariable functional interpolation and adaptive networks",
-    "venue": "Complex Systems 2, 321-355"
-  },
-  "bengio2006local": {
-    "authors": "Bengio, Y., Delalleau, O., and Le Roux, N.",
-    "year": 2006,
-    "title": "The curse of highly variable functions for local kernel machines",
-    "venue": "NeurIPS 18"
-  },
-  "glorot2010": {
-    "authors": "Glorot, X. and Bengio, Y.",
-    "year": 2010,
-    "title": "Understanding the difficulty of training deep feedforward neural networks",
-    "venue": "AISTATS"
-  },
-  "montufar2014": {
-    "authors": "Montufar, G., Pascanu, R., Cho, K., and Bengio, Y.",
-    "year": 2014,
-    "title": "On the number of linear regions of deep neural networks",
-    "venue": "NeurIPS 27"
-  },
-  "belkin2019dd": {
-    "authors": "Belkin, M., Hsu, D., Ma, S., and Mandal, S.",
-    "year": 2019,
-    "title": "Reconciling modern machine-learning practice and the classical bias-variance trade-off",
-    "venue": "Proceedings of the National Academy of Sciences 116(32), 15849-15854"
-  },
-  "belkin2018understand": {
-    "authors": "Belkin, M., Ma, S., and Mandal, S.",
-    "year": 2018,
-    "title": "To understand deep learning we need to understand kernel learning",
-    "venue": "ICML"
-  },
-  "liang2020interpolate": {
-    "authors": "Liang, T. and Rakhlin, A.",
-    "year": 2020,
-    "title": "Just interpolate: kernel ridgeless regression can generalize",
-    "venue": "Annals of Statistics 48(3), 1329-1347"
-  },
-  "bartlett2020benign": {
-    "authors": "Bartlett, P. L., Long, P. M., Lugosi, G., and Tsigler, A.",
-    "year": 2020,
-    "title": "Benign overfitting in linear regression",
-    "venue": "Proceedings of the National Academy of Sciences 117(48), 30063-30070"
-  },
-  "lee2018nngp": {
-    "authors": "Lee, J., Bahri, Y., Novak, R., Schoenholz, S. S., Pennington, J., and Sohl-Dickstein, J.",
-    "year": 2018,
-    "title": "Deep neural networks as Gaussian processes",
-    "venue": "ICLR"
-  },
-  "matthews2018": {
-    "authors": "Matthews, A. G. de G., Rowland, M., Hron, J., Turner, R. E., and Ghahramani, Z.",
-    "year": 2018,
-    "title": "Gaussian process behaviour in wide deep neural networks",
-    "venue": "ICLR"
-  },
-  "arora2019cntk": {
-    "authors": "Arora, S., Du, S. S., Hu, W., Li, Z., Salakhutdinov, R., and Wang, R.",
-    "year": 2019,
-    "title": "On exact computation with an infinitely wide neural net",
-    "venue": "NeurIPS 32"
-  },
-  "yang2019tp": {
-    "authors": "Yang, G.",
-    "year": 2019,
-    "title": "Tensor programs I: wide feedforward or recurrent neural networks of any architecture are Gaussian processes",
-    "venue": "NeurIPS 32"
-  },
-  "chizat2018meanfield": {
-    "authors": "Chizat, L. and Bach, F.",
-    "year": 2018,
-    "title": "On the global convergence of gradient descent for over-parameterized models using optimal transport",
-    "venue": "NeurIPS 31"
-  },
-  "mei2018meanfield": {
-    "authors": "Mei, S., Montanari, A., and Nguyen, P.-M.",
-    "year": 2018,
-    "title": "A mean field view of the landscape of two-layer neural networks",
-    "venue": "Proceedings of the National Academy of Sciences 115(33), E7665-E7671"
-  },
-  "bach2017barron": {
-    "authors": "Bach, F.",
-    "year": 2017,
-    "title": "Breaking the curse of dimensionality with convex neural networks",
-    "venue": "Journal of Machine Learning Research 18(19), 1-53"
-  },
-  "rudi2017falkon": {
-    "authors": "Rudi, A., Carratino, L., and Rosasco, L.",
-    "year": 2017,
-    "title": "FALKON: an optimal large scale kernel method",
-    "venue": "NeurIPS 30"
-  },
-  "ma2017eigenpro": {
-    "authors": "Ma, S. and Belkin, M.",
-    "year": 2017,
-    "title": "Diving into the shallows: a computational perspective on large-scale shallow learning (EigenPro)",
-    "venue": "NeurIPS 30"
-  },
-  "le2013fastfood": {
-    "authors": "Le, Q., Sarlós, T., and Smola, A.",
-    "year": 2013,
-    "title": "Fastfood: approximating kernel expansions in loglinear time",
-    "venue": "ICML"
-  },
-  "yu2016orf": {
-    "authors": "Yu, F. X., Suresh, A. T., Choromanski, K., Holtmann-Rice, D., and Kumar, S.",
-    "year": 2016,
-    "title": "Orthogonal random features",
-    "venue": "NeurIPS 29"
-  },
-  "bach2017quadrature": {
-    "authors": "Bach, F.",
-    "year": 2017,
-    "title": "On the equivalence between kernel quadrature rules and random feature expansions",
-    "venue": "Journal of Machine Learning Research 18(21), 1-38"
-  },
-  "chwialkowski2016ksd": {
-    "authors": "Chwialkowski, K., Strathmann, H., and Gretton, A.",
-    "year": 2016,
-    "title": "A kernel test of goodness of fit",
-    "venue": "ICML"
-  },
-  "liu2016ksd": {
-    "authors": "Liu, Q., Lee, J. D., and Jordan, M. I.",
-    "year": 2016,
-    "title": "A kernelized Stein discrepancy for goodness-of-fit tests",
-    "venue": "ICML"
-  },
-  "liu2016svgd": {
-    "authors": "Liu, Q. and Wang, D.",
-    "year": 2016,
-    "title": "Stein variational gradient descent: a general purpose Bayesian inference algorithm",
-    "venue": "NeurIPS 29"
-  },
   "song2013cme": {
     "authors": "Song, L., Fukumizu, K., and Gretton, A.",
     "year": 2013,
     "title": "Kernel embeddings of conditional distributions",
     "venue": "IEEE Signal Processing Magazine 30(4), 98-111"
+  },
+  "sriperumbudur2010": {
+    "authors": "Sriperumbudur, B. K., Gretton, A., Fukumizu, K., Schölkopf, B., and Lanckriet, G.",
+    "year": 2010,
+    "title": "Hilbert space embeddings and metrics on probability measures",
+    "venue": "Journal of Machine Learning Research 11, 1517-1561"
+  },
+  "stein1999": {
+    "authors": "Stein, M. L.",
+    "year": 1999,
+    "title": "Interpolation of Spatial Data: Some Theory for Kriging",
+    "venue": "Springer"
+  },
+  "steinwart2001": {
+    "authors": "Steinwart, I.",
+    "year": 2001,
+    "title": "On the influence of the kernel on the consistency of support vector machines",
+    "venue": "Journal of Machine Learning Research 2, 67-93"
+  },
+  "steinwart2008": {
+    "authors": "Steinwart, I. and Christmann, A.",
+    "year": 2008,
+    "title": "Support Vector Machines",
+    "venue": "Springer"
   },
   "szabo2016dr": {
     "authors": "Szabó, Z., Sriperumbudur, B. K., Póczos, B., and Gretton, A.",
@@ -721,10 +883,22 @@
     "title": "Learning theory for distribution regression",
     "venue": "Journal of Machine Learning Research 17(152), 1-40"
   },
-  "feydy2019sinkhorn": {
-    "authors": "Feydy, J., Séjourné, T., Vialard, F.-X., Amari, S., Trouvé, A., and Peyré, G.",
-    "year": 2019,
-    "title": "Interpolating between optimal transport and MMD using Sinkhorn divergences",
+  "tikhonov1977": {
+    "authors": "Tikhonov, A. N. and Arsenin, V. Y.",
+    "year": 1977,
+    "title": "Solutions of Ill-Posed Problems",
+    "venue": "V. H. Winston and Sons, Washington DC"
+  },
+  "tipping2001": {
+    "authors": "Tipping, M. E.",
+    "year": 2001,
+    "title": "Sparse Bayesian learning and the relevance vector machine",
+    "venue": "Journal of Machine Learning Research 1, 211-244"
+  },
+  "titsias2009svgp": {
+    "authors": "Titsias, M.",
+    "year": 2009,
+    "title": "Variational learning of inducing variables in sparse Gaussian processes",
     "venue": "AISTATS"
   },
   "tsai2019transformer": {
@@ -733,185 +907,59 @@
     "title": "Transformer dissection: a unified understanding of transformer's attention via the lens of kernel",
     "venue": "EMNLP"
   },
-  "katharopoulos2020": {
-    "authors": "Katharopoulos, A., Vyas, A., Pappas, N., and Fleuret, F.",
-    "year": 2020,
-    "title": "Transformers are RNNs: fast autoregressive transformers with linear attention",
-    "venue": "ICML"
+  "tsuda2002": {
+    "authors": "Tsuda, K., Kin, T., and Asai, K.",
+    "year": 2002,
+    "title": "Marginalized kernels for biological sequences",
+    "venue": "Bioinformatics 18(Suppl 1), S268-S275"
   },
-  "choromanski2021performer": {
-    "authors": "Choromanski, K., Likhosherstov, V., Dohan, D., Song, X., et al.",
-    "year": 2021,
-    "title": "Rethinking attention with Performers",
-    "venue": "ICLR"
+  "tsuda2002tp": {
+    "authors": "Tsuda, K., Kawanabe, M., Rätsch, G., Sonnenburg, S., and Müller, K.-R.",
+    "year": 2002,
+    "title": "A new discriminative kernel from probabilistic models",
+    "venue": "Neural Computation 14(10), 2397-2414"
   },
-  "borovitskiy2020matern": {
-    "authors": "Borovitskiy, V., Terenin, A., Mostowsky, P., and Deisenroth, M. P.",
-    "year": 2020,
-    "title": "Matérn Gaussian processes on Riemannian manifolds",
-    "venue": "NeurIPS 33"
+  "tsuda2003": {
+    "authors": "Tsuda, K., Kin, T., and Asai, K.",
+    "year": 2003,
+    "title": "Marginalized kernels for biological sequences",
+    "venue": "Bioinformatics 18(Suppl. 1), S268-S275"
   },
-  "borovitskiy2021graph": {
-    "authors": "Borovitskiy, V., Azangulov, I., Terenin, A., Mostowsky, P., Deisenroth, M. P., and Durrande, N.",
-    "year": 2021,
-    "title": "Matérn Gaussian processes on graphs",
-    "venue": "AISTATS"
-  },
-  "li2020fno": {
-    "authors": "Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., and Anandkumar, A.",
-    "year": 2020,
-    "title": "Fourier neural operator for parametric partial differential equations",
-    "venue": "ICLR 2021"
-  },
-  "titsias2009svgp": {
-    "authors": "Titsias, M.",
+  "tsybakov2009": {
+    "authors": "Tsybakov, A. B.",
     "year": 2009,
-    "title": "Variational learning of inducing variables in sparse Gaussian processes",
-    "venue": "AISTATS"
+    "title": "Introduction to Nonparametric Estimation",
+    "venue": "Springer, Springer Series in Statistics"
   },
-  "hensman2013bigdata": {
-    "authors": "Hensman, J., Fusi, N., and Lawrence, N. D.",
-    "year": 2013,
-    "title": "Gaussian processes for big data",
-    "venue": "UAI"
+  "vapnik1982": {
+    "authors": "Vapnik, V. N.",
+    "year": 1982,
+    "title": "Estimation of Dependences Based on Empirical Data",
+    "venue": "Springer"
   },
-  "damianou2013deepgp": {
-    "authors": "Damianou, A. and Lawrence, N. D.",
-    "year": 2013,
-    "title": "Deep Gaussian processes",
-    "venue": "AISTATS"
+  "vapnik1995": {
+    "authors": "Vapnik, V. N.",
+    "year": 1995,
+    "title": "The Nature of Statistical Learning Theory",
+    "venue": "Springer"
   },
-  "wilson2016dkl": {
-    "authors": "Wilson, A. G., Hu, Z., Salakhutdinov, R., and Xing, E. P.",
-    "year": 2016,
-    "title": "Deep kernel learning",
-    "venue": "AISTATS"
+  "vapnik1998": {
+    "authors": "Vapnik, V. N.",
+    "year": 1998,
+    "title": "Statistical Learning Theory",
+    "venue": "Wiley"
   },
-  "zhang2009rkbs": {
-    "authors": "Zhang, H., Xu, Y., and Zhang, J.",
-    "year": 2009,
-    "title": "Reproducing kernel Banach spaces for machine learning",
-    "venue": "Journal of Machine Learning Research 10, 2741-2775"
+  "vapnikchervonenkis1971": {
+    "authors": "Vapnik, V. N. and Chervonenkis, A. Ya.",
+    "year": 1971,
+    "title": "On the uniform convergence of relative frequencies of events to their probabilities",
+    "venue": "Theory of Probability and Its Applications 16(2), 264-280"
   },
-  "aizerman1964": {
-    "authors": "Aizerman, M. A., Braverman, E. M., and Rozonoer, L. I.",
-    "year": 1964,
-    "title": "Theoretical foundations of the potential function method in pattern recognition learning",
-    "venue": "Automation and Remote Control 25, 821-837"
-  },
-  "schoenberg1938": {
-    "authors": "Schoenberg, I. J.",
-    "year": 1938,
-    "title": "Metric spaces and positive definite functions",
-    "venue": "Transactions of the American Mathematical Society 44(3), 522-536"
-  },
-  "micchelli1986": {
-    "authors": "Micchelli, C. A.",
-    "year": 1986,
-    "title": "Interpolation of scattered data: distance matrices and conditionally positive definite functions",
-    "venue": "Constructive Approximation 2, 11-22"
-  },
-  "argyriou2009": {
-    "authors": "Argyriou, A., Micchelli, C. A., and Pontil, M.",
-    "year": 2009,
-    "title": "When is there a representer theorem? Vector versus matrix regularizers",
-    "venue": "Journal of Machine Learning Research 10, 2507-2529"
-  },
-  "kloft2011": {
-    "authors": "Kloft, M., Brefeld, U., Sonnenburg, S., and Zien, A.",
-    "year": 2011,
-    "title": "lp-norm multiple kernel learning",
-    "venue": "Journal of Machine Learning Research 12, 953-997"
-  },
-  "cortes2009": {
-    "authors": "Cortes, C.",
-    "year": 2009,
-    "title": "Can learning kernels help performance? (invited talk)",
-    "venue": "ICML"
-  },
-  "robbins1951": {
-    "authors": "Robbins, H. and Monro, S.",
-    "year": 1951,
-    "title": "A stochastic approximation method",
-    "venue": "Annals of Mathematical Statistics 22(3), 400-407"
-  },
-  "gretton2005hsic": {
-    "authors": "Gretton, A., Bousquet, O., Smola, A., and Schölkopf, B.",
-    "year": 2005,
-    "title": "Measuring statistical dependence with Hilbert-Schmidt norms",
-    "venue": "Algorithmic Learning Theory (ALT)"
-  },
-  "gretton2006": {
-    "authors": "Gretton, A., Borgwardt, K. M., Rasch, M., Schölkopf, B., and Smola, A.",
-    "year": 2006,
-    "title": "A kernel method for the two-sample problem",
-    "venue": "NeurIPS 19"
-  },
-  "li2015gmmn": {
-    "authors": "Li, Y., Swersky, K., and Zemel, R.",
-    "year": 2015,
-    "title": "Generative moment matching networks",
-    "venue": "ICML"
-  },
-  "dziugaite2015": {
-    "authors": "Dziugaite, G. K., Roy, D. M., and Ghahramani, Z.",
-    "year": 2015,
-    "title": "Training generative neural networks via maximum mean discrepancy optimization",
-    "venue": "UAI"
-  },
-  "sejdinovic2013": {
-    "authors": "Sejdinovic, D., Sriperumbudur, B., Gretton, A., and Fukumizu, K.",
-    "year": 2013,
-    "title": "Equivalence of distance-based and RKHS-based statistics in hypothesis testing",
-    "venue": "Annals of Statistics 41(5), 2263-2291"
-  },
-  "wilson2013": {
-    "authors": "Wilson, A. G. and Adams, R. P.",
-    "year": 2013,
-    "title": "Gaussian process kernels for pattern discovery and extrapolation (the spectral mixture kernel)",
-    "venue": "ICML"
-  },
-  "shankar2020": {
-    "authors": "Shankar, V., Fang, A., Guo, W., Fridovich-Keil, S., Ragan-Kelley, J., Schmidt, L., and Recht, B.",
-    "year": 2020,
-    "title": "Neural kernels without tangents",
-    "venue": "ICML"
-  },
-  "mei2022": {
-    "authors": "Mei, S. and Montanari, A.",
-    "year": 2022,
-    "title": "The generalization error of random features regression: precise asymptotics and the double descent curve",
-    "venue": "Communications on Pure and Applied Mathematics 75(4), 667-766"
-  },
-  "bordelon2020": {
-    "authors": "Bordelon, B., Canatar, A., and Pehlevan, C.",
-    "year": 2020,
-    "title": "Spectrum dependent learning curves in kernel regression and wide neural networks",
-    "venue": "ICML"
-  },
-  "canatar2021": {
-    "authors": "Canatar, A., Bordelon, B., and Pehlevan, C.",
-    "year": 2021,
-    "title": "Spectral bias and task-model alignment explain generalization in kernel regression and infinitely wide neural networks",
-    "venue": "Nature Communications 12, 2914"
-  },
-  "du2019gntk": {
-    "authors": "Du, S. S., Hou, K., Salakhutdinov, R., Póczos, B., Wang, R., and Xu, K.",
-    "year": 2019,
-    "title": "Graph neural tangent kernel: fusing graph neural networks with graph kernels",
-    "venue": "NeurIPS 32"
-  },
-  "haochen2021": {
-    "authors": "HaoChen, J. Z., Wei, C., Gaidon, A., and Ma, T.",
-    "year": 2021,
-    "title": "Provable guarantees for self-supervised deep learning with spectral contrastive loss",
-    "venue": "NeurIPS 34"
-  },
-  "xu2019gin": {
-    "authors": "Xu, K., Hu, W., Leskovec, J., and Jegelka, S.",
-    "year": 2019,
-    "title": "How powerful are graph neural networks?",
-    "venue": "ICLR"
+  "watkins2000": {
+    "authors": "Watkins, C.",
+    "year": 2000,
+    "title": "Dynamic alignment kernels",
+    "venue": "Advances in Large Margin Classifiers, MIT Press, 39-50"
   },
   "wendland2005": {
     "authors": "Wendland, H.",
@@ -919,34 +967,82 @@
     "title": "Scattered Data Approximation",
     "venue": "Cambridge University Press"
   },
-  "jaakkola1999fisher": {
-    "authors": "Jaakkola, T. and Haussler, D.",
-    "year": 1999,
-    "title": "Exploiting generative models in discriminative classifiers",
-    "venue": "NeurIPS 11 (1998)"
+  "williams1996": {
+    "authors": "Williams, C. K. I. and Rasmussen, C. E.",
+    "year": 1996,
+    "title": "Gaussian processes for regression",
+    "venue": "Advances in Neural Information Processing Systems 8, 514-520"
   },
-  "rasmussen2006": {
-    "authors": "Rasmussen, C. E. and Williams, C. K. I.",
-    "year": 2006,
-    "title": "Gaussian Processes for Machine Learning",
-    "venue": "MIT Press"
+  "williams2001": {
+    "authors": "Williams, C. K. I. and Seeger, M.",
+    "year": 2001,
+    "title": "Using the Nyström method to speed up kernel machines",
+    "venue": "NeurIPS 13"
   },
-  "stein1999": {
-    "authors": "Stein, M. L.",
-    "year": 1999,
-    "title": "Interpolation of Spatial Data: Some Theory for Kriging",
-    "venue": "Springer"
+  "williams2002": {
+    "authors": "Williams, C. K. I.",
+    "year": 2002,
+    "title": "On a connection between kernel PCA and metric multidimensional scaling",
+    "venue": "Machine Learning 46(1-3), 11-19"
   },
-  "dicker2015": {
-    "authors": "Dicker, L. H., Foster, D. P., and Hsu, D.",
-    "year": 2015,
-    "title": "Kernel ridge vs. principal component regression: minimax bounds and the qualification problem",
-    "venue": "Electronic Journal of Statistics 11(1) (2017)"
+  "wilson2013": {
+    "authors": "Wilson, A. G. and Adams, R. P.",
+    "year": 2013,
+    "title": "Gaussian process kernels for pattern discovery and extrapolation (the spectral mixture kernel)",
+    "venue": "ICML"
   },
-  "leslie2004": {
-    "authors": "Leslie, C., Eskin, E., Cohen, A., Weston, J., and Noble, W. S.",
+  "wilson2016dkl": {
+    "authors": "Wilson, A. G., Hu, Z., Salakhutdinov, R., and Xing, E. P.",
+    "year": 2016,
+    "title": "Deep kernel learning",
+    "venue": "AISTATS"
+  },
+  "wold1975": {
+    "authors": "Wold, H.",
+    "year": 1975,
+    "title": "Soft modelling by latent variables: the non-linear iterative partial least squares (NIPALS) approach",
+    "venue": "Perspectives in Probability and Statistics (ed. J. Gani), Academic Press, 117-142"
+  },
+  "xu2019gin": {
+    "authors": "Xu, K., Hu, W., Leskovec, J., and Jegelka, S.",
+    "year": 2019,
+    "title": "How powerful are graph neural networks?",
+    "venue": "ICLR"
+  },
+  "yamanishi2004": {
+    "authors": "Yamanishi, Y., Vert, J.-P., and Kanehisa, M.",
     "year": 2004,
-    "title": "Mismatch string kernels for discriminative protein classification",
-    "venue": "Bioinformatics 20(4)"
+    "title": "Protein network inference from multiple genomic data: a supervised approach",
+    "venue": "Bioinformatics 20(Suppl 1), i363-i370"
+  },
+  "yang2019tp": {
+    "authors": "Yang, G.",
+    "year": 2019,
+    "title": "Tensor programs I: wide feedforward or recurrent neural networks of any architecture are Gaussian processes",
+    "venue": "NeurIPS 32"
+  },
+  "yu2016orf": {
+    "authors": "Yu, F. X., Suresh, A. T., Choromanski, K., Holtmann-Rice, D., and Kumar, S.",
+    "year": 2016,
+    "title": "Orthogonal random features",
+    "venue": "NeurIPS 29"
+  },
+  "zhang2004": {
+    "authors": "Zhang, T.",
+    "year": 2004,
+    "title": "Statistical behavior and consistency of classification methods based on convex risk minimization",
+    "venue": "Annals of Statistics 32(1), 56-85"
+  },
+  "zhang2009rkbs": {
+    "authors": "Zhang, H., Xu, Y., and Zhang, J.",
+    "year": 2009,
+    "title": "Reproducing kernel Banach spaces for machine learning",
+    "venue": "Journal of Machine Learning Research 10, 2741-2775"
+  },
+  "zhu2005": {
+    "authors": "Zhu, J. and Hastie, T.",
+    "year": 2005,
+    "title": "Kernel logistic regression and the import vector machine",
+    "venue": "Journal of Computational and Graphical Statistics 14(1), 185-205"
   }
 }
