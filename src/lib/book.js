@@ -102,6 +102,7 @@ function boxHead(kindLabel, id, ann) {
 export function decorateBoxes(body, chLabel) {
   let nStmt = 0;
   let nEx = 0;
+  let nAlgo = 0;
   body = body.replace(
     /<div class="box (thm|lem|prop|cor|def)">\s*<span class="box-title">([\s\S]*?)<\/span>/g,
     (m, kind, title) => {
@@ -126,6 +127,16 @@ export function decorateBoxes(body, chLabel) {
       const id = `example-${String(chLabel).toLowerCase()}-${nEx}`;
       const ann = boxAnnotation(t, "Example");
       return `<div class="box ex" id="${id}">${boxHead(`Example ${num}`, id, ann)}`;
+    },
+  );
+  body = body.replace(
+    /<div class="box algo">\s*<span class="box-title">([\s\S]*?)<\/span>/g,
+    (m, title) => {
+      nAlgo++;
+      const num = `${chLabel}.${nAlgo}`;
+      const id = `algo-${String(chLabel).toLowerCase()}-${nAlgo}`;
+      const ann = boxAnnotation(title.trim(), "Algorithm");
+      return `<div class="box algo" id="${id}">${boxHead(`Algorithm ${num}`, id, ann)}`;
     },
   );
   body = body.replace(

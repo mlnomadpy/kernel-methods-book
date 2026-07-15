@@ -342,6 +342,30 @@ $$
 $$
 </div>
 
+<div class="box proof"><span class="box-title">Proof</span>
+The primal of the preceding proposition is a convex quadratic program, and the point
+\(\alpha = 0\), \(\xi = \mathbf{1}\) satisfies every constraint (indeed \(y_i[K\alpha]_i + \xi_i - 1 = 0\)
+and \(\xi_i = 1 \gt 0\)), so Slater's condition holds and strong duality lets us solve the dual in
+its place. Attach multipliers \(\mu \ge 0\) to the margin constraints and \(\nu \ge 0\) to the
+positivity constraints \(\xi_i \ge 0\), giving the Lagrangian
+\(L(\alpha,\xi,\mu,\nu) = \tfrac1n \xi^\top\mathbf{1} + \lambda\,\alpha^\top K\alpha
+- (\mathrm{diag}(y)\mu)^\top K\alpha - (\mu+\nu)^\top\xi + \mu^\top\mathbf{1}\).
+It is convex in \(\alpha\) and linear in \(\xi\), so its infimum splits across the two blocks.
+Stationarity in \(\alpha\), \(\nabla_\alpha L = K(2\lambda\alpha - \mathrm{diag}(y)\mu) = 0\), is
+solved by \(\alpha^* = \mathrm{diag}(y)\mu/2\lambda\), and every solution attains the same value.
+Stationarity in \(\xi\), \(\nabla_\xi L = \mathbf{1}/n - \mu - \nu = 0\), is the only way the
+\(\xi\)-linear part stays bounded below, forcing \(\mu + \nu = \mathbf{1}/n\); otherwise the
+infimum is \(-\infty\). Substituting \(\alpha^*\) collapses the two quadratic terms to a single
+\(-\tfrac{1}{4\lambda}\,\mu^\top\mathrm{diag}(y)K\mathrm{diag}(y)\mu\), so the dual function is
+\(q(\mu) = \mu^\top\mathbf{1} - \tfrac{1}{4\lambda}\mu^\top\mathrm{diag}(y)K\mathrm{diag}(y)\mu\).
+The requirement \(\nu \ge 0\) with \(\nu = \mathbf{1}/n - \mu\) reads \(\mu \le \mathbf{1}/n\), and
+\(\mu \ge 0\) was imposed from the start, so the feasible set is the box
+\(0 \le \mu \le \mathbf{1}/n\). Finally the invertible change of variables
+\(\mu_i = 2\lambda\, y_i\alpha_i\) (using \(y_i^2 = 1\)) sends \(\mu^\top\mathbf{1}\) to
+\(2\lambda\sum_i y_i\alpha_i\), the quadratic form to \(\lambda\,\alpha^\top K\alpha\), and the box
+\(0 \le \mu_i \le 1/n\) to \(0 \le y_i\alpha_i \le 1/(2\lambda n)\); dividing the objective by the
+positive constant \(\lambda\) leaves the stated program. <span class="qed">\(\square\)</span></div>
+
 <p>
 Notice what duality has bought us. The dual is a QP in only \(n\) variables (the slacks
 are gone), its constraints are simple box constraints rather than general linear
@@ -540,6 +564,27 @@ representative, and it is exactly what turns \(\|w\|\) itself into a geometric q
 inverse margin.
 </p>
 
+<div class="box prop"><span class="box-title">Proposition (the margin is \(1/\|w\|\))</span>
+Let \(\{x : \langle w, x\rangle + b = 0\}\) be a hyperplane, canonical with respect to the sample,
+that is \(\min_i \lvert \langle w, x_i\rangle + b\rvert = 1\). Then the training point nearest the
+boundary lies at Euclidean distance \(1/\|w\|\) from it, and the two margin hyperplanes
+\(\langle w, x\rangle + b = \pm 1\) are parallel at distance \(2/\|w\|\).
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+The Euclidean distance from a point \(x_0\) to the hyperplane \(\langle w, x\rangle + b = 0\) is
+\(\lvert \langle w, x_0\rangle + b\rvert / \|w\|\). To see this, decompose
+\(x_0 = x_\perp + t\, w/\|w\|\) with \(x_\perp\) on the hyperplane, so that
+\(\langle w, x_0\rangle + b = \langle w, x_\perp\rangle + b + t\,\langle w, w\rangle/\|w\| = t\,\|w\|\),
+whence the signed distance to the boundary is \(t = (\langle w, x_0\rangle + b)/\|w\|\). Minimizing
+its absolute value over the sample and using canonicity gives the nearest distance
+\(\min_i \lvert \langle w, x_i\rangle + b\rvert / \|w\| = 1/\|w\|\). For the band, start from any
+point on \(\langle w, x\rangle + b = -1\) and step along the unit normal \(w/\|w\|\): a step of
+length \(s\) raises \(\langle w, x\rangle + b\) by \(s\,\langle w, w/\|w\|\rangle = s\,\|w\|\), so
+covering the rise of \(2\) from \(-1\) to \(+1\) takes \(s = 2/\|w\|\), the width of the band. It is
+widest exactly when \(\|w\| = \|f\|_{\mathcal H}\) is smallest, which is why the regularizer
+\(\lambda\|f\|_{\mathcal H}^2\) is a drive toward a large margin. <span class="qed">\(\square\)</span></div>
+
 <p>
 The reason a wide band is worth wanting is robustness. A point that sits a full margin width
 from the boundary can be perturbed by any displacement smaller than that width without
@@ -626,6 +671,59 @@ pinned to the upper bound, and both points fall in the strictly-interior regime 
 trichotomy, exactly on the margin.
 </div>
 
+<p>
+The two-point example kept its boundary through the origin. Adding an offset \(b\) and a point the
+machine will ignore turns the support-vector bookkeeping into numbers. This is the classic
+maximum-margin machine \(f(x) = \langle w, x\rangle + b\) of Boser, Guyon, and Vapnik (1992),
+the hard-margin limit \(\lambda \to 0\) of the dual; its only change from the offset-free form of
+the previous sections is the extra equality constraint \(\sum_i \alpha_i y_i = 0\), the footprint of
+optimizing over \(b\).
+</p>
+
+<div class="box ex"><span class="box-title">Example (hard-margin SVM on four points)</span>
+<div class="wex">
+<div class="wex-setup">
+Linear kernel \(K(x,x') = \langle x, x'\rangle\) on \(\mathbb{R}^2\); four points
+\(x_1 = (0,0)\), \(x_2 = (4,0)\) with \(y_1 = y_2 = -1\), and \(x_3 = (1,2)\), \(x_4 = (1,6)\) with
+\(y_3 = y_4 = +1\). The hard-margin dual is
+$$
+\max_{\alpha \ge 0,\; \sum_i \alpha_i y_i = 0}\;
+\sum_i \alpha_i - \tfrac12 \sum_{i,j} \alpha_i \alpha_j\, y_i y_j \langle x_i, x_j\rangle,
+\qquad w = \sum_i \alpha_i y_i x_i.
+$$
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Build the reweighted Gram matrix.</span> The inner products are
+\(\langle x_2,x_2\rangle = 16\), \(\langle x_2,x_3\rangle = \langle x_2,x_4\rangle = 4\),
+\(\langle x_3,x_3\rangle = 5\), \(\langle x_3,x_4\rangle = 13\), \(\langle x_4,x_4\rangle = 37\), and
+\(x_1 = 0\) kills its whole row. The matrix \(Q_{ij} = y_i y_j \langle x_i, x_j\rangle\) that enters
+the quadratic form flips the signs of the mixed-class entries.</li>
+<li><span class="wex-op">Solve the dual.</span> The maximizer is
+\(\alpha = \big(\tfrac38,\, \tfrac18,\, \tfrac12,\, 0\big)\). It respects the equality constraint,
+\(\sum_i \alpha_i y_i = -\tfrac38 - \tfrac18 + \tfrac12 + 0 = 0\), and every \(\alpha_i \ge 0\).</li>
+<li><span class="wex-op">Recover the weight vector.</span>
+\(w = \tfrac38(-1)(0,0) + \tfrac18(-1)(4,0) + \tfrac12(+1)(1,2) + 0
+= (-\tfrac12 + \tfrac12,\; 1) = (0,1)\), so \(\|w\| = 1\).</li>
+<li><span class="wex-op">Recover the offset.</span> Any support vector lies exactly on its margin,
+\(y_k(\langle w, x_k\rangle + b) = 1\). Using \(x_3\): \(\langle w, x_3\rangle = 2\), so
+\(2 + b = 1\) gives \(b = -1\); \(x_1\) and \(x_2\) give the same \(b\).</li>
+<li><span class="wex-op">Read the margins.</span> With \(f(x) = \langle w, x\rangle + b = x^{(2)} - 1\)
+(the second coordinate minus one), \(f(x_1,\dots,x_4) = (-1,\,-1,\,1,\,5)\), hence
+\(y_i f(x_i) = (1,\,1,\,1,\,5)\). The geometric margin is \(1/\|w\| = 1\) and the band width is
+\(2/\|w\| = 2\).</li>
+<li><span class="wex-op">Sort the points.</span> The three points \(x_1, x_2, x_3\) have
+\(\alpha_i \ne 0\) and \(y_i f(x_i) = 1\): support vectors, one from each corner, sitting on the
+margin. The far point \(x_4\) has \(\alpha_4 = 0\) and \(y_4 f(x_4) = 5 \gt 1\): it lies well outside
+the band and drops out of the model, the \(\alpha_i = 0\) regime of the trichotomy.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The machine remembers only the three points pinned to
+the margin; the comfortably classified \(x_4\) is discarded. The unequal coefficients
+\(\tfrac38\) and \(\tfrac18\) on the two negative base points show them pulling with different force
+because the positive apex \(x_3\) sits off-center, closer to \(x_1\), while the sum rule
+\(\sum_i \alpha_i y_i = 0\) keeps the two classes' total pull in balance.</p>
+</div>
+</div>
+
 <p>Nothing conveys this trade-off as directly as moving the points yourself and watching the boundary respond.</p>
 
 <figure class="viz" data-widget="svm-margin"></figure>
@@ -636,6 +734,22 @@ trichotomy, exactly on the margin.
 The training points with \(\alpha_i \ne 0\) are called the <em>support vectors</em> of the
 SVM.
 </div>
+
+<div class="box prop"><span class="box-title">Proposition (the solution depends only on the support vectors)</span>
+Every training point with \(y_i f(x_i) \gt 1\) has \(\alpha_i = 0\). Consequently the support vectors
+all satisfy \(y_i f(x_i) \le 1\), lying on or inside the margin band, and
+\(f = \sum_{i \in \mathrm{SV}} \alpha_i K(x_i,\cdot)\) is a combination of the support vectors alone.
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Complementary slackness on the margin constraint reads
+\(\alpha_i\big[y_i f(x_i) + \xi_i - 1\big] = 0\). Suppose \(y_i f(x_i) \gt 1\). Primal feasibility
+gives \(\xi_i \ge 0\), so the bracket obeys \(y_i f(x_i) + \xi_i - 1 \ge y_i f(x_i) - 1 \gt 0\) and is
+strictly positive; for the product to vanish the other factor must, forcing \(\alpha_i = 0\). Reading
+this contrapositively, any support vector, a point with \(\alpha_i \ne 0\), satisfies
+\(y_i f(x_i) \le 1\). Since the zero-coefficient points contribute nothing to
+\(f(x) = \sum_i \alpha_i K(x_i,x)\), the sum collapses onto \(\mathrm{SV} = \{i : \alpha_i \ne 0\}\).
+<span class="qed">\(\square\)</span></div>
 
 <p>
 Complementary slackness gives the cleanest reading of why this set is the one that matters.
@@ -670,7 +784,8 @@ methods exploit this by optimizing over small working sets of coordinates at a t
 which is what makes SVM solvers scale far beyond what a generic \(2n\)-dimensional QP
 solver on the primal could handle. The best known such method is sequential minimal
 optimization (Platt 1998), which shrinks the working set all the way down to two
-coordinates at a time and solves each tiny subproblem in closed form.
+coordinates at a time and solves each tiny subproblem in closed form; it is developed in
+full in [[ch:solving-the-svm]].
 </li>
 <li>
 <strong>Fast prediction.</strong> Classifying a new point requires kernel evaluations
@@ -710,6 +825,26 @@ $$
 This formulation is often called the <em>\(C\)-SVM</em>; it is the convention used by most
 software packages. Large \(C\) means weak regularization (a hard, narrow margin), small
 \(C\) means strong regularization (a soft, wide margin).
+</div>
+
+<p>
+As a procedure the \(C\)-SVM is a single box-constrained quadratic program followed by a reading
+of the support set. Stated as pseudocode it makes explicit where the specialized solver of the next
+chapter plugs in.
+</p>
+
+<div class="box algo"><span class="box-title">Algorithm (C-SVM dual)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> Gram matrix \(K \in \mathbb{R}^{n\times n}\) with \(K_{ij} = K(x_i,x_j)\); labels \(y \in \{-1,+1\}^n\); penalty \(C = 1/(2n\lambda) \gt 0\).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> coefficients \(\alpha \in \mathbb{R}^n\) of \(\hat f = \sum_i \alpha_i K(x_i,\cdot)\) and the support set \(\mathrm{SV}\).</p>
+</div>
+<ol class="algo-steps">
+<li>Change variables to \(\beta_i = y_i \alpha_i\) and form the label-reweighted matrix \(Q = \mathrm{diag}(y)\, K\, \mathrm{diag}(y)\), so that \(Q_{ij} = y_i y_j K(x_i,x_j)\).</li>
+<li>Solve the box-constrained quadratic program \(\max_{\beta \in \mathbb{R}^n}\; 2\,\mathbf{1}^\top\beta - \beta^\top Q\,\beta\) subject to \(0 \le \beta_i \le C\), which is the dual of the remark above rewritten in \(\beta\).</li>
+<li class="algo-loop">Do not hand this to a generic QP solver: exploit the anticipated sparsity by decomposing over small working sets, in the limit two coordinates at a time in closed form (SMO); this is the subject of [[ch:solving-the-svm]].</li>
+<li>Recover \(\alpha_i = y_i \beta_i\) and set \(\mathrm{SV} = \{i : \alpha_i \ne 0\}\); the complementary-slackness trichotomy labels each index as off-margin (\(\beta_i = 0\)), on-margin (\(0 \lt \beta_i \lt C\)), or capped (\(\beta_i = C\)).</li>
+<li>Classify a new point \(x\) by \(\operatorname{sgn} \hat f(x) = \operatorname{sgn} \sum_{i \in \mathrm{SV}} \alpha_i K(x_i, x)\), touching the support vectors only.</li>
+</ol>
 </div>
 
 <h3 id="nu-svm">The \(\nu\)-SVM</h3>
@@ -812,7 +947,9 @@ bounds the fraction of margin errors and lower bounds the fraction of support ve
 2-SVM, built on the squared hinge, is again the same machine with kernel \(K + n\lambda I\) and
 \(C = +\infty\). The wide margin these machines seek is not an aesthetic preference but a
 quantity that provably controls generalization, through margin-based bounds that never invoke
-the dimension of the feature space.
+the dimension of the feature space. The same slack-variable and duality pipeline, run with the
+\(\epsilon\)-insensitive loss in place of the hinge, produces support vector regression, the
+regression counterpart taken up in [[ch:support-vector-regression]].
 </p>
 
 <div class="box rmk"><span class="box-title">Further reading</span>

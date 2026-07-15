@@ -1,0 +1,169 @@
+<h1>Kernel Clustering and Spectral Methods</h1>
+
+<p class="lead">Clustering asks us to partition a dataset into a small number of coherent groups with no labels to guide us, judging coherence entirely by how similar the points look to one another. When that similarity is measured through a kernel, the flat cell boundaries of ordinary K-means bend into curved ones that follow the geometry the kernel encodes. This chapter carries the clustering objective into a reproducing-kernel Hilbert space, giving kernel K-means and, through a spectral relaxation of the same combinatorial cost, the family of spectral clustering algorithms.</p>
+
+<h2 id="k-means">The K-means algorithm</h2>
+
+<p>We turn from finding coordinates to finding groups. Clustering asks us to partition a dataset into a small number of coherent groups without any labels to guide us. K-means is probably the most popular clustering algorithm, and, exactly as with PCA, understanding its classical form is the whole battle: kernel K-means will be the same algorithm read through a feature map.</p>
+
+<h3 id="kmeans-objective">An optimization point of view</h3>
+
+<p>Given data points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) in \(\mathbb{R}^p\) and a target number of clusters \(k\), K-means represents each cluster by a centroid \(\boldsymbol{\mu}_j \in \mathbb{R}^p\) and assigns each point an index \(s_i \in \{1, \ldots, k\}\) naming its cluster. It seeks the assignments and centroids that minimize the total squared distance from each point to the centroid of its cluster:</p>
+$$
+\min_{\substack{\boldsymbol{\mu}_j \in \mathbb{R}^p,\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \mathbf{x}_i - \boldsymbol{\mu}_{s_i} \rVert_2^2.
+$$
+<p>This objective couples two very different kinds of unknown: the continuous centroids and the discrete assignments. Optimizing both at once is hard, but optimizing either one with the other held fixed is easy, and that observation is the algorithm. K-means performs alternate minimization, cycling between two steps until the assignments stop changing.</p>
+
+<p>The first step is <em>cluster assignment</em>. With the centroids \(\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_k\) fixed, the objective decouples across points, and each \(\mathbf{x}_i\) is best assigned to its nearest centroid:</p>
+$$
+\forall i, \quad s_i \in \arg\min_{s \in \{1, \ldots, k\}} \lVert \mathbf{x}_i - \boldsymbol{\mu}_s \rVert_2^2.
+$$
+<p>The second step is the <em>centroid update</em>. With the assignments \(s_1, \ldots, s_n\) fixed, the objective decouples across clusters, and within cluster \(j\) we minimize \(\sum_{i : s_i = j} \lVert \mathbf{x}_i - \boldsymbol{\mu} \rVert_2^2\) over \(\boldsymbol{\mu} \in \mathbb{R}^p\):</p>
+$$
+\forall j, \quad \boldsymbol{\mu}_j = \arg\min_{\boldsymbol{\mu} \in \mathbb{R}^p} \sum_{i : s_i = j} \lVert \mathbf{x}_i - \boldsymbol{\mu} \rVert_2^2.
+$$
+<p>Setting the gradient to zero, the minimizer is the mean of the points currently assigned to the cluster:</p>
+$$
+\forall j, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{i \in C_j} \mathbf{x}_i, \qquad C_j = \{ i : s_i = j \}.
+$$
+<p>Each step can only decrease the objective, which is bounded below, so the alternation converges (to a local minimum; the objective is nonconvex and the result depends on initialization). The only two operations K-means performs on the data are computing squared distances to centroids and averaging points, and, as with PCA, this is exactly the structure that lets us kernelize.</p>
+
+<h2 id="kernel-k-means">The kernel K-means algorithm</h2>
+
+<p>To cluster data whose natural similarity is nonlinear, or data that are not vectors at all, we move the objective into an RKHS. Given points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) in a set \(\mathcal{X}\) and a p.d. kernel \(K\) with RKHS \(\mathcal{H}\) and feature map \(\varphi\), the centroids now live in \(\mathcal{H}\) and the objective becomes</p>
+$$
+\min_{\substack{\boldsymbol{\mu}_j \in \mathcal{H},\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu}_{s_i} \rVert_{\mathcal{H}}^2.
+$$
+<p>It helps to picture what this buys us. Ordinary K-means splits \(\mathbb{R}^p\) into cells with flat boundaries, the point being assigned to whichever centroid is nearest, so it can only recover clusters that are roughly convex blobs; two interlocking rings or a small cluster wrapped inside a larger one defeat it. Running the same algorithm on \(\varphi(\mathbf{x})\) draws those same flat boundaries in feature space, but a flat boundary in \(\mathcal{H}\) pulls back to a curved boundary in \(\mathcal{X}\), bent to follow the geometry the kernel encodes. The nonlinearity comes for free from the feature map; the algorithm itself is unchanged.</p>
+
+<p>The alternating scheme goes through unchanged, but we must check that both steps can be carried out using kernel values alone, since we never see the vectors \(\varphi(\mathbf{x}_i)\). The centroid update is what makes this work, and it rests on a small fact about centers of mass.</p>
+
+<div class="box prop"><span class="box-title">Proposition (the center of mass minimizes total dispersion)</span>
+The center of mass \(\bar\varphi_n = \frac{1}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i)\) solves
+$$
+\min_{\boldsymbol{\mu} \in \mathcal{H}} \ \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2.
+$$
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+Expand the averaged objective, using bilinearity of the inner product:
+$$
+\frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2
+= \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) \rVert_{\mathcal{H}}^2 - \Big\langle \tfrac{2}{n} \sum_{i=1}^n \varphi(\mathbf{x}_i), \boldsymbol{\mu} \Big\rangle_{\mathcal{H}} + \lVert \boldsymbol{\mu} \rVert_{\mathcal{H}}^2.
+$$
+Recognizing \(\frac{1}{n}\sum_i \varphi(\mathbf{x}_i) = \bar\varphi_n\) in the middle term and completing the square in \(\boldsymbol{\mu}\),
+$$
+= \frac{1}{n} \sum_{i=1}^n \lVert \varphi(\mathbf{x}_i) \rVert_{\mathcal{H}}^2 - \lVert \bar\varphi_n \rVert_{\mathcal{H}}^2 + \lVert \bar\varphi_n - \boldsymbol{\mu} \rVert_{\mathcal{H}}^2.
+$$
+The first two terms do not depend on \(\boldsymbol{\mu}\), and the last is minimized, at value zero, exactly when \(\boldsymbol{\mu} = \bar\varphi_n\). <span class="qed">\(\square\)</span>
+</div>
+
+<h3 id="kernel-k-means-steps">The two steps, in kernel form</h3>
+
+<p>By the proposition, with assignments fixed, the optimal centroid of cluster \(j\) is the center of mass of its members,</p>
+$$
+\forall j, \quad \boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{i \in C_j} \varphi(\mathbf{x}_i), \qquad C_j = \{ i : s_i = j \}.
+$$
+<p>We cannot store this vector, but we do not need to: it enters the assignment step only through squared distances, and those we can expand into kernel values. For the assignment step, fixing the centroids and using \(\boldsymbol{\mu}_s = \frac{1}{|C_s|}\sum_{j \in C_s} \varphi(\mathbf{x}_j)\),</p>
+$$
+s_i \in \arg\min_{s \in \{1, \ldots, k\}} \ \Big\lVert \varphi(\mathbf{x}_i) - \frac{1}{|C_s|} \sum_{j \in C_s} \varphi(\mathbf{x}_j) \Big\rVert_{\mathcal{H}}^2.
+$$
+<p>Expanding the squared norm through the reproducing kernel, \(\langle \varphi(\mathbf{x}_a), \varphi(\mathbf{x}_b) \rangle_{\mathcal{H}} = K(\mathbf{x}_a, \mathbf{x}_b)\), gives a formula in kernel values only:</p>
+$$
+s_i \in \arg\min_{s \in \{1, \ldots, k\}} \left[ K(\mathbf{x}_i, \mathbf{x}_i) - \frac{2}{|C_s|} \sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j) + \frac{1}{|C_s|^2} \sum_{j, l \in C_s} K(\mathbf{x}_j, \mathbf{x}_l) \right].
+$$
+<p>The three terms are the squared norm of the point, its average similarity to the cluster, and the internal cohesion of the cluster. Every operation is a kernel evaluation, so kernel K-means never touches \(\mathcal{H}\) directly. It alternates the centroid step (bookkeeping the memberships \(C_j\)) and this assignment step until convergence, a greedy descent on the objective just like ordinary K-means.</p>
+
+<p>A concrete case makes the three terms tangible. Take two concentric rings of points with a Gaussian kernel whose bandwidth is smaller than the gap between the rings, so that \(K(\mathbf{x}_i, \mathbf{x}_j)\) is appreciable only when \(i\) and \(j\) sit on the same ring. Then a candidate cluster that mixes the two rings gives its members a small average-similarity term \(\frac{2}{|C_s|}\sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j)\) and is penalized, whereas the two single-ring clusters make that term large. The assignment step therefore pushes each point toward the ring it belongs to and recovers a grouping that ordinary K-means cannot: with flat cell boundaries the linear method can only cut the pair of rings with a straight line through both, splitting each ring in half.</p>
+
+<h3 id="kernel-k-means-equivalent">An equivalent objective</h3>
+
+<p>Substituting the optimal centroids back into the cost turns kernel K-means into a pure assignment problem: minimize, over assignments alone,</p>
+$$
+\min_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{i=1}^n \Big\lVert \varphi(\mathbf{x}_i) - \frac{1}{|C_{s_i}|} \sum_{j \in C_{s_i}} \varphi(\mathbf{x}_j) \Big\rVert_{\mathcal{H}}^2,
+$$
+<p>equivalently, in kernel values,</p>
+$$
+\min_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{i=1}^n \left[ K(\mathbf{x}_i, \mathbf{x}_i) - \frac{2}{|C_{s_i}|} \sum_{j \in C_{s_i}} K(\mathbf{x}_i, \mathbf{x}_j) + \frac{1}{|C_{s_i}|^2} \sum_{j, l \in C_{s_i}} K(\mathbf{x}_j, \mathbf{x}_l) \right].
+$$
+<p>The last two sums simplify when we group points by cluster. Summing the cross term over all \(i\) and reindexing by the cluster \(l\) that \(i\) belongs to,</p>
+$$
+\sum_{i=1}^n \frac{1}{|C_{s_i}|} \sum_{j \in C_{s_i}} K(\mathbf{x}_i, \mathbf{x}_j) = \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j),
+$$
+<p>and by the same reindexing the double-counted cohesion term collapses identically:</p>
+$$
+\sum_{i=1}^n \frac{1}{|C_{s_i}|^2} \sum_{j, l \in C_{s_i}} K(\mathbf{x}_j, \mathbf{x}_l) = \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j).
+$$
+<p>The two combine into a single term, the constant \(\sum_i K(\mathbf{x}_i, \mathbf{x}_i)\) is fixed by the data and drops out of the minimization, and after flipping the sign the minimization becomes a maximization.</p>
+
+<div class="box prop"><span class="box-title">Proposition (equivalent kernel K-means objective)</span>
+Minimizing the kernel K-means cost is equivalent to
+$$
+\max_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j).
+$$
+</div>
+
+<p>The objective is now transparent: reward partitions whose clusters have high total internal similarity, normalized by cluster size. This is a hard combinatorial optimization problem, since it ranges over all assignments of \(n\) points to \(k\) clusters. There are two standard ways to attack it. The first is the greedy alternating descent we just derived, kernel K-means itself. The second is to relax the combinatorial constraint into a continuous one that can be solved exactly, which leads to spectral clustering. That these are not two unrelated algorithms but two attacks on one objective, and that this same trace maximization underlies the classical graph-cut criteria as well, was made explicit by Dhillon, Guan, and Kulis (2004).</p>
+
+<h2 id="spectral-clustering">Spectral clustering</h2>
+
+<p>Rather than descend greedily and risk poor local minima, spectral clustering relaxes the assignment problem into an eigenvalue problem, solves that exactly, and then rounds the continuous solution back to a partition. The starting point is the maximization we just obtained,</p>
+$$
+\max_{\substack{s_i \in \{1, \ldots, k\} \\ i = 1, \ldots, n}} \ \sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j).
+$$
+
+<h3 id="spectral-matrix-form">A matrix form of the objective</h3>
+
+<p>To expose the eigenstructure we encode the partition in matrices. Introduce the binary assignment matrix \(A \in \{0, 1\}^{n \times k}\), where \([A]_{ij} = 1\) if point \(i\) belongs to cluster \(j\) and \(0\) otherwise; each row of \(A\) sums to one, since every point lands in exactly one cluster. Introduce also the diagonal rescaling matrix \(D \in \mathbb{R}^{k \times k}\) whose entry \([D]_{jj} = \big(\sum_{i=1}^n [A]_{ij}\big)^{-1}\) is the reciprocal of the size of cluster \(j\). With these, the double sum for cluster \(l\) is \([A^\top K A]_{ll}\), and dividing by the cluster size and summing over \(l\) is exactly a trace:</p>
+$$
+\sum_{l=1}^k \frac{1}{|C_l|} \sum_{i, j \in C_l} K(\mathbf{x}_i, \mathbf{x}_j) = \operatorname{trace}\!\big(D^{1/2} A^\top K A \, D^{1/2} \big).
+$$
+<p>So the objective is (the algebra is a short exercise)</p>
+$$
+\max_{A, D} \ \operatorname{trace}\!\big(D^{1/2} A^\top K A \, D^{1/2} \big) \quad \text{s.t.} \quad (\star) \text{ and } (\star\star),
+$$
+<p>where \((\star)\) is the constraint that \(A\) is binary with unit row sums and \((\star\star)\) that \(D\) holds the inverse cluster cardinalities.</p>
+
+<h3 id="spectral-relaxation">The relaxation</h3>
+
+<p>The key observation is that these constraints force an orthonormality relation. A direct computation shows</p>
+$$
+D^{1/2} A^\top A \, D^{1/2} = I,
+$$
+<p>because \(A^\top A\) is the diagonal matrix of cluster sizes and \(D\) inverts exactly those sizes (again a short exercise). Now set \(Z = A D^{1/2} \in \mathbb{R}^{n \times k}\). The objective is \(\operatorname{trace}(Z^\top K Z)\) and the identity above reads \(Z^\top Z = I\). The <em>relaxation</em> consists of dropping the rigid constraints \((\star)\) and \((\star\star)\) on \(A\) and \(D\) and keeping only this orthonormality, letting \(Z\) range over all real matrices with orthonormal columns:</p>
+$$
+\max_{Z \in \mathbb{R}^{n \times k}} \ \operatorname{trace}\!\big(Z^\top K Z \big) \quad \text{s.t.} \quad Z^\top Z = I.
+$$
+
+<p>The point of the move is a change in the kind of problem we face. The original maximization ranges over assignments, a discrete set of exponentially many partitions with no calculus to exploit and generally no efficient way to find the best member. The relaxed one ranges over a continuous set, the matrices with orthonormal columns, on which the objective is a smooth quadratic form with a known global maximizer. We trade the guarantee that the answer is a genuine partition for the ability to solve the resulting problem exactly, and we recover a partition at the end by rounding.</p>
+
+<div class="box prop"><span class="box-title">Proposition (solution of the relaxed problem)</span>
+A solution \(Z^\star\) of
+$$
+\max_{Z \in \mathbb{R}^{n \times k}} \operatorname{trace}(Z^\top K Z) \quad \text{s.t.} \quad Z^\top Z = I
+$$
+is given by the \(n \times k\) matrix whose columns are the eigenvectors of \(K\) associated with its \(k\) largest eigenvalues.
+</div>
+
+<p>This is the Ky Fan characterization of the top eigenspace: among all sets of \(k\) orthonormal vectors, the trace of the quadratic form is maximized by the top \(k\) eigenvectors. Notice that this is precisely the computation kernel PCA performs; spectral clustering and kernel PCA share the same linear-algebra core, an eigendecomposition of the Gram matrix, and differ only in what they do with the eigenvectors. (When \(K\) is built as a similarity or affinity matrix on a graph, this eigenproblem is the one governed by the graph Laplacian, which is why the method is called spectral: the relevant directions are the extreme eigenvectors of a matrix attached to the data graph.)</p>
+
+<p>An idealized case explains why one can hope to round the eigenvectors back into a partition at all. Suppose the data split into \(k\) groups so cleanly that the kernel is block diagonal, with \(K(\mathbf{x}_i, \mathbf{x}_j) = 0\) whenever \(i\) and \(j\) lie in different groups. Then \(K\) is a direct sum of \(k\) blocks, its top eigenvectors may be taken to vanish outside a single block, and each point's row of \(Z^\star\) becomes a scaled one-hot vector naming its group: the two rows belonging to the same group are identical, and rows from different groups are orthogonal. Rounding is then trivial, since the rows already fall on \(k\) distinct points. Real data only approach this block structure, so in practice the rows land near, rather than exactly on, those \(k\) ideal points, which is precisely why the robust rounding runs a final K-means to snap them back together.</p>
+
+<h3 id="spectral-rounding">From eigenvectors back to a partition</h3>
+
+<p>The relaxed solution \(Z^\star\) is a real matrix, not a valid assignment matrix, so we must round it back. There are several ways to do this, reflecting that the rounding is a design choice rather than a theorem.</p>
+
+<p>A first, direct answer uses the shape the original constraints would have imposed: with \((\star)\) in force each row of \(A\) has a single nonzero entry, so we simply read off, for each row of \(Z^\star\), the index of its largest entry and assign the point to that cluster. A second, more robust and by far the most common answer normalizes each row of \(Z^\star\) to unit \(\ell_2\) norm and then runs ordinary K-means on the \(n\) rows, treating each row as a \(k\)-dimensional feature vector for its point. The reason this is more than a heuristic is that the top eigenvectors give each point a short coordinate, and when the data really do fall into \(k\) well-separated groups these coordinates are nearly constant within a group, so the rows collect into \(k\) tight clusters that even plain K-means resolves cleanly; this is the observation behind the algorithm of Ng, Jordan, and Weiss (2002). This last procedure, eigendecompose the (kernel or affinity) matrix, take the top \(k\) eigenvectors, normalize the rows, and cluster them, is what is usually meant by <em>spectral clustering</em>. Other variants differ in normalization and in how many eigenvectors are used, but all share the same skeleton: relax to an eigenproblem, solve it exactly, and round.</p>
+
+<div class="box rmk"><span class="box-title">Remark (affinity matrices and the Laplacian)</span>
+The relaxation above diagonalizes the kernel matrix \(K\) itself, but many spectral methods instead build a rescaled matrix whose spectrum reflects cluster structure more evenly. Collecting the row sums into the diagonal degree matrix \(D\) with \([D]_{ii} = \sum_j K(\mathbf{x}_i, \mathbf{x}_j)\), useful partitions can be read from the eigenvectors of \(D^{-1} K\), of the symmetrically normalized \(D^{-1/2} K D^{-1/2}\), or of the graph Laplacian \(L = D - K\) (Shawe-Taylor and Cristianini, 2004). The Laplacian is the cleanest to reason about: a short computation gives \(\mathbf{v}^\top L \mathbf{v} = \tfrac{1}{2} \sum_{i,j} K(\mathbf{x}_i,\mathbf{x}_j)(v_i - v_j)^2\), so \(L\) is positive semidefinite whenever the affinities are nonnegative, and the all-ones vector is always an eigenvector with eigenvalue \(0\). Its smallest nontrivial eigenvectors vary slowly across strongly connected points and jump between weakly connected ones, which is why thresholding or clustering them separates the graph along its weakest cuts. The normalizations by \(D\) matter in practice because they keep a few high-degree points from dominating the leading eigenvectors, giving the more balanced partitions that normalized-cut criteria were designed to produce.
+</div>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">warm-up</span> In the kernel K-means assignment step, the squared distance from point \(\mathbf{x}_i\) to the centroid of a candidate cluster \(s\) expands into three terms: the self-similarity \(K(\mathbf{x}_i, \mathbf{x}_i)\), the average similarity \(\frac{2}{|C_s|}\sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j)\), and the internal cohesion \(\frac{1}{|C_s|^2}\sum_{j,l \in C_s} K(\mathbf{x}_j, \mathbf{x}_l)\). Say which of the three does not depend on the candidate cluster \(s\), and may therefore be dropped from the \(\arg\min\) over \(s\); which depends on \(s\) but not on the point \(i\); and which couples the point to the cluster. Conclude that assigning \(\mathbf{x}_i\) amounts to comparing, across clusters, the cohesion minus twice the average similarity.</li>
+
+<li><span class="ex-tag">challenge</span> The graph Laplacian \(L = D - K\), with \([D]_{ii} = \sum_j K(\mathbf{x}_i, \mathbf{x}_j)\), sits at the heart of the spectral methods. (a) Prove the quadratic-form identity \(\mathbf{v}^\top L \mathbf{v} = \frac{1}{2}\sum_{i,j} K(\mathbf{x}_i, \mathbf{x}_j)(v_i - v_j)^2\). (b) Deduce that \(L\) is positive semidefinite whenever the affinities \(K(\mathbf{x}_i,\mathbf{x}_j)\) are nonnegative, and that the all-ones vector \(\mathbf{1}\) is always an eigenvector with eigenvalue \(0\). (c) Argue from the identity why the smallest nontrivial eigenvector varies slowly across strongly connected points and jumps across weakly connected ones, so that thresholding it separates the graph along its weakest cut.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), expand \(\frac{1}{2}\sum_{i,j}K_{ij}(v_i - v_j)^2 = \frac{1}{2}\sum_{i,j}K_{ij}(v_i^2 - 2 v_i v_j + v_j^2)\) and recognize the degree matrix in the pure-square sums and \(K\) in the cross term. For (c), a small value of \(\mathbf{v}^\top L \mathbf{v}\) under a norm constraint forces \((v_i - v_j)^2\) to be small wherever \(K_{ij}\) is large, so tightly coupled points get nearly equal coordinates.</div></details></li>
+</ol>
+</section>
