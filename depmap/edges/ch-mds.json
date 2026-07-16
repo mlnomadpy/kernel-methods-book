@@ -1,0 +1,57 @@
+[
+ {
+  "from": "data-visualization-and-mds#prop-17-1",
+  "to": "preliminaries#def-p-5",
+  "note": "proof expands the squared distances via inner-product bilinearity, d_ij^2 = g_ii - 2g_ij + g_jj"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-1",
+  "to": "data-visualization-and-mds#prop-17-1",
+  "note": "step 2 double-centers the squared distances to recover the centered Gram matrix B"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-1",
+  "to": "preliminaries#thm-p-2",
+  "note": "step 3 diagonalizes the symmetric B and splits Lambda^{1/2} to factor out coordinates"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-1",
+  "to": "preliminaries#def-p-1",
+  "note": "B = X_c X_c^T is symmetric psd for Euclidean distances, so the kept eigenpairs are nonnegative"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "data-visualization-and-mds#prop-17-1",
+  "note": "double-centering the feature-space squared distances yields exactly the centered kernel matrix JKJ"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "data-visualization-and-mds#algo-17-1",
+  "note": "classical MDS with the Gram-manufacturing stages skipped, since the kernel supplies inner products directly"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "kernel-pca#prop-13-5",
+  "note": "centering step K~ = JKJ is the centered-embedding Gram matrix identity"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "kernel-pca#algo-13-1",
+  "note": "reproduces the kernel PCA algorithm's centering, eigendecomposition, normalization, and projection steps"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "kernel-pca#thm-13-4",
+  "note": "alpha^(j) = lambda_j^{-1/2} v_j gives unit-norm feature-space axes with coordinates sqrt(lambda_j)(v_j)_i, as in kernel PCA"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "the distances being preserved are feature-space distances assembled from kernel values"
+ },
+ {
+  "from": "data-visualization-and-mds#algo-17-2",
+  "to": "kernels-and-rkhs#thm-2-7",
+  "note": "a psd kernel guarantees a Euclidean feature-space embedding by Mercer, so the metric-MDS assumption holds automatically"
+ }
+]

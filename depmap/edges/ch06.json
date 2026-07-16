@@ -1,0 +1,112 @@
+[
+ {
+  "from": "kernel-pca#prop-13-2",
+  "to": "kernel-pca#def-13-1",
+  "note": "solves the recursive variance-maximization defining the principal directions"
+ },
+ {
+  "from": "kernel-pca#prop-13-2",
+  "to": "preliminaries#thm-p-2",
+  "note": "successive maximizers come from the Rayleigh-quotient characterization of eigenvectors of a symmetric matrix"
+ },
+ {
+  "from": "kernel-pca#prop-13-2",
+  "to": "preliminaries#def-p-1",
+  "note": "X^T X is symmetric positive semidefinite, the class the characterization applies to"
+ },
+ {
+  "from": "kernel-pca#def-13-3",
+  "to": "kernel-pca#def-13-1",
+  "note": "term-by-term RKHS translation of the classical principal directions"
+ },
+ {
+  "from": "kernel-pca#def-13-3",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "posed for a positive definite kernel K on the data set"
+ },
+ {
+  "from": "kernel-pca#def-13-3",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "RKHS norm and reproducing property turn the inner product with phi(x_i) into f(x_i) in the objective"
+ },
+ {
+  "from": "kernel-pca#def-13-3",
+  "to": "kernels-and-rkhs#thm-2-13",
+  "note": "linear-kernel sanity check identifies the RKHS of the linear kernel with R^d to recover classical PCA"
+ },
+ {
+  "from": "kernel-pca#thm-13-4",
+  "to": "kernel-pca#def-13-3",
+  "note": "exhibits the solution of the kernel principal direction problem"
+ },
+ {
+  "from": "kernel-pca#thm-13-4",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "representer argument writes each f_i as a kernel expansion over the data points"
+ },
+ {
+  "from": "kernel-pca#thm-13-4",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing-kernel inner products turn norms and orthogonality constraints into quadratic forms in the Gram matrix"
+ },
+ {
+  "from": "kernel-pca#thm-13-4",
+  "to": "preliminaries#thm-p-2",
+  "note": "eigendecomposition K = U Delta U^T and the psd square root K^{1/2} drive the change of variables"
+ },
+ {
+  "from": "kernel-pca#thm-13-4",
+  "to": "kernel-pca#prop-13-2",
+  "note": "after beta = K^{1/2} alpha the problem is the variational eigenvector characterization met for classical PCA"
+ },
+ {
+  "from": "kernel-pca#thm-13-4",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "positive definiteness of the kernel makes the Gram matrix psd, so Delta_i >= 0"
+ },
+ {
+  "from": "kernel-pca#algo-13-1",
+  "to": "kernel-pca#thm-13-4",
+  "note": "normalizes alpha_i = u_i/sqrt(Delta_i) and reads projections K_c alpha_i as the theorem prescribes"
+ },
+ {
+  "from": "kernel-pca#algo-13-1",
+  "to": "kernel-tricks#def-3-3",
+  "note": "centering step K_c = JKJ is the centered Gram matrix formula derived there"
+ },
+ {
+  "from": "kernel-pca#algo-13-1",
+  "to": "preliminaries#thm-p-2",
+  "note": "eigendecomposes the symmetric centered Gram matrix into orthonormal eigenpairs"
+ },
+ {
+  "from": "kernel-pca#prop-13-5",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "proof expands the inner products of embeddings via the reproducing property, giving K_ij"
+ },
+ {
+  "from": "kernel-pca#prop-13-5",
+  "to": "preliminaries#def-p-5",
+  "note": "bilinearity of the Hilbert-space inner product expands the four centering terms"
+ },
+ {
+  "from": "kernel-pca#prop-13-5",
+  "to": "kernel-tricks#def-3-3",
+  "note": "re-derives the centered Gram matrix formula posed as a problem there"
+ },
+ {
+  "from": "kernel-pca#prop-13-6",
+  "to": "kernel-pca#thm-13-4",
+  "note": "U_k and the discarded eigenvalues Delta_i are the kernel PCA directions and spectrum"
+ },
+ {
+  "from": "kernel-pca#prop-13-6",
+  "to": "preliminaries#thm-p-6",
+  "note": "Pythagorean split of each embedded point by the orthogonal projection onto U"
+ },
+ {
+  "from": "kernel-pca#prop-13-6",
+  "to": "kernel-pca#prop-13-2",
+  "note": "the captured-norm trace maximization is solved by the top eigenvectors, the eigenproblem characterization of PCA"
+ }
+]

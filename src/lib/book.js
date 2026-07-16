@@ -417,6 +417,12 @@ export function buildBook() {
     x: "Symbols and terms used across the book, cross-linked to the chapters that introduce them.",
   });
   searchIndex.push({
+    h: "Dependency Map",
+    c: "End matter",
+    u: "dependency-map.html",
+    x: "The logical scaffolding of the book: which theorem, definition, and algorithm each result depends on, as an interactive graph and a full cross-linked listing.",
+  });
+  searchIndex.push({
     h: "Bibliography",
     c: "End matter",
     u: "bibliography.html",
@@ -519,6 +525,9 @@ export function tocHtml(currentSlug = null) {
   rows.push('<div class="part">End matter</div>');
   rows.push(
     `<a href="glossary.html"${currentSlug === "glossary" ? ' class="here"' : ""}>Notation &amp; Glossary</a>`,
+  );
+  rows.push(
+    `<a href="dependency-map.html"${currentSlug === "dependency-map" ? ' class="here"' : ""}>Dependency Map</a>`,
   );
   rows.push(
     `<a href="bibliography.html"${currentSlug === "bibliography" ? ' class="here"' : ""}>Bibliography</a>`,

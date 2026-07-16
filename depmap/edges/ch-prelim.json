@@ -1,0 +1,42 @@
+[
+ {
+  "from": "preliminaries#thm-p-2",
+  "to": "preliminaries#def-p-1",
+  "note": "statement characterizes the symmetric, PSD, and strictly positive definite properties defined there by eigenvalue signs"
+ },
+ {
+  "from": "preliminaries#def-p-5",
+  "to": "preliminaries#def-p-4",
+  "note": "a Hilbert space is defined as an inner-product space complete in the induced norm, using completeness from that definition"
+ },
+ {
+  "from": "preliminaries#thm-p-6",
+  "to": "preliminaries#def-p-5",
+  "note": "both projection and Riesz are stated for a Hilbert space and phrased via its inner product"
+ },
+ {
+  "from": "preliminaries#def-p-7",
+  "to": "preliminaries#def-p-5",
+  "note": "the operator classes are defined on a Hilbert space through its norm and inner product"
+ },
+ {
+  "from": "preliminaries#thm-p-8",
+  "to": "preliminaries#def-p-7",
+  "note": "the hypotheses (compact, self-adjoint, positive operator) are the classes defined there"
+ },
+ {
+  "from": "preliminaries#thm-p-8",
+  "to": "preliminaries#def-p-5",
+  "note": "stated on a Hilbert space, with the eigenfunction expansion written in its inner product"
+ },
+ {
+  "from": "preliminaries#thm-p-8",
+  "to": "preliminaries#def-p-1",
+  "note": "the application clause concerns the integral operator of a continuous PSD kernel, the kernel convention fixed there"
+ },
+ {
+  "from": "preliminaries#def-p-11",
+  "to": "preliminaries#def-p-10",
+  "note": "strong duality is asserted for convex problems and KKT stationarity is written with gradients, both defined there"
+ }
+]

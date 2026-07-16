@@ -1,0 +1,23 @@
+[
+ {"from": "vc-theory-and-generalization#thm-12-1", "to": "learning-theory#thm-11-7", "note": "restates ch04's bounded-differences inequality"},
+ {"from": "vc-theory-and-generalization#thm-12-1", "to": "preliminaries#def-p-9", "note": "concentration for independent variables"},
+ {"from": "vc-theory-and-generalization#cor-12-2", "to": "vc-theory-and-generalization#thm-12-1", "note": "McDiarmid applied to sample mean"},
+ {"from": "vc-theory-and-generalization#thm-12-3", "to": "kernel-ridge-and-friends#def-4-11", "note": "compares expected and empirical risk"},
+ {"from": "vc-theory-and-generalization#thm-12-3", "to": "learning-theory#def-11-4", "note": "characterizes consistency of ERM"},
+ {"from": "vc-theory-and-generalization#def-12-5", "to": "vc-theory-and-generalization#def-12-4", "note": "largest m with shattering coefficient 2^m"},
+ {"from": "vc-theory-and-generalization#lem-12-6", "to": "preliminaries#def-p-9", "note": "independent ghost sample, matching expectation"},
+ {"from": "vc-theory-and-generalization#lem-12-6", "to": "vc-theory-and-generalization#def-12-4", "note": "pooled points realize few labelings"},
+ {"from": "vc-theory-and-generalization#thm-12-7", "to": "vc-theory-and-generalization#lem-12-6", "note": "symmetrizes with the ghost sample"},
+ {"from": "vc-theory-and-generalization#thm-12-7", "to": "vc-theory-and-generalization#def-12-4", "note": "union bound over realizable labelings"},
+ {"from": "vc-theory-and-generalization#thm-12-7", "to": "vc-theory-and-generalization#cor-12-2", "note": "Hoeffding tail per labeling"},
+ {"from": "vc-theory-and-generalization#thm-12-7", "to": "vc-theory-and-generalization#def-12-5", "note": "Sauer's lemma via VC dimension"},
+ {"from": "vc-theory-and-generalization#algo-12-1", "to": "vc-theory-and-generalization#thm-12-7", "note": "evaluates the VC risk bound"},
+ {"from": "vc-theory-and-generalization#algo-12-1", "to": "vc-theory-and-generalization#def-12-5", "note": "nested classes by VC dimension"},
+ {"from": "vc-theory-and-generalization#algo-12-1", "to": "learning-theory#def-11-4", "note": "runs ERM inside each class"},
+ {"from": "vc-theory-and-generalization#thm-12-8", "to": "vc-theory-and-generalization#def-12-5", "note": "bounds VC dimension by R^2Lambda^2"},
+ {"from": "vc-theory-and-generalization#thm-12-8", "to": "vc-theory-and-generalization#def-12-4", "note": "starts from a shattered set"},
+ {"from": "vc-theory-and-generalization#thm-12-8", "to": "support-vector-machines#def-5-5", "note": "canonical form from SVM margin"},
+ {"from": "vc-theory-and-generalization#thm-12-8", "to": "support-vector-machines#prop-5-6", "note": "margin is one over norm"},
+ {"from": "vc-theory-and-generalization#thm-12-8", "to": "preliminaries#def-p-5", "note": "Cauchy-Schwarz bounds the sum"},
+ {"from": "vc-theory-and-generalization#thm-12-8", "to": "preliminaries#def-p-9", "note": "averaging independent mean-zero signs"}
+]

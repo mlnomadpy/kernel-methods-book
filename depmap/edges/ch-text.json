@@ -1,0 +1,67 @@
+[
+  {
+    "from": "kernels-for-text#def-23-2",
+    "to": "kernels-for-text#def-23-1",
+    "note": "vector space kernel is the inner product of the vector space model embeddings phi(d)"
+  },
+  {
+    "from": "kernels-for-text#def-23-2",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "dot product of document feature vectors, p.d. by the embedding lemma"
+  },
+  {
+    "from": "kernels-for-text#def-23-2",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "positive definite kernel via its explicit feature map"
+  },
+  {
+    "from": "kernels-for-text#algo-23-1",
+    "to": "kernels-for-text#def-23-2",
+    "note": "computes the vector space kernel with each term scaled by the squared idf weight"
+  },
+  {
+    "from": "kernels-for-text#algo-23-1",
+    "to": "kernels-for-text#def-23-1",
+    "note": "builds the document-term matrix rows from the vector space model embedding"
+  },
+  {
+    "from": "kernels-for-text#def-23-3",
+    "to": "kernels-for-text#def-23-2",
+    "note": "the vector space kernel with proximity matrix P = V_k projecting onto concepts"
+  },
+  {
+    "from": "kernels-for-text#def-23-3",
+    "to": "preliminaries#def-p-3",
+    "note": "concepts are the top right singular vectors from the SVD of the document-term matrix D"
+  },
+  {
+    "from": "kernels-for-text#def-23-3",
+    "to": "kernel-pca#thm-13-4",
+    "note": "projecting onto the leading co-occurrence directions is kernel PCA on the bag-of-words embedding"
+  },
+  {
+    "from": "kernels-for-text#algo-23-2",
+    "to": "kernels-for-text#def-23-3",
+    "note": "computes the latent semantic kernel value"
+  },
+  {
+    "from": "kernels-for-text#algo-23-2",
+    "to": "preliminaries#def-p-3",
+    "note": "eigendecomposes K = D D^T, equivalently the SVD of D with sigma_i = sqrt(lambda_i)"
+  },
+  {
+    "from": "kernels-for-text#algo-23-2",
+    "to": "kernel-pca#algo-13-1",
+    "note": "dual concept-projection formula is the kernel PCA feature extraction from the Gram matrix"
+  },
+  {
+    "from": "kernels-for-text#prop-23-4",
+    "to": "kernels-for-text#def-23-2",
+    "note": "the von Neumann kernel K-hat is itself a vector space kernel with proximity matrix P = sqrt(mu G-hat + I)"
+  },
+  {
+    "from": "kernels-for-text#prop-23-4",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "the proximity-matrix embedding phi(d)P gives a valid p.d. kernel"
+  }
+]

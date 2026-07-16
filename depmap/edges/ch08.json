@@ -1,0 +1,257 @@
+[
+  {
+    "from": "kernel-families#def-19-1",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "calls a sequence positive definite when its difference kernel K(x,y)=a_{x-y} is a p.d. kernel"
+  },
+  {
+    "from": "kernel-families#thm-19-2",
+    "to": "kernel-families#def-19-1",
+    "note": "characterizes the positive definite sequences behind shift-invariant kernels on Z"
+  },
+  {
+    "from": "kernel-families#thm-19-2",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "both directions of the proof work the defining p.d. quadratic form of the induced kernel"
+  },
+  {
+    "from": "kernel-families#thm-19-2",
+    "to": "preliminaries#thm-p-6",
+    "note": "step 4 extends the coefficient functional to C(T) and reads off the measure by the Riesz representation theorem"
+  },
+  {
+    "from": "kernel-families#def-19-3",
+    "to": "preliminaries#thm-p-6",
+    "note": "measures enter as the dual C(T)*, functionals represented by integration via the Riesz representation theorem"
+  },
+  {
+    "from": "kernel-families#def-19-4",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "calls phi positive definite when the kernel K(x,y)=phi(x-y) is a p.d. kernel"
+  },
+  {
+    "from": "kernel-families#def-19-4",
+    "to": "kernel-families#def-19-1",
+    "note": "continuous R^d analogue of the shift-invariant definition on the integer lattice"
+  },
+  {
+    "from": "kernel-families#thm-19-5",
+    "to": "kernel-families#def-19-4",
+    "note": "decides which translation-invariant profiles phi are positive definite"
+  },
+  {
+    "from": "kernel-families#thm-19-5",
+    "to": "kernel-families#thm-19-2",
+    "note": "the converse samples phi on the lattice lambda-Z and applies Herglotz to each sampled sequence"
+  },
+  {
+    "from": "kernel-families#thm-19-5",
+    "to": "kernel-families#def-19-3",
+    "note": "Herglotz returns torus measures mu_lambda with phi(lambda n) as their Fourier-Stieltjes coefficients"
+  },
+  {
+    "from": "kernel-families#thm-19-5",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "the easy direction completes the square inside the p.d. quadratic form"
+  },
+  {
+    "from": "kernel-families#thm-19-5",
+    "to": "preliminaries#thm-p-6",
+    "note": "the representation lemma extends the functional to C_0(R) and invokes the Riesz representation theorem"
+  },
+  {
+    "from": "kernel-families#def-19-6",
+    "to": "kernel-families#def-19-3",
+    "note": "extends the torus Fourier-Stieltjes coefficients to finite measures on R^d"
+  },
+  {
+    "from": "kernel-families#prop-19-7",
+    "to": "kernel-families#def-19-6",
+    "note": "stated for the Fourier-Stieltjes transform of a finite measure on R^d"
+  },
+  {
+    "from": "kernel-families#thm-19-8",
+    "to": "kernel-families#def-19-4",
+    "note": "hypothesis: K(x,t)=phi(x-t) is a translation-invariant positive definite kernel"
+  },
+  {
+    "from": "kernel-families#thm-19-8",
+    "to": "kernel-families#thm-19-5",
+    "note": "Bochner makes the spectral density phi-hat nonnegative, fit to sit in the norm's denominator"
+  },
+  {
+    "from": "kernel-families#thm-19-8",
+    "to": "kernel-families#def-19-6",
+    "note": "the norm weights |f-hat|^2 by the reciprocal transform, the function case of the Fourier-Stieltjes transform"
+  },
+  {
+    "from": "kernel-families#thm-19-8",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "proof exhibits K_x in H and verifies the reproducing property of an RKHS"
+  },
+  {
+    "from": "kernel-families#def-19-9",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "relaxes the p.d. quadratic-form test to coefficient vectors with zero sum"
+  },
+  {
+    "from": "kernel-families#thm-19-10",
+    "to": "kernel-families#def-19-9",
+    "note": "the equivalence is stated for conditionally positive definite kernels k"
+  },
+  {
+    "from": "kernel-families#thm-19-10",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "asserts exp(tk) passes the p.d. kernel test for every t>0"
+  },
+  {
+    "from": "kernel-families#def-19-12",
+    "to": "kernel-families#def-19-11",
+    "note": "forms K(s,t)=phi(s* o t) from the semigroup composition and involution"
+  },
+  {
+    "from": "kernel-families#def-19-12",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "defines positive definiteness of phi by K(s,t)=phi(s* o t) being a p.d. kernel on S"
+  },
+  {
+    "from": "kernel-families#def-19-12",
+    "to": "kernel-families#def-19-4",
+    "note": "specializes to translation invariance on the group (R^d,+,-)"
+  },
+  {
+    "from": "kernel-families#def-19-13",
+    "to": "kernel-families#def-19-11",
+    "note": "defined on an abelian semigroup with involution, using its addition and involution"
+  },
+  {
+    "from": "kernel-families#lem-19-14",
+    "to": "kernel-families#def-19-13",
+    "note": "multiplicativity of the semicharacter factors the quadratic form into a perfect square"
+  },
+  {
+    "from": "kernel-families#lem-19-14",
+    "to": "kernel-families#def-19-12",
+    "note": "positive definiteness asserted in the semigroup sense via K(s,t)=rho(s*+t)"
+  },
+  {
+    "from": "kernel-families#def-19-15",
+    "to": "kernel-families#def-19-11",
+    "note": "submultiplicativity alpha(s o t)<=alpha(s)alpha(t) and alpha(s*)=alpha(s) use the semigroup operations"
+  },
+  {
+    "from": "kernel-families#thm-19-16",
+    "to": "kernel-families#def-19-12",
+    "note": "characterizes the exponentially bounded positive definite functions on an abelian semigroup"
+  },
+  {
+    "from": "kernel-families#thm-19-16",
+    "to": "kernel-families#def-19-13",
+    "note": "the representing measure lives on the set S* of semicharacters"
+  },
+  {
+    "from": "kernel-families#thm-19-16",
+    "to": "kernel-families#def-19-15",
+    "note": "exponential boundedness through an absolute value is the growth hypothesis"
+  },
+  {
+    "from": "kernel-families#thm-19-16",
+    "to": "kernel-families#lem-19-14",
+    "note": "the if direction mixes semicharacters, each positive definite by the lemma"
+  },
+  {
+    "from": "kernel-families#thm-19-16",
+    "to": "preliminaries#def-p-10",
+    "note": "proof sketch works with the compact convex set P_1^alpha, its extreme points, and a barycentre"
+  },
+  {
+    "from": "kernel-families#cor-19-17",
+    "to": "kernel-families#thm-19-16",
+    "note": "integrates semicharacters against a Radon measure, the representation theorem on the measure semigroup"
+  },
+  {
+    "from": "kernel-families#cor-19-17",
+    "to": "kernel-families#def-19-13",
+    "note": "rho_f(mu)=exp(mu[f]) are the continuous semicharacters of (M_+^b(U),+)"
+  },
+  {
+    "from": "kernel-families#cor-19-17",
+    "to": "kernel-families#def-19-12",
+    "note": "asserts K is a positive definite kernel on the additive semigroup of bounded measures"
+  },
+  {
+    "from": "kernel-families#def-19-18",
+    "to": "preliminaries#def-p-9",
+    "note": "the Fisher information is the expectation of the score outer product under the model"
+  },
+  {
+    "from": "kernel-families#def-19-18",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "K is the inner product of the whitened score embeddings phi = I^{-1/2} Phi"
+  },
+  {
+    "from": "kernel-families#prop-19-19",
+    "to": "kernel-families#def-19-18",
+    "note": "asymptotic guarantees stated for classifiers built on the Fisher kernel"
+  },
+  {
+    "from": "kernel-families#lem-19-20",
+    "to": "kernel-families#def-19-18",
+    "note": "chain rule transforms score and information matrix; the Jacobians cancel in the kernel"
+  },
+  {
+    "from": "kernel-families#def-19-21",
+    "to": "preliminaries#def-p-9",
+    "note": "integrates the two model likelihoods against a prior w on the parameter set"
+  },
+  {
+    "from": "kernel-families#def-19-21",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "inner product in L^2(w) of the likelihood feature maps phi(x)=(P_theta(x))_theta"
+  },
+  {
+    "from": "kernel-families#def-19-22",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "requires a kernel K_Z on the completed data z=(x,y)"
+  },
+  {
+    "from": "kernel-families#def-19-22",
+    "to": "preliminaries#def-p-9",
+    "note": "averages K_Z over the conditional laws P_x(dy) and P_x'(dy') of the latent variable"
+  },
+  {
+    "from": "kernel-families#prop-19-23",
+    "to": "kernel-families#def-19-22",
+    "note": "certifies positive definiteness of the marginalized kernel construction"
+  },
+  {
+    "from": "kernel-families#prop-19-23",
+    "to": "kernels-and-rkhs#thm-2-5",
+    "note": "Aronszajn supplies the feature map Phi_Z with K_Z as its inner product"
+  },
+  {
+    "from": "kernel-families#prop-19-23",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "K_X is the inner product of the posterior-averaged features, hence a kernel by embedding"
+  },
+  {
+    "from": "kernel-families#prop-19-24",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "each closure operation is checked against the p.d. quadratic-form condition"
+  },
+  {
+    "from": "kernel-families#prop-19-24",
+    "to": "kernels-and-rkhs#thm-2-14",
+    "note": "collects and extends the sum, Schur-product, and pointwise-limit closure of chapter 2"
+  },
+  {
+    "from": "kernel-families#prop-19-24",
+    "to": "preliminaries#def-p-1",
+    "note": "the product case reduces to PSD-ness of the Hadamard product of two PSD Gram matrices"
+  },
+  {
+    "from": "kernel-families#prop-19-24",
+    "to": "preliminaries#def-p-9",
+    "note": "probabilistic proof uses independent mean-zero Gaussian vectors and the factorized covariance"
+  }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "from": "kernel-tricks#prop-3-1",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "proof: K(x,x') = <Phi(x),Phi(x')> by Aronszajn's theorem, cited explicitly, so kernel values are indistinguishable from feature-space inner products"
+ },
+ {
+  "from": "kernel-tricks#prop-3-1",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "stated for the feature space of a p.d. kernel"
+ },
+ {
+  "from": "kernel-tricks#prop-3-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "worked instance of the trick: both identities reduce feature-space quantities to averages of Gram-matrix entries"
+ },
+ {
+  "from": "kernel-tricks#prop-3-2",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "derivation replaces each <Phi(x_i),Phi(x_j)> by K(x_i,x_j) via the embedding identity"
+ },
+ {
+  "from": "kernel-tricks#prop-3-2",
+  "to": "kernels-and-rkhs#def-2-6",
+  "note": "expansion of ||Phi(x_s) - mu||^2 uses bilinearity of the Hilbert-space inner product"
+ },
+ {
+  "from": "kernel-tricks#def-3-3",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "posed for a finite set endowed with a p.d. kernel and its Gram matrix"
+ },
+ {
+  "from": "kernel-tricks#def-3-3",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "the centered vectors u_i = Phi(x_i) - mu live in the feature space H of the embedding"
+ },
+ {
+  "from": "kernel-tricks#thm-3-4",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "hypothesis: X is endowed with a p.d. kernel K"
+ },
+ {
+  "from": "kernel-tricks#thm-3-4",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "posed over the RKHS of K; the proof kills the orthogonal part via the reproducing property f_perp(x_i) = <f_perp, K_{x_i}> = 0"
+ },
+ {
+  "from": "kernel-tricks#thm-3-4",
+  "to": "kernels-and-rkhs#thm-2-12",
+  "note": "'the corresponding RKHS' of a p.d. kernel exists by the p.d.-equals-reproducing theorem"
+ },
+ {
+  "from": "kernel-tricks#thm-3-4",
+  "to": "kernels-and-rkhs#thm-2-11",
+  "note": "the definite article is licensed by uniqueness of the RKHS of a kernel"
+ },
+ {
+  "from": "kernel-tricks#thm-3-4",
+  "to": "preliminaries#thm-p-6",
+  "note": "proof decomposes f by orthogonal projection onto the closed finite-dimensional span H_S"
+ }
+]

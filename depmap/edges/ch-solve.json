@@ -1,0 +1,21 @@
+[
+ {"from": "solving-the-svm#prop-9-1", "to": "preliminaries#def-p-11", "note": "specializes general KKT optimality conditions"},
+ {"from": "solving-the-svm#prop-9-1", "to": "support-vector-machines#prop-5-4", "note": "characterizes optimality of SVM dual"},
+ {"from": "solving-the-svm#prop-9-1", "to": "support-vector-machines#algo-5-1", "note": "written for the C-form dual"},
+ {"from": "solving-the-svm#prop-9-1", "to": "kernel-ridge-and-friends#def-4-9", "note": "classifies points by their margin"},
+ {"from": "solving-the-svm#algo-9-1", "to": "solving-the-svm#prop-9-1", "note": "KKT violation selects set, stops loop"},
+ {"from": "solving-the-svm#algo-9-1", "to": "support-vector-machines#prop-5-9", "note": "chunking exploits support-vector sparsity"},
+ {"from": "solving-the-svm#algo-9-1", "to": "support-vector-machines#def-5-8", "note": "hunts for the support set"},
+ {"from": "solving-the-svm#algo-9-1", "to": "support-vector-machines#algo-5-1", "note": "inner solve is C-SVM dual"},
+ {"from": "solving-the-svm#algo-9-2", "to": "solving-the-svm#prop-9-1", "note": "certificate is KKT threshold interval"},
+ {"from": "solving-the-svm#algo-9-2", "to": "support-vector-machines#algo-5-1", "note": "index sets from the box"},
+ {"from": "solving-the-svm#lem-9-2", "to": "support-vector-machines#prop-5-4", "note": "equality constraint pins single variable"},
+ {"from": "solving-the-svm#prop-9-3", "to": "solving-the-svm#lem-9-2", "note": "clips the two-variable feasible line"},
+ {"from": "solving-the-svm#prop-9-3", "to": "support-vector-machines#algo-5-1", "note": "intersects line with the box"},
+ {"from": "solving-the-svm#prop-9-3", "to": "preliminaries#def-p-10", "note": "concave parabola makes clipping exact"},
+ {"from": "solving-the-svm#algo-9-3", "to": "solving-the-svm#lem-9-2", "note": "size-two minimal working set"},
+ {"from": "solving-the-svm#algo-9-3", "to": "solving-the-svm#prop-9-3", "note": "clips step to the box"},
+ {"from": "solving-the-svm#algo-9-3", "to": "solving-the-svm#algo-9-2", "note": "sweeps maximal-violation selected pairs"},
+ {"from": "solving-the-svm#algo-9-3", "to": "solving-the-svm#prop-9-1", "note": "threshold refresh restores KKT; stops loop"},
+ {"from": "solving-the-svm#algo-9-3", "to": "kernels-and-rkhs#def-2-1", "note": "curvature is p.d.-kernel quadratic form"}
+]

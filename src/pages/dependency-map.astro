@@ -1,0 +1,180 @@
+---
+import Book from "../layouts/Book.astro";
+import {
+  BOOK,
+  escapeHtml,
+  statementIndex,
+  dependencyEdges,
+  tocHtml,
+} from "../lib/book.js";
+
+const nodes = statementIndex();
+const edges = dependencyEdges();
+const byKey = new Map(nodes.map((n) => [n.key, n]));
+
+// outgoing (uses) and incoming (used by) per node
+const uses = new Map(nodes.map((n) => [n.key, []]));
+const usedBy = new Map(nodes.map((n) => [n.key, []]));
+for (const e of edges) {
+  if (uses.has(e.from) && byKey.has(e.to)) uses.get(e.from).push(e);
+  if (usedBy.has(e.to) && byKey.has(e.from)) usedBy.get(e.to).push(e);
+}
+
+// group nodes by chapter, in book order
+const order = [];
+for (const part of BOOK.parts)
+  for (const ch of part.chapters) order.push(ch);
+const chapters = order
+  .map((ch) => ({
+    ...ch,
+    nodes: nodes.filter((n) => n.chapter === ch.slug),
+  }))
+  .filter((c) => c.nodes.length);
+
+// chapter-level aggregate edges (cross-chapter only) for the overview graph
+const chIndex = new Map(chapters.map((c, i) => [c.slug, i]));
+const aggMap = new Map();
+for (const e of edges) {
+  const a = byKey.get(e.from),
+    b = byKey.get(e.to);
+  if (!a || !b || a.chapter === b.chapter) continue;
+  const k = `${a.chapter}|${b.chapter}`;
+  aggMap.set(k, (aggMap.get(k) || 0) + 1);
+}
+const chapterNodes = chapters.map((c) => ({
+  slug: c.slug,
+  title: c.title,
+  num: c.nodes[0].chapterNum,
+  count: c.nodes.length,
+  part: order.find((o) => o.slug === c.slug) ? undefined : undefined,
+}));
+const chapterEdges = [...aggMap.entries()].map(([k, w]) => {
+  const [from, to] = k.split("|");
+  return { from, to, w };
+});
+
+// data the client viz reads
+const graph = {
+  nodes: nodes.map((n) => ({
+    key: n.key,
+    kind: n.kind,
+    label: n.kindLabel,
+    title: n.title,
+    chapter: n.chapter,
+    chapterNum: n.chapterNum,
+    href: `${n.chapter}.html#${n.id}`,
+  })),
+  edges: edges.map((e) => ({ from: e.from, to: e.to, note: e.note })),
+  chapters: chapterNodes,
+  chapterEdges,
+};
+
+const kindWord = {
+  def: "Definition",
+  thm: "Theorem",
+  lem: "Lemma",
+  prop: "Proposition",
+  cor: "Corollary",
+  algo: "Algorithm",
+};
+
+// most-depended-on statements (the load-bearing results)
+const hubs = [...nodes]
+  .map((n) => ({ n, deg: usedBy.get(n.key).length }))
+  .filter((x) => x.deg > 0)
+  .sort((a, b) => b.deg - a.deg)
+  .slice(0, 12);
+
+function nodeLink(n) {
+  return `<a class="dm-ref dm-${n.kind}" href="${n.chapter}.html#${n.id}">${escapeHtml(n.kindLabel)}</a>`;
+}
+
+// build the server-rendered listing
+let listing = "";
+for (const c of chapters) {
+  const num = c.nodes[0].chapterNum;
+  const numStr = num === "P" ? "Preliminaries" : `Chapter ${num}`;
+  listing += `<section class="dm-chapter"><h3 id="dm-${c.slug}">${numStr}. ${escapeHtml(c.title)}</h3><ul class="dm-list">`;
+  for (const n of c.nodes) {
+    const out = uses.get(n.key);
+    const inc = usedBy.get(n.key);
+    let line = `<li><a class="dm-anchor dm-${n.kind}" href="${n.chapter}.html#${n.id}">${escapeHtml(n.kindLabel)}</a> <span class="dm-title">${escapeHtml(n.title)}</span>`;
+    if (out.length) {
+      line +=
+        `<div class="dm-edge dm-uses"><span class="dm-lab">uses</span> ` +
+        out
+          .map((e) => {
+            const t = byKey.get(e.to);
+            return t
+              ? `${nodeLink(t)}${e.note ? `<span class="dm-note"> (${escapeHtml(e.note)})</span>` : ""}`
+              : "";
+          })
+          .filter(Boolean)
+          .join(", ") +
+        `</div>`;
+    }
+    if (inc.length) {
+      line +=
+        `<div class="dm-edge dm-usedby"><span class="dm-lab">used by</span> ` +
+        inc
+          .map((e) => {
+            const f = byKey.get(e.from);
+            return f ? nodeLink(f) : "";
+          })
+          .filter(Boolean)
+          .join(", ") +
+        `</div>`;
+    }
+    line += `</li>`;
+    listing += line;
+  }
+  listing += `</ul></section>`;
+}
+
+const body = `<h1><span class="chno">End matter</span>The Dependency Map</h1>
+<p class="lead">The book is one long argument. This page draws its skeleton: every numbered
+definition, theorem, lemma, proposition, corollary, and algorithm, and the edges
+that say which result each one leans on. Read it to see how far a single idea reaches,
+or to find the shortest path from a first definition to a result you care about.</p>
+
+<figure class="dm-viz" id="dm-viz">
+  <div class="dm-toolbar">
+    <button type="button" class="dm-btn dm-back" hidden>&larr; All chapters</button>
+    <span class="dm-scope" id="dm-scope">Chapters, sized by number of statements. Click one to open it.</span>
+  </div>
+  <canvas id="dm-canvas" width="1600" height="1000" role="img"
+    aria-label="Interactive graph of the book's chapters and their dependencies. A full textual listing follows below."></canvas>
+  <div class="dm-tip" id="dm-tip" hidden></div>
+  <figcaption>Each arrow points from a result to a result it depends on. In the chapter
+  view, an arrow's weight counts how many statements cross between the two chapters.
+  A full, cross-linked listing of every statement and its dependencies is below, and
+  works without scripts.</figcaption>
+</figure>
+
+<h2 id="load-bearing">The load-bearing results</h2>
+<p>The statements the rest of the book leans on most, by how many other results invoke them:</p>
+<ol class="dm-hubs">
+${hubs
+  .map(
+    (h) =>
+      `<li>${nodeLink(h.n)} <span class="dm-title">${escapeHtml(h.n.title)}</span> <span class="dm-deg">${h.deg} dependents</span></li>`,
+  )
+  .join("\n")}
+</ol>
+
+<h2 id="full-listing">Every statement and its dependencies</h2>
+<p class="hint">Anchors link to the statement in its chapter. "uses" lists what the statement
+or its proof invokes; "used by" lists the later results that rely on it.</p>
+${listing}
+
+<script id="dm-data" type="application/json">${JSON.stringify(graph)}</script>`;
+---
+
+<Book
+  title={`The Dependency Map · ${BOOK.title}`}
+  desc={`A statement-level dependency graph of ${BOOK.title}: which theorem, definition, and algorithm each result depends on.`}
+  toc={tocHtml("dependency-map")}
+>
+  <Fragment set:html={body} />
+  <script is:inline defer src="assets/depmap.js"></script>
+</Book>

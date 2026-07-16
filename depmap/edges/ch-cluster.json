@@ -1,0 +1,47 @@
+[
+ {
+  "from": "kernel-clustering#prop-14-1",
+  "to": "preliminaries#def-p-5",
+  "note": "proof expands the squared norm by bilinearity of the Hilbert-space inner product and completes the square"
+ },
+ {
+  "from": "kernel-clustering#prop-14-1",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "the embedded points phi(x_i) live in the RKHS of the p.d. kernel"
+ },
+ {
+  "from": "kernel-clustering#prop-14-2",
+  "to": "kernel-clustering#prop-14-1",
+  "note": "substitutes the optimal per-cluster centroids, the centers of mass, back into the cost"
+ },
+ {
+  "from": "kernel-clustering#prop-14-2",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "expands squared distances through the reproducing kernel identity for inner products of embeddings"
+ },
+ {
+  "from": "kernel-clustering#prop-14-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "kernel trick rewrites the point-to-centroid distance identity entirely in kernel evaluations"
+ },
+ {
+  "from": "kernel-clustering#prop-14-2",
+  "to": "kernel-tricks#prop-3-2",
+  "note": "cluster cohesion term is the squared norm of the cluster barycenter as a Gram-matrix average"
+ },
+ {
+  "from": "kernel-clustering#prop-14-3",
+  "to": "kernel-clustering#prop-14-2",
+  "note": "relaxes the trace form of the equivalent kernel K-means objective over orthonormal Z"
+ },
+ {
+  "from": "kernel-clustering#prop-14-3",
+  "to": "preliminaries#thm-p-2",
+  "note": "Ky Fan reading of the spectral theorem: trace(Z^T K Z) over orthonormal columns is maximized by the top-k eigenvectors"
+ },
+ {
+  "from": "kernel-clustering#prop-14-3",
+  "to": "kernel-pca#thm-13-4",
+  "note": "the solve is precisely kernel PCA's eigendecomposition of the Gram matrix"
+ }
+]

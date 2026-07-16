@@ -1,0 +1,102 @@
+[
+ {
+  "from": "kernel-discriminants-and-projections#def-16-1",
+  "to": "preliminaries#def-p-1",
+  "note": "posed for symmetric A and positive definite B"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#def-16-1",
+  "to": "kernel-pca#prop-13-2",
+  "note": "two-matrix generalization of the one-matrix Rayleigh quotient met in PCA, solved by the top eigenvector"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#prop-16-2",
+  "to": "kernel-discriminants-and-projections#def-16-1",
+  "note": "proves the stationarity and maximizer claims of the generalized Rayleigh quotient"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#prop-16-2",
+  "to": "preliminaries#thm-p-2",
+  "note": "positive definite B has a symmetric square root, and the reduced symmetric matrix has real eigenvalues with orthonormal eigenvectors"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#prop-16-2",
+  "to": "preliminaries#def-p-1",
+  "note": "positive definiteness makes B^{1/2} a bijection, so the change of variables loses no direction"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#prop-16-3",
+  "to": "kernel-discriminants-and-projections#def-16-1",
+  "note": "concerns the eigenvectors of the generalized problem Aw = lambda Bw"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#prop-16-3",
+  "to": "kernel-discriminants-and-projections#prop-16-2",
+  "note": "B-orthonormality pulls back the orthonormal eigenvectors of the reduced symmetric eigenproblem through B^{1/2}"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#def-16-4",
+  "to": "kernel-discriminants-and-projections#def-16-1",
+  "note": "removes a found eigenpair from the generalized eigenproblem and repeats"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#def-16-4",
+  "to": "kernel-discriminants-and-projections#prop-16-3",
+  "note": "preserving the remaining eigenpairs rests on the B-metric conjugacy of the eigenvectors"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-1",
+  "to": "kernel-discriminants-and-projections#def-16-1",
+  "note": "Fisher's scatter ratio J is a generalized Rayleigh quotient, maximized as S_B w = lambda S_W w"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-1",
+  "to": "kernel-discriminants-and-projections#prop-16-2",
+  "note": "with N + mu I positive definite the rank-one numerator makes the single solve the top generalized eigenvector"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-1",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "dual step writes the discriminant direction as a data expansion w = sum_i alpha_i phi(x_i)"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-1",
+  "to": "kernel-tricks#def-3-3",
+  "note": "within-class matrix N applies the class-wise mean-subtracting centering projector to Gram blocks"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-1",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "regularizer penalizes the RKHS norm of the direction, alpha^T K alpha"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-2",
+  "to": "kernel-pca#thm-13-4",
+  "note": "keeps the leading kernel principal directions and reweights each eigenvector by its covariance with the target"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-2",
+  "to": "kernel-pca#algo-13-1",
+  "note": "prediction centers new points against the training kernel exactly as in kernel PCA"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-2",
+  "to": "preliminaries#thm-p-2",
+  "note": "eigendecomposes the symmetric centered Gram matrix; orthogonality of the v_j makes the coefficients incremental"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-3",
+  "to": "preliminaries#def-p-3",
+  "note": "the maximum-covariance direction pair is the leading singular-vector pair of C_xy = U Sigma V^T"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-3",
+  "to": "kernel-discriminants-and-projections#def-16-4",
+  "note": "extracts successive components by deflating the matrix after each score, the deflation engine again"
+ },
+ {
+  "from": "kernel-discriminants-and-projections#algo-16-3",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "PLS touches X only through inner products, so the loop kernelizes into two-sided Gram deflations"
+ }
+]

@@ -1,0 +1,187 @@
+[
+ {
+  "from": "kernels-and-rkhs#def-2-1",
+  "to": "preliminaries#def-p-1",
+  "note": "the attached equivalent reading says K is p.d. iff every similarity matrix is symmetric positive semidefinite, the matrix property defined there"
+ },
+ {
+  "from": "kernels-and-rkhs#lem-2-2",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "asserts positive definiteness; the proof checks the definition's quadratic form, which collapses to a square"
+ },
+ {
+  "from": "kernels-and-rkhs#lem-2-3",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "asserts the linear kernel is p.d. in the sense of that definition"
+ },
+ {
+  "from": "kernels-and-rkhs#lem-2-3",
+  "to": "preliminaries#def-p-5",
+  "note": "proof uses bilinearity of the inner product to collapse the quadratic form into a squared norm"
+ },
+ {
+  "from": "kernels-and-rkhs#lem-2-4",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "concludes the embedded comparison is p.d. by verifying the definition's quadratic form"
+ },
+ {
+  "from": "kernels-and-rkhs#lem-2-4",
+  "to": "kernels-and-rkhs#lem-2-3",
+  "note": "proof is the linear-kernel computation applied to the embedded points Phi(x_i)"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-5",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "the equivalence characterizes p.d. kernels as defined there"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-5",
+  "to": "preliminaries#def-p-5",
+  "note": "asserts an embedding into a Hilbert space realizing K as an inner product"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-5",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "easy direction: the embedding-lemma proof works verbatim with R^d replaced by any Hilbert space"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-5",
+  "to": "preliminaries#thm-p-2",
+  "note": "finite-case proof diagonalizes the kernel matrix on an orthonormal eigenbasis with nonnegative eigenvalues"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-5",
+  "to": "preliminaries#def-p-1",
+  "note": "finite-case proof starts from the symmetric positive semidefinite kernel matrix"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-5",
+  "to": "kernels-and-rkhs#thm-2-12",
+  "note": "converse direction completed via the Moore-Aronszajn theorem"
+ },
+ {
+  "from": "kernels-and-rkhs#def-2-6",
+  "to": "preliminaries#def-p-5",
+  "note": "restates the inner-product, pre-Hilbert and Hilbert-space definitions of the preliminaries in the chapter's notation"
+ },
+ {
+  "from": "kernels-and-rkhs#def-2-6",
+  "to": "preliminaries#def-p-4",
+  "note": "completeness is defined via Cauchy sequences, the metric-space notions introduced there"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-7",
+  "to": "preliminaries#def-p-7",
+  "note": "the hypothesis is positivity of the integral operator T_K, the operator notion defined there"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-7",
+  "to": "preliminaries#thm-p-8",
+  "note": "the eigenvalues and eigenfunctions in the expansion are those the compact self-adjoint spectral theorem supplies for the integral operator"
+ },
+ {
+  "from": "kernels-and-rkhs#def-2-8",
+  "to": "kernels-and-rkhs#def-2-6",
+  "note": "defined for a Hilbert space of functions with inner product as defined there"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-9",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "characterizes the RKHS property; forward proof bounds |f(x)| <= ||f|| K(x,x)^{1/2} via the reproducing property"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-9",
+  "to": "preliminaries#thm-p-6",
+  "note": "converse proof invokes the Riesz representation theorem to produce the representer g_x of evaluation"
+ },
+ {
+  "from": "kernels-and-rkhs#cor-2-10",
+  "to": "kernels-and-rkhs#thm-2-9",
+  "note": "follows by applying that theorem's evaluation bound to f_n - f"
+ },
+ {
+  "from": "kernels-and-rkhs#cor-2-10",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "stated for convergence in an RKHS"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-11",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "both uniqueness arguments manipulate the reproducing property of the competing kernels and spaces"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-11",
+  "to": "kernels-and-rkhs#thm-2-9",
+  "note": "space-uniqueness sketch invokes continuity of the evaluation functionals"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-11",
+  "to": "kernels-and-rkhs#cor-2-10",
+  "note": "space-uniqueness sketch uses that norm limits are determined pointwise"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-12",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "equivalence with positive definiteness; the construction uses p.d.-ness to make the forced bilinear form an inner product"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-12",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "equivalence with the reproducing-kernel property; the easy direction applies the reproducing property twice"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-12",
+  "to": "kernels-and-rkhs#def-2-6",
+  "note": "the construction builds a pre-Hilbert space and completes it via Cauchy sequences, as defined there"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-13",
+  "to": "kernels-and-rkhs#lem-2-3",
+  "note": "identifies the RKHS of the linear kernel introduced and proved p.d. there"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-13",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "proof verifies the two RKHS axioms (contains all K_x; reproducing property)"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-13",
+  "to": "kernels-and-rkhs#thm-2-11",
+  "note": "the verified candidate is THE RKHS because a kernel has at most one RKHS"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-14",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "closure statements about p.d. kernels; sum, scaling and limit follow directly from the definition's quadratic form"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-14",
+  "to": "preliminaries#def-p-1",
+  "note": "the Schur-product proof works with the p.s.d. kernel matrices of the two factors"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-14",
+  "to": "preliminaries#thm-p-2",
+  "note": "proof factorizes each p.s.d. Gram matrix as X^T X via the spectral decomposition"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-14",
+  "to": "kernels-and-rkhs#lem-2-3",
+  "note": "final step: the entrywise product is a Gram matrix of inner products of vectors z_i, hence p.s.d."
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-15",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "asserts e^K is a p.d. kernel"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-15",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "proof: powers are p.d. by the product rule, partial sums by nonnegative combination, then the pointwise-limit rule"
+ },
+ {
+  "from": "kernels-and-rkhs#thm-2-15",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "K^0 = 1 is p.d. as the inner product after the constant embedding Phi(x) = 1"
+ }
+]

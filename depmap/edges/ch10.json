@@ -1,0 +1,167 @@
+[
+  {
+    "from": "graph-kernels#thm-24-2",
+    "to": "graph-kernels#def-24-1",
+    "note": "Hamiltonian-path reduction reads off subgraph occurrences"
+  },
+  {
+    "from": "graph-kernels#thm-24-4",
+    "to": "graph-kernels#def-24-3",
+    "note": "paths are exactly the linear subgraphs"
+  },
+  {
+    "from": "graph-kernels#thm-24-4",
+    "to": "graph-kernels#thm-24-2",
+    "note": "same Hamiltonian-path reduction as the subgraph case"
+  },
+  {
+    "from": "graph-kernels#prop-24-6",
+    "to": "graph-kernels#def-24-5",
+    "note": "completeness makes the Hilbert distance decide isomorphism"
+  },
+  {
+    "from": "graph-kernels#def-24-7",
+    "to": "graph-kernels#def-24-1",
+    "note": "indexes each graph by its subgraph counts"
+  },
+  {
+    "from": "graph-kernels#prop-24-8",
+    "to": "graph-kernels#def-24-7",
+    "note": "n subgraph-kernel evaluations decide the Hamiltonian path"
+  },
+  {
+    "from": "graph-kernels#def-24-9",
+    "to": "graph-kernels#def-24-7",
+    "note": "path kernel is the subgraph kernel restricted to paths"
+  },
+  {
+    "from": "graph-kernels#def-24-9",
+    "to": "graph-kernels#def-24-3",
+    "note": "restricts the pattern set to path graphs"
+  },
+  {
+    "from": "graph-kernels#prop-24-10",
+    "to": "graph-kernels#def-24-9",
+    "note": "the path kernel is NP-hard"
+  },
+  {
+    "from": "graph-kernels#def-24-12",
+    "to": "graph-kernels#def-24-11",
+    "note": "feature map sums weights over labeled walks"
+  },
+  {
+    "from": "graph-kernels#prop-24-13",
+    "to": "graph-kernels#def-24-12",
+    "note": "the walk kernels are computable in polynomial time"
+  },
+  {
+    "from": "graph-kernels#lem-24-15",
+    "to": "graph-kernels#def-24-14",
+    "note": "matched walk pairs become walks on the product graph"
+  },
+  {
+    "from": "graph-kernels#lem-24-15",
+    "to": "graph-kernels#def-24-11",
+    "note": "bijection between pairs of same-label walks"
+  },
+  {
+    "from": "graph-kernels#cor-24-16",
+    "to": "graph-kernels#lem-24-15",
+    "note": "reindexes the kernel sum via the walk bijection"
+  },
+  {
+    "from": "graph-kernels#cor-24-16",
+    "to": "graph-kernels#def-24-12",
+    "note": "rewrites the walk kernel as one product-graph sum"
+  },
+  {
+    "from": "graph-kernels#prop-24-17",
+    "to": "graph-kernels#cor-24-16",
+    "note": "evaluates the product-graph walk sum"
+  },
+  {
+    "from": "graph-kernels#prop-24-17",
+    "to": "graph-kernels#def-24-14",
+    "note": "adjacency powers of the product graph count walks"
+  },
+  {
+    "from": "graph-kernels#prop-24-19",
+    "to": "graph-kernels#def-24-18",
+    "note": "the convolution kernel is positive semi-definite"
+  },
+  {
+    "from": "graph-kernels#prop-24-19",
+    "to": "kernels-and-rkhs#thm-2-14",
+    "note": "sums and tensor products of p.d. kernels stay p.d."
+  },
+  {
+    "from": "graph-kernels#def-24-20",
+    "to": "kernel-families#def-19-9",
+    "note": "negative squared Hilbert distance is conditionally p.d."
+  },
+  {
+    "from": "graph-kernels#def-24-20",
+    "to": "kernel-families#thm-19-10",
+    "note": "exp(-t d^2) p.d. since -d^2 is conditionally p.d."
+  },
+  {
+    "from": "graph-kernels#lem-24-21",
+    "to": "graph-kernels#def-24-20",
+    "note": "asks whether -d_G is c.p.d. (Hilbert-embeddable)"
+  },
+  {
+    "from": "graph-kernels#lem-24-21",
+    "to": "preliminaries#thm-p-2",
+    "note": "circulant cycle-distance diagonalized by the Fourier basis"
+  },
+  {
+    "from": "graph-kernels#lem-24-23",
+    "to": "graph-kernels#def-24-22",
+    "note": "roughness Omega(f)=f^T L f from the Laplacian"
+  },
+  {
+    "from": "graph-kernels#thm-24-24",
+    "to": "graph-kernels#lem-24-23",
+    "note": "uses Omega=f^T L f and Im(L)=mean-zero functions"
+  },
+  {
+    "from": "graph-kernels#thm-24-24",
+    "to": "preliminaries#def-p-3",
+    "note": "reproducing kernel is the Laplacian pseudo-inverse L*"
+  },
+  {
+    "from": "graph-kernels#thm-24-24",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "identifies the reproducing kernel of the RKHS"
+  },
+  {
+    "from": "graph-kernels#def-24-26",
+    "to": "graph-kernels#def-24-22",
+    "note": "diffusion kernel is the matrix exponential e^{-tL}"
+  },
+  {
+    "from": "graph-kernels#def-24-26",
+    "to": "graph-kernels#lem-24-25",
+    "note": "transfers the Gaussian heat-kernel characterization to the graph"
+  },
+  {
+    "from": "graph-kernels#def-24-26",
+    "to": "preliminaries#thm-p-2",
+    "note": "spectral decomposition of L gives positive eigenvalues"
+  },
+  {
+    "from": "graph-kernels#def-24-27",
+    "to": "graph-kernels#def-24-26",
+    "note": "diffusion kernel is the r(lambda)=e^{-t lambda} member"
+  },
+  {
+    "from": "graph-kernels#def-24-27",
+    "to": "graph-kernels#thm-24-24",
+    "note": "Laplacian pseudo-inverse is the r(lambda)=1/lambda member"
+  },
+  {
+    "from": "graph-kernels#def-24-27",
+    "to": "preliminaries#thm-p-2",
+    "note": "reweights the Laplacian spectral decomposition"
+  }
+]

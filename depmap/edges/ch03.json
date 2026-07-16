@@ -1,0 +1,127 @@
+[
+  {
+    "from": "kernel-ridge-and-friends#def-4-2",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "KRR is defined for a p.d. kernel K on X"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-2",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "minimizes over the RKHS of K with the squared RKHS norm as penalty"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-2",
+    "to": "kernel-ridge-and-friends#def-4-1",
+    "note": "instantiates the supervised learning problem with the squared loss"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-3",
+    "to": "kernel-ridge-and-friends#def-4-2",
+    "note": "gives the closed-form solution of the KRR problem"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-3",
+    "to": "kernel-tricks#thm-3-4",
+    "note": "representer theorem reduces KRR to the finite problem in alpha that the formula solves"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-3",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "reproducing property turns predictions into K alpha and the norm into alpha' K alpha"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-3",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "psd Gram matrix of the p.d. kernel makes K + lambda n I invertible"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-3",
+    "to": "preliminaries#def-p-10",
+    "note": "convexity of the objective lets a vanishing gradient certify the minimum"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-4",
+    "to": "kernel-ridge-and-friends#prop-4-3",
+    "note": "characterizes all solutions of the stationarity equation from that proof"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-4",
+    "to": "kernel-ridge-and-friends#def-4-2",
+    "note": "establishes uniqueness of the KRR estimator in H"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-4",
+    "to": "preliminaries#thm-p-2",
+    "note": "spectral theorem diagonalizes K with Ker(K) orthogonal to Im(K)"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-4",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "reproducing property gives ||f - f'||^2 = eps' K eps = 0, so all alphas define one function"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-6",
+    "to": "kernel-ridge-and-friends#def-4-2",
+    "note": "solves the weighted variant of the KRR problem"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-6",
+    "to": "kernel-tricks#thm-3-4",
+    "note": "representer theorem again reduces the weighted objective to n coefficients"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-6",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "psd Gram matrix makes the congruence W^1/2 K W^1/2 + n lambda I invertible"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-6",
+    "to": "kernel-ridge-and-friends#prop-4-3",
+    "note": "collapses to the unweighted closed form when W = I"
+  },
+  {
+    "from": "kernel-ridge-and-friends#prop-4-6",
+    "to": "preliminaries#def-p-10",
+    "note": "convex differentiable objective, so a zero of the gradient suffices"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-7",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "penalizes the logistic empirical risk by the squared RKHS norm"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-7",
+    "to": "kernel-ridge-and-friends#def-4-1",
+    "note": "instantiates supervised learning for binary classification with the logistic loss"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-9",
+    "to": "kernel-ridge-and-friends#def-4-1",
+    "note": "defined for pairs (x, y) in the binary-classification instance of the setup"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-10",
+    "to": "kernel-ridge-and-friends#def-4-9",
+    "note": "the loss phi is evaluated at the margins y_i f(x_i)"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-10",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "regularizes by the squared RKHS norm over H"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-10",
+    "to": "kernel-ridge-and-friends#def-4-1",
+    "note": "a family of classifiers for the supervised learning problem"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-11",
+    "to": "preliminaries#def-p-9",
+    "note": "risk is a probability of error under the distribution P with an i.i.d. sample"
+  },
+  {
+    "from": "kernel-ridge-and-friends#def-4-11",
+    "to": "kernel-ridge-and-friends#def-4-1",
+    "note": "grades classifiers sign(f) from the binary supervised learning setup"
+  }
+]

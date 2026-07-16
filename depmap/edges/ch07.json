@@ -1,0 +1,307 @@
+[
+  {
+    "from": "mercer-and-rates#thm-18-2",
+    "to": "mercer-and-rates#def-18-1",
+    "note": "the space H is defined by absolute continuity of its members"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-2",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "asserts H is an RKHS by checking K_x membership and the reproducing property"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-2",
+    "to": "preliminaries#def-p-5",
+    "note": "Step 1 verifies the inner product and uses Cauchy-Schwarz for the pointwise bound"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-2",
+    "to": "preliminaries#def-p-4",
+    "note": "Step 2 proves completeness via Cauchy sequences in L2"
+  },
+  {
+    "from": "mercer-and-rates#def-18-3",
+    "to": "preliminaries#def-p-5",
+    "note": "states the Green-function property through the L2 inner product"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-4",
+    "to": "mercer-and-rates#def-18-3",
+    "note": "the reproducing kernel is the Green function of D*D"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-4",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "concludes H is an RKHS by verifying the reproducing property"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-4",
+    "to": "preliminaries#def-p-5",
+    "note": "hypothesis: H is a Hilbert space under the inner product (Df, Dg)_L2"
+  },
+  {
+    "from": "mercer-and-rates#def-18-5",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "requires K to be a continuous positive definite kernel"
+  },
+  {
+    "from": "mercer-and-rates#def-18-5",
+    "to": "preliminaries#def-p-4",
+    "note": "requires the domain X to be a compact metric space"
+  },
+  {
+    "from": "mercer-and-rates#def-18-6",
+    "to": "preliminaries#def-p-5",
+    "note": "the operator classes are defined on a Hilbert space"
+  },
+  {
+    "from": "mercer-and-rates#def-18-6",
+    "to": "preliminaries#def-p-7",
+    "note": "recalls the compact, self-adjoint, positive operator classes of the preliminaries"
+  },
+  {
+    "from": "mercer-and-rates#prop-18-7",
+    "to": "preliminaries#def-p-1",
+    "note": "the Gram matrix is symmetric positive semidefinite"
+  },
+  {
+    "from": "mercer-and-rates#prop-18-7",
+    "to": "preliminaries#thm-p-2",
+    "note": "diagonalizes the Gram matrix by the spectral theorem for symmetric matrices"
+  },
+  {
+    "from": "mercer-and-rates#prop-18-7",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "positive definiteness of K makes every Gram matrix PSD"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-8",
+    "to": "mercer-and-rates#def-18-5",
+    "note": "hypothesis: K is a Mercer kernel on the compact X"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-8",
+    "to": "mercer-and-rates#def-18-6",
+    "note": "the conclusion asserts compactness, self-adjointness, and positivity as defined there"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-8",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "Step 6 gets positivity of L_K from positive definiteness of K via finite-sum approximation"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-8",
+    "to": "preliminaries#def-p-5",
+    "note": "Cauchy-Schwarz in L2_nu drives the continuity and boundedness bounds"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-9",
+    "to": "mercer-and-rates#def-18-6",
+    "note": "stated for compact self-adjoint (and positive) operators"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-9",
+    "to": "preliminaries#thm-p-8",
+    "note": "quotes the preliminaries' spectral theorem for compact self-adjoint operators"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "mercer-and-rates#def-18-5",
+    "note": "hypotheses are the Mercer-kernel conditions plus nondegeneracy of nu"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "mercer-and-rates#lem-18-8",
+    "note": "L_K is compact, self-adjoint, positive, and maps into continuous functions"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "mercer-and-rates#thm-18-9",
+    "note": "the spectral theorem supplies the orthonormal eigenfunctions and nonnegative eigenvalues of L_K"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "kernels-and-rkhs#thm-2-12",
+    "note": "the proof works inside the RKHS of K, the Aronszajn theory it explicitly invokes"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "uses kernel sections K_x and the reproducing property throughout Steps 1-4"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "kernels-and-rkhs#cor-2-10",
+    "note": "Step 2 identifies the limit of h_n via norm convergence implying pointwise convergence"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "preliminaries#def-p-5",
+    "note": "Cauchy-Schwarz and orthonormal-system (Bessel) estimates in Hilbert space"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-10",
+    "to": "kernels-and-rkhs#thm-2-7",
+    "note": "full statement and proof of the expansion quoted there; the remark records the equivalence of the two forms"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-11",
+    "to": "mercer-and-rates#thm-18-10",
+    "note": "well-definedness, the expansion identity, and continuity all read off Mercer's theorem"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-11",
+    "to": "preliminaries#def-p-5",
+    "note": "the feature space l2 is the model Hilbert space of square-summable sequences"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-12",
+    "to": "mercer-and-rates#def-18-5",
+    "note": "the continuous periodic p.d. kernel on compact [0,1] is a Mercer kernel"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-12",
+    "to": "mercer-and-rates#thm-18-10",
+    "note": "solves the eigenproblem of L_K posed to write Mercer's expansion"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-12",
+    "to": "kernels-and-rkhs#def-2-1",
+    "note": "symmetry of the p.d. kernel forces kappa even, so only cosine coefficients survive"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-14",
+    "to": "mercer-and-rates#def-18-13",
+    "note": "stated for spherical harmonics Y_k in Y_k(d)"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-14",
+    "to": "mercer-and-rates#thm-18-10",
+    "note": "read as giving the Mercer eigenfunctions and eigenvalues of every dot-product kernel on the sphere"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-15",
+    "to": "mercer-and-rates#thm-18-10",
+    "note": "Mercer's expansion gives the pointwise bound, K_x membership, and the diagonal identity in Steps 2 and 4"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-15",
+    "to": "mercer-and-rates#def-18-5",
+    "note": "standing setting: a Mercer kernel on compact X with nondegenerate nu"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-15",
+    "to": "mercer-and-rates#thm-18-9",
+    "note": "the eigenfunctions psi_i form a complete orthonormal basis of L2_nu"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-15",
+    "to": "mercer-and-rates#lem-18-8",
+    "note": "continuity of the eigenfunctions comes from L_K mapping L2_nu into continuous functions"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-15",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "verifies the RKHS axioms: K_x in H and the reproducing property"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-15",
+    "to": "preliminaries#def-p-5",
+    "note": "Step 1 transports the Hilbert structure from L2_nu; Step 2 uses Cauchy-Schwarz"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-16",
+    "to": "mercer-and-rates#thm-18-15",
+    "note": "direct application of the RKHS-from-eigenfunctions construction and its norm"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-16",
+    "to": "mercer-and-rates#lem-18-12",
+    "note": "the Fourier basis diagonalizes L_K with eigenvalues n^(-2beta)"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-16",
+    "to": "mercer-and-rates#def-18-1",
+    "note": "the Sobolev description requires the derivatives f^(i) to be absolutely continuous"
+  },
+  {
+    "from": "mercer-and-rates#def-18-17",
+    "to": "mercer-and-rates#def-18-5",
+    "note": "assumes K is a Mercer kernel over the compact X"
+  },
+  {
+    "from": "mercer-and-rates#def-18-17",
+    "to": "mercer-and-rates#thm-18-9",
+    "note": "posits the eigenvalue-eigenfunction system of L_K provided by the spectral theorem"
+  },
+  {
+    "from": "mercer-and-rates#def-18-17",
+    "to": "mercer-and-rates#thm-18-15",
+    "note": "phi_i = sqrt(lambda_i) psi_i is an orthonormal basis of H by the spectral RKHS construction"
+  },
+  {
+    "from": "mercer-and-rates#def-18-17",
+    "to": "kernel-ridge-and-friends#def-4-2",
+    "note": "measures the MSE of the KRR estimator recalled from that chapter"
+  },
+  {
+    "from": "mercer-and-rates#def-18-17",
+    "to": "preliminaries#def-p-9",
+    "note": "the sampling model uses distributions, expectation, independence, and i.i.d. draws"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-18",
+    "to": "mercer-and-rates#def-18-17",
+    "note": "stated and proved under the model's assumptions"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-18",
+    "to": "mercer-and-rates#thm-18-15",
+    "note": "Step 1 uses the isometry L_K^(1/2) between L2_nu and H from the RKHS construction"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-18",
+    "to": "kernel-tricks#thm-3-4",
+    "note": "Step 3 starts from the representer expansion of the KRR solution"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-18",
+    "to": "kernel-ridge-and-friends#prop-4-3",
+    "note": "plugs in the closed form alpha = (K + lambda n I)^(-1) y of KRR"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-18",
+    "to": "kernel-ridge-and-friends#lem-4-5",
+    "note": "the push-through identity moves Phi_n^T through the regularized inverse"
+  },
+  {
+    "from": "mercer-and-rates#lem-18-18",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "the reproducing property gives the coordinates e(K_x) and f*(x) = (f*, K_x)_H"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-19",
+    "to": "mercer-and-rates#lem-18-18",
+    "note": "bounds the bias and variance terms of the decomposition under Phi_n^T Phi_n = nT"
+  },
+  {
+    "from": "mercer-and-rates#thm-18-19",
+    "to": "mercer-and-rates#def-18-17",
+    "note": "uses the model's ingredients: f* in H, noise variance sigma^2, spectrum of L_K"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-20",
+    "to": "mercer-and-rates#thm-18-19",
+    "note": "optimizes lambda and the head-tail split J in the spectral bias and variance bounds"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-20",
+    "to": "mercer-and-rates#lem-18-18",
+    "note": "the excess risk it bounds is the bias-variance sum of the decomposition"
+  },
+  {
+    "from": "mercer-and-rates#cor-18-20",
+    "to": "mercer-and-rates#def-18-17",
+    "note": "rates are stated in the model's quantities: norm of f*, sigma^2, and n"
+  }
+]

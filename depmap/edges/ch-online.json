@@ -1,0 +1,12 @@
+[
+ {"from": "online-kernel-learning#algo-10-1", "to": "kernel-tricks#prop-3-1", "note": "inner products replaced by kernel"},
+ {"from": "online-kernel-learning#algo-10-1", "to": "kernels-and-rkhs#thm-2-5", "note": "runs in kernel feature space"},
+ {"from": "online-kernel-learning#thm-10-1", "to": "online-kernel-learning#algo-10-1", "note": "bounds perceptron update count"},
+ {"from": "online-kernel-learning#thm-10-1", "to": "preliminaries#def-p-5", "note": "Cauchy-Schwarz in the squeeze"},
+ {"from": "online-kernel-learning#thm-10-1", "to": "kernel-ridge-and-friends#def-4-9", "note": "margin condition on every example"},
+ {"from": "online-kernel-learning#thm-10-1", "to": "support-vector-machines#def-5-5", "note": "gamma is SVM geometric margin"},
+ {"from": "online-kernel-learning#algo-10-2", "to": "support-vector-machines#prop-5-4", "note": "coordinate ascent on SVM dual"},
+ {"from": "online-kernel-learning#algo-10-2", "to": "support-vector-machines#algo-5-1", "note": "clip enforces the C-SVM box"},
+ {"from": "online-kernel-learning#algo-10-2", "to": "solving-the-svm#prop-9-1", "note": "coordinates by KKT violation, same stop"},
+ {"from": "online-kernel-learning#algo-10-2", "to": "preliminaries#def-p-10", "note": "projected step on concave quadratic"}
+]
