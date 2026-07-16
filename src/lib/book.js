@@ -427,6 +427,80 @@ export function buildBook() {
   return cache;
 }
 
+/**
+ * Every numbered statement in the book (definitions, theorems, lemmas,
+ * propositions, corollaries, algorithms), with the same ids the build gives
+ * their boxes. This is the node set of the dependency map; the curated edges
+ * in depmap/edges/*.json reference these nodes by `chapterSlug#id`.
+ */
+export function statementIndex() {
+  const chs = chaptersFlat();
+  const nodes = [];
+  const KIND_LABEL = { ...STMT_KINDS, algo: "Algorithm" };
+  chs.forEach((ch, i) => {
+    const isPrelim = ch.src === "ch-prelim";
+    const chLabel = isPrelim ? "P" : String(i);
+    const body = fs.readFileSync(
+      path.join(ROOT, "chapters", "src", `${ch.src}.body.html`),
+      "utf8",
+    );
+    let nStmt = 0;
+    let nAlgo = 0;
+    const re =
+      /<div class="box (thm|lem|prop|cor|def|algo)">\s*<span class="box-title">([\s\S]*?)<\/span>/g;
+    let m;
+    while ((m = re.exec(body))) {
+      const kind = m[1];
+      let num, id;
+      if (kind === "algo") {
+        nAlgo++;
+        num = `${chLabel}.${nAlgo}`;
+        id = `algo-${chLabel.toLowerCase()}-${nAlgo}`;
+      } else {
+        nStmt++;
+        num = `${chLabel}.${nStmt}`;
+        id = `${kind}-${chLabel.toLowerCase()}-${nStmt}`;
+      }
+      const title = m[2]
+        .replace(/<[^>]+>/g, "")
+        .replace(/\\\(/g, "")
+        .replace(/\\\)/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      nodes.push({
+        key: `${ch.slug}#${id}`,
+        id,
+        kind,
+        kindLabel: `${KIND_LABEL[kind]} ${num}`,
+        chapter: ch.slug,
+        chapterTitle: ch.title,
+        chapterNum: isPrelim ? "P" : i,
+        src: ch.src,
+        title,
+      });
+    }
+  });
+  return nodes;
+}
+
+/** The curated dependency edges, merged from depmap/edges/*.json. */
+export function dependencyEdges() {
+  const dir = path.join(ROOT, "depmap", "edges");
+  if (!fs.existsSync(dir)) return [];
+  const edges = [];
+  const seen = new Set();
+  for (const f of fs.readdirSync(dir).sort()) {
+    if (!f.endsWith(".json")) continue;
+    for (const e of JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"))) {
+      const sig = `${e.from}->${e.to}`;
+      if (seen.has(sig) || e.from === e.to) continue;
+      seen.add(sig);
+      edges.push({ from: e.from, to: e.to, note: e.note || "" });
+    }
+  }
+  return edges;
+}
+
 /** Sidebar table of contents (shared by every page). */
 export function tocHtml(currentSlug = null) {
   const rows = [
