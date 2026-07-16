@@ -1,77 +1,17 @@
 [
-  {
-    "from": "efficient-string-and-tree-kernels#def-22-1",
-    "to": "kernels-and-rkhs#lem-2-4",
-    "note": "all-subsequences kernel is the inner product of the subsequence-count feature map Phi_u"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#def-22-1",
-    "to": "kernels-and-rkhs#def-2-1",
-    "note": "positive definite kernel via its explicit feature map"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-1",
-    "to": "efficient-string-and-tree-kernels#def-22-1",
-    "note": "dynamic program computes the all-subsequences kernel by the last-character recurrence"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-2",
-    "to": "efficient-string-and-tree-kernels#def-22-1",
-    "note": "restricts the all-subsequences feature map to fixed length p"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-2",
-    "to": "efficient-string-and-tree-kernels#algo-22-1",
-    "note": "extends the last-character recurrence with a length index tracking remaining symbols"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#def-22-2",
-    "to": "string-kernels#def-21-3",
-    "note": "auxiliary suffix kernel introduced to compute the gap-weighted subsequence kernel"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-3",
-    "to": "efficient-string-and-tree-kernels#def-22-2",
-    "note": "fills the suffix-kernel tables via the inclusion-exclusion auxiliary recurrence"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-3",
-    "to": "string-kernels#def-21-3",
-    "note": "computes the gap-weighted subsequence kernel in O(p|s||t|)"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-3",
-    "to": "efficient-string-and-tree-kernels#algo-22-2",
-    "note": "the fixed-length recursion is the scaffold, adding a decay weight per matched position"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-4",
-    "to": "string-kernels#def-21-2",
-    "note": "evaluates the p-spectrum kernel with a trie instead of the dynamic-programming table"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#def-22-4",
-    "to": "efficient-string-and-tree-kernels#def-22-3",
-    "note": "feature map indexes the proper co-rooted subtrees defined earlier"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#def-22-4",
-    "to": "kernels-and-rkhs#lem-2-4",
-    "note": "counts common co-rooted subtrees as an inner product of subtree-indicator features"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#def-22-4",
-    "to": "kernels-and-rkhs#def-2-1",
-    "note": "positive definite kernel via its explicit feature map"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-5",
-    "to": "efficient-string-and-tree-kernels#def-22-4",
-    "note": "assembles the all-subtree kernel from the co-rooted subtree kernel via kappa = sum kappa_r"
-  },
-  {
-    "from": "efficient-string-and-tree-kernels#algo-22-5",
-    "to": "efficient-string-and-tree-kernels#def-22-3",
-    "note": "recursion ranges over the general/co-rooted subtree structure"
-  }
+  { "from": "efficient-string-and-tree-kernels#def-22-1", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of subsequence-count features" },
+  { "from": "efficient-string-and-tree-kernels#def-22-1", "to": "kernels-and-rkhs#def-2-1", "note": "p.d. via its explicit feature map" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-1", "to": "efficient-string-and-tree-kernels#def-22-1", "note": "computes the all-subsequences kernel" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-2", "to": "efficient-string-and-tree-kernels#def-22-1", "note": "fixed-length restriction of all-subsequences" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-2", "to": "efficient-string-and-tree-kernels#algo-22-1", "note": "adds a length index to the recurrence" },
+  { "from": "efficient-string-and-tree-kernels#def-22-2", "to": "string-kernels#def-21-3", "note": "auxiliary for the gap-weighted subsequence kernel" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-3", "to": "efficient-string-and-tree-kernels#def-22-2", "note": "fills the suffix-kernel tables" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-3", "to": "string-kernels#def-21-3", "note": "computes the gap-weighted subsequence kernel" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-3", "to": "efficient-string-and-tree-kernels#algo-22-2", "note": "extends the fixed-length recursion with decay" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-4", "to": "string-kernels#def-21-2", "note": "trie evaluates the p-spectrum kernel" },
+  { "from": "efficient-string-and-tree-kernels#def-22-4", "to": "efficient-string-and-tree-kernels#def-22-3", "note": "indexes the co-rooted subtrees" },
+  { "from": "efficient-string-and-tree-kernels#def-22-4", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of subtree-indicator features" },
+  { "from": "efficient-string-and-tree-kernels#def-22-4", "to": "kernels-and-rkhs#def-2-1", "note": "p.d. via its explicit feature map" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-5", "to": "efficient-string-and-tree-kernels#def-22-4", "note": "assembles from the co-rooted subtree kernel" },
+  { "from": "efficient-string-and-tree-kernels#algo-22-5", "to": "efficient-string-and-tree-kernels#def-22-3", "note": "recursion ranges over subtree structure" }
 ]

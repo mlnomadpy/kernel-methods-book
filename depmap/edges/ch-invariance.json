@@ -1,102 +1,22 @@
 [
-  {
-    "from": "invariances-and-pre-images#algo-20-1",
-    "to": "support-vector-machines#algo-5-1",
-    "note": "steps 1 and 4 train a standard C-SVM with kernel k and penalty C"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-1",
-    "to": "support-vector-machines#def-5-8",
-    "note": "step 1 extracts the support vector set S = {x_i : alpha_i > 0}"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-1",
-    "to": "support-vector-machines#prop-5-9",
-    "note": "sound because the SVM solution depends only on its support vectors, so retraining on S loses nothing"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-1",
-    "to": "invariances-and-pre-images#def-20-1",
-    "note": "applies the invariance transforms L_t to each support vector to make virtual examples"
-  },
-  {
-    "from": "invariances-and-pre-images#def-20-2",
-    "to": "kernels-and-rkhs#def-2-1",
-    "note": "starts from an admissible kernel with Gram entries K_ij = k(x_i,x_j)"
-  },
-  {
-    "from": "invariances-and-pre-images#def-20-2",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "picks the jitter minimizing the feature-space distance K_ii - 2K_ij + K_jj, computed by the kernel trick"
-  },
-  {
-    "from": "invariances-and-pre-images#def-20-2",
-    "to": "invariances-and-pre-images#def-20-1",
-    "note": "the jittered forms of x_i are its invariance transforms plus itself"
-  },
-  {
-    "from": "invariances-and-pre-images#prop-20-3",
-    "to": "kernels-and-rkhs#thm-2-5",
-    "note": "proof reads k(z,e_i) = <Phi(z),Phi(e_i)> through the Aronszajn feature map"
-  },
-  {
-    "from": "invariances-and-pre-images#prop-20-3",
-    "to": "preliminaries#def-p-5",
-    "note": "expands z in an orthonormal basis, each coordinate an inner product"
-  },
-  {
-    "from": "invariances-and-pre-images#prop-20-3",
-    "to": "kernel-tricks#thm-3-4",
-    "note": "the target Psi = sum alpha_j Phi(x_j) is the expansion a kernel algorithm returns"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-2",
-    "to": "kernel-families#thm-19-10",
-    "note": "iterates the Gaussian kernel exp(-|x_i-z|^2/2sigma^2), the p.d. exponential of the c.p.d. negative squared distance"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-2",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "the projection objective <Psi,Phi(z)> evaluates as the kernel expansion sum alpha_i k(x_i,z)"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-2",
-    "to": "kernel-pca#thm-13-4",
-    "note": "the vector to invert is typically the kernel-PCA projection P_n Phi(x) onto the top eigendirections"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-2",
-    "to": "kernel-pca#prop-13-6",
-    "note": "P_n Phi(x) is the best rank-n mean-square approximation, so a good approximate pre-image exists (denoising)"
-  },
-  {
-    "from": "invariances-and-pre-images#prop-20-4",
-    "to": "kernel-tricks#thm-3-4",
-    "note": "approximates the representer-type expansion Psi = sum alpha_i Phi(x_i) of a trained machine"
-  },
-  {
-    "from": "invariances-and-pre-images#prop-20-4",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "the objective |Psi - sum beta_i Phi(z_i)|^2 is fully expressible in the Gram blocks K^z and K^zx"
-  },
-  {
-    "from": "invariances-and-pre-images#prop-20-4",
-    "to": "preliminaries#thm-p-6",
-    "note": "the minimizer makes the residual orthogonal to each Phi(z_j), the orthogonal-projection characterization"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-3",
-    "to": "invariances-and-pre-images#algo-20-2",
-    "note": "step 2 finds each one-term pre-image of the residual by the fixed-point iteration"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-3",
-    "to": "invariances-and-pre-images#prop-20-4",
-    "note": "step 3 recomputes all coefficients by the optimal-coefficient formula"
-  },
-  {
-    "from": "invariances-and-pre-images#algo-20-3",
-    "to": "kernel-tricks#thm-3-4",
-    "note": "compresses the machine's expansion sum alpha_i k(x_i,.) into N_z far fewer terms"
-  }
+  { "from": "invariances-and-pre-images#algo-20-1", "to": "support-vector-machines#algo-5-1", "note": "trains a standard C-SVM" },
+  { "from": "invariances-and-pre-images#algo-20-1", "to": "support-vector-machines#def-5-8", "note": "extracts the support-vector set" },
+  { "from": "invariances-and-pre-images#algo-20-1", "to": "support-vector-machines#prop-5-9", "note": "sound: solution depends only on support vectors" },
+  { "from": "invariances-and-pre-images#algo-20-1", "to": "invariances-and-pre-images#def-20-1", "note": "transforms support vectors into virtual examples" },
+  { "from": "invariances-and-pre-images#def-20-2", "to": "kernels-and-rkhs#def-2-1", "note": "starts from an admissible p.d. kernel" },
+  { "from": "invariances-and-pre-images#def-20-2", "to": "kernel-tricks#prop-3-1", "note": "feature-space distance via the kernel trick" },
+  { "from": "invariances-and-pre-images#def-20-2", "to": "invariances-and-pre-images#def-20-1", "note": "jittered forms are the invariance transforms" },
+  { "from": "invariances-and-pre-images#prop-20-3", "to": "kernels-and-rkhs#thm-2-5", "note": "reads k via the Aronszajn feature map" },
+  { "from": "invariances-and-pre-images#prop-20-3", "to": "preliminaries#def-p-5", "note": "expands z in an orthonormal basis" },
+  { "from": "invariances-and-pre-images#prop-20-3", "to": "kernel-tricks#thm-3-4", "note": "target is the representer expansion" },
+  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-families#thm-19-10", "note": "Gaussian kernel is a p.d. exponential" },
+  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-tricks#prop-3-1", "note": "projection objective via the kernel trick" },
+  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-pca#thm-13-4", "note": "inverts the kernel-PCA projection" },
+  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-pca#prop-13-6", "note": "kernel-PCA projection has a good pre-image" },
+  { "from": "invariances-and-pre-images#prop-20-4", "to": "kernel-tricks#thm-3-4", "note": "approximates the representer expansion" },
+  { "from": "invariances-and-pre-images#prop-20-4", "to": "kernel-tricks#prop-3-1", "note": "objective expressed via Gram blocks" },
+  { "from": "invariances-and-pre-images#prop-20-4", "to": "preliminaries#thm-p-6", "note": "residual orthogonal to each Phi(z_j)" },
+  { "from": "invariances-and-pre-images#algo-20-3", "to": "invariances-and-pre-images#algo-20-2", "note": "step 2 finds one-term pre-images" },
+  { "from": "invariances-and-pre-images#algo-20-3", "to": "invariances-and-pre-images#prop-20-4", "note": "step 3 recomputes optimal coefficients" },
+  { "from": "invariances-and-pre-images#algo-20-3", "to": "kernel-tricks#thm-3-4", "note": "compresses the representer expansion" }
 ]
