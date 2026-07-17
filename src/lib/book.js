@@ -169,10 +169,21 @@ export function transformProofs(body) {
 
 // ---- citations ------------------------------------------------------------
 
-/** 'Schölkopf, B. and Smola, A. J.' -> ['Schölkopf', 'Smola'] */
+/** 'Schölkopf, B. and Smola, A. J.' -> ['Schölkopf', 'Smola'].
+ *  Handles surname particles ('De Vito', 'van der Maaten', 'von Luxburg') and
+ *  non-ASCII surnames ('Alpaydın'); each surname is the word(s) right before a
+ *  ', Initials' group, with the connector (comma / 'and' / '&') not captured. */
+const PARTICLES =
+  "de|De|del|Del|della|Van|van|von|Von|der|Der|den|Den|la|La|le|Le|di|Di|dos|Dos|du|Du|ten|Ten|ter|Ter|st|St";
 function surnames(authors) {
   const out = [];
-  const re = /([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'-]+),\s+(?:[A-Z]\.[- ]?)+/g;
+  // Each surname is optional particles + a capitalized word, right before a
+  // ', Initials' group. No leading boundary is needed: a connector ('and', '&')
+  // is lowercase and not a particle, so it can never start a capture.
+  const re = new RegExp(
+    `((?:(?:${PARTICLES})\\s+)*\\p{Lu}[\\p{L}'’-]+),\\s+(?:\\p{Lu}\\.[-\\s]?)+`,
+    "gu",
+  );
   let m;
   while ((m = re.exec(authors))) out.push(m[1]);
   return out;
@@ -182,25 +193,35 @@ function escapeRe(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Regexes matching the in-prose citation forms for a work, longest first. */
+/** Regexes matching the in-prose citation forms for a work, most-specific first.
+ *  Covers narrative "Author (Year)" including multi-year "(2020, 2021)", and
+ *  parenthetical "(Author, Year)" including grouped "(A, y1; B, y2)" lists and
+ *  "(see ... Author Year)". Patterns use lookaround so the link wraps only the
+ *  citation text, never the surrounding punctuation. */
 function citePatterns(names, year) {
   const y = String(year);
   const esc = names.map(escapeRe);
-  const pats = [];
+  // author-name tokens, most specific first
+  const toks = [];
   if (esc.length >= 3) {
     const mid = esc.slice(0, -1).join(",?\\s+");
-    pats.push(`${mid},?\\s+and\\s+${esc[esc.length - 1]}\\s+\\(${y}\\)`);
-    pats.push(`\\(\\s*${mid},?\\s+and\\s+${esc[esc.length - 1]},?\\s+${y}\\s*\\)`);
+    toks.push(`${mid},?\\s+and\\s+${esc[esc.length - 1]}`);
   }
-  if (esc.length >= 2) {
-    pats.push(`${esc[0]}\\s+and\\s+${esc[1]}\\s+\\(${y}\\)`);
-    pats.push(`\\(\\s*${esc[0]}\\s+and\\s+${esc[1]},?\\s+${y}\\s*\\)`);
-  }
+  if (esc.length >= 2) toks.push(`${esc[0]}\\s+and\\s+${esc[1]}`);
   if (esc.length) {
-    pats.push(`${esc[0]}\\s+et\\s+al\\.?\\s*\\(${y}\\)`);
-    pats.push(`\\(\\s*${esc[0]}\\s+et\\s+al\\.?,?\\s+${y}\\s*\\)`);
-    pats.push(`${esc[0]}\\s+\\(${y}\\)`);
-    pats.push(`\\(\\s*${esc[0]},?\\s+${y}\\s*\\)`);
+    toks.push(`${esc[0]}\\s+et\\s+al\\.?`);
+    toks.push(esc[0]);
+  }
+  // the target year sitting anywhere in a comma-separated year list
+  const yList = `(?:\\d{4}[a-z]?,\\s*)*${y}[a-z]?(?:,\\s*\\d{4}[a-z]?)*`;
+  const pats = [];
+  for (const t of toks) {
+    // narrative: Author (Year) / Author (2020, 2021)
+    pats.push(`${t}\\s+\\(${yList}\\)`);
+    // parenthetical, incl. grouped lists: preceded by ( or ; , followed by ) ; ,
+    pats.push(`(?<=[(;]\\s{0,2})${t},?\\s+${y}[a-z]?(?=\\s*[);,])`);
+    // "(see ... in Author Year)": author mid-paren, year closes/separates
+    pats.push(`(?<=[\\s(])${t}\\s+${y}[a-z]?(?=\\s*[);,])`);
   }
   return pats;
 }
