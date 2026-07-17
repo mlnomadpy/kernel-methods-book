@@ -194,26 +194,54 @@
 
   // ---- scroll-spy for the on-page rail ---------------------------------------
   function wireSpy() {
-    var rail = $("aside.onpage");
-    if (!rail) return;
-    var links = $$("a", rail);
-    var map = new Map();
+    // spy both the right-gutter rail and the sidebar section drill-down
+    var links = $$("aside.onpage a").concat($$("nav.toc .toc-sections a.sec"));
+    if (!links.length) return;
+    var map = new Map(); // heading element -> [links pointing at it]
     links.forEach(function (a) {
       var id = decodeURIComponent(a.getAttribute("href").slice(1));
       var el = document.getElementById(id);
-      if (el) map.set(el, a);
+      if (!el) return;
+      if (!map.has(el)) map.set(el, []);
+      map.get(el).push(a);
     });
     if (!map.size) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) {
           links.forEach(function (l) { l.classList.remove("active"); });
-          var a = map.get(e.target);
-          if (a) a.classList.add("active");
+          (map.get(e.target) || []).forEach(function (a) { a.classList.add("active"); });
         }
       });
     }, { rootMargin: "-10% 0px -75% 0px" });
     map.forEach(function (_, el) { io.observe(el); });
+  }
+
+  // ---- sidebar accordion: persist open parts, reveal the active chapter ------
+  function initToc() {
+    var parts = $$("details.toc-part");
+    if (!parts.length) return;
+    var KEY = "bk-toc-open";
+    var saved;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { saved = null; }
+    // a reader's manual open/closed choices persist across pages by part label;
+    // the part holding the current chapter always stays open (build sets it).
+    parts.forEach(function (d) {
+      var label = (d.querySelector("summary") || {}).textContent || "";
+      var hasHere = !!d.querySelector("a.here");
+      if (saved && Object.prototype.hasOwnProperty.call(saved, label) && !hasHere) {
+        d.open = saved[label];
+      }
+      d.addEventListener("toggle", function () {
+        var state = {};
+        try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+        state[label] = d.open;
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      });
+    });
+    // bring the active chapter into view within the sidebar on load
+    var here = $("nav.toc a.here");
+    if (here && here.scrollIntoView) here.scrollIntoView({ block: "center" });
   }
 
   // ---- heading anchors --------------------------------------------------------
@@ -312,7 +340,7 @@
 
   function boot() {
     initTheme(); initDrawer(); initSearch();
-    wireCites(); wireSpy(); initAnchors();
+    wireCites(); wireSpy(); initAnchors(); initToc();
     initProgress(); initBacktop(); initKeys(); initTables(); initDetails();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

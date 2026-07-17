@@ -300,6 +300,19 @@ function chapterRefsHtml(src) {
 
 // ---- navigation and search ------------------------------------------------
 
+/** The chapter's top-level (h2) sections, for the sidebar drill-down:
+ *  [{id, label}]. Kept to h2 so the active chapter stays compact in the TOC. */
+export function chapterSections(body) {
+  return [...body.matchAll(/<h2\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => ({
+    id: m[1],
+    label: m[2]
+      .replace(/<[^>]+>/g, "")
+      .replace(/\\\(/g, "")
+      .replace(/\\\)/g, "")
+      .trim(),
+  }));
+}
+
 /** The 'On this page' rail from the chapter's h2/h3 headings. */
 export function onpageNav(body) {
   const heads = [...body.matchAll(/<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/g)];
@@ -368,6 +381,7 @@ export function buildBook() {
     ncites += nc;
 
     const onpage = onpageNav(body);
+    const sections = chapterSections(body);
 
     // search index: the chapter lead, then one entry per h2/h3 section
     const num = isPrelim ? "Preliminaries" : i;
@@ -396,7 +410,7 @@ export function buildBook() {
     body = body.replace("<h1>", `<h1><span class="chno">${chno}</span>`);
     body += chapterRefsHtml(ch.src);
 
-    chapters.push({ ...ch, i, isPrelim, body, onpage });
+    chapters.push({ ...ch, i, isPrelim, body, onpage, sections });
   });
 
   // prev/next cards
@@ -528,30 +542,45 @@ export function dependencyEdges() {
   return edges;
 }
 
-/** Sidebar table of contents (shared by every page). */
-export function tocHtml(currentSlug = null) {
+/** Sidebar table of contents (shared by every page). Each part is a
+ *  collapsible <details>; the part holding the current chapter is open, and the
+ *  active chapter expands to a nested list of its sections (passed in from the
+ *  page). `sections` is [{id,label}] (the active chapter's h2 headings). */
+export function tocHtml(currentSlug = null, sections = []) {
   const rows = [
     `<div class="booktitle"><a href="index.html">${escapeHtml(BOOK.title)}</a></div>`,
     `<div class="bookmeta">${escapeHtml(BOOK.subtitle)}</div>`,
   ];
   let n = 0;
+  const partHtml = (label, inner, open) =>
+    `<details class="toc-part"${open ? " open" : ""}><summary>${escapeHtml(label)}</summary>${inner}</details>`;
+
   for (const part of BOOK.parts) {
-    rows.push(`<div class="part">${escapeHtml(part.part)}</div>`);
+    const links = [];
+    let hasCurrent = false;
     for (const ch of part.chapters) {
       n++;
-      const cls = ch.slug === currentSlug ? ' class="here"' : "";
-      rows.push(`<a href="${ch.slug}.html"${cls}>${n}. ${escapeHtml(ch.title)}</a>`);
+      const here = ch.slug === currentSlug;
+      if (here) hasCurrent = true;
+      links.push(
+        `<a href="${ch.slug}.html"${here ? ' class="here"' : ""}>${n}. ${escapeHtml(ch.title)}</a>`,
+      );
+      if (here && sections.length) {
+        const secs = sections
+          .map((s) => `<a class="sec" href="#${s.id}">${escapeHtml(s.label)}</a>`)
+          .join("");
+        links.push(`<div class="toc-sections">${secs}</div>`);
+      }
     }
+    rows.push(partHtml(part.part, links.join("\n"), hasCurrent));
   }
-  rows.push('<div class="part">End matter</div>');
-  rows.push(
+
+  const endLinks = [
     `<a href="glossary.html"${currentSlug === "glossary" ? ' class="here"' : ""}>Notation &amp; Glossary</a>`,
-  );
-  rows.push(
     `<a href="dependency-map.html"${currentSlug === "dependency-map" ? ' class="here"' : ""}>Dependency Map</a>`,
-  );
-  rows.push(
     `<a href="bibliography.html"${currentSlug === "bibliography" ? ' class="here"' : ""}>Bibliography</a>`,
-  );
+  ];
+  const endOpen = ["glossary", "dependency-map", "bibliography"].includes(currentSlug);
+  rows.push(partHtml("End matter", endLinks.join("\n"), endOpen));
   return rows.join("\n");
 }

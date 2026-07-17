@@ -13,7 +13,7 @@ const { ch } = Astro.props;
 <Book
   title={`${ch.title} · ${BOOK.title}`}
   desc={`${ch.title}, from ${BOOK.title}.`}
-  toc={tocHtml(ch.slug)}
+  toc={tocHtml(ch.slug, ch.sections)}
   onpage={ch.onpage}
   prevHref={ch.prevHref}
   nextHref={ch.nextHref}
