@@ -66,7 +66,7 @@
     },
     {
       "part": "VII · Designing Kernels for Data",
-      "intro": "Everything so far assumed a kernel was handed to you. This part builds them: for vectors by symmetry and probability, for prior knowledge through invariance, and for structured data, sequences, text, and graphs, where the kernel is the only bridge to the RKHS toolbox.",
+      "intro": "Everything so far assumed a kernel was handed to you. This part builds them: for vectors by symmetry and probability, for prior knowledge through invariance, for the structured data (sequences, text, graphs) where the kernel is the only bridge to the RKHS toolbox, for paths and time series, for curved and symmetric domains, and even for the indefinite similarities that fall outside the positive-definite world.",
       "chapters": [
         {"src": "ch08", "slug": "kernel-families", "title": "Translation-Invariant, Semigroup, and Probabilistic Kernels"},
         {"src": "ch-invariance", "slug": "invariances-and-pre-images", "title": "Invariances and the Pre-Image Problem"},
@@ -74,18 +74,34 @@
         {"src": "ch-strings2", "slug": "efficient-string-and-tree-kernels", "title": "Efficient String and Tree Kernels"},
         {"src": "ch-text", "slug": "kernels-for-text", "title": "Kernels for Text"},
         {"src": "ch10", "slug": "graph-kernels", "title": "Kernels for and on Graphs"},
-        {"src": "ch-generative", "slug": "generative-and-marginalization-kernels", "title": "Kernels from Generative Models"}
+        {"src": "ch-generative", "slug": "generative-and-marginalization-kernels", "title": "Kernels from Generative Models"},
+        {"src": "ch-signature", "slug": "signature-and-time-series-kernels", "title": "Signature and Sequence-Path Kernels"},
+        {"src": "ch-geom", "slug": "geometric-and-equivariant-kernels", "title": "Geometric and Equivariant Kernels"},
+        {"src": "ch-krein", "slug": "indefinite-and-krein-kernels", "title": "Indefinite and Krein-Space Kernels"}
       ]
     },
     {
       "part": "VIII · Kernels and Distributions",
-      "intro": "A kernel can embed not just a point but an entire probability distribution. This part builds the mean embedding, measures distributions by the distance between embeddings, and asks which kernels lose no information in the process.",
+      "intro": "A kernel can embed not just a point but an entire probability distribution. This part builds the mean embedding, tests whether two samples come from the same law, measures distributions by the distance between embeddings and by optimal transport, and integrates against them with kernel quadrature.",
       "chapters": [
-        {"src": "ch11", "slug": "kernel-mean-embeddings", "title": "Mean Embeddings, MMD, and Characteristic Kernels"}
+        {"src": "ch11", "slug": "kernel-mean-embeddings", "title": "Mean Embeddings, MMD, and Characteristic Kernels"},
+        {"src": "ch-testing", "slug": "kernel-hypothesis-testing", "title": "Kernel Hypothesis Testing"},
+        {"src": "ch-ot", "slug": "optimal-transport-and-kernels", "title": "Optimal Transport and Kernels"},
+        {"src": "ch-quad", "slug": "kernel-quadrature-and-herding", "title": "Kernel Quadrature and Herding"}
       ]
     },
     {
-      "part": "IX · Scaling and Learning the Kernel",
+      "part": "IX · Kernel Probabilistic Inference",
+      "intro": "Embeddings turn probability into linear algebra, and that opens inference. This part embeds conditional distributions as operators, tests goodness of fit against an unnormalized model with a Stein operator, reads causal questions through the RKHS, and learns when the training example is itself a distribution.",
+      "chapters": [
+        {"src": "ch-cme", "slug": "conditional-mean-embeddings", "title": "Conditional Mean Embeddings and Kernel Bayes' Rule"},
+        {"src": "ch-ksd", "slug": "kernel-stein-discrepancy", "title": "Kernel Stein Discrepancy and Stein Methods"},
+        {"src": "ch-causal", "slug": "causal-inference-with-kernels", "title": "Causal Inference with Kernels"},
+        {"src": "ch-distreg", "slug": "distribution-regression", "title": "Distribution Regression and Functional Data"}
+      ]
+    },
+    {
+      "part": "X · Scaling and Learning the Kernel",
       "intro": "The exact solve does not survive a million examples, and the kernel need not be fixed or shallow. This part removes the quadratic wall, learns the kernel itself, and reads deep networks as kernel machines.",
       "chapters": [
         {"src": "ch13", "slug": "large-scale-kernels", "title": "Large-Scale Kernel Machines"},
@@ -94,18 +110,26 @@
       ]
     },
     {
-      "part": "X · The Bayesian View",
-      "intro": "The same kernel that defines a norm defines a covariance. This part reads kernel ridge regression as the posterior mean of a Gaussian process, develops inference and hyperparameter learning, and reaches the sparse Bayesian machines that put a probability on every prediction.",
+      "part": "XI · The Bayesian View",
+      "intro": "The same kernel that defines a norm defines a covariance. This part reads kernel ridge regression as the posterior mean of a Gaussian process, develops inference and hyperparameter learning, reaches the sparse Bayesian machines that put a probability on every prediction, and turns that uncertainty into a rule for what to measure next.",
       "chapters": [
-        {"src": "ch-gp", "slug": "gaussian-processes-and-rvm", "title": "Gaussian Processes and the RVM"}
+        {"src": "ch-gp", "slug": "gaussian-processes-and-rvm", "title": "Gaussian Processes and the RVM"},
+        {"src": "ch-bo", "slug": "bayesian-optimization-and-bandits", "title": "Kernelized Bandits and Bayesian Optimization"}
       ]
     },
     {
-      "part": "XI · Kernels Now",
+      "part": "XII · Kernels Now",
       "intro": "The two standard textbooks close around 2004, before the deep-learning era rewrote what kernels are for. This part is a guide to what came after: the interpolation revolution that revised the book's own theory of generalization, and the frontier where fixed kernels give way to learned features.",
       "chapters": [
         {"src": "ch-modern", "slug": "kernels-now", "title": "Modern Generalization Theory"},
         {"src": "ch-frontier", "slug": "the-frontier", "title": "The Frontier: Feature Learning and Beyond"}
+      ]
+    },
+    {
+      "part": "XIII · Practice",
+      "intro": "Theory meets the terminal. This closing part walks end-to-end applications, the model-selection and implementation choices that decide whether a kernel method works in practice, and a map of the software that puts these methods a few lines of code away.",
+      "chapters": [
+        {"src": "ch-apps", "slug": "applications-and-practice", "title": "Applications and Practice"}
       ]
     }
   ]
