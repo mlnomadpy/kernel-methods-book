@@ -1,0 +1,17 @@
+[
+  { "from": "bayesian-optimization-and-bandits#algo-41-1", "to": "gaussian-processes-and-rvm#thm-40-2", "note": "computes the GP posterior mean and variance" },
+  { "from": "bayesian-optimization-and-bandits#prop-41-2", "to": "gaussian-processes-and-rvm#thm-40-2", "note": "posterior marginal is Gaussian N(mu,sigma^2)" },
+  { "from": "bayesian-optimization-and-bandits#algo-41-2", "to": "gaussian-processes-and-rvm#thm-40-2", "note": "fits the GP surrogate posterior" },
+  { "from": "bayesian-optimization-and-bandits#algo-41-2", "to": "gaussian-processes-and-rvm#def-40-4", "note": "refits hyperparameters by marginal likelihood" },
+  { "from": "bayesian-optimization-and-bandits#def-41-3", "to": "gaussian-processes-and-rvm#def-40-1", "note": "GP makes observations jointly Gaussian" },
+  { "from": "bayesian-optimization-and-bandits#def-41-3", "to": "preliminaries#def-p-9", "note": "Gaussian entropy gives the determinant form" },
+  { "from": "bayesian-optimization-and-bandits#lem-41-5", "to": "gaussian-processes-and-rvm#thm-40-2", "note": "posterior is Gaussian at each point" },
+  { "from": "bayesian-optimization-and-bandits#lem-41-5", "to": "preliminaries#def-p-9", "note": "union bound over Gaussian tails" },
+  { "from": "bayesian-optimization-and-bandits#lem-41-6", "to": "bayesian-optimization-and-bandits#lem-41-5", "note": "applies the confidence bound twice" },
+  { "from": "bayesian-optimization-and-bandits#lem-41-6", "to": "bayesian-optimization-and-bandits#algo-41-1", "note": "x_t maximizes the UCB acquisition" },
+  { "from": "bayesian-optimization-and-bandits#lem-41-7", "to": "bayesian-optimization-and-bandits#def-41-3", "note": "telescopes the information gain" },
+  { "from": "bayesian-optimization-and-bandits#thm-41-4", "to": "bayesian-optimization-and-bandits#lem-41-5", "note": "works on the confidence event" },
+  { "from": "bayesian-optimization-and-bandits#thm-41-4", "to": "bayesian-optimization-and-bandits#lem-41-6", "note": "optimism caps per-round regret" },
+  { "from": "bayesian-optimization-and-bandits#thm-41-4", "to": "bayesian-optimization-and-bandits#lem-41-7", "note": "sums variances to the information gain" },
+  { "from": "bayesian-optimization-and-bandits#thm-41-4", "to": "bayesian-optimization-and-bandits#def-41-3", "note": "regret controlled by gamma_T" }
+]

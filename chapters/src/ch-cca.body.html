@@ -94,6 +94,81 @@ $$
 
 <p>This taxonomy also clarifies what regularization does to kernel CCA. The penalized constraint \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\) does more than restore invertibility: as \(\tau\) runs from \(0\) to \(1\) it slides the objective smoothly from pure correlation toward pure covariance (Shawe-Taylor and Cristianini, 2004). At \(\tau = 0\) we have the degenerate correlation problem that reports a perfect match on any data; as \(\tau\) grows, the projected-variance term is progressively replaced by a plain norm, and in the limit the method rewards directions of large covariance rather than large correlation, which is exactly the well-posed maximal-covariance problem above. The regularizer is thus not an ad hoc patch but a dial between two members of the same family, and a modest \(\tau\) buys the numerical stability and the resistance to spurious correlation that pure correlation lacks.</p>
 
+<h2 id="regularization-mandatory">Why regularization is mandatory</h2>
+
+<p>The last two sections diagnosed the degeneracy of unregularized kernel CCA and offered a dial, the parameter \(\tau\), for it. It is worth pinning down why that degeneracy is unavoidable rather than a corner case one might dodge with a lucky choice of kernel. The overfitting argument needed only one fact: that \(K_a\) and \(K_b\) are invertible, so that \(\boldsymbol{\alpha} \mapsto K_a \boldsymbol{\alpha}\) is a bijection. Asking when that fact holds shows the trouble is forced by exactly the property that makes a kernel worth using.</p>
+
+<h3 id="characteristic-kernels-force-saturation">Characteristic kernels force the saturation</h3>
+
+<p>The expressive kernels of the earlier chapters are the universal and characteristic ones: the Gaussian, the Laplace, and their relatives, whose RKHS is dense in the continuous functions and whose mean embedding separates probability measures. That defining richness casts a concrete finite-sample shadow. On any set of \(n\) distinct points a strictly positive definite kernel produces a Gram matrix of full rank \(n\), hence invertible. So for precisely the kernels one reaches for, both \(K_a\) and \(K_b\) are invertible on any sample in general position, and the change of variables of the overfitting section applies verbatim.</p>
+
+<div class="box prop"><span class="box-title">Proposition (unregularized kernel CCA saturates)</span>
+<p>Let \(K_a\) and \(K_b\) be strictly positive definite kernels, for instance any universal kernel such as the Gaussian, evaluated at \(n\) distinct points. Then the Gram matrices are invertible, and unregularized kernel CCA attains its maximum canonical correlation \(1\) on every such sample, whatever the pairing between the two views.</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Strict positive definiteness makes \(K_a\) and \(K_b\) invertible, so \(\boldsymbol{\alpha}' = K_a \boldsymbol{\alpha}\) and \(\boldsymbol{\beta}' = K_b \boldsymbol{\beta}\) range over all of \(\mathbb{R}^n\). Under this substitution the objective \(\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}\) with constraints \(\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} = \boldsymbol{\beta}^\top K_b^2 \boldsymbol{\beta} = 1\) becomes \(\max \, \boldsymbol{\alpha}'^\top \boldsymbol{\beta}'\) subject to \(\lVert \boldsymbol{\alpha}' \rVert = \lVert \boldsymbol{\beta}' \rVert = 1\), whose value is \(1\) by Cauchy-Schwarz, attained at any \(\boldsymbol{\alpha}' = \boldsymbol{\beta}'\) on the unit sphere. The pairing of the two views never entered the argument, so the reported correlation is \(1\) whether or not any real dependence links them. <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>This is the same disease that makes the regularized Fisher discriminant of [[ch:kernel-discriminants-and-projections]] replace its singular scatter matrix by \(N + \mu I\): an expressive feature map hands each view as many free directions as there are points, and left unconstrained they will fit anything. Fukumizu, Bach, and Gretton (2007) make the statement asymptotic and precise. Working with the population cross-covariance operator between the two RKHSs, they show that the unregularized canonical correlation is degenerate, and that empirical kernel CCA is a consistent estimator of the true population dependence only when a regularizer \(\kappa_n\) is present and is sent to zero slowly as the sample grows. Regularization is therefore not a numerical convenience bolted on for conditioning; it is the condition under which kernel CCA estimates anything at all. Kernel CCA in this form was proposed by Lai and Fyfe (2000) and, as a kernel measure of dependence, by Bach and Jordan (2002), and given its standard overview by Hardoon, Szedmak, and Shawe-Taylor (2004).</p>
+
+<h3 id="shrinkage-eigenproblem">The shrinkage form of the regularized eigenproblem</h3>
+
+<p>We restored well-posedness earlier with the convex combination \((1 - \tau)\, \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\, \boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}\). The parameterization used in most implementations, following Hardoon, Szedmak, and Shawe-Taylor (2004), writes the same idea as a shrinkage of the kernel matrix itself: add \(\kappa\) to its diagonal before squaring, replacing \(K_a^2\) by \((K_a + \kappa I)^2\). The two are the same penalty to first order, since</p>
+$$
+(K_a + \kappa I)^2 = K_a^2 + 2\kappa\, K_a + \kappa^2 I,
+$$
+<p>where the middle term \(2\kappa\, K_a\) is exactly the RKHS-norm penalty \(\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = \lVert f_a \rVert_{\mathcal{H}_a}^2\) that charges for wiggly directions, and the trailing \(\kappa^2 I\) is a strict ridge that makes the constraint matrix positive definite even when \(K_a\) is only positive semidefinite. That last point matters for the non-universal kernels: a linear or low-degree polynomial kernel has \(\operatorname{rank} K_a \lt n\), so \(K_a^2\) is singular and even the penalized matrix \(K_a^2 + \tau K_a\) can stay singular, whereas \((K_a + \kappa I)^2\) is invertible for every \(\kappa \gt 0\).</p>
+
+<div class="box def"><span class="box-title">Definition (regularized kernel CCA)</span>
+<p>For a shrinkage parameter \(\kappa \gt 0\), regularized kernel CCA solves the generalized eigenvalue problem
+$$
+\begin{pmatrix} 0 & K_a K_b \\ K_b K_a & 0 \end{pmatrix} \begin{pmatrix} \boldsymbol{\alpha} \\ \boldsymbol{\beta} \end{pmatrix} = \rho \begin{pmatrix} (K_a + \kappa I)^2 & 0 \\ 0 & (K_b + \kappa I)^2 \end{pmatrix} \begin{pmatrix} \boldsymbol{\alpha} \\ \boldsymbol{\beta} \end{pmatrix},
+$$
+whose largest eigenvalue \(\rho \in [0, 1]\) is the leading canonical correlation and whose eigenvector supplies the dual weights \((\boldsymbol{\alpha}, \boldsymbol{\beta})\) of the first canonical pair.</p>
+</div>
+
+<p>Because the right-hand matrix is block diagonal and positive definite, the substitution \(\mathbf{u} = (K_a + \kappa I) \boldsymbol{\alpha}\), \(\mathbf{v} = (K_b + \kappa I) \boldsymbol{\beta}\) reduces this to an ordinary symmetric eigenproblem exactly as in the linear derivation above: the canonical correlations are the eigenvalues of \((K_a + \kappa I)^{-1} K_a K_b (K_b + \kappa I)^{-1}\) and its transpose, so the shrinkage simply whitens each view through the well-conditioned \((K + \kappa I)^{-1}\) in place of the singular or near-singular \(K^{-1}\). The consistency theory of Fukumizu, Bach, and Gretton (2007) is the statement that letting \(\kappa = \kappa_n \to 0\) at a controlled rate recovers the population canonical correlations as \(n \to \infty\); holding \(\kappa\) fixed trades a little bias for the stability that the next example makes numerical.</p>
+
+<h3 id="kcca-worked-example">A worked example: saturation and its cure</h3>
+
+<p>A three-object sample makes both halves visible at once: the unregularized correlation is \(1\) by the proposition above, and the shrinkage dials it down to an honest, data-dependent value.</p>
+
+<div class="box ex"><span class="box-title">Example (kernel CCA on three paired points)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Three objects with scalar views \(x^a = (-1,\, 0,\, 2)\) and \(x^b = (0,\, 1,\, 1.5)\), each embedded with the Gaussian kernel \(k(u, v) = e^{-(u - v)^2 / 2}\) (bandwidth \(\sigma = 1\), universal). The Gram matrices are
+$$
+K_a = \begin{pmatrix} 1 & 0.607 & 0.011 \\ 0.607 & 1 & 0.135 \\ 0.011 & 0.135 & 1 \end{pmatrix}, \qquad K_b = \begin{pmatrix} 1 & 0.607 & 0.325 \\ 0.607 & 1 & 0.882 \\ 0.325 & 0.882 & 1 \end{pmatrix}.
+$$</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Confirm both embeddings are full rank.</span> The determinants \(\det K_a = 0.6155\) and \(\det K_b = 0.0955\) are nonzero, so \(K_a\) and \(K_b\) are invertible and the hypothesis of the saturation proposition holds.</li>
+<li><span class="wex-op">Solve the unregularized eigenproblem.</span> With the constraint matrix \(\operatorname{diag}(K_a^2, K_b^2)\) the top generalized eigenvalue is \(\rho = 1.000\): the two views report a perfect canonical correlation, and the same \(1\) would appear for any other pairing of the six numbers.</li>
+<li><span class="wex-op">Apply the \((K + \kappa I)\) shrinkage.</span> Replacing each \(K^2\) by \((K + \kappa I)^2\) and solving the regularized eigenproblem gives a leading correlation that falls monotonically as the shrinkage grows: \(\rho = 0.896\) at \(\kappa = 0.1\), then \(\rho = 0.611\) at \(\kappa = 0.5\), and \(\rho = 0.413\) at \(\kappa = 1\).</li>
+<li><span class="wex-op">Read off the canonical directions.</span> At \(\kappa = 1\) the leading dual weights, normalized to unit length, are \(\boldsymbol{\alpha} = (0.519,\, 0.635,\, 0.572)\) and \(\boldsymbol{\beta} = (0.632,\, 0.627,\, 0.456)\), giving one concrete pair of canonical functions \(f_a = \sum_i \alpha_i K_a(x_i^a, \cdot)\) and \(f_b = \sum_i \beta_i K_b(x_i^b, \cdot)\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The unregularized \(1.000\) is an artifact of an invertible, expressive kernel and carries no information about the data. The shrinkage turns \(\kappa\) into a dial that trades that illusory perfect fit for a genuine, data-dependent correlation, which is exactly the \((K + \kappa I)\) ridge whose vanishing rate the consistency theory prescribes.</p>
+</div>
+</div>
+
+<h2 id="multi-view-deep-cca">Multi-view learning and deep CCA</h2>
+
+<p>Kernel CCA is one point in a wider space of multi-view methods, all of which read shared structure from paired data and differ only in how each view is represented before the correlations are taken. Linear CCA maps each view by a matrix, kernel CCA maps it by a fixed RKHS feature map, and one can instead learn the maps outright.</p>
+
+<table>
+<thead><tr><th>Method</th><th>View map</th><th>What is learned</th><th>Scaling in \(n\)</th></tr></thead>
+<tbody>
+<tr><td>Linear CCA</td><td>linear \(\mathbf{x} \mapsto W \mathbf{x}\)</td><td>the two projection matrices</td><td>cheap, dimension bound</td></tr>
+<tr><td>Kernel CCA</td><td>fixed feature map \(\varphi(\mathbf{x})\)</td><td>the dual weights \(\boldsymbol{\alpha}, \boldsymbol{\beta}\)</td><td>\(O(n^3)\) eigenproblem</td></tr>
+<tr><td>Deep CCA</td><td>neural network \(f_\theta(\mathbf{x})\)</td><td>the network weights \(\theta, \psi\)</td><td>minibatch, \(O(n)\)</td></tr>
+</tbody>
+</table>
+
+<p>Deep CCA (Andrew, Arora, Bilmes, and Livescu, 2013) keeps the correlation objective but replaces the two fixed feature maps by trainable neural networks \(f_\theta\) and \(g_\psi\), one per view. The networks are trained to maximize the total canonical correlation of their outputs, the sum of the top singular values of the normalized cross-covariance \(\hat{\Sigma}_{ff}^{-1/2} \hat{\Sigma}_{fg} \hat{\Sigma}_{gg}^{-1/2}\), and the gradient of that spectral objective is backpropagated through both networks. This buys the nonlinearity of kernel CCA while escaping the \(O(n^3)\) Gram-matrix eigenproblem, since the networks are optimized on minibatches rather than on the full sample. Crucially, the whitening matrices \(\hat{\Sigma}_{ff}\) and \(\hat{\Sigma}_{gg}\) are inverted with the very same \((\hat{\Sigma} + r I)\) shrinkage of the previous section: the expressive-map degeneracy does not vanish when the map is learned rather than fixed, so deep CCA regularizes its covariances for exactly the reason kernel CCA regularizes its Gram matrices.</p>
+
+<p>The setting that has driven these methods most is a paired corpus. In the cross-lingual case each object is a document present in two languages, the two views are its representations under the per-language kernels of [[ch:kernels-for-text]], and the leading canonical directions span a shared, language-independent semantic space in which a query in one language can be matched against candidates in the other; the same construction induces bilingual word and document embeddings from parallel text. The image-and-tags alignment mentioned earlier (Gong and Lazebnik, 2014) is the vision analogue, with one view a visual kernel and the other a text kernel over the tags. In every case the family relationship to the single-view spectral methods of [[ch:kernel-pca]] is the organizing thread: kernel PCA diagonalizes one view's covariance, kernel CCA factorizes the cross-covariance of two, and deep CCA does the latter with learned features, but all three read geometry out of a spectral decomposition.</p>
+
 <div class="box rmk"><span class="box-title">Further reading</span>
 For a book-length treatment of the methods in this chapter, Schölkopf and Smola (2002), <em>Learning with Kernels</em>, develops kernel PCA in its chapter 14 and takes up the related kernel feature-extraction methods in the neighbouring chapters, with the pre-image problem and kernel-PCA denoising worked out in detail. Shawe-Taylor and Cristianini (2004), <em>Kernel Methods for Pattern Analysis</em>, covers the same territory from the pattern-analysis viewpoint: its chapters 5 and 6 treat the spectral methods, kernel PCA, and canonical correlation analysis, and Section 6.5 is the source of the generalized-eigenvalue derivation of CCA used above. Both books also situate these unsupervised methods within the wider representer-theorem program that organizes these chapters.
 </div>
@@ -104,5 +179,13 @@ For a book-length treatment of the methods in this chapter, Schölkopf and Smola
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">The Cauchy-Schwarz inequality bounds \(\boldsymbol{\alpha}'^\top\boldsymbol{\beta}' \le \lVert\boldsymbol{\alpha}'\rVert\,\lVert\boldsymbol{\beta}'\rVert = 1\), with equality exactly when the two unit vectors coincide. For the regularization step, note that \(\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = \lVert f_a\rVert_{\mathcal{H}_a}^2\) is the RKHS norm of the direction: adding \(\tau \gt 0\) of it makes the constraint matrix strictly positive definite and charges for high-norm, wiggly directions, so the change of variable no longer decouples the problem.</div></details></li>
 
 <li><span class="ex-tag">challenge</span> The chapter argues that variance, covariance, and correlation are one eigen-decomposition family tuned by a single choice. Fill in the family for a pair of centered views \(X, Y\): (a) which matrix's eigenvectors solve the single-view maximal-variance problem (PCA); (b) which matrix's singular vectors solve the maximal-covariance problem \(\max_{\lVert\mathbf{w}_a\rVert = \lVert\mathbf{w}_b\rVert = 1} \mathbf{w}_a^\top C_{XY}\mathbf{w}_b\); and (c) which generalized eigenproblem solves maximal correlation (CCA). Then explain, using the regularized constraint \((1-\tau)\,\boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau\,\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha} = 1\), why sending \(\tau\) from \(0\) to \(1\) slides kernel CCA from pure correlation toward pure covariance, and why a modest \(\tau\) is what buys resistance to spurious correlation.</li>
+
+<li><span class="ex-tag">computation</span> Expand the shrinkage constraint matrix \((K + \kappa I)^2\) and name its three terms: the raw projected-variance matrix \(K^2\), the RKHS-norm penalty, and the strict ridge. Then take the linear kernel \(k(u, v) = uv\) on the one-dimensional points \(u \in \{1, 2, 3\}\), whose Gram matrix \(K\) has rank \(1\). Check that \(K^2\) and the penalized matrix \(K^2 + \tau K\) both remain singular, while \((K + \kappa I)^2\) is invertible for every \(\kappa \gt 0\). Conclude why the shrinkage form is the safe default once the kernel is not universal.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The rank of \(K^2\) equals the rank of \(K\), and adding \(\tau K\) cannot raise it because \(\tau K\) shares the null space of \(K\); only the \(\kappa^2 I\) term fills that null space, lifting every eigenvalue to at least \(\kappa^2\).</div></details></li>
+
+<li><span class="ex-tag">challenge</span> Reproduce the worked example's shrinkage sweep and confirm the leading canonical correlation \(\rho(\kappa)\) falls monotonically from \(1\) as \(\kappa\) grows (the check script prints \(1.000,\, 0.896,\, 0.611,\, 0.413\) at \(\kappa = 0,\, 0.1,\, 0.5,\, 1\)). Then prove monotonicity in general. Writing the top correlation as the maximum of \(\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}\) over \(\sqrt{\boldsymbol{\alpha}^\top (K_a + \kappa I)^2 \boldsymbol{\alpha}} \, \sqrt{\boldsymbol{\beta}^\top (K_b + \kappa I)^2 \boldsymbol{\beta}} = 1\), argue that enlarging the constraint matrices from \(K^2\) to \((K + \kappa I)^2\) can only shrink the attainable maximum, so \(\rho(\kappa)\) is nonincreasing.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For a positive semidefinite \(K\) and \(\kappa \gt 0\), \((K + \kappa I)^2 - K^2 = 2\kappa K + \kappa^2 I \succeq 0\), so each denominator quadratic form only grows with \(\kappa\) while the numerator is untouched: every feasible ratio is bounded by its value at smaller \(\kappa\).</div></details></li>
+
+<li><span class="ex-tag">concept</span> Place kernel CCA in the multi-view family. (a) State precisely what deep CCA (Andrew et al., 2013) replaces relative to kernel CCA, and explain why it still needs the covariance shrinkage \((\hat{\Sigma} + r I)\) of this chapter. (b) Describe the cross-lingual paired-corpus application: what are the two views, what does a leading canonical direction represent, and how is it used for retrieval across languages? (c) Relate the objective to kernel PCA of [[ch:kernel-pca]]: which covariance or cross-covariance does each of PCA, CCA, and deep CCA decompose?</li>
 </ol>
 </section>

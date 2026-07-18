@@ -169,10 +169,21 @@ export function transformProofs(body) {
 
 // ---- citations ------------------------------------------------------------
 
-/** 'Schölkopf, B. and Smola, A. J.' -> ['Schölkopf', 'Smola'] */
+/** 'Schölkopf, B. and Smola, A. J.' -> ['Schölkopf', 'Smola'].
+ *  Handles surname particles ('De Vito', 'van der Maaten', 'von Luxburg') and
+ *  non-ASCII surnames ('Alpaydın'); each surname is the word(s) right before a
+ *  ', Initials' group, with the connector (comma / 'and' / '&') not captured. */
+const PARTICLES =
+  "de|De|del|Del|della|Van|van|von|Von|der|Der|den|Den|la|La|le|Le|di|Di|dos|Dos|du|Du|ten|Ten|ter|Ter|st|St";
 function surnames(authors) {
   const out = [];
-  const re = /([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'-]+),\s+(?:[A-Z]\.[- ]?)+/g;
+  // Each surname is optional particles + a capitalized word, right before a
+  // ', Initials' group. No leading boundary is needed: a connector ('and', '&')
+  // is lowercase and not a particle, so it can never start a capture.
+  const re = new RegExp(
+    `((?:(?:${PARTICLES})\\s+)*\\p{Lu}[\\p{L}'’-]+),\\s+(?:\\p{Lu}\\.[-\\s]?)+`,
+    "gu",
+  );
   let m;
   while ((m = re.exec(authors))) out.push(m[1]);
   return out;
@@ -182,25 +193,53 @@ function escapeRe(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Regexes matching the in-prose citation forms for a work, longest first. */
+// accented letters in a bib surname should also match their ASCII form in prose
+// ("Schölkopf" links a prose "Scholkopf"; "Matérn" links "Matern").
+const ASCII_FOLD = {
+  à: "a", á: "a", â: "a", ä: "a", ã: "a", å: "a", ç: "c", è: "e", é: "e",
+  ê: "e", ë: "e", ì: "i", í: "i", î: "i", ï: "i", ı: "i", ñ: "n", ò: "o",
+  ó: "o", ô: "o", ö: "o", õ: "o", ø: "o", ù: "u", ú: "u", û: "u", ü: "u",
+  ý: "y", ÿ: "y", š: "s", ž: "z", č: "c", ć: "c", ř: "r", ł: "l", ð: "d",
+};
+function foldSurname(escaped) {
+  return escaped.replace(/[À-ÿıšžčćřłĀ-ſ]/gu, (ch) => {
+    const ascii = ASCII_FOLD[ch.toLowerCase()];
+    if (!ascii) return ch;
+    const a = ch === ch.toLowerCase() ? ascii : ascii.toUpperCase();
+    return a === ch ? ch : `[${ch}${a}]`;
+  });
+}
+
+/** Regexes matching the in-prose citation forms for a work, most-specific first.
+ *  Covers narrative "Author (Year)" including multi-year "(2020, 2021)", and
+ *  parenthetical "(Author, Year)" including grouped "(A, y1; B, y2)" lists and
+ *  "(see ... Author Year)". Patterns use lookaround so the link wraps only the
+ *  citation text, never the surrounding punctuation. */
 function citePatterns(names, year) {
   const y = String(year);
-  const esc = names.map(escapeRe);
-  const pats = [];
+  const esc = names.map((n) => foldSurname(escapeRe(n)));
+  const poss = "(?:['’]s)?"; // allow a possessive "Neal's (1996)"
+  // author-name tokens, most specific first
+  const toks = [];
   if (esc.length >= 3) {
     const mid = esc.slice(0, -1).join(",?\\s+");
-    pats.push(`${mid},?\\s+and\\s+${esc[esc.length - 1]}\\s+\\(${y}\\)`);
-    pats.push(`\\(\\s*${mid},?\\s+and\\s+${esc[esc.length - 1]},?\\s+${y}\\s*\\)`);
+    toks.push(`${mid},?\\s+and\\s+${esc[esc.length - 1]}`);
   }
-  if (esc.length >= 2) {
-    pats.push(`${esc[0]}\\s+and\\s+${esc[1]}\\s+\\(${y}\\)`);
-    pats.push(`\\(\\s*${esc[0]}\\s+and\\s+${esc[1]},?\\s+${y}\\s*\\)`);
-  }
+  if (esc.length >= 2) toks.push(`${esc[0]}\\s+and\\s+${esc[1]}`);
   if (esc.length) {
-    pats.push(`${esc[0]}\\s+et\\s+al\\.?\\s*\\(${y}\\)`);
-    pats.push(`\\(\\s*${esc[0]}\\s+et\\s+al\\.?,?\\s+${y}\\s*\\)`);
-    pats.push(`${esc[0]}\\s+\\(${y}\\)`);
-    pats.push(`\\(\\s*${esc[0]},?\\s+${y}\\s*\\)`);
+    toks.push(`${esc[0]}\\s+et\\s+al\\.?`);
+    toks.push(esc[0]);
+  }
+  // the target year sitting anywhere in a comma-separated year list
+  const yList = `(?:\\d{4}[a-z]?,\\s*)*${y}[a-z]?(?:,\\s*\\d{4}[a-z]?)*`;
+  const pats = [];
+  for (const t of toks) {
+    // narrative: Author (Year) / Author's (Year) / Author (2020, 2021)
+    pats.push(`${t}${poss}\\s+\\(${yList}\\)`);
+    // parenthetical, incl. grouped lists: preceded by ( or ; , followed by ) ; ,
+    pats.push(`(?<=[(;]\\s{0,2})${t},?\\s+${y}[a-z]?(?=\\s*[);,])`);
+    // "(see ... in Author Year)": author mid-paren, year closes/separates
+    pats.push(`(?<=[\\s(])${t}\\s+${y}[a-z]?(?=\\s*[);,])`);
   }
   return pats;
 }
@@ -279,6 +318,19 @@ function chapterRefsHtml(src) {
 
 // ---- navigation and search ------------------------------------------------
 
+/** The chapter's top-level (h2) sections, for the sidebar drill-down:
+ *  [{id, label}]. Kept to h2 so the active chapter stays compact in the TOC. */
+export function chapterSections(body) {
+  return [...body.matchAll(/<h2\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => ({
+    id: m[1],
+    label: m[2]
+      .replace(/<[^>]+>/g, "")
+      .replace(/\\\(/g, "")
+      .replace(/\\\)/g, "")
+      .trim(),
+  }));
+}
+
 /** The 'On this page' rail from the chapter's h2/h3 headings. */
 export function onpageNav(body) {
   const heads = [...body.matchAll(/<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/g)];
@@ -347,6 +399,7 @@ export function buildBook() {
     ncites += nc;
 
     const onpage = onpageNav(body);
+    const sections = chapterSections(body);
 
     // search index: the chapter lead, then one entry per h2/h3 section
     const num = isPrelim ? "Preliminaries" : i;
@@ -375,7 +428,7 @@ export function buildBook() {
     body = body.replace("<h1>", `<h1><span class="chno">${chno}</span>`);
     body += chapterRefsHtml(ch.src);
 
-    chapters.push({ ...ch, i, isPrelim, body, onpage });
+    chapters.push({ ...ch, i, isPrelim, body, onpage, sections });
   });
 
   // prev/next cards
@@ -507,30 +560,45 @@ export function dependencyEdges() {
   return edges;
 }
 
-/** Sidebar table of contents (shared by every page). */
-export function tocHtml(currentSlug = null) {
+/** Sidebar table of contents (shared by every page). Each part is a
+ *  collapsible <details>; the part holding the current chapter is open, and the
+ *  active chapter expands to a nested list of its sections (passed in from the
+ *  page). `sections` is [{id,label}] (the active chapter's h2 headings). */
+export function tocHtml(currentSlug = null, sections = []) {
   const rows = [
     `<div class="booktitle"><a href="index.html">${escapeHtml(BOOK.title)}</a></div>`,
     `<div class="bookmeta">${escapeHtml(BOOK.subtitle)}</div>`,
   ];
   let n = 0;
+  const partHtml = (label, inner, open) =>
+    `<details class="toc-part"${open ? " open" : ""}><summary>${escapeHtml(label)}</summary>${inner}</details>`;
+
   for (const part of BOOK.parts) {
-    rows.push(`<div class="part">${escapeHtml(part.part)}</div>`);
+    const links = [];
+    let hasCurrent = false;
     for (const ch of part.chapters) {
       n++;
-      const cls = ch.slug === currentSlug ? ' class="here"' : "";
-      rows.push(`<a href="${ch.slug}.html"${cls}>${n}. ${escapeHtml(ch.title)}</a>`);
+      const here = ch.slug === currentSlug;
+      if (here) hasCurrent = true;
+      links.push(
+        `<a href="${ch.slug}.html"${here ? ' class="here"' : ""}>${n}. ${escapeHtml(ch.title)}</a>`,
+      );
+      if (here && sections.length) {
+        const secs = sections
+          .map((s) => `<a class="sec" href="#${s.id}">${escapeHtml(s.label)}</a>`)
+          .join("");
+        links.push(`<div class="toc-sections">${secs}</div>`);
+      }
     }
+    rows.push(partHtml(part.part, links.join("\n"), hasCurrent));
   }
-  rows.push('<div class="part">End matter</div>');
-  rows.push(
+
+  const endLinks = [
     `<a href="glossary.html"${currentSlug === "glossary" ? ' class="here"' : ""}>Notation &amp; Glossary</a>`,
-  );
-  rows.push(
     `<a href="dependency-map.html"${currentSlug === "dependency-map" ? ' class="here"' : ""}>Dependency Map</a>`,
-  );
-  rows.push(
     `<a href="bibliography.html"${currentSlug === "bibliography" ? ' class="here"' : ""}>Bibliography</a>`,
-  );
+  ];
+  const endOpen = ["glossary", "dependency-map", "bibliography"].includes(currentSlug);
+  rows.push(partHtml("End matter", endLinks.join("\n"), endOpen));
   return rows.join("\n");
 }

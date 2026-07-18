@@ -307,6 +307,124 @@ $$
 $$
 <p>with weights \(\gamma_i\) read off from the projection \(P_k \varphi(\mathbf{x})\). Each reconstructed input is thus pulled toward the region where the data are dense and away from the isolated excursions in which noise tends to live, so the pre-image comes out smoother than the point it started from. Applied to images of handwritten digits corrupted by noise, keeping only the top kernel components and taking pre-images returns visibly cleaner digits, the standard demonstration that discarding low-variance directions in feature space denoises in input space (Mika et al., 1999).</p>
 
+<h2 id="out-of-sample-extension">Out-of-sample extension and the Nyström view</h2>
+
+<p>Everything derived so far produces coordinates for the \(n\) points we trained on: the eigenvectors of the centered Gram matrix are, after scaling, exactly the training projections. A working method, though, must place points it never saw. Denoising takes in a fresh corrupted image, projects it onto the top components, and returns it to input space; visualization drops a new query onto an existing map; a downstream classifier wants the kernel-PCA coordinates of every test point. Classical PCA does this without a thought, because a principal direction is a vector \(\mathbf{w}\) and the coordinate of a new point is the dot product \(\mathbf{w}^\top\mathbf{x}\). Kernel PCA never formed its directions \(f_i\) as vectors; it holds only their expansion coefficients \(\boldsymbol{\alpha}_i\) against the training embeddings. The question of this section is whether a new point can be placed using nothing but its kernel values to the training set. The answer is yes, the same coefficients \(\boldsymbol{\alpha}_i\) do the job, and the resulting formula turns out to be an instance of a single principle, the Nyström extension, that reaches every spectral embedding method. Step 6 of the kernel-PCA algorithm already wrote this projection down; we now derive it, pin down the one delicate point of how the test point is centered, and read it as a Nyström extension. Returning the placed point to input space, the last leg of the denoising pipeline, is the separate pre-image problem of [[ch:invariances-and-pre-images]].</p>
+
+<h3 id="oos-projection">Projecting a new point</h3>
+
+<p>Fix a fitted kernel PCA and a new point \(\mathbf{x} \in \mathcal{X}\). Its coordinate on the \(i\)-th unit-norm component is the projection \(h_{f_i}(\mathbf{x}) = \langle \varphi(\mathbf{x}), f_i \rangle_{\mathcal{H}}\), and two moves collapse this abstract inner product into kernel values. First, the direction is a combination of the centered training embeddings, \(f_i = \sum_{j=1}^n \alpha_{i,j}\, \tilde{\varphi}(\mathbf{x}_j)\) with \(\tilde{\varphi}(\mathbf{x}_j) = \varphi(\mathbf{x}_j) - \boldsymbol{\mu}\) and \(\boldsymbol{\mu} = \frac{1}{n}\sum_{a=1}^n \varphi(\mathbf{x}_a)\) the training mean. Second, and this is the step that is easy to get wrong, the new point must be measured against the same origin: we center its embedding by the very same training mean, \(\tilde{\varphi}(\mathbf{x}) = \varphi(\mathbf{x}) - \boldsymbol{\mu}\). With both embeddings centered by \(\boldsymbol{\mu}\),</p>
+$$
+\langle \tilde{\varphi}(\mathbf{x}), f_i \rangle_{\mathcal{H}} = \sum_{j=1}^n \alpha_{i,j}\, \langle \tilde{\varphi}(\mathbf{x}), \tilde{\varphi}(\mathbf{x}_j) \rangle_{\mathcal{H}} = \boldsymbol{\alpha}_i^\top \tilde{\mathbf{k}}(\mathbf{x}),
+$$
+<p>where the centered kernel vector \(\tilde{\mathbf{k}}(\mathbf{x}) \in \mathbb{R}^n\) has entries obtained by expanding \(\langle \varphi(\mathbf{x}) - \boldsymbol{\mu},\, \varphi(\mathbf{x}_j) - \boldsymbol{\mu} \rangle_{\mathcal{H}}\) by bilinearity, exactly as in the double-centering proposition but with one argument now off the training set.</p>
+
+<div class="box prop"><span class="box-title">Proposition (out-of-sample projection)</span>
+Fit kernel PCA on \(\mathbf{x}_1, \ldots, \mathbf{x}_n\), with centered Gram matrix \(K_c\), eigenpairs \((\Delta_i, \mathbf{u}_i)\), and coefficients \(\boldsymbol{\alpha}_i = \mathbf{u}_i / \sqrt{\Delta_i}\). The coordinate of any \(\mathbf{x} \in \mathcal{X}\) on the \(i\)-th kernel principal component is
+$$
+\pi_i(\mathbf{x}) = \boldsymbol{\alpha}_i^\top \tilde{\mathbf{k}}(\mathbf{x}) = \frac{1}{\sqrt{\Delta_i}}\, \mathbf{u}_i^\top \tilde{\mathbf{k}}(\mathbf{x}),
+$$
+with the centered kernel vector
+$$
+\tilde{k}_j(\mathbf{x}) = K(\mathbf{x}, \mathbf{x}_j) - \frac{1}{n}\sum_{a=1}^n K(\mathbf{x}, \mathbf{x}_a) - \frac{1}{n}\sum_{b=1}^n K(\mathbf{x}_b, \mathbf{x}_j) + \frac{1}{n^2}\sum_{a,b=1}^n K(\mathbf{x}_a, \mathbf{x}_b).
+$$
+For \(\mathbf{x} = \mathbf{x}_m\) the vector \(\tilde{\mathbf{k}}(\mathbf{x}_m)\) is the \(m\)-th column of \(K_c\), so \(\pi_i(\mathbf{x}_m) = \sqrt{\Delta_i}\,(\mathbf{u}_i)_m\) recovers the training coordinate of the kernel-PCA theorem: the map extends kernel PCA from the sample to all of \(\mathcal{X}\).
+</div>
+
+<p>The four terms deserve a slow look, because their asymmetry is the whole subtlety of the extension.</p>
+
+<div class="box rmk"><span class="box-title">Remark (centering the test kernel vector)</span>
+Only the first two terms of \(\tilde{k}_j(\mathbf{x})\) involve the new point. The second, \(\frac{1}{n}\sum_a K(\mathbf{x}, \mathbf{x}_a)\), is the test point's own mean similarity to the training set, the single number that recenters \(\varphi(\mathbf{x})\). The third and fourth terms, the training column mean \(\frac{1}{n}\sum_b K(\mathbf{x}_b, \mathbf{x}_j)\) and the training grand mean \(\frac{1}{n^2}\sum_{a,b} K(\mathbf{x}_a, \mathbf{x}_b)\), carry no \(\mathbf{x}\) at all: they are frozen statistics of the training Gram matrix, computed once and reused for every test point. This is what it means to center by the training mean \(\boldsymbol{\mu}\) rather than by some new mean: the new point is never folded into the averages. In particular the grand mean is not recomputed over the augmented set, and \(\mathbf{x}\) is not centered against its own kernel row. Contrast the symmetric training rule \(K_c = (I - \mathbf{1}_n) K (I - \mathbf{1}_n)\), where a single \(n\)-point mean centers both arguments; here one argument is on the training set and one is not, so the expression loses its symmetry while keeping the same \(\boldsymbol{\mu}\). Getting this wrong, by refreshing the column or grand means with \(\mathbf{x}\) included, silently biases every out-of-sample coordinate and breaks the exact agreement with kernel PCA on the training points.
+</div>
+
+<p>That exact agreement is worth stating as a test one can run: because \(\tilde{\mathbf{k}}(\mathbf{x}_m)\) is literally the \(m\)-th column of \(K_c\), feeding a training point through the out-of-sample formula returns its kernel-PCA coordinate to machine precision, while feeding a genuinely new point returns a value that only approximates what a refit would give. The worked example checks both faces, the exact one and the approximate one, against direct computation.</p>
+
+<div class="box ex"><span class="box-title">Example (out-of-sample projection and the refit check)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Five training points on a shallow arc, \(\mathbf{x}_1 = (-2,0)\), \(\mathbf{x}_2 = (-1,1)\), \(\mathbf{x}_3 = (0,0)\), \(\mathbf{x}_4 = (1,1)\), \(\mathbf{x}_5 = (2,0)\), with the Gaussian kernel \(K(\mathbf{x}, \mathbf{y}) = \exp(-\lVert \mathbf{x} - \mathbf{y}\rVert^2 / 2\sigma^2)\), \(\sigma = 1.5\). We fit kernel PCA, then place the fresh point \(\mathbf{z} = (-0.5, 0.5)\) out of sample.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Build and center the Gram matrix.</span> The kernel falls off along the arc, giving
+$$
+K = \begin{pmatrix}
+1 & 0.6412 & 0.4111 & 0.1084 & 0.0286\\
+0.6412 & 1 & 0.6412 & 0.4111 & 0.1084\\
+0.4111 & 0.6412 & 1 & 0.6412 & 0.4111\\
+0.1084 & 0.4111 & 0.6412 & 1 & 0.6412\\
+0.0286 & 0.1084 & 0.4111 & 0.6412 & 1
+\end{pmatrix},
+$$
+and double-centering \(K_c = J K J\), \(J = I - \tfrac{1}{5}\mathbf{1}\mathbf{1}^\top\), gives a matrix with rows summing to zero.</li>
+<li><span class="wex-op">Eigendecompose.</span> The eigenvalues are \(\Delta = (1.3463,\ 0.5452,\ 0.2772,\ 0.2141,\ 0)\), so the first component captures \(1.3463 / 2.3827 = 56.5\%\) of the variance and the second \(22.9\%\), for \(79.4\%\) together. The leading eigenvectors are
+$$
+\mathbf{u}_1 = (-0.5783, -0.4069,\ 0,\ 0.4069,\ 0.5783), \qquad
+\mathbf{u}_2 = (0.5426, -0.3063, -0.4728, -0.3063,\ 0.5426),
+$$
+with \(\mathbf{u}_1\) reading position along the arc and \(\mathbf{u}_2\) its symmetric curvature.</li>
+<li><span class="wex-op">Normalize.</span> Dividing by \(\sqrt{\Delta_i}\) gives unit-RKHS-norm coefficients \(\boldsymbol{\alpha}_1 = (-0.4984, -0.3507, 0, 0.3507, 0.4984)\) and \(\boldsymbol{\alpha}_2 = (0.7349, -0.4148, -0.6403, -0.4148, 0.7349)\), and the training coordinates on the first two components are \(\sqrt{\Delta_1}\,\mathbf{u}_1 = (-0.671, -0.472, 0, 0.472, 0.671)\) and \(\sqrt{\Delta_2}\,\mathbf{u}_2 = (0.401, -0.226, -0.349, -0.226, 0.401)\).</li>
+<li><span class="wex-op">Center the test kernel vector.</span> The raw kernel vector of \(\mathbf{z}\) is \(K(\mathbf{z}, \mathbf{x}_j) = (0.5738, 0.8948, 0.8948, 0.5738, 0.2359)\). Its own mean similarity is \(\tfrac{1}{5}\sum_a K(\mathbf{z}, \mathbf{x}_a) = 0.6346\); the frozen training column means are \((0.4378, 0.5604, 0.6209, 0.5604, 0.4378)\) and the training grand mean is \(0.5235\). Subtracting the test mean and the frozen training statistics,
+$$
+\tilde{\mathbf{k}}(\mathbf{z}) = (0.0248,\ 0.2233,\ 0.1628,\ -0.0978,\ -0.3131).
+$$
+</li>
+<li><span class="wex-op">Read the out-of-sample coordinates.</span> Dotting with the coefficients, \(\pi_1(\mathbf{z}) = \boldsymbol{\alpha}_1^\top \tilde{\mathbf{k}}(\mathbf{z}) = -0.281\) and \(\pi_2(\mathbf{z}) = \boldsymbol{\alpha}_2^\top \tilde{\mathbf{k}}(\mathbf{z}) = -0.368\). The Nyström reading agrees: the extended eigenfunction \(\psi_1(\mathbf{z}) = \tfrac{1}{\Delta_1}\mathbf{u}_1^\top \tilde{\mathbf{k}}(\mathbf{z}) = -0.2422\) gives \(\sqrt{\Delta_1}\,\psi_1(\mathbf{z}) = -0.281\). As an exact check, running \(\mathbf{x}_1\) through the same formula returns \(-0.671\), its training coordinate, to machine precision.</li>
+<li><span class="wex-op">Verify against a refit.</span> Adding \(\mathbf{z}\) to the set and re-running kernel PCA on all six points gives leading eigenvalues \((1.424, 0.6547)\) and places \(\mathbf{z}\) at \(-0.275\) on the first component and \(-0.293\) on the second. The out-of-sample values \((-0.281, -0.368)\) match the first to \(0.006\), a \(2.3\%\) relative gap, and the second to \(0.075\); for scale, adding one point already shifts the five training coordinates by up to \(0.110\) on the first component and \(0.144\) on the second.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The out-of-sample formula places a new point from the frozen fit alone, at the cost of one centered kernel vector and two dot products, and it reproduces the training coordinates exactly. Against a full refit it agrees closely on the leading, well-separated component and more loosely on the second, both gaps staying within the perturbation that adding a single point induces on every coordinate. The leading component extends most reliably precisely because its eigenvalue is the best separated, the same spectral condition that governs when the projection is trustworthy at all.</p>
+</div>
+</div>
+
+<h3 id="nystrom-view">The Nyström view and its cost</h3>
+
+<p>The extension formula is not an ad hoc trick; it is the Nyström method for approximating the eigenfunctions of an integral operator, applied to the centered kernel. Read the kernel as an operator on functions: under the data distribution \(\rho\), the operator \((T_\rho g)(\mathbf{x}) = \int \tilde{K}(\mathbf{x}, \mathbf{y})\, g(\mathbf{y})\, d\rho(\mathbf{y})\) has eigenfunctions \(\psi_i\) whose values at the training points are what kernel PCA recovers as the eigenvectors \(\mathbf{u}_i\). Given only the sample, we cannot integrate against \(\rho\); the Nyström method (Williams and Seeger, 2001) replaces \(\rho\) by the empirical measure on the \(n\) points, turning the integral into the average \((T_n g)(\mathbf{x}) = \frac{1}{n}\sum_j \tilde{K}(\mathbf{x}, \mathbf{x}_j)\, g(\mathbf{x}_j)\). Its eigenfunctions, evaluated at a new \(\mathbf{x}\), are</p>
+$$
+\psi_i(\mathbf{x}) = \frac{1}{\Delta_i}\sum_{j=1}^n \tilde{k}_j(\mathbf{x})\,(\mathbf{u}_i)_j = \frac{1}{\Delta_i}\, \mathbf{u}_i^\top \tilde{\mathbf{k}}(\mathbf{x}),
+$$
+<p>which at a training point returns \(\psi_i(\mathbf{x}_m) = \frac{1}{\Delta_i}(K_c \mathbf{u}_i)_m = (\mathbf{u}_i)_m\), the sampled eigenvector entry. Comparing with the proposition, the kernel-PCA coordinate is exactly \(\sqrt{\Delta_i}\) times this Nyström-extended eigenfunction, \(\pi_i(\mathbf{x}) = \sqrt{\Delta_i}\,\psi_i(\mathbf{x})\): out-of-sample kernel PCA is the Nyström extension of the centered kernel operator, and the worked example confirms the two expressions agree to the digit.</p>
+
+<p>The economy of the extension is its point. Fitting kernel PCA costs one eigendecomposition of the \(n \times n\) matrix, \(O(n^3)\) dense or \(O(n^2 k)\) with an iterative solver for the top \(k\) components. Afterwards, each new point costs \(n\) kernel evaluations to form its vector, an \(O(n)\) centering, and one length-\(n\) dot product per component, so \(O(nk)\) with no further eigendecomposition. Fit once, extend a stream of points cheaply. The same identity, run in reverse, is how kernel methods are scaled to large \(n\): rather than build and diagonalize the full Gram matrix, one deliberately fits on a small set of \(m\) landmark points and Nyström-extends the resulting eigenvectors to the remaining \(n - m\), a low-rank approximation costing \(O(nm^2)\) that is developed in [[ch:large-scale-kernels]]. Out-of-sample projection and the Nyström low-rank approximation are one formula read in opposite directions: the first extends a fixed basis to new data, the second chooses a small basis so the extension carries the load.</p>
+
+<h3 id="nystrom-principle">The general Nyström-extension principle</h3>
+
+<p>Kernel PCA is one member of a family of spectral embeddings that share a single computational shape: build a data-dependent \(n \times n\) symmetric matrix, take its leading eigenvectors, and read the coordinates off them. Metric multidimensional scaling, Isomap, locally linear embedding, Laplacian eigenmaps, and spectral clustering all fit this mold, and several of them were originally defined only on the training sample, with no recipe for a new point short of rebuilding and re-diagonalizing the whole matrix. Bengio et al. (2004) unified them by the observation that each method is generated by a symmetric data-dependent kernel \(K_D(\mathbf{x}, \mathbf{y})\), whose Gram matrix on the sample is the matrix the method diagonalizes, and that once \(K_D\) is named, a new point is embedded by the very Nyström formula above,</p>
+$$
+f_i(\mathbf{x}) = \frac{1}{\sqrt{\lambda_i}}\sum_{j=1}^n (\mathbf{v}_i)_j\, K_D(\mathbf{x}, \mathbf{x}_j),
+$$
+<p>with \((\lambda_i, \mathbf{v}_i)\) the eigenpairs of the sample matrix: evaluate the data-dependent kernel between the new point and each training point, weight by the eigenvector, and rescale by the eigenvalue. The methods differ only in which \(K_D\) they use.</p>
+
+<table>
+<thead><tr><th>Method</th><th>Data-dependent kernel \(K_D(\mathbf{x}, \mathbf{y})\)</th><th>Embedding read off</th></tr></thead>
+<tbody>
+<tr>
+<td>Kernel PCA, metric MDS</td>
+<td>centered kernel \(\tilde{K}(\mathbf{x}, \mathbf{y}) = \langle \tilde{\varphi}(\mathbf{x}), \tilde{\varphi}(\mathbf{y})\rangle_{\mathcal{H}}\)</td>
+<td>principal components</td>
+</tr>
+<tr>
+<td>Isomap</td>
+<td>\(-\tfrac{1}{2}\) double-centered squared graph geodesics</td>
+<td>isometric coordinates</td>
+</tr>
+<tr>
+<td>Locally linear embedding</td>
+<td>\(c\,I - (I - W)^\top (I - W)\) from local weights \(W\)</td>
+<td>local-linear coordinates</td>
+</tr>
+<tr>
+<td>Laplacian eigenmaps, spectral clustering</td>
+<td>normalized affinity \(D^{-1/2} A\, D^{-1/2}\) of the neighborhood graph</td>
+<td>Laplacian embedding</td>
+</tr>
+</tbody>
+</table>
+
+<p>Read this way, the transductive methods become inductive at \(O(n)\) per new point, which is exactly what visualization needs when a fresh query must be dropped onto an Isomap or MDS layout without recomputing the embedding of the whole corpus, the use developed in [[ch:data-visualization-and-mds]]. Bengio et al. (2004) further show the extension is consistent: as \(n\) grows, \(f_i(\mathbf{x})\) converges to an eigenfunction of a limiting operator fixed by \(K_D\) and the data density, and it reproduces the training embedding at the training points, precisely as the kernel-PCA extension did. The one piece of care that transfers verbatim is the centering. For kernel PCA the data-dependent kernel \(\tilde{K}\) centers both arguments against the training mean, which is the frozen-statistics rule above; each other method carries its own normalization, a double-centering for Isomap and MDS, a degree normalization for the graph-Laplacian methods, that must likewise be applied to the new point with training-set quantities, never recomputed with \(\mathbf{x}\) folded in.</p>
+
+<h3 id="robust-sparse-kpca">Robust and sparse variants</h3>
+
+<p>Two structural weaknesses of plain kernel PCA have each grown a family of remedies, and both leave the out-of-sample machinery untouched. The first is fragility to outliers. The feature-space covariance is a sum of squared embeddings, so a few points with large embedded norm can tilt the top components toward themselves, and the double-centering then smears each outlier's pull across every entry of \(K_c\). Robust kernel PCA replaces the squared reconstruction criterion with a slower-growing loss, or iteratively reweights the points by their residual, so that high-residual examples are discounted and the principal subspace tracks the bulk of the data rather than its excursions (Nguyen and De la Torre, 2009). The second is density of the components. Each direction \(f_i = \sum_j \alpha_{i,j}\varphi(\mathbf{x}_j)\) puts nonzero weight on every training point, so evaluating it at a new point costs the full \(n\) kernel evaluations of the out-of-sample formula. Sparse kernel PCA adds a cardinality or \(\ell_1\) penalty on \(\boldsymbol{\alpha}_i\), seeking directions supported on a handful of training points; it gives up a little captured variance in exchange for components that are cheaper to extend and easier to read, since a sparse \(\boldsymbol{\alpha}_i\) names the few examples that define the direction (Tipping, 2001). In both cases what changes is which \(\boldsymbol{\alpha}_i\) one extends, not how the extension is computed: the centered kernel vector and its projection are the same.</p>
+
 <section class="exercises"><h2 id="exercises">Exercises</h2>
 <ol class="exlist">
 <li><span class="ex-tag">computation</span> A centered Gram matrix has eigenvalues \(\Delta = (10, 6, 3, 1, 0, 0, 0, 0)\) (the last four vanish). (a) What fraction of the total variance is captured by projecting onto the top two kernel principal components? (b) By the reconstruction-error proposition, what is the residual \(J^\perp(U_2) = \sum_{i \gt 2}\Delta_i\) left by that two-dimensional summary? (c) What is the smallest number of components \(k\) needed for the captured variance to reach at least ninety percent of the total? (d) The stability remark ties reliability to how early the spectrum falls off; comment on whether a two-dimensional projection of this dataset looks trustworthy.</li>
@@ -325,5 +443,11 @@ $$
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">Write \(P_U = \sum_{m=1}^k \mathbf{e}_m \mathbf{e}_m^\top\) for an orthonormal basis \(\{\mathbf{e}_m\}\) of \(U\) in feature space, so that \(\sum_i \lVert P_U \varphi(\mathbf{x}_i)\rVert^2 = \sum_m \mathbf{e}_m^\top C \mathbf{e}_m = \operatorname{trace}(P_U C)\), where \(C = \sum_i \varphi(\mathbf{x}_i)\varphi(\mathbf{x}_i)^\top\) is the (uncentered-in-notation, centered-in-fact) covariance operator whose nonzero eigenvalues match the \(\Delta_i\). The trace is maximized by aligning \(U\) with the top-\(k\) eigenvectors; the leftover \(\sum_i \lVert \varphi(\mathbf{x}_i)\rVert^2 = \sum_i \Delta_i\) minus the captured part is the tail.</div></details></li>
 
 <li><span class="ex-tag">exploration</span> Open the interactive Gram-matrix heatmap earlier in this chapter; this is exactly the matrix kernel PCA diagonalizes. Widen the kernel bandwidth and watch the off-diagonal entries fill in, then narrow it toward zero and watch the matrix drift toward the identity. Describe how the spectrum you would read off changes between these regimes: for which bandwidth does the variance concentrate into a few dominant eigenvalues, and for which does it flatten so that no small set of components can summarize the data? Connect your observation to the stability rule of thumb that kernel PCA is trustworthy exactly when the eigenvalues fall off early.</li>
+
+<li><span class="ex-tag">computation</span> Out-of-sample by hand. Using the fitted quantities from the out-of-sample worked example, place the same test point \(\mathbf{z} = (-0.5, 0.5)\) yourself. Its raw kernel vector is \(K(\mathbf{z}, \mathbf{x}_j) = (0.5738, 0.8948, 0.8948, 0.5738, 0.2359)\), the frozen training column means are \((0.4378, 0.5604, 0.6209, 0.5604, 0.4378)\), and the training grand mean is \(0.5235\). (a) Form the centered kernel vector \(\tilde{\mathbf{k}}(\mathbf{z})\), identifying among its three centering terms the one that uses the test point's own mean similarity and the two that are frozen training statistics. (b) With \(\boldsymbol{\alpha}_1 = (-0.4984, -0.3507, 0, 0.3507, 0.4984)\), compute the first-component coordinate \(\boldsymbol{\alpha}_1^\top \tilde{\mathbf{k}}(\mathbf{z})\). (c) Explain why repeating the computation with the third column of \(K\) in place of \(K(\mathbf{z}, \cdot)\) returns \(\mathbf{x}_3\)'s training coordinate exactly, whereas the coordinate of \(\mathbf{z}\) only approximates the value a refit would give.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The test mean similarity is \(\tfrac{1}{5}\sum_a K(\mathbf{z}, \mathbf{x}_a) = 0.6346\); it enters the second term only. The third column of \(K\) is a training column, so its centering is a column of \(K_c\), and \(\boldsymbol{\alpha}_i^\top (K_c)_{:,3} = (K_c \boldsymbol{\alpha}_i)_3 = \sqrt{\Delta_i}\,(\mathbf{u}_i)_3\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> The extension agrees with kernel PCA on the sample. Let \(K_c = (I - \mathbf{1}_n) K (I - \mathbf{1}_n)\) be the centered training Gram matrix with coefficients \(\boldsymbol{\alpha}_i = \mathbf{u}_i / \sqrt{\Delta_i}\). Show that for a training point \(\mathbf{x}_m\) the centered out-of-sample kernel vector \(\tilde{\mathbf{k}}(\mathbf{x}_m)\), with entries \(\tilde{k}_j = K_{mj} - \frac{1}{n}\sum_a K_{ma} - \frac{1}{n}\sum_b K_{bj} + \frac{1}{n^2}\sum_{a,b} K_{ab}\), is exactly the \(m\)-th column of \(K_c\). Conclude that \(\pi_i(\mathbf{x}_m) = \boldsymbol{\alpha}_i^\top \tilde{\mathbf{k}}(\mathbf{x}_m) = \sqrt{\Delta_i}\,(\mathbf{u}_i)_m\) is the training coordinate of the kernel-PCA theorem. Then argue why the corresponding statement for a fresh point holds only approximately, and name the two quantities that change when the point is added to the reference set.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Compare the four-term \(\tilde{k}_j\) with the entrywise formula \([K_c]_{mj} = K_{mj} - \frac{1}{n}\sum_a K_{aj} - \frac{1}{n}\sum_b K_{mb} + \frac{1}{n^2}\sum_{a,b} K_{ab}\) from the double-centering proposition; they coincide term by term using \(K_{ma} = K_{am}\). For a new point, both the training mean \(\boldsymbol{\mu}\) and the eigenpairs \((\Delta_i, \mathbf{u}_i)\) shift when it joins the sample.</div></details></li>
 </ol>
 </section>

@@ -1,34 +1,162 @@
 [
-  { "from": "string-kernels#def-21-1", "to": "kernels-and-rkhs#lem-2-4", "note": "explicit inner product of tf features" },
-  { "from": "string-kernels#def-21-1", "to": "kernels-and-rkhs#def-2-1", "note": "asserted a positive definite kernel" },
-  { "from": "string-kernels#def-21-2", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of k-mer count vectors" },
-  { "from": "string-kernels#def-21-2", "to": "kernels-and-rkhs#def-2-1", "note": "p.d. by its explicit feature map" },
-  { "from": "string-kernels#def-21-3", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of gapped-subsequence features" },
-  { "from": "string-kernels#def-21-3", "to": "kernels-and-rkhs#def-2-1", "note": "p.d. via its explicit feature map" },
-  { "from": "string-kernels#def-21-4", "to": "kernels-and-rkhs#def-2-1", "note": "P-kernel has the finite-p.s.d. property" },
-  { "from": "string-kernels#prop-21-5", "to": "string-kernels#def-21-4", "note": "concludes the marginal is a P-kernel" },
-  { "from": "string-kernels#prop-21-5", "to": "kernels-and-rkhs#lem-2-4", "note": "each term is a rank-one feature map" },
-  { "from": "string-kernels#prop-21-5", "to": "kernels-and-rkhs#thm-2-14", "note": "nonnegative combination p.d. by closure" },
-  { "from": "string-kernels#thm-21-6", "to": "string-kernels#prop-21-5", "note": "valid by the conditional-independence P-kernel" },
-  { "from": "string-kernels#thm-21-6", "to": "kernel-families#def-19-21", "note": "is a valid mutual-information kernel" },
-  { "from": "string-kernels#def-21-7", "to": "string-kernels#prop-21-5", "note": "rests on the conditional-independence engine" },
-  { "from": "string-kernels#def-21-7", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of latent mean embeddings" },
-  { "from": "string-kernels#lem-21-9", "to": "kernels-and-rkhs#def-2-1", "note": "closure of positive definite kernels" },
-  { "from": "string-kernels#lem-21-9", "to": "preliminaries#def-p-1", "note": "nonnegative combinations, Hadamard products of PSD" },
-  { "from": "string-kernels#lem-21-9", "to": "preliminaries#thm-p-2", "note": "Schur proof diagonalizes the PSD matrix" },
-  { "from": "string-kernels#lem-21-10", "to": "string-kernels#lem-21-9", "note": "sum and product from the closure lemma" },
-  { "from": "string-kernels#lem-21-10", "to": "kernels-and-rkhs#lem-2-4", "note": "lifts kernels via a feature map" },
-  { "from": "string-kernels#lem-21-11", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of summed set embeddings" },
-  { "from": "string-kernels#lem-21-11", "to": "kernels-and-rkhs#def-2-6", "note": "bilinearity pulls out the double sum" },
-  { "from": "string-kernels#lem-21-13", "to": "string-kernels#def-21-12", "note": "proves the convolution kernel p.d." },
-  { "from": "string-kernels#lem-21-13", "to": "string-kernels#lem-21-10", "note": "integrand is a direct-product kernel" },
-  { "from": "string-kernels#lem-21-13", "to": "string-kernels#lem-21-11", "note": "sum over splits is kernel-for-sets" },
-  { "from": "string-kernels#def-21-14", "to": "kernel-families#def-19-9", "note": "letter kernel needs c.p.d. substitution matrix" },
-  { "from": "string-kernels#def-21-14", "to": "kernel-families#thm-19-10", "note": "exp(beta S) p.d. iff S c.p.d." },
-  { "from": "string-kernels#def-21-14", "to": "kernels-and-rkhs#lem-2-4", "note": "gap kernel is a rank-one feature map" },
-  { "from": "string-kernels#thm-21-15", "to": "string-kernels#def-21-8", "note": "proves the local alignment kernel p.d." },
-  { "from": "string-kernels#thm-21-15", "to": "string-kernels#def-21-14", "note": "assembles the three atomic kernels" },
-  { "from": "string-kernels#thm-21-15", "to": "string-kernels#def-21-12", "note": "series of Haussler convolutions" },
-  { "from": "string-kernels#thm-21-15", "to": "string-kernels#lem-21-13", "note": "convolution preserves positive definiteness" },
-  { "from": "string-kernels#thm-21-15", "to": "string-kernels#lem-21-9", "note": "sum and pointwise-limit closure" }
+ {
+  "from": "string-kernels#def-21-1",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "explicit inner product of tf features"
+ },
+ {
+  "from": "string-kernels#def-21-1",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "asserted a positive definite kernel"
+ },
+ {
+  "from": "string-kernels#def-21-2",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of k-mer count vectors"
+ },
+ {
+  "from": "string-kernels#def-21-2",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "p.d. by its explicit feature map"
+ },
+ {
+  "from": "string-kernels#def-21-3",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of gapped-subsequence features"
+ },
+ {
+  "from": "string-kernels#def-21-3",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "p.d. via its explicit feature map"
+ },
+ {
+  "from": "string-kernels#def-21-4",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "P-kernel has the finite-p.s.d. property"
+ },
+ {
+  "from": "string-kernels#prop-21-5",
+  "to": "string-kernels#def-21-4",
+  "note": "concludes the marginal is a P-kernel"
+ },
+ {
+  "from": "string-kernels#prop-21-5",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "each term is a rank-one feature map"
+ },
+ {
+  "from": "string-kernels#prop-21-5",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "nonnegative combination p.d. by closure"
+ },
+ {
+  "from": "string-kernels#thm-21-6",
+  "to": "string-kernels#prop-21-5",
+  "note": "valid by the conditional-independence P-kernel"
+ },
+ {
+  "from": "string-kernels#thm-21-6",
+  "to": "kernel-families#def-19-25",
+  "note": "is a valid mutual-information kernel"
+ },
+ {
+  "from": "string-kernels#def-21-7",
+  "to": "string-kernels#prop-21-5",
+  "note": "rests on the conditional-independence engine"
+ },
+ {
+  "from": "string-kernels#def-21-7",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of latent mean embeddings"
+ },
+ {
+  "from": "string-kernels#lem-21-9",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "closure of positive definite kernels"
+ },
+ {
+  "from": "string-kernels#lem-21-9",
+  "to": "preliminaries#def-p-1",
+  "note": "nonnegative combinations, Hadamard products of PSD"
+ },
+ {
+  "from": "string-kernels#lem-21-9",
+  "to": "preliminaries#thm-p-2",
+  "note": "Schur proof diagonalizes the PSD matrix"
+ },
+ {
+  "from": "string-kernels#lem-21-10",
+  "to": "string-kernels#lem-21-9",
+  "note": "sum and product from the closure lemma"
+ },
+ {
+  "from": "string-kernels#lem-21-10",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "lifts kernels via a feature map"
+ },
+ {
+  "from": "string-kernels#lem-21-11",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of summed set embeddings"
+ },
+ {
+  "from": "string-kernels#lem-21-11",
+  "to": "kernels-and-rkhs#def-2-6",
+  "note": "bilinearity pulls out the double sum"
+ },
+ {
+  "from": "string-kernels#lem-21-13",
+  "to": "string-kernels#def-21-12",
+  "note": "proves the convolution kernel p.d."
+ },
+ {
+  "from": "string-kernels#lem-21-13",
+  "to": "string-kernels#lem-21-10",
+  "note": "integrand is a direct-product kernel"
+ },
+ {
+  "from": "string-kernels#lem-21-13",
+  "to": "string-kernels#lem-21-11",
+  "note": "sum over splits is kernel-for-sets"
+ },
+ {
+  "from": "string-kernels#def-21-14",
+  "to": "kernel-families#def-19-9",
+  "note": "letter kernel needs c.p.d. substitution matrix"
+ },
+ {
+  "from": "string-kernels#def-21-14",
+  "to": "kernel-families#thm-19-14",
+  "note": "exp(beta S) p.d. iff S c.p.d."
+ },
+ {
+  "from": "string-kernels#def-21-14",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "gap kernel is a rank-one feature map"
+ },
+ {
+  "from": "string-kernels#thm-21-15",
+  "to": "string-kernels#def-21-8",
+  "note": "proves the local alignment kernel p.d."
+ },
+ {
+  "from": "string-kernels#thm-21-15",
+  "to": "string-kernels#def-21-14",
+  "note": "assembles the three atomic kernels"
+ },
+ {
+  "from": "string-kernels#thm-21-15",
+  "to": "string-kernels#def-21-12",
+  "note": "series of Haussler convolutions"
+ },
+ {
+  "from": "string-kernels#thm-21-15",
+  "to": "string-kernels#lem-21-13",
+  "note": "convolution preserves positive definiteness"
+ },
+ {
+  "from": "string-kernels#thm-21-15",
+  "to": "string-kernels#lem-21-9",
+  "note": "sum and pointwise-limit closure"
+ }
 ]

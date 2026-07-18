@@ -1,112 +1,112 @@
 [
-  {
-    "from": "ranking-and-ordinal-regression#def-8-1",
-    "to": "kernel-ridge-and-friends#def-4-1",
-    "note": "ranked pairs (x_i, y_i) specialize the supervised-learning training set to an ordered label set Y"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#def-8-2",
-    "to": "ranking-and-ordinal-regression#def-8-1",
-    "note": "the preferred-pair set P is induced by the preference relation"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#def-8-2",
-    "to": "kernels-and-rkhs#thm-2-5",
-    "note": "difference vectors z_ij = phi(x_i) - phi(x_j) live in the kernel feature space through phi"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#def-8-3",
-    "to": "ranking-and-ordinal-regression#def-8-2",
-    "note": "the ranking risk is exactly the training error of the pairwise classifier"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#def-8-3",
-    "to": "kernel-ridge-and-friends#def-4-11",
-    "note": "empirical and population risk transported from misclassified points to misordered pairs"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#prop-8-4",
-    "to": "ranking-and-ordinal-regression#def-8-2",
-    "note": "the margin is evaluated at the pairwise problem's difference vector z_ij"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#prop-8-4",
-    "to": "kernel-ridge-and-friends#def-4-9",
-    "note": "proof starts from the functional margin <w, z_ij> of the +1-labelled pair point"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#prop-8-4",
-    "to": "support-vector-machines#def-5-5",
-    "note": "dividing by ||w|| gives the geometric margin, the distance from z_ij to the hyperplane"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "ranking-and-ordinal-regression#def-8-2",
-    "note": "trains on the difference vectors and pair Gram matrix of the pairwise reduction"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "ranking-and-ordinal-regression#prop-8-4",
-    "note": "minimizing (1/2)||w||^2 maximizes the ranking margin of the proposition"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "support-vector-machines#def-5-1",
-    "note": "replaces the misordered-pair count by its hinge upper bound"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "support-vector-machines#prop-5-4",
-    "note": "the derived program is precisely an SVM dual whose Gram matrix is the pair kernel"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "preliminaries#def-p-11",
-    "note": "dual from Lagrangian stationarity, with the box 0 <= alpha_ij <= C from alpha_ij + mu_ij = C"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "the pair kernel G is built from base-kernel entries, so the optimizer touches inner products only"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-1",
-    "to": "support-vector-machines#prop-5-10",
-    "note": "its nu-parametrized variant inherits the nu-property sandwich on slacked and on-margin constraints"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-2",
-    "to": "ranking-and-ordinal-regression#def-8-2",
-    "note": "streams the +1-labelled difference vectors of the pairwise problem"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-2",
-    "to": "ranking-and-ordinal-regression#prop-8-4",
-    "note": "the update fires exactly when the pair margin <w, z_ij> is nonpositive"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#algo-8-2",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "w stays in the span of difference vectors, so the update kernelizes through the pair kernel"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#def-8-5",
-    "to": "ranking-and-ordinal-regression#def-8-1",
-    "note": "defines a ranking rule r : X -> Y whose thresholds respect the total order on Y"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#def-8-5",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "the dual form f(x) = sum alpha_i kappa(x_i, x) needs only kernel evaluations"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#prop-8-6",
-    "to": "ranking-and-ordinal-regression#def-8-3",
-    "note": "identifies 1 - AUC with the bipartite ranking risk"
-  },
-  {
-    "from": "ranking-and-ordinal-regression#prop-8-6",
-    "to": "ranking-and-ordinal-regression#def-8-2",
-    "note": "positive-negative pairs are the preferred pairs of the bipartite pairwise problem"
-  }
+ {
+  "from": "ranking-and-ordinal-regression#def-8-1",
+  "to": "kernel-ridge-and-friends#def-4-1",
+  "note": "ranked pairs (x_i, y_i) specialize the supervised-learning training set to an ordered label set Y"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#def-8-2",
+  "to": "ranking-and-ordinal-regression#def-8-1",
+  "note": "the preferred-pair set P is induced by the preference relation"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#def-8-2",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "difference vectors z_ij = phi(x_i) - phi(x_j) live in the kernel feature space through phi"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#def-8-3",
+  "to": "ranking-and-ordinal-regression#def-8-2",
+  "note": "the ranking risk is exactly the training error of the pairwise classifier"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#def-8-3",
+  "to": "kernel-ridge-and-friends#def-4-11",
+  "note": "empirical and population risk transported from misclassified points to misordered pairs"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#prop-8-4",
+  "to": "ranking-and-ordinal-regression#def-8-2",
+  "note": "the margin is evaluated at the pairwise problem's difference vector z_ij"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#prop-8-4",
+  "to": "kernel-ridge-and-friends#def-4-10",
+  "note": "proof starts from the functional margin <w, z_ij> of the +1-labelled pair point"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#prop-8-4",
+  "to": "support-vector-machines#def-5-5",
+  "note": "dividing by ||w|| gives the geometric margin, the distance from z_ij to the hyperplane"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "ranking-and-ordinal-regression#def-8-2",
+  "note": "trains on the difference vectors and pair Gram matrix of the pairwise reduction"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "ranking-and-ordinal-regression#prop-8-4",
+  "note": "minimizing (1/2)||w||^2 maximizes the ranking margin of the proposition"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "support-vector-machines#def-5-1",
+  "note": "replaces the misordered-pair count by its hinge upper bound"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "support-vector-machines#prop-5-4",
+  "note": "the derived program is precisely an SVM dual whose Gram matrix is the pair kernel"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "preliminaries#def-p-11",
+  "note": "dual from Lagrangian stationarity, with the box 0 <= alpha_ij <= C from alpha_ij + mu_ij = C"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "the pair kernel G is built from base-kernel entries, so the optimizer touches inner products only"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-1",
+  "to": "support-vector-machines#prop-5-10",
+  "note": "its nu-parametrized variant inherits the nu-property sandwich on slacked and on-margin constraints"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-2",
+  "to": "ranking-and-ordinal-regression#def-8-2",
+  "note": "streams the +1-labelled difference vectors of the pairwise problem"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-2",
+  "to": "ranking-and-ordinal-regression#prop-8-4",
+  "note": "the update fires exactly when the pair margin <w, z_ij> is nonpositive"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#algo-8-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "w stays in the span of difference vectors, so the update kernelizes through the pair kernel"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#def-8-5",
+  "to": "ranking-and-ordinal-regression#def-8-1",
+  "note": "defines a ranking rule r : X -> Y whose thresholds respect the total order on Y"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#def-8-5",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "the dual form f(x) = sum alpha_i kappa(x_i, x) needs only kernel evaluations"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#prop-8-6",
+  "to": "ranking-and-ordinal-regression#def-8-3",
+  "note": "identifies 1 - AUC with the bipartite ranking risk"
+ },
+ {
+  "from": "ranking-and-ordinal-regression#prop-8-6",
+  "to": "ranking-and-ordinal-regression#def-8-2",
+  "note": "positive-negative pairs are the preferred pairs of the bipartite pairwise problem"
+ }
 ]

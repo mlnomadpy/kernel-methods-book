@@ -1,152 +1,152 @@
 [
-  {
-    "from": "support-vector-machines#def-5-1",
-    "to": "kernel-ridge-and-friends#def-4-9",
-    "note": "convex surrogate for the 0-1 loss evaluated at the margin u = y f(x)"
-  },
-  {
-    "from": "support-vector-machines#def-5-2",
-    "to": "support-vector-machines#def-5-1",
-    "note": "plugs the hinge loss into the regularized empirical risk template"
-  },
-  {
-    "from": "support-vector-machines#def-5-2",
-    "to": "kernel-ridge-and-friends#def-4-10",
-    "note": "defined as the large-margin classifier with phi the hinge loss"
-  },
-  {
-    "from": "support-vector-machines#def-5-2",
-    "to": "kernels-and-rkhs#def-2-1",
-    "note": "requires a positive definite kernel K on X"
-  },
-  {
-    "from": "support-vector-machines#def-5-2",
-    "to": "kernels-and-rkhs#def-2-8",
-    "note": "optimizes over the RKHS of K with the squared-norm penalty"
-  },
-  {
-    "from": "support-vector-machines#prop-5-3",
-    "to": "support-vector-machines#def-5-2",
-    "note": "recasts the SVM problem as a quadratic program with slack variables"
-  },
-  {
-    "from": "support-vector-machines#prop-5-3",
-    "to": "kernel-tricks#thm-3-4",
-    "note": "representer theorem collapses the problem onto the span of the K(x_i, .)"
-  },
-  {
-    "from": "support-vector-machines#prop-5-3",
-    "to": "kernels-and-rkhs#def-2-8",
-    "note": "reproducing property gives f(x_i) = [K alpha]_i and ||f||^2 = alpha' K alpha"
-  },
-  {
-    "from": "support-vector-machines#prop-5-3",
-    "to": "support-vector-machines#def-5-1",
-    "note": "each epigraph constraint xi_i >= hinge splits into the two linear inequalities"
-  },
-  {
-    "from": "support-vector-machines#prop-5-4",
-    "to": "support-vector-machines#prop-5-3",
-    "note": "dualizes the primal QP of the preceding proposition"
-  },
-  {
-    "from": "support-vector-machines#prop-5-4",
-    "to": "preliminaries#def-p-11",
-    "note": "proof runs Lagrangian duality with Slater's condition and strong duality"
-  },
-  {
-    "from": "support-vector-machines#prop-5-4",
-    "to": "kernels-and-rkhs#def-2-1",
-    "note": "psd Gram matrix makes the Lagrangian convex in alpha and the dual concave"
-  },
-  {
-    "from": "support-vector-machines#def-5-5",
-    "to": "kernel-ridge-and-friends#def-4-9",
-    "note": "normalizes the functional margin y(<w,x>+b) by ||w|| into a signed distance"
-  },
-  {
-    "from": "support-vector-machines#prop-5-6",
-    "to": "support-vector-machines#def-5-5",
-    "note": "computes the geometric margin of a canonical hyperplane"
-  },
-  {
-    "from": "support-vector-machines#prop-5-6",
-    "to": "kernels-and-rkhs#thm-2-13",
-    "note": "identifies ||w|| with the RKHS norm of f for the linear kernel"
-  },
-  {
-    "from": "support-vector-machines#prop-5-6",
-    "to": "support-vector-machines#def-5-2",
-    "note": "reads the SVM regularizer lambda ||f||^2 as a drive toward a wide margin"
-  },
-  {
-    "from": "support-vector-machines#thm-5-7",
-    "to": "kernel-ridge-and-friends#def-4-9",
-    "note": "margin error counts points whose margin y_i <w, x_i> falls below rho"
-  },
-  {
-    "from": "support-vector-machines#thm-5-7",
-    "to": "kernel-ridge-and-friends#def-4-11",
-    "note": "bounds the misclassification probability of a fresh point, the risk"
-  },
-  {
-    "from": "support-vector-machines#def-5-8",
-    "to": "support-vector-machines#prop-5-3",
-    "note": "names the points with nonzero coefficient in the expansion f = sum alpha_i K(x_i, .)"
-  },
-  {
-    "from": "support-vector-machines#prop-5-9",
-    "to": "support-vector-machines#def-5-8",
-    "note": "shows the expansion collapses onto the support vectors alone"
-  },
-  {
-    "from": "support-vector-machines#prop-5-9",
-    "to": "preliminaries#def-p-11",
-    "note": "proof invokes complementary slackness on the margin constraint"
-  },
-  {
-    "from": "support-vector-machines#prop-5-9",
-    "to": "support-vector-machines#prop-5-3",
-    "note": "uses primal feasibility y_i f(x_i) + xi_i >= 1 and xi_i >= 0"
-  },
-  {
-    "from": "support-vector-machines#prop-5-9",
-    "to": "support-vector-machines#prop-5-4",
-    "note": "uses the KKT conditions rewritten in alpha via mu_i = 2 lambda y_i alpha_i"
-  },
-  {
-    "from": "support-vector-machines#algo-5-1",
-    "to": "support-vector-machines#prop-5-4",
-    "note": "solves the dual box QP in the C = 1/(2 n lambda) parameterization"
-  },
-  {
-    "from": "support-vector-machines#algo-5-1",
-    "to": "support-vector-machines#def-5-8",
-    "note": "outputs the support set SV = {i : alpha_i != 0}"
-  },
-  {
-    "from": "support-vector-machines#algo-5-1",
-    "to": "support-vector-machines#prop-5-9",
-    "note": "classifies new points touching the support vectors only"
-  },
-  {
-    "from": "support-vector-machines#algo-5-1",
-    "to": "preliminaries#def-p-11",
-    "note": "labels each index by the complementary-slackness trichotomy"
-  },
-  {
-    "from": "support-vector-machines#prop-5-10",
-    "to": "support-vector-machines#prop-5-4",
-    "note": "counting argument runs on the same dual box 0 <= mu_i <= 1/n"
-  },
-  {
-    "from": "support-vector-machines#prop-5-10",
-    "to": "support-vector-machines#def-5-8",
-    "note": "lower-bounds the fraction of support vectors, the points with mu_i > 0"
-  },
-  {
-    "from": "support-vector-machines#prop-5-10",
-    "to": "preliminaries#def-p-11",
-    "note": "margin errors have their prices pinned to the box ceiling by KKT"
-  }
+ {
+  "from": "support-vector-machines#def-5-1",
+  "to": "kernel-ridge-and-friends#def-4-10",
+  "note": "convex surrogate for the 0-1 loss evaluated at the margin u = y f(x)"
+ },
+ {
+  "from": "support-vector-machines#def-5-2",
+  "to": "support-vector-machines#def-5-1",
+  "note": "plugs the hinge loss into the regularized empirical risk template"
+ },
+ {
+  "from": "support-vector-machines#def-5-2",
+  "to": "kernel-ridge-and-friends#def-4-10",
+  "note": "defined as the large-margin classifier with phi the hinge loss"
+ },
+ {
+  "from": "support-vector-machines#def-5-2",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "requires a positive definite kernel K on X"
+ },
+ {
+  "from": "support-vector-machines#def-5-2",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "optimizes over the RKHS of K with the squared-norm penalty"
+ },
+ {
+  "from": "support-vector-machines#prop-5-3",
+  "to": "support-vector-machines#def-5-2",
+  "note": "recasts the SVM problem as a quadratic program with slack variables"
+ },
+ {
+  "from": "support-vector-machines#prop-5-3",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "representer theorem collapses the problem onto the span of the K(x_i, .)"
+ },
+ {
+  "from": "support-vector-machines#prop-5-3",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing property gives f(x_i) = [K alpha]_i and ||f||^2 = alpha' K alpha"
+ },
+ {
+  "from": "support-vector-machines#prop-5-3",
+  "to": "support-vector-machines#def-5-1",
+  "note": "each epigraph constraint xi_i >= hinge splits into the two linear inequalities"
+ },
+ {
+  "from": "support-vector-machines#prop-5-4",
+  "to": "support-vector-machines#prop-5-3",
+  "note": "dualizes the primal QP of the preceding proposition"
+ },
+ {
+  "from": "support-vector-machines#prop-5-4",
+  "to": "preliminaries#def-p-11",
+  "note": "proof runs Lagrangian duality with Slater's condition and strong duality"
+ },
+ {
+  "from": "support-vector-machines#prop-5-4",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "psd Gram matrix makes the Lagrangian convex in alpha and the dual concave"
+ },
+ {
+  "from": "support-vector-machines#def-5-5",
+  "to": "kernel-ridge-and-friends#def-4-10",
+  "note": "normalizes the functional margin y(<w,x>+b) by ||w|| into a signed distance"
+ },
+ {
+  "from": "support-vector-machines#prop-5-6",
+  "to": "support-vector-machines#def-5-5",
+  "note": "computes the geometric margin of a canonical hyperplane"
+ },
+ {
+  "from": "support-vector-machines#prop-5-6",
+  "to": "kernels-and-rkhs#thm-2-13",
+  "note": "identifies ||w|| with the RKHS norm of f for the linear kernel"
+ },
+ {
+  "from": "support-vector-machines#prop-5-6",
+  "to": "support-vector-machines#def-5-2",
+  "note": "reads the SVM regularizer lambda ||f||^2 as a drive toward a wide margin"
+ },
+ {
+  "from": "support-vector-machines#thm-5-7",
+  "to": "kernel-ridge-and-friends#def-4-10",
+  "note": "margin error counts points whose margin y_i <w, x_i> falls below rho"
+ },
+ {
+  "from": "support-vector-machines#thm-5-7",
+  "to": "kernel-ridge-and-friends#def-4-11",
+  "note": "bounds the misclassification probability of a fresh point, the risk"
+ },
+ {
+  "from": "support-vector-machines#def-5-8",
+  "to": "support-vector-machines#prop-5-3",
+  "note": "names the points with nonzero coefficient in the expansion f = sum alpha_i K(x_i, .)"
+ },
+ {
+  "from": "support-vector-machines#prop-5-9",
+  "to": "support-vector-machines#def-5-8",
+  "note": "shows the expansion collapses onto the support vectors alone"
+ },
+ {
+  "from": "support-vector-machines#prop-5-9",
+  "to": "preliminaries#def-p-11",
+  "note": "proof invokes complementary slackness on the margin constraint"
+ },
+ {
+  "from": "support-vector-machines#prop-5-9",
+  "to": "support-vector-machines#prop-5-3",
+  "note": "uses primal feasibility y_i f(x_i) + xi_i >= 1 and xi_i >= 0"
+ },
+ {
+  "from": "support-vector-machines#prop-5-9",
+  "to": "support-vector-machines#prop-5-4",
+  "note": "uses the KKT conditions rewritten in alpha via mu_i = 2 lambda y_i alpha_i"
+ },
+ {
+  "from": "support-vector-machines#algo-5-1",
+  "to": "support-vector-machines#prop-5-4",
+  "note": "solves the dual box QP in the C = 1/(2 n lambda) parameterization"
+ },
+ {
+  "from": "support-vector-machines#algo-5-1",
+  "to": "support-vector-machines#def-5-8",
+  "note": "outputs the support set SV = {i : alpha_i != 0}"
+ },
+ {
+  "from": "support-vector-machines#algo-5-1",
+  "to": "support-vector-machines#prop-5-9",
+  "note": "classifies new points touching the support vectors only"
+ },
+ {
+  "from": "support-vector-machines#algo-5-1",
+  "to": "preliminaries#def-p-11",
+  "note": "labels each index by the complementary-slackness trichotomy"
+ },
+ {
+  "from": "support-vector-machines#prop-5-10",
+  "to": "support-vector-machines#prop-5-4",
+  "note": "counting argument runs on the same dual box 0 <= mu_i <= 1/n"
+ },
+ {
+  "from": "support-vector-machines#prop-5-10",
+  "to": "support-vector-machines#def-5-8",
+  "note": "lower-bounds the fraction of support vectors, the points with mu_i > 0"
+ },
+ {
+  "from": "support-vector-machines#prop-5-10",
+  "to": "preliminaries#def-p-11",
+  "note": "margin errors have their prices pinned to the box ceiling by KKT"
+ }
 ]

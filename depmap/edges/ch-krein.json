@@ -1,0 +1,132 @@
+[
+ {
+  "from": "indefinite-and-krein-kernels#def-28-1",
+  "to": "preliminaries#def-p-5",
+  "note": "direct sum of two Hilbert spaces"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#def-28-2",
+  "to": "indefinite-and-krein-kernels#def-28-1",
+  "note": "Krein space of functions"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#def-28-2",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing property in Krein form"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#def-28-2",
+  "to": "kernels-and-rkhs#thm-2-9",
+  "note": "defined by continuous evaluation functionals"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-3",
+  "to": "indefinite-and-krein-kernels#def-28-2",
+  "note": "characterizes RKKS reproducing kernels"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-3",
+  "to": "indefinite-and-krein-kernels#def-28-1",
+  "note": "fundamental decomposition supplies H+ and H-"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-3",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "Aronszajn pairs each part with its RKHS"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-3",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "difference of two p.d. kernels"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#lem-28-4",
+  "to": "preliminaries#thm-p-2",
+  "note": "orthogonal eigendecomposition of symmetric K"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#lem-28-4",
+  "to": "preliminaries#def-p-1",
+  "note": "nonnegative spectra make the parts p.s.d."
+ },
+ {
+  "from": "indefinite-and-krein-kernels#lem-28-4",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "signed version of the finite Aronszajn map"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#lem-28-4",
+  "to": "indefinite-and-krein-kernels#def-28-1",
+  "note": "signature J is the fundamental symmetry"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#def-28-5",
+  "to": "indefinite-and-krein-kernels#def-28-1",
+  "note": "minimize over H+, maximize over H-"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-6",
+  "to": "indefinite-and-krein-kernels#def-28-5",
+  "note": "solutions are stabilizers, not minimizers"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-6",
+  "to": "indefinite-and-krein-kernels#def-28-2",
+  "note": "reproducing property gives the data values"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-6",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "Krein version of the representer argument"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#thm-28-6",
+  "to": "preliminaries#thm-p-6",
+  "note": "orthogonal split in the associated Hilbert space"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-1",
+  "to": "preliminaries#thm-p-2",
+  "note": "eigendecomposes the symmetric Gram matrix"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-1",
+  "to": "indefinite-and-krein-kernels#lem-28-4",
+  "note": "clip and flip reuse the spectral split"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#prop-28-7",
+  "to": "support-vector-machines#prop-5-4",
+  "note": "the SVM dual whose Hessian is -G"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#prop-28-7",
+  "to": "preliminaries#def-p-10",
+  "note": "concavity needs a negative semidefinite Hessian"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-2",
+  "to": "indefinite-and-krein-kernels#def-28-5",
+  "note": "stabilizes the hinge risk in the RKKS"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-2",
+  "to": "indefinite-and-krein-kernels#thm-28-6",
+  "note": "representer collapses to a finite saddle"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-2",
+  "to": "indefinite-and-krein-kernels#algo-28-1",
+  "note": "flip branch supplies |K|"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-2",
+  "to": "indefinite-and-krein-kernels#lem-28-4",
+  "note": "fundamental symmetry S from the spectral split"
+ },
+ {
+  "from": "indefinite-and-krein-kernels#algo-28-2",
+  "to": "support-vector-machines#algo-5-1",
+  "note": "solves the convex C-SVM dual"
+ }
+]

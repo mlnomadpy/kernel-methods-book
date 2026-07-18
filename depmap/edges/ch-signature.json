@@ -1,0 +1,97 @@
+[
+ {
+  "from": "signature-and-time-series-kernels#prop-26-2",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "change of variables in the iterated integrals"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-3",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "splits the iterated-integral simplex at the join"
+ },
+ {
+  "from": "signature-and-time-series-kernels#prop-26-4",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "integration by parts on signature coordinates"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-5",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "which paths share a signature"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-5",
+  "to": "signature-and-time-series-kernels#prop-26-2",
+  "note": "reparametrization already known to preserve the signature"
+ },
+ {
+  "from": "signature-and-time-series-kernels#algo-26-1",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "computes the depth-m truncated signature"
+ },
+ {
+  "from": "signature-and-time-series-kernels#algo-26-1",
+  "to": "signature-and-time-series-kernels#thm-26-3",
+  "note": "Chen product of segment tensor exponentials"
+ },
+ {
+  "from": "signature-and-time-series-kernels#def-26-6",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "inner product of truncated signatures"
+ },
+ {
+  "from": "signature-and-time-series-kernels#def-26-6",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "explicit feature map, p.d. by construction"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-7",
+  "to": "signature-and-time-series-kernels#def-26-1",
+  "note": "partial-path signatures form the surface U"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-7",
+  "to": "signature-and-time-series-kernels#def-26-6",
+  "note": "infinite-depth limit of the truncated kernel"
+ },
+ {
+  "from": "signature-and-time-series-kernels#algo-26-2",
+  "to": "signature-and-time-series-kernels#thm-26-7",
+  "note": "finite-difference scheme for the Goursat PDE"
+ },
+ {
+  "from": "signature-and-time-series-kernels#def-26-8",
+  "to": "generative-and-marginalization-kernels#def-25-3",
+  "note": "sum over alignments mirrors pair-HMM marginalization"
+ },
+ {
+  "from": "signature-and-time-series-kernels#algo-26-3",
+  "to": "signature-and-time-series-kernels#def-26-8",
+  "note": "forward recursion evaluates the alignment sum"
+ },
+ {
+  "from": "signature-and-time-series-kernels#algo-26-3",
+  "to": "efficient-string-and-tree-kernels#algo-22-1",
+  "note": "same prefix-telescoping as the string DPs"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-9",
+  "to": "signature-and-time-series-kernels#def-26-8",
+  "note": "positive definiteness of the GA kernel"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-9",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "sums and products preserve positive definiteness"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-9",
+  "to": "string-kernels#def-21-12",
+  "note": "alignment sum is an R-convolution"
+ },
+ {
+  "from": "signature-and-time-series-kernels#thm-26-9",
+  "to": "graph-kernels#prop-24-20",
+  "note": "convolution kernels are positive definite"
+ }
+]

@@ -143,6 +143,47 @@ which is no longer Gaussian, and the predictive integral has no closed form. Two
 $$t_{\mathrm{new}}=(K^{-1}+C)^{-1}(C\,t_{\mathrm{old}}+c),$$
 equivalent in coefficient form to \(\alpha_{\mathrm{new}}=(KC+I)^{-1}(KC\,\alpha_{\mathrm{old}}+c)\). The curvature \(C\) at the mode then supplies the covariance of the Gaussian approximation, from which predictive probabilities follow. Because the logistic likelihood is log-concave, \(\Psi\) is convex and the mode is unique. A second option replaces the intractable posterior with the best matching Gaussian in a moment-matching sense rather than a curvature sense; expectation propagation is the standard such scheme, and it is generally more accurate than Laplace for the probit link, at comparable cost. A variational method of Jaakkola and Jordan, which sandwiches the logistic between tractable quadratic bounds, is a third route (Schölkopf and Smola 2002). In every case the approximation reduces classification to a sequence of the same linear-algebra operations that regression required, an \(n\times n\) solve per iteration.</p>
 
+<h2 id="laplace-mechanics">Laplace mechanics: from mode to prediction</h2>
+
+<p>The previous section stated the Laplace idea in one line, fit a Gaussian at the mode, and moved on. Since this approximation is the workhorse of Gaussian process classification, it deserves to be opened up: which Gaussian is being fitted, how the computation is organized so that it never forms \(K^{-1}\), and what the classifier finally reports. The program was carried through for GP classifiers by Williams and Barber (1998), including the multiclass case with a softmax link; the numerically stable formulation below follows Rasmussen and Williams (2006).</p>
+
+<p>Start from the negative log posterior \(\Psi(t)=-\ln p(Y\mid t)+\tfrac12 t^\top K^{-1}t\), up to an additive constant, and let \(\hat t\) be its minimizer, found by the Newton iteration of the previous section. Because the gradient vanishes at the minimizer, the Taylor expansion of \(\Psi\) around \(\hat t\) has no linear term:
+$$\Psi(t)=\Psi(\hat t)+\tfrac12\,(t-\hat t)^\top\big(K^{-1}+C\big)(t-\hat t)+O\big(\|t-\hat t\|^3\big),$$
+where \(C=-\nabla^2\ln p(Y\mid\hat t)\) is the likelihood curvature at the mode, diagonal because the likelihood factorizes over points. Dropping the cubic remainder and exponentiating leaves a Gaussian, and that Gaussian is the Laplace approximation:
+$$p(t\mid X,Y)\ \approx\ q(t\mid X,Y)=\mathcal N\big(\hat t,\ (K^{-1}+C)^{-1}\big).$$
+The covariance adds two curvatures: the prior contributes \(K^{-1}\) and each observation contributes \(C_{ii}\) on the diagonal. For the logistic link \(C_{ii}=\pi_i(1-\pi_i)\le\tfrac14\) with \(\pi_i=\sigma(\hat t_i)\), so a single binary label is only mildly informative, and most informative exactly where the current prediction is undecided at \(\pi_i=\tfrac12\).</p>
+
+<p>The stationarity condition \(\nabla\Psi(\hat t)=0\) reads \(\hat t=K\hat c\) with \(\hat c=\nabla\ln p(Y\mid\hat t)\): the mode is once more a kernel expansion over the training points, the classification counterpart of \(\alpha=(K+\sigma^2I)^{-1}y\) in regression. The coefficients are readable. For the logistic link, \(\hat c_i=y_i\,\sigma(-y_i\hat t_i)\), which is the probability the model currently assigns to the <em>wrong</em> class at point \(i\), signed by the label. Confidently fitted points contribute almost nothing to the expansion; uncertain and misfitted points carry it. The Laplace classifier has soft support vectors: the hard sparsity of the SVM is replaced by an exponential taper of influence.</p>
+
+<p>Numerics next. The matrix \(K^{-1}+C\) should never be assembled from \(K^{-1}\), whose computation is exactly what ill-conditioned kernels punish. The right object is
+$$B=I+C^{1/2}KC^{1/2},$$
+whose eigenvalues lie in \([1,\ 1+\tfrac14\lambda_{\max}(K)]\) for the logistic link: bounded below by one no matter how close to singular \(K\) is. By the Woodbury identity, \((K^{-1}+C)^{-1}=K-KC^{1/2}B^{-1}C^{1/2}K\), so every Newton step and every predictive quantity reduces to Cholesky solves against \(B\), at \(O(n^3)\) per iteration and only a handful of iterations, since the log-concave likelihood makes \(\Psi\) convex.</p>
+
+<p>Prediction assembles the same two Gaussian-conditioning moves as regression, now under the approximate posterior. The latent value at \(x_*\) has approximate mean and variance
+$$\mu_*=k_*^\top\hat c,\qquad v_*=k_{**}-k_*^\top C^{1/2}B^{-1}C^{1/2}k_*,$$
+the mean following from \(\mathbb E_q[f_*]=k_*^\top K^{-1}\hat t=k_*^\top\hat c\), the variance from \((K+C^{-1})^{-1}=C^{1/2}B^{-1}C^{1/2}\). The reported class probability then averages the link over the latent uncertainty,
+$$\bar\pi_*=\int\sigma(f)\,\mathcal N\big(f\mid\mu_*,v_*\big)\,df,$$
+a one-dimensional integral: closed form \(\bar\pi_*=\Phi\big(\mu_*/\sqrt{1+v_*}\big)\) for the probit link, a short quadrature for the logistic. The averaging is not decoration. Plugging \(\mu_*\) straight into the sigmoid ignores \(v_*\) and overstates confidence far from the data; averaging pulls \(\bar\pi_*\) toward \(\tfrac12\) exactly where the latent variance says the model does not know.</p>
+
+<p>Finally, the same expansion prices the whole fit: integrating the Gaussian approximation gives an approximate evidence
+$$\ln q(Y\mid X,\theta)=-\tfrac12\,\hat t^\top\hat c+\ln p(Y\mid\hat t)-\tfrac12\ln\det B,$$
+using \(\hat t^\top K^{-1}\hat t=\hat t^\top\hat c\) at the mode. The three terms replay the regression marginal likelihood: a prior charge, a data fit, and a determinant acting as the Occam factor. Ascending this quantity tunes length scales and amplitudes for classification exactly as the exact evidence did for regression; Williams and Barber (1998) ran this adaptation with the multiclass softmax, where \(C\) becomes block structured but the pipeline is unchanged. The same mechanics reappear wherever a Gaussian prior meets a factorized non-Gaussian likelihood, from robust regression to point-process intensity models.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (Laplace GP classification)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> Gram matrix \(K\); labels \(y\in\{-1,+1\}^n\); link likelihood \(p(y_i\mid t_i)\); test point \(x_*\).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> Predictive class probability \(\bar\pi_*\); approximate evidence \(\ln q(Y\mid X,\theta)\).</p>
+</div>
+<ol class="algo-steps">
+<li>Initialize \(t=0\).</li>
+<li>Compute the gradient \(c=\nabla\ln p(Y\mid t)\) and curvature \(C=-\nabla^2\ln p(Y\mid t)\); form \(B=I+C^{1/2}KC^{1/2}\) and its Cholesky factor.</li>
+<li>Newton step: set \(b=Ct+c\) and update \(t\leftarrow K\big(b-C^{1/2}B^{-1}C^{1/2}Kb\big)\).</li>
+<li class="algo-loop">Repeat steps 2 and 3 until \(\Psi\) stops decreasing; call the results \(\hat t\), \(\hat c\), \(\hat C\), \(\hat B\).</li>
+<li>Predict: \(\mu_*=k_*^\top\hat c\), \(v_*=k_{**}-k_*^\top\hat C^{1/2}\hat B^{-1}\hat C^{1/2}k_*\), and \(\bar\pi_*=\int\sigma(f)\,\mathcal N(f\mid\mu_*,v_*)\,df\) (probit: \(\Phi\big(\mu_*/\sqrt{1+v_*}\big)\)).</li>
+<li>Report \(\ln q(Y\mid X,\theta)=-\tfrac12\hat t^\top\hat c+\ln p(Y\mid\hat t)-\tfrac12\ln\det\hat B\) for hyperparameter ascent.</li>
+</ol>
+</div>
+
 <h2 id="laplacian-rvm">Sparse Bayesian priors and the Relevance Vector Machine</h2>
 
 <p>The Gaussian process prior spreads its belief smoothly, and its posterior mean uses every training point: \(\alpha=(K+\sigma^2 I)^{-1}y\) is generically dense. Sometimes we want the opposite, a prediction supported on a handful of basis functions. Sparsity is a statement about the prior, and there are two ways to build it in.</p>
@@ -181,6 +222,103 @@ Learning the \(s_i\) proceeds by type-II maximum likelihood, exactly as for GP h
 $$\bar y(x_*)=k_*^\top\mu,\qquad v(x_*)=\sigma^2+k_*^\top\Sigma k_*,$$
 mirror the Gaussian process formulas of the regression section, now built on only the relevance vectors.</p>
 
+<h2 id="sparse-variational-gp">Sparse and variational Gaussian processes</h2>
+
+<p>The Relevance Vector Machine made its predictor sparse because the prior wanted few active basis functions. A second, blunter pressure pushes in the same direction: cost. Every exact GP quantity in this chapter, the posterior mean, the variance, the evidence and its gradient, passes through a factorization of the \(n\times n\) matrix \(K+\sigma^2 I\), at \(O(n^3)\) time and \(O(n^2)\) memory, repeated at every step of hyperparameter learning. Beyond a few tens of thousands of points the exact equations stop being computable. [[ch:large-scale-kernels|The large-scale chapter]] develops the generic remedies, random features and Nyström-type low-rank factorizations, which approximate the <em>matrix</em>. The Gaussian process literature developed a complementary line that approximates the <em>model</em>: replace the full process by one whose information about the data is carried by \(m\ll n\) well-placed points. The prize for staying inside the probabilistic frame is that variances and evidences survive with their meaning intact, and the quality of the approximation itself becomes a measurable quantity. Throughout this section \(n\) counts training points and \(m\) counts inducing points.</p>
+
+<div class="box def"><span class="box-title">Definition (inducing points and the Nyström surrogate)</span>
+<p>Let \(Z=(z_1,\dots,z_m)\) be <em>inducing inputs</em> in \(\mathcal X\) and let \(u=(t(z_1),\dots,t(z_m))\) be the latent process evaluated there. Write \(K_{uu}\), \(K_{uf}\), \(K_{ff}\) for the kernel matrices among inducing and training inputs (so \(K_{ff}=K\)), and define, for any two blocks of inputs \(a\) and \(b\),
+$$Q_{ab}=K_{au}\,K_{uu}^{-1}\,K_{ub}.$$
+\(Q_{ab}\) is the covariance that remains when all correlation between \(a\) and \(b\) is forced to pass through \(u\); as a matrix approximation it is exactly the Nyström approximation of \(K_{ab}\) built from the columns at \(Z\).</p>
+</div>
+
+<p>Conditioning the joint Gaussian prior of \((f,u)\) gives \(p(f\mid u)=\mathcal N\big(K_{fu}K_{uu}^{-1}u,\ K_{ff}-Q_{ff}\big)\), by the same block formula that produced the predictive equations. The conditional covariance \(K_{ff}-Q_{ff}\) is a Schur complement, hence positive semidefinite, and its \(i\)th diagonal entry vanishes whenever \(x_i\) belongs to \(Z\): it measures exactly the part of the prior that the bottleneck \(u\) fails to carry. The classical sparse constructions, unified by Quiñonero-Candela and Rasmussen (2005), all keep the exact \(p(u)=\mathcal N(0,K_{uu})\) and tamper only with this conditional. The <em>subset of regressors</em> (SoR) approximation pretends the conditional is deterministic at training and test points alike, \(f=K_{fu}K_{uu}^{-1}u\); the model degenerates to a rank-\(m\) GP with kernel \(Q\), and its variances collapse wherever \(Q\) does. The <em>deterministic training conditional</em> (DTC) keeps the deterministic rule at the training points but restores the exact conditional at test points, repairing the predictive variance. The <em>fully independent training conditional</em> (FITC) of Snelson and Ghahramani (2006) is subtler: it keeps every training point's exact conditional variance and severs only their correlations, replacing \(K_{ff}-Q_{ff}\) by its diagonal. Each variant is exact Gaussian inference in its modified model, and all share one predictive template. Setting
+$$\Lambda_{\mathrm{SoR}}=\Lambda_{\mathrm{DTC}}=\sigma^2 I,\qquad \Lambda_{\mathrm{FITC}}=\operatorname{diag}\big(K_{ff}-Q_{ff}\big)+\sigma^2 I,$$
+and \(\Sigma=\big(K_{uu}+K_{uf}\Lambda^{-1}K_{fu}\big)^{-1}\), the predictive law at \(x_*\) is \(\mathcal N(\mu_*,v_*)\) with
+$$\mu_*=k_{u*}^\top\,\Sigma\,K_{uf}\Lambda^{-1}y,\qquad v_*=k_{**}-Q_{**}+k_{u*}^\top\,\Sigma\,k_{u*},$$
+where \(k_{u*}\) collects the covariances between \(Z\) and \(x_*\) and \(Q_{**}=k_{u*}^\top K_{uu}^{-1}k_{u*}\). SoR alone replaces the honest \(k_{**}\) by \(Q_{**}\), which is what deflates its error bars away from \(Z\). The cost is \(O(nm^2)\) once, then \(O(m)\) per test mean and \(O(m^2)\) per test variance: linear in \(n\), with \(m\) ours to choose.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (sparse GP prediction with inducing points)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> Training data \(X,y\) (\(n\) points); inducing inputs \(Z\) (\(m\ll n\)); kernel \(k\); noise \(\sigma^2\); family (DTC or FITC).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> Predictive mean and variance at any \(x_*\); a training objective for \(\theta\), \(\sigma^2\), \(Z\).</p>
+</div>
+<ol class="algo-steps">
+<li>Form \(K_{uu}\) (\(m\times m\)) and \(K_{uf}\) (\(m\times n\)); factor \(K_{uu}\) by Cholesky.</li>
+<li>With \(k_{ui}\) the \(i\)th column of \(K_{uf}\), compute the Nyström diagonal \(q_{ii}=k_{ui}^\top K_{uu}^{-1}k_{ui}\) for all \(i\) in \(O(nm^2)\); never form the full \(Q_{ff}\).</li>
+<li>Set \(\Lambda=\sigma^2 I\) (DTC) or \(\Lambda=\operatorname{diag}\big(k(x_i,x_i)-q_{ii}\big)+\sigma^2 I\) (FITC); \(\Lambda\) is diagonal.</li>
+<li>Factor \(\Sigma^{-1}=K_{uu}+K_{uf}\Lambda^{-1}K_{fu}\) (\(m\times m\)) and cache the weights \(w=\Sigma K_{uf}\Lambda^{-1}y\).</li>
+<li>At a test point form \(k_{u*}\) and report \(\mu_*=k_{u*}^\top w\), \(v_*=k_{**}-k_{u*}^\top K_{uu}^{-1}k_{u*}+k_{u*}^\top\Sigma k_{u*}\).</li>
+<li class="algo-loop">To train, ascend the sparse evidence \(\ln\mathcal N\big(y\mid 0,\ Q_{ff}+\Lambda\big)\) or the variational bound \(\mathcal L_T\) below over \(\theta\), \(\sigma^2\), and the positions \(Z\); each gradient costs \(O(nm^2)\).</li>
+</ol>
+</div>
+
+<h3 id="titsias-bound">The variational answer: sparsity without changing the model</h3>
+
+<p>DTC and FITC are honest algorithms with an awkward epistemology: each is exact inference in a model that is not the one we wrote down. Their evidences are evidences <em>of the surrogates</em>, so ascending them over \(Z\) rewards whichever surrogate most flatters the data, not the best approximation to the true posterior; the inducing positions act as extra kernel parameters, free to overfit. Titsias (2009) recast sparsity as approximate inference in the <em>exact</em> model. Choose a variational posterior of the constrained form \(q(f,u)=p(f\mid u)\,q(u)\), which may reshape belief over the inducing values but must propagate it to \(f\) through the true conditional, and maximize a lower bound on the exact evidence. Maximizing over \(q(u)\) in closed form collapses the bound to a formula.</p>
+
+<div class="box prop"><span class="box-title">Proposition (Titsias, 2009)</span>
+<p>For any inducing inputs \(Z\), the collapsed variational bound
+$$\mathcal L_T=\ln\mathcal N\big(y\mid 0,\ Q_{ff}+\sigma^2 I\big)-\frac{1}{2\sigma^2}\operatorname{tr}\big(K_{ff}-Q_{ff}\big)$$
+satisfies \(\mathcal L_T\le\ln p(y\mid X)\), with equality whenever \(Q_{ff}=K_{ff}\), in particular when \(Z=X\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Fix \(u\) and apply Jensen's inequality to the training conditional: \(\ln p(y\mid u)=\ln\mathbb E_{p(f\mid u)}[p(y\mid f)]\ \ge\ \mathbb E_{p(f\mid u)}[\ln p(y\mid f)]\). With \(p(f\mid u)=\mathcal N(a,\,K_{ff}-Q_{ff})\), \(a=K_{fu}K_{uu}^{-1}u\), and \(\ln p(y\mid f)=-\tfrac{1}{2\sigma^2}\|y-f\|^2-\tfrac n2\ln(2\pi\sigma^2)\), the expectation uses \(\mathbb E\|y-f\|^2=\|y-a\|^2+\operatorname{tr}(K_{ff}-Q_{ff})\), giving the pointwise inequality
+$$p(y\mid u)\ \ge\ \mathcal N\big(y\mid a,\ \sigma^2 I\big)\,\exp\!\Big(-\tfrac{1}{2\sigma^2}\operatorname{tr}\big(K_{ff}-Q_{ff}\big)\Big).$$
+The trace factor does not depend on \(u\). Averaging both sides over \(p(u)=\mathcal N(0,K_{uu})\) and using the linear-Gaussian marginalization \(\int\mathcal N\big(y\mid K_{fu}K_{uu}^{-1}u,\ \sigma^2 I\big)\,\mathcal N(u\mid 0,K_{uu})\,du=\mathcal N\big(y\mid 0,\ Q_{ff}+\sigma^2 I\big)\) gives \(p(y)\ge\mathcal N(y\mid 0,Q_{ff}+\sigma^2I)\,e^{-\operatorname{tr}(K_{ff}-Q_{ff})/(2\sigma^2)}\); take logarithms. If \(Q_{ff}=K_{ff}\) the trace vanishes and the first term is the exact log marginal likelihood, so the inequality is tight; \(Z=X\) gives \(Q_{ff}=K_{ff}K_{ff}^{-1}K_{ff}=K_{ff}\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>Read \(\mathcal L_T\) term by term. The first term is exactly the DTC evidence. The second charges it \(\tfrac{1}{2\sigma^2}\sum_i\operatorname{Var}[f_i\mid u]\), the total conditional variance the bottleneck throws away. That one trace changes the status of everything: the positions \(Z\), and \(m\) itself, become variational parameters, and improving \(\mathcal L_T\) provably tightens an approximation to one fixed model rather than drifting toward a more convenient model, with the bound only improving as inducing points are added (Titsias 2009). The optimal inducing posterior is available in closed form, \(q^*(u)=\mathcal N\big(\sigma^{-2}K_{uu}\Sigma K_{uf}\,y,\ K_{uu}\Sigma K_{uu}\big)\) with \(\Sigma=(K_{uu}+\sigma^{-2}K_{uf}K_{fu})^{-1}\), and the prediction it induces coincides with the DTC formulas above. Variationally trained sparse GPs therefore predict like DTC; what changes is the objective that places \(Z\) and tunes the hyperparameters.</p>
+
+<div class="box ex"><span class="box-title">Example (two inducing points against the full GP)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Training inputs \(x=(-2,\,-1,\,0.5,\,2)\), targets \(y=(-1.7,\,-0.8,\,0.7,\,1.5)\), squared-exponential kernel \(k(x,x')=e^{-(x-x')^2/8}\) (length scale \(\ell=2\)), noise \(\sigma^2=0.1\). Inducing inputs \(Z=(-1,\,0.5)\), the two middle training points, so \(n=4\) and \(m=2\). Predict at \(x_*=0.3\). All numbers from <code>checks/ch-gp-ex3.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Fit the exact GP for reference.</span>
+$$K_{ff}=\begin{pmatrix}1&0.8825&0.4578&0.1353\\0.8825&1&0.7548&0.3247\\0.4578&0.7548&1&0.7548\\0.1353&0.3247&0.7548&1\end{pmatrix},$$
+and the full predictive equations give \(\bar m(x_*)=0.4672\), \(v(x_*)=0.0648\).</li>
+<li><span class="wex-op">Assemble the Nyström surrogate.</span> Since \(Z=(x_2,x_3)\), \(K_{uu}=\begin{pmatrix}1&0.7548\\0.7548&1\end{pmatrix}\) is a principal submatrix of \(K_{ff}\) and \(K_{uf}\) is its rows 2 and 3. Then
+$$Q_{ff}=K_{fu}K_{uu}^{-1}K_{uf}=\begin{pmatrix}0.8797&0.8825&0.4578&0.0397\\0.8825&1&0.7548&0.3247\\0.4578&0.7548&1&0.7548\\0.0397&0.3247&0.7548&0.7095\end{pmatrix}.$$
+Rows 2 and 3 reproduce \(K_{ff}\) exactly; the corners degrade, the \(x_1\)-\(x_4\) covariance dropping from \(0.1353\) to \(0.0397\) because it must be carried through \(u\). The discarded diagonal is \(\operatorname{diag}(K_{ff}-Q_{ff})=(0.1203,\,0,\,0,\,0.2905)\), zero exactly at the inducing points, and \(Q_{**}=0.998\) against \(k_{**}=1\).</li>
+<li><span class="wex-op">Predict with \(\Lambda=\sigma^2 I\) (DTC, equally the Titsias posterior).</span> The template gives \(\mu_*=0.5054\) and, keeping \(k_{**}\), \(v_*=0.0443\). SoR substitutes \(Q_{**}\) and reports \(0.0423\).</li>
+<li><span class="wex-op">Predict with FITC.</span> \(\Lambda=\operatorname{diag}(0.2203,\,0.1,\,0.1,\,0.3905)\): the noise floor \(0.1\) plus the discarded variance, inflated exactly at the two poorly covered inputs. The template gives \(\mu_*=0.4364\) and \(v_*=0.0608\).</li>
+<li><span class="wex-op">Score the sparsification with the variational bound.</span> The fit term is \(\ln\mathcal N(y\mid 0,\ Q_{ff}+\sigma^2 I)=-4.982\) and the trace penalty \(\operatorname{tr}(K_{ff}-Q_{ff})/(2\sigma^2)=2.0544\) (the trace itself is \(0.4109\)), so \(\mathcal L_T=-4.982-2.0544=-7.0364\). The exact log marginal likelihood is \(-5.3762\): the bound holds with gap \(1.6602\), while the fit term alone, DTC's own evidence, overshoots the truth.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Half the data serving as inducing set moves the predictive means by a few hundredths, but the error bars tell the finer story: \(0.0423\) (SoR) \(\lt 0.0443\) (DTC) \(\lt 0.0608\) (FITC) against the exact \(0.0648\); the more of the discarded conditional variance a scheme keeps, the closer its uncertainty comes to the truth. The bound line is the operational one. \(\mathcal L_T\) sits \(1.6602\) below the exact evidence, all of it charged by the trace over the two badly covered inputs \(x_1\) and \(x_4\), so an optimizer ascending \(\mathcal L_T\) over \(Z\) is pushed to cover exactly those points, and at \(Z=X\) the bound closes.</p>
+</div>
+</div>
+
+<h3 id="svgp-big-data">Stochastic variational Gaussian processes</h3>
+
+<p>One computational ceiling remains: evaluating \(\mathcal L_T\) or its gradient sweeps all \(n\) points through the \(O(nm^2)\) sums, once per optimizer step. Hensman, Fusi, and Lawrence (2013) removed it by refusing to collapse. Keep \(q(u)=\mathcal N(m_u,S)\) as explicit variational parameters; the uncollapsed evidence lower bound is
+$$\mathcal L(m_u,S,Z,\theta)=\sum_{i=1}^{n}\mathbb E_{q(f_i)}\big[\ln p(y_i\mid f_i)\big]\;-\;\mathrm{KL}\big(q(u)\,\big\|\,p(u)\big),$$
+where \(q(f_i)\) is Gaussian with mean \(k_{ui}^\top K_{uu}^{-1}m_u\) and variance \(k(x_i,x_i)-q_{ii}+k_{ui}^\top K_{uu}^{-1}SK_{uu}^{-1}k_{ui}\). For the Gaussian likelihood, maximizing over \((m_u,S)\) at fixed \(Z\) recovers \(\mathcal L_T\) exactly, so nothing is conceded. What is gained is the shape of the objective: the data enter only through a sum of independent per-point terms, so a random minibatch of size \(b\), rescaled by \(n/b\), gives an unbiased estimate of the sum, and stochastic gradient ascent applies jointly to \(m_u\), \(S\), \(Z\), and the kernel hyperparameters. One step costs \(O(bm^2+m^3)\), with no dependence on \(n\) at all; the bound moreover fits the framework of stochastic variational inference, where natural-gradient steps in the exponential-family parameterization of \(q(u)\) speed convergence. This is SVGP, demonstrated by Hensman, Fusi, and Lawrence (2013) on hundreds of thousands of flight records with a few hundred inducing points, and it is the template modern GP software implements for big data.</p>
+
+<p>Two further dividends. Because each expectation in the sum is a one-dimensional Gaussian integral, any likelihood whose scalar expectations can be computed or quadratured slots straight in, so the same loop trains GP classifiers with the links of the classification section on data far beyond the Laplace approximation's reach. And the machinery composes: the sparse variational posterior is the substrate on which the deep constructions of the next section stand, and it is what makes Gaussian process surrogates affordable inside larger systems.</p>
+
+<h2 id="deep-multioutput-gp">Deep, multi-output, and spectral-mixture processes</h2>
+
+<p>The prior we have used so far is restrictive in three separable ways: the kernel is picked from a small catalogue of fixed stationary forms, the process models a single scalar function, and the function is drawn in one shot rather than built out of simpler stages. Each restriction has a principled lift, and all three run on machinery this chapter has already built, evidence-driven hyperparameter learning and inducing-point inference.</p>
+
+<h3 id="spectral-mixture-kernels">Learning the kernel: spectral mixtures</h3>
+
+<p>Bochner's theorem, developed in [[ch:kernel-families|the kernel-families chapter]], says a stationary kernel is the Fourier transform of a nonnegative spectral density: choosing a stationary covariance <em>is</em> choosing a distribution over frequencies. Seen through that lens the standard kernels are rigid commitments: the squared-exponential is a single Gaussian density centered at zero frequency, so it can say nothing beyond "smooth at scale \(\ell\)", and automatic relevance determination tunes one number per dimension without ever changing the shape. Wilson and Adams (2013) put the flexibility where the theorem says it lives, modelling the spectral density as a mixture of \(Q\) Gaussians. In one dimension the resulting kernel is closed form,
+$$k_{\mathrm{SM}}(\tau)=\sum_{q=1}^{Q}w_q\,\exp\big(-2\pi^2\sigma_q^2\tau^2\big)\cos\big(2\pi\mu_q\tau\big),\qquad \tau=x-x',$$
+with weights \(w_q\), center frequencies \(\mu_q\), and bandwidths \(\sigma_q\). Each component is a squared-exponential envelope times a cosine: a quasi-periodic pattern at frequency \(\mu_q\) that persists over a range of order \(1/\sigma_q\); taking \(Q=1\) and \(\mu_1=0\) recovers the squared-exponential itself. Since mixtures of Gaussians can approximate any spectral density, spectral-mixture kernels are dense among stationary covariances, and every parameter is learned by ascending the marginal likelihood: kernel learning reduced to the hyperparameter learning of this chapter. The practical payoff Wilson and Adams (2013) demonstrated is extrapolation, the evidence discovering periodic structure and continuing it beyond the data, where a fixed squared-exponential can only fall back to its mean.</p>
+
+<h3 id="multi-output-gps">Many outputs: coregionalization</h3>
+
+<p>Often the target is vector valued: \(p\) sensors on one machine, \(p\) related tasks, \(p\) outputs of a simulator. Modelling each coordinate with an independent GP wastes exactly what makes the problem interesting, that the outputs are correlated and data on one should sharpen predictions of another. A Gaussian prior over vector-valued functions needs a matrix-valued covariance, \(\operatorname{cov}\big(f_i(x),f_j(x')\big)\), positive semidefinite in the joint sense. The simplest separable choice, long used in geostatistics under the name co-kriging, is the <em>intrinsic coregionalization model</em>
+$$\operatorname{cov}\big(f_i(x),f_j(x')\big)=B_{ij}\,k(x,x'),$$
+with \(k\) an ordinary kernel on inputs and \(B\) a positive semidefinite \(p\times p\) <em>coregionalization matrix</em>; the joint Gram matrix is the Kronecker product \(B\otimes K\), positive semidefinite by the product closure rules. Writing \(B=AA^\top\) with \(A\) of rank \(r\) exposes the generative reading: the \(p\) outputs are linear mixtures of \(r\) shared latent GPs, and the <em>linear model of coregionalization</em> sums several such terms with different base kernels. The evidence learns \(B\), which is a task-similarity matrix read off from data, and transfer happens mechanically: an observation of output \(j\) enters the posterior of output \(i\) with weight proportional to \(B_{ij}\). This is the construction behind multi-task surrogates in [[ch:bayesian-optimization-and-bandits|Bayesian optimization]], where cheap evaluations of a related objective narrow the posterior over an expensive one, and Kronecker algebra plus the inducing-point machinery keeps the joint model tractable.</p>
+
+<h3 id="deep-gps">Depth: compositions of processes</h3>
+
+<p>Stationarity is a strong commitment: one length scale for the whole input space. A function that undulates in one region and is nearly flat in another fits no stationary prior well. The classical fix warps the inputs through a fixed map \(h\) and models \(f(h(x))\); the radical fix is to learn the warp as a function too, and then there is no reason to stop at one stage. A <em>deep Gaussian process</em> (Damianou and Lawrence 2013) composes layers \(f=f_L\circ\cdots\circ f_1\), each layer a GP prior over a map between adjacent feature spaces. The composite is no longer a Gaussian process: its marginals are non-Gaussian, can be multimodal, and its effective smoothness varies with position, which is precisely the expressive gain. The price is inference, since each layer's inputs are the previous layer's random outputs; Damianou and Lawrence (2013) made it tractable by placing inducing points at every layer and nesting the variational bound of the previous section, and later stochastic variants scale the same construction with minibatches. The contrast with Neal (1996) is worth savoring: widening a single hidden layer to infinity collapses a neural network onto one GP with a fixed kernel, while stacking finite GP layers keeps a learned, data-dependent composition. That dialogue, between kernels fixed by an architecture and representations learned through it, is where this book is heading; [[ch:the-frontier|the frontier chapter]] takes it up in earnest through the infinite-width limits of deep networks and the kernels that grow depth.</p>
+
 <h2 id="exercises">Exercises</h2>
 
 <ol>
@@ -199,4 +337,12 @@ mirror the Gaussian process formulas of the regression section, now built on onl
 <li><strong>(Laplace vs. Gaussian prior.)</strong> Contrast the MAP estimate under a Gaussian coefficient prior (\(-\ln p\propto\sum_i\alpha_i^2\)) with that under a Laplace prior (\(-\ln p\propto\sum_i|\alpha_i|\)). Explain why only the second yields exactly-zero coefficients, using the shape of the penalty near the origin. <em>Difficulty: medium.</em></li>
 
 <li><strong>(GP classification curvature.)</strong> For the logistic likelihood \(p(y\mid t)=\sigma(yt)\), compute \(c_i=\partial_{t_i}\ln p(y_i\mid t_i)\) and \(C_{ii}=-\partial_{t_i}^2\ln p(y_i\mid t_i)\), and confirm \(0\lt C_{ii}\le\tfrac14\). Explain why log-concavity guarantees the Laplace-approximation mode is unique. <em>Difficulty: hard. Hint: \(\sigma'=\sigma(1-\sigma)\).</em></li>
+
+<li><strong>(The Nyström gap.)</strong> Show that \(K_{ff}-Q_{ff}\) is the covariance of the conditional \(p(f\mid u)\), hence positive semidefinite, and that if a training input \(x_i\) belongs to the inducing set then the \(i\)th row and column of \(K_{ff}-Q_{ff}\) vanish. Check both claims against the worked sparse example, where \(Z=(x_2,x_3)\) gave \(\operatorname{diag}(K_{ff}-Q_{ff})=(0.1203,\,0,\,0,\,0.2905)\). Conclude that the FITC correction \(\Lambda_{\mathrm{FITC}}-\sigma^2 I\) never subtracts variance. <em>Difficulty: medium. Hint: a coordinate of \(u\) has zero variance given \(u\), and a positive semidefinite matrix with a zero diagonal entry has a zero row.</em></li>
+
+<li><strong>(A bound and a non-bound.)</strong> Show that at \(Z=X\) one has \(Q_{ff}=K_{ff}\), so both the DTC evidence \(\ln\mathcal N(y\mid 0,\ Q_{ff}+\sigma^2 I)\) and the Titsias bound \(\mathcal L_T\) equal the exact log marginal likelihood. Explain why for general \(Z\) only \(\mathcal L_T\) is guaranteed to sit below the exact value, and confirm it on the worked example, where the DTC evidence \(-4.982\) exceeds the exact \(-5.3762\) while \(\mathcal L_T=-7.0364\) respects the bound with gap \(1.6602\). Which of the two is the safe objective for optimizing the positions \(Z\), and why? <em>Difficulty: medium.</em></li>
+
+<li><strong>(Averaging the probit.)</strong> Prove the closed form used in the Laplace predictive step: for \(v\ge 0\),
+$$\int\Phi(f)\,\mathcal N(f\mid\mu,v)\,df=\Phi\!\left(\frac{\mu}{\sqrt{1+v}}\right).$$
+Conclude that latent uncertainty always pulls the reported class probability toward \(\tfrac12\) compared with plugging the mean into the link, and that the pull grows with \(v\). <em>Difficulty: hard. Hint: write \(\Phi(f)=P(Z\le f)\) for \(Z\sim\mathcal N(0,1)\) independent of \(f\sim\mathcal N(\mu,v)\), and read the left side as \(P(Z-f\le 0)\) with \(Z-f\sim\mathcal N(-\mu,\,1+v)\).</em></li>
 </ol>

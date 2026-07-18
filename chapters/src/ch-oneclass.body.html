@@ -76,6 +76,45 @@ The derivation is unchanged except that the multiplier on the slack constraint, 
 </ol>
 </div>
 
+<h3 id="svdd-negative">SVDD with negative examples</h3>
+
+<p>So far the only information was a sample of normal points. Sometimes a few examples of the novel class are also at hand: confirmed frauds in a transaction log, known faults on a production line, a handful of images from outside the target category. Discarding them would be wasteful, yet they are far too few and too unrepresentative to train a balanced two-class classifier against. Tax and Duin (2004) fold them into the sphere directly. The ball should still wrap the normal points, the <em>targets</em>, but now it must also draw its boundary in so as to leave the labelled outliers, the <em>negatives</em>, on the outside.</p>
+
+<p>Write \(y_i=+1\) for a target and \(y_i=-1\) for a negative. Targets want to sit inside the sphere and negatives outside it, so the two families carry containment constraints that point in opposite directions. With separate penalties \(C_1,C_2\) for the two kinds of violation,
+$$\min_{R,c,\xi}\ R^2+C_1\!\!\sum_{i:\,y_i=+1}\!\!\xi_i+C_2\!\!\sum_{l:\,y_l=-1}\!\!\xi_l\quad\text{s.t.}\quad \begin{cases}\|\phi_i-c\|^2\le R^2+\xi_i, & y_i=+1,\\[2pt] \|\phi_l-c\|^2\ge R^2-\xi_l, & y_l=-1,\end{cases}\qquad \xi\ge 0.$$
+The target constraint is the soft-sphere constraint from before; the negative constraint is its mirror image, demanding a squared distance of at least \(R^2\) rather than at most. Carrying the derivation through, the dual keeps the exact shape of the SVDD dual but signs every negative.</p>
+
+<div class="box prop"><span class="box-title">Proposition (SVDD dual with negatives)</span>
+<p>With multipliers \(\alpha_i\ge 0\) the smallest sphere containing the targets and excluding the negatives solves
+$$\max_{\alpha}\ \sum_i y_i\alpha_i\,k(x_i,x_i)-\sum_{i,j}y_iy_j\,\alpha_i\alpha_j\,k(x_i,x_j)\quad\text{s.t.}\quad \sum_i y_i\alpha_i=1,\ 0\le\alpha_i\le C_{y_i},$$
+where \(C_{y_i}\) is \(C_1\) for a target and \(C_2\) for a negative. The center is \(c=\sum_i y_i\alpha_i\phi_i\), a signed combination in which each negative pulls the center away from itself, and any non-bound point \(0\lt\alpha_i\lt C_{y_i}\) lies exactly on the sphere.</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Form the Lagrangian with \(\alpha_i,\gamma_i\ge 0\),
+$$L=R^2+C_1\!\!\sum_{y_i=+1}\!\!\xi_i+C_2\!\!\sum_{y_l=-1}\!\!\xi_l-\!\!\sum_{y_i=+1}\!\!\alpha_i\big(R^2+\xi_i-\|\phi_i-c\|^2\big)-\!\!\sum_{y_l=-1}\!\!\alpha_l\big(\|\phi_l-c\|^2-R^2+\xi_l\big)-\sum_i\gamma_i\xi_i.$$
+Then \(\partial L/\partial R=2R\big(1-\sum_{y_i=+1}\alpha_i+\sum_{y_l=-1}\alpha_l\big)=0\) gives \(\sum_i y_i\alpha_i=1\), and \(\partial L/\partial c=0\) gives \(c=\sum_{y_i=+1}\alpha_i\phi_i-\sum_{y_l=-1}\alpha_l\phi_l=\sum_i y_i\alpha_i\phi_i\). The slack derivatives give \(\alpha_i=C_{y_i}-\gamma_i\), hence \(0\le\alpha_i\le C_{y_i}\). Substituting \(c\) and expanding \(\|\phi_i-c\|^2\) exactly as in the hard sphere, now with the signs carried through \(\langle\phi_i,c\rangle=\sum_j y_j\alpha_j k(x_i,x_j)\) and \(\|c\|^2=\sum_{i,j}y_iy_j\alpha_i\alpha_j k(x_i,x_j)\), collapses \(L\) to the stated objective under \(\sum_i y_i\alpha_i=1\). Complementarity forces \(\|\phi_i-c\|^2=R^2\) at every point with \(0\lt\alpha_i\lt C_{y_i}\), so each non-bound support vector, target or negative, sits on the boundary. <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>The reading is that the negatives enter every formula with a flipped sign. The center \(c=\sum_i y_i\alpha_i\phi_i\) is an affine rather than a convex combination, so a labelled outlier repels the center instead of attracting it, and the radius adjusts just enough to leave it out. The decision function keeps its form, \(f(x)=\operatorname{sgn}\!\big(k(x,x)-2\sum_i y_i\alpha_i k(x_i,x)+\sum_{i,j}y_iy_j\alpha_i\alpha_j k(x_i,x_j)-R^2\big)\), positive on the novel side.</p>
+
+<p>This is more than a cosmetic sign change: it is the bridge to ordinary [[ch:support-vector-machines|two-class classification]]. The quadratic term \(\sum_{i,j}y_iy_j\alpha_i\alpha_j k(x_i,x_j)\) is exactly the support vector machine's dual form. When the kernel is normalized so that \(k(x,x)=\kappa(0)\) is constant, the linear term \(\sum_i y_i\alpha_i k(x_i,x_i)=\kappa(0)\sum_i y_i\alpha_i=\kappa(0)\) is frozen on the feasible set, and maximizing what remains is the same as minimizing \(\tfrac12\sum_{i,j}y_iy_j\alpha_i\alpha_j k(x_i,x_j)\) subject to \(\sum_i y_i\alpha_i=1\) and \(0\le\alpha_i\le C\). That is the two-class SVM dual, differing only in that the equality constraint reads \(\sum_i y_i\alpha_i=1\) rather than \(=0\), because the radius is free where the classifier's bias is free. SVDD with negatives thus interpolates between the two worlds: with no negatives it is the one-class sphere, and as the negatives grow into a full second sample it becomes the maximum-margin classifier.</p>
+
+<div class="box ex"><span class="box-title">Example (one negative pushes the ball)</span>
+<div class="wex">
+<div class="wex-setup">A linear kernel \(k(x,x')=\langle x,x'\rangle\), so the ball is a disc. Three targets and one negative:
+$$x_1=(-2,0),\ x_2=(2,0),\ x_3=(0,1)\ \ (y=+1),\qquad x_4=(0,-1)\ \ (y=-1).$$
+The Gram diagonal is \(k(x_i,x_i)=\|x_i\|^2=(4,4,1,1)\).</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Fit the targets alone.</span> The plain SVDD on \(x_1,x_2,x_3\) returns \(\alpha=(0.5,0.5,0)\), center \(c=(0,0)\), and \(R^2=4\), so \(R=2\). The two far targets are diametrically opposite and pin the disc; \(x_3\) is interior.</li>
+<li><span class="wex-op">Locate the negative.</span> Its squared distance to that center is \(\|x_4-c\|^2=1\lt 4=R^2\), so the negative sits <em>inside</em> the target-only ball. Ignored, it would be accepted as normal.</li>
+<li><span class="wex-op">Refit with the negative.</span> The signed dual returns \(\alpha=(1.25,1.25,0,1.5)\), which meets \(\sum_i y_i\alpha_i=1.25+1.25+0-1.5=1\). The center moves to \(c=\sum_i y_i\alpha_i x_i=(0,1.5)\), lifted away from the outlier below.</li>
+<li><span class="wex-op">Read the new sphere.</span> The optimal value is \(R^2=6.25\), so \(R=2.5\). The squared distances to the new center are \((6.25,6.25,0.25,6.25)\): the two far targets and the negative all sit exactly on the boundary, while \(x_3\) is strictly inside. The negative now lands on the sphere and is excluded.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> One labelled outlier moved the center from \((0,0)\) to \((0,1.5)\) and grew the radius from \(2\) to \(2.5\), just enough to expel it. The negative carries weight \(\alpha_4=1.5\) with a minus sign, the only new ingredient, and it earns a place on the boundary exactly as a support vector does.</p>
+</div>
+</div>
+
 <h2 id="one-class-svm-origin">Separating the data from the origin</h2>
 
 <p>Schölkopf, Platt, Shawe-Taylor, Smola and Williamson (2001) reach the same goal by a different picture. Instead of wrapping a ball around the data, push a hyperplane between the data and the origin, as far from the origin as possible. Whatever lands on the origin side of the plane is novel. The strategy is a direct transcription of the maximum-margin idea: the training images should sit on the far side by a margin \(\rho/\|w\|\), and a small \(\|w\|\) means a large margin of separation from the origin.</p>
@@ -138,7 +177,6 @@ with a Gaussian kernel \(k(x,x')=e^{-(x-x')^2/c}\), width \(c=1\). Solve the \(\
 <p class="wex-take"><strong>Reading.</strong> One number \(\nu\) squeezes the answer from both sides. It is an upper bound on how much data you throw away and a lower bound on how many points define the region, so setting \(\nu\) is the same as declaring, in advance, the outlier rate you are willing to tolerate.</p>
 </div>
 </div>
-</div>
 
 <h3 id="connection-and-robustness">Connection to classification and robustness</h3>
 
@@ -169,6 +207,35 @@ with a Gaussian kernel \(k(x,x')=e^{-(x-x')^2/c}\), width \(c=1\). Solve the \(\
 </div>
 
 <p>Geometrically the reason is vivid. A translation-invariant kernel with \(\kappa(0)=1\) maps every point onto the unit sphere of feature space, since \(\|\phi(x)\|^2=k(x,x)=1\). All images lie on one sphere, so the smallest ball enclosing them cuts off a spherical cap, and the plane that slices off the smallest cap is exactly the hyperplane with maximum margin from the origin. On the round sphere, the tightest ball and the farthest plane trace the same circle. This is why the [[ch:kernel-families|Gaussian and other RBF kernels]] let one move freely between the two formulations, and why a Gaussian kernel always makes the data separable from the origin: all images sit in a single orthant of unit vectors.</p>
+
+<h2 id="density-level-sets">Density level sets and the Parzen connection</h2>
+
+<p>The equivalence just proved says that for an RBF kernel the whole decision reduces to thresholding a single function of the test point, \(g(x)=\sum_i\alpha_i k(x_i,x)\). Written out, \(g\) is a sum of identical bumps, one centered on each training point, weighted by \(\alpha_i\). That is the very shape of a kernel density estimate, and following the thread back to a classical estimator makes the meaning of the one-class boundary exact: it is a contour of an estimated density.</p>
+
+<p>The classical estimator is the Parzen window (Parzen 1962). Given a normalized window \(k_h\) of bandwidth \(h\), the density estimate at a point is the average height of the windows centered on the data,
+$$\hat p_h(x)=\frac1m\sum_{i=1}^m k_h(x-x_i),\qquad k_h(u)=\frac{1}{(2\pi h^2)^{d/2}}\,e^{-\|u\|^2/2h^2}$$
+for the Gaussian window, and under the usual schedule \(h\to 0\) with \(mh^d\to\infty\) it converges to the true density \(p\). Now compare it with the one-class decision. In the uniform limit found above, where the box constraint pins every \(\alpha_i=1/m\), the machine tests \(f(x)=\operatorname{sgn}\!\big(\tfrac1m\sum_i k(x_i,x)-\rho\big)\). The bare Gaussian kernel \(k(x,x')=e^{-\|x-x'\|^2/2h^2}\) is the Parzen window stripped of its constant \(Z=(2\pi h^2)^{-d/2}\), so \(\hat p_h(x)=Z\cdot\tfrac1m\sum_i k(x_i,x)\), and the accepted region is
+$$\{x:f(x)\ge 0\}=\Big\{x:\tfrac1m\textstyle\sum_i k(x_i,x)\ge\rho\Big\}=\{x:\hat p_h(x)\ge Z\rho\}.$$
+The normal region is a <em>super-level set</em> of the Parzen density, and its boundary \(\{x:\hat p_h(x)=Z\rho\}\) is a density contour. The offset \(\rho\) is a density threshold in disguise.</p>
+
+<p>This is the precise sense in which support estimation is level-set estimation. Recall the minimum-volume set \(C(\mu)\) of the first section, the smallest region holding mass \(\mu\). For a density \(p\) with no flat plateau of positive measure, that minimum-volume set is exactly a super-level set \(\{p\ge\tau\}\), with \(\tau\) fixed so that the set carries mass \(\mu\): among all regions of a given probability, the one of least volume is bounded by a density contour, since trading any interior sliver for an equal-probability sliver at higher density shrinks the volume. Estimating the support at level \(\mu\) is therefore estimating the level set \(\{p\ge\tau\}\), and the one-class SVM does this by thresholding the plug-in estimate \(\hat p_h\). The general, sparse solution is the same estimator run economically: in place of the flat weights \(1/m\) that rebuild the full Parzen sum, the optimized \(\alpha_i\) concentrate on the points near the contour, spending the representation only where the level set actually bends.</p>
+
+<p>That the substitution is legitimate, not merely suggestive, is the content of Vert and Vert (2006). They prove that the Gaussian one-class SVM, with bandwidth and regularization sent to zero at appropriate rates, is a consistent estimator of density level sets, and they trace exactly how its solution relates to the Parzen estimate it thresholds. So the one-class SVM inherits the guarantees of kernel density estimation while keeping the sparsity and the convex program of the support vector machine. Seen through [[ch:kernel-mean-embeddings|the mean embedding]], the thresholded quantity is the empirical kernel mean \(\tfrac1m\sum_i k(x_i,\cdot)\), which is why [[ch:kernel-families|the Gaussian and its relatives]], the standard Parzen windows, are also the standard one-class kernels.</p>
+
+<div class="box ex"><span class="box-title">Example (a Parzen level set is the one-class boundary)</span>
+<div class="wex">
+<div class="wex-setup">Four points on a line, a cluster of three with one straggler,
+$$x=(0,\,1,\,2,\,5),$$
+a Gaussian window of bandwidth \(h=1\), so \(Z=1/(\sqrt{2\pi}\,h)=0.3989\). Estimate the density, threshold it, and match the boundary to the one-class test.</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Estimate the density.</span> The Parzen estimate \(\hat p_h(x)=\tfrac1m\sum_i Z\,e^{-(x-x_i)^2/2}\) at the four points is \((0.1737,\,0.2208,\,0.1748,\,0.1009)\). The cluster rides a ridge near \(0.17\) to \(0.22\); the lone point at \(x=5\) drops to \(0.1009\).</li>
+<li><span class="wex-op">Threshold it.</span> Take the level \(\tau=0.15\). The three cluster points clear it and are accepted; the straggler at \(x=5\), with \(\hat p_h=0.1009\lt 0.15\), falls below and is flagged novel, an empirical outlier fraction of \(1/4=0.25\).</li>
+<li><span class="wex-op">Trace the level set.</span> Solving \(\hat p_h(x)=0.15\) on the line gives two crossings, \(x=-0.2527\) and \(x=2.2773\). The accepted region is the single interval \([-0.2527,\,2.2773]\), the super-level set \(\{\hat p_h\ge 0.15\}\), whose two endpoints are the density contour.</li>
+<li><span class="wex-op">Match the one-class test.</span> The one-class boundary \(\tfrac1m\sum_i k(x_i,x)=\rho\) with \(\rho=\tau/Z=0.376\) crosses at \(x=-0.2527\) and \(x=2.2773\), identical to the density contour. Thresholding \(\hat p_h\) and thresholding the kernel sum draw the same boundary.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The one-class decision is a thresholded Parzen estimate to the last digit: the offset \(\rho=0.376\) is the density level \(\tau=0.15\) divided by the window constant \(Z\), and the estimated support is the density super-level set \(\{\hat p_h\ge 0.15\}\). Novelty detection is level-set estimation.</p>
+</div>
+</div>
 
 <h2 id="theory">Uniqueness, generalization, and experiments</h2>
 
@@ -201,5 +268,7 @@ where \(R\) bounds the radius of the data in feature space and \(\|\xi^\ast\|_1\
 <li><span class="ex-tag">medium</span> <strong>Hard-margin blow-up.</strong> Show that forcing \(\rho\ge 0\) in the primal changes the equality constraint from \(\sum_i\alpha_i=1\) to \(\sum_i\alpha_i\ge 1\), and argue geometrically that the hard-margin limit \(\nu\to 0\) can become infeasible while the free-offset problem stays feasible. Hint: a large negative \(\rho\) always satisfies the constraints.</li>
 <li><span class="ex-tag">hard</span> <strong>Prove the equivalence in the decision function.</strong> For a translation-invariant kernel with \(\kappa(0)=1\), show that the SVDD test \(\|\phi(x)-c\|^2\gtrless R^2\) and the one-class test \(\langle w,\phi(x)\rangle\gtrless\rho\) define the same boundary, and express the SVDD threshold \(R^2\) in terms of \(\rho\) and constants. Hint: expand \(\|\phi(x)-c\|^2\) and collect the terms independent of \(x\).</li>
 <li><span class="ex-tag">hard</span> <strong>Separation from a reference set.</strong> Modify the one-class SVM to separate the data not from the origin but from the mean \(\tfrac1t\sum_{n=1}^t\phi(z_n)\) of a second set \(\{z_n\}\). Derive the dual and show the objective gains a linear term \(-q_i\) with \(q_i=\tfrac1t\sum_n k(x_i,z_n)\), so that a weak model of the "other" class can be folded in. Hint: replace \(\langle w,\phi_i\rangle\) by \(\langle w,\phi_i-\bar\phi_z\rangle\) in the margin constraint.</li>
+<li><span class="ex-tag">medium</span> <strong>A negative that does not matter.</strong> In the SVDD-with-negatives example, move the negative to \(x_4=(0,-3)\), well below the targets. Show that the target-only ball (center \((0,0)\), \(R=2\)) already leaves it outside, so its dual weight vanishes, \(\alpha_4=0\), and the solution collapses to the plain three-target SVDD. Explain through complementarity why a negative that is already outside the target ball carries no weight, and contrast this with the original negative at \((0,-1)\).</li>
+<li><span class="ex-tag">hard</span> <strong>Minimum-volume sets are level sets.</strong> Let \(p\) be a density on \(\mathbb{R}\) with no interval of constant positive value. Show that among all measurable sets \(C\) with \(\int_C p=\mu\), the one of least Lebesgue measure is a super-level set \(\{p\ge\tau\}\) for some \(\tau\ge 0\). Conclude that the estimated support returned by the RBF one-class SVM is, in the population limit, a density level set. Hint: if \(C\) omits a point where \(p\) is high while including one where \(p\) is lower, swap two slivers of equal probability and compare their volumes.</li>
 </ol>
 </section>

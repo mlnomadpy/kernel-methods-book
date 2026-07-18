@@ -1,9 +1,37 @@
 [
- {"from": "multiple-kernel-learning#def-28-1", "to": "kernels-and-rkhs#thm-2-14", "note": "sum of p.d. kernels is p.d."},
- {"from": "multiple-kernel-learning#thm-28-3", "to": "multiple-kernel-learning#thm-28-2", "note": "decomposition via feature concatenation"},
- {"from": "multiple-kernel-learning#thm-28-4", "to": "kernel-tricks#thm-3-4", "note": "representer theorem in each RKHS"},
- {"from": "multiple-kernel-learning#thm-28-4", "to": "learning-theory#thm-11-12", "note": "Slater's condition gives strong duality"},
- {"from": "multiple-kernel-learning#thm-28-5", "to": "multiple-kernel-learning#thm-28-4", "note": "dual representation of J(K)"},
- {"from": "multiple-kernel-learning#thm-28-7", "to": "multiple-kernel-learning#thm-28-4", "note": "rewrites weighted-sum-kernel penalty"},
- {"from": "multiple-kernel-learning#thm-28-8", "to": "multiple-kernel-learning#thm-28-7", "note": "mirrors group-lasso derivation"}
+ {
+  "from": "multiple-kernel-learning#def-38-1",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "sum of p.d. kernels is p.d."
+ },
+ {
+  "from": "multiple-kernel-learning#thm-38-3",
+  "to": "multiple-kernel-learning#thm-38-2",
+  "note": "decomposition via feature concatenation"
+ },
+ {
+  "from": "multiple-kernel-learning#thm-38-4",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "representer theorem in each RKHS"
+ },
+ {
+  "from": "multiple-kernel-learning#thm-38-4",
+  "to": "learning-theory#thm-11-19",
+  "note": "Slater's condition gives strong duality"
+ },
+ {
+  "from": "multiple-kernel-learning#thm-38-5",
+  "to": "multiple-kernel-learning#thm-38-4",
+  "note": "dual representation of J(K)"
+ },
+ {
+  "from": "multiple-kernel-learning#thm-38-7",
+  "to": "multiple-kernel-learning#thm-38-4",
+  "note": "rewrites weighted-sum-kernel penalty"
+ },
+ {
+  "from": "multiple-kernel-learning#thm-38-8",
+  "to": "multiple-kernel-learning#thm-38-7",
+  "note": "mirrors group-lasso derivation"
+ }
 ]

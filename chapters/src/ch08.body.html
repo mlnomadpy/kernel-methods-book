@@ -259,6 +259,116 @@ These closed forms make \(\nu=\tfrac32\) and \(\nu=\tfrac52\) the default choice
 
 <p>The pattern is identical in all three rows: a spectral quantity (the eigenvalue \(\lambda_k\) of an operator, or the spectral density \(\hat\kappa(\omega)\)) appears in the denominator, so that directions with little spectral energy are heavily penalized. Smoothness, in every guise, is small energy at high frequency.</p>
 
+<h2 id="matern-spectral-mixture">Parametric spectral families: Matern and spectral mixtures</h2>
+
+<p>Bochner's theorem turns the design of a stationary kernel into the choice of a positive spectral density: decide how much mass to put at each frequency and the kernel follows. Two choices dominate practice, and they sit at opposite ends of a spectrum of ambition. The first fixes a rigid, single-peaked spectral shape with one tunable smoothness knob, the Matern family that the RKHS discussion above named as the bridge from Laplace to Gaussian; we now derive its spectrum straight from Bochner and pin down exactly how the knob controls smoothness. The second refuses to fix the shape at all and fits the spectral density itself as a Gaussian mixture, the spectral mixture kernel. A closing subsection then lets the spectral density vary from place to place, which breaks stationarity while keeping positive definiteness.</p>
+
+<h3 id="matern-spectral-density">The Matern spectrum and mean-square smoothness</h3>
+
+<p>The brief treatment above located the Matern RKHS as a Sobolev space and named the two endpoints. Here we make the account systematic, starting from the object Bochner cares about, the spectral density, and reading the smoothness parameter off it. Writing \(r=\|x-y\|\) for the distance and \(\ell\gt 0\) for the length scale, the family is due to Matern (1960).</p>
+
+<div class="box def"><span class="box-title">Definition (Matern kernel and spectrum, Matern 1960)</span>
+<p>For smoothness \(\nu\gt 0\) and length scale \(\ell\gt 0\), the Matern kernel on \(\mathbb{R}^d\) is the radial function
+$$k_\nu(r)=\frac{2^{1-\nu}}{\Gamma(\nu)}\Big(\frac{\sqrt{2\nu}\,r}{\ell}\Big)^{\!\nu} K_\nu\!\Big(\frac{\sqrt{2\nu}\,r}{\ell}\Big),$$
+with \(K_\nu\) the modified Bessel function of the second kind, normalized so that \(k_\nu(0)=1\). At the half-integers \(\nu=p+\tfrac12\) it collapses to a degree-\(p\) polynomial times a decaying exponential; the first three are
+$$k_{1/2}(r)=e^{-r/\ell},\qquad k_{3/2}(r)=\Big(1+\tfrac{\sqrt3\,r}{\ell}\Big)e^{-\sqrt3\,r/\ell},\qquad k_{5/2}(r)=\Big(1+\tfrac{\sqrt5\,r}{\ell}+\tfrac{5r^2}{3\ell^2}\Big)e^{-\sqrt5\,r/\ell}.$$
+Its Bochner spectral density on \(\mathbb{R}^d\) is, up to the positive constant fixed by \(k_\nu(0)=1\),
+$$\hat k_\nu(\omega)\ \propto\ \Big(\frac{2\nu}{\ell^2}+\|\omega\|^2\Big)^{-(\nu+d/2)},$$
+a radial power law. Normalizing it to unit value at the origin strips the constant and exposes the exact shape,
+$$\frac{\hat k_\nu(\omega)}{\hat k_\nu(0)}=\Big(1+\frac{\|\omega\|^2\ell^2}{2\nu}\Big)^{-(\nu+d/2)},$$
+which is the density of a multivariate Student-t distribution with \(2\nu\) degrees of freedom.</p>
+</div>
+
+<p>The spectral density is not an afterthought to be verified: it is what constructs the kernel. Read Bochner backwards. Fix \(\alpha=\sqrt{2\nu}/\ell\) and the exponent \(s=\nu+d/2\), and start from the pure power law
+$$S(\omega)=\big(\alpha^2+\|\omega\|^2\big)^{-s},\qquad s\gt \tfrac d2.$$
+This function is positive, symmetric under \(\omega\mapsto-\omega\), and, because the radial integrand decays like \(\|\omega\|^{-2s+d-1}\) with \(2s\gt d\), integrable on \(\mathbb{R}^d\). It is therefore a legitimate finite symmetric spectral measure, so Bochner promises that its inverse Fourier transform is a real positive definite stationary kernel with no further checking. That inverse transform is a classical Bessel-potential identity: for \(\alpha\gt 0\) and \(s\gt d/2\),
+$$\int_{\mathbb{R}^d}\big(\alpha^2+\|\omega\|^2\big)^{-s}\,e^{i\omega^\top\tau}\,d\omega=C_{d,s}\,\alpha^{\,d-2s}\,(\alpha\|\tau\|)^{\,s-d/2}\,K_{s-d/2}(\alpha\|\tau\|),$$
+with \(C_{d,s}=\pi^{d/2}\,2^{1-s+d/2}/\Gamma(s)\gt 0\) a constant depending only on \(d\) and \(s\). Substituting \(s-d/2=\nu\), the right-hand side is exactly \((\alpha\|\tau\|)^\nu K_\nu(\alpha\|\tau\|)\) up to a constant, which is the Matern function; requiring \(k_\nu(0)=1\) fixes the remaining scale. So the Matern kernel is not a shape someone guessed and then proved admissible, it is by definition the inverse Fourier transform of a power-law spectrum, and admissibility is built in.</p>
+
+<p>The Student-t reading is the useful one. The tail index is \(\nu\): the density decays only as the power law \(\|\omega\|^{-(2\nu+d)}\), far more slowly than the Gaussian's \(e^{-\ell^2\|\omega\|^2/2}\). Heavy spectral tails mean the kernel keeps a nonvanishing amount of high-frequency content, and that surviving high frequency is exactly what makes Matern sample paths rough. As \(\nu\to\infty\) the Student-t tends to a Gaussian, \((1+\|\omega\|^2\ell^2/2\nu)^{-(\nu+d/2)}\to e^{-\ell^2\|\omega\|^2/2}\), and the family collapses to the squared-exponential kernel; at the other extreme \(\nu=\tfrac12\) gives the Cauchy-Lorentzian spectrum \((2\nu/\ell^2+\omega^2)^{-1}\) of the Laplace kernel. The single parameter \(\nu\) slides the tail weight continuously between these two.</p>
+
+<p>Because \(\nu\) governs the tail, it governs smoothness in the precise sense of mean-square differentiability.</p>
+
+<div class="box prop"><span class="box-title">Proposition (the smoothness ladder)</span>
+<p>A mean-square continuous stationary process with spectral density \(S\) is \(m\)-times mean-square differentiable if and only if its \(2m\)-th spectral moment is finite, \(\int_{\mathbb{R}^d}\|\omega\|^{2m}S(\omega)\,d\omega\lt\infty\). For the Matern density this holds exactly when \(m\lt\nu\). Hence a Matern kernel of smoothness \(\nu\) is \(\lceil\nu\rceil-1\) times mean-square differentiable: \(\nu=\tfrac12\) gives a continuous but nowhere-differentiable Ornstein-Uhlenbeck path, \(\nu=\tfrac32\) one derivative, \(\nu=\tfrac52\) two, and \(\nu\to\infty\) the infinitely differentiable Gaussian limit.</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Differentiating a stationary process \(m\) times multiplies its spectral density by \(\|\omega\|^{2m}\), so the \(m\)-th derivative exists in mean square exactly when the variance of that derivative, namely \(\int\|\omega\|^{2m}S(\omega)\,d\omega\), is finite. For the Matern density \(S(\omega)\propto(\alpha^2+\|\omega\|^2)^{-(\nu+d/2)}\), pass to polar coordinates: at large radius the integrand behaves like \(\|\omega\|^{2m}\cdot\|\omega\|^{-(2\nu+d)}\cdot\|\omega\|^{d-1}=\|\omega\|^{2m-2\nu-1}\), whose radial integral converges at infinity if and only if \(2m-2\nu-1\lt-1\), that is \(m\lt\nu\). The number of derivatives is then \(\lceil\nu\rceil-1\), the largest integer strictly below \(\nu\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>This is the sample-path face of a fact already met on the RKHS side. The reciprocal-density penalty \(\int|\hat f(\omega)|^2/\hat k_\nu(\omega)\,d\omega\) grows like \(\|\omega\|^{2\nu+d}\), so the Matern RKHS is the Sobolev space of order \(\nu+d/2\), the smoothness bookkeeping of [[ch:mercer-and-rates]]. Committing to \(\nu=\infty\) in advance, as the Gaussian kernel silently does, commits to analytic functions and can badly misjudge rougher data; Stein (1999) argues from kriging practice that \(\nu\) should be estimated rather than assumed, and Rasmussen and Williams (2006) make the half-integer kernels \(\nu=\tfrac32\) and \(\nu=\tfrac52\) the workhorse covariances of Gaussian-process regression precisely because they buy a controlled, finite amount of smoothness in closed form.</p>
+
+<h3 id="matern-worked-example">Worked example: the smoothness ladder in numbers</h3>
+
+<div class="box ex"><span class="box-title">Example (Matern kernel and spectrum across \(\nu\))</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Length scale \(\ell=1\). We evaluate the Matern kernel at \(\nu=\tfrac12,\tfrac32,\tfrac52\) from the closed forms above and its Gaussian limit \(e^{-r^2/2}\), then the normalized spectral density \((1+\omega^2/2\nu)^{-(\nu+1/2)}\) in dimension \(d=1\). All numbers from <code>checks/ch08-ex1.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Climb the ladder at a fixed distance.</span> The kernel values are
+$$\begin{array}{c|cccc} r & \nu=\tfrac12 & \nu=\tfrac32 & \nu=\tfrac52 & \text{Gaussian}\\\hline 0.5 & 0.606531 & 0.784888 & 0.828649 & 0.882497\\ 1.0 & 0.367879 & 0.483358 & 0.523994 & 0.606531\end{array}$$
+At each distance the value increases with \(\nu\): a smoother kernel holds nearby points more strongly correlated.</li>
+<li><span class="wex-op">Watch the Gaussian limit.</span> Climbing the half-integer ladder, \(k_\nu(1)\) rises through \(0.367879,\ 0.483358,\ 0.523994,\ 0.566053,\ 0.584965,\ 0.595439\) at \(\nu=\tfrac12,\tfrac32,\tfrac52,\tfrac{11}{2},\tfrac{21}{2},\tfrac{41}{2}\), toward the limit \(e^{-1/2}=0.606531\). The largest gap \(\max_r|k_\nu(r)-e^{-r^2/2}|\) on \([0,3]\) shrinks as \(0.0839,\ 0.0216,\ 0.0112\) at \(\nu=\tfrac52,\tfrac{21}{2},\tfrac{41}{2}\).</li>
+<li><span class="wex-op">Read the heavy tail off the spectrum.</span> The normalized spectral density is
+$$\begin{array}{c|cccc} \omega & \nu=\tfrac12 & \nu=\tfrac32 & \nu=\tfrac52 & \text{Gaussian}\\\hline 1 & 0.5000 & 0.5625 & 0.5787 & 0.6065\\ 3 & 0.1000 & 0.0625 & 0.0456 & 0.0111\\ 10 & 9.901\times10^{-3} & 8.483\times10^{-4} & 1.080\times10^{-4} & 1.929\times10^{-22}\end{array}$$
+The Matern tails fall as the power law \(\omega^{-(2\nu+1)}\), so even the smooth \(\nu=\tfrac52\) kernel retains, at \(\omega=10\), more than \(10^{17}\) times the spectral mass the Gaussian keeps there.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> One parameter \(\nu\) slides continuously from the rough Laplace kernel to the analytic Gaussian, and the same \(\nu\) that adds mean-square derivatives in the space domain lightens the power-law tail in the frequency domain. The Gaussian is the \(\nu\to\infty\) corner of the Matern family, not a separate object.</p>
+</div>
+</div>
+
+<h3 id="spectral-mixture">Spectral mixture kernels</h3>
+
+<p>The Matern family still hard-wires the shape of the spectrum: a single bump anchored at zero frequency. A kernel that must model data with periodic or quasi-periodic structure needs spectral mass away from zero, and, more ambitiously, needs to learn where the mass sits rather than have it prescribed. Bochner licenses any placement of nonnegative symmetric spectral mass, so we may treat the spectral density itself as the model and fit it to data. Wilson and Adams (2013) take the most tractable rich family for this, a Gaussian mixture on the frequency axis.</p>
+
+<div class="box def"><span class="box-title">Definition (spectral mixture kernel, Wilson and Adams 2013)</span>
+<p>Place a symmetric mixture of \(Q\) Gaussians on the frequency axis as the spectral density, the \(q\)-th component carrying weight \(w_q\gt 0\), center frequency \(\mu_q\ge 0\), and spectral variance \(v_q\gt 0\). In one dimension,
+$$S(\omega)=\sum_{q=1}^{Q}\frac{w_q}{2}\Big[\mathcal N(\omega;\mu_q,v_q)+\mathcal N(\omega;-\mu_q,v_q)\Big],$$
+and its inverse Fourier transform is the stationary spectral mixture kernel, with \(\tau=x-x'\),
+$$k(\tau)=\sum_{q=1}^{Q} w_q\,e^{-2\pi^2\tau^2 v_q}\,\cos\!\big(2\pi\mu_q\tau\big).$$
+</p>
+</div>
+
+<p>Positive definiteness is free and needs no verification: \(S\) is a sum of Gaussians with positive weights, hence a nonnegative symmetric measure, so Bochner certifies \(k\) at once. The construction inverts the usual workflow. Rather than propose a kernel and then check admissibility, one writes down any nonnegative spectral density and reads off a guaranteed-valid kernel. Each component contributes a Gaussian envelope \(e^{-2\pi^2\tau^2 v_q}\), whose width is set by the spectral variance \(v_q\), modulating a cosine of period \(1/\mu_q\). A single component with \(\mu_1=0\) recovers the squared-exponential kernel; a component with \(\mu_q\neq 0\) is a damped cosine, which lets the kernel represent correlations that oscillate with distance, dip below zero, and extrapolate periodic patterns that no single-bump kernel can capture. Because Gaussian mixtures are dense in the integrable spectral densities, the spectral mixture family is dense in the stationary kernels: with enough components it approximates any of them, which is why it serves as a flexible default covariance for Gaussian-process pattern discovery ([[ch:gaussian-processes-and-rvm]]).</p>
+
+<div class="box ex"><span class="box-title">Example (a spectral-mixture Gram is positive definite by construction)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>A two-component kernel with weights \(w=(1.0,\,0.5)\), spectral variances \(v=(0.30,\,0.05)\), and center frequencies \(\mu=(0.6,\,1.4)\), evaluated on the five points \(x=(0,\,0.3,\,0.9,\,1.5,\,2.2)\). All numbers from <code>checks/ch08-ex2.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Assemble the Gram.</span> With \(K_{ij}=k(x_i-x_j)\),
+$$K=\begin{pmatrix} 1.5000 & -0.1510 & -0.0221 & 0.0439 & 0.0037\\ -0.1510 & 1.5000 & 0.1122 & -0.0514 & -0.0076\\ -0.0221 & 0.1122 & 1.5000 & 0.1122 & 0.0402\\ 0.0439 & -0.0514 & 0.1122 & 1.5000 & 0.2577\\ 0.0037 & -0.0076 & 0.0402 & 0.2577 & 1.5000\end{pmatrix}.$$
+The diagonal is \(k(0)=\sum_q w_q=1.5000\), and several off-diagonals are negative (\(K_{12}=-0.1510\), \(K_{13}=-0.0221\)), the signature of the cosine factor: correlation can pass below zero as distance grows.</li>
+<li><span class="wex-op">Diagonalize.</span> The eigenvalues are \((1.2188,\ 1.3237,\ 1.4571,\ 1.6996,\ 1.8008)\), all strictly positive.</li>
+<li><span class="wex-op">Certify.</span> The smallest eigenvalue is \(1.2188\gt 0\), so \(K\succ 0\). No positivity was imposed on the points or checked by hand: it is inherited from the nonnegative spectral density through Bochner.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Designing in the frequency domain makes validity automatic. Any weights and any placement of the Gaussian bumps yield a positive definite kernel, so the modeler is free to fit \(w_q,\mu_q,v_q\) to data without ever leaving the admissible set.</p>
+</div>
+</div>
+
+<h3 id="nonstationary-kernels">Non-stationary kernels: varying length scales and warping</h3>
+
+<p>Every kernel so far is stationary: a single spectral density governs the whole space, so the kernel looks the same at every location. Many signals are not like that, being smooth in some regions and rough in others, or stretched along some directions and compressed along others. Two constructions leave stationarity behind while keeping positive definiteness, and both reuse the stationary kernels just built as raw material.</p>
+
+<p>The first lets the length scale vary with position. Paciorek and Schervish (2004) attach to each input \(x\) a local covariance matrix \(\Sigma(x)\succ 0\), the smoothing ellipse there, and couple two points through the average of their ellipses.</p>
+
+<div class="box prop"><span class="box-title">Proposition (non-stationary kernel, Paciorek and Schervish 2004)</span>
+<p>Let \(k_0\) be any isotropic positive definite function on \(\mathbb{R}^d\), and let \(x\mapsto\Sigma(x)\) assign a positive definite \(d\times d\) matrix to each input. Then
+$$k(x,x')=\big|\Sigma(x)\big|^{1/4}\big|\Sigma(x')\big|^{1/4}\Big|\tfrac{\Sigma(x)+\Sigma(x')}{2}\Big|^{-1/2}\,k_0\!\big(\sqrt{Q(x,x')}\big),\qquad Q(x,x')=(x-x')^\top\Big(\tfrac{\Sigma(x)+\Sigma(x')}{2}\Big)^{-1}(x-x'),$$
+is positive definite on \(\mathbb{R}^d\). In one dimension, with scalar length scales \(\ell(x)\), this reduces to
+$$k(x,x')=\sqrt{\frac{2\,\ell(x)\,\ell(x')}{\ell(x)^2+\ell(x')^2}}\;\,k_0\!\Big(\frac{|x-x'|}{\sqrt{(\ell(x)^2+\ell(x')^2)/2}}\Big).$$
+</p>
+</div>
+
+<p>The quadratic form \(Q\) is a Mahalanobis distance under the averaged ellipse, so where \(\Sigma\) is small the kernel resolves fine detail and where \(\Sigma\) is large it smooths aggressively. The determinant prefactor is exactly the normalizer that keeps the construction positive definite: Paciorek and Schervish obtain it by writing each local kernel as a Gaussian-shaped basis function of width \(\Sigma(x)\) and convolving, and a convolution of positive kernels is positive again. Taking \(k_0\) from the Matern family gives a non-stationary Matern kernel with a spatially adaptive length scale, a common default in geostatistics.</p>
+
+<p>The second route is simpler still: pull a stationary kernel back through a nonlinear map. Given any warp \(u:\mathcal X\to\mathbb{R}^m\) and a stationary kernel \(k_0\) on \(\mathbb{R}^m\), the composition
+$$k(x,x')=k_0\big(u(x)-u(x')\big)$$
+is positive definite, since it is \(k_0\) evaluated on transformed inputs, and it is non-stationary whenever \(u\) stretches space unevenly. Warping is the manifold idea in flat disguise: bending the input space so that one stationary kernel fits varying smoothness is the Euclidean cousin of building a kernel from the geometry of a curved domain, developed for graphs and manifolds in [[ch:geometric-and-equivariant-kernels]]. Together, varying length scales and input warping show that the stationary spectral picture is a starting point rather than a ceiling: once a valid stationary kernel is in hand, position-dependent reshapings of it remain valid kernels.</p>
+
 <h2 id="cpd-kernels">Conditionally positive definite kernels</h2>
 
 <p>Bochner's theorem draws the boundary of the positive definite translation-invariant kernels, but that boundary is not the edge of the useful world. The Gaussian and Laplace profiles above are all nonnegative and decreasing, yet some of the most natural dissimilarity profiles on \(\mathbb{R}^d\), the plain squared distance among them, fail positive definiteness while still generating a perfectly good geometry. The resolution, following Schölkopf and Smola (2002), is to relax the quadratic-form condition on one subspace and to read the kernel not as a dot product but as a squared distance.</p>
@@ -285,7 +395,7 @@ so that positive definite kernels represent inner products while conditionally p
 
 <h2 id="semigroups">Generalization to semigroups</h2>
 
-<p>Herglotz and Bochner both rely on a group structure: differences \(x-y\), inverses, characters \(e^{i\omega t}\). Yet many data types support only a partial algebra. A bag of parts can be added to another bag, but it cannot be subtracted; a finite measure can be summed with another, but there is no inverse. The right abstraction is a semigroup, and the theory of Berg, Christensen, and Ressel (1983) extends the whole Fourier picture to that setting.</p>
+<p>Herglotz and Bochner both rely on a group structure: differences \(x-y\), inverses, characters \(e^{i\omega t}\). Yet many data types support only a partial algebra. A bag of parts can be added to another bag, but it cannot be subtracted; a finite measure can be summed with another, but there is no inverse. The right abstraction is a semigroup, and the theory of Berg, Christensen, and Ressel (1984) extends the whole Fourier picture to that setting.</p>
 
 <div class="box def"><span class="box-title">Definition (semigroup with involution)</span>
 <p>A semigroup \((S,\circ)\) is a nonempty set \(S\) with an associative composition \(\circ\) and a neutral element \(e\). A semigroup with involution \((S,\circ,\ast)\) adds a map \(\ast:S\to S\) satisfying
@@ -345,7 +455,7 @@ $$\varphi(s)=\int_{S^\ast}\rho(s)\,d\mu(\rho),$$
 where \(\mu\) is a Radon measure with compact support on \(S^\ast\) (respectively on \(\hat S\), the set of bounded semicharacters).</p>
 </div>
 
-<div class="box proof"><span class="box-title">Proof (sketch; full details in Berg, Christensen, Ressel 1983, Theorem 4.2.5)</span>
+<div class="box proof"><span class="box-title">Proof (sketch; full details in Berg, Christensen, and Ressel (1984), Theorem 4.2.5)</span>
 <p>For a fixed absolute value \(\alpha\), the set \(P_1^\alpha\) of \(\alpha\)-bounded positive definite functions with \(\varphi(0)=1\) is a compact convex set, and its extreme points are exactly the \(\alpha\)-bounded semicharacters. If \(\varphi\) is positive definite and exponentially bounded, then \(\varphi(0)^{-1}\varphi\in P_1^\alpha\) for a suitable \(\alpha\). By the Krein-Milman theorem there is a Radon probability measure on \(P_1^\alpha\) whose barycentre is \(\varphi(0)^{-1}\varphi\), and this measure is supported on the extreme points, the semicharacters. <span class="qed">\(\square\)</span></p>
 </div>
 
@@ -615,5 +725,11 @@ so that the corresponding Fisher score coordinates are the class posteriors minu
 
 <li><span class="ex-tag">challenge</span> Work on the additive semigroup of natural numbers \((\mathbb{N}_0,+,\mathrm{Id})\), whose bounded semicharacters are the geometric sequences \(\rho_t(n)=t^n\) with \(t\in[-1,1]\). Show that the sequence \(\varphi(n)=\dfrac{1}{n+1}\) is a positive definite function on this semigroup by exhibiting it as a moment sequence, \(\varphi(n)=\int_{-1}^{1}t^n\,d\mu(t)\), for an explicit positive measure \(\mu\). Then verify positive definiteness directly, without quoting the integral-representation theorem, and identify which classical moment problem this instance recovers.
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">Note \(\int_0^1 t^n\,dt=\tfrac{1}{n+1}\), so \(\mu\) is Lebesgue measure on \([0,1]\). For the direct check, \(\sum_{i,j}a_i a_j\,\varphi(n_i+n_j)=\int_0^1\big(\sum_i a_i t^{n_i}\big)^2 dt\ge 0\). This is the Hausdorff moment problem, the specialization of the integral representation with pure modes \(t^n\).</div></details></li>
+
+<li><span class="ex-tag">computation</span> Work in \(d=1\) with \(\ell=1\), where the Matern spectral density is \(\hat k_\nu(\omega)\propto(2\nu+\omega^2)^{-(\nu+1/2)}\). (a) Show that the \(2m\)-th spectral moment \(\int_{\mathbb{R}}\omega^{2m}\hat k_\nu(\omega)\,d\omega\) is finite if and only if \(m\lt\nu\), and read off how many mean-square derivatives the \(\nu=\tfrac12,\tfrac32,\tfrac52\) kernels give. (b) Let \(\nu\to\infty\) in the normalized spectrum \((1+\omega^2/2\nu)^{-(\nu+1/2)}\) and show it tends to the Gaussian spectrum \(e^{-\omega^2/2}\), so the family acquires finite spectral moments of every order only in the limit. (c) Reproduce the \(r=0.5\) column of the worked example from the half-integer closed forms, confirming \(k_{1/2}(0.5)=e^{-1/2}\) and \(k_{3/2}(0.5)=(1+\tfrac{\sqrt3}{2})e^{-\sqrt3/2}\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), at large \(\omega\) the integrand behaves like \(\omega^{2m-2\nu-1}\), integrable at infinity iff \(2m-2\nu-1\lt-1\). For (b), use \((1+a/n)^{n}\to e^{a}\) with \(n\) of order \(\nu\): the factor \(\omega^2/2\nu\) inside and the exponent \(\nu+\tfrac12\) conspire to \(e^{-\omega^2/2}\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> The spectral mixture kernel of Wilson and Adams (2013) is \(k(\tau)=\sum_{q=1}^Q w_q\,e^{-2\pi^2\tau^2 v_q}\cos(2\pi\mu_q\tau)\). (a) Prove it is positive definite directly from Bochner by exhibiting its spectral density as a nonnegative symmetric measure, a mixture of Gaussian bumps at \(\pm\mu_q\). (b) Show that a single component with \(\mu_1=0\) is the squared-exponential kernel, and identify its length scale \(\ell\) in terms of \(v_1\). (c) Explain why a component with \(\mu_q\neq 0\) can drive \(k(\tau)\) below zero for some \(\tau\), which no single Gaussian or Matern kernel can do, and what structure in the data this negative correlation lets the kernel capture.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), \(\cos(2\pi\mu_q\tau)\) is the Fourier transform of \(\tfrac12(\delta_{\mu_q}+\delta_{-\mu_q})\), and multiplying by the Gaussian envelope convolves the spectrum, spreading each atom into a Gaussian bump; the weighted sum is a nonnegative symmetric density. For (b), at \(\mu_1=0\) the cosine is \(1\) and \(e^{-2\pi^2\tau^2 v_1}=e^{-\tau^2/2\ell^2}\) forces \(\ell^2=1/(4\pi^2 v_1)\).</div></details></li>
 </ol>
 </section>

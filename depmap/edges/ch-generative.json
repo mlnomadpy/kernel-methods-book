@@ -1,42 +1,42 @@
 [
-  {
-    "from": "generative-and-marginalization-kernels#prop-25-2",
-    "to": "generative-and-marginalization-kernels#def-25-1",
-    "note": "concludes the marginal P(x,z) is a P-kernel"
-  },
-  {
-    "from": "generative-and-marginalization-kernels#prop-25-2",
-    "to": "kernels-and-rkhs#lem-2-4",
-    "note": "each m-term is a rank-one product feature map, p.d."
-  },
-  {
-    "from": "generative-and-marginalization-kernels#prop-25-2",
-    "to": "kernels-and-rkhs#thm-2-14",
-    "note": "marginal is a non-negative combination of p.d. kernels"
-  },
-  {
-    "from": "generative-and-marginalization-kernels#prop-25-2",
-    "to": "graph-kernels#def-24-18",
-    "note": "marginalization is Haussler's R-convolution structure"
-  },
-  {
-    "from": "generative-and-marginalization-kernels#algo-25-1",
-    "to": "generative-and-marginalization-kernels#prop-25-2",
-    "note": "P-kernel by the conditional-independence proposition"
-  },
-  {
-    "from": "generative-and-marginalization-kernels#algo-25-2",
-    "to": "generative-and-marginalization-kernels#def-25-3",
-    "note": "computes the pair HMM marginalization kernel"
-  },
-  {
-    "from": "generative-and-marginalization-kernels#algo-25-2",
-    "to": "generative-and-marginalization-kernels#prop-25-2",
-    "note": "sums a probability over alignments, P-kernel by conditional independence"
-  },
-  {
-    "from": "generative-and-marginalization-kernels#def-25-4",
-    "to": "kernel-families#def-19-18",
-    "note": "point specialization of the general Fisher kernel"
-  }
+ {
+  "from": "generative-and-marginalization-kernels#prop-25-2",
+  "to": "generative-and-marginalization-kernels#def-25-1",
+  "note": "concludes the marginal P(x,z) is a P-kernel"
+ },
+ {
+  "from": "generative-and-marginalization-kernels#prop-25-2",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "each m-term is a rank-one product feature map, p.d."
+ },
+ {
+  "from": "generative-and-marginalization-kernels#prop-25-2",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "marginal is a non-negative combination of p.d. kernels"
+ },
+ {
+  "from": "generative-and-marginalization-kernels#prop-25-2",
+  "to": "graph-kernels#def-24-19",
+  "note": "marginalization is Haussler's R-convolution structure"
+ },
+ {
+  "from": "generative-and-marginalization-kernels#algo-25-1",
+  "to": "generative-and-marginalization-kernels#prop-25-2",
+  "note": "P-kernel by the conditional-independence proposition"
+ },
+ {
+  "from": "generative-and-marginalization-kernels#algo-25-2",
+  "to": "generative-and-marginalization-kernels#def-25-3",
+  "note": "computes the pair HMM marginalization kernel"
+ },
+ {
+  "from": "generative-and-marginalization-kernels#algo-25-2",
+  "to": "generative-and-marginalization-kernels#prop-25-2",
+  "note": "sums a probability over alignments, P-kernel by conditional independence"
+ },
+ {
+  "from": "generative-and-marginalization-kernels#def-25-4",
+  "to": "kernel-families#def-19-22",
+  "note": "point specialization of the general Fisher kernel"
+ }
 ]

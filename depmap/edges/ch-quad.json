@@ -1,0 +1,10 @@
+[
+  { "from": "kernel-quadrature-and-herding#thm-32-3", "to": "kernel-mean-embeddings#def-29-1", "note": "P[f] is inner product with mean embedding" },
+  { "from": "kernel-quadrature-and-herding#thm-32-3", "to": "kernel-mean-embeddings#def-29-3", "note": "worst-case error equals the MMD" },
+  { "from": "kernel-quadrature-and-herding#prop-32-4", "to": "kernel-quadrature-and-herding#thm-32-3", "note": "expands the embedding distance in coordinates" },
+  { "from": "kernel-quadrature-and-herding#prop-32-5", "to": "kernel-quadrature-and-herding#prop-32-4", "note": "uniform weights in the coordinate error" },
+  { "from": "kernel-quadrature-and-herding#prop-32-6", "to": "kernel-quadrature-and-herding#prop-32-4", "note": "minimizes the coordinate worst-case error" },
+  { "from": "kernel-quadrature-and-herding#algo-32-1", "to": "kernel-quadrature-and-herding#prop-32-6", "note": "computes optimal weights w = K^{-1} z" },
+  { "from": "kernel-quadrature-and-herding#algo-32-2", "to": "kernel-quadrature-and-herding#thm-32-3", "note": "greedily minimizes the worst-case error" },
+  { "from": "kernel-quadrature-and-herding#algo-32-2", "to": "kernel-mean-embeddings#def-29-1", "note": "acquisition is the mean-embedding residual" }
+]

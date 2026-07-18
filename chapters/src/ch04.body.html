@@ -215,6 +215,118 @@ $$h \;\le\; R^2 \Lambda^2.$$
 The message is the one the RKHS-ball bound delivers: capacity is governed not by the ambient dimension, which may be infinite, but by the product of a size of the data, \(R^2\) or \(\mathbb E\, K(X,X)\), and a budget on the norm, \(\Lambda^2\) or \(B^2\). Constraining \(\lVert w\rVert\), equivalently \(\lVert f\rVert_{\mathcal H}\), is what makes an infinite-dimensional class learnable, and it is why the support vector machine introduced in [[ch:support-vector-machines]] minimizes the norm at all.</p>
 </div>
 
+<h2 id="fast-rates-and-stability">Fast rates: local complexity and stability</h2>
+
+<p>The corollary just proved is reassuring but pessimistic. It charges the estimation error at the rate \(B/\sqrt n\), the same \(1/\sqrt n\) that a single coin-flip average obeys and that the worst-case analyses of [[ch:vc-theory-and-generalization]] also reach, no matter how favourable the problem. Yet the empirical risk minimizer does not roam the whole ball \(\mathcal F_B\): it settles near the in-class risk minimizer, and functions near that optimum have small variance, so the sample pins them down far more reliably than it does a worst-case member of the ball. Two refinements exploit exactly this, and both can accelerate the rate from \(n^{-1/2}\) toward \(n^{-1}\). The first, <em>local Rademacher complexity</em>, measures capacity only inside a small-variance neighbourhood of the optimum and pays off under a variance condition on the loss. The second, <em>algorithmic stability</em>, abandons uniform convergence altogether and bounds the generalization gap of one specific estimator, which for the regularized kernel methods of [[ch:kernel-ridge-and-friends]] is immediate. This section develops both, following Bartlett, Bousquet, and Mendelson (2005) and Bousquet and Elisseeff (2002).</p>
+
+<h3 id="local-rademacher">Localization and the variance condition</h3>
+
+<p>Return to the symmetrization heuristic behind the basic bound. The global complexity \(\mathrm{Rad}_n(\mathcal F)\) prices the ability of the class to chase noise across all of \(\mathcal F\) at once. But the excess risk of the ERM is driven by the deviation of a single function, \(\hat f_n\), whose excess loss is small in mean and, if the loss is well behaved, small in variance too. Concentration is sharper for small-variance quantities: the Bernstein and Talagrand inequalities replace the range by the variance in their leading term, so a function of variance \(v\) deviates from its mean by \(O(\sqrt{v/n})\) rather than \(O(\sqrt{1/n})\). Restricting the complexity to a variance ball captures precisely this gain.</p>
+
+<div class="box def"><span class="box-title">Definition (local Rademacher complexity)</span>
+<p>For a class \(\mathcal G\) of functions and a radius \(r \gt 0\), the <em>local Rademacher complexity</em> keeps only the members whose second moment is at most \(r\):
+$$\mathrm{Rad}_n(\mathcal G; r) = \mathbb E_{X,\sigma}\!\left[\, \sup_{g \in \mathcal G,\; \mathbb E g^2 \le r}\; \frac{2}{n}\sum_{i=1}^n \sigma_i\, g(X_i) \right].$$
+The global complexity is the case \(r = \infty\); shrinking \(r\) can only shrink the supremum, so \(\mathrm{Rad}_n(\mathcal G; r) \le \mathrm{Rad}_n(\mathcal G)\).</p>
+</div>
+
+<p>Localization helps only if a small excess risk genuinely forces a small variance, so that the excess loss of the ERM lives in a variance ball of small \(r\). That link is a hypothesis on the problem, not a theorem, and it is the exact condition that unlocks fast rates.</p>
+
+<div class="box def"><span class="box-title">Definition (Bernstein variance condition)</span>
+<p>Let \(f^\star = \operatorname*{arg\,min}_{f\in\mathcal F} R_\varphi(f)\) be the in-class risk minimizer and let \(g_f(x,y) = \varphi(y f(x)) - \varphi(y f^\star(x))\) be the excess loss of \(f\). The class satisfies the <em>\((B,\theta)\)-Bernstein condition</em>, for constants \(B \gt 0\) and \(\theta \in (0,1]\), if
+$$\mathbb E\big[g_f^2\big] \;\le\; B\,\big(\mathbb E\, g_f\big)^{\theta} \;=\; B\,\big(R_\varphi(f) - R_\varphi(f^\star)\big)^{\theta} \qquad \text{for every } f \in \mathcal F.$$
+The strongest case \(\theta = 1\) reads: the variance of the excess loss is at most \(B\) times the excess risk itself.</p>
+</div>
+
+<p>Read plainly, whenever a function is close to optimal in mean (small \(\mathbb E g_f\)) it is automatically close in mean square (small \(\mathbb E g_f^2\)), so the near-minimizers cluster in a thin variance shell that localization can exploit. The condition is not exotic. For the squared loss on a bounded convex class it holds with \(\theta = 1\), because the excess risk equals \(\lVert f - f^\star\rVert_{L^2}^2\), which also controls the variance of the excess loss. In binary classification it follows from the low-noise (margin) conditions on \(\eta\) taken up in [[ch:vc-theory-and-generalization]], and the calibration theory of the previous sections, due to Bartlett, Jordan, and McAuliffe (2006), converts such a margin condition into exactly this Bernstein bound on the excess \(\varphi\)-risk. When \(\theta \to 0\) the condition is vacuous and no acceleration is possible; \(\theta = 1\) buys the fastest rate.</p>
+
+<h3 id="the-fixed-point">The sub-root fixed point that sets the rate</h3>
+
+<p>With the variance condition in hand the rate is decided by a single scalar: the radius at which the local complexity stops shrinking faster than the radius itself. To state it we need the shape that local Rademacher complexities always take as a function of \(r\).</p>
+
+<div class="box def"><span class="box-title">Definition (sub-root function, critical radius)</span>
+<p>A function \(\psi : [0,\infty) \to [0,\infty)\) is <em>sub-root</em> if it is nondecreasing, not identically zero, and \(r \mapsto \psi(r)/\sqrt r\) is nonincreasing. A sub-root function has a unique positive fixed point \(r^\star\), the <em>critical radius</em>, solving
+$$\psi(r^\star) = r^\star.$$</p>
+</div>
+
+<p>The map \(r \mapsto \mathrm{Rad}_n(\mathcal G; r)\), applied to the star-hull of the class so that the ratio condition holds, is sub-root: the supremum grows with \(r\), but its \(\sqrt r\)-normalized version falls, because widening the variance ball admits functions of larger norm only at a diminishing marginal rate. The theorem of the localized theory says the excess risk is set by where this sub-root bound meets the diagonal.</p>
+
+<div class="box thm"><span class="box-title">Theorem (fast rate from localization; Bartlett, Bousquet, and Mendelson, 2005)</span>
+<p>Suppose the excess-loss class satisfies the \((B,1)\)-Bernstein condition and that \(\psi\) is a sub-root upper bound on its local Rademacher complexity, \(\mathrm{Rad}_n(\mathcal G; r) \le \psi(r)\), with critical radius \(r^\star\). Then there are constants \(c_1, c_2\) depending only on \(B\) and the range of the loss such that, with probability at least \(1-\delta\), the empirical risk minimizer obeys
+$$R_\varphi(\hat f_n) - \inf_{f\in\mathcal F} R_\varphi(f) \;\le\; c_1\, r^\star \;+\; \frac{c_2\,\ln(1/\delta)}{n}.$$</p>
+</div>
+
+<p>The estimation error is therefore \(O(r^\star)\), the critical radius, plus a benign \(1/n\) term. Everything now rests on how the critical radius behaves, and for a kernel class it is read straight off the spectrum. The localized companion of the trace bound proved above, also due to Bartlett, Bousquet, and Mendelson (2005), controls the local complexity of the unit RKHS ball by the truncated eigenvalue sum of the kernel integral operator,
+$$\mathrm{Rad}_n(\mathcal F_1; r) \;\le\; \sqrt{\frac{2}{n}\sum_{i=1}^\infty \min(\lambda_i,\, r)},$$
+where \(\lambda_1 \ge \lambda_2 \ge \cdots\) are the Mercer eigenvalues of [[ch:mercer-and-rates]]. The right-hand side is sub-root in \(r\), so the rate is fixed by the fixed point of
+$$r \;=\; \sqrt{\frac{1}{n}\sum_{i=1}^\infty \min(\lambda_i,\, r)},$$
+where the constant has been dropped, since it only rescales \(r^\star\). The truncation \(\min(\lambda_i, r)\) is the whole mechanism: an eigen-direction with \(\lambda_i \gt r\) is "large" and contributes its full \(r\) to the budget, while the tail directions with \(\lambda_i \lt r\) contribute only their own small energy. The count of large directions, \(d(r) = \#\{i : \lambda_i \gt r\}\), is the <em>effective dimension</em> at scale \(r\), and the fixed point balances this growing dimension against the shrinking tail. When the spectrum decays polynomially that balance has a closed-form exponent, and it is genuinely faster than \(n^{-1/2}\).</p>
+
+<div class="box ex"><span class="box-title">Example (critical radius for polynomial eigen-decay)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Kernel with Mercer eigenvalues \(\lambda_i = i^{-2b}\), decay exponent \(b = 1\) (so \(\lambda_i = i^{-2}\), total trace \(\sum_i \lambda_i = \zeta(2) = 1.6449\)). Solve the fixed point \(r = \sqrt{\tfrac1n \sum_i \min(\lambda_i, r)}\) for \(n = 100, 1000, 10000\), and compare its decay with the slow rate \(n^{-1/2}\) and the predicted fast rate \(n^{-2b/(2b+1)} = n^{-2/3}\). All numbers from <code>checks/ch04-ex1.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Fix the sub-root target.</span> The right-hand side \(\psi(r) = \sqrt{\tfrac1n\sum_i \min(i^{-2}, r)}\) is increasing in \(r\); the curve \(\psi\) starts above the diagonal near \(0\) and crosses it once, at \(r^\star\), which bisection isolates.</li>
+<li><span class="wex-op">Solve at three sample sizes.</span> The fixed point \(r^\star\) and the effective dimension \(d(r^\star) = \#\{i : \lambda_i \gt r^\star\}\) are
+$$\begin{array}{c|c|c|c}
+n & r^\star & d(r^\star) & n^{-1/2}\ (\text{slow}) \\ \hline
+100 & 0.07035 & 3 & 0.1000 \\
+1000 & 0.01555 & 8 & 0.03162 \\
+10000 & 0.003387 & 17 & 0.01000
+\end{array}$$</li>
+<li><span class="wex-op">Read the empirical exponent.</span> The log-log slope \(-\Delta\ln r^\star / \Delta \ln n\) between successive rows is \(0.655\) then \(0.662\), climbing toward the predicted fast exponent \(2b/(2b+1) = 0.6667\), and sitting well above the slow value \(0.5\).</li>
+<li><span class="wex-op">Confirm against the reference curves.</span> The ratio \(r^\star / n^{-2/3}\) is \(1.52, 1.56, 1.57\), nearly constant, so \(r^\star \propto n^{-2/3}\); meanwhile \(r^\star / n^{-1/2}\) falls, \(0.70 \to 0.49 \to 0.34\), so \(r^\star\) decays strictly faster than the slow rate.</li>
+<li><span class="wex-op">Steepen the spectrum.</span> Repeating with \(b = 2\) (\(\lambda_i = i^{-4}\), trace \(\zeta(4) = 1.0823\)) lifts the measured slope to \(0.771\) then \(0.785\), tracking the higher target \(2b/(2b+1) = 0.8\) and pushing toward the parametric ceiling \(n^{-1}\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The critical radius, and with it the excess risk, decays like \(n^{-2/3}\) for this kernel, not \(n^{-1/2}\): localization has turned the slow global bound into a genuinely fast rate. The engine is the effective dimension \(d(r^\star)\), which grows only like \(n^{1/3}\) (here \(3, 8, 17\)), so the sample faces an effectively low-dimensional problem even though the RKHS is infinite-dimensional. The smoother the kernel (the larger \(b\)), the fewer the large eigen-directions and the faster the rate.</p>
+</div>
+</div>
+
+<div class="box rmk"><span class="box-title">Remark (the rate, in one line)</span>
+<p>For \(\lambda_i \asymp i^{-2b}\) with \(b \gt \tfrac12\), splitting the sum at the crossover index \(i \asymp r^{-1/(2b)}\) gives \(\sum_i \min(\lambda_i, r) \asymp r^{\,1 - 1/(2b)}\), so the fixed-point equation \(r^2 \asymp n^{-1}\, r^{\,1-1/(2b)}\) collapses to
+$$r^\star \asymp n^{-\frac{2b}{2b+1}}.$$
+As \(b \to \tfrac12^+\) this degrades to the slow \(n^{-1/2}\); as \(b \to \infty\), the smoother the kernel, the closer the rate approaches the parametric ceiling \(n^{-1}\). Koltchinskii (2006) reaches the same critical-radius calculus through an iterative localization scheme, and Steinwart and Christmann (2008) carry it through to end-to-end oracle inequalities for the support vector machine.</p>
+</div>
+
+<h3 id="stability-route">Generalization from algorithmic stability</h3>
+
+<p>Localization still argues through uniform convergence over a class. A completely different route asks nothing about classes at all: it looks only at how much the <em>output</em> of a fixed learning algorithm moves when one training point is perturbed. If the algorithm is insensitive to any single example, then its empirical risk cannot sit far from its true risk, because no example was able to bend the fit toward itself. This is the stability programme of Bousquet and Elisseeff (2002), and it is tailor-made for the regularized kernel estimators of [[ch:kernel-ridge-and-friends]].</p>
+
+<div class="box def"><span class="box-title">Definition (uniform stability)</span>
+<p>Let \(A\) map a training sample \(S = (z_1,\dots,z_n)\) to a predictor \(A_S\), and let \(S^{\setminus i}\) be \(S\) with its \(i\)-th example removed. The algorithm has <em>uniform stability</em> \(\beta_n\) with respect to a loss \(\ell\) if
+$$\sup_{z}\;\big|\ell(A_S, z) - \ell(A_{S^{\setminus i}}, z)\big| \;\le\; \beta_n \qquad \text{for all samples } S \text{ and all } i.$$</p>
+</div>
+
+<div class="box thm"><span class="box-title">Theorem (stability implies generalization; Bousquet and Elisseeff, 2002)</span>
+<p>If \(A\) has uniform stability \(\beta_n\) and the loss is bounded, \(0 \le \ell \le M\), then the generalization gap is controlled in expectation,
+$$\Big|\, \mathbb E_S\big[R(A_S) - R^n(A_S)\big]\Big| \;\le\; 2\beta_n,$$
+and, with probability at least \(1-\delta\) over the sample,
+$$R(A_S) \;\le\; R^n(A_S) + 2\beta_n + \big(4 n\,\beta_n + M\big)\sqrt{\frac{\ln(1/\delta)}{2n}}.$$</p>
+</div>
+
+<p>For the bound to say anything, the stability must vanish faster than \(1/\sqrt n\): a stability of order \(1/n\) makes the expected gap \(O(1/n)\), a fast rate, and keeps the high-probability term at \(O(1/\sqrt n)\). The decisive fact is that regularization in an RKHS delivers exactly \(\beta_n = O(1/n)\), and the reason is the strong convexity that the norm penalty injects into the objective.</p>
+
+<div class="box prop"><span class="box-title">Proposition (stability of regularized kernel methods; Bousquet and Elisseeff, 2002)</span>
+<p>Let \(\ell(f,z)\) be convex and \(L\)-Lipschitz in the prediction \(f(x)\), and let \(K(x,x) \le \kappa^2\). The regularized estimator
+$$\hat f_S = \operatorname*{arg\,min}_{f\in\mathcal H}\; \frac{1}{n}\sum_{i=1}^n \ell(f, z_i) + \lambda\, \lVert f\rVert_{\mathcal H}^2$$
+has uniform stability
+$$\beta_n \;\le\; \frac{L^2 \kappa^2}{2\lambda n}.$$
+In particular the support vector machine (hinge loss, \(L = 1\)) and kernel ridge regression (squared loss on a bounded range) are uniformly stable at the rate \(1/n\) for fixed \(\lambda\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Write \(R_\lambda(f) = \tfrac1n\sum_i \ell(f,z_i) + \lambda\lVert f\rVert_{\mathcal H}^2\) for the objective on \(S\) and \(R_\lambda^{\setminus k}\) for the objective on \(S^{\setminus k}\) (both empirical averages normalized by \(n\)), with minimizers \(\hat f = \hat f_S\) and \(\hat g = \hat f_{S^{\setminus k}}\). The penalty makes each objective \(2\lambda\)-strongly convex in \(\lVert\cdot\rVert_{\mathcal H}\), so at the minimizer \(\hat f\),
+$$R_\lambda(\hat g) - R_\lambda(\hat f) \;\ge\; \lambda\,\lVert \hat g - \hat f\rVert_{\mathcal H}^2,$$
+and symmetrically \(R_\lambda^{\setminus k}(\hat f) - R_\lambda^{\setminus k}(\hat g) \ge \lambda\lVert \hat f - \hat g\rVert_{\mathcal H}^2\). Adding the two inequalities, the regularization terms cancel and the empirical averages differ only in the single example \(z_k\), leaving
+$$2\lambda\,\lVert \hat f - \hat g\rVert_{\mathcal H}^2 \;\le\; \frac1n\big|\ell(\hat f, z_k) - \ell(\hat g, z_k)\big| \;\le\; \frac{L}{n}\,\big|\hat f(x_k) - \hat g(x_k)\big|.$$
+The reproducing property and Cauchy-Schwarz bound the prediction gap by the norm gap, \(|\hat f(x_k) - \hat g(x_k)| = |\langle \hat f - \hat g,\, K_{x_k}\rangle_{\mathcal H}| \le \kappa\,\lVert \hat f - \hat g\rVert_{\mathcal H}\). Substituting and dividing by \(\lVert \hat f - \hat g\rVert_{\mathcal H}\) gives
+$$\lVert \hat f - \hat g\rVert_{\mathcal H} \;\le\; \frac{L\kappa}{2\lambda n}.$$
+Finally the loss is \(L\)-Lipschitz in the prediction and the prediction is \(\kappa\)-Lipschitz in the norm, so for any test point \(z\), \(|\ell(\hat f, z) - \ell(\hat g, z)| \le L\kappa\,\lVert \hat f - \hat g\rVert_{\mathcal H} \le L^2\kappa^2/(2\lambda n)\), which is the claimed \(\beta_n\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>Two conclusions close the loop with the localized theory. The expected generalization gap of the support vector machine and of kernel ridge regression is at most \(2\beta_n \le L^2\kappa^2/(\lambda n)\), a clean \(1/n\) bound obtained without a single covering number or Rademacher average, purely from the geometry of the regularized objective. And the appearance of \(\lambda\) in the denominator is the same trade-off seen throughout the chapter, now read through stability: a larger penalty shrinks the ball, stiffens the solution against perturbation, and improves the gap, at the price of the approximation error a smaller ball incurs. Balancing \(\beta_n\) against that approximation error, exactly as the radius \(B\) was tuned in the corollary, recovers the fast rates of the localized analysis from the algorithmic side, which is why Steinwart and Christmann (2008) treat stability and local complexity as two windows onto the same oracle inequality.</p>
+
 <h2 id="from-constraints-to-penalties">From constrained ERM to penalized ERM: regularization</h2>
 
 <p>The theory above analyzes ERM over the ball \(\mathcal F_B\), which is the constrained minimization problem
@@ -369,6 +481,13 @@ so that the uniform deviation concentrates around its expectation at the rate \(
 
 <li><span class="ex-tag">challenge</span> The theory analyzes constrained ERM over \(\mathcal F_B\), but the algorithms solve the penalized problem. Using the Lagrangian duality interlude, make the reduction precise. (a) Write the constrained problem "minimize \(\frac{1}{n}\sum_i \varphi(y_i f(x_i))\) subject to \(\lVert f\rVert_{\mathcal H}^2 \le B^2\)" with its single inequality constraint \(g(f) = \lVert f\rVert_{\mathcal H}^2 - B^2 \le 0\), form the Lagrangian, and identify the penalized objective \(\frac{1}{n}\sum_i \varphi(y_i f(x_i)) + \lambda \lVert f\rVert_{\mathcal H}^2\) as the minimization of \(L(f, \lambda)\) over \(f\) at a fixed multiplier \(\lambda \ge 0\). (b) Verify that Slater's condition holds, so strong duality gives an optimal \(\lambda^\star \ge 0\) for which the constrained and penalized minimizers coincide. (c) Invoke complementary slackness \(\lambda^\star g(f^\star) = 0\) to show that either the norm constraint is active (\(\lVert f^\star\rVert_{\mathcal H} = B\)) or \(\lambda^\star = 0\); interpret the second case as the unregularized minimizer already lying inside the ball. (d) Finally, relate this norm-budget picture to the margin-VC ancestor \(h \le R^2 \Lambda^2\) of Schölkopf and Smola (2002): argue that constraining \(\lVert f\rVert_{\mathcal H} \le B\) plays the role of the bound \(\lVert w\rVert \le \Lambda\), and \(\mathbb E\, K(X,X)\) plays the role of the data radius \(R^2\), so both theories charge capacity as (data size) \(\times\) (norm budget), never as ambient dimension.
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>The Lagrangian is \(L(f,\lambda) = \frac{1}{n}\sum_i \varphi(y_i f(x_i)) + \lambda\big(\lVert f\rVert_{\mathcal H}^2 - B^2\big)\); the constant \(-\lambda B^2\) does not affect the minimizer over \(f\), so \(\arg\min_f L(f,\lambda)\) is exactly the penalized solution. For Slater, any \(f\) with \(\lVert f\rVert_{\mathcal H} \lt B\) (for instance \(f = 0\)) is strictly feasible. For (c), the product of the non-negative \(\lambda^\star\) and the non-positive \(g(f^\star)\) can vanish only if one factor is zero.</p></div></details></li>
+
+
+<li><span class="ex-tag">concept</span> The fast-rate section trades the global rate \(n^{-1/2}\) for the critical radius \(r^\star\), the fixed point of \(\psi(r) = \sqrt{\tfrac1n\sum_i \min(\lambda_i, r)}\). (a) Verify that \(\psi\) is sub-root: it is nondecreasing, and \(\psi(r)/\sqrt r\) is nonincreasing, so the fixed point \(r^\star\) is unique. (b) For a finite-rank kernel with exactly \(m\) nonzero eigenvalues, all equal to \(1\), and the rest zero, solve the fixed-point equation in closed form and show \(r^\star = m/n\), the parametric rate of an \(m\)-dimensional model. (c) For the polynomial decay \(\lambda_i = i^{-2b}\) with \(b \gt \tfrac12\), reproduce the scaling \(r^\star \asymp n^{-2b/(2b+1)}\) by splitting the sum at the crossover index \(i \asymp r^{-1/(2b)}\), and check that this exponent exceeds \(\tfrac12\) for every such \(b\), so the localized rate always beats the global one.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>For (a), fix \(i\) and note that \(r \mapsto \min(\lambda_i, r)/r = \min(\lambda_i/r, 1)\) is nonincreasing; summing preserves it, and \(\psi(r)/\sqrt r = \sqrt{\tfrac{1}{nr}\sum_i \min(\lambda_i, r)}\). For (b), take \(r \le 1\) so that \(\min(1, r) = r\) and \(\sum_i \min(\lambda_i, r) = m r\); the equation \(r^2 = mr/n\) gives \(r^\star = m/n\). For (c), the head contributes \(\asymp r \cdot r^{-1/(2b)}\) and the tail \(\asymp r^{1-1/(2b)}\), both of order \(r^{1-1/(2b)}\).</p></div></details></li>
+
+<li><span class="ex-tag">proof</span> Complete the stability calculation for regularized kernel methods. (a) Show that the objective \(R_\lambda(f) = \tfrac1n\sum_i \ell(f, z_i) + \lambda\lVert f\rVert_{\mathcal H}^2\) is \(2\lambda\)-strongly convex in \(\lVert\cdot\rVert_{\mathcal H}\) whenever \(\ell\) is convex in \(f\), and deduce that for its minimizer \(\hat f\), \(R_\lambda(g) - R_\lambda(\hat f) \ge \lambda\lVert g - \hat f\rVert_{\mathcal H}^2\) for every \(g\). (b) Applying this to \(\hat f = \hat f_S\) and its leave-one-out twin \(\hat g = \hat f_{S^{\setminus k}}\) and adding the two inequalities, derive \(\lVert \hat f - \hat g\rVert_{\mathcal H} \le L\kappa/(2\lambda n)\), using \(L\)-Lipschitzness of \(\ell\) and \(|f(x)| \le \kappa\lVert f\rVert_{\mathcal H}\). (c) Conclude the uniform stability \(\beta_n \le L^2\kappa^2/(2\lambda n)\) and, via the Bousquet and Elisseeff (2002) theorem, that the expected generalization gap of the support vector machine is \(O\big(1/(\lambda n)\big)\). (d) In one sentence, explain why increasing \(\lambda\) improves the stability but need not improve the test risk.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body"><p>For (a), the map \(f \mapsto \lambda\lVert f\rVert_{\mathcal H}^2\) has strong-convexity modulus \(2\lambda\), and a convex \(\ell\) only adds nonnegative curvature; for the minimizer use \(\langle \nabla R_\lambda(\hat f),\, g - \hat f\rangle \ge 0\). For (d), a larger \(\lambda\) shrinks the ball and stiffens the fit, lowering the estimation error but raising the approximation error.</p></div></details></li>
 
 </ol>
 </section>

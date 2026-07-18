@@ -1,11 +1,47 @@
 [
- {"from": "kernels-and-deep-learning#thm-29-1", "to": "kernels-and-rkhs#thm-2-14", "note": "closure under non-negative sums and limits"},
- {"from": "kernels-and-deep-learning#thm-29-3", "to": "kernels-and-deep-learning#def-29-2", "note": "arc-cosine is a random feature kernel"},
- {"from": "kernels-and-deep-learning#prop-29-4", "to": "kernels-and-deep-learning#thm-29-3", "note": "ReLU dual activation is arc-cosine"},
- {"from": "kernels-and-deep-learning#algo-29-1", "to": "kernels-and-deep-learning#prop-29-4", "note": "runs the NNGP recursion"},
- {"from": "kernels-and-deep-learning#prop-29-6", "to": "kernels-and-deep-learning#def-29-5", "note": "gradient descent uses the NTK"},
- {"from": "kernels-and-deep-learning#prop-29-7", "to": "kernels-and-deep-learning#prop-29-4", "note": "assembled from the NNGP kernels"},
- {"from": "kernels-and-deep-learning#prop-29-7", "to": "kernels-and-deep-learning#def-29-5", "note": "deep recursion for the NTK"},
- {"from": "kernels-and-deep-learning#thm-29-9", "to": "kernels-and-deep-learning#def-29-8", "note": "establishes stability to deformations"},
- {"from": "kernels-and-deep-learning#prop-29-10", "to": "kernels-and-rkhs#def-2-8", "note": "reproducing property reads patches back"}
+ {
+  "from": "kernels-and-deep-learning#thm-39-1",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "closure under non-negative sums and limits"
+ },
+ {
+  "from": "kernels-and-deep-learning#thm-39-3",
+  "to": "kernels-and-deep-learning#def-39-2",
+  "note": "arc-cosine is a random feature kernel"
+ },
+ {
+  "from": "kernels-and-deep-learning#prop-39-4",
+  "to": "kernels-and-deep-learning#thm-39-3",
+  "note": "ReLU dual activation is arc-cosine"
+ },
+ {
+  "from": "kernels-and-deep-learning#algo-39-1",
+  "to": "kernels-and-deep-learning#prop-39-4",
+  "note": "runs the NNGP recursion"
+ },
+ {
+  "from": "kernels-and-deep-learning#prop-39-6",
+  "to": "kernels-and-deep-learning#def-39-5",
+  "note": "gradient descent uses the NTK"
+ },
+ {
+  "from": "kernels-and-deep-learning#prop-39-7",
+  "to": "kernels-and-deep-learning#prop-39-4",
+  "note": "assembled from the NNGP kernels"
+ },
+ {
+  "from": "kernels-and-deep-learning#prop-39-7",
+  "to": "kernels-and-deep-learning#def-39-5",
+  "note": "deep recursion for the NTK"
+ },
+ {
+  "from": "kernels-and-deep-learning#thm-39-9",
+  "to": "kernels-and-deep-learning#def-39-8",
+  "note": "establishes stability to deformations"
+ },
+ {
+  "from": "kernels-and-deep-learning#prop-39-10",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing property reads patches back"
+ }
 ]

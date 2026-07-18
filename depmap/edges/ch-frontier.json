@@ -1,9 +1,37 @@
 [
- {"from": "the-frontier#prop-32-2", "to": "the-frontier#def-32-1", "note": "output dynamics via the empirical NTK"},
- {"from": "the-frontier#thm-32-3", "to": "the-frontier#prop-32-2", "note": "trained network is kernel regression"},
- {"from": "the-frontier#thm-32-3", "to": "the-frontier#def-32-1", "note": "empirical NTK converges to limit"},
- {"from": "the-frontier#algo-32-1", "to": "the-frontier#def-32-1", "note": "computes the empirical NTK"},
- {"from": "the-frontier#thm-32-4", "to": "mercer-and-rates#thm-18-14", "note": "rotation-invariant eigenbasis is spherical harmonics"},
- {"from": "the-frontier#prop-32-5", "to": "kernels-and-deep-learning#prop-29-4", "note": "same NNGP layerwise recursion"},
- {"from": "the-frontier#prop-32-5", "to": "kernels-and-deep-learning#thm-29-3", "note": "ReLU expectation is arc-cosine"}
+ {
+  "from": "the-frontier#prop-43-2",
+  "to": "the-frontier#def-43-1",
+  "note": "output dynamics via the empirical NTK"
+ },
+ {
+  "from": "the-frontier#thm-43-3",
+  "to": "the-frontier#prop-43-2",
+  "note": "trained network is kernel regression"
+ },
+ {
+  "from": "the-frontier#thm-43-3",
+  "to": "the-frontier#def-43-1",
+  "note": "empirical NTK converges to limit"
+ },
+ {
+  "from": "the-frontier#algo-43-1",
+  "to": "the-frontier#def-43-1",
+  "note": "computes the empirical NTK"
+ },
+ {
+  "from": "the-frontier#thm-43-4",
+  "to": "mercer-and-rates#thm-18-14",
+  "note": "rotation-invariant eigenbasis is spherical harmonics"
+ },
+ {
+  "from": "the-frontier#prop-43-5",
+  "to": "kernels-and-deep-learning#prop-39-4",
+  "note": "same NNGP layerwise recursion"
+ },
+ {
+  "from": "the-frontier#prop-43-5",
+  "to": "kernels-and-deep-learning#thm-39-3",
+  "note": "ReLU expectation is arc-cosine"
+ }
 ]

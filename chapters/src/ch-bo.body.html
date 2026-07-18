@@ -1,0 +1,240 @@
+<h1>Kernelized Bandits and Bayesian Optimization</h1>
+
+<p class="lead">Every method so far assumed the data were given: a fixed sample arrives, and we fit. This chapter hands the learner a new power and a new cost. The power is to choose where to look next; the cost is that each look is expensive, so we get only a handful. Think of tuning the hyperparameters of a large model, where one evaluation is a full training run, or running a physical experiment, where one measurement takes a day in the lab. The objective \(f\) is unknown, we can query it only at points of our choosing, each query returns a noisy value, and we want to find its maximum in as few queries as possible. The engine that makes this tractable is the Gaussian process posterior of [[ch:gaussian-processes-and-rvm|the Bayesian-view chapter]], now used not to predict but to decide. We keep a running belief about \(f\), score each candidate point by how promising it looks under that belief, query the winner, update, and repeat. The score is called an acquisition function, and the central tension it must resolve is between exploiting where the belief is already high and exploring where the belief is uncertain. The chapter builds the loop, derives the two workhorse acquisitions in closed form, and proves that the most analyzable of them, GP-UCB, is a no-regret algorithm whose regret is controlled by a single spectral quantity, the maximum information gain.</p>
+
+<h2 id="sequential-optimization">Sequential optimization of an unknown function</h2>
+
+<p>Fix a domain \(\mathcal X\) and an unknown objective \(f:\mathcal X\to\mathbb{R}\). At each round \(t=1,2,\dots\) we choose a point \(x_t\in\mathcal X\) and receive a noisy observation \(y_t=f(x_t)+\varepsilon_t\), with \(\varepsilon_t\) zero-mean noise of variance \(\sigma^2\). We want the maximizer \(x^\star=\arg\max_{x\in\mathcal X}f(x)\), but we never see \(f\) itself, only the values it returns where we probe. Two ingredients make the problem well posed. First, a regularity assumption: without one, an adversary could hide a sharp spike anywhere and no finite budget would find it. We assume either that \(f\) is a sample from a Gaussian process with a known covariance kernel \(k\), the Bayesian setting, or that \(f\) lives in the reproducing kernel Hilbert space of \(k\) with bounded norm \(\|f\|_k\le B\), the agnostic setting. Both say the same thing in spirit: nearby points have similar values, at a rate the kernel fixes. Second, a way to score progress.</p>
+
+<div class="box def"><span class="box-title">Definition (regret)</span>
+<p>The <em>instantaneous regret</em> at round \(t\) is \(r_t=f(x^\star)-f(x_t)\), the shortfall of the point we queried against the true optimum. The <em>cumulative regret</em> over horizon \(T\) is \(R_T=\sum_{t=1}^{T}r_t\), and the <em>simple regret</em> is \(\min_{t\le T}r_t\), the shortfall of the best point found. A strategy is <em>no-regret</em> if \(R_T/T\to 0\), so that its average per-round shortfall vanishes.</p>
+</div>
+
+<p>The two regrets fit two goals. Cumulative regret is the right cost when every query counts as a real action, as when a recommender must serve good content while it learns, the bandit framing. Simple regret is the right cost when only the final recommendation matters and the intermediate queries are cheap probes, as in hyperparameter tuning, the pure-optimization framing. They are linked by an inequality that we will lean on: since the minimum is below the average, \(\min_{t\le T}r_t\le R_T/T\), so any cumulative-regret bound that grows slower than \(T\) forces the simple regret to zero and certifies that the search finds a near-optimal point. This is why controlling \(R_T\) is the mathematical heart of the subject even when optimization, not online reward, is the aim. The classical references are Shahriari, Swersky, Wang, Adams, and de Freitas (2016) for the review and Frazier (2018) for the tutorial.</p>
+
+<h2 id="surrogate-gp">The surrogate: a running Gaussian process belief</h2>
+
+<p>To decide where to look we need a belief about \(f\) at every point, not just where we have data, and it must come with a calibrated uncertainty so that "unexplored" is a quantity we can act on. The Gaussian process supplies exactly this. Place a zero-mean GP prior with covariance \(k\) on \(f\); after \(t\) rounds we hold the data \(\mathcal D_t=\{(x_i,y_i)\}_{i=1}^{t}\), and the posterior is again a Gaussian process whose mean and variance we already derived in [[ch:gaussian-processes-and-rvm|the Gaussian-process chapter]]. Writing \(k_t(x)=(k(x_1,x),\dots,k(x_t,x))^\top\) for the vector of covariances against the queried points and \(K_t\) for their Gram matrix, the posterior at any test point \(x\) is \(\mathcal N\big(\mu_t(x),\sigma_t^2(x)\big)\) with</p>
+
+$$\mu_t(x)=k_t(x)^\top\big(K_t+\sigma^2 I\big)^{-1}y_{1:t},\qquad \sigma_t^2(x)=k(x,x)-k_t(x)^\top\big(K_t+\sigma^2 I\big)^{-1}k_t(x).$$
+
+<p>These are the surrogate. The mean \(\mu_t\) is the current best guess of \(f\), and by the correspondence proved in the Bayesian chapter it is exactly the kernel ridge regression fit with regularizer \(\sigma^2\), so the agnostic RKHS analysis and the Bayesian analysis run on the same formulas. The variance \(\sigma_t^2\) is the surrogate's honesty: it ignores the observed values \(y\) entirely and depends only on where we have queried, shrinking near data and swelling in the gaps. That is the object exploration will chase. Two practical notes carry over. The posterior costs an \(n\times n\) solve that grows as we collect data, so the \(O(n^3)\) factorization and its sparse and low-rank remedies from [[ch:large-scale-kernels|the large-scale chapter]] apply directly to long optimization runs. And the kernel's hyperparameters, the length scale and amplitude, are refit as data arrive by maximizing the marginal likelihood, the type-II route of the same chapter.</p>
+
+<h2 id="acquisition">Acquisition functions and the exploration-exploitation tradeoff</h2>
+
+<p>The surrogate turns the decision into a one-dimensional judgement at each candidate: given a posterior mean \(\mu_{t-1}(x)\) and standard deviation \(\sigma_{t-1}(x)\), how much do we want to query \(x\) next? A good answer must reward two different things. High mean is good, because we are hunting a maximum and \(\mu_{t-1}(x)\) is our guess of \(f(x)\); this is exploitation. High variance is also good, because a point we know little about might hide the optimum, and querying it sharpens the belief everywhere nearby; this is exploration. An acquisition function \(\alpha_t(x)\) is any rule that combines the two into a score, and the strategy is always the same: query \(x_t=\arg\max_{x}\alpha_t(x)\). The art is in the combination, and three designs dominate.</p>
+
+<h3 id="gp-ucb">GP-UCB: optimism in the face of uncertainty</h3>
+
+<p>The cleanest combination adds the two terms with a tunable weight. The upper confidence bound acquisition scores a point by an optimistic estimate of its value, the posterior mean plus a multiple of the posterior standard deviation,</p>
+
+$$\alpha_t^{\mathrm{UCB}}(x)=\mu_{t-1}(x)+\beta_t^{1/2}\,\sigma_{t-1}(x),$$
+
+<p>and queries its maximizer. The name records the reading: \(\alpha_t^{\mathrm{UCB}}(x)\) is a high-probability upper bound on \(f(x)\), and by always querying the point with the largest plausible value we are optimistic in the face of uncertainty. The weight \(\beta_t^{1/2}\) is the exploration dial. At \(\beta_t=0\) the rule is greedy, chasing the current mean and never probing the unknown; as \(\beta_t\) grows it favours uncertain regions. Neither extreme works, and the regret theory below pins down the schedule \(\beta_t\) that balances them. This acquisition, and its analysis, are due to Srinivas, Krause, Kakade, and Seeger (2010), who named the algorithm GP-UCB.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (GP-UCB)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> decision set \(D\subseteq\mathcal X\); kernel \(k\); noise variance \(\sigma^2\); exploration schedule \(\{\beta_t\}\); horizon \(T\).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> queried points \(x_1,\dots,x_T\) and the best observed point.</p>
+</div>
+<ol class="algo-steps">
+<li>Initialize \(\mathcal D_0=\varnothing\), so \(\mu_0\equiv 0\) and \(\sigma_0^2(x)=k(x,x)\).</li>
+<li class="algo-loop">For \(t=1,\dots,T\): compute \(\mu_{t-1}(x)\) and \(\sigma_{t-1}(x)\) on \(D\) from \(\mathcal D_{t-1}\) by the GP posterior equations.</li>
+<li>Select \(x_t=\arg\max_{x\in D}\ \mu_{t-1}(x)+\beta_t^{1/2}\,\sigma_{t-1}(x)\).</li>
+<li>Query the objective, \(y_t=f(x_t)+\varepsilon_t\), and set \(\mathcal D_t=\mathcal D_{t-1}\cup\{(x_t,y_t)\}\).</li>
+<li>Return \(\arg\max_{t\le T}y_t\) (or the posterior-mean maximizer \(\arg\max_x\mu_T(x)\)).</li>
+</ol>
+</div>
+
+<p>A tiny run makes the two forces visible. We take a five-point grid, a squared-exponential kernel, and watch the rule swing from exploration to exploitation across two rounds.</p>
+
+<div class="box ex"><span class="box-title">Example (two GP-UCB steps)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Decision set \(D=\{0,\,0.5,\,1,\,1.5,\,2\}\); squared-exponential kernel \(k(x,x')=e^{-(x-x')^2/(2\ell^2)}\) with length scale \(\ell=0.5\); noise variance \(\sigma^2=0.01\); exploration weight fixed at \(\beta_t^{1/2}=2\) for illustration. The unknown objective is \(f(x)=\sin(3x)\), whose grid maximum sits at \(x^\star=0.5\) with \(f(x^\star)=0.9975\). We start from two observations at the ends, \((0,\,0)\) and \((2,\,-0.2794)\). All numbers from <code>checks/ch-bo-ex1.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Fit the surrogate (round 1).</span> With the two end points the posterior mean over the grid is \(\mu=(-0,\,-0.003,\,-0.037,\,-0.168,\,-0.277)\) and the standard deviation is \(\sigma=(0.099,\,0.797,\,0.982,\,0.797,\,0.099)\): near the data \(\sigma\) collapses, in the unexplored middle it is largest.</li>
+<li><span class="wex-op">Score and query.</span> The acquisition \(\mu+2\sigma=(0.199,\,1.592,\,1.926,\,1.427,\,-0.078)\) peaks at \(x=1.0\), the most uncertain point, so round 1 <em>explores</em> the middle. Observe \(y=f(1)=0.1411\).</li>
+<li><span class="wex-op">Refit (round 2).</span> With three points the mean rises in the middle, \(\mu=(0.000,\,0.093,\,0.139,\,-0.072,\,-0.276)\), and the uncertainty there drops, \(\sigma=(0.099,\,0.595,\,0.099,\,0.595,\,0.099)\).</li>
+<li><span class="wex-op">Score and query again.</span> Now \(\mu+2\sigma=(0.199,\,1.283,\,0.338,\,1.118,\,-0.077)\) peaks at \(x=0.5\): with the middle pinned down, the rule <em>exploits</em> the promising left shoulder. Observe \(y=f(0.5)=0.9975\), exactly the optimum.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Two queries suffice here: round 1 spends its budget reducing uncertainty where the belief is blank, round 2 cashes that in, and the simple regret drops to \(0\). The swing is entirely driven by the \(\sigma\) term shrinking after the first observation, which is the exploration-exploitation tradeoff playing out in numbers.</p>
+</div>
+</div>
+
+<h3 id="expected-improvement">Expected improvement</h3>
+
+<p>UCB scores a point by an optimistic value. A different and older idea scores it by the improvement it is expected to bring over the best value seen so far. Let \(f^+=\max_{i\le t}y_i\) be the current incumbent. If we query \(x\) and observe value \(v\), the gain is the improvement \((v-f^+)^+=\max(v-f^+,0)\), zero if we do no better than the incumbent and the excess otherwise. Since \(v\) is unknown, we score \(x\) by the expectation of this gain under the posterior, which is the expected improvement of Mockus, Tiesis, and Žilinskas (1978), popularized as the efficient global optimization criterion by Jones, Schonlau, and Welch (1998). Its virtue is that the expectation has a closed form, so no sampling is needed.</p>
+
+<div class="box prop"><span class="box-title">Proposition (expected improvement, closed form)</span>
+<p>Let the posterior at \(x\) be \(f(x)\sim\mathcal N(\mu,\sigma^2)\) with \(\sigma\gt 0\), write \(\mu\) for \(\mu_{t-1}(x)\) and \(\sigma\) for \(\sigma_{t-1}(x)\), and let \(f^+\) be the incumbent. With \(\phi\) and \(\Phi\) the standard-normal density and distribution function, the expected improvement is
+$$\mathrm{EI}(x)=\mathbb{E}\big[(f(x)-f^+)^+\big]=(\mu-f^+)\,\Phi(z)+\sigma\,\phi(z),\qquad z=\frac{\mu-f^+}{\sigma}.$$
+When \(\sigma=0\) the point is known and \(\mathrm{EI}(x)=(\mu-f^+)^+\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Write \(f(x)=\mu+\sigma Z\) with \(Z\sim\mathcal N(0,1)\). The improvement \(\mu-f^++\sigma Z\) is positive exactly when \(Z\gt -(\mu-f^+)/\sigma=-z\), so
+$$\mathrm{EI}(x)=\int_{-z}^{\infty}(\mu-f^++\sigma u)\,\phi(u)\,du=(\mu-f^+)\!\int_{-z}^{\infty}\!\phi(u)\,du+\sigma\!\int_{-z}^{\infty}\!u\,\phi(u)\,du.$$
+The first integral is \(1-\Phi(-z)=\Phi(z)\). For the second, note \(\frac{d}{du}\big[{-\phi(u)}\big]=u\,\phi(u)\), so \(\int_{-z}^{\infty}u\,\phi(u)\,du=\big[-\phi(u)\big]_{-z}^{\infty}=\phi(-z)=\phi(z)\), using that \(\phi\) is even. Adding the two terms gives \((\mu-f^+)\Phi(z)+\sigma\phi(z)\). If \(\sigma=0\) there is no randomness and the improvement is the deterministic \((\mu-f^+)^+\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>The formula is worth reading termwise. The first term \((\mu-f^+)\Phi(z)\) is exploitation: it is large when the mean already beats the incumbent. The second term \(\sigma\,\phi(z)\) is exploration: it is large when the uncertainty is high, and it rewards querying points whose mean is nowhere near the incumbent as long as they are uncertain enough that they <em>might</em> exceed it. Expected improvement therefore folds the tradeoff into a single expression with no free weight to tune, which is its main appeal over UCB, though a small exploration offset \(\xi\) is often subtracted, using \(\mu-f^+-\xi\) in place of \(\mu-f^+\), to push it toward exploration. Notice also that when \(\sigma=0\) at an already-queried noiseless point, \(\mathrm{EI}=0\), so the rule never wastes a query repeating itself.</p>
+
+<div class="box ex"><span class="box-title">Example (expected improvement at a candidate)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Same surrogate as the GP-UCB example, conditioned on the two initial observations, so the incumbent is \(f^+=\max(0,\,-0.2794)=0\). We compute \(\mathrm{EI}\) in full at the candidate \(x=1.0\), where the posterior is \(\mu=-0.0374\), \(\sigma=0.9817\), then over the whole grid. Numbers from <code>checks/ch-bo-ex2.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Standardize the gap.</span> \(z=(\mu-f^+)/\sigma=(-0.0374-0)/0.9817=-0.0381\).</li>
+<li><span class="wex-op">Evaluate the normal pieces.</span> \(\Phi(z)=0.4848\) and \(\phi(z)=0.3987\).</li>
+<li><span class="wex-op">Assemble the two terms.</span> Exploitation \((\mu-f^+)\Phi(z)=-0.0181\), exploration \(\sigma\,\phi(z)=0.3914\), so \(\mathrm{EI}(1.0)=-0.0181+0.3914=0.3732\). The uncertainty term dominates: the mean is slightly below the incumbent, yet the point scores high.</li>
+<li><span class="wex-op">Compare across the grid.</span> \(\mathrm{EI}=(0.040,\,0.317,\,0.373,\,0.241,\,0.000)\) peaks at \(x=1.0\), so EI, like UCB, elects to explore the middle first.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> At the left shoulder \(x=0.5\) the mean is higher but the uncertainty lower, giving \(\mathrm{EI}=0.317\), just under the \(0.373\) at the more uncertain \(x=1.0\). Early on, when little is known, expected improvement is uncertainty-led, and only as \(\sigma\) shrinks do the mean-driven terms take over: the same arc the UCB run traced.</p>
+</div>
+</div>
+
+<h3 id="thompson-sampling">Thompson sampling and probability of improvement</h3>
+
+<p>A third design is probabilistic rather than deterministic. Thompson sampling, the oldest idea of all, going back to Thompson (1933), draws one sample function \(\tilde f\) from the current GP posterior and queries its maximizer, \(x_t=\arg\max_x\tilde f(x)\). Because the sample is random, the rule explores automatically: a point is queried with exactly the posterior probability that it is the true optimum, so uncertain regions get their fair share of queries without any explicit variance term. The GP version and its regret analysis are developed by Chowdhury and Gopalan (2017), and the general principle is surveyed by Russo, Van Roy, Kazerouni, Osband, and Wen (2018). A simpler and older sibling, the probability of improvement, scores a point by \(\mathrm{PI}(x)=\Phi(z)\), the posterior probability that it beats the incumbent, but it tends to under-explore because it ignores the size of the improvement, rewarding a near-certain tiny gain over an uncertain large one. Expected improvement fixes precisely that defect by weighting the probability by the magnitude.</p>
+
+<p>These acquisitions are the interchangeable core of the Bayesian optimization loop. The loop itself is acquisition-agnostic: fit the surrogate, maximize the acquisition to pick the next query, evaluate, update, and repeat until the budget is spent.</p>
+
+<div class="box algo"><span class="box-title">Algorithm (Bayesian optimization loop)</span>
+<div class="algo-io">
+<p class="algo-in"><span class="algo-lab">Input</span> domain \(\mathcal X\); kernel \(k\) with hyperparameters \(\theta\); acquisition \(\alpha\) (for instance EI or UCB); initial design \(\{x_i\}_{i=1}^{n_0}\); budget \(T\).</p>
+<p class="algo-out"><span class="algo-lab">Output</span> the best evaluated point.</p>
+</div>
+<ol class="algo-steps">
+<li>Evaluate the initial design, \(y_i=f(x_i)+\varepsilon_i\), and fit the GP posterior \((\mu,\sigma)\).</li>
+<li class="algo-loop">For \(t=n_0+1,\dots,T\): re-estimate \(\theta\) by maximizing the marginal likelihood, and refresh \((\mu_{t-1},\sigma_{t-1})\).</li>
+<li>Maximize the acquisition over the domain, \(x_t=\arg\max_{x\in\mathcal X}\alpha_t(x)\), by a numerical inner optimizer (multi-start gradient ascent, or a fine grid in low dimension).</li>
+<li>Query the objective, \(y_t=f(x_t)+\varepsilon_t\), and append \((x_t,y_t)\) to the data.</li>
+<li>Return the incumbent \(\arg\max_{t\le T}y_t\), or the posterior-mean maximizer if the observations are noisy.</li>
+</ol>
+</div>
+
+<p>Two costs deserve mention. The inner maximization in step 3 is itself a global optimization, but of the cheap acquisition rather than the expensive \(f\), which is the whole point: we have traded queries of \(f\) for arithmetic on the surrogate. And re-fitting hyperparameters each round makes the prior data-dependent, so the clean Bayesian regret theory strictly applies to a fixed kernel; in practice the loop with adapted hyperparameters is what is run (Snoek, Larochelle, and Adams 2012).</p>
+
+<h2 id="regret">Regret and the maximum information gain</h2>
+
+<p>We now make good on the promise that GP-UCB is a no-regret algorithm and identify what governs its rate. The remarkable fact, due to Srinivas, Krause, Kakade, and Seeger (2010), is that the cumulative regret is controlled by a single quantity that measures how much the queries can teach us about \(f\): the maximum information gain. Its definition rests on the entropy of a Gaussian.</p>
+
+<div class="box def"><span class="box-title">Definition (information gain and \(\gamma_T\))</span>
+<p>For a set of points \(A=\{x_1,\dots,x_T\}\) with noisy observations \(y_A\) of the latent values \(f_A\), the <em>information gain</em> is the mutual information \(I(y_A;f_A)=H(y_A)-H(y_A\mid f_A)\). For a GP with Gaussian noise it has the closed form
+$$I(y_A;f_A)=\tfrac12\ln\det\!\big(I+\sigma^{-2}K_A\big),$$
+with \(K_A\) the Gram matrix on \(A\). The <em>maximum information gain</em> after \(T\) rounds is
+$$\gamma_T=\max_{A\subseteq\mathcal X,\ |A|=T}\ I(y_A;f_A).$$
+</p>
+</div>
+
+<p>The closed form follows because \(y_A=f_A+\varepsilon\) is Gaussian with covariance \(K_A+\sigma^2 I\), so \(H(y_A)=\tfrac12\ln\det\big(2\pi e(K_A+\sigma^2 I)\big)\) while \(H(y_A\mid f_A)=\tfrac12\ln\det(2\pi e\,\sigma^2 I)\), and the determinants divide. Read \(\gamma_T\) as the most any \(T\) queries could reduce our uncertainty about \(f\), a purely kernel-and-domain quantity with no reference to the algorithm. It is small when the kernel is smooth, because then observations are highly redundant and few of them already say most of what there is to say, and it grows with roughness. Since \(I(y_A;f_A)\) is a monotone submodular function of \(A\), greedy selection of high-variance points is near-optimal for it, which is the bridge to the sequential algorithm. Crucially, \(\gamma_T\) is governed by the decay of the kernel's eigenvalues, the same spectrum that set approximation rates in [[ch:mercer-and-rates|the Mercer chapter]], and the information gain is itself a divergence between the posterior and prior over \(f\), a way of measuring distance between distributions that recurs through the RKHS embeddings of [[ch:kernel-mean-embeddings|the mean-embedding chapter]]. The known bounds are as follows (Srinivas et al. 2010, with the polynomial rates later tightened by Vakili, Khezeli, and Picheny 2021).</p>
+
+<table>
+<thead><tr><th>Kernel on \([0,r]^d\)</th><th>Maximum information gain \(\gamma_T\)</th></tr></thead>
+<tbody>
+<tr><td>Linear</td><td>\(O(d\ln T)\)</td></tr>
+<tr><td>Squared-exponential</td><td>\(O\big((\ln T)^{d+1}\big)\)</td></tr>
+<tr><td>Matern, smoothness \(\nu\)</td><td>\(O\big(T^{\,d(d+1)/(2\nu+d(d+1))}\ln T\big)\), refined toward \(O\big(T^{\,d/(2\nu+d)}(\ln T)^{2\nu/(2\nu+d)}\big)\)</td></tr>
+</tbody>
+</table>
+
+<p>In every case \(\gamma_T\) is sublinear in \(T\): polylogarithmic for the smooth kernels, and polynomial with an exponent below one for the Matern family once \(\nu\) is large enough relative to \(d\). That sublinearity is the whole game, because the regret bound is essentially \(\sqrt{T\gamma_T}\) up to the exploration factor, and \(\sqrt{T\gamma_T}/T\to 0\).</p>
+
+<div class="box thm"><span class="box-title">Theorem (GP-UCB regret, Srinivas, Krause, Kakade, and Seeger, 2010)</span>
+<p>Let \(f\) be sampled from a zero-mean GP with covariance \(k\) satisfying \(k(x,x)\le 1\), on a finite decision set \(D\), with Gaussian noise of variance \(\sigma^2\). Fix \(\delta\in(0,1)\) and run GP-UCB with the schedule \(\beta_t=2\ln\!\big(|D|\,t^2\pi^2/(6\delta)\big)\). Then with probability at least \(1-\delta\),
+$$R_T\ \le\ \sqrt{C_1\,T\,\beta_T\,\gamma_T}\quad\text{for all }T\ge 1,\qquad C_1=\frac{8}{\ln(1+\sigma^{-2})}.$$
+A schedule with an extra logarithmic term in \(T\) gives the same rate on a continuous compact domain, and in the agnostic RKHS setting with \(\|f\|_k\le B\) the analogous bound is \(R_T=O^\ast\!\big(\sqrt{T}\,(B\sqrt{\gamma_T}+\gamma_T)\big)\).</p>
+</div>
+
+<p>The proof factors into three clean pieces: a confidence bound that holds uniformly, an instantaneous-regret bound that turns optimism into a per-round guarantee, and a summation that ties the posterior variances to \(\gamma_T\). We prove the two tractable middle pieces in full and cite the concentration and summation lemmas.</p>
+
+<div class="box lem"><span class="box-title">Lemma (uniform confidence bound)</span>
+<p>Under the schedule above, with probability at least \(1-\delta\), every round \(t\) and every \(x\in D\) satisfy \(|f(x)-\mu_{t-1}(x)|\le\beta_t^{1/2}\,\sigma_{t-1}(x)\). This is a union bound over Gaussian tails on the finite set \(D\) and the horizon; the schedule \(\beta_t\) is exactly the size needed for the total failure probability to sum to \(\delta\) (Srinivas et al. 2010, Lemma 5.1).</p>
+</div>
+
+<div class="box lem"><span class="box-title">Lemma (optimism bounds instantaneous regret)</span>
+<p>On the confidence event, the instantaneous regret obeys \(r_t\le 2\,\beta_t^{1/2}\,\sigma_{t-1}(x_t)\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Apply the confidence bound at the optimum \(x^\star\): \(f(x^\star)\le\mu_{t-1}(x^\star)+\beta_t^{1/2}\sigma_{t-1}(x^\star)=\alpha_t^{\mathrm{UCB}}(x^\star)\). Since \(x_t\) maximizes the acquisition, \(\alpha_t^{\mathrm{UCB}}(x^\star)\le\alpha_t^{\mathrm{UCB}}(x_t)=\mu_{t-1}(x_t)+\beta_t^{1/2}\sigma_{t-1}(x_t)\). Apply the confidence bound again at \(x_t\), now on the lower side: \(f(x_t)\ge\mu_{t-1}(x_t)-\beta_t^{1/2}\sigma_{t-1}(x_t)\). Subtracting,
+$$r_t=f(x^\star)-f(x_t)\le\big[\mu_{t-1}(x_t)+\beta_t^{1/2}\sigma_{t-1}(x_t)\big]-\big[\mu_{t-1}(x_t)-\beta_t^{1/2}\sigma_{t-1}(x_t)\big]=2\,\beta_t^{1/2}\sigma_{t-1}(x_t).$$
+The mean cancels, leaving twice the posterior uncertainty at the chosen point. This is the payoff of optimism: the very rule that could overreach instead guarantees that each round's shortfall is no larger than the uncertainty it was willing to bet on. <span class="qed">\(\square\)</span></p>
+</div>
+
+<div class="box lem"><span class="box-title">Lemma (variances sum to the information gain)</span>
+<p>The posterior variances at the queried points satisfy \(\sum_{t=1}^{T}\sigma_{t-1}^2(x_t)\le\dfrac{2}{\ln(1+\sigma^{-2})}\,\gamma_T\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>The information gain from the sequential queries telescopes into per-round terms that use the variance just before each observation,
+$$I(y_{1:T};f_{1:T})=\tfrac12\sum_{t=1}^{T}\ln\!\big(1+\sigma^{-2}\sigma_{t-1}^2(x_t)\big),$$
+because conditioning on each new point multiplies the determinant by \(1+\sigma^{-2}\sigma_{t-1}^2(x_t)\) (Srinivas et al. 2010, Lemma 5.3). Now \(k(x,x)\le 1\) forces \(\sigma_{t-1}^2(x_t)\le 1\), so the argument \(u=\sigma^{-2}\sigma_{t-1}^2(x_t)\) lies in \([0,\sigma^{-2}]\). On that interval the elementary inequality \(u\le\frac{\sigma^{-2}}{\ln(1+\sigma^{-2})}\ln(1+u)\) holds, since \(u/\ln(1+u)\) is increasing. Multiplying by \(\sigma^2\) gives \(\sigma_{t-1}^2(x_t)\le\frac{1}{\ln(1+\sigma^{-2})}\ln\!\big(1+\sigma^{-2}\sigma_{t-1}^2(x_t)\big)\). Summing and using the telescoping identity,
+$$\sum_{t=1}^{T}\sigma_{t-1}^2(x_t)\le\frac{2}{\ln(1+\sigma^{-2})}\,I(y_{1:T};f_{1:T})\le\frac{2}{\ln(1+\sigma^{-2})}\,\gamma_T,$$
+the last step because any actual selection has information gain at most the maximum \(\gamma_T\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof (of the theorem)</span>
+<p>Work on the confidence event, which holds with probability at least \(1-\delta\). By the optimism lemma and \(\beta_t\le\beta_T\),
+$$\sum_{t=1}^{T}r_t^2\le\sum_{t=1}^{T}4\beta_t\,\sigma_{t-1}^2(x_t)\le 4\beta_T\sum_{t=1}^{T}\sigma_{t-1}^2(x_t)\le\frac{8\beta_T}{\ln(1+\sigma^{-2})}\,\gamma_T=C_1\beta_T\gamma_T,$$
+using the variance-sum lemma. By Cauchy-Schwarz, \(R_T=\sum_t r_t\le\sqrt{T\sum_t r_t^2}\le\sqrt{C_1\,T\,\beta_T\,\gamma_T}\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>Since \(\beta_T\) grows only logarithmically and \(\gamma_T\) is sublinear, \(R_T=O^\ast(\sqrt{T\gamma_T})\) up to log factors, and \(R_T/T\to 0\): GP-UCB is no-regret, and by the simple-regret inequality it finds arbitrarily near-optimal points. The uniform confidence bound at the root of the argument is a concentration statement of exactly the flavour that drives the generalization bounds of [[ch:learning-theory|the learning-theory chapter]]. To see \(\gamma_T\) as a genuine number rather than a symbol, we compute it for the run of the first example.</p>
+
+<div class="box ex"><span class="box-title">Example (information gain of a short run)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Take the four points GP-UCB acquired in the first example, in order \(x=(0,\,2,\,1,\,0.5)\), same kernel and \(\sigma^2=0.01\). We compute the information gain \(I=\tfrac12\ln\det(I+\sigma^{-2}K)\), verify the telescoping identity, and check the variance-sum bound of the proof. Numbers from <code>checks/ch-bo-ex3.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Batch information gain.</span> With \(\sigma^{-2}=100\), the \(4\times 4\) Gram matrix gives \(I=\tfrac12\ln\det(I+100\,K)=8.7015\) nats. This is a lower bound on \(\gamma_4\), which maximizes over all four-point sets.</li>
+<li><span class="wex-op">Telescoping check.</span> The pre-observation variances at the four points are \(v_t=(1,\,1,\,0.9637,\,0.3539)\), and \(\tfrac12\sum_t\ln(1+100\,v_t)=8.7015\), matching \(I\) to four decimals: the identity in the variance-sum lemma holds numerically.</li>
+<li><span class="wex-op">Variance-sum bound.</span> The constant is \(C=2/\ln(1+100)=0.4334\), so the lemma predicts \(\sum_t v_t\le C\cdot I=0.4334\times 8.7015=3.7709\). The actual sum is \(\sum_t v_t=3.3176\), comfortably under the bound.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The abstract chain of the proof becomes three concrete numbers: the queries earned \(8.70\) nats of information, the telescoping decomposition reproduces it exactly, and the cumulative posterior variance \(3.32\) sits below the certified ceiling \(3.77\). It is this ceiling, times the exploration factor, that the regret bound converts into a guarantee.</p>
+</div>
+</div>
+
+<h3 id="igp-ucb">Sharper confidence: IGP-UCB</h3>
+
+<p>The Bayesian theorem assumes \(f\) is literally a GP sample. The agnostic setting, where \(f\) is only known to have bounded RKHS norm and the noise is sub-Gaussian, is harder, and Srinivas et al. reach it with an exploration schedule inflated by a \(\ln^3 t\) factor, which is wasteful. Chowdhury and Gopalan (2017) remove that waste with a sharper self-normalized concentration inequality for the kernel ridge estimator, of the kind pioneered for linear bandits. Their bound, holding uniformly in \(t\) and \(x\) with probability at least \(1-\delta\), is</p>
+
+$$|f(x)-\mu_{t-1}(x)|\ \le\ \Big(B+R\sqrt{2\big(\gamma_{t-1}+1+\ln(1/\delta)\big)}\Big)\,\sigma_{t-1}(x),$$
+
+<p>where \(B\ge\|f\|_k\) and \(R\) is the sub-Gaussian noise parameter. Reading off the bracket as \(\beta_t^{1/2}\) and running the same GP-UCB rule, now called IGP-UCB, gives the regret bound \(R_T=O\big(\sqrt{T\gamma_T}\,(B+\sqrt{\gamma_T+\ln(1/\delta)})\big)\), which drops the extra logarithmic factors of the earlier analysis and matches the Bayesian rate up to constants. The same paper analyzes GP Thompson sampling and proves a comparable bound, putting the two acquisition families on the same theoretical footing. The exploration weight is no longer a free dial: it is the width of a rigorous confidence tube, and \(\gamma_t\) inside it is once more the kernel's information budget doing the accounting.</p>
+
+<h2 id="batch-highdim">A note on batch and high-dimensional Bayesian optimization</h2>
+
+<p>Two departures from the basic loop matter in practice. The first is parallelism. The loop as written is strictly sequential, one query per round, but experiments are often run in batches: an experimenter with sixteen machines wants sixteen points at once. The difficulty is that a naive batch would query the acquisition's maximizer sixteen times over, since the surrogate does not update within a batch. The fix is to encode the pending queries into the belief. GP-BUCB (Desautels, Krause, and Burdick 2014) selects a batch greedily, after each pick updating the posterior variance, which needs no observed value, so that later picks in the same batch avoid points made redundant by earlier ones, and it preserves the regret guarantees up to a bounded penalty. Local penalization (González, Dai, Hennig, and Lawrence 2016) instead multiplies the acquisition by a soft exclusion zone around each pending point, using a Lipschitz estimate to size it. Both turn the scalar loop into a batch loop while keeping the surrogate honest about what is already in flight.</p>
+
+<p>The second departure is dimension. The information-gain bounds degrade quickly with \(d\), and, more concretely, the acquisition's inner maximization and the space-filling role of exploration both suffer the curse of dimensionality: covering a high-dimensional box takes exponentially many points. Progress comes from structural assumptions that shrink the effective dimension. Additive models (Kandasamy, Schneider, and Póczos 2015) assume \(f\) decomposes as a sum of low-dimensional components on disjoint variable groups, so the surrogate and acquisition factor over the groups and the regret scales with the group size rather than \(d\). Random embeddings (Wang, Hutter, Zoghi, Matheson, and de Freitas 2016) assume \(f\) varies only along an unknown low-dimensional subspace and optimize inside a random linear image of a low-dimensional box, provably hitting the active subspace with high probability. Both are instances of the same lesson that runs through the book: high-dimensional learning is only possible when the target has low intrinsic complexity, and the kernel, or here the search, must be built to exploit it.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Bayesian optimization is the Gaussian process turned from a predictor into a decision-maker. The posterior of [[ch:gaussian-processes-and-rvm|the Bayesian chapter]] serves as a surrogate whose mean guesses the objective and whose variance measures ignorance, and an acquisition function scores each candidate by trading the two off. GP-UCB adds an optimistic multiple of the standard deviation to the mean; expected improvement, derived here in closed form as \((\mu-f^+)\Phi(z)+\sigma\phi(z)\), scores the expected gain over the incumbent with no free weight; Thompson sampling explores by querying the maximizer of a posterior sample. The theory is unusually complete: GP-UCB is a no-regret algorithm whose cumulative regret is \(O^\ast(\sqrt{T\beta_T\gamma_T})\), controlled by the maximum information gain \(\gamma_T\), a spectral property of the kernel that is polylogarithmic for smooth kernels and sublinear for the Matern family. The proof reduces to optimism, which caps each round's regret at twice the posterior width, and a summation that ties those widths to \(\gamma_T\); Chowdhury and Gopalan (2017) sharpen the confidence tube to match. Batch and high-dimensional variants extend the loop by keeping the surrogate honest about pending queries and by exploiting low intrinsic dimension. What began as a covariance function ends as a principled recipe for spending a scarce experimental budget.</p>
+
+<section class="exercises"><h2 id="exercises">Exercises</h2>
+<ol class="exlist">
+<li><span class="ex-tag">warm-up</span> In the first worked example, round 1 has posterior mean \(\mu=(-0,\,-0.003,\,-0.037,\,-0.168,\,-0.277)\) on the grid. A purely greedy rule sets \(\beta_t=0\) and queries \(\arg\max_x\mu_{t-1}(x)\). Which grid point does it choose, and why does that stall the search? Contrast with the GP-UCB choice \(x=1.0\), and explain in one sentence what the \(\beta_t^{1/2}\sigma\) term buys.</li>
+
+<li><span class="ex-tag">computation</span> Using the posterior in the expected-improvement example (incumbent \(f^+=0\), the grid means and standard deviations given there), compute the probability of improvement \(\mathrm{PI}(x)=\Phi\big((\mu-f^+)/\sigma\big)\) at \(x=0.5\) and \(x=1.0\). Compare the two rankings, PI versus EI, and explain why PI can prefer a lower-variance point that EI passes over.</li>
+
+<li><span class="ex-tag">computation</span> Verify the information-gain identity by hand on two points. Take the kernel and noise of the third worked example and the pair \(A=\{0,\,1\}\). Compute \(I=\tfrac12\ln\det(I+\sigma^{-2}K_A)\) directly, then via the telescoping form \(\tfrac12\ln(1+\sigma^{-2}\sigma_0^2(x_1))+\tfrac12\ln(1+\sigma^{-2}\sigma_1^2(x_2))\), and confirm the two agree.</li>
+
+<li><span class="ex-tag">proof</span> Show that expected improvement is strictly increasing in the posterior standard deviation \(\sigma\) for fixed mean \(\mu\ne f^+\). Conclude that, among points with equal mean, EI always prefers the more uncertain one, which is its exploration mechanism.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Write \(\mathrm{EI}=\sigma\big(z\Phi(z)+\phi(z)\big)\) with \(z=(\mu-f^+)/\sigma\). Differentiate \(g(z)=z\Phi(z)+\phi(z)\) to get \(g'(z)=\Phi(z)\gt 0\), so \(g\) is increasing, and combine with \(\partial z/\partial\sigma=-(\mu-f^+)/\sigma^2\); the product rule leaves \(\partial\mathrm{EI}/\partial\sigma=\phi(z)\gt 0\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> Prove the instantaneous-regret bound \(r_t\le 2\beta_t^{1/2}\sigma_{t-1}(x_t)\) of the optimism lemma from scratch, stating exactly where the confidence bound and the acquisition-maximizing choice of \(x_t\) each enter. Then explain why the argument fails for the greedy rule \(\beta_t=0\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Sandwich \(f(x^\star)\) above by its UCB and \(f(x_t)\) below by its lower confidence bound, then use \(\alpha_t^{\mathrm{UCB}}(x^\star)\le\alpha_t^{\mathrm{UCB}}(x_t)\). With \(\beta_t=0\) the two confidence bounds collapse to the mean and there is nothing to guarantee \(f(x^\star)\le\mu_{t-1}(x_t)\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> Establish the elementary inequality used in the variance-sum lemma: for \(u\in[0,C_0]\), \(u\le\frac{C_0}{\ln(1+C_0)}\ln(1+u)\). Then apply it with \(C_0=\sigma^{-2}\) to complete the step \(\sigma_{t-1}^2(x_t)\le\frac{1}{\ln(1+\sigma^{-2})}\ln(1+\sigma^{-2}\sigma_{t-1}^2(x_t))\), noting where \(k(x,x)\le 1\) is used.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">The map \(u\mapsto u/\ln(1+u)\) is increasing on \((0,\infty)\), so its value at any \(u\le C_0\) is at most its value at \(C_0\), giving \(u/\ln(1+u)\le C_0/\ln(1+C_0)\). The bound \(k(x,x)\le 1\) guarantees \(\sigma_{t-1}^2(x_t)\le 1\), hence \(u=\sigma^{-2}\sigma_{t-1}^2(x_t)\le\sigma^{-2}=C_0\).</div></details></li>
+
+<li><span class="ex-tag">challenge</span> Deduce a simple-regret guarantee from the cumulative bound, then read it against the information-gain table. Using \(\min_{t\le T}r_t\le R_T/T\) and \(R_T\le\sqrt{C_1 T\beta_T\gamma_T}\), write the simple-regret rate for the squared-exponential kernel (where \(\gamma_T=O((\ln T)^{d+1})\)) and for a Matern kernel with \(\gamma_T=O(T^{a})\), \(0\lt a\lt 1\). For which \(a\) does simple regret still vanish, and what does that say about the roughest objective GP-UCB can reliably optimize?
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">\(\min_{t\le T}r_t\le\sqrt{C_1\beta_T\gamma_T/T}\), and \(\beta_T=O(\ln T)\). For the squared-exponential this is \(O^\ast\big(\sqrt{(\ln T)^{d+2}/T}\big)\to 0\); for the Matern case it is \(O^\ast\big(\sqrt{T^{a-1}\ln T}\big)\), which vanishes precisely when \(a\lt 1\). The kernel's smoothness must be enough to keep the information-gain exponent below one.</div></details></li>
+</ol>
+</section>

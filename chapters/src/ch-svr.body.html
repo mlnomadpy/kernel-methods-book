@@ -14,6 +14,8 @@ $$|y-f(x)|_\varepsilon:=\max\bigl(0,\ |y-f(x)|-\varepsilon\bigr).$$
 Deviations up to \(\varepsilon\) cost nothing; beyond \(\varepsilon\) the loss grows linearly with the excess.</p>
 </div>
 
+<p>Support vector regression was introduced by Drucker, Burges, Kaufman, Smola, and Vapnik (1997), who carried the margin construction of the classifier across to real-valued targets; the \(\varepsilon\)-insensitive loss on which it rests is due to Vapnik (1995) and is developed at length in Vapnik (1998). Everything that follows, the primal program, its dual, the tube geometry, and the \(\nu\)-variant, is the account systematized in the monograph of Schölkopf and Smola (2002).</p>
+
 <p>The graph is a trough: a flat floor of zero on the interval \([-\varepsilon,\varepsilon]\), then two straight ramps of unit slope. The flat floor is the regression analogue of the classifier's margin region, and it will do the same work. A point whose prediction already lands within \(\varepsilon\) of its target sits on the floor, contributes zero to the objective, and, as we will prove from the optimality conditions, receives a zero coefficient. The prediction is then reconstructed from the remaining points alone. Setting \(\varepsilon=0\) recovers the ordinary \(\ell_1\) (least absolute deviations) loss, which is robust but not sparse; the sparsity is bought entirely by the width of the insensitive zone.</p>
 
 <h2 id="the-primal-program">The primal program for SV regression</h2>
@@ -36,7 +38,7 @@ $$\langle w,x_i\rangle+b-y_i\ \le\ \varepsilon+\xi_i,\qquad y_i-\langle w,x_i\ra
 
 <h2 id="the-dual-and-box-constraints">The dual and its box constraints</h2>
 
-<p>As with the classifier, the kernel enters only after we pass to the dual, where the inputs appear solely through inner products. We introduce a nonnegative multiplier for each constraint: \(\alpha_i\) for the overshoot family, \(\alpha_i^\ast\) for the undershoot family, and \(\eta_i,\eta_i^\ast\) for the two positivity constraints on the slacks. The derivation is a textbook Lagrangian saddle-point calculation, and it produces the box constraints that give the method its structure.</p>
+<p>As with the classifier, the kernel enters only after we pass to the dual, where the inputs appear solely through inner products. We introduce a nonnegative multiplier for each constraint: \(\alpha_i\) for the overshoot family, \(\alpha_i^\ast\) for the undershoot family, and \(\eta_i,\eta_i^\ast\) for the two positivity constraints on the slacks. The derivation is the Lagrangian saddle-point calculation laid out in the tutorial of Smola and Schölkopf (2004), and it produces the box constraints that give the method its structure.</p>
 
 <div class="box thm"><span class="box-title">Theorem (dual program, \(\varepsilon\)-SVR)</span>
 <p>The dual of the primal program is
@@ -122,6 +124,63 @@ together with \(\bigl(\tfrac{C}{m}-\alpha_i\bigr)\xi_i=0\) and the same for the 
 </table>
 
 <p>The Gaussian row is the bridge to the rest of the book. With squared loss and \(\varepsilon=0\), the primal objective \(\tfrac12\|w\|^2+\tfrac{C}{m}\sum_i(y_i-f(x_i))^2\) is exactly ridge regression, and its kernelized form is the kernel ridge regression of [[ch:kernel-ridge-and-friends]]. So SV regression and kernel ridge regression are the same regularized risk minimization with different losses: squared loss gives the closed-form linear solve of KRR but a dense expansion in which every point is a support vector, while the \(\varepsilon\)-insensitive loss gives a quadratic program but a sparse expansion. One trades a linear system for a QP and, in return, gets to store only the support vectors. The cautionary note in the source is exactly this: any loss with \(\varepsilon=0\) loses sparsity, which may be acceptable for small data but slows prediction otherwise.</p>
+
+<h2 id="quantile-regression">Quantile regression with the pinball loss</h2>
+
+<p>Every loss met so far is symmetric: it charges overshoot and undershoot alike, so the fitted function tracks the centre of the data and says nothing about its spread. Yet many questions are about the spread. A delivery estimate is useful only with a near-worst-case upper bound; a risk model needs the fifth and ninety-fifth percentiles, not the average. The clean way to read such a bound off a model in [[ch:gaussian-processes-and-rvm]] is to assume a Gaussian predictive density and take its quantiles, but that answer is only as trustworthy as the Gaussian assumption, and real residuals are often skewed or heavy-tailed. Quantile regression asks for the conditional quantile directly, distribution-free, through a single change of loss: make the trough of the previous sections lopsided.</p>
+
+<div class="box def"><span class="box-title">Definition (pinball loss, Koenker and Bassett 1978)</span>
+<p>For a quantile level \(\tau\in(0,1)\), the pinball (or check) loss of the residual \(u=y-f(x)\) is
+$$\rho_\tau(u)=\max\bigl(\tau u,\ (\tau-1)u\bigr)=\begin{cases}\tau\,u & u\ge 0,\\ (1-\tau)\,|u| & u\lt 0.\end{cases}$$
+An underprediction (\(u\gt 0\), the fit lying below the target) is charged at rate \(\tau\); an overprediction (\(u\lt 0\)) at rate \(1-\tau\).</p>
+</div>
+
+<p>The graph is again two straight ramps meeting at the origin, but now with unequal slopes \(\tau\) and \(1-\tau\) and no flat floor between them: the tolerance is \(\varepsilon=0\). The lopsided slopes are the whole idea. Where a symmetric loss pulls the fit to the middle, the pinball loss makes it cheaper to sit below the data when \(\tau\gt\tfrac12\) and cheaper to sit above when \(\tau\lt\tfrac12\), so the minimizer settles at a level with a controlled fraction of the mass beneath it. Koenker and Bassett (1978) proved the population statement that anchors the method: the function minimizing the expected pinball loss \(\mathbb{E}\,\rho_\tau(Y-f(X))\) is exactly the conditional \(\tau\)-quantile of \(Y\) given \(X\). At \(\tau=\tfrac12\) the two slopes are equal, \(\rho_{1/2}(u)=\tfrac12|u|\), and we are back at the median, the Laplacian (least absolute deviations) row of the table above.</p>
+
+<p>Kernelizing this in the manner of [[ch:support-vector-machines]] is now routine. We regularize by flatness exactly as before and split each residual into an over- and an under-shoot slack, but we weight the two slacks unequally, by \(\tau\) and \(1-\tau\), to match the loss.</p>
+
+<div class="box def"><span class="box-title">Definition (primal program, quantile SVR)</span>
+<p>Given data \((x_1,y_1),\dots,(x_m,y_m)\), level \(\tau\in(0,1)\), and penalty \(C\gt 0\), solve
+$$\min_{w,b,\xi,\xi^\ast}\ \tfrac12\|w\|^2+\frac{C}{m}\sum_{i=1}^m\bigl(\tau\,\xi_i+(1-\tau)\,\xi_i^\ast\bigr)$$
+subject to, for every \(i=1,\dots,m\),
+$$y_i-\langle w,x_i\rangle-b\ \le\ \xi_i,\qquad \langle w,x_i\rangle+b-y_i\ \le\ \xi_i^\ast,\qquad \xi_i,\xi_i^\ast\ge 0.$$
+</p>
+</div>
+
+<p>Passing to the dual repeats the calculation behind the \(\varepsilon\)-SVR dual almost verbatim. The only two changes are that the tube width is gone, \(\varepsilon=0\), and that the unequal slack weights push the two ceilings apart.</p>
+
+<div class="box thm"><span class="box-title">Theorem (dual program, quantile SVR, Takeuchi, Le, Sears, and Smola 2006)</span>
+<p>The dual is
+$$\max_{\alpha,\alpha^\ast}\ \sum_{i=1}^m(\alpha_i-\alpha_i^\ast)\,y_i-\tfrac12\sum_{i,j=1}^m(\alpha_i-\alpha_i^\ast)(\alpha_j-\alpha_j^\ast)\,k(x_i,x_j)$$
+subject to
+$$\sum_{i=1}^m(\alpha_i-\alpha_i^\ast)=0,\qquad \alpha_i\in\Bigl[0,\tfrac{C}{m}\tau\Bigr],\qquad \alpha_i^\ast\in\Bigl[0,\tfrac{C}{m}(1-\tau)\Bigr].$$
+It is precisely the \(\varepsilon\)-SVR dual with \(\varepsilon=0\) and the single symmetric box \([0,C/m]\) replaced by the asymmetric pair. The fit is \(f(x)=\sum_i(\alpha_i-\alpha_i^\ast)\,k(x_i,x)+b\).</p>
+</div>
+
+<div class="box proof"><span class="box-title">Proof</span>
+<p>Introduce multipliers \(\alpha_i,\alpha_i^\ast\ge 0\) for the two tube constraints and \(\eta_i,\eta_i^\ast\ge 0\) for the slack positivity, and form the Lagrangian
+$$L=\tfrac12\|w\|^2+\frac{C}{m}\sum_i\bigl(\tau\xi_i+(1-\tau)\xi_i^\ast\bigr)-\sum_i(\eta_i\xi_i+\eta_i^\ast\xi_i^\ast)+\sum_i\alpha_i\bigl(y_i-\langle w,x_i\rangle-b-\xi_i\bigr)+\sum_i\alpha_i^\ast\bigl(\langle w,x_i\rangle+b-y_i-\xi_i^\ast\bigr).$$
+Stationarity in \(w\) gives \(w=\sum_i(\alpha_i-\alpha_i^\ast)x_i\), and stationarity in \(b\) gives \(\sum_i(\alpha_i-\alpha_i^\ast)=0\), exactly as in the \(\varepsilon\)-SVR derivation. Stationarity in the slacks now reads \(\tfrac{C}{m}\tau-\alpha_i-\eta_i=0\) and \(\tfrac{C}{m}(1-\tau)-\alpha_i^\ast-\eta_i^\ast=0\); since \(\eta_i,\eta_i^\ast\ge 0\), these force \(\alpha_i\le\tfrac{C}{m}\tau\) and \(\alpha_i^\ast\le\tfrac{C}{m}(1-\tau)\), the asymmetric ceilings. Substituting the relations back annihilates every slack and offset term, and, because \(\varepsilon=0\), no \(-\varepsilon\sum_i(\alpha_i+\alpha_i^\ast)\) term survives, leaving the stated objective once \(\langle x_i,x_j\rangle\) is replaced by \(k(x_i,x_j)\). <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>Reading the box is again the whole story, just as the budget constraint was for \(\nu\)-SVR. The upper multiplier \(\alpha_i\), which attaches to points sitting above the fit, is capped at \(\tfrac{C}{m}\tau\); the lower multiplier \(\alpha_i^\ast\), for points below the fit, is capped at \(\tfrac{C}{m}(1-\tau)\). A large \(\tau\) gives the points above the fit more pull and those below it less, so the fit rises until only a \(\tau\)-fraction of the data is left beneath it; a small \(\tau\) does the reverse. The Karush-Kuhn-Tucker conditions make the accounting exact: a point strictly below the fit has its \(\alpha_i^\ast\) pinned at the ceiling \(\tfrac{C}{m}(1-\tau)\), a point strictly above has \(\alpha_i\) pinned at \(\tfrac{C}{m}\tau\), and a point on the fit is an in-bound support vector that fixes the offset through \(b=y_i-\langle w,x_i\rangle\). Because the loss has no flat floor, no point sits in a cost-free interior, so every point is a support vector: quantile regression, like every \(\varepsilon=0\) entry in the loss table, trades the sparsity of the tube for the ability to chase a quantile. The tie to [[ch:kernel-ridge-and-friends]] is the one drawn above, moved one loss to the side: kernel ridge minimizes the squared residual and estimates the conditional mean, quantile SVR minimizes the pinball residual and estimates a conditional quantile, and the median case \(\tau=\tfrac12\) is the robust absolute-deviation midpoint between them.</p>
+
+<p>With finitely many points the fraction beneath the fit cannot equal \(\tau\) exactly, but it is trapped around it. Points lying exactly on the fit are ties that may be counted on either side, so writing \(\#\text{below}\) for the strictly-below points and \(\#\text{on}\) for those on the fit, every solution obeys
+$$\frac{\#\text{below}}{m}\ \le\ \tau\ \le\ \frac{\#\text{below}+\#\text{on}}{m},$$
+the quantile analogue of the \(\nu\)-property bracket, which follows from the equality \(\sum_i(\alpha_i-\alpha_i^\ast)=0\) and the asymmetric ceilings (Exercise 10). We watch two levels bracket a small data set.</p>
+
+<div class="box ex"><span class="box-title">Example (a quantile fit at two levels)</span>
+<div class="wex">
+<div class="wex-setup">Six points \(x=(1,2,3,4,5,6)\), \(y=(1.0,\,2.6,\,2.0,\,4.2,\,3.4,\,5.6)\), linear kernel \(k(x,x')=xx'\), penalty \(C=12\) so \(C/m=2\). We fit the pinball loss at \(\tau=0.25\) and \(\tau=0.75\) and read off the two lines.</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Set the asymmetric box.</span> At \(\tau=0.25\) the ceilings are \(\alpha_i\in[0,\tfrac{C}{m}\tau]=[0,0.5]\) and \(\alpha_i^\ast\in[0,\tfrac{C}{m}(1-\tau)]=[0,1.5]\); at \(\tau=0.75\) they swap to \([0,1.5]\) and \([0,0.5]\). Everything else in the dual is identical.</li>
+<li><span class="wex-op">Fit both levels.</span> Solving the dual QP gives the low line \(f(x)=0.6x+0.4\) at \(\tau=0.25\) and the high line \(f(x)=0.75x+1.1\) at \(\tau=0.75\). The low line lies below the high line at every \(x\), so the two bracket the data.</li>
+<li><span class="wex-op">Count what is beneath.</span> At \(\tau=0.25\) the residuals \(y_i-f(x_i)\) are \((0,\,1.0,\,-0.2,\,1.4,\,0,\,1.6)\): one point (\(x_3\)) sits below the line, two (\(x_1,x_5\)) on it, three above. At \(\tau=0.75\) the residuals are \((-0.85,\,0,\,-1.35,\,0.1,\,-1.45,\,0)\): three points below, two on, one above. The fraction beneath rises from \(1/6\) to \(3/6\) as \(\tau\) grows.</li>
+<li><span class="wex-op">Check the quantile bracket.</span> At \(\tau=0.25\), \(\tfrac16\le0.25\le\tfrac36\), that is \(0.167\le0.25\le0.500\); at \(\tau=0.75\), \(\tfrac36\le0.75\le\tfrac56\), that is \(0.500\le0.75\le0.833\). The level is trapped between the strictly-below and the on-or-below fractions in both rows, and strong duality holds, the dual and primal objectives agreeing at \(2.480\) and \(2.256\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> One dial, \(\tau\), slides the fit up or down through the data with no tube at all: the asymmetry of the box does what the width \(\varepsilon\) did before. Two levels give two lines that fence the points between them, a distribution-free prediction band built from the same quadratic program as the classifier.</p>
+</div>
+</div>
 
 <h2 id="nu-sv-regression">\(\nu\)-SV regression</h2>
 
@@ -213,5 +272,9 @@ still linear in the multipliers. The ordinary \(\nu\)-SVR is the special case \(
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">Keep only the \(\xi_i^\ast\) family, or equivalently drive the upper multipliers to zero; the tube degenerates into a single supporting hyperplane.</div></details></li>
 <li><span class="ex-tag">challenge</span> <strong>Heteroscedastic tube.</strong> With a two-function width model \(g_1\equiv 1\), \(g_2(x)=x\), work out how the fitted envelope \(\zeta_1+\zeta_2 x\) tilts on a dataset whose noise grows with \(x\), and state the modified budget constraints that the dual must satisfy.
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">The dual budget splits into one linear constraint per \(g_q\): \(\sum_i(\alpha_i+\alpha_i^\ast)g_q(x_i)\le C\zeta_q\). A growing envelope means \(\zeta_2\gt 0\).</div></details></li>
+<li><span class="ex-tag">computation</span> <strong>Median line.</strong> Set \(\tau=\tfrac12\) in the quantile example. Show the box collapses to the symmetric \([0,\tfrac{C}{2m}]\) on both sides and the pinball loss becomes \(\tfrac12|u|\). The fit is \(f(x)=0.92x+0.08\); check that it lies between the \(\tau=0.25\) and \(\tau=0.75\) lines, and name the row of the loss table it realizes.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">Equal slopes give the Laplacian loss \(|u|\), so \(\tau=\tfrac12\) is a regularized least-absolute-deviations fit, the robust analogue of the mean-fitting ridge of [[ch:kernel-ridge-and-friends]].</div></details></li>
+<li><span class="ex-tag">proof</span> <strong>The quantile bracket.</strong> From the dual equality \(\sum_i(\alpha_i-\alpha_i^\ast)=0\) and the asymmetric ceilings, prove that any quantile-SVR fit satisfies \(\tfrac{\#\text{below}}{m}\le\tau\le\tfrac{\#\text{below}+\#\text{on}}{m}\), then verify both inequalities on the two levels of the worked example.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">A strictly-below point carries \(\alpha_i^\ast=\tfrac{C}{m}(1-\tau)\) and \(\alpha_i=0\); a strictly-above point carries \(\alpha_i=\tfrac{C}{m}\tau\) and \(\alpha_i^\ast=0\). Split \(\sum_i\alpha_i=\sum_i\alpha_i^\ast\) over the below, on, and above sets and use \(\#\text{below}+\#\text{on}+\#\text{above}=m\).</div></details></li>
 </ol>
 </section>

@@ -1,53 +1,247 @@
 [
-  { "from": "kernel-families#def-19-1", "to": "kernels-and-rkhs#def-2-1", "note": "difference kernel is a p.d. kernel" },
-  { "from": "kernel-families#thm-19-2", "to": "kernel-families#def-19-1", "note": "characterizes positive definite sequences" },
-  { "from": "kernel-families#thm-19-2", "to": "kernels-and-rkhs#def-2-1", "note": "works the p.d. quadratic form" },
-  { "from": "kernel-families#thm-19-2", "to": "preliminaries#thm-p-6", "note": "reads off the measure via Riesz" },
-  { "from": "kernel-families#def-19-3", "to": "preliminaries#thm-p-6", "note": "measures as the dual via Riesz" },
-  { "from": "kernel-families#def-19-4", "to": "kernels-and-rkhs#def-2-1", "note": "kernel phi(x-y) is a p.d. kernel" },
-  { "from": "kernel-families#def-19-4", "to": "kernel-families#def-19-1", "note": "continuous analogue of the lattice definition" },
-  { "from": "kernel-families#thm-19-5", "to": "kernel-families#def-19-4", "note": "decides which profiles are positive definite" },
-  { "from": "kernel-families#thm-19-5", "to": "kernel-families#thm-19-2", "note": "converse samples lattice, applies Herglotz" },
-  { "from": "kernel-families#thm-19-5", "to": "kernel-families#def-19-3", "note": "Herglotz returns Fourier-Stieltjes coefficients" },
-  { "from": "kernel-families#thm-19-5", "to": "kernels-and-rkhs#def-2-1", "note": "easy direction completes the square" },
-  { "from": "kernel-families#thm-19-5", "to": "preliminaries#thm-p-6", "note": "representation lemma invokes Riesz" },
-  { "from": "kernel-families#def-19-6", "to": "kernel-families#def-19-3", "note": "extends coefficients to measures on R^d" },
-  { "from": "kernel-families#prop-19-7", "to": "kernel-families#def-19-6", "note": "stated for the Fourier-Stieltjes transform" },
-  { "from": "kernel-families#thm-19-8", "to": "kernel-families#def-19-4", "note": "hypothesis: translation-invariant p.d. kernel" },
-  { "from": "kernel-families#thm-19-8", "to": "kernel-families#thm-19-5", "note": "Bochner makes spectral density nonnegative" },
-  { "from": "kernel-families#thm-19-8", "to": "kernel-families#def-19-6", "note": "norm weights by the reciprocal transform" },
-  { "from": "kernel-families#thm-19-8", "to": "kernels-and-rkhs#def-2-8", "note": "verifies the reproducing-kernel property" },
-  { "from": "kernel-families#def-19-9", "to": "kernels-and-rkhs#def-2-1", "note": "relaxes p.d. test to zero-sum vectors" },
-  { "from": "kernel-families#thm-19-10", "to": "kernel-families#def-19-9", "note": "stated for conditionally p.d. kernels" },
-  { "from": "kernel-families#thm-19-10", "to": "kernels-and-rkhs#def-2-1", "note": "exp(tk) passes the p.d. test" },
-  { "from": "kernel-families#def-19-12", "to": "kernel-families#def-19-11", "note": "uses semigroup composition and involution" },
-  { "from": "kernel-families#def-19-12", "to": "kernels-and-rkhs#def-2-1", "note": "phi p.d. means K(s,t) p.d." },
-  { "from": "kernel-families#def-19-12", "to": "kernel-families#def-19-4", "note": "specializes to translation invariance on groups" },
-  { "from": "kernel-families#def-19-13", "to": "kernel-families#def-19-11", "note": "defined on an abelian semigroup" },
-  { "from": "kernel-families#lem-19-14", "to": "kernel-families#def-19-13", "note": "multiplicativity factors the quadratic form" },
-  { "from": "kernel-families#lem-19-14", "to": "kernel-families#def-19-12", "note": "positive definite in the semigroup sense" },
-  { "from": "kernel-families#def-19-15", "to": "kernel-families#def-19-11", "note": "submultiplicativity uses the semigroup operations" },
-  { "from": "kernel-families#thm-19-16", "to": "kernel-families#def-19-12", "note": "characterizes exponentially bounded p.d. functions" },
-  { "from": "kernel-families#thm-19-16", "to": "kernel-families#def-19-13", "note": "representing measure lives on semicharacters" },
-  { "from": "kernel-families#thm-19-16", "to": "kernel-families#def-19-15", "note": "exponential boundedness is the growth hypothesis" },
-  { "from": "kernel-families#thm-19-16", "to": "kernel-families#lem-19-14", "note": "mixes semicharacters, each positive definite" },
-  { "from": "kernel-families#thm-19-16", "to": "preliminaries#def-p-10", "note": "proof uses a compact convex set" },
-  { "from": "kernel-families#cor-19-17", "to": "kernel-families#thm-19-16", "note": "specializes representation to the measure semigroup" },
-  { "from": "kernel-families#cor-19-17", "to": "kernel-families#def-19-13", "note": "exp(mu[f]) are the continuous semicharacters" },
-  { "from": "kernel-families#cor-19-17", "to": "kernel-families#def-19-12", "note": "K is p.d. on bounded measures" },
-  { "from": "kernel-families#def-19-18", "to": "preliminaries#def-p-9", "note": "Fisher information is the score covariance" },
-  { "from": "kernel-families#def-19-18", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of whitened score embeddings" },
-  { "from": "kernel-families#prop-19-19", "to": "kernel-families#def-19-18", "note": "guarantees for Fisher-kernel classifiers" },
-  { "from": "kernel-families#lem-19-20", "to": "kernel-families#def-19-18", "note": "chain rule cancels the Jacobians" },
-  { "from": "kernel-families#def-19-21", "to": "preliminaries#def-p-9", "note": "integrates model likelihoods against a prior" },
-  { "from": "kernel-families#def-19-21", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of likelihood feature maps" },
-  { "from": "kernel-families#def-19-22", "to": "kernels-and-rkhs#def-2-1", "note": "requires a kernel on completed data" },
-  { "from": "kernel-families#def-19-22", "to": "preliminaries#def-p-9", "note": "averages K_Z over the latent laws" },
-  { "from": "kernel-families#prop-19-23", "to": "kernel-families#def-19-22", "note": "positive definiteness of the marginalized kernel" },
-  { "from": "kernel-families#prop-19-23", "to": "kernels-and-rkhs#thm-2-5", "note": "Aronszajn supplies the feature map" },
-  { "from": "kernel-families#prop-19-23", "to": "kernels-and-rkhs#lem-2-4", "note": "inner product of posterior-averaged features" },
-  { "from": "kernel-families#prop-19-24", "to": "kernels-and-rkhs#def-2-1", "note": "checked against the p.d. condition" },
-  { "from": "kernel-families#prop-19-24", "to": "kernels-and-rkhs#thm-2-14", "note": "collects chapter 2 closure properties" },
-  { "from": "kernel-families#prop-19-24", "to": "preliminaries#def-p-1", "note": "Schur product from Hadamard of PSD" },
-  { "from": "kernel-families#prop-19-24", "to": "preliminaries#def-p-9", "note": "Gaussian-vector proof of the Schur product" }
+ {
+  "from": "kernel-families#def-19-1",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "difference kernel is a p.d. kernel"
+ },
+ {
+  "from": "kernel-families#thm-19-2",
+  "to": "kernel-families#def-19-1",
+  "note": "characterizes positive definite sequences"
+ },
+ {
+  "from": "kernel-families#thm-19-2",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "works the p.d. quadratic form"
+ },
+ {
+  "from": "kernel-families#thm-19-2",
+  "to": "preliminaries#thm-p-6",
+  "note": "reads off the measure via Riesz"
+ },
+ {
+  "from": "kernel-families#def-19-3",
+  "to": "preliminaries#thm-p-6",
+  "note": "measures as the dual via Riesz"
+ },
+ {
+  "from": "kernel-families#def-19-4",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "kernel phi(x-y) is a p.d. kernel"
+ },
+ {
+  "from": "kernel-families#def-19-4",
+  "to": "kernel-families#def-19-1",
+  "note": "continuous analogue of the lattice definition"
+ },
+ {
+  "from": "kernel-families#thm-19-5",
+  "to": "kernel-families#def-19-4",
+  "note": "decides which profiles are positive definite"
+ },
+ {
+  "from": "kernel-families#thm-19-5",
+  "to": "kernel-families#thm-19-2",
+  "note": "converse samples lattice, applies Herglotz"
+ },
+ {
+  "from": "kernel-families#thm-19-5",
+  "to": "kernel-families#def-19-3",
+  "note": "Herglotz returns Fourier-Stieltjes coefficients"
+ },
+ {
+  "from": "kernel-families#thm-19-5",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "easy direction completes the square"
+ },
+ {
+  "from": "kernel-families#thm-19-5",
+  "to": "preliminaries#thm-p-6",
+  "note": "representation lemma invokes Riesz"
+ },
+ {
+  "from": "kernel-families#def-19-6",
+  "to": "kernel-families#def-19-3",
+  "note": "extends coefficients to measures on R^d"
+ },
+ {
+  "from": "kernel-families#prop-19-7",
+  "to": "kernel-families#def-19-6",
+  "note": "stated for the Fourier-Stieltjes transform"
+ },
+ {
+  "from": "kernel-families#thm-19-8",
+  "to": "kernel-families#def-19-4",
+  "note": "hypothesis: translation-invariant p.d. kernel"
+ },
+ {
+  "from": "kernel-families#thm-19-8",
+  "to": "kernel-families#thm-19-5",
+  "note": "Bochner makes spectral density nonnegative"
+ },
+ {
+  "from": "kernel-families#thm-19-8",
+  "to": "kernel-families#def-19-6",
+  "note": "norm weights by the reciprocal transform"
+ },
+ {
+  "from": "kernel-families#thm-19-8",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "verifies the reproducing-kernel property"
+ },
+ {
+  "from": "kernel-families#def-19-9",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "relaxes p.d. test to zero-sum vectors"
+ },
+ {
+  "from": "kernel-families#thm-19-14",
+  "to": "kernel-families#def-19-9",
+  "note": "stated for conditionally p.d. kernels"
+ },
+ {
+  "from": "kernel-families#thm-19-14",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "exp(tk) passes the p.d. test"
+ },
+ {
+  "from": "kernel-families#def-19-16",
+  "to": "kernel-families#def-19-11",
+  "note": "uses semigroup composition and involution"
+ },
+ {
+  "from": "kernel-families#def-19-16",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "phi p.d. means K(s,t) p.d."
+ },
+ {
+  "from": "kernel-families#def-19-16",
+  "to": "kernel-families#def-19-4",
+  "note": "specializes to translation invariance on groups"
+ },
+ {
+  "from": "kernel-families#def-19-13",
+  "to": "kernel-families#def-19-11",
+  "note": "defined on an abelian semigroup"
+ },
+ {
+  "from": "kernel-families#lem-19-18",
+  "to": "kernel-families#def-19-13",
+  "note": "multiplicativity factors the quadratic form"
+ },
+ {
+  "from": "kernel-families#lem-19-18",
+  "to": "kernel-families#def-19-16",
+  "note": "positive definite in the semigroup sense"
+ },
+ {
+  "from": "kernel-families#def-19-15",
+  "to": "kernel-families#def-19-11",
+  "note": "submultiplicativity uses the semigroup operations"
+ },
+ {
+  "from": "kernel-families#thm-19-20",
+  "to": "kernel-families#def-19-16",
+  "note": "characterizes exponentially bounded p.d. functions"
+ },
+ {
+  "from": "kernel-families#thm-19-20",
+  "to": "kernel-families#def-19-13",
+  "note": "representing measure lives on semicharacters"
+ },
+ {
+  "from": "kernel-families#thm-19-20",
+  "to": "kernel-families#def-19-15",
+  "note": "exponential boundedness is the growth hypothesis"
+ },
+ {
+  "from": "kernel-families#thm-19-20",
+  "to": "kernel-families#lem-19-18",
+  "note": "mixes semicharacters, each positive definite"
+ },
+ {
+  "from": "kernel-families#thm-19-20",
+  "to": "preliminaries#def-p-10",
+  "note": "proof uses a compact convex set"
+ },
+ {
+  "from": "kernel-families#cor-19-21",
+  "to": "kernel-families#thm-19-20",
+  "note": "specializes representation to the measure semigroup"
+ },
+ {
+  "from": "kernel-families#cor-19-21",
+  "to": "kernel-families#def-19-13",
+  "note": "exp(mu[f]) are the continuous semicharacters"
+ },
+ {
+  "from": "kernel-families#cor-19-21",
+  "to": "kernel-families#def-19-16",
+  "note": "K is p.d. on bounded measures"
+ },
+ {
+  "from": "kernel-families#def-19-22",
+  "to": "preliminaries#def-p-9",
+  "note": "Fisher information is the score covariance"
+ },
+ {
+  "from": "kernel-families#def-19-22",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of whitened score embeddings"
+ },
+ {
+  "from": "kernel-families#prop-19-23",
+  "to": "kernel-families#def-19-22",
+  "note": "guarantees for Fisher-kernel classifiers"
+ },
+ {
+  "from": "kernel-families#lem-19-24",
+  "to": "kernel-families#def-19-22",
+  "note": "chain rule cancels the Jacobians"
+ },
+ {
+  "from": "kernel-families#def-19-25",
+  "to": "preliminaries#def-p-9",
+  "note": "integrates model likelihoods against a prior"
+ },
+ {
+  "from": "kernel-families#def-19-25",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of likelihood feature maps"
+ },
+ {
+  "from": "kernel-families#def-19-22",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "requires a kernel on completed data"
+ },
+ {
+  "from": "kernel-families#prop-19-23",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "Aronszajn supplies the feature map"
+ },
+ {
+  "from": "kernel-families#prop-19-23",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "inner product of posterior-averaged features"
+ },
+ {
+  "from": "kernel-families#prop-19-28",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "checked against the p.d. condition"
+ },
+ {
+  "from": "kernel-families#prop-19-28",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "collects chapter 2 closure properties"
+ },
+ {
+  "from": "kernel-families#prop-19-28",
+  "to": "preliminaries#def-p-1",
+  "note": "Schur product from Hadamard of PSD"
+ },
+ {
+  "from": "kernel-families#prop-19-28",
+  "to": "preliminaries#def-p-9",
+  "note": "Gaussian-vector proof of the Schur product"
+ }
 ]

@@ -1,107 +1,107 @@
 [
-  {
-    "from": "kernel-mean-embeddings#prop-26-2",
-    "to": "kernel-mean-embeddings#def-26-1",
-    "note": "establishes the mean embedding mu_P exists in H"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-2",
-    "to": "preliminaries#thm-p-6",
-    "note": "Riesz represents the bounded expectation functional as mu_P"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-2",
-    "to": "kernels-and-rkhs#def-2-8",
-    "note": "uses the reproducing property f(X)=<f,K_X>"
-  },
-  {
-    "from": "kernel-mean-embeddings#def-26-3",
-    "to": "kernel-mean-embeddings#def-26-1",
-    "note": "MMD is the RKHS distance between mean embeddings"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-4",
-    "to": "kernel-mean-embeddings#def-26-3",
-    "note": "expands the squared MMD"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-4",
-    "to": "kernel-mean-embeddings#def-26-1",
-    "note": "writes mu_P=E[K_X] and pulls expectations out"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-6",
-    "to": "kernel-mean-embeddings#def-26-5",
-    "note": "MMD is the IPM over the RKHS unit ball"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-6",
-    "to": "kernel-mean-embeddings#def-26-3",
-    "note": "the supremum equals the MMD"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-6",
-    "to": "kernel-mean-embeddings#prop-26-2",
-    "note": "applies the generalized kernel trick to each expectation"
-  },
-  {
-    "from": "kernel-mean-embeddings#def-26-7",
-    "to": "kernel-mean-embeddings#def-26-3",
-    "note": "test statistic is the empirical MMD^2"
-  },
-  {
-    "from": "kernel-mean-embeddings#def-26-8",
-    "to": "kernel-mean-embeddings#def-26-3",
-    "note": "HSIC is MMD^2 of joint versus product of marginals"
-  },
-  {
-    "from": "kernel-mean-embeddings#def-26-9",
-    "to": "kernel-mean-embeddings#def-26-1",
-    "note": "characteristic means the mean-embedding map is injective"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-11",
-    "to": "kernel-mean-embeddings#def-26-10",
-    "note": "assumes the kernel is universal"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-11",
-    "to": "kernel-mean-embeddings#def-26-9",
-    "note": "concludes the kernel is characteristic"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-11",
-    "to": "kernel-mean-embeddings#prop-26-2",
-    "note": "generalized kernel trick makes the cross term vanish"
-  },
-  {
-    "from": "kernel-mean-embeddings#thm-26-13",
-    "to": "kernel-mean-embeddings#thm-26-12",
-    "note": "checks the three Stone-Weierstrass hypotheses"
-  },
-  {
-    "from": "kernel-mean-embeddings#thm-26-13",
-    "to": "kernel-mean-embeddings#def-26-10",
-    "note": "concludes density in C(X), i.e. universality"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-14",
-    "to": "kernel-mean-embeddings#thm-26-13",
-    "note": "monomial features span the polynomial algebra"
-  },
-  {
-    "from": "kernel-mean-embeddings#prop-26-15",
-    "to": "kernel-mean-embeddings#thm-26-13",
-    "note": "sine/cosine features form a trigonometric algebra"
-  },
-  {
-    "from": "kernel-mean-embeddings#thm-26-16",
-    "to": "kernel-mean-embeddings#def-26-9",
-    "note": "characterizes which translation-invariant kernels are characteristic"
-  },
-  {
-    "from": "kernel-mean-embeddings#thm-26-16",
-    "to": "kernel-families#thm-19-5",
-    "note": "Bochner writes kappa as a spectral measure transform"
-  }
+ {
+  "from": "kernel-mean-embeddings#prop-29-2",
+  "to": "kernel-mean-embeddings#def-29-1",
+  "note": "establishes the mean embedding mu_P exists in H"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-2",
+  "to": "preliminaries#thm-p-6",
+  "note": "Riesz represents the bounded expectation functional as mu_P"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-2",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "uses the reproducing property f(X)=<f,K_X>"
+ },
+ {
+  "from": "kernel-mean-embeddings#def-29-3",
+  "to": "kernel-mean-embeddings#def-29-1",
+  "note": "MMD is the RKHS distance between mean embeddings"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-4",
+  "to": "kernel-mean-embeddings#def-29-3",
+  "note": "expands the squared MMD"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-4",
+  "to": "kernel-mean-embeddings#def-29-1",
+  "note": "writes mu_P=E[K_X] and pulls expectations out"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-6",
+  "to": "kernel-mean-embeddings#def-29-5",
+  "note": "MMD is the IPM over the RKHS unit ball"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-6",
+  "to": "kernel-mean-embeddings#def-29-3",
+  "note": "the supremum equals the MMD"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-6",
+  "to": "kernel-mean-embeddings#prop-29-2",
+  "note": "applies the generalized kernel trick to each expectation"
+ },
+ {
+  "from": "kernel-mean-embeddings#def-29-7",
+  "to": "kernel-mean-embeddings#def-29-3",
+  "note": "test statistic is the empirical MMD^2"
+ },
+ {
+  "from": "kernel-mean-embeddings#def-29-8",
+  "to": "kernel-mean-embeddings#def-29-3",
+  "note": "HSIC is MMD^2 of joint versus product of marginals"
+ },
+ {
+  "from": "kernel-mean-embeddings#def-29-9",
+  "to": "kernel-mean-embeddings#def-29-1",
+  "note": "characteristic means the mean-embedding map is injective"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-11",
+  "to": "kernel-mean-embeddings#def-29-10",
+  "note": "assumes the kernel is universal"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-11",
+  "to": "kernel-mean-embeddings#def-29-9",
+  "note": "concludes the kernel is characteristic"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-11",
+  "to": "kernel-mean-embeddings#prop-29-2",
+  "note": "generalized kernel trick makes the cross term vanish"
+ },
+ {
+  "from": "kernel-mean-embeddings#thm-29-13",
+  "to": "kernel-mean-embeddings#thm-29-12",
+  "note": "checks the three Stone-Weierstrass hypotheses"
+ },
+ {
+  "from": "kernel-mean-embeddings#thm-29-13",
+  "to": "kernel-mean-embeddings#def-29-10",
+  "note": "concludes density in C(X), i.e. universality"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-14",
+  "to": "kernel-mean-embeddings#thm-29-13",
+  "note": "monomial features span the polynomial algebra"
+ },
+ {
+  "from": "kernel-mean-embeddings#prop-29-15",
+  "to": "kernel-mean-embeddings#thm-29-13",
+  "note": "sine/cosine features form a trigonometric algebra"
+ },
+ {
+  "from": "kernel-mean-embeddings#thm-29-16",
+  "to": "kernel-mean-embeddings#def-29-9",
+  "note": "characterizes which translation-invariant kernels are characteristic"
+ },
+ {
+  "from": "kernel-mean-embeddings#thm-29-16",
+  "to": "kernel-families#thm-19-5",
+  "note": "Bochner writes kappa as a spectral measure transform"
+ }
 ]

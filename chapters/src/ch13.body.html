@@ -329,11 +329,179 @@ $$
 The greedy rule above did not originate as a Nystrom variant. It is essentially the <em>sparse greedy matrix approximation</em> of Smola and Scholkopf (2000), one of the earliest systematic attacks on the \(O(n^2)\) Gram matrix, and reading the two side by side shows how little the modern method had to add. That work starts from the same spectral premise we invoked for Nystrom: the kernel matrix typically has many small eigenvalues, so it can be replaced by the outer product \(K \approx Z Z^\top\) of a tall, thin \(Z \in \mathbb{R}^{n \times p}\) with \(p \ll n\) at little cost (Scholkopf and Smola, 2002). It selects a small set of columns \(K(\mathbf{x}_{z_1}, \cdot), \ldots, K(\mathbf{x}_{z_p}, \cdot)\) and approximates every remaining \(K(\mathbf{x}_i, \cdot)\) by its best linear combination of them, with the error measured in RKHS distance, which is exactly the projection residual \(K(\mathbf{x}_i,\mathbf{x}_i) - \mathbf{f}_Z(\mathbf{x}_i)^\top K_Z^{-1} \mathbf{f}_Z(\mathbf{x}_i)\) that the recipe above minimizes. Two of its devices survive intact in practice: the rank-one (bordered-inverse) update of \(K_Z^{-1}\) when a column is appended, and the trick of choosing the next column not from all \(n\) candidates but from a small random pool. A sampling argument keeps that pool startlingly small (Scholkopf and Smola, 2002): a random subset of only 59 candidates contains, with 95 percent confidence, an element better than 95 percent of all candidates, a guarantee independent of \(n\). Nystrom's data-dependent anchor selection is thus the direct heir of this reduced-set method, incomplete-Cholesky update and all.
 </div>
 
-<p>A last variant applies when \(\mathcal{X} = \mathbb{R}^d\), where we may <em>synthesize</em> anchors rather than pick existing points. Running K-means on the training data yields \(p\) centroids \(\mathbf{z}_1, \ldots, \mathbf{z}_p\); setting \(f_j = \varphi(\mathbf{z}_j)\) and applying the standard Nystrom construction gives the Clustered Nystrom approximation (Zhang and Kwok, 2008). Its cost matches random sampling apart from the K-means step, but because the anchors are placed where the data actually concentrate, it is data-dependent and can significantly outperform the other variants in practice.</p>
+<p>A last variant applies when \(\mathcal{X} = \mathbb{R}^d\), where we may <em>synthesize</em> anchors rather than pick existing points. Running K-means on the training data yields \(p\) centroids \(\mathbf{z}_1, \ldots, \mathbf{z}_p\); setting \(f_j = \varphi(\mathbf{z}_j)\) and applying the standard Nystrom construction gives the Clustered Nystrom approximation (Zhang, Tsang, and Kwok, 2008). Its cost matches random sampling apart from the K-means step, but because the anchors are placed where the data actually concentrate, it is data-dependent and can significantly outperform the other variants in practice.</p>
 
 <div class="box rmk"><span class="box-title">Remark (what Nystrom is, in one line)</span>
 Every variant produces a low-rank factorization \(K \approx L L^\top\) of the kernel matrix, with a geometric reading as orthogonal projection onto a \(p\)-dimensional subspace of \(\mathcal{H}\). The greedy rule is an incomplete Cholesky factorization. Crucially, the approximation lives inside the RKHS: because \(\psi(\mathbf{x})\) encodes genuine projections of feature vectors, RKHS operations on it (translations, linear combinations, projections) remain valid. This is exactly what the next method gives up.
 </div>
+
+<h2 id="leverage-scores">Choosing landmarks by leverage scores</h2>
+
+<p>The recipes left the most consequential choice, which points to sample, in an unsatisfying state. Uniform sampling is the cheapest option and the blindest; greedy selection and kernel PCA see the data but pay extra for the privilege; K-means splits the difference when the inputs are Euclidean. What is still missing is a number attached to each individual point that measures how much the kernel geometry would lose without it: a quantity we could sample proportionally to, prove theorems about, and estimate cheaply. The intuition for what that number must express is already on the table. A point inside a tight cluster is exchangeable: any neighbor spans nearly the same direction of \(\mathcal{H}\), so whatever importance the cluster has should be shared out among its members. An isolated point is the sole witness of its direction: drop it and an entire eigendirection of the Gram matrix vanishes from the landmark subspace. Importance is also relative to the accuracy actually being solved for. In ridge regression, eigendirections of \(K\) with eigenvalue far below the regularization level are crushed by the ridge whether or not the approximation keeps them, so a sensible score should discount them from the start. The quantity with exactly these properties is the ridge leverage score, put to work for kernel methods by El Alaoui and Mahoney (2015).</p>
+
+<h3 id="ridge-leverage">Ridge leverage scores and the effective dimension</h3>
+
+<div class="box def"><span class="box-title">Definition (ridge leverage scores, El Alaoui and Mahoney, 2015)</span>
+Let \(K \in \mathbb{R}^{n \times n}\) be a kernel matrix and \(\lambda \gt 0\) a regularization level (absorbing the sample-size factor, so the \(\lambda\) here plays the role of \(n\lambda\) in the system of the opening section). The <em>ridge leverage score</em> of point \(i\) is
+$$
+\ell_i(\lambda) = \big[ K (K + \lambda I)^{-1} \big]_{ii},
+$$
+and the <em>effective dimension</em> at level \(\lambda\) is their sum,
+$$
+d_{\mathrm{eff}}(\lambda) = \sum_{i=1}^n \ell_i(\lambda) = \operatorname{tr}\big( K (K + \lambda I)^{-1} \big) = \sum_{k=1}^n \frac{\lambda_k}{\lambda_k + \lambda},
+$$
+where \(\lambda_1 \geq \cdots \geq \lambda_n \geq 0\) are the eigenvalues of \(K\).
+</div>
+
+<p>The eigendecomposition makes the definition transparent. Writing \(K = \sum_k \lambda_k \mathbf{u}_k \mathbf{u}_k^\top\) with orthonormal eigenvectors \(\mathbf{u}_k\), the matrix \(K(K+\lambda I)^{-1}\) has the same eigenvectors with eigenvalues \(\lambda_k / (\lambda_k + \lambda)\), so the diagonal entry is</p>
+$$
+\ell_i(\lambda) = \sum_{k=1}^n \frac{\lambda_k}{\lambda_k + \lambda} \, u_{ki}^2,
+$$
+<p>where \(u_{ki}\) is the \(i\)-th coordinate of \(\mathbf{u}_k\). Each eigendirection carries a survival weight \(\lambda_k/(\lambda_k+\lambda)\), close to \(1\) when \(\lambda_k \gg \lambda\) and close to \(0\) when \(\lambda_k \ll \lambda\), and distributes that weight over the points in proportion to its eigenvector mass \(u_{ki}^2\). Because the rows of an orthogonal matrix have unit norm, \(\sum_k u_{ki}^2 = 1\), and every weight lies in \((0,1)\), so \(0 \leq \ell_i(\lambda) \lt 1\): a leverage score is a fraction. A point that carries most of the mass of a strong or isolated eigendirection scores near \(1\), irreplaceable; the members of a redundant cluster split the weight of their shared direction, each scoring low. Summing over points, \(d_{\mathrm{eff}}(\lambda)\) counts the eigendirections that survive the ridge, a smooth version of the number of eigenvalues above \(\lambda\); how fast it grows as \(\lambda\) shrinks is exactly the spectral-decay information studied in [[ch:mercer-and-rates|the Mercer chapter]]. The score also has a direct statistical reading: \(K(K+\lambda I)^{-1}\) is the smoother matrix of kernel ridge regression, the operator taking observations \(\mathbf{y}\) to fitted values, so \(\ell_i(\lambda)\) is the sensitivity of the \(i\)-th fitted value to its own observation, and \(d_{\mathrm{eff}}(\lambda)\) is the classical degrees of freedom of the fit.</p>
+
+<p>This is the vocabulary in which uniform sampling's failure mode can be stated precisely. Uniform sampling of \(p\) landmarks catches any fixed point with probability \(p/n\). An eigendirection whose mass \(u_{ki}^2\) is concentrated on a handful of points, an isolated point, a small cluster, a rare pattern, enters the landmark subspace only if one of those few witnesses is drawn, and when the draw misses them all, the Nystrom projection loses the entire direction and pays its full eigenvalue in trace error. When leverage is flat across points, uniform sampling is essentially optimal, and nothing better can be done; when leverage is spiky, uniform sampling needs \(p\) large enough to catch the spikes by luck, which can be a large multiple of the \(d_{\mathrm{eff}}(\lambda)\) directions actually worth capturing. Sampling with probabilities proportional to \(\ell_i(\lambda)\) puts the budget where the geometry lives by construction.</p>
+
+<h3 id="leverage-sampling">Sampling proportionally to leverage</h3>
+
+<div class="box algo"><span class="box-title">Algorithm (Nystrom with ridge leverage sampling)</span>
+<div class="algo-io">
+  <p class="algo-in"><span class="algo-lab">Input</span> data \(\mathbf{x}_1, \ldots, \mathbf{x}_n\), kernel \(K\), regularization \(\lambda\), landmark budget \(p\).</p>
+  <p class="algo-out"><span class="algo-lab">Output</span> landmark set \(Z\) and Nystrom feature map \(\psi\).</p>
+</div>
+<ol class="algo-steps">
+  <li>Compute or approximate the ridge leverage scores \(\ell_i(\lambda)\), \(i = 1, \ldots, n\).</li>
+  <li>Draw \(p\) landmark indices independently with probabilities \(q_i = \ell_i(\lambda) / d_{\mathrm{eff}}(\lambda)\).</li>
+  <li>Build \(\psi(\mathbf{x}) = K_Z^{-1/2} \mathbf{f}_Z(\mathbf{x})\) from the sampled landmarks as in Recipe 2.</li>
+</ol>
+</div>
+
+<p>The guarantee this buys is best stated as a spectral sandwich. Recall that any Nystrom approximation satisfies \(\widetilde{K} \preceq K\), because it is the Gram matrix of orthogonal projections of the feature vectors. Leverage sampling controls the other side.</p>
+
+<div class="box prop"><span class="box-title">Proposition (leverage-score Nystrom, El Alaoui and Mahoney, 2015)</span>
+Fix \(\lambda \gt 0\), \(\varepsilon \in (0,1)\), and \(\delta \in (0,1)\), and sample \(p\) landmarks with probabilities proportional to the ridge leverage scores \(\ell_i(\lambda)\). There is a constant \(C\) such that if
+$$
+p \geq C \, \frac{d_{\mathrm{eff}}(\lambda)}{\varepsilon^2} \, \log \frac{d_{\mathrm{eff}}(\lambda)}{\delta},
+$$
+then with probability at least \(1 - \delta\) the Nystrom approximation \(\widetilde{K}\) built on those landmarks satisfies
+$$
+0 \preceq K - \widetilde{K} \preceq \varepsilon \, (K + \lambda I).
+$$
+In particular \((1-\varepsilon)(K + \lambda I) \preceq \widetilde{K} + \lambda I \preceq K + \lambda I\), so ridge regression computed with \(\widetilde{K}\) in place of \(K\) at level \(\lambda\) is spectrally indistinguishable from the exact problem up to \((1 \pm \varepsilon)\) factors, and its in-sample risk matches the exact estimator's up to a constant depending only on \(\varepsilon\).
+</div>
+
+<p>The reading of the sample size deserves emphasis, because it is the point of the whole construction: the number of landmarks that suffices is governed by \(d_{\mathrm{eff}}(\lambda)\), a property of the spectrum at the accuracy actually being solved for, not by \(n\). For a smooth kernel on concentrated data the effective dimension grows very slowly as \(\lambda\) decreases, so a few dozen landmarks can faithfully replace a Gram matrix of any size. The one apparent circularity is that computing the scores exactly means forming \((K + \lambda I)^{-1}\), the very \(O(n^3)\) object we are trying to avoid. The circularity is benign: the guarantee survives if the sampling probabilities use overestimates of the true scores, at the price of a proportionally larger \(p\), and constant-factor overestimates can be obtained cheaply, for instance from a preliminary sketch built by uniform sampling, as El Alaoui and Mahoney (2015) show. In practice one bootstraps: a crude uniform sketch yields approximate scores, and the approximate scores yield a sharp landmark set.</p>
+
+<div class="box ex"><span class="box-title">Example (leverage scores find the irreplaceable landmarks)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>Seven points on the line: a tight cluster of five, \(x = 0, 0.15, 0.3, 0.45, 0.6\), and two isolated points at \(x = 5\) and \(x = 10\). Gaussian kernel with \(\sigma = 1\), regularization \(\lambda = 0.01\), landmark budget \(p = 3\). All numbers from <code>checks/ch13-ex1.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Read the spectrum.</span> The eigenvalues of \(K\) are \(4.7879,\ 1.0000,\ 1.0000,\ 0.2087,\ 0.0034,\ 0,\ 0\): the cluster is essentially one strong direction plus small corrections, and each isolated point contributes its own eigenvalue of exactly \(1\), since it is nearly orthogonal to everything else. The best rank-\(3\) approximation, by the top eigenvectors, has Frobenius error \(0.2087\) and trace error \(0.2121\): that is the floor no choice of three landmarks can beat.</li>
+<li><span class="wex-op">Score the points.</span> The ridge leverage scores are \(\ell = (0.6415,\ 0.3217,\ 0.2794,\ 0.3217,\ 0.6415,\ 0.9901,\ 0.9901)\). The two isolated points score \(0.9901\), nearly the maximum \(1\): each is the sole witness of a surviving eigendirection. The five cluster members share their common directions, scoring between \(0.28\) and \(0.64\). The scores sum to the effective dimension \(d_{\mathrm{eff}}(\lambda) = 4.1861\): about four directions matter at this \(\lambda\), one more than the budget \(p = 3\) can hold.</li>
+<li><span class="wex-op">Sample by leverage.</span> The three highest-leverage points are the two isolated points plus one cluster representative, \(Z = \{0, 5, 10\}\). The resulting Nystrom approximation has Frobenius error \(0.5889\) and trace error \(0.594\): above the rank-\(3\) floor, as it must be with \(p \lt d_{\mathrm{eff}}\), but every surviving eigendirection is represented.</li>
+<li><span class="wex-op">Sample uniformly.</span> Averaged over all \(35\) subsets of size \(3\), uniform sampling incurs Frobenius error \(1.0329\) and trace error \(1.21\). Its worst draw is the all-cluster pick \(Z = \{0, 0.15, 0.3\}\), with Frobenius error \(1.4142\) and trace error \(2.001\): both isolated directions are lost outright, and the trace error is, to three digits, the sum \(1 + 1\) of their abandoned eigenvalues. Such a draw is no fluke: a uniform sample of three lands entirely inside the cluster with probability \(0.2857\).</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Leverage sampling is nearly twice as accurate as the average uniform draw here, and its real advantage is the failure mode it deletes: more than a quarter of uniform draws miss both isolated points and pay their full eigenvalues in error, an event that sampling proportional to \(\ell_i(\lambda)\) makes essentially impossible. The scores also announce, through \(d_{\mathrm{eff}} = 4.1861\), that a budget of three landmarks is one short of the geometry's demands: the gap between \(0.5889\) and the floor \(0.2087\) is the price of that missing landmark, not of the sampling rule.</p>
+</div>
+</div>
+
+<h2 id="falkon">FALKON and preconditioned solvers</h2>
+
+<p>Landmark selection settled, a gap remains in the accounting. Nystrom shrank the \(n \times n\) kernel problem to a problem in \(p\) dimensions, and we have quietly assumed that the small problem is easy. At the scales that motivate this chapter it is not. The statistical theory below will mandate landmark counts like \(\sqrt{n}\), which at \(n = 10^8\) means \(10^4\) landmarks; solving the reduced problem by a direct factorization then costs \(O(n p^2) = O(n^2)\) arithmetic, and the wall we knocked down reappears one story lower. The escape is the one the interlude taught, iterate rather than factor, but applied with a twist that is the heart of this section: the reduced problem is small enough that a little exact linear algebra on it, two Cholesky factorizations that never touch \(n\), can precondition the iteration into converging in a handful of steps. This combination, Nystrom plus preconditioned conjugate gradient, is the FALKON algorithm of Rudi, Carratino, and Rosasco (2017), and it is the closest thing large-scale kernel methods have to a reference solver.</p>
+
+<h3 id="nystrom-system">The landmark system and its conditioning</h3>
+
+<p>Fix \(m\) landmarks \(\mathbf{x}_{z_1}, \ldots, \mathbf{x}_{z_m}\), sampled uniformly or by leverage (we write \(m\) for the landmark count in this section, as the solver literature does). Let \(K_{mm} \in \mathbb{R}^{m \times m}\) be their kernel matrix and \(K_{nm} \in \mathbb{R}^{n \times m}\) the matrix of kernel evaluations \([K_{nm}]_{ij} = K(\mathbf{x}_i, \mathbf{x}_{z_j})\) between data and landmarks. Restricting the representer expansion to the landmark span, which is exactly the projection step of the Nystrom method, means searching over predictors \(f = \sum_{j=1}^m \beta_j K(\mathbf{x}_{z_j}, \cdot)\), for which \(f(\mathbf{x}_i) = [K_{nm}\boldsymbol{\beta}]_i\) and \(\lVert f \rVert_{\mathcal{H}}^2 = \boldsymbol{\beta}^\top K_{mm} \boldsymbol{\beta}\). Kernel ridge regression over this span is</p>
+$$
+\min_{\boldsymbol{\beta} \in \mathbb{R}^m} \ \frac{1}{n} \lVert K_{nm} \boldsymbol{\beta} - \mathbf{y} \rVert_2^2 + \lambda \, \boldsymbol{\beta}^\top K_{mm} \boldsymbol{\beta},
+$$
+<p>and setting the gradient to zero gives the \(m \times m\) linear system</p>
+$$
+H \boldsymbol{\beta} = \mathbf{v}, \qquad H = \frac{1}{n} K_{nm}^\top K_{nm} + \lambda K_{mm}, \qquad \mathbf{v} = \frac{1}{n} K_{nm}^\top \mathbf{y}.
+$$
+<p>Solving it directly costs \(O(nm^2)\) to form \(K_{nm}^\top K_{nm}\) plus \(O(m^3)\) for the factorization, and the first term is the killer: at \(m \sim \sqrt{n}\) it is \(O(n^2)\). Conjugate gradient avoids forming \(H\) at all. Each iteration needs one product \(H\mathbf{w}\), computed as \(\tfrac{1}{n} K_{nm}^\top (K_{nm} \mathbf{w}) + \lambda K_{mm} \mathbf{w}\): two streaming passes over the data at \(O(nm)\) arithmetic, with only \(O(m^2)\) memory resident if \(K_{nm}\) is generated in blocks and discarded. The question becomes how many iterations are needed, and here the classical convergence theory of conjugate gradient gives the bound \(O\big(\sqrt{\kappa(H)} \, \log(1/\varepsilon)\big)\) iterations for relative accuracy \(\varepsilon\), with \(\kappa(H)\) the condition number. That number is bad by construction. The top of \(H\)'s spectrum is set by the data term \(\tfrac{1}{n}K_{nm}^\top K_{nm}\); the bottom is set by \(\lambda\) times the tail of the landmark spectrum, and \(\lambda\) is statistically small, of order \(1/\sqrt{n}\) or smaller, precisely because we want to fit finely. In the worked example below, a system with \(\kappa(K_{mm}) = 2.26 \times 10^4\) turns into \(\kappa(H) = 4.34 \times 10^8\) once the ridge drops to \(10^{-5}\). Plain conjugate gradient on such a system spends hundreds of \(O(nm)\) passes, and the wall is rebuilt in iteration count.</p>
+
+<h3 id="falkon-preconditioner">A preconditioner from the landmarks alone</h3>
+
+<p>Preconditioning is the standard cure: instead of \(H\boldsymbol{\beta} = \mathbf{v}\), solve the transformed system</p>
+$$
+(B^\top H B) \, \mathbf{u} = B^\top \mathbf{v}, \qquad \boldsymbol{\beta} = B \mathbf{u},
+$$
+<p>for an invertible matrix \(B\) chosen to make \(\kappa(B^\top H B)\) small. The perfect choice would come from factoring \(H\) itself, which is circular: it costs what the solve costs. FALKON's observation is that the landmarks already carry a faithful miniature of \(H\). If the \(m\) landmarks <em>were</em> the entire dataset, the matrix \(H\) would be</p>
+$$
+H_{mm} = \frac{1}{m} K_{mm}^2 + \lambda K_{mm},
+$$
+<p>the same object with the data average \(\tfrac{1}{n}K_{nm}^\top K_{nm}\) replaced by the landmark average \(\tfrac{1}{m}K_{mm}^2\). This miniature can be factored exactly with two Cholesky decompositions of \(m \times m\) matrices: writing \(K_{mm} = T^\top T\) with \(T\) upper triangular, and then \(\tfrac{1}{m} T T^\top + \lambda I = A^\top A\) with \(A\) upper triangular,</p>
+$$
+H_{mm} = T^\top \Big( \frac{1}{m} T T^\top + \lambda I \Big) T = (A T)^\top (A T),
+$$
+<p>so the choice</p>
+$$
+B = T^{-1} A^{-1}
+$$
+<p>gives \(B^\top H_{mm} B = I\) exactly. Applied to the true \(H\), the same \(B\) gives \(B^\top H B = I + E\), where \(E\) is controlled by the discrepancy between the data average and the landmark average of the rank-one matrices \(\mathbf{f}_Z(\mathbf{x})\mathbf{f}_Z(\mathbf{x})^\top\): a Monte Carlo error over the landmark draw, small as soon as \(m\) is modestly large, and entirely independent of how large \(n\) is. The preconditioner costs \(O(m^3)\) once, never touches the data, and is applied inside each iteration by two triangular solves at \(O(m^2)\).</p>
+
+<div class="box prop"><span class="box-title">Proposition (the preconditioned system is well conditioned, Rudi, Carratino, and Rosasco, 2017)</span>
+Let the landmarks be drawn uniformly from the data and let \(B\) be the FALKON preconditioner above. There are constants \(c_0, c_1, c_2 \gt 0\), depending only on the kernel bound, such that for any \(\delta \in (0,1)\), if
+$$
+m \geq c_0 \, \frac{1}{\lambda} \log \frac{n}{\delta},
+$$
+then with probability at least \(1 - \delta\) all eigenvalues of \(B^\top H B\) lie in \([c_1, c_2]\). The condition number of the preconditioned system is then bounded by a constant independent of \(n\) and \(\lambda\), and conjugate gradient reaches relative accuracy \(\varepsilon\) in \(O(\log(1/\varepsilon))\) iterations. At the statistically motivated scaling \(\lambda \sim n^{-1/2}\), the requirement reads \(m \gtrsim \sqrt{n} \log n\), and refinements replace the \(1/\lambda\) by the effective dimension \(d_{\mathrm{eff}}(\lambda)\) when the landmarks are drawn by leverage.
+</div>
+
+<div class="box algo"><span class="box-title">Algorithm (FALKON)</span>
+<div class="algo-io">
+  <p class="algo-in"><span class="algo-lab">Input</span> data \((\mathbf{x}_i, y_i)_{i=1}^n\), kernel \(K\), landmark count \(m\), ridge \(\lambda\), iteration budget \(t\).</p>
+  <p class="algo-out"><span class="algo-lab">Output</span> coefficients \(\boldsymbol{\beta} \in \mathbb{R}^m\) of the predictor \(f(\mathbf{x}) = \sum_{j=1}^m \beta_j K(\mathbf{x}_{z_j}, \mathbf{x})\).</p>
+</div>
+<ol class="algo-steps">
+  <li>Sample \(m\) landmarks uniformly from the data (or by ridge leverage scores).</li>
+  <li>Factor \(K_{mm} = T^\top T\) and \(\tfrac{1}{m} T T^\top + \lambda I = A^\top A\), two Cholesky factorizations of \(m \times m\) matrices; set \(B = T^{-1} A^{-1}\), applied only through triangular solves.</li>
+  <li>Run conjugate gradient on \(B^\top H B \, \mathbf{u} = B^\top \mathbf{v}\), computing each product \(H \mathbf{w}\) as \(\tfrac{1}{n} K_{nm}^\top (K_{nm} \mathbf{w}) + \lambda K_{mm} \mathbf{w}\) over streaming blocks of \(K_{nm}\), never storing the full matrix.</li>
+  <li class="algo-loop">Stop after \(t\) iterations (or at a target residual); return \(\boldsymbol{\beta} = B \mathbf{u}\).</li>
+</ol>
+</div>
+
+<p>The budget now assembles into the headline. The preconditioner costs \(O(m^3)\) once; each of the \(t\) iterations costs \(O(nm)\) for the streamed kernel products plus \(O(m^2)\) for the triangular solves; memory holds \(O(m^2)\) floats. With \(m \sim \sqrt{n}\) landmarks and \(t = O(\log n)\) iterations, the total is \(\widetilde{O}(n\sqrt{n})\) time and \(O(n)\) memory, against \(O(n^3)\) and \(O(n^2)\) for the exact solve, and against \(O(n^2)\) time for Nystrom with a direct factorization. The iteration count is the quantity to watch, and the worked example makes it concrete.</p>
+
+<div class="box ex"><span class="box-title">Example (the FALKON preconditioner collapses the iteration count)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>\(n = 1000\) points drawn uniformly on \([0,4]\), responses \(y = \sin(3x)\) plus Gaussian noise of standard deviation \(0.1\); Laplacian kernel \(K(x,x') = e^{-\lvert x - x' \rvert / \sigma}\) with \(\sigma = 0.5\); \(m = 100\) landmarks sampled uniformly from the data; ridge \(\lambda = 10^{-5}\); conjugate gradient stopped at relative residual \(10^{-6}\). All numbers from <code>checks/ch13-ex2.py</code>.</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Form the landmark system.</span> \(H = \tfrac{1}{n} K_{nm}^\top K_{nm} + \lambda K_{mm}\) is \(100 \times 100\). The landmark kernel matrix is tame, \(\kappa(K_{mm}) = 2.26 \times 10^4\), but the small ridge exposes the decaying spectrum of the data term: \(\kappa(H) = 4.34 \times 10^8\), four orders of magnitude worse.</li>
+<li><span class="wex-op">Run plain conjugate gradient.</span> It takes \(751\) iterations to reach the residual \(9.4 \times 10^{-7}\), each iteration a full \(O(nm)\) pass through the kernel products. In exact arithmetic CG on a \(100\)-dimensional system must terminate within \(100\) steps; needing seven and a half times that is ill-conditioning made visible, round-off destroying the conjugacy the guarantee rests on.</li>
+<li><span class="wex-op">Build the preconditioner.</span> Two Cholesky factorizations of \(100 \times 100\) matrices give \(T\), \(A\), and \(B = T^{-1}A^{-1}\), at a cost independent of \(n\). The transformed operator \(M = B^\top H B\) has \(\kappa(M) = 2.44 \times 10^1\): seven orders of magnitude below \(\kappa(H)\).</li>
+<li><span class="wex-op">Run preconditioned conjugate gradient.</span> It reaches residual \(5.6 \times 10^{-7}\) in \(25\) iterations, a \(30.0\times\) reduction, each iteration costing the same \(O(nm)\) as before plus two cheap triangular solves. The two runs return the same predictor: their in-sample predictions agree to \(7.2 \times 10^{-4}\) in relative norm, and both fits have RMSE \(0.033\) against the noiseless \(\sin(3x)\), a third of the noise level.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> The preconditioner spends \(O(m^3)\) arithmetic once, on matrices that never see \(n\), to make every subsequent \(O(nm)\) iteration count: the iteration budget now reflects \(\kappa(M) = 24.4\), which the proposition above pins at a constant as \(n\) grows, rather than \(\kappa(H)\), which deteriorates as the ridge shrinks. This is the entire engineering content of FALKON: iterate on the big system, but let the small system decide the geometry of the iteration.</p>
+</div>
+</div>
+
+<h3 id="falkon-rates">Optimal rates: approximation as regularization</h3>
+
+<p>Speed would mean little if the landmark restriction degraded what can be learned. The statistical story, worked out two years before FALKON itself, says it does not, and the way it says so reframes approximation entirely. The question is how the excess risk of Nystrom kernel ridge regression depends on \(m\), and the answer of Rudi, Camoriano, and Rosasco (2015) is that beyond a threshold, it does not.</p>
+
+<div class="box thm"><span class="box-title">Theorem (optimal-rate Nystrom, Rudi, Camoriano, and Rosasco, 2015)</span>
+In the standard learning setting for kernel ridge regression (bounded kernel, a target function in \(\mathcal{H}\), the basic source condition), let the Nystrom subspace be built from \(m\) landmarks drawn uniformly from the data, and choose \(\lambda \sim n^{-1/2}\). There is a constant \(c\) such that if
+$$
+m \geq c \, \sqrt{n} \, \log n,
+$$
+then with high probability the Nystrom estimator's excess risk is \(O(n^{-1/2})\), the minimax-optimal rate attained by exact kernel ridge regression on this class. Under refined capacity assumptions the threshold improves to the order of the effective dimension \(d_{\mathrm{eff}}(\lambda)\), with leverage-score sampling reaching it.
+</div>
+
+<p>The title of that paper, less is more, is the right slogan. Subsampling is not a corruption to be minimized but a form of regularization: below the threshold the approximation error contributes to the risk, above it the statistical error dominates and further landmarks buy nothing. The landmark count should track the effective dimension of the problem at the chosen \(\lambda\), not the dataset size, and computation saved past the threshold is free in statistical terms, a phenomenon the authors call computational regularization. FALKON is what happens when this statistical threshold meets the solver of the previous subsection: with \(m \sim \sqrt{n}\) landmarks mandated by the statistics and \(O(\log n)\) iterations delivered by the preconditioner, the full pipeline achieves the optimal rate at a strictly subquadratic budget (Rudi, Carratino, and Rosasco, 2017).</p>
+
+<div class="box thm"><span class="box-title">Theorem (FALKON, Rudi, Carratino, and Rosasco, 2017)</span>
+In the same setting, run FALKON with \(m = \Theta(\sqrt{n} \log n)\) uniform landmarks, \(\lambda \sim n^{-1/2}\), and \(t = O(\log n)\) iterations of preconditioned conjugate gradient. With high probability the returned predictor has excess risk \(O(n^{-1/2})\), matching exact kernel ridge regression, at total cost
+$$
+\widetilde{O}(n \sqrt{n}) \ \text{time} \qquad \text{and} \qquad \widetilde{O}(n) \ \text{memory}.
+$$
+</div>
+
+<p>The gap between this theory and hardware is closed by engineering, and it is worth recording how far that goes. Meanti, Carratino, Rosasco, and Rudi (2020) reimplemented FALKON for multi-GPU machines: the two Cholesky factorizations run out-of-core in blocks so that \(m\) can exceed single-device memory, the \(K_{nm}\) products are fused and streamed across GPUs, and most of the arithmetic runs in single precision with the factorizations kept in double where conditioning demands it. The resulting solver handles datasets with \(n\) in the billions on a single multi-GPU server, and put kernel machines back on the same large benchmarks as deep networks, at competitive accuracy and training time. The interlude taught that at scale one stops solving and starts iterating; FALKON sharpens the lesson: keep a solve, but make it \(m \times m\), and let it steer the iteration.</p>
 
 <h2 id="rff">Random Fourier features</h2>
 
@@ -423,6 +591,35 @@ $$
 Both replace the kernel by a \(p\)-dimensional feature map and reduce a kernel machine to a linear model, defeating the same \(O(n^2)\) memory and \(O(n^3)\) solve. They differ in where the features come from and what survives. Nystrom is data-dependent: it samples or synthesizes anchors from the data, gives a low-rank factorization \(K \approx LL^\top\), and keeps the approximation inside the RKHS, so its points admit all RKHS operations. Random Fourier features are data-independent: they sample from the kernel's Fourier transform, come with a uniform, distribution-free guarantee that holds before any data are seen, and apply to shift-invariant kernels, but their predictors do not live in \(\mathcal{H}\). Data-adaptive accuracy on one side, universal and label-free simplicity on the other.
 </div>
 
+<h2 id="nystrom-vs-random-features">Nystrom versus random features: pricing the choice</h2>
+
+<p>The remark above states the dichotomy; it does not yet price it. Given a fixed budget of \(p\) dimensions, which map serves the learning problem better? The honest answer depends on the spectrum of the problem, and on who is allowed to see it, and it is worth working out because the two families fail in different places.</p>
+
+<p>The error currencies differ first. Nystrom's error after \(p\) landmarks is a projection residual, controlled by the tail of the Gram spectrum: with well-chosen landmarks it is roughly the eigenvalue mass beyond the top \(p\) directions, and with leverage sampling the budget that suffices for ridge regression at level \(\lambda\) is \(d_{\mathrm{eff}}(\lambda)\) up to logarithms. It is a data-dependent quantity: an easy dataset, one whose kernel geometry is nearly low rank, genuinely costs fewer landmarks. Random features pay in a different coin: Monte Carlo error, \(O(1/\sqrt{p})\) uniformly over the domain, identical for an easy dataset and a hard one, because the construction never looks at the data at all. From this single difference the practical folklore follows. When the spectrum decays fast, a smooth kernel, inputs concentrated near a low-dimensional set, clustered data, Nystrom captures with tens of landmarks what a data-blind average still resolves noisily with thousands of features, and Nystrom wins outright. When the spectrum decays slowly, there is no thin tail for data-dependence to exploit, the two families need comparable dimensions, and the tie is broken by logistics rather than approximation: random features need no pass over the training data, can be regenerated on the fly from a random seed rather than stored, extend to a new point with no bookkeeping, and parallelize trivially, which is why they are the default in streaming and privacy-constrained settings. Nystrom, for its part, is the only option of the two for kernels with no Fourier transform to sample, such as the kernels on strings, trees, and graphs of [[ch:string-kernels|the structured-data chapters]], since it asks nothing of the kernel beyond positive definiteness.</p>
+
+<p>The statistical theory refines this picture without overturning it. On the Nystrom side, the optimal-rate theorem of Rudi, Camoriano, and Rosasco (2015) puts the landmark threshold for minimax performance at \(\widetilde{O}(\sqrt{n})\); on the random-features side, Rudi and Rosasco (2017) prove the matching statement, that \(\widetilde{O}(\sqrt{n})\) random features suffice for the same \(O(n^{-1/2})\) excess risk. At the level of worst-case rates the families tie. The separation is adaptivity: leverage-adapted Nystrom can ride a benign spectrum down to \(d_{\mathrm{eff}}(\lambda) \ll \sqrt{n}\) landmarks, while plain random features, blind to the data, cannot see a benign spectrum at all. The comparison in brief:</p>
+
+<table>
+<thead><tr><th></th><th>Nystrom</th><th>Random Fourier features</th></tr></thead>
+<tbody>
+<tr><td>Feature source</td><td>the data (sampled or learned anchors)</td><td>the kernel's Fourier transform</td></tr>
+<tr><td>Kernels covered</td><td>any positive definite kernel</td><td>shift-invariant kernels</td></tr>
+<tr><td>Error currency</td><td>spectral tail, \(d_{\mathrm{eff}}(\lambda)\) with leverage sampling</td><td>Monte Carlo, \(O(1/\sqrt{p})\) uniformly</td></tr>
+<tr><td>Guarantee</td><td>data-dependent, spectrum-adaptive</td><td>distribution-free, holds before any data</td></tr>
+<tr><td>Predictor in \(\mathcal{H}\)</td><td>yes, a genuine projection</td><td>no</td></tr>
+<tr><td>Features for optimal KRR rate</td><td>\(\widetilde{O}(\sqrt{n})\), down to \(\widetilde{O}(d_{\mathrm{eff}})\) adaptive</td><td>\(\widetilde{O}(\sqrt{n})\)</td></tr>
+<tr><td>Wins when</td><td>spectrum decays fast; kernel non-spectral</td><td>streaming, no second pass; slow spectral decay</td></tr>
+</tbody>
+</table>
+
+<h3 id="structured-features">Structured and quasi-random features</h3>
+
+<p>Inside the random-features budget there is a second cost that the count \(p\) hides: the map itself. Vanilla random Fourier features store a dense Gaussian matrix \(W \in \mathbb{R}^{p \times d}\) of frequencies and spend \(O(pd)\) arithmetic per encoded point, and for high-dimensional inputs, images, spectra, text embeddings, with \(p\) in the tens of thousands, the matrix and the product dominate the pipeline. A line of work removes this cost by replacing the i.i.d. Gaussian matrix with structured randomness, and a parallel line improves the constant in the \(O(1/\sqrt{p})\) error by making the frequencies better spread than chance. Both keep the Bochner integral as the target and change only how it is sampled.</p>
+
+<p>Fastfood (Le, Sarlós, and Smola, 2013) replaces \(W\) by a product of diagonal and Walsh-Hadamard matrices, \(V = \tfrac{1}{\sigma\sqrt{d}}\, S H G \Pi H B\), with \(\Pi\) a random permutation, \(B\) and \(S\) random diagonal matrices, \(G\) a diagonal of Gaussians, and \(H\) the Walsh-Hadamard transform. The point of the construction is that \(H\) needs no storage and multiplies a vector in \(O(d \log d)\) by an FFT-style recursion, so the whole map costs \(O(p \log d)\) time and \(O(p)\) memory against \(O(pd)\) and \(O(pd)\): log-linear, as the name advertises. Each row of \(V\) is still marginally Gaussian, so the kernel estimate remains unbiased, and the rows' weak dependence costs only a modest factor in concentration. Orthogonal random features (Yu et al., 2016) keep the cost of the dense map but attack its variance: draw the frequency block as a uniformly random orthogonal matrix with rows rescaled by chi-distributed norms, so that each row is again exactly Gaussian, but distinct rows are exactly orthogonal rather than merely independent. The estimator of the Gaussian kernel stays unbiased, and the negative dependence between orthogonal directions cancels part of the Monte Carlo noise: the mean squared error is provably below that of i.i.d. features, with the largest gains at moderate distances \(\lVert \mathbf{x} - \mathbf{y} \rVert\), and a Hadamard-based variant recovers the \(O(p \log d)\) evaluation cost as well. Quasi-Monte Carlo features (Avron, Sindhwani, Yang, and Mahoney, 2016) go after the sampling itself: replace the i.i.d. draws from \(q\) by a deterministic low-discrepancy sequence, Halton or Sobol, pushed through the inverse distribution function of \(q\), so the frequencies are equidistributed by design rather than on average. For integrands as smooth as the kernel's, the integration error improves from \(O(p^{-1/2})\) toward \(O(1/p)\) up to logarithmic factors, and the paper's box-discrepancy theory tailors the sequence to the kernel's spectral measure; the idea is the same trade of randomness for equidistribution that drives the kernel herding and quadrature rules of [[ch:kernel-quadrature-and-herding|the quadrature chapter]].</p>
+
+<p>The pattern across all three is the pattern of the whole chapter in miniature. The Bochner integral is fixed; only our quadrature of it improves, by cheapening each sample (Fastfood), by decorrelating the samples (orthogonal features), or by spreading them evenly (quasi-Monte Carlo). That is precisely the ladder the Nystrom sections climbed on the other side, from uniform landmarks through greedy selection to leverage scores. In both families the kernel machine at the end is the same linear model; the craft, and the theory, live entirely in where the sampling budget is spent.</p>
+
 <div class="box rmk"><span class="box-title">Further reading</span>
 The optimization machinery behind large-scale kernel machines, decomposition and working-set solvers for the support vector machine, and the day-to-day practice of training these models at scale, is developed at length by Scholkopf and Smola (2002) in <em>Learning with Kernels</em>, chapters 10 and 11, which remain a good entry point to the implementation and optimization side of the subject. That book predates the two approximation families that organize this chapter. The random-features idea was introduced later, by Rahimi and Recht (2007), and the modern statistical analysis of both Nystrom and random-feature approximations, which quantifies how few landmarks or features already match the generalization of the exact kernel estimator, belongs to a still later line of work exemplified by Rudi and Rosasco (2017). For those sharper guarantees one has to look past the textbook to the research literature.
 </div>
@@ -450,6 +647,15 @@ The optimization machinery behind large-scale kernel machines, decomposition and
 
 <li><span class="ex-tag">challenge</span> Trace the memory-versus-compute trade behind variance reduction. The chapter argues SGD's noise never dies. (a) At the optimum \(\mathbf{w}^\star\), the full gradient \(\tfrac{1}{n}\sum_i \nabla f_i(\mathbf{w}^\star) = 0\); construct an \(n = 2\) example in which the individual gradients \(\nabla f_i(\mathbf{w}^\star)\) are nonzero yet cancel, and conclude that the one-sample estimator \(\nabla f_I(\mathbf{w}^\star)\) has strictly positive variance. (b) Explain why that irreducible variance forces SGD to send \(\eta_t \to 0\), which is what drags its strongly convex rate down to \(O(1/t)\), whereas a variance-reduced estimate whose variance vanishes as \(\mathbf{w} \to \mathbf{w}^\star\) permits a constant step and the geometric rate to return. (c) SAG restores that fast rate by storing one gradient per example, while SVRG spends periodic full-batch recomputation instead. State the resource each pays, and compute the size in gigabytes of SAG's gradient table for \(n = 10^6\), \(p = 10^3\), in double precision.
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a) take \(f_1(w) = \tfrac{1}{2}(w - 1)^2\), \(f_2(w) = \tfrac{1}{2}(w + 1)^2\); the average is minimized at \(w^\star = 0\) where \(\nabla f_1 = -1\), \(\nabla f_2 = +1\), so a random draw returns \(\pm 1\), variance \(1 \neq 0\). For (c) SAG's table is \(n \times p\) floats, so \(10^6 \times 10^3 \times 8\) bytes; SVRG trades that memory for the compute of recomputing a full gradient every so often.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Establish the basic identities of ridge leverage scores. Let \(K = \sum_{k=1}^n \lambda_k \mathbf{u}_k \mathbf{u}_k^\top\) with orthonormal eigenvectors and \(\lambda \gt 0\). (a) Show that \(\ell_i(\lambda) = \sum_k \tfrac{\lambda_k}{\lambda_k + \lambda} u_{ki}^2\), and deduce \(0 \leq \ell_i(\lambda) \lt 1\) for every \(i\). (b) Show that \(\sum_i \ell_i(\lambda) = d_{\mathrm{eff}}(\lambda) = \sum_k \tfrac{\lambda_k}{\lambda_k + \lambda}\). (c) Determine the limits of \(d_{\mathrm{eff}}(\lambda)\) as \(\lambda \to 0^+\) and as \(\lambda \to \infty\), and check both against the worked example, whose spectrum \((4.7879, 1, 1, 0.2087, 0.0034, 0, 0)\) has five nonzero eigenvalues and whose effective dimension at \(\lambda = 0.01\) is \(4.1861\).
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), \(K(K+\lambda I)^{-1}\) has the same eigenvectors as \(K\) with eigenvalues \(\lambda_k/(\lambda_k+\lambda) \in [0,1)\), and the rows of an orthogonal matrix have unit norm, \(\sum_k u_{ki}^2 = 1\). For (c), each term \(\lambda_k/(\lambda_k+\lambda)\) tends to \(1\) if \(\lambda_k \gt 0\) and to \(0\) always as \(\lambda \to \infty\), so \(d_{\mathrm{eff}} \to \operatorname{rank}(K) = 5\) and \(d_{\mathrm{eff}} \to 0\) respectively; \(4.1861\) at \(\lambda = 0.01\) sits below \(5\) because the eigenvalue \(0.0034\) is already mostly crushed by the ridge, contributing only \(0.0034/0.0134 \approx 0.25\).</div></details></li>
+
+<li><span class="ex-tag">proof</span> Show that the FALKON preconditioner is exact when the landmarks are the whole dataset. Let \(K_{mm} = T^\top T\) and \(\tfrac{1}{m} T T^\top + \lambda I = A^\top A\) be the two Cholesky factorizations, and \(B = T^{-1} A^{-1}\). (a) Verify the identity \(\tfrac{1}{m} K_{mm}^2 + \lambda K_{mm} = (AT)^\top (AT)\). (b) Suppose \(m = n\) and the landmark set is the entire dataset, so \(K_{nm} = K_{mm}\). Show that \(H = \tfrac{1}{n} K_{nm}^\top K_{nm} + \lambda K_{mm}\) equals \(\tfrac{1}{m} K_{mm}^2 + \lambda K_{mm}\), and conclude \(B^\top H B = I\), so preconditioned conjugate gradient converges in a single iteration. (c) For \(m \lt n\), write \(B^\top H B = I + E\) and identify the matrix whose deviation from its landmark average \(E\) measures. What kind of convergence, in \(m\), controls the size of \(E\)?
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">For (a), factor \(K_{mm} = T^\top T\) out on both sides: \(\tfrac{1}{m}K_{mm}^2 + \lambda K_{mm} = T^\top(\tfrac{1}{m} T T^\top + \lambda I)T = T^\top A^\top A T\). For (b), substitute and cancel: \(B^\top (AT)^\top (AT) B = A^{-\top} T^{-\top} T^\top A^\top A T T^{-1} A^{-1} = I\); CG on the identity solves in one step. For (c), \(E = B^\top \big( \tfrac{1}{n} K_{nm}^\top K_{nm} - \tfrac{1}{m} K_{mm}^2 \big) B\): the data average of the rank-one matrices \(\mathbf{f}_Z(\mathbf{x}_i)\mathbf{f}_Z(\mathbf{x}_i)^\top\) minus their landmark average, a Monte Carlo deviation over the landmark draw that concentrates as \(m\) grows, independently of \(n\).</div></details></li>
+
+<li><span class="ex-tag">computation</span> Test the conjugate gradient iteration bound against the FALKON worked example. The classical bound says CG reaches relative accuracy \(\varepsilon\) within about \(\tfrac{1}{2}\sqrt{\kappa} \, \ln(2/\varepsilon)\) iterations on a system with condition number \(\kappa\). The worked example reports \(\kappa(H) = 4.34 \times 10^8\), \(\kappa(M) = 2.44 \times 10^1\), tolerance \(10^{-6}\), and measured iteration counts \(751\) and \(25\). (a) Evaluate the bound for the preconditioned system \(M\) and compare with the measured \(25\). (b) Evaluate it for \(H\) and observe that the prediction is around two hundred times the measured \(751\): explain the gap through the shape of the spectrum, recalling that CG adapts to all the eigenvalues, effectively deleting a few extreme ones after a few iterations, while \(\kappa\) sees only the two endpoints. (c) The measured \(751\) exceeds the dimension \(m = 100\), yet exact-arithmetic CG must terminate in at most \(m\) steps. What does the overshoot demonstrate about finite-precision CG on ill-conditioned systems?
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">With \(\ln(2/\varepsilon) = \ln(2 \times 10^6) \approx 14.5\): for \(M\), \(\tfrac{1}{2}\sqrt{24.4} \times 14.5 \approx 36\), the right order against the measured \(25\); for \(H\), \(\tfrac{1}{2}\sqrt{4.34 \times 10^8} \times 14.5 \approx 1.5 \times 10^5\), wildly pessimistic because the bound is tight only for spectra spread evenly between the extremes. For (c), round-off destroys the exact conjugacy of the search directions, so the finite-termination property fails precisely when conditioning is poor; the preconditioned run, at \(25 \lt 100\), sits safely inside the regime where the theory works.</div></details></li>
 
 </ol>
 </section>
