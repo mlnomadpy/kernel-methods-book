@@ -1494,6 +1494,151 @@ Taking \(\lambda = n^{-1}\) and summing these inequalities gives the result.
 <li>Under additional assumptions on \(f^*\), for instance requiring not only \(\sum_{i\geq 1}(\beta^*_i)^2 \lt \infty\) but also \(\sum_{i \geq 1} i^{\tau} (\beta^*_i)^2 \lt \infty\) for some \(\tau \gt 0\), or \(\beta^*_i = 0\) for \(i \gt J\), one obtains faster convergence rates, which are again minimax optimal for the class of functions considered. In this sense KRR is <em>adaptive</em>: the same estimator, with a properly tuned \(\lambda\), achieves the optimal rate over a range of regularity classes (Caponnetto and De Vito, 2007; Dicker et al., 2015).</li>
 </ul>
 
+<h2 id="integral-operator-minimax">The integral-operator minimax framework: source and capacity</h2>
+
+<p>
+The rates corollary tied the speed of learning to a single number, the eigenvalue-decay exponent, under the standing assumption \(f^* \in \mathcal H\). That assumption quietly hides a second dial. Two targets can both lie in \(\mathcal H\) yet be learnable at very different speeds, because what governs the bias is not merely that \(f^*\) has finite RKHS norm but how deep inside the smoothing action of the kernel it sits. The modern account, the <em>integral-operator approach</em> to minimax learning rates, separates these two effects cleanly: a <em>source condition</em> measures the smoothness of the target relative to the kernel, a <em>capacity condition</em> measures the richness of the kernel through its spectrum, and a single exponent formula built from the two governs the optimal rate. The error-estimate technique was developed by Smale and Zhou (2007), and its optimal-rate form is due to Caponnetto and De Vito (2007); the framework has since been sharpened by Steinwart, Hush, and Scovel (2009), Fischer and Steinwart (2020), and Blanchard and Mücke (2018). This section names the framework, states its central theorem, and reads off the saturation phenomenon that specifically limits kernel ridge regression. Both conditions are phrased through the integral operator \(T = L_K\), diagonal in the eigenbasis with \(T \psi_i = \lambda_i \psi_i\), and its spectral powers \(T^r \big(\sum_i c_i \psi_i \big) = \sum_i \lambda_i^r\, c_i\, \psi_i\).
+</p>
+
+<h3 id="source-condition">The source condition</h3>
+
+<p>
+How smooth is the target relative to the kernel? The chapter's RKHS is the range of \(T^{1/2}\), the functions whose coordinates decay one half-power of the spectrum faster than square-summable. Demanding that \(f^*\) sit even deeper inside the range of \(T\), in the range of a higher power \(T^r\), is exactly a quantitative smoothness assumption, and it is the hypothesis under which fast rates are proved.
+</p>
+
+<div class="box def"><span class="box-title">Definition (source condition)</span>
+<p>
+The target \(f^*\) satisfies a <em>source condition</em> of order \(r \gt 0\) with radius \(R\) if it lies in the range of the \(r\)-th power of the integral operator,
+</p>
+$$
+f^* = T^r g, \qquad \lVert g \rVert_{L^2_\nu(\mathcal X)} \leq R,
+$$
+<p>
+where \(T^r\) is defined by the spectral calculus. Equivalently, writing \(f^* = \sum_i c_i \psi_i\) in the \(L^2_\nu\) eigenbasis, the coordinates obey
+</p>
+$$
+\sum_{i \geq 1} \frac{c_i^2}{\lambda_i^{2r}} \leq R^2.
+$$
+</div>
+
+<p>
+The larger the exponent \(r\), the faster the coordinates \(c_i\) must decay relative to \(\lambda_i^r\), so the deeper \(f^*\) sits inside the smoothed range of \(T\) and the smoother it is relative to the kernel. The threshold \(r = \tfrac12\) is precisely membership in the RKHS: since \(\lVert f^* \rVert_{\mathcal H}^2 = \sum_i c_i^2 / \lambda_i\), the source condition at \(r = \tfrac12\) reads \(\sum_i c_i^2 / \lambda_i \leq R^2\), that is, \(f^* \in \mathcal H\) with \(\lVert f^* \rVert_{\mathcal H} \leq R\). So \(r = \tfrac12\) recovers exactly the standing hypothesis of the rate analysis above, as the optimality remarks already anticipated; \(r \gt \tfrac12\) asks for a genuinely smoother target, while \(r \in (0, \tfrac12)\) admits targets rougher than a generic RKHS element, the misspecified regime handled by Steinwart, Hush, and Scovel (2009) and by Fischer and Steinwart (2020) through an additional embedding condition on the eigenfunctions.
+</p>
+
+<h3 id="capacity-condition">The capacity condition and the effective dimension</h3>
+
+<p>
+The source condition speaks about the target; the second dial speaks about the kernel and the space it lives on. It asks how many directions the estimator is forced to fit, and the right measure is the effective dimension already met in the variance analysis, now promoted to a hypothesis in its own right.
+</p>
+
+<div class="box def"><span class="box-title">Definition (capacity condition)</span>
+<p>
+The kernel satisfies a <em>capacity condition</em> with exponent \(p \in (0, 1]\) if the effective dimension
+</p>
+$$
+N(\lambda) = \mathrm{tr}\!\left(T (T + \lambda I)^{-1} \right) = \sum_{i \geq 1} \frac{\lambda_i}{\lambda_i + \lambda}
+$$
+<p>
+obeys \(N(\lambda) \leq C\, \lambda^{-p}\) for all \(\lambda \gt 0\) and some constant \(C\).
+</p>
+</div>
+
+<p>
+A polynomially decaying spectrum \(\lambda_i \asymp i^{-1/p}\), equivalently \(\lambda_i \asymp i^{-s}\) with \(s = 1/p\), gives exactly \(N(\lambda) \asymp \lambda^{-p}\). The borderline \(p = 1\) is nothing more than the trace-class bound \(\sum_i \lambda_i \lt \infty\) proved for every Mercer kernel, which always yields \(N(\lambda) \leq \lambda^{-1} \sum_i \lambda_i\); a smaller \(p\) means a faster-decaying spectrum, a smaller effective dimension, and therefore fewer directions carrying variance. This is the same reading as the effective-dimension remark of the Mercer section: \(N(\lambda)\) counts, softly, the eigenvalues above the threshold \(\lambda\), and the capacity exponent \(p\) is the growth rate of that count as \(\lambda \to 0\). It is this exponent, not the ambient dimension, that fixes the size of the variance.
+</p>
+
+<h3 id="the-minimax-rate">The minimax rate and the saturation of KRR</h3>
+
+<p>
+With both dials in place the optimal rate is a single closed expression in the two exponents.
+</p>
+
+<div class="box thm"><span class="box-title">Theorem (Caponnetto and De Vito, 2007)</span>
+<p>
+Suppose the kernel satisfies the capacity condition with exponent \(p \in (0, 1]\) and the target the source condition with exponent \(r \in \left[ \tfrac12, 1 \right]\) and radius \(R\). Then kernel ridge regression with regularization \(\lambda_n \asymp n^{-1/(2r + p)}\) has excess risk
+</p>
+$$
+\mathbb E \left\lVert \hat f_{\lambda_n} - f^* \right\rVert^2_{L^2_\nu(\mathcal X)}
+\leq C\, \left(R^2 + \sigma^2 \right)\, n^{-\frac{2r}{2r + p}},
+$$
+<p>
+and the exponent \(\tfrac{2r}{2r + p}\) is minimax optimal: no estimator attains a uniformly faster rate over the class of distributions meeting these two conditions.
+</p>
+</div>
+
+<p>
+The formula reproduces every rate of the corollary above as a special case. At \(r = \tfrac12\), the case \(f^* \in \mathcal H\), and capacity \(p = 1/s\) from a spectrum \(\lambda_i \asymp i^{-s}\), the exponent is \(\tfrac{2r}{2r+p} = \tfrac{1}{1 + p} = \tfrac{s}{s+1}\), exactly the polynomial-decay rate \(n^{-s/(s+1)}\) obtained earlier by hand. The framework only makes explicit what the hand computation left implicit, that the rate also depends on the smoothness of the target, and it is the product structure \(2r/(2r+p)\) that shows how the two dependencies interlock.
+</p>
+
+<p>
+The intuition is exactly the bias-variance split already computed, now read through the operator calculus. The kernel ridge estimator smooths the target by \(g_\lambda(T) = (T + \lambda I)^{-1}\), so its bias is the smoothing residual applied to \(f^*\),
+</p>
+
+$$
+\mathrm{bias}(\lambda) = \left\lVert \lambda (T + \lambda I)^{-1} f^* \right\rVert_{L^2_\nu(\mathcal X)}
+= \left\lVert \lambda (T + \lambda I)^{-1} T^r g \right\rVert_{L^2_\nu(\mathcal X)}
+\leq \left( \sup_{0 \leq t \leq \lVert T \rVert} \frac{\lambda\, t^{\,r}}{t + \lambda} \right) R.
+$$
+
+<p>
+For \(0 \lt r \leq 1\) the scalar supremum is of order \(\lambda^{r}\), attained near \(t \asymp \lambda\), so \(\mathrm{bias}(\lambda)^2 \lesssim \lambda^{2r} R^2\): a larger source exponent shrinks the bias faster as \(\lambda \to 0\). The variance is controlled by capacity, since the spectral bound of the previous section reads \(\tilde V_\lambda \lesssim \sigma^2 N(\lambda) / n \lesssim \sigma^2 \lambda^{-p} / n\). Balancing the two,
+</p>
+
+$$
+\lambda^{2r} \asymp \frac{\lambda^{-p}}{n}
+\;\Longrightarrow\;
+\lambda_n \asymp n^{-\frac{1}{2r + p}},
+\qquad
+\mathrm{bias}^2 + \mathrm{variance} \asymp n^{-\frac{2r}{2r + p}}.
+$$
+
+<p>
+The source exponent governs how fast the bias falls, the capacity exponent how slowly the variance rises, and the rate is the crossing point of the two.
+</p>
+
+<div class="box rmk"><span class="box-title">Remark (saturation of KRR at \(r = 1\))</span>
+<p>
+The bias estimate conceals a ceiling. The scalar function \(t \mapsto \lambda\, t^{\,r} / (t + \lambda)\) has order \(\lambda^{r}\) only while \(r \leq 1\); for \(r \gt 1\) its supremum over \(t \in [0, \lVert T \rVert]\) is attained at the top of the spectrum and has order \(\lambda\), not \(\lambda^{r}\). The kernel ridge bias therefore <em>saturates</em>: \(\mathrm{bias}(\lambda)^2 \asymp \lambda^2\) for every \(r \geq 1\), so the best achievable rate freezes at \(n^{-2/(2+p)}\), the value already reached at \(r = 1\), no matter how much smoother \(f^*\) is. The minimax rate \(n^{-2r/(2r+p)}\) keeps improving past \(r = 1\), so on very smooth targets plain kernel ridge regression is provably suboptimal. Recovering the faster rate requires a higher-qualification spectral regularizer, such as iterated Tikhonov, spectral cut-off, or gradient-flow (Landweber) learning, analyzed in one inverse-problems framework by Blanchard and Mücke (2018). The gap between the two exponents past \(r = 1\) is the price of the simplest regularizer.
+</p>
+</div>
+
+<p>
+The whole mechanism is easiest to trust in numbers: a concrete spectrum, its measured effective dimension, and the rate exponent seen to plateau in the source exponent.
+</p>
+
+<div class="box ex"><span class="box-title">Example (effective dimension, rate exponent, and saturation)</span>
+<div class="wex">
+<div class="wex-setup">
+<p>
+Take the polynomial spectrum \(\lambda_i = i^{-2b}\) of the integral operator \(T\) with \(b = 1\), that is \(\lambda_i = i^{-2}\), so the decay exponent is \(s = 2b = 2\). The theory predicts capacity exponent \(p = 1/(2b) = \tfrac12\). We read off the effective dimension, the predicted kernel ridge rate exponent as a function of the source exponent \(r\), and the saturation at \(r = 1\). The noise level \(\sigma^2\) enters only through constants.
+</p>
+</div>
+<ol class="wex-steps">
+<li><span class="wex-op">Confirm trace class.</span> The eigenvalues sum to \(\sum_{i \geq 1} i^{-2} = 1.644934\), the value \(\pi^2 / 6\), which is finite, so \(T\) is trace class and the analysis applies. The capacity exponent \(p = 1\) would already follow from this bound alone; the point is to do better.</li>
+<li><span class="wex-op">Compute the effective dimension.</span> Summing \(N(\lambda) = \sum_i \lambda_i / (\lambda_i + \lambda)\) at three scales,
+$$
+N(10^{-2}) = 15.208, \qquad N(10^{-3}) = 49.173, \qquad N(10^{-4}) = 156.580,
+$$
+each within half a unit of the asymptote \((\pi/2)\, \lambda^{-1/2}\), namely \(15.708,\ 49.673,\ 157.080\). A log-log fit of \(N(\lambda)\) across \(\lambda \in [10^{-2}, 10^{-6}]\) has slope \(-0.5032\), so the measured capacity exponent is \(p \approx 0.50\), matching \(1/(2b)\).</li>
+<li><span class="wex-op">Read the rate exponent.</span> With \(p = \tfrac12\), the kernel ridge exponent \(\rho_{\mathrm{KRR}}(r) = 2\min(r,1) / \left(2\min(r,1) + p \right)\) and the minimax exponent \(\rho_{\min}(r) = 2r / (2r + p)\) are
+<table>
+<thead><tr><th>\(r\)</th><th>\(\rho_{\mathrm{KRR}}(r)\)</th><th>\(\rho_{\min}(r)\)</th></tr></thead>
+<tbody>
+<tr><td>\(0.5\)</td><td>\(0.6667\)</td><td>\(0.6667\)</td></tr>
+<tr><td>\(0.75\)</td><td>\(0.7500\)</td><td>\(0.7500\)</td></tr>
+<tr><td>\(1.0\)</td><td>\(0.8000\)</td><td>\(0.8000\)</td></tr>
+<tr><td>\(1.5\)</td><td>\(0.8000\)</td><td>\(0.8571\)</td></tr>
+<tr><td>\(2.0\)</td><td>\(0.8000\)</td><td>\(0.8889\)</td></tr>
+<tr><td>\(3.0\)</td><td>\(0.8000\)</td><td>\(0.9231\)</td></tr>
+</tbody>
+</table>
+At \(r = \tfrac12\) this reproduces the chapter's polynomial rate \(n^{-s/(s+1)} = n^{-2/3}\) for \(f^* \in \mathcal H\). The two columns agree up to \(r = 1\), then \(\rho_{\mathrm{KRR}}\) sticks at \(2/(2 + p) = 0.8\) while \(\rho_{\min}\) keeps climbing.</li>
+<li><span class="wex-op">See the saturation in the balance.</span> At \(n = 10^4\), tuning \(\lambda_* = n^{-1/(2\min(r,1) + p)}\) and reading \(\mathrm{bias}^2 = \lambda_*^{\,2\min(r,1)}\) and \(\mathrm{variance} = N(\lambda_*) / n\): for \(r = \tfrac12\), \(\lambda_* = 2.154 \times 10^{-3}\), \(\mathrm{bias}^2 = 2.154 \times 10^{-3}\), \(\mathrm{variance} = 3.334 \times 10^{-3}\); for \(r = 1\), \(\lambda_* = 2.512 \times 10^{-2}\), \(\mathrm{bias}^2 = 6.310 \times 10^{-4}\), \(\mathrm{variance} = 9.411 \times 10^{-4}\). The \(r = 2\) target produces the same three numbers as \(r = 1\), to every printed digit: kernel ridge regression cannot tell a twice-smoother target from a once-smoother one.</li>
+</ol>
+<p class="wex-take"><strong>Reading.</strong> Two exponents, not one, set the rate: the capacity \(p = \tfrac12\), fixed by the spectrum, and the source \(r\), fixed by the target. They combine as \(2\min(r,1) / \left(2\min(r,1) + p \right)\), and the \(\min(r,1)\) is the fingerprint of saturation. Past \(r = 1\) the kernel ridge estimator leaves speed on the table that a higher-qualification method would collect.</p>
+</div>
+</div>
+
 <h2 id="beyond-compactness">Beyond compactness: an outlook</h2>
 
 <p>
@@ -1554,5 +1699,15 @@ $$
 $$
 so that truncating \(\Phi\) at \(n\) coordinates reproduces the kernel on the diagonal within \(C \sum_{k \gt n} \lambda_k\). Then estimate the number of coordinates \(n(\varepsilon)\) needed to make this tail at most \(\varepsilon\), for (a) polynomial decay \(\lambda_k \leq C_0\, k^{-s}\) with \(s \gt 1\), and (b) exponential decay \(\lambda_k \leq C_0\, e^{-\alpha k}\). Which spectrum yields a genuinely low effective dimension?
 <details class="ex-hint"><summary>Hint</summary><div class="hint-body">The lower bound is nonnegativity of the omitted terms; the upper bound is \(\sum_{k \gt n} \lambda_k \psi_k(x)^2 \leq C \sum_{k \gt n} \lambda_k\). For (a) compare the tail with \(\int_n^\infty t^{-s}\, dt \asymp n^{1-s}\), so \(n(\varepsilon) \asymp \varepsilon^{-1/(s-1)}\); for (b) sum the geometric tail, \(\sum_{k \gt n} e^{-\alpha k} \asymp e^{-\alpha n}\), so \(n(\varepsilon) \asymp \alpha^{-1} \log(1/\varepsilon)\).</div></details></li>
+
+<li><span class="ex-tag">computation</span> Keep the spectrum \(\lambda_i = i^{-2}\) of the integral-operator worked example, whose capacity exponent is \(p = \tfrac12\). Suppose the target has \(L^2_\nu\) eigen-coordinates \(c_i = \langle f^*, \psi_i \rangle_{L^2_\nu(\mathcal X)} = i^{-3}\). (a) Using the coordinate form \(\sum_i c_i^2 / \lambda_i^{2r} \lt \infty\) of the source condition, show that \(f^* = T^r g\) holds exactly for \(r \lt \tfrac54\). (b) Since the source exponent can be taken up to but not including \(\tfrac54 \gt 1\), the KRR bias saturates: give the KRR rate exponent \(2\min(r,1)/(2\min(r,1)+p)\) and the minimax exponent \(2r/(2r+p)\) as \(r \to \tfrac54\), and state which one KRR attains. (c) In one sentence, name the kind of regularizer that would close the gap.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">In (a), \(c_i^2/\lambda_i^{2r} = i^{-6} / i^{-4r} = i^{4r - 6}\), and \(\sum_i i^{4r-6}\) converges iff \(4r - 6 \lt -1\). In (b), KRR uses \(\min(r,1) = 1\), giving \(2/(2 + \tfrac12) = 0.8\), while the minimax exponent tends to \(\tfrac56 \approx 0.833\); the difference is exactly saturation. In (c), any method of qualification above \(1\), such as spectral cut-off, iterated Tikhonov, or gradient-flow (Landweber) learning.</div></details></li>
+
+<li><span class="ex-tag">proof</span> Model the excess risk of KRR under a source condition of order \(r\) and a capacity condition of exponent \(p\) by the univariate surrogate
+$$
+E(\lambda) = \lambda^{2r}\, R^2 + \frac{c\, \sigma^2}{n}\, \lambda^{-p}, \qquad \lambda \gt 0,
+$$
+with the bias term \(\lambda^{2r}\) valid for \(0 \lt r \leq 1\). (a) Minimize \(E\) over \(\lambda\), and show the optimum is \(\lambda_* \asymp n^{-1/(2r+p)}\) with \(E(\lambda_*) \asymp n^{-2r/(2r+p)}\), recovering the rate of the theorem. (b) Recall that the true bias equals \(R\) times \(\sup_{0 \leq t \leq \lVert T \rVert} \lambda\, t^{\,r}/(t+\lambda)\). Explain why, for \(r \gt 1\), this supremum has order \(\lambda\) rather than \(\lambda^{r}\), so the bias term should read \(\lambda^2\) and the rate is capped at \(n^{-2/(2+p)}\) however large \(r\) is.
+<details class="ex-hint"><summary>Hint</summary><div class="hint-body">In (a), set \(E'(\lambda) = 2r R^2 \lambda^{2r-1} - p\, c \sigma^2 n^{-1} \lambda^{-p-1} = 0\), giving \(\lambda^{2r + p} \asymp n^{-1}\); substitute back and both terms have order \(n^{-2r/(2r+p)}\). In (b), differentiate to find \(\tfrac{d}{dt}\big[ t^{r}/(t+\lambda) \big] \propto (r-1)t + r\lambda\), which is positive for all \(t \geq 0\) when \(r \gt 1\), so the ratio is increasing and maximized at \(t = \lVert T \rVert\), where \(\lambda\, t^{r}/(t+\lambda) = O(\lambda)\).</div></details></li>
 </ol>
 </section>
