@@ -22,7 +22,7 @@
 
 <p>The first answer is that a valid kernel is never merely a similarity score; it is secretly a <em>dot product</em> in some space of features. Whenever \(k\) is <em>positive definite</em>, there is a map \(\Phi\) sending each example into a (possibly infinite-dimensional) inner-product space, its <em>feature space</em>, such that</p>
 $$ k(x,x') \;=\; \langle \Phi(x),\, \Phi(x')\rangle. $$
-<p>Comparing with \(k\) is thus doing geometry, measuring angles and lengths, in a space you never have to build. Distances, projections, and separating planes all become available through the kernel alone. This is the view of Part I, and its precise form, the reproducing kernel Hilbert space, is where the book begins.</p>
+<p>Comparing with \(k\) is thus doing geometry, measuring angles and lengths, in a space you never have to build. Distances, projections, and separating planes all become available through the kernel alone. Lifting the data this way is also what makes a separating plane likely to exist at all: Cover (1965) showed that patterns cast nonlinearly into a higher-dimensional space are far more probably linearly separable there than in their native coordinates, which is exactly the room a rich feature space buys. This is the view of Part I, and its precise form, the reproducing kernel Hilbert space, is where the book begins.</p>
 
 <h3 id="view-regularization">The regularization view: the norm is smoothness</h3>
 

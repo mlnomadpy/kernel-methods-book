@@ -193,6 +193,23 @@ function escapeRe(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// accented letters in a bib surname should also match their ASCII form in prose
+// ("Schölkopf" links a prose "Scholkopf"; "Matérn" links "Matern").
+const ASCII_FOLD = {
+  à: "a", á: "a", â: "a", ä: "a", ã: "a", å: "a", ç: "c", è: "e", é: "e",
+  ê: "e", ë: "e", ì: "i", í: "i", î: "i", ï: "i", ı: "i", ñ: "n", ò: "o",
+  ó: "o", ô: "o", ö: "o", õ: "o", ø: "o", ù: "u", ú: "u", û: "u", ü: "u",
+  ý: "y", ÿ: "y", š: "s", ž: "z", č: "c", ć: "c", ř: "r", ł: "l", ð: "d",
+};
+function foldSurname(escaped) {
+  return escaped.replace(/[À-ÿıšžčćřłĀ-ſ]/gu, (ch) => {
+    const ascii = ASCII_FOLD[ch.toLowerCase()];
+    if (!ascii) return ch;
+    const a = ch === ch.toLowerCase() ? ascii : ascii.toUpperCase();
+    return a === ch ? ch : `[${ch}${a}]`;
+  });
+}
+
 /** Regexes matching the in-prose citation forms for a work, most-specific first.
  *  Covers narrative "Author (Year)" including multi-year "(2020, 2021)", and
  *  parenthetical "(Author, Year)" including grouped "(A, y1; B, y2)" lists and
@@ -200,7 +217,8 @@ function escapeRe(s) {
  *  citation text, never the surrounding punctuation. */
 function citePatterns(names, year) {
   const y = String(year);
-  const esc = names.map(escapeRe);
+  const esc = names.map((n) => foldSurname(escapeRe(n)));
+  const poss = "(?:['’]s)?"; // allow a possessive "Neal's (1996)"
   // author-name tokens, most specific first
   const toks = [];
   if (esc.length >= 3) {
@@ -216,8 +234,8 @@ function citePatterns(names, year) {
   const yList = `(?:\\d{4}[a-z]?,\\s*)*${y}[a-z]?(?:,\\s*\\d{4}[a-z]?)*`;
   const pats = [];
   for (const t of toks) {
-    // narrative: Author (Year) / Author (2020, 2021)
-    pats.push(`${t}\\s+\\(${yList}\\)`);
+    // narrative: Author (Year) / Author's (Year) / Author (2020, 2021)
+    pats.push(`${t}${poss}\\s+\\(${yList}\\)`);
     // parenthetical, incl. grouped lists: preceded by ( or ; , followed by ) ; ,
     pats.push(`(?<=[(;]\\s{0,2})${t},?\\s+${y}[a-z]?(?=\\s*[);,])`);
     // "(see ... in Author Year)": author mid-paren, year closes/separates

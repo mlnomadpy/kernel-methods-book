@@ -46,8 +46,7 @@ that predicts whether a new protein is secreted. The label depends on subtle
 regularities of the amino-acid string, not on any obvious numeric feature.
 </div>
 
-<p>Kernel methods are a natural fit. Since the seminal paper of Jaakkola,
-Diekhans, and Haussler (1998), the entire kernel toolbox, from the support
+<p>Kernel methods are a natural fit. Since the seminal paper of Jaakkola, Diekhans, and Haussler (2000), the entire kernel toolbox, from the support
 vector machine to kernel PCA, becomes available on strings the moment we exhibit
 a valid kernel \(K(x,x')\) between two sequences. The design question is
 therefore the only question, and a good string kernel must satisfy three demands
@@ -105,7 +104,7 @@ words</em>: the vector \(\Phi(d) = (\mathrm{tf}(t,d))_{t \in \mathcal{D}}\) inde
 by a dictionary \(\mathcal{D}\) of terms, whose coordinate for term \(t\) is the
 frequency \(\mathrm{tf}(t,d)\) with which \(t\) occurs in \(d\). Word order and
 punctuation are discarded, so a phrase such as "bread winner" breaks into its
-constituents. This is the vector space model of Salton and colleagues (1975), and
+constituents. This is the vector space model of Salton et al. (1975), and
 as Shawe-Taylor and Cristianini (2004) observe, reading it as a feature map turns
 the whole information-retrieval toolbox into a kernel method.</p>
 
@@ -685,7 +684,7 @@ obtained in time linear in the sequence length times the number of hidden states
 This same recipe underlies the spectrum kernel on the hidden states of a protein
 HMM (Tsuda et al., 2002), the marginalized kernels on labeled sequences and graphs
 of Kashima, Tsuda, and Inokuchi (2003), and phylogenetic kernels on multiple
-alignments (Vert et al., 2006).</p>
+alignments (Vert, 2002).</p>
 
 <h3 id="hmm-kernels">Fixed-length and pair hidden Markov model kernels</h3>
 
