@@ -125,6 +125,12 @@
     "title": "Rademacher and Gaussian complexities: risk bounds and structural results",
     "venue": "Journal of Machine Learning Research 3, 463-482"
   },
+  "bartlett2005local": {
+    "authors": "Bartlett, P. L., Bousquet, O., and Mendelson, S.",
+    "year": 2005,
+    "title": "Local Rademacher complexities",
+    "venue": "Annals of Statistics 33(4), 1497-1537"
+  },
   "bartlett2006": {
     "authors": "Bartlett, P. L., Jordan, M. I., and McAuliffe, J. D.",
     "year": 2006,
@@ -263,6 +269,12 @@
     "title": "A test of relative similarity for model selection in generative models",
     "venue": "International Conference on Learning Representations (ICLR); arXiv:1511.04581"
   },
+  "bousquet2002stability": {
+    "authors": "Bousquet, O. and Elisseeff, A.",
+    "year": 2002,
+    "title": "Stability and generalization",
+    "venue": "Journal of Machine Learning Research 2, 499-526"
+  },
   "boyd2004": {
     "authors": "Boyd, S. and Vandenberghe, L.",
     "year": 2004,
@@ -298,6 +310,12 @@
     "year": 2007,
     "title": "Optimal rates for the regularized least-squares algorithm",
     "venue": "Foundations of Computational Mathematics 7(3), 331-368"
+  },
+  "cfi1992": {
+    "authors": "Cai, J.-Y., Fürer, M., and Immerman, N.",
+    "year": 1992,
+    "title": "An optimal lower bound on the number of variables for graph identification",
+    "venue": "Combinatorica 12(4), 389-410"
   },
   "chang2011libsvm": {
     "authors": "Chang, C.-C. and Lin, C.-J.",
@@ -419,6 +437,12 @@
     "title": "Can learning kernels help performance? (invited talk)",
     "venue": "ICML"
   },
+  "cortes2012alignment": {
+    "authors": "Cortes, C., Mohri, M., and Rostamizadeh, A.",
+    "year": 2012,
+    "title": "Algorithms for learning kernels based on centered alignment",
+    "venue": "Journal of Machine Learning Research 13, 795-828"
+  },
   "coxcox2000": {
     "authors": "Cox, T. F. and Cox, M. A. A.",
     "year": 2000,
@@ -442,6 +466,12 @@
     "year": 1979,
     "title": "Smoothing noisy data with spline functions: estimating the correct degree of smoothing by the method of generalized cross-validation",
     "venue": "Numerische Mathematik 31(4), 377-403"
+  },
+  "cristianini2002alignment": {
+    "authors": "Cristianini, N., Shawe-Taylor, J., Elisseeff, A., and Kandola, J.",
+    "year": 2002,
+    "title": "On kernel-target alignment",
+    "venue": "Advances in Neural Information Processing Systems 14 (NIPS 2001), 367-373"
   },
   "cristianini2002lsk": {
     "authors": "Cristianini, N., Shawe-Taylor, J., and Lodhi, H.",
@@ -532,6 +562,12 @@
     "year": 2005,
     "title": "On the Nyström method for approximating a Gram matrix for improved kernel-based learning",
     "venue": "Journal of Machine Learning Research 6, 2153-2175"
+  },
+  "drucker1997svr": {
+    "authors": "Drucker, H., Burges, C. J. C., Kaufman, L., Smola, A. J., and Vapnik, V. N.",
+    "year": 1997,
+    "title": "Support vector regression machines",
+    "venue": "Advances in Neural Information Processing Systems 9, 155-161"
   },
   "du2019gntk": {
     "authors": "Du, S. S., Hou, K., Salakhutdinov, R., Póczos, B., Wang, R., and Xu, K.",
@@ -989,17 +1025,41 @@
     "title": "lp-norm multiple kernel learning",
     "venue": "Journal of Machine Learning Research 12, 953-997"
   },
+  "koenker1978quantile": {
+    "authors": "Koenker, R. and Bassett, G.",
+    "year": 1978,
+    "title": "Regression quantiles",
+    "venue": "Econometrica 46(1), 33-50"
+  },
   "kolmogorov1941": {
     "authors": "Kolmogorov, A. N.",
     "year": 1941,
     "title": "Stationary sequences in Hilbert space",
     "venue": "Bulletin of Moscow State University, Mathematics 2(6), 1-40"
   },
+  "koltchinskii2006": {
+    "authors": "Koltchinskii, V.",
+    "year": 2006,
+    "title": "Local Rademacher complexities and oracle inequalities in risk minimization",
+    "venue": "Annals of Statistics 34(6), 2593-2656"
+  },
   "kondor2002": {
     "authors": "Kondor, R. I. and Lafferty, J.",
     "year": 2002,
     "title": "Diffusion kernels on graphs and other discrete input spaces",
     "venue": "ICML"
+  },
+  "kriege2020survey": {
+    "authors": "Kriege, N. M., Johansson, F. D., and Morris, C.",
+    "year": 2020,
+    "title": "A survey on graph kernels",
+    "venue": "Applied Network Science 5, Article 6"
+  },
+  "kusner2015wmd": {
+    "authors": "Kusner, M. J., Sun, Y., Kolkin, N. I., and Weinberger, K. Q.",
+    "year": 2015,
+    "title": "From word embeddings to document distances",
+    "venue": "Proceedings of the 32nd International Conference on Machine Learning (ICML), PMLR 37, 957-966"
   },
   "lai2000kcca": {
     "authors": "Lai, P. L. and Fyfe, C.",
@@ -1151,6 +1211,12 @@
     "title": "Proximal causal learning with kernels: two-stage estimation and moment restriction",
     "venue": "ICML 38, PMLR 139, 7512-7523"
   },
+  "matern1960": {
+    "authors": "Matérn, B.",
+    "year": 1960,
+    "title": "Spatial Variation: Stochastic Models and Their Application to Some Problems in Forest Surveys and Other Sampling Investigations",
+    "venue": "Meddelanden från Statens Skogsforskningsinstitut 49(5); reprinted 1986 as Lecture Notes in Statistics 36, Springer"
+  },
   "matthews2017gpflow": {
     "authors": "Matthews, A. G. de G., van der Wilk, M., Nickson, T., Fujii, K., Boukouvalas, A., León-Villagrá, P., Ghahramani, Z., and Hensman, J.",
     "year": 2017,
@@ -1229,6 +1295,12 @@
     "title": "Fisher discriminant analysis with kernels",
     "venue": "Neural Networks for Signal Processing IX, 41-48"
   },
+  "mikolov2013word2vec": {
+    "authors": "Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S., and Dean, J.",
+    "year": 2013,
+    "title": "Distributed representations of words and phrases and their compositionality",
+    "venue": "Advances in Neural Information Processing Systems (NeurIPS) 26, 3111-3119"
+  },
   "mockus1978": {
     "authors": "Mockus, J., Tiesis, V., and Žilinskas, A.",
     "year": 1978,
@@ -1240,6 +1312,12 @@
     "year": 2014,
     "title": "On the number of linear regions of deep neural networks",
     "venue": "NeurIPS 27"
+  },
+  "morris2019kgnn": {
+    "authors": "Morris, C., Ritzert, M., Fey, M., Hamilton, W. L., Lenssen, J. E., Rattan, G., and Grohe, M.",
+    "year": 2019,
+    "title": "Weisfeiler and Leman go neural: higher-order graph neural networks",
+    "venue": "AAAI, 4602-4609"
   },
   "muandet2012smm": {
     "authors": "Muandet, K., Fukumizu, K., Dinuzzo, F., and Schölkopf, B.",
@@ -1331,6 +1409,18 @@
     "title": "An improved training algorithm for support vector machines",
     "venue": "Neural Networks for Signal Processing VII (IEEE Workshop), 276-285"
   },
+  "paciorek2004": {
+    "authors": "Paciorek, C. J. and Schervish, M. J.",
+    "year": 2004,
+    "title": "Nonstationary covariance functions for Gaussian process regression",
+    "venue": "Advances in Neural Information Processing Systems (NeurIPS) 16, 273-280"
+  },
+  "parzen1962": {
+    "authors": "Parzen, E.",
+    "year": 1962,
+    "title": "On estimation of a probability density function and mode",
+    "venue": "The Annals of Mathematical Statistics 33(3), 1065-1076"
+  },
   "pearl2009": {
     "authors": "Pearl, J.",
     "year": 2009,
@@ -1348,6 +1438,12 @@
     "year": 2005,
     "title": "The Dissimilarity Representation for Pattern Recognition: Foundations and Applications",
     "venue": "World Scientific"
+  },
+  "pennington2014glove": {
+    "authors": "Pennington, J., Socher, R., and Manning, C. D.",
+    "year": 2014,
+    "title": "GloVe: Global vectors for word representation",
+    "venue": "Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), 1532-1543"
   },
   "perronnin2007": {
     "authors": "Perronnin, F. and Dance, C.",
@@ -1426,6 +1522,12 @@
     "year": 2006,
     "title": "Gaussian Processes for Machine Learning",
     "venue": "MIT Press"
+  },
+  "reimers2019sbert": {
+    "authors": "Reimers, N. and Gurevych, I.",
+    "year": 2019,
+    "title": "Sentence-BERT: sentence embeddings using Siamese BERT-networks",
+    "venue": "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP-IJCNLP), 3982-3992"
   },
   "rifkin2004": {
     "authors": "Rifkin, R. and Klautau, A.",
@@ -1687,6 +1789,12 @@
     "title": "Kernels and regularization on graphs",
     "venue": "Learning Theory and Kernel Machines (COLT/Kernel Workshop), LNCS 2777, 144-158"
   },
+  "smola2004svrtutorial": {
+    "authors": "Smola, A. J. and Schölkopf, B.",
+    "year": 2004,
+    "title": "A tutorial on support vector regression",
+    "venue": "Statistics and Computing 14(3), 199-222"
+  },
   "smola2007": {
     "authors": "Smola, A., Gretton, A., Song, L., and Schölkopf, B.",
     "year": 2007,
@@ -1801,6 +1909,12 @@
     "title": "Learning theory for distribution regression",
     "venue": "Journal of Machine Learning Research 17(152), 1-40"
   },
+  "takeuchi2006quantile": {
+    "authors": "Takeuchi, I., Le, Q. V., Sears, T. D., and Smola, A. J.",
+    "year": 2006,
+    "title": "Nonparametric quantile estimation",
+    "venue": "Journal of Machine Learning Research 7, 1231-1264"
+  },
   "tax2004": {
     "authors": "Tax, D. M. J. and Duin, R. P. W.",
     "year": 2004,
@@ -1842,6 +1956,12 @@
     "year": 2009,
     "title": "Variational learning of inducing variables in sparse Gaussian processes",
     "venue": "AISTATS"
+  },
+  "togninalli2019wwl": {
+    "authors": "Togninalli, M., Ghisu, E., Llinares-López, F., Rieck, B., and Borgwardt, K.",
+    "year": 2019,
+    "title": "Wasserstein Weisfeiler-Lehman graph kernels",
+    "venue": "Advances in Neural Information Processing Systems (NeurIPS) 32"
   },
   "torgerson1952": {
     "authors": "Torgerson, W. S.",
@@ -1933,6 +2053,12 @@
     "title": "A tree kernel to analyse phylogenetic profiles",
     "venue": "Bioinformatics 18(Suppl. 1), S276-S284"
   },
+  "vert2006oneclass": {
+    "authors": "Vert, R. and Vert, J.-P.",
+    "year": 2006,
+    "title": "Consistency and convergence rates of one-class SVMs and related algorithms",
+    "venue": "Journal of Machine Learning Research 7, 817-854"
+  },
   "villani2009": {
     "authors": "Villani, C.",
     "year": 2009,
@@ -1968,6 +2094,12 @@
     "year": 2000,
     "title": "Dynamic alignment kernels",
     "venue": "Advances in Large Margin Classifiers, MIT Press, 39-50"
+  },
+  "weisfeiler1968": {
+    "authors": "Weisfeiler, B. and Leman, A.",
+    "year": 1968,
+    "title": "The reduction of a graph to canonical form and the algebra which appears therein",
+    "venue": "Nauchno-Technicheskaya Informatsia 2(9), 12-16"
   },
   "welling2009herding": {
     "authors": "Welling, M.",
