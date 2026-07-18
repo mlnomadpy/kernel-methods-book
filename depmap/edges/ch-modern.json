@@ -1,21 +1,97 @@
 [
- {"from": "kernels-now#def-31-1", "to": "preliminaries#def-p-3", "note": "Defined as beta = Phi^+ y through the Moore-Penrose pseudoinverse."},
- {"from": "kernels-now#def-31-1", "to": "kernels-and-rkhs#thm-2-5", "note": "The features may be the possibly infinite-dimensional feature map a kernel induces."},
- {"from": "kernels-now#def-31-1", "to": "large-scale-kernels#def-27-8", "note": "Or an explicit random-feature map, the finite-D case of the setup."},
- {"from": "kernels-now#def-31-1", "to": "kernel-ridge-and-friends#def-4-2", "note": "Its overparameterized form is kernel ridge regression at ridge zero, with K = Phi Phi^T."},
- {"from": "kernels-now#def-31-1", "to": "kernel-ridge-and-friends#prop-4-3", "note": "The predictor k(x)^T K^{-1} y is the lambda -> 0 limit of the KRR closed form."},
- {"from": "kernels-now#thm-31-2", "to": "kernels-now#def-31-1", "note": "Computes the exact risk of the minimum-norm least-squares estimator X^+ y."},
- {"from": "kernels-now#thm-31-2", "to": "preliminaries#def-p-3", "note": "The proof uses the pseudoinverse's full-column-rank and full-row-rank closed forms."},
- {"from": "kernels-now#thm-31-2", "to": "preliminaries#thm-p-6", "note": "The overparameterized bias is the signal lost to the orthogonal projection onto the row space."},
- {"from": "kernels-now#thm-31-2", "to": "preliminaries#def-p-9", "note": "Independence of noise and design uncorrelates the bias and variance terms."},
- {"from": "kernels-now#def-31-3", "to": "preliminaries#thm-p-2", "note": "The effective ranks are functionals of the covariance's eigenvalue spectrum."},
- {"from": "kernels-now#thm-31-4", "to": "kernels-now#def-31-1", "note": "Grades the minimum-norm interpolant of n noisy samples."},
- {"from": "kernels-now#thm-31-4", "to": "kernels-now#def-31-3", "note": "The variance is sigma^2 (k*/n + n/R_{k*}) in the two effective ranks and the critical index."},
- {"from": "kernels-now#thm-31-4", "to": "kernels-now#thm-31-2", "note": "Its reading explains why the isotropic double-descent model overfits harmfully: Sigma = I has no tail."},
- {"from": "kernels-now#thm-31-4", "to": "mercer-and-rates#thm-18-10", "note": "In the kernel case the effective ranks are read off the Mercer eigenvalues."},
- {"from": "kernels-now#prop-31-5", "to": "mercer-and-rates#thm-18-10", "note": "The eigenbasis (eta_i, phi_i) is supplied by Mercer's theorem for the kernel integral operator."},
- {"from": "kernels-now#prop-31-5", "to": "mercer-and-rates#def-18-17", "note": "Reuses the spectral regression model: target expanded in the kernel eigenbasis with independent noise sigma^2."},
- {"from": "kernels-now#prop-31-5", "to": "kernel-ridge-and-friends#def-4-2", "note": "Predicts the generalization error of kernel ridge regression at ridge lambda."},
- {"from": "kernels-now#prop-31-5", "to": "mercer-and-rates#lem-18-18", "note": "The derivation is the ridge bias-variance decomposition applied mode by mode."},
- {"from": "kernels-now#prop-31-5", "to": "mercer-and-rates#cor-18-20", "note": "Its power-law exponent refines the KRR rates fixed by eigenvalue decay and the source condition."}
+ {
+  "from": "kernels-now#def-42-1",
+  "to": "preliminaries#def-p-3",
+  "note": "Defined as beta = Phi^+ y through the Moore-Penrose pseudoinverse."
+ },
+ {
+  "from": "kernels-now#def-42-1",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "The features may be the possibly infinite-dimensional feature map a kernel induces."
+ },
+ {
+  "from": "kernels-now#def-42-1",
+  "to": "large-scale-kernels#def-37-8",
+  "note": "Or an explicit random-feature map, the finite-D case of the setup."
+ },
+ {
+  "from": "kernels-now#def-42-1",
+  "to": "kernel-ridge-and-friends#def-4-2",
+  "note": "Its overparameterized form is kernel ridge regression at ridge zero, with K = Phi Phi^T."
+ },
+ {
+  "from": "kernels-now#def-42-1",
+  "to": "kernel-ridge-and-friends#prop-4-3",
+  "note": "The predictor k(x)^T K^{-1} y is the lambda -> 0 limit of the KRR closed form."
+ },
+ {
+  "from": "kernels-now#thm-42-2",
+  "to": "kernels-now#def-42-1",
+  "note": "Computes the exact risk of the minimum-norm least-squares estimator X^+ y."
+ },
+ {
+  "from": "kernels-now#thm-42-2",
+  "to": "preliminaries#def-p-3",
+  "note": "The proof uses the pseudoinverse's full-column-rank and full-row-rank closed forms."
+ },
+ {
+  "from": "kernels-now#thm-42-2",
+  "to": "preliminaries#thm-p-6",
+  "note": "The overparameterized bias is the signal lost to the orthogonal projection onto the row space."
+ },
+ {
+  "from": "kernels-now#thm-42-2",
+  "to": "preliminaries#def-p-9",
+  "note": "Independence of noise and design uncorrelates the bias and variance terms."
+ },
+ {
+  "from": "kernels-now#def-42-3",
+  "to": "preliminaries#thm-p-2",
+  "note": "The effective ranks are functionals of the covariance's eigenvalue spectrum."
+ },
+ {
+  "from": "kernels-now#thm-42-4",
+  "to": "kernels-now#def-42-1",
+  "note": "Grades the minimum-norm interpolant of n noisy samples."
+ },
+ {
+  "from": "kernels-now#thm-42-4",
+  "to": "kernels-now#def-42-3",
+  "note": "The variance is sigma^2 (k*/n + n/R_{k*}) in the two effective ranks and the critical index."
+ },
+ {
+  "from": "kernels-now#thm-42-4",
+  "to": "kernels-now#thm-42-2",
+  "note": "Its reading explains why the isotropic double-descent model overfits harmfully: Sigma = I has no tail."
+ },
+ {
+  "from": "kernels-now#thm-42-4",
+  "to": "mercer-and-rates#thm-18-10",
+  "note": "In the kernel case the effective ranks are read off the Mercer eigenvalues."
+ },
+ {
+  "from": "kernels-now#prop-42-5",
+  "to": "mercer-and-rates#thm-18-10",
+  "note": "The eigenbasis (eta_i, phi_i) is supplied by Mercer's theorem for the kernel integral operator."
+ },
+ {
+  "from": "kernels-now#prop-42-5",
+  "to": "mercer-and-rates#def-18-17",
+  "note": "Reuses the spectral regression model: target expanded in the kernel eigenbasis with independent noise sigma^2."
+ },
+ {
+  "from": "kernels-now#prop-42-5",
+  "to": "kernel-ridge-and-friends#def-4-2",
+  "note": "Predicts the generalization error of kernel ridge regression at ridge lambda."
+ },
+ {
+  "from": "kernels-now#prop-42-5",
+  "to": "mercer-and-rates#lem-18-18",
+  "note": "The derivation is the ridge bias-variance decomposition applied mode by mode."
+ },
+ {
+  "from": "kernels-now#prop-42-5",
+  "to": "mercer-and-rates#cor-18-20",
+  "note": "Its power-law exponent refines the KRR rates fixed by eigenvalue decay and the source condition."
+ }
 ]

@@ -1,36 +1,167 @@
 [
- {"from": "learning-theory#def-11-1", "to": "kernel-ridge-and-friends#def-4-11", "note": "specializes the general risk definition"},
- {"from": "learning-theory#def-11-1", "to": "preliminaries#def-p-9", "note": "risk is expectation over distribution"},
- {"from": "learning-theory#def-11-2", "to": "learning-theory#def-11-1", "note": "convex surrogate for 0/1 risk"},
- {"from": "learning-theory#def-11-2", "to": "kernel-ridge-and-friends#def-4-11", "note": "instantiates the empirical-risk template"},
- {"from": "learning-theory#def-11-2", "to": "kernel-ridge-and-friends#def-4-9", "note": "its argument is the margin"},
- {"from": "learning-theory#def-11-2", "to": "support-vector-machines#def-5-1", "note": "hinge loss as example surrogate"},
- {"from": "learning-theory#def-11-2", "to": "kernel-ridge-and-friends#def-4-7", "note": "logistic surrogate from kernel logistic regression"},
- {"from": "learning-theory#def-11-2", "to": "kernel-ridge-and-friends#def-4-10", "note": "surrogates define large-margin classifiers"},
- {"from": "learning-theory#thm-11-3", "to": "learning-theory#def-11-2", "note": "hypothesis minimizes the phi-risk"},
- {"from": "learning-theory#thm-11-3", "to": "learning-theory#def-11-1", "note": "conclusion attains the Bayes risk"},
- {"from": "learning-theory#thm-11-3", "to": "preliminaries#def-p-10", "note": "convexity drives sign consistency"},
- {"from": "learning-theory#thm-11-3", "to": "preliminaries#def-p-9", "note": "conditions on X, monotone convergence"},
- {"from": "learning-theory#def-11-4", "to": "learning-theory#def-11-2", "note": "minimizes empirical phi-risk over class"},
- {"from": "learning-theory#def-11-5", "to": "preliminaries#def-p-9", "note": "expectation over sample and signs"},
- {"from": "learning-theory#thm-11-6", "to": "learning-theory#def-11-4", "note": "bounds the ERM estimator"},
- {"from": "learning-theory#thm-11-6", "to": "learning-theory#def-11-5", "note": "estimation error is Rademacher complexity"},
- {"from": "learning-theory#thm-11-6", "to": "learning-theory#def-11-2", "note": "excess measured in phi-risk"},
- {"from": "learning-theory#thm-11-7", "to": "preliminaries#def-p-9", "note": "concentration for independent variables"},
- {"from": "learning-theory#thm-11-8", "to": "learning-theory#def-11-5", "note": "bounds ball's Rademacher complexity"},
- {"from": "learning-theory#thm-11-8", "to": "kernels-and-rkhs#def-2-1", "note": "ball lives in kernel's RKHS"},
- {"from": "learning-theory#thm-11-8", "to": "kernels-and-rkhs#def-2-8", "note": "reproducing property rewrites the values"},
- {"from": "learning-theory#thm-11-8", "to": "preliminaries#def-p-5", "note": "Cauchy-Schwarz turns sup into norm"},
- {"from": "learning-theory#thm-11-8", "to": "preliminaries#def-p-9", "note": "independence kills the cross terms"},
- {"from": "learning-theory#cor-11-9", "to": "learning-theory#thm-11-6", "note": "into the Lipschitz learning bound"},
- {"from": "learning-theory#cor-11-9", "to": "learning-theory#thm-11-8", "note": "uses the RKHS-ball capacity bound"},
- {"from": "learning-theory#cor-11-9", "to": "learning-theory#def-11-4", "note": "guarantee for the ERM estimator"},
- {"from": "learning-theory#def-11-10", "to": "preliminaries#def-p-11", "note": "redevelops the preliminaries' Lagrangian apparatus"},
- {"from": "learning-theory#prop-11-11", "to": "learning-theory#def-11-10", "note": "properties of the dual function"},
- {"from": "learning-theory#prop-11-11", "to": "preliminaries#def-p-10", "note": "concavity via pointwise infimum"},
- {"from": "learning-theory#thm-11-12", "to": "learning-theory#def-11-10", "note": "strong duality closes the gap"},
- {"from": "learning-theory#thm-11-12", "to": "learning-theory#prop-11-11", "note": "upgrades weak-duality bound to equality"},
- {"from": "learning-theory#thm-11-12", "to": "preliminaries#def-p-10", "note": "stated for a convex problem"},
- {"from": "learning-theory#prop-11-13", "to": "learning-theory#def-11-10", "note": "optimality chain uses the Lagrangian"},
- {"from": "learning-theory#prop-11-13", "to": "learning-theory#thm-11-12", "note": "needs the zero-gap optimal pair"}
+ {
+  "from": "learning-theory#def-11-1",
+  "to": "kernel-ridge-and-friends#def-4-11",
+  "note": "specializes the general risk definition"
+ },
+ {
+  "from": "learning-theory#def-11-1",
+  "to": "preliminaries#def-p-9",
+  "note": "risk is expectation over distribution"
+ },
+ {
+  "from": "learning-theory#def-11-2",
+  "to": "learning-theory#def-11-1",
+  "note": "convex surrogate for 0/1 risk"
+ },
+ {
+  "from": "learning-theory#def-11-2",
+  "to": "kernel-ridge-and-friends#def-4-11",
+  "note": "instantiates the empirical-risk template"
+ },
+ {
+  "from": "learning-theory#def-11-2",
+  "to": "kernel-ridge-and-friends#def-4-10",
+  "note": "its argument is the margin"
+ },
+ {
+  "from": "learning-theory#def-11-2",
+  "to": "support-vector-machines#def-5-1",
+  "note": "hinge loss as example surrogate"
+ },
+ {
+  "from": "learning-theory#def-11-2",
+  "to": "kernel-ridge-and-friends#def-4-8",
+  "note": "logistic surrogate from kernel logistic regression"
+ },
+ {
+  "from": "learning-theory#thm-11-3",
+  "to": "learning-theory#def-11-2",
+  "note": "hypothesis minimizes the phi-risk"
+ },
+ {
+  "from": "learning-theory#thm-11-3",
+  "to": "learning-theory#def-11-1",
+  "note": "conclusion attains the Bayes risk"
+ },
+ {
+  "from": "learning-theory#thm-11-3",
+  "to": "preliminaries#def-p-10",
+  "note": "convexity drives sign consistency"
+ },
+ {
+  "from": "learning-theory#thm-11-3",
+  "to": "preliminaries#def-p-9",
+  "note": "conditions on X, monotone convergence"
+ },
+ {
+  "from": "learning-theory#def-11-4",
+  "to": "learning-theory#def-11-2",
+  "note": "minimizes empirical phi-risk over class"
+ },
+ {
+  "from": "learning-theory#def-11-5",
+  "to": "preliminaries#def-p-9",
+  "note": "expectation over sample and signs"
+ },
+ {
+  "from": "learning-theory#thm-11-6",
+  "to": "learning-theory#def-11-4",
+  "note": "bounds the ERM estimator"
+ },
+ {
+  "from": "learning-theory#thm-11-6",
+  "to": "learning-theory#def-11-5",
+  "note": "estimation error is Rademacher complexity"
+ },
+ {
+  "from": "learning-theory#thm-11-6",
+  "to": "learning-theory#def-11-2",
+  "note": "excess measured in phi-risk"
+ },
+ {
+  "from": "learning-theory#thm-11-7",
+  "to": "preliminaries#def-p-9",
+  "note": "concentration for independent variables"
+ },
+ {
+  "from": "learning-theory#thm-11-8",
+  "to": "learning-theory#def-11-5",
+  "note": "bounds ball's Rademacher complexity"
+ },
+ {
+  "from": "learning-theory#thm-11-8",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "ball lives in kernel's RKHS"
+ },
+ {
+  "from": "learning-theory#thm-11-8",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing property rewrites the values"
+ },
+ {
+  "from": "learning-theory#thm-11-8",
+  "to": "preliminaries#def-p-5",
+  "note": "Cauchy-Schwarz turns sup into norm"
+ },
+ {
+  "from": "learning-theory#thm-11-8",
+  "to": "preliminaries#def-p-9",
+  "note": "independence kills the cross terms"
+ },
+ {
+  "from": "learning-theory#cor-11-9",
+  "to": "learning-theory#thm-11-6",
+  "note": "into the Lipschitz learning bound"
+ },
+ {
+  "from": "learning-theory#cor-11-9",
+  "to": "learning-theory#thm-11-8",
+  "note": "uses the RKHS-ball capacity bound"
+ },
+ {
+  "from": "learning-theory#cor-11-9",
+  "to": "learning-theory#def-11-4",
+  "note": "guarantee for the ERM estimator"
+ },
+ {
+  "from": "learning-theory#def-11-10",
+  "to": "preliminaries#def-p-11",
+  "note": "redevelops the preliminaries' Lagrangian apparatus"
+ },
+ {
+  "from": "learning-theory#prop-11-18",
+  "to": "learning-theory#def-11-10",
+  "note": "properties of the dual function"
+ },
+ {
+  "from": "learning-theory#prop-11-18",
+  "to": "preliminaries#def-p-10",
+  "note": "concavity via pointwise infimum"
+ },
+ {
+  "from": "learning-theory#thm-11-19",
+  "to": "learning-theory#def-11-10",
+  "note": "strong duality closes the gap"
+ },
+ {
+  "from": "learning-theory#thm-11-19",
+  "to": "learning-theory#prop-11-18",
+  "note": "upgrades weak-duality bound to equality"
+ },
+ {
+  "from": "learning-theory#thm-11-19",
+  "to": "preliminaries#def-p-10",
+  "note": "stated for a convex problem"
+ },
+ {
+  "from": "learning-theory#prop-11-20",
+  "to": "learning-theory#def-11-10",
+  "note": "optimality chain uses the Lagrangian"
+ },
+ {
+  "from": "learning-theory#prop-11-20",
+  "to": "learning-theory#thm-11-19",
+  "note": "needs the zero-gap optimal pair"
+ }
 ]

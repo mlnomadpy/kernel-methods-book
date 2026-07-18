@@ -1,107 +1,107 @@
 [
-  {
-    "from": "one-class-and-novelty#def-7-1",
-    "to": "preliminaries#def-p-9",
-    "note": "defines the quantile of a distribution P sampled i.i.d., the probability objects of Definition P.9"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-2",
-    "to": "preliminaries#def-p-11",
-    "note": "dual derived via the Lagrangian, and the proof invokes KKT complementarity to put support vectors on the sphere"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-2",
-    "to": "kernels-and-rkhs#thm-2-5",
-    "note": "points are mapped into the feature space H of the kernel k through Aronszajn's phi"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-2",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "center in the span of the data lets the whole dual be written with kernel evaluations alone"
-  },
-  {
-    "from": "one-class-and-novelty#algo-7-1",
-    "to": "one-class-and-novelty#prop-7-2",
-    "note": "step 1 solves the SVDD dual QP, softened with a box constraint"
-  },
-  {
-    "from": "one-class-and-novelty#algo-7-1",
-    "to": "support-vector-machines#prop-5-3",
-    "note": "the slack softening copies the soft-margin SVM primal device"
-  },
-  {
-    "from": "one-class-and-novelty#algo-7-1",
-    "to": "preliminaries#def-p-11",
-    "note": "the slack multipliers beta_i = C - alpha_i in the Lagrangian yield the box 0 <= alpha_i <= 1/(nu l)"
-  },
-  {
-    "from": "one-class-and-novelty#algo-7-2",
-    "to": "preliminaries#def-p-11",
-    "note": "dual obtained by Lagrangian stationarity: w = sum alpha_i phi_i, sum alpha_i = 1, and the box constraint"
-  },
-  {
-    "from": "one-class-and-novelty#algo-7-2",
-    "to": "support-vector-machines#prop-5-6",
-    "note": "maximizes the origin margin rho/||w|| by minimizing ||w||, the margin-is-1/||w|| mechanism"
-  },
-  {
-    "from": "one-class-and-novelty#algo-7-2",
-    "to": "support-vector-machines#algo-5-1",
-    "note": "same dual structure as the C-SVM dual, so the classifier's solver carries over almost unchanged"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-3",
-    "to": "one-class-and-novelty#algo-7-2",
-    "note": "statement about the nu-one-class SVM solution and its dual constraints sum alpha_i = 1, alpha_i <= 1/(nu m)"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-3",
-    "to": "support-vector-machines#prop-5-10",
-    "note": "the one-class analogue of the nu-property for classifiers"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-3",
-    "to": "preliminaries#def-p-11",
-    "note": "proof runs on KKT complementarity forcing every outlier's coefficient to the ceiling"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-4",
-    "to": "one-class-and-novelty#algo-7-2",
-    "note": "perturbs an outlier of the nu-one-class solution (w, rho)"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-4",
-    "to": "one-class-and-novelty#prop-7-3",
-    "note": "uses the outliers-at-the-ceiling fact alpha_o = 1/(nu m) established in the nu-property proof"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-4",
-    "to": "preliminaries#def-p-11",
-    "note": "proof checks every KKT condition still holds, so the previous solution remains optimal"
-  },
-  {
-    "from": "one-class-and-novelty#thm-7-5",
-    "to": "one-class-and-novelty#prop-7-2",
-    "note": "the SVDD dual objective and its containment test are one side of the equivalence"
-  },
-  {
-    "from": "one-class-and-novelty#thm-7-5",
-    "to": "one-class-and-novelty#algo-7-1",
-    "note": "compares the soft SVDD dual with box 0 <= alpha_i <= 1/(nu l)"
-  },
-  {
-    "from": "one-class-and-novelty#thm-7-5",
-    "to": "one-class-and-novelty#algo-7-2",
-    "note": "the nu-one-class dual and its hyperplane threshold test are the other side"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-6",
-    "to": "preliminaries#def-p-10",
-    "note": "proof uses convex hulls, a supporting hyperplane, and strict-convexity uniqueness of the minimizer"
-  },
-  {
-    "from": "one-class-and-novelty#prop-7-6",
-    "to": "support-vector-machines#prop-5-6",
-    "note": "distance of the plane <w,z> = 1 from the origin is 1/||w||, maximized by minimizing ||w||"
-  }
+ {
+  "from": "one-class-and-novelty#def-7-1",
+  "to": "preliminaries#def-p-9",
+  "note": "defines the quantile of a distribution P sampled i.i.d., the probability objects of Definition P.9"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-2",
+  "to": "preliminaries#def-p-11",
+  "note": "dual derived via the Lagrangian, and the proof invokes KKT complementarity to put support vectors on the sphere"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-2",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "points are mapped into the feature space H of the kernel k through Aronszajn's phi"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "center in the span of the data lets the whole dual be written with kernel evaluations alone"
+ },
+ {
+  "from": "one-class-and-novelty#algo-7-1",
+  "to": "one-class-and-novelty#prop-7-2",
+  "note": "step 1 solves the SVDD dual QP, softened with a box constraint"
+ },
+ {
+  "from": "one-class-and-novelty#algo-7-1",
+  "to": "support-vector-machines#prop-5-3",
+  "note": "the slack softening copies the soft-margin SVM primal device"
+ },
+ {
+  "from": "one-class-and-novelty#algo-7-1",
+  "to": "preliminaries#def-p-11",
+  "note": "the slack multipliers beta_i = C - alpha_i in the Lagrangian yield the box 0 <= alpha_i <= 1/(nu l)"
+ },
+ {
+  "from": "one-class-and-novelty#algo-7-2",
+  "to": "preliminaries#def-p-11",
+  "note": "dual obtained by Lagrangian stationarity: w = sum alpha_i phi_i, sum alpha_i = 1, and the box constraint"
+ },
+ {
+  "from": "one-class-and-novelty#algo-7-2",
+  "to": "support-vector-machines#prop-5-6",
+  "note": "maximizes the origin margin rho/||w|| by minimizing ||w||, the margin-is-1/||w|| mechanism"
+ },
+ {
+  "from": "one-class-and-novelty#algo-7-2",
+  "to": "support-vector-machines#algo-5-1",
+  "note": "same dual structure as the C-SVM dual, so the classifier's solver carries over almost unchanged"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-3",
+  "to": "one-class-and-novelty#algo-7-2",
+  "note": "statement about the nu-one-class SVM solution and its dual constraints sum alpha_i = 1, alpha_i <= 1/(nu m)"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-3",
+  "to": "support-vector-machines#prop-5-10",
+  "note": "the one-class analogue of the nu-property for classifiers"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-3",
+  "to": "preliminaries#def-p-11",
+  "note": "proof runs on KKT complementarity forcing every outlier's coefficient to the ceiling"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-4",
+  "to": "one-class-and-novelty#algo-7-2",
+  "note": "perturbs an outlier of the nu-one-class solution (w, rho)"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-4",
+  "to": "one-class-and-novelty#prop-7-3",
+  "note": "uses the outliers-at-the-ceiling fact alpha_o = 1/(nu m) established in the nu-property proof"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-4",
+  "to": "preliminaries#def-p-11",
+  "note": "proof checks every KKT condition still holds, so the previous solution remains optimal"
+ },
+ {
+  "from": "one-class-and-novelty#thm-7-6",
+  "to": "one-class-and-novelty#prop-7-2",
+  "note": "the SVDD dual objective and its containment test are one side of the equivalence"
+ },
+ {
+  "from": "one-class-and-novelty#thm-7-6",
+  "to": "one-class-and-novelty#algo-7-1",
+  "note": "compares the soft SVDD dual with box 0 <= alpha_i <= 1/(nu l)"
+ },
+ {
+  "from": "one-class-and-novelty#thm-7-6",
+  "to": "one-class-and-novelty#algo-7-2",
+  "note": "the nu-one-class dual and its hyperplane threshold test are the other side"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-7",
+  "to": "preliminaries#def-p-10",
+  "note": "proof uses convex hulls, a supporting hyperplane, and strict-convexity uniqueness of the minimizer"
+ },
+ {
+  "from": "one-class-and-novelty#prop-7-7",
+  "to": "support-vector-machines#prop-5-6",
+  "note": "distance of the plane <w,z> = 1 from the origin is 1/||w||, maximized by minimizing ||w||"
+ }
 ]

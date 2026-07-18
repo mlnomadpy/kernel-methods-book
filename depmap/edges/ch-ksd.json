@@ -1,0 +1,102 @@
+[
+  {
+    "from": "kernel-stein-discrepancy#def-34-2",
+    "to": "kernel-stein-discrepancy#def-34-1",
+    "note": "operator built from the score"
+  },
+  {
+    "from": "kernel-stein-discrepancy#thm-34-3",
+    "to": "kernel-stein-discrepancy#def-34-2",
+    "note": "expectation of the Stein operator vanishes"
+  },
+  {
+    "from": "kernel-stein-discrepancy#thm-34-3",
+    "to": "kernel-stein-discrepancy#def-34-1",
+    "note": "uses the score identity"
+  },
+  {
+    "from": "kernel-stein-discrepancy#def-34-4",
+    "to": "kernel-stein-discrepancy#def-34-2",
+    "note": "supremum of the Stein-operator functional"
+  },
+  {
+    "from": "kernel-stein-discrepancy#def-34-4",
+    "to": "kernel-stein-discrepancy#thm-34-3",
+    "note": "score-gap form uses Stein's identity"
+  },
+  {
+    "from": "kernel-stein-discrepancy#def-34-5",
+    "to": "kernel-stein-discrepancy#def-34-4",
+    "note": "Stein discrepancy over the RKHS ball"
+  },
+  {
+    "from": "kernel-stein-discrepancy#def-34-6",
+    "to": "kernel-stein-discrepancy#def-34-2",
+    "note": "Stein operator applied in both slots"
+  },
+  {
+    "from": "kernel-stein-discrepancy#def-34-6",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "reproducing identities give four terms"
+  },
+  {
+    "from": "kernel-stein-discrepancy#thm-34-7",
+    "to": "kernel-stein-discrepancy#def-34-5",
+    "note": "computes the kernel Stein discrepancy"
+  },
+  {
+    "from": "kernel-stein-discrepancy#thm-34-7",
+    "to": "kernel-stein-discrepancy#def-34-6",
+    "note": "double expectation of the Stein kernel"
+  },
+  {
+    "from": "kernel-stein-discrepancy#thm-34-7",
+    "to": "kernel-mean-embeddings#def-29-10",
+    "note": "universal kernel gives injectivity"
+  },
+  {
+    "from": "kernel-stein-discrepancy#cor-34-8",
+    "to": "kernel-stein-discrepancy#def-34-6",
+    "note": "Stein kernel is a Gram product"
+  },
+  {
+    "from": "kernel-stein-discrepancy#cor-34-8",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "feature-map Gram is a kernel"
+  },
+  {
+    "from": "kernel-stein-discrepancy#algo-34-1",
+    "to": "kernel-stein-discrepancy#def-34-6",
+    "note": "builds the Stein kernel matrix"
+  },
+  {
+    "from": "kernel-stein-discrepancy#algo-34-1",
+    "to": "kernel-stein-discrepancy#thm-34-7",
+    "note": "U-statistic estimates KSD squared"
+  },
+  {
+    "from": "kernel-stein-discrepancy#algo-34-1",
+    "to": "kernel-hypothesis-testing#def-30-1",
+    "note": "test level and error framework"
+  },
+  {
+    "from": "kernel-stein-discrepancy#prop-34-9",
+    "to": "kernel-stein-discrepancy#def-34-2",
+    "note": "KL derivative is the Stein operator"
+  },
+  {
+    "from": "kernel-stein-discrepancy#prop-34-9",
+    "to": "kernel-stein-discrepancy#def-34-5",
+    "note": "maximal descent equals the KSD"
+  },
+  {
+    "from": "kernel-stein-discrepancy#algo-34-2",
+    "to": "kernel-stein-discrepancy#prop-34-9",
+    "note": "follows the steepest-descent witness"
+  },
+  {
+    "from": "kernel-stein-discrepancy#algo-34-2",
+    "to": "kernel-stein-discrepancy#def-34-1",
+    "note": "score-driven particle update"
+  }
+]

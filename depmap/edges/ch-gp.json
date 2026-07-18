@@ -1,8 +1,32 @@
 [
- {"from": "gaussian-processes-and-rvm#thm-30-2", "to": "preliminaries#def-p-9", "note": "Gaussian conditioning formula"},
- {"from": "gaussian-processes-and-rvm#algo-30-1", "to": "gaussian-processes-and-rvm#thm-30-2", "note": "implements the predictive equations"},
- {"from": "gaussian-processes-and-rvm#prop-30-3", "to": "gaussian-processes-and-rvm#thm-30-2", "note": "compares the GP posterior mean"},
- {"from": "gaussian-processes-and-rvm#prop-30-3", "to": "kernel-ridge-and-friends#prop-4-3", "note": "matches the KRR closed form"},
- {"from": "gaussian-processes-and-rvm#algo-30-2", "to": "gaussian-processes-and-rvm#def-30-5", "note": "fits the RVM prior"},
- {"from": "gaussian-processes-and-rvm#algo-30-2", "to": "gaussian-processes-and-rvm#def-30-4", "note": "type-II marginal-likelihood maximization"}
+ {
+  "from": "gaussian-processes-and-rvm#thm-40-2",
+  "to": "preliminaries#def-p-9",
+  "note": "Gaussian conditioning formula"
+ },
+ {
+  "from": "gaussian-processes-and-rvm#algo-40-1",
+  "to": "gaussian-processes-and-rvm#thm-40-2",
+  "note": "implements the predictive equations"
+ },
+ {
+  "from": "gaussian-processes-and-rvm#prop-40-3",
+  "to": "gaussian-processes-and-rvm#thm-40-2",
+  "note": "compares the GP posterior mean"
+ },
+ {
+  "from": "gaussian-processes-and-rvm#prop-40-3",
+  "to": "kernel-ridge-and-friends#prop-4-3",
+  "note": "matches the KRR closed form"
+ },
+ {
+  "from": "gaussian-processes-and-rvm#algo-40-2",
+  "to": "gaussian-processes-and-rvm#def-40-5",
+  "note": "fits the RVM prior"
+ },
+ {
+  "from": "gaussian-processes-and-rvm#algo-40-2",
+  "to": "gaussian-processes-and-rvm#def-40-4",
+  "note": "type-II marginal-likelihood maximization"
+ }
 ]

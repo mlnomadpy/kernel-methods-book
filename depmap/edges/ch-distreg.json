@@ -1,0 +1,112 @@
+[
+  {
+    "from": "distribution-regression#def-36-1",
+    "to": "kernel-ridge-and-friends#def-4-1",
+    "note": "generalizes supervised learning to distributions"
+  },
+  {
+    "from": "distribution-regression#def-36-2",
+    "to": "kernel-mean-embeddings#def-29-1",
+    "note": "built on the mean embedding"
+  },
+  {
+    "from": "distribution-regression#def-36-2",
+    "to": "kernel-mean-embeddings#def-29-3",
+    "note": "Gaussian kernel in the MMD"
+  },
+  {
+    "from": "distribution-regression#prop-36-3",
+    "to": "distribution-regression#def-36-2",
+    "note": "positive definiteness of embedding kernels"
+  },
+  {
+    "from": "distribution-regression#prop-36-3",
+    "to": "kernels-and-rkhs#lem-2-4",
+    "note": "embedding inner product is a kernel"
+  },
+  {
+    "from": "distribution-regression#prop-36-3",
+    "to": "kernels-and-rkhs#thm-2-14",
+    "note": "Schur product closure"
+  },
+  {
+    "from": "distribution-regression#prop-36-3",
+    "to": "kernels-and-rkhs#thm-2-15",
+    "note": "exponential of a kernel"
+  },
+  {
+    "from": "distribution-regression#algo-36-1",
+    "to": "distribution-regression#def-36-2",
+    "note": "computes the embedding kernel"
+  },
+  {
+    "from": "distribution-regression#algo-36-1",
+    "to": "kernel-mean-embeddings#def-29-1",
+    "note": "empirical mean embedding per bag"
+  },
+  {
+    "from": "distribution-regression#algo-36-1",
+    "to": "kernel-mean-embeddings#prop-29-4",
+    "note": "empirical MMD from kernel averages"
+  },
+  {
+    "from": "distribution-regression#algo-36-2",
+    "to": "distribution-regression#algo-36-1",
+    "note": "builds the distribution Gram matrix"
+  },
+  {
+    "from": "distribution-regression#algo-36-2",
+    "to": "kernel-ridge-and-friends#def-4-2",
+    "note": "stage two kernel ridge regression"
+  },
+  {
+    "from": "distribution-regression#lem-36-4",
+    "to": "kernel-mean-embeddings#def-29-1",
+    "note": "error of the empirical embedding"
+  },
+  {
+    "from": "distribution-regression#lem-36-5",
+    "to": "distribution-regression#def-36-2",
+    "note": "Lipschitz bound for Gaussian-on-MMD kernel"
+  },
+  {
+    "from": "distribution-regression#lem-36-5",
+    "to": "kernels-and-rkhs#def-2-8",
+    "note": "reproducing property expands the norm"
+  },
+  {
+    "from": "distribution-regression#prop-36-6",
+    "to": "distribution-regression#lem-36-4",
+    "note": "stage-one finite-bag error"
+  },
+  {
+    "from": "distribution-regression#prop-36-6",
+    "to": "distribution-regression#lem-36-5",
+    "note": "Lipschitz propagation to stage two"
+  },
+  {
+    "from": "distribution-regression#prop-36-6",
+    "to": "kernel-ridge-and-friends#def-4-2",
+    "note": "ridge bias-variance split"
+  },
+  {
+    "from": "distribution-regression#thm-36-7",
+    "to": "distribution-regression#prop-36-6",
+    "note": "builds on the risk decomposition"
+  },
+  {
+    "from": "distribution-regression#thm-36-7",
+    "to": "mercer-and-rates#def-18-21",
+    "note": "source condition"
+  },
+  {
+    "from": "distribution-regression#thm-36-7",
+    "to": "mercer-and-rates#def-18-22",
+    "note": "capacity condition"
+  },
+  {
+    "from": "distribution-regression#thm-36-7",
+    "to": "mercer-and-rates#thm-18-23",
+    "note": "minimax-optimal KRR rate"
+  }
+]

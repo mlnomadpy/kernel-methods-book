@@ -1,9 +1,37 @@
 [
- {"from": "large-scale-kernels#thm-27-2", "to": "large-scale-kernels#lem-27-1", "note": "applies the descent lemma"},
- {"from": "large-scale-kernels#thm-27-2", "to": "preliminaries#def-p-10", "note": "first-order convexity inequality"},
- {"from": "large-scale-kernels#prop-27-3", "to": "large-scale-kernels#thm-27-2", "note": "sharpens the one-step inequality"},
- {"from": "large-scale-kernels#def-27-5", "to": "kernel-pca#thm-13-4", "note": "optimal anchors are kernel PCA directions"},
- {"from": "large-scale-kernels#def-27-8", "to": "kernel-families#thm-19-5", "note": "Bochner writes kernel as expectation"},
- {"from": "large-scale-kernels#thm-27-9", "to": "large-scale-kernels#def-27-8", "note": "bounds the random Fourier feature map"},
- {"from": "large-scale-kernels#thm-27-9", "to": "vc-theory-and-generalization#cor-12-2", "note": "Hoeffding gives the pointwise bound"}
+ {
+  "from": "large-scale-kernels#thm-37-2",
+  "to": "large-scale-kernels#lem-37-1",
+  "note": "applies the descent lemma"
+ },
+ {
+  "from": "large-scale-kernels#thm-37-2",
+  "to": "preliminaries#def-p-10",
+  "note": "first-order convexity inequality"
+ },
+ {
+  "from": "large-scale-kernels#prop-37-3",
+  "to": "large-scale-kernels#thm-37-2",
+  "note": "sharpens the one-step inequality"
+ },
+ {
+  "from": "large-scale-kernels#def-37-5",
+  "to": "kernel-pca#thm-13-4",
+  "note": "optimal anchors are kernel PCA directions"
+ },
+ {
+  "from": "large-scale-kernels#def-37-8",
+  "to": "kernel-families#thm-19-5",
+  "note": "Bochner writes kernel as expectation"
+ },
+ {
+  "from": "large-scale-kernels#thm-37-14",
+  "to": "large-scale-kernels#def-37-8",
+  "note": "bounds the random Fourier feature map"
+ },
+ {
+  "from": "large-scale-kernels#thm-37-14",
+  "to": "vc-theory-and-generalization#cor-12-2",
+  "note": "Hoeffding gives the pointwise bound"
+ }
 ]

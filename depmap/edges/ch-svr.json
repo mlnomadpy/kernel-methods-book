@@ -1,132 +1,132 @@
 [
-  {
-    "from": "support-vector-regression#def-6-1",
-    "to": "support-vector-machines#def-5-1",
-    "note": "regression analogue of the hinge loss's flat zero-cost region"
-  },
-  {
-    "from": "support-vector-regression#def-6-2",
-    "to": "support-vector-regression#def-6-1",
-    "note": "slack variables smooth the eps-insensitive loss of the direct objective"
-  },
-  {
-    "from": "support-vector-regression#def-6-2",
-    "to": "support-vector-machines#prop-5-3",
-    "note": "splits each excess deviation into slacks exactly as the soft-margin primal"
-  },
-  {
-    "from": "support-vector-regression#def-6-2",
-    "to": "support-vector-machines#prop-5-6",
-    "note": "small ||w|| means a large geometric margin, motivating the 1/2 ||w||^2 term"
-  },
-  {
-    "from": "support-vector-regression#def-6-2",
-    "to": "support-vector-machines#def-5-2",
-    "note": "shares the classifier's norm regularizer verbatim"
-  },
-  {
-    "from": "support-vector-regression#thm-6-3",
-    "to": "support-vector-regression#def-6-2",
-    "note": "derives the dual of the eps-SVR primal program"
-  },
-  {
-    "from": "support-vector-regression#thm-6-3",
-    "to": "preliminaries#def-p-11",
-    "note": "proof is a Lagrangian saddle-point calculation with nonnegative multipliers"
-  },
-  {
-    "from": "support-vector-regression#thm-6-3",
-    "to": "kernel-tricks#prop-3-1",
-    "note": "kernel trick replaces the inner products <x_i, x_j> by k(x_i, x_j)"
-  },
-  {
-    "from": "support-vector-regression#algo-6-1",
-    "to": "support-vector-regression#thm-6-3",
-    "note": "solves the dual QP and reads f from its expansion"
-  },
-  {
-    "from": "support-vector-regression#algo-6-1",
-    "to": "support-vector-regression#def-6-2",
-    "note": "implements eps-SVR for the given C and eps"
-  },
-  {
-    "from": "support-vector-regression#algo-6-1",
-    "to": "support-vector-machines#def-5-8",
-    "note": "declares the indices with beta_i != 0 the support vectors"
-  },
-  {
-    "from": "support-vector-regression#prop-6-4",
-    "to": "support-vector-regression#def-6-1",
-    "note": "resistance comes from the linear growth of the eps-insensitive loss outside the tube"
-  },
-  {
-    "from": "support-vector-regression#prop-6-4",
-    "to": "support-vector-regression#thm-6-3",
-    "note": "an exterior point's dual multiplier stays pinned at the box bound C/m"
-  },
-  {
-    "from": "support-vector-regression#prop-6-4",
-    "to": "preliminaries#def-p-11",
-    "note": "KKT conditions still hold, certifying the shifted pair optimal"
-  },
-  {
-    "from": "support-vector-regression#def-6-5",
-    "to": "support-vector-regression#def-6-2",
-    "note": "same tube program with eps promoted to a decision variable priced by nu"
-  },
-  {
-    "from": "support-vector-regression#def-6-5",
-    "to": "support-vector-machines#prop-5-10",
-    "note": "transplants the nu-trick from the nu-SVM classifier"
-  },
-  {
-    "from": "support-vector-regression#thm-6-6",
-    "to": "support-vector-regression#def-6-5",
-    "note": "derives the dual of the nu-SVR primal"
-  },
-  {
-    "from": "support-vector-regression#thm-6-6",
-    "to": "support-vector-regression#thm-6-3",
-    "note": "repeats the eps-SVR Lagrangian calculation with one extra constraint from eps"
-  },
-  {
-    "from": "support-vector-regression#thm-6-6",
-    "to": "preliminaries#def-p-11",
-    "note": "Lagrangian duality; eps reappears as the multiplier of the budget constraint"
-  },
-  {
-    "from": "support-vector-regression#prop-6-7",
-    "to": "support-vector-regression#thm-6-6",
-    "note": "counting runs on the active budget sum(alpha + alpha*) = C nu and the box [0, C/m]"
-  },
-  {
-    "from": "support-vector-regression#prop-6-7",
-    "to": "support-vector-regression#def-6-5",
-    "note": "stated for solutions of the nu-SVR program with nonzero eps"
-  },
-  {
-    "from": "support-vector-regression#prop-6-7",
-    "to": "preliminaries#def-p-11",
-    "note": "KKT slack condition pins exterior points' multipliers at the ceiling C/m"
-  },
-  {
-    "from": "support-vector-regression#prop-6-7",
-    "to": "support-vector-machines#def-5-8",
-    "note": "bounds the fraction of support vectors, the nonzero-coefficient points"
-  },
-  {
-    "from": "support-vector-regression#algo-6-2",
-    "to": "support-vector-regression#thm-6-6",
-    "note": "solves the nu-SVR dual QP and recovers eps and b from in-bound SVs"
-  },
-  {
-    "from": "support-vector-regression#algo-6-2",
-    "to": "support-vector-regression#def-6-5",
-    "note": "implements nu-SVR for the given C and nu"
-  },
-  {
-    "from": "support-vector-regression#algo-6-2",
-    "to": "support-vector-machines#def-5-8",
-    "note": "reads off the SV set from the nonzero beta_i"
-  }
+ {
+  "from": "support-vector-regression#def-6-1",
+  "to": "support-vector-machines#def-5-1",
+  "note": "regression analogue of the hinge loss's flat zero-cost region"
+ },
+ {
+  "from": "support-vector-regression#def-6-2",
+  "to": "support-vector-regression#def-6-1",
+  "note": "slack variables smooth the eps-insensitive loss of the direct objective"
+ },
+ {
+  "from": "support-vector-regression#def-6-2",
+  "to": "support-vector-machines#prop-5-3",
+  "note": "splits each excess deviation into slacks exactly as the soft-margin primal"
+ },
+ {
+  "from": "support-vector-regression#def-6-2",
+  "to": "support-vector-machines#prop-5-6",
+  "note": "small ||w|| means a large geometric margin, motivating the 1/2 ||w||^2 term"
+ },
+ {
+  "from": "support-vector-regression#def-6-2",
+  "to": "support-vector-machines#def-5-2",
+  "note": "shares the classifier's norm regularizer verbatim"
+ },
+ {
+  "from": "support-vector-regression#thm-6-3",
+  "to": "support-vector-regression#def-6-2",
+  "note": "derives the dual of the eps-SVR primal program"
+ },
+ {
+  "from": "support-vector-regression#thm-6-3",
+  "to": "preliminaries#def-p-11",
+  "note": "proof is a Lagrangian saddle-point calculation with nonnegative multipliers"
+ },
+ {
+  "from": "support-vector-regression#thm-6-3",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "kernel trick replaces the inner products <x_i, x_j> by k(x_i, x_j)"
+ },
+ {
+  "from": "support-vector-regression#algo-6-1",
+  "to": "support-vector-regression#thm-6-3",
+  "note": "solves the dual QP and reads f from its expansion"
+ },
+ {
+  "from": "support-vector-regression#algo-6-1",
+  "to": "support-vector-regression#def-6-2",
+  "note": "implements eps-SVR for the given C and eps"
+ },
+ {
+  "from": "support-vector-regression#algo-6-1",
+  "to": "support-vector-machines#def-5-8",
+  "note": "declares the indices with beta_i != 0 the support vectors"
+ },
+ {
+  "from": "support-vector-regression#prop-6-4",
+  "to": "support-vector-regression#def-6-1",
+  "note": "resistance comes from the linear growth of the eps-insensitive loss outside the tube"
+ },
+ {
+  "from": "support-vector-regression#prop-6-4",
+  "to": "support-vector-regression#thm-6-3",
+  "note": "an exterior point's dual multiplier stays pinned at the box bound C/m"
+ },
+ {
+  "from": "support-vector-regression#prop-6-4",
+  "to": "preliminaries#def-p-11",
+  "note": "KKT conditions still hold, certifying the shifted pair optimal"
+ },
+ {
+  "from": "support-vector-regression#def-6-5",
+  "to": "support-vector-regression#def-6-2",
+  "note": "same tube program with eps promoted to a decision variable priced by nu"
+ },
+ {
+  "from": "support-vector-regression#def-6-5",
+  "to": "support-vector-machines#prop-5-10",
+  "note": "transplants the nu-trick from the nu-SVM classifier"
+ },
+ {
+  "from": "support-vector-regression#thm-6-9",
+  "to": "support-vector-regression#def-6-5",
+  "note": "derives the dual of the nu-SVR primal"
+ },
+ {
+  "from": "support-vector-regression#thm-6-9",
+  "to": "support-vector-regression#thm-6-3",
+  "note": "repeats the eps-SVR Lagrangian calculation with one extra constraint from eps"
+ },
+ {
+  "from": "support-vector-regression#thm-6-9",
+  "to": "preliminaries#def-p-11",
+  "note": "Lagrangian duality; eps reappears as the multiplier of the budget constraint"
+ },
+ {
+  "from": "support-vector-regression#prop-6-10",
+  "to": "support-vector-regression#thm-6-9",
+  "note": "counting runs on the active budget sum(alpha + alpha*) = C nu and the box [0, C/m]"
+ },
+ {
+  "from": "support-vector-regression#prop-6-10",
+  "to": "support-vector-regression#def-6-5",
+  "note": "stated for solutions of the nu-SVR program with nonzero eps"
+ },
+ {
+  "from": "support-vector-regression#prop-6-10",
+  "to": "preliminaries#def-p-11",
+  "note": "KKT slack condition pins exterior points' multipliers at the ceiling C/m"
+ },
+ {
+  "from": "support-vector-regression#prop-6-10",
+  "to": "support-vector-machines#def-5-8",
+  "note": "bounds the fraction of support vectors, the nonzero-coefficient points"
+ },
+ {
+  "from": "support-vector-regression#algo-6-2",
+  "to": "support-vector-regression#thm-6-9",
+  "note": "solves the nu-SVR dual QP and recovers eps and b from in-bound SVs"
+ },
+ {
+  "from": "support-vector-regression#algo-6-2",
+  "to": "support-vector-regression#def-6-5",
+  "note": "implements nu-SVR for the given C and nu"
+ },
+ {
+  "from": "support-vector-regression#algo-6-2",
+  "to": "support-vector-machines#def-5-8",
+  "note": "reads off the SV set from the nonzero beta_i"
+ }
 ]

@@ -1,0 +1,132 @@
+[
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-1",
+  "to": "kernel-families#def-19-9",
+  "note": "SPDE symbol reproduces the Matern spectrum"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-1",
+  "to": "kernel-families#thm-19-5",
+  "note": "spectral density determines the kernel"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-2",
+  "to": "geometric-and-equivariant-kernels#def-27-1",
+  "note": "Laplace-Beltrami replaces the flat Laplacian"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-2",
+  "to": "mercer-and-rates#thm-18-10",
+  "note": "Mercer expansion in the Laplacian eigenbasis"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-3",
+  "to": "preliminaries#thm-p-8",
+  "note": "eigenbasis of the self-adjoint operator"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-3",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "verifies the defining quadratic form"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-3",
+  "to": "kernels-and-rkhs#thm-2-14",
+  "note": "nonnegative combinations and limits stay p.d."
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-4",
+  "to": "geometric-and-equivariant-kernels#def-27-2",
+  "note": "graph transport of the manifold construction"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-4",
+  "to": "graph-kernels#def-24-23",
+  "note": "spectral filter of the graph Laplacian"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-4",
+  "to": "graph-kernels#lem-24-24",
+  "note": "Laplacian symmetric p.s.d. with Fourier modes"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-4",
+  "to": "graph-kernels#def-24-27",
+  "note": "recovers the Kondor-Lafferty diffusion kernel"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-4",
+  "to": "graph-kernels#def-24-28",
+  "note": "tunable-smoothness completion of the spectral family"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-5",
+  "to": "geometric-and-equivariant-kernels#def-27-4",
+  "note": "certifies the diffusion and Matern filters"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-5",
+  "to": "preliminaries#thm-p-2",
+  "note": "diagonalizes the symmetric Laplacian"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-5",
+  "to": "graph-kernels#lem-24-24",
+  "note": "nonnegative Laplacian spectrum"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-5",
+  "to": "preliminaries#def-p-1",
+  "note": "positive eigenvalues give positive definiteness"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#algo-27-1",
+  "to": "geometric-and-equivariant-kernels#def-27-4",
+  "note": "assembles the graph Matern/diffusion Gram"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#algo-27-1",
+  "to": "graph-kernels#def-24-23",
+  "note": "forms L = D - W"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#algo-27-1",
+  "to": "geometric-and-equivariant-kernels#prop-27-5",
+  "note": "positive filter guarantees the output p.d."
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#def-27-6",
+  "to": "kernels-and-rkhs#lem-2-4",
+  "note": "kernel from the averaged feature embedding"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-7",
+  "to": "geometric-and-equivariant-kernels#def-27-6",
+  "note": "quadratic form of averaged features"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-7",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "verifies the p.d. quadratic form"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#prop-27-8",
+  "to": "geometric-and-equivariant-kernels#def-27-6",
+  "note": "Haar invariance fixes the averaged features"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#algo-27-2",
+  "to": "geometric-and-equivariant-kernels#def-27-6",
+  "note": "evaluates the orbit-averaged Gram"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#algo-27-2",
+  "to": "geometric-and-equivariant-kernels#prop-27-7",
+  "note": "output guaranteed positive definite"
+ },
+ {
+  "from": "geometric-and-equivariant-kernels#algo-27-2",
+  "to": "geometric-and-equivariant-kernels#prop-27-8",
+  "note": "output guaranteed invariant"
+ }
+]

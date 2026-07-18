@@ -1,22 +1,102 @@
 [
-  { "from": "invariances-and-pre-images#algo-20-1", "to": "support-vector-machines#algo-5-1", "note": "trains a standard C-SVM" },
-  { "from": "invariances-and-pre-images#algo-20-1", "to": "support-vector-machines#def-5-8", "note": "extracts the support-vector set" },
-  { "from": "invariances-and-pre-images#algo-20-1", "to": "support-vector-machines#prop-5-9", "note": "sound: solution depends only on support vectors" },
-  { "from": "invariances-and-pre-images#algo-20-1", "to": "invariances-and-pre-images#def-20-1", "note": "transforms support vectors into virtual examples" },
-  { "from": "invariances-and-pre-images#def-20-2", "to": "kernels-and-rkhs#def-2-1", "note": "starts from an admissible p.d. kernel" },
-  { "from": "invariances-and-pre-images#def-20-2", "to": "kernel-tricks#prop-3-1", "note": "feature-space distance via the kernel trick" },
-  { "from": "invariances-and-pre-images#def-20-2", "to": "invariances-and-pre-images#def-20-1", "note": "jittered forms are the invariance transforms" },
-  { "from": "invariances-and-pre-images#prop-20-3", "to": "kernels-and-rkhs#thm-2-5", "note": "reads k via the Aronszajn feature map" },
-  { "from": "invariances-and-pre-images#prop-20-3", "to": "preliminaries#def-p-5", "note": "expands z in an orthonormal basis" },
-  { "from": "invariances-and-pre-images#prop-20-3", "to": "kernel-tricks#thm-3-4", "note": "target is the representer expansion" },
-  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-families#thm-19-10", "note": "Gaussian kernel is a p.d. exponential" },
-  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-tricks#prop-3-1", "note": "projection objective via the kernel trick" },
-  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-pca#thm-13-4", "note": "inverts the kernel-PCA projection" },
-  { "from": "invariances-and-pre-images#algo-20-2", "to": "kernel-pca#prop-13-6", "note": "kernel-PCA projection has a good pre-image" },
-  { "from": "invariances-and-pre-images#prop-20-4", "to": "kernel-tricks#thm-3-4", "note": "approximates the representer expansion" },
-  { "from": "invariances-and-pre-images#prop-20-4", "to": "kernel-tricks#prop-3-1", "note": "objective expressed via Gram blocks" },
-  { "from": "invariances-and-pre-images#prop-20-4", "to": "preliminaries#thm-p-6", "note": "residual orthogonal to each Phi(z_j)" },
-  { "from": "invariances-and-pre-images#algo-20-3", "to": "invariances-and-pre-images#algo-20-2", "note": "step 2 finds one-term pre-images" },
-  { "from": "invariances-and-pre-images#algo-20-3", "to": "invariances-and-pre-images#prop-20-4", "note": "step 3 recomputes optimal coefficients" },
-  { "from": "invariances-and-pre-images#algo-20-3", "to": "kernel-tricks#thm-3-4", "note": "compresses the representer expansion" }
+ {
+  "from": "invariances-and-pre-images#algo-20-1",
+  "to": "support-vector-machines#algo-5-1",
+  "note": "trains a standard C-SVM"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-1",
+  "to": "support-vector-machines#def-5-8",
+  "note": "extracts the support-vector set"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-1",
+  "to": "support-vector-machines#prop-5-9",
+  "note": "sound: solution depends only on support vectors"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-1",
+  "to": "invariances-and-pre-images#def-20-1",
+  "note": "transforms support vectors into virtual examples"
+ },
+ {
+  "from": "invariances-and-pre-images#def-20-2",
+  "to": "kernels-and-rkhs#def-2-1",
+  "note": "starts from an admissible p.d. kernel"
+ },
+ {
+  "from": "invariances-and-pre-images#def-20-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "feature-space distance via the kernel trick"
+ },
+ {
+  "from": "invariances-and-pre-images#def-20-2",
+  "to": "invariances-and-pre-images#def-20-1",
+  "note": "jittered forms are the invariance transforms"
+ },
+ {
+  "from": "invariances-and-pre-images#prop-20-3",
+  "to": "kernels-and-rkhs#thm-2-5",
+  "note": "reads k via the Aronszajn feature map"
+ },
+ {
+  "from": "invariances-and-pre-images#prop-20-3",
+  "to": "preliminaries#def-p-5",
+  "note": "expands z in an orthonormal basis"
+ },
+ {
+  "from": "invariances-and-pre-images#prop-20-3",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "target is the representer expansion"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-2",
+  "to": "kernel-families#thm-19-14",
+  "note": "Gaussian kernel is a p.d. exponential"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-2",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "projection objective via the kernel trick"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-2",
+  "to": "kernel-pca#thm-13-4",
+  "note": "inverts the kernel-PCA projection"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-2",
+  "to": "kernel-pca#prop-13-6",
+  "note": "kernel-PCA projection has a good pre-image"
+ },
+ {
+  "from": "invariances-and-pre-images#prop-20-4",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "approximates the representer expansion"
+ },
+ {
+  "from": "invariances-and-pre-images#prop-20-4",
+  "to": "kernel-tricks#prop-3-1",
+  "note": "objective expressed via Gram blocks"
+ },
+ {
+  "from": "invariances-and-pre-images#prop-20-4",
+  "to": "preliminaries#thm-p-6",
+  "note": "residual orthogonal to each Phi(z_j)"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-3",
+  "to": "invariances-and-pre-images#algo-20-2",
+  "note": "step 2 finds one-term pre-images"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-3",
+  "to": "invariances-and-pre-images#prop-20-4",
+  "note": "step 3 recomputes optimal coefficients"
+ },
+ {
+  "from": "invariances-and-pre-images#algo-20-3",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "compresses the representer expansion"
+ }
 ]
