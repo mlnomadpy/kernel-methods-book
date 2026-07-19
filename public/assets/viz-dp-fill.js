@@ -170,9 +170,9 @@
       const finished = cursor >= total;
       const K = st.Ks[st.p - 1];
       const norm = K / Math.sqrt(Math.max(st.selfS * st.selfT, 1e-300));
-      ro.textContent = "cells " + cursor + "/" + total +
+      ro("cells " + cursor + "/" + total +
         (finished ? " · K_" + st.p + "(" + st.s + ", " + st.t + ") = " + K.toPrecision(4) + " · normalized = " + norm.toFixed(4)
-                  : " · press run or finish");
+                  : " · press run or finish"));
     }
 
     rebuild();

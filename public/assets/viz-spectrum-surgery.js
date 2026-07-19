@@ -127,9 +127,9 @@
       // readout
       let lmin = Infinity, neg = 0;
       for (let i = 0; i < N; i++) { if (eig.lam[i] < lmin) lmin = eig.lam[i]; if (eig.lam[i] < -1e-12) neg++; }
-      ro.textContent = "λmin = " + lmin.toFixed(3) + " · " + neg + " negative eigenvalue" + (neg === 1 ? "" : "s") +
+      ro("λmin = " + lmin.toFixed(3) + " · " + neg + " negative eigenvalue" + (neg === 1 ? "" : "s") +
         " · ‖S−K'‖F: clip " + frob.clip.toFixed(3) + ", flip " + frob.flip.toFixed(3) + ", shift " + frob.shift.toFixed(3) +
-        (ctrl.repair !== "none" ? " · showing " + ctrl.repair : "");
+        (ctrl.repair !== "none" ? " · showing " + ctrl.repair : ""));
     }
 
     recomputeS();
