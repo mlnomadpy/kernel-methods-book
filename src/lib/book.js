@@ -448,12 +448,12 @@ export function buildBook() {
     nav.push(
       nextHref
         ? `<a class="nav-card next" href="${nextHref}"><span class="dir">Next &rarr;</span><span class="nav-title">${label(i + 1)}</span></a>`
-        : '<a class="nav-card next" href="bibliography.html"><span class="dir">Next &rarr;</span><span class="nav-title">Bibliography</span></a>',
+        : '<a class="nav-card next" href="projects.html"><span class="dir">Next &rarr;</span><span class="nav-title">Projects &amp; Competitions</span></a>',
     );
     nav.push("</nav>");
     ch.body += nav.join("\n");
     ch.prevHref = prevHref;
-    ch.nextHref = nextHref || "bibliography.html";
+    ch.nextHref = nextHref || "projects.html";
   });
 
   // bibliography, alphabetical by author then year
@@ -463,6 +463,12 @@ export function buildBook() {
     return ka < kb ? -1 : ka > kb ? 1 : 0;
   });
 
+  searchIndex.push({
+    h: "Projects and Competitions",
+    c: "End matter",
+    u: "projects.html",
+    x: "Build-it capstones and a final project, each with a dataset, a metric, and a measured baseline, and each ready to run as a Kaggle community competition.",
+  });
   searchIndex.push({
     h: "Notation and Glossary",
     c: "End matter",
@@ -594,11 +600,12 @@ export function tocHtml(currentSlug = null, sections = []) {
   }
 
   const endLinks = [
+    `<a href="projects.html"${currentSlug === "projects" ? ' class="here"' : ""}>Projects &amp; Competitions</a>`,
     `<a href="glossary.html"${currentSlug === "glossary" ? ' class="here"' : ""}>Notation &amp; Glossary</a>`,
     `<a href="dependency-map.html"${currentSlug === "dependency-map" ? ' class="here"' : ""}>Dependency Map</a>`,
     `<a href="bibliography.html"${currentSlug === "bibliography" ? ' class="here"' : ""}>Bibliography</a>`,
   ];
-  const endOpen = ["glossary", "dependency-map", "bibliography"].includes(currentSlug);
+  const endOpen = ["projects", "glossary", "dependency-map", "bibliography"].includes(currentSlug);
   rows.push(partHtml("End matter", endLinks.join("\n"), endOpen));
   return rows.join("\n");
 }

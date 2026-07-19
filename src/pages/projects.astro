@@ -1,0 +1,19 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import Book from "../layouts/Book.astro";
+import { BOOK, tocHtml } from "../lib/book.js";
+
+const body = fs.readFileSync(
+  path.join(process.cwd(), "chapters", "src", "projects.body.html"),
+  "utf8",
+);
+---
+
+<Book
+  title={`Projects and Competitions · ${BOOK.title}`}
+  desc={`Build-it capstones and a final project for ${BOOK.title}, each with a dataset, a metric, and a measured baseline, and each ready to run as a Kaggle community competition.`}
+  toc={tocHtml("projects")}
+>
+  <Fragment set:html={body} />
+</Book>
