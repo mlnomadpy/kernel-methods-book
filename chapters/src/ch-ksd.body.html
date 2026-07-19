@@ -218,6 +218,9 @@ $$ \hat\phi(x_i) = \frac{1}{n}\sum_{j=1}^n \Big[\, \underbrace{k(x_j, x_i)\, s_p
 </ol>
 </div>
 
+<figure class="viz" data-widget="svgd-flow">
+<figcaption>Eighty particles start in a clump at \(x=-5\) and follow the exact SVGD update above, computed live with the analytic score of the two-mode target \(p=\tfrac12\,\mathcal N(-2,0.6^2)+\tfrac12\,\mathcal N(2,0.8^2)\). The driving force alone would pile every particle onto the peak of the near mode; it is the kernel repulsion \(\nabla_{x_j}k(x_j,x_i)\) that spreads the swarm through that mode and pushes a front across the low-density valley until both modes are populated. The readout is the empirical kernel Stein discrepancy, the V-statistic \(\widehat{\mathrm{KSD}}^2\) with the same RBF kernel, recomputed as the particles flow; watch it fall by orders of magnitude, and switch the bandwidth to see how the reach of the repulsion reroutes the whole flow.</figcaption></figure>
+
 <p>The two terms in the update have a clean mechanical reading. The driving force \(k(x_j, x_i) s_p(x_j)\) is a kernel-weighted average of the score, pushing each particle toward regions where \(\log p\) increases, that is toward the high-density part of the target; a lone particle would follow \(s_p\) and slide to a mode. The repulsion \(\nabla_{x_j} k(x_j, x_i)\) points particles away from one another, and without it every particle would collapse onto the same mode. Their balance is what makes the particles spread out into the shape of \(p\) rather than piling up at its peak. Both terms use only \(s_p\), so SVGD samples an unnormalized posterior with no MCMC and no normalizer, which is why it reappears in [[ch:gaussian-processes-and-rvm|Bayesian inference]] as a fast deterministic alternative to sampling.</p>
 
 <div class="box ex"><span class="box-title">Example (one SVGD step toward a standard Gaussian)</span>

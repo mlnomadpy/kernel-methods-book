@@ -84,6 +84,9 @@ Including the identity in the count is what makes the test exactly level \(\alph
 </ol>
 </div>
 
+<figure class="viz" data-widget="permutation-null">
+<figcaption>The histogram is the exact permutation null of the unbiased \(\widehat{\mathrm{MMD}}^2_U\), built live: each of \(B = 2000\) relabelings resplits the pooled \(50\) points and re-sums one precomputed kernel matrix, so no kernel value is ever evaluated twice. The vertical line is the observed statistic \(T_0\) on the true labels, and \(\hat p\) is the fraction of null values at or above it, the observed labeling counted in. At separation \(0\) the line sits inside the null and the test retains \(H_0\); slide the separation up and the line escapes the histogram while \(\hat p\) collapses below \(\alpha = 0.05\).</figcaption></figure>
+
 <p>The procedure needs nothing but repeated kernel evaluations, and it is easiest to trust on a case small enough to enumerate by hand.</p>
 
 <div class="box ex"><span class="box-title">Example (an exact permutation test on eight points)</span>

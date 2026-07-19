@@ -217,6 +217,9 @@ where \(\phi^{(h)}\) is the compressed-label histogram after \(h\) iterations. T
 </ol>
 </div>
 
+<figure class="viz" data-widget="wl-refine">
+<figcaption>Each press of step runs one exact round of 1-WL color refinement, with the color dictionary shared across both graphs; the histograms beneath are precisely what the WL subtree kernel compares. The pendant pair separates at round 2 and the path against the star at round 1, while the 6-cycle against two triangles never separates: both are 2-regular, the blind spot the text proves.</figcaption></figure>
+
 <p>Two facts fix the reach of this test, one encouraging and one sobering. It is <em>sound</em> in one direction: because the update reads only the graph structure, isomorphic graphs always receive identical colorings, so a difference between two histograms is a genuine certificate of non-isomorphism. It is <em>incomplete</em> in the other: identical colorings do not certify isomorphism. What 1-WL actually computes is the <em>coarsest equitable partition</em> of the vertices, the coarsest coloring in which every two vertices of one color have the same number of neighbors of each color, and any two graphs sharing these partition statistics are invisible to it whether or not they are truly the same.</p>
 
 <p>The cleanest blind spot is the regular graphs. On a \(d\)-regular graph every vertex begins with one color and forever sees a multiset of \(d\) identical colors, so refinement never splits the single class: every \(d\)-regular graph on \(m\) vertices yields the same trivial coloring, and 1-WL cannot tell any two of them apart. The worked example makes this concrete and contrasts it with a pair that refinement does separate.</p>

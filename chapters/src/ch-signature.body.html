@@ -20,6 +20,9 @@ $$S(X)_{a,b}=\big(1,\ \mathbf{S}^1,\ \mathbf{S}^2,\ \mathbf{S}^3,\dots\big),\qqu
 where \(\mathbf{S}^k\) is the level-\(k\) tensor collecting the \(d^k\) coordinates \(S(X)^{i_1\cdots i_k}\), and the level-\(0\) entry is the constant \(1\). The <em>depth-\(m\)</em> (truncated) signature \(S^{\le m}(X)\) keeps levels \(0\) through \(m\).</p>
 </div>
 
+<figure class="viz" data-widget="sig-draw">
+<figcaption>Draw with the pointer; the widget accumulates the exact depth-2 signature of the piecewise-linear path through the sampled points, one Chen concatenation per segment. Level 1 is the displacement; at level 2 the diagonal is determined, \(S^{11}=\tfrac12(S^1)^2\) and \(S^{22}=\tfrac12(S^2)^2\), and the genuinely new coordinate is the Lévy area \(\tfrac12(S^{12}-S^{21})\), the signed area between the stroke and its chord, shaded on the canvas. These numbers are iterated integrals of the trace alone, so reparametrization invariance is testable by hand: retrace the same shape quickly or slowly and the signature agrees, with the previous stroke kept faint for the comparison.</figcaption></figure>
+
 <p>The lowest levels already have plain meaning. Level \(0\) is always \(1\). Level \(1\) is the total increment,
 $$S(X)^i_{a,b}=\int_a^b dX_t^i=X_b^i-X_a^i,$$
 so the first level of the signature is just the displacement from start to end, the feature a stacked-difference model would use. Level \(2\) is where the signature starts to see structure a static summary cannot,

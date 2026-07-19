@@ -155,6 +155,9 @@ Writing \(u_i=e^{f_i/\varepsilon}\), \(v_j=e^{g_j/\varepsilon}\), and \(K_{ij}=e
 </ol>
 </div>
 
+<figure class="viz" data-widget="sinkhorn-plan">
+<figcaption>The heatmap is the entropic plan \(\pi=\operatorname{diag}(u)\,K\,\operatorname{diag}(v)\) under the algorithm exactly as stated, one full update \(u\leftarrow a\oslash(Kv)\), \(v\leftarrow b\oslash(K^\top u)\) per tick, transporting a two-bump source \(a\) (bars, left) to a wide bump \(b\) (bars, bottom) on \(28\) grid points with cost \(C_{ij}=(x_i-y_j)^2\). The readout is the exact row-marginal violation \(\|\pi\mathbf 1-a\|_1\), which falls monotonically until it crosses the stopping threshold \(10^{-6}\) and the iteration halts with the converged cost \(\langle C,\pi\rangle\); the dark ticks on the left bars are the current row sums \(\pi\mathbf 1\) closing onto \(a\). Lower \(\varepsilon\) and the plan sharpens toward the monotone optimal map while the iteration count multiplies; raise it and the plan blurs toward the independent coupling \(ab^\top\).</figcaption></figure>
+
 <div class="box ex"><span class="box-title">Example (Sinkhorn iterations on a tiny cost matrix)</span>
 <div class="wex">
 <div class="wex-setup">

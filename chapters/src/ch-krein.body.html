@@ -123,6 +123,9 @@ $$f^\star=\sum_{i=1}^n \alpha_i\,k(x_i,\cdot),\qquad \alpha\in\mathbb R^n.$$
 </ol>
 </div>
 
+<figure class="viz" data-widget="spectrum-surgery">
+<figcaption>The bars are the exact spectrum of the tanh similarity on ten points, eigendecomposed live; negative bars are the Krein part, and steepening \(a\) drives them further negative. Each repair recomposes the matrix from surgically altered eigenvalues, and the Frobenius readout compares all three at once: clip changes the matrix least, the nearest-PSD fact proved above.</figcaption></figure>
+
 <p>Each transform embodies a different belief about the negative eigenvalues, and each pays a different price. Clip declares them noise and deletes them; it yields \(K_+\), which is exactly the nearest positive semidefinite matrix to \(K\) in Frobenius norm (Higham 1988), so it is the least violent repair, but it throws away whatever signal the negative part carried. Flip declares the negative directions informative and keeps their magnitude, \(|\lambda_i|\), which preserves all spectral energy but reverses the geometry along those directions. Shift lifts the entire spectrum by \(|\lambda_{\min}|\); it preserves every eigenvector and every off-diagonal similarity, touching only the diagonal, but it inflates each point's self-similarity and can be a large perturbation when \(\lambda_{\min}\) is very negative.</p>
 
 <table>

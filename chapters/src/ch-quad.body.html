@@ -166,6 +166,9 @@ $$ x_t \;=\; \arg\max_{x\in\mathcal X}\ \Big[\, \mu_P(x) - g_{t-1}(x)\,\Big], \q
 </ol>
 </div>
 
+<figure class="viz" data-widget="herding-greedy">
+<figcaption>Each step places the exact argmax of the herding criterion for the standard normal target and unit-bandwidth Gaussian kernel, using the closed-form embedding \(\mu_P(x)=e^{-x^2/4}/\sqrt{2}\). The lower panel tracks the true worst-case integration error: uniform weights against the optimally reweighted same nodes and the exact Monte Carlo expectation, the comparison worked in the examples above.</figcaption></figure>
+
 <p>The greedy criterion is cheap: each step is one pass over the candidates evaluating a scalar acquisition, with no linear solve. We trace three steps on the same target and kernel as before, so the two examples can be compared directly.</p>
 
 <div class="box ex"><span class="box-title">Example (three greedy herding steps)</span>

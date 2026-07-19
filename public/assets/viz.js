@@ -59,6 +59,137 @@
     return x;
   }
 
+  // Cholesky factorization of the SPD matrix A + reg I (flat n*n). Returns the
+  // lower factor L, writing into `out` when given so hot loops reuse one
+  // buffer. Faster and more stable than elimination for the GP / ridge solves
+  // the simulation widgets refit repeatedly.
+  function chol(A, n, reg, out) {
+    const L = out || new Float64Array(n * n);
+    L.fill(0);
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j <= i; j++) {
+        let s = A[i * n + j] + (i === j ? reg : 0);
+        for (let k = 0; k < j; k++) s -= L[i * n + k] * L[j * n + k];
+        if (i === j) L[i * n + i] = Math.sqrt(Math.max(s, 1e-12));
+        else L[i * n + j] = s / L[j * n + j];
+      }
+    }
+    return L;
+  }
+  // Solve L L^T x = b given the Cholesky factor. Writes into `out` when given.
+  function cholSolve(L, b, n, out) {
+    const x = out || new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      let s = b[i];
+      for (let k = 0; k < i; k++) s -= L[i * n + k] * x[k];
+      x[i] = s / L[i * n + i];
+    }
+    for (let i = n - 1; i >= 0; i--) {
+      let s = x[i];
+      for (let k = i + 1; k < n; k++) s -= L[k * n + i] * x[k];
+      x[i] = s / L[i * n + i];
+    }
+    return x;
+  }
+
+  // Cyclic Jacobi eigendecomposition for a small symmetric matrix (flat n*n).
+  // Sweeps until the largest off-diagonal entry is below 1e-10 (typically a
+  // handful of sweeps for n <= 30). Returns {lam, vec} with eigenvectors in
+  // the COLUMNS of vec. Small-n only: O(n^3) per sweep.
+  function jacobi(Ain, n) {
+    const A = Float64Array.from(Ain);
+    const Vc = new Float64Array(n * n);
+    for (let i = 0; i < n; i++) Vc[i * n + i] = 1;
+    for (let sweep = 0; sweep < 80; sweep++) {
+      let off = 0;
+      for (let p = 0; p < n - 1; p++)
+        for (let q = p + 1; q < n; q++) off = Math.max(off, Math.abs(A[p * n + q]));
+      if (off < 1e-10) break;
+      for (let p = 0; p < n - 1; p++)
+        for (let q = p + 1; q < n; q++) {
+          const apq = A[p * n + q];
+          if (Math.abs(apq) < 1e-14) continue;
+          const th = 0.5 * Math.atan2(2 * apq, A[q * n + q] - A[p * n + p]);
+          const c = Math.cos(th), s = Math.sin(th);
+          for (let k = 0; k < n; k++) {
+            const akp = A[k * n + p], akq = A[k * n + q];
+            A[k * n + p] = c * akp - s * akq;
+            A[k * n + q] = s * akp + c * akq;
+          }
+          for (let k = 0; k < n; k++) {
+            const apk = A[p * n + k], aqk = A[q * n + k];
+            A[p * n + k] = c * apk - s * aqk;
+            A[q * n + k] = s * apk + c * aqk;
+          }
+          for (let k = 0; k < n; k++) {
+            const vkp = Vc[k * n + p], vkq = Vc[k * n + q];
+            Vc[k * n + p] = c * vkp - s * vkq;
+            Vc[k * n + q] = s * vkp + c * vkq;
+          }
+        }
+    }
+    const lam = new Float64Array(n);
+    for (let i = 0; i < n; i++) lam[i] = A[i * n + i];
+    return { lam: lam, vec: Vc };
+  }
+
+  // ---- simulation harness --------------------------------------------------
+  // Fixed-budget stepper for the CPU-heavy widgets. The contract that keeps
+  // the page smooth: step() advances the simulation WITHOUT allocating (state
+  // lives in preallocated typed arrays), draw() renders it, and the loop runs
+  // only while the figure is on screen and the tab is visible. Compute is
+  // capped per frame; a backlog is dropped rather than "caught up", so a slow
+  // machine degrades to slower simulated time instead of jank.
+  function makeSim(fig, opts) {
+    const budgetMs = opts.budgetMs || 8; // max compute per frame
+    const stepMs = opts.stepMs || 16;    // simulated time per step() call
+    let raf = 0, running = false, last = 0, acc = 0;
+    function frame(now) {
+      raf = 0;
+      if (!running) return;
+      if (fig._vizVisible === false || document.hidden) { last = 0; return; }
+      if (!last) last = now;
+      acc += Math.min(100, now - last);
+      last = now;
+      const t0 = performance.now();
+      let stepped = false;
+      while (acc >= stepMs) {
+        opts.step(stepMs);
+        acc -= stepMs;
+        stepped = true;
+        if (performance.now() - t0 > budgetMs) { acc = 0; break; }
+      }
+      if (stepped || opts.alwaysDraw) opts.draw();
+      if (opts.done && opts.done()) { running = false; if (opts.onDone) opts.onDone(); return; }
+      raf = requestAnimationFrame(frame);
+    }
+    const sim = {
+      start() { if (!running) { running = true; last = 0; } if (!raf) raf = requestAnimationFrame(frame); },
+      stop() { running = false; last = 0; if (raf) { cancelAnimationFrame(raf); raf = 0; } },
+      toggle() { if (running) sim.stop(); else sim.start(); return running; },
+      kick() { if (running && !raf) { last = 0; raf = requestAnimationFrame(frame); } },
+      get running() { return running; },
+    };
+    (fig._vizSims || (fig._vizSims = [])).push(sim);
+    return sim;
+  }
+  // resume running sims when the tab becomes visible again
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden)
+      document.querySelectorAll("figure.viz[data-widget]").forEach((f) => (f._vizSims || []).forEach((s) => s.kick()));
+  });
+
+  // Coalesce pointermove to one handler call per animation frame, so a
+  // refit-on-drag widget retrains at most once per frame regardless of the
+  // pointer event rate.
+  function onPointerMove(cv, fn) {
+    let pending = null, raf = 0;
+    cv.addEventListener("pointermove", (e) => {
+      pending = e;
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; const ev = pending; pending = null; fn(ev); });
+    });
+  }
+
   // ---- kernels -------------------------------------------------------------
   const KERNELS = {
     linear: { f: (a, b) => dot(a, b), label: "linear ⟨x,x'⟩" },
@@ -194,7 +325,7 @@
       if (i >= 0) { drag = i; cv.setPointerCapture(e.pointerId); }
       else if (m.x > box.x && m.x < box.x + box.w) { const x = XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]); const y = YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0]); pts.push([x, Math.max(YR[0], Math.min(YR[1], y))]); draw(); }
     });
-    cv.addEventListener("pointermove", (e) => { if (drag < 0) return; const m = pointerXY(cv, e); pts[drag] = [XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]), Math.max(YR[0], Math.min(YR[1], YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0])))]; draw(); });
+    onPointerMove(cv, (e) => { if (drag < 0) return; const m = pointerXY(cv, e); pts[drag] = [XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]), Math.max(YR[0], Math.min(YR[1], YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0])))]; draw(); });
     window.addEventListener("pointerup", () => { drag = -1; });
     return draw;
   };
@@ -372,7 +503,7 @@
     }
     function nearest(mx, my) { let bi = -1, bd = 14 * 14; for (let i = 0; i < P.length; i++) { const dx = sx(box, XR, P[i][0]) - mx, dy = sy(box, YR, P[i][1]) - my; const d = dx * dx + dy * dy; if (d < bd) { bd = d; bi = i; } } return bi; }
     cv.addEventListener("pointerdown", (e) => { const m = pointerXY(cv, e); drag = nearest(m.x, m.y); if (drag >= 0) cv.setPointerCapture(e.pointerId); });
-    cv.addEventListener("pointermove", (e) => { if (drag < 0) return; const m = pointerXY(cv, e); P[drag][0] = XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]); P[drag][1] = YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0]); draw(); });
+    onPointerMove(cv, (e) => { if (drag < 0) return; const m = pointerXY(cv, e); P[drag][0] = XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]); P[drag][1] = YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0]); draw(); });
     window.addEventListener("pointerup", () => { drag = -1; });
     return draw;
   };
@@ -425,13 +556,23 @@
     }
     function nearest(mx, my) { const dP = (sx(box, XR, muP[0]) - mx) ** 2 + (sy(box, YR, muP[1]) - my) ** 2; const dQ = (sx(box, XR, muQ[0]) - mx) ** 2 + (sy(box, YR, muQ[1]) - my) ** 2; return dP < dQ ? (dP < 400 ? 1 : 0) : (dQ < 400 ? 2 : 0); }
     cv.addEventListener("pointerdown", (e) => { const m = pointerXY(cv, e); drag = nearest(m.x, m.y); if (drag) cv.setPointerCapture(e.pointerId); });
-    cv.addEventListener("pointermove", (e) => { if (!drag) return; const m = pointerXY(cv, e); const x = XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]); const y = YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0]); const c = drag === 1 ? muP : muQ; const old = c.slice(); c[0] = x; c[1] = y; const S = drag === 1 ? SP : SQ; for (const s of S) { s[0] += x - old[0]; s[1] += y - old[1]; } draw(); });
+    onPointerMove(cv, (e) => { if (!drag) return; const m = pointerXY(cv, e); const x = XR[0] + (m.x - box.x) / box.w * (XR[1] - XR[0]); const y = YR[1] - (m.y - box.y) / box.h * (YR[1] - YR[0]); const c = drag === 1 ? muP : muQ; const old = c.slice(); c[0] = x; c[1] = y; const S = drag === 1 ? SP : SQ; for (const s of S) { s[0] += x - old[0]; s[1] += y - old[1]; } draw(); });
     window.addEventListener("pointerup", () => { drag = 0; });
     return draw;
   };
 
   // ---- mount ---------------------------------------------------------------
   function addTitle(host, t) { const d = document.createElement("div"); d.className = "viz-title"; d.textContent = t; host.append(d); }
+
+  // Public registry: widget files (assets/viz-*.js, loaded after this one)
+  // register themselves and reuse the engine's math + chrome helpers, so each
+  // widget stays a self-contained file with no duplicate infrastructure.
+  window.VIZ = {
+    register: function (name, factory) { WIDGETS[name] = factory; },
+    palette, solveSym, chol, cholSolve, makeSim, onPointerMove,
+    setupCanvas, pointerXY, mkControls, readout, axes, disc, contour,
+    heat, hexRGB, gauss, dot, sqdist, KERNELS, sx, sy, addTitle, jacobi,
+  };
 
   function mount(fig) {
     if (fig.dataset.mounted) return; fig.dataset.mounted = "1";
@@ -443,8 +584,18 @@
     let draw;
     try { draw = factory(fig, host); } catch (e) { host.innerHTML = '<div class="viz-readout">widget error: ' + e.message + "</div>"; return; }
     fig._redraw = draw;
-    // draw when in view + on resize
-    const io = new IntersectionObserver((es) => { for (const en of es) if (en.isIntersecting) { draw(); io.disconnect(); } }, { rootMargin: "200px" });
+    // persistent visibility tracking: first entry triggers the initial draw,
+    // and simulation widgets pause whenever the figure leaves the viewport.
+    let drawn = false;
+    const io = new IntersectionObserver((es) => {
+      for (const en of es) {
+        fig._vizVisible = en.isIntersecting;
+        if (en.isIntersecting) {
+          if (!drawn) { drawn = true; draw(); }
+          (fig._vizSims || []).forEach((s) => s.kick());
+        }
+      }
+    }, { rootMargin: "200px" });
     io.observe(fig);
     let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (fig._redraw) fig._redraw(); }, 150); });
   }
@@ -455,7 +606,11 @@
     const rerender = () => { if (window.renderMathInElement) document.querySelectorAll("figure.viz figcaption").forEach((c) => { try { window.renderMathInElement(c, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }], throwOnError: false }); } catch (e) {} }); };
     rerender(); setTimeout(rerender, 300); window.addEventListener("load", rerender);
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+  // Defer scripts execute while readyState is "interactive", BEFORE
+  // DOMContentLoaded fires; waiting for it lets the viz-*.js widget files
+  // (loaded after this one) register before any figure mounts.
+  if (document.readyState === "complete") boot();
+  else document.addEventListener("DOMContentLoaded", boot);
   // redraw all on theme change
   new MutationObserver(() => document.querySelectorAll("figure.viz[data-widget]").forEach((f) => f._redraw && f._redraw()))
     .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });

@@ -116,6 +116,9 @@ which satisfies a two-dimensional inclusion-exclusion recurrence that adds one r
 </ol>
 </div>
 
+<figure class="viz" data-widget="dp-fill">
+<figcaption>The table is the chapter's exact recursion filling in evaluation order for any two words you type: matched letters seed \(\mathrm{DPS}\) entries in accent, and each cell combines its left, upper, and diagonal neighbors with the stated \(\lambda\) weights. Setting cat against car with \(\lambda=0.5\) and \(p=2\) reproduces the worked example: \(K_2=\lambda^4=0.0625\), normalized \(0.4444\).</figcaption></figure>
+
 <p>Each level fills one \(|s|\times|t|\) table with constant work per cell, so the kernel costs \(O(p\,|s|\,|t|)\) time, the headline result of the section. The subtracted term \(-\lambda^2\mathrm{DP}_q(k-1,l-1)\) is pure inclusion-exclusion: the two shifted tables \(\lambda\,\mathrm{DP}_q(k-1,l)\) and \(\lambda\,\mathrm{DP}_q(k,l-1)\) both include the block up to \((k-1,l-1)\), so it is counted twice and must be removed once. We fill the tables by hand for a two-letter difference.</p>
 
 <div class="box ex"><span class="box-title">Example (gap-weighted DP table for "cat" and "car", \(p=2\))</span>

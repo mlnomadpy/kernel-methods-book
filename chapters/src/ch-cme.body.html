@@ -72,6 +72,9 @@ $$\widehat{\mathbb E}\big[g(Y)\mid X=x\big]=\big\langle g,\widehat\mu_{Y\mid X=x
 </ol>
 </div>
 
+<figure class="viz" data-widget="cme-explore">
+<figcaption>Dragging the conditioning point applies the exact estimator \(\beta(x^*)=(K_X+n\lambda I)^{-1}k_X(x^*)\) to sixty fixed samples: the side profile is the embedded conditional \(\sum_i\beta_i\,l(\cdot,y_i)\) and the dot its conditional mean. The Cholesky factor is shared across every \(x^*\), so each drag costs one triangular solve; the sliders expose the bandwidth and ridge trade-off the chapter derives.</figcaption></figure>
+
 <p>Regularization is not optional decoration here. The matrix \(K\) is often numerically singular (repeated or nearby inputs make its columns almost dependent), and even in the population the operator inverse is unbounded, so the raw \(K^{-1}\mathbf k_x\) would be a wild, high-variance vector. The term \(n\lambda I\) floors the spectrum of \(K\) at \(n\lambda\), trading a little bias for a large reduction in variance, exactly the bias-variance dial of ridge regression.</p>
 
 <div class="box ex"><span class="box-title">Example (predicting a conditional expectation)</span>

@@ -116,6 +116,9 @@ The first integral is \(1-\Phi(-z)=\Phi(z)\). For the second, note \(\frac{d}{du
 </ol>
 </div>
 
+<figure class="viz" data-widget="bo-loop">
+<figcaption>The loop above, run live on a hidden objective: the shaded band is the exact GP posterior \(\mu\pm2\sigma\), refit after every query, and the lower strip is the acquisition function whose argmax (dashed line) chooses the next point. Step the loop, or let it run, and watch exploration give way to exploitation: early queries land where the band is widest, later ones crowd the emerging maximum. The \(\sqrt{\beta}\) slider is GP-UCB's exploration weight and makes that tradeoff a dial you can turn; expected improvement folds it into one formula with no weight to choose.</figcaption></figure>
+
 <p>Two costs deserve mention. The inner maximization in step 3 is itself a global optimization, but of the cheap acquisition rather than the expensive \(f\), which is the whole point: we have traded queries of \(f\) for arithmetic on the surrogate. And re-fitting hyperparameters each round makes the prior data-dependent, so the clean Bayesian regret theory strictly applies to a fixed kernel; in practice the loop with adapted hyperparameters is what is run (Snoek, Larochelle, and Adams 2012).</p>
 
 <h2 id="regret">Regret and the maximum information gain</h2>
