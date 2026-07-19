@@ -1,72 +1,77 @@
 [
-  {
-    "from": "optimal-transport-and-kernels#thm-31-2",
-    "to": "optimal-transport-and-kernels#def-31-1",
-    "note": "dual of the transport cost"
-  },
-  {
-    "from": "optimal-transport-and-kernels#thm-31-2",
-    "to": "preliminaries#def-p-11",
-    "note": "linear-program duality"
-  },
-  {
-    "from": "optimal-transport-and-kernels#thm-31-3",
-    "to": "optimal-transport-and-kernels#thm-31-2",
-    "note": "specializes duality to metric cost"
-  },
-  {
-    "from": "optimal-transport-and-kernels#thm-31-3",
-    "to": "kernel-mean-embeddings#def-29-5",
-    "note": "W1 is an integral probability metric"
-  },
-  {
-    "from": "optimal-transport-and-kernels#def-31-4",
-    "to": "optimal-transport-and-kernels#def-31-1",
-    "note": "entropic regularization of transport"
-  },
-  {
-    "from": "optimal-transport-and-kernels#prop-31-5",
-    "to": "optimal-transport-and-kernels#def-31-4",
-    "note": "solves the entropic problem"
-  },
-  {
-    "from": "optimal-transport-and-kernels#prop-31-5",
-    "to": "preliminaries#def-p-11",
-    "note": "Lagrangian stationarity for the plan"
-  },
-  {
-    "from": "optimal-transport-and-kernels#algo-31-1",
-    "to": "optimal-transport-and-kernels#prop-31-5",
-    "note": "implements the scaling fixed point"
-  },
-  {
-    "from": "optimal-transport-and-kernels#def-31-6",
-    "to": "optimal-transport-and-kernels#def-31-4",
-    "note": "debiases the entropic cost"
-  },
-  {
-    "from": "optimal-transport-and-kernels#thm-31-7",
-    "to": "optimal-transport-and-kernels#def-31-6",
-    "note": "limits of the Sinkhorn divergence"
-  },
-  {
-    "from": "optimal-transport-and-kernels#thm-31-7",
-    "to": "kernel-mean-embeddings#def-29-3",
-    "note": "large-epsilon limit is squared MMD"
-  },
-  {
-    "from": "optimal-transport-and-kernels#thm-31-7",
-    "to": "optimal-transport-and-kernels#def-31-1",
-    "note": "small-epsilon limit is unregularized OT"
-  },
-  {
-    "from": "optimal-transport-and-kernels#algo-31-2",
-    "to": "optimal-transport-and-kernels#def-31-6",
-    "note": "computes the Sinkhorn divergence"
-  },
-  {
-    "from": "optimal-transport-and-kernels#algo-31-2",
-    "to": "optimal-transport-and-kernels#algo-31-1",
-    "note": "three Sinkhorn runs"
-  }
+ {
+  "from": "optimal-transport-and-kernels#thm-31-2",
+  "to": "optimal-transport-and-kernels#def-31-1",
+  "note": "dual of the transport cost"
+ },
+ {
+  "from": "optimal-transport-and-kernels#thm-31-2",
+  "to": "preliminaries#def-p-11",
+  "note": "linear-program duality"
+ },
+ {
+  "from": "optimal-transport-and-kernels#thm-31-3",
+  "to": "optimal-transport-and-kernels#thm-31-2",
+  "note": "specializes duality to metric cost"
+ },
+ {
+  "from": "optimal-transport-and-kernels#thm-31-3",
+  "to": "kernel-mean-embeddings#def-29-5",
+  "note": "W1 is an integral probability metric"
+ },
+ {
+  "from": "optimal-transport-and-kernels#def-31-4",
+  "to": "optimal-transport-and-kernels#def-31-1",
+  "note": "entropic regularization of transport"
+ },
+ {
+  "from": "optimal-transport-and-kernels#prop-31-5",
+  "to": "optimal-transport-and-kernels#def-31-4",
+  "note": "solves the entropic problem"
+ },
+ {
+  "from": "optimal-transport-and-kernels#prop-31-5",
+  "to": "preliminaries#def-p-11",
+  "note": "Lagrangian stationarity for the plan"
+ },
+ {
+  "from": "optimal-transport-and-kernels#algo-31-1",
+  "to": "optimal-transport-and-kernels#prop-31-5",
+  "note": "implements the scaling fixed point"
+ },
+ {
+  "from": "optimal-transport-and-kernels#def-31-6",
+  "to": "optimal-transport-and-kernels#def-31-4",
+  "note": "debiases the entropic cost"
+ },
+ {
+  "from": "optimal-transport-and-kernels#thm-31-7",
+  "to": "optimal-transport-and-kernels#def-31-6",
+  "note": "limits of the Sinkhorn divergence"
+ },
+ {
+  "from": "optimal-transport-and-kernels#thm-31-7",
+  "to": "kernel-mean-embeddings#def-29-3",
+  "note": "large-epsilon limit is squared MMD"
+ },
+ {
+  "from": "optimal-transport-and-kernels#thm-31-7",
+  "to": "optimal-transport-and-kernels#def-31-1",
+  "note": "small-epsilon limit is unregularized OT"
+ },
+ {
+  "from": "optimal-transport-and-kernels#algo-31-2",
+  "to": "optimal-transport-and-kernels#def-31-6",
+  "note": "computes the Sinkhorn divergence"
+ },
+ {
+  "from": "optimal-transport-and-kernels#algo-31-2",
+  "to": "optimal-transport-and-kernels#algo-31-1",
+  "note": "three Sinkhorn runs"
+ },
+ {
+  "from": "optimal-transport-and-kernels#def-31-1",
+  "to": "preliminaries#def-p-19",
+  "note": "optimizes over couplings"
+ }
 ]

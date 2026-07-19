@@ -1,92 +1,97 @@
 [
-  {
-    "from": "conditional-mean-embeddings#def-33-1",
-    "to": "kernel-mean-embeddings#def-29-1",
-    "note": "conditional analogue of the mean embedding"
-  },
-  {
-    "from": "conditional-mean-embeddings#def-33-2",
-    "to": "kernels-and-rkhs#def-2-8",
-    "note": "reproducing property characterizes the operators"
-  },
-  {
-    "from": "conditional-mean-embeddings#prop-33-3",
-    "to": "conditional-mean-embeddings#def-33-1",
-    "note": "produces the conditional mean embedding"
-  },
-  {
-    "from": "conditional-mean-embeddings#prop-33-3",
-    "to": "conditional-mean-embeddings#def-33-2",
-    "note": "built from the covariance operators"
-  },
-  {
-    "from": "conditional-mean-embeddings#prop-33-3",
-    "to": "kernels-and-rkhs#def-2-8",
-    "note": "reproducing property drives the proof"
-  },
-  {
-    "from": "conditional-mean-embeddings#prop-33-3",
-    "to": "preliminaries#def-p-7",
-    "note": "covariance operator is self-adjoint"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-1",
-    "to": "conditional-mean-embeddings#prop-33-3",
-    "note": "regularized empirical conditional operator"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-1",
-    "to": "conditional-mean-embeddings#def-33-2",
-    "note": "empirical covariance operators"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-1",
-    "to": "kernel-ridge-and-friends#lem-4-5",
-    "note": "push-through identity to Gram form"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-1",
-    "to": "kernel-ridge-and-friends#def-4-2",
-    "note": "weights are a ridge solution"
-  },
-  {
-    "from": "conditional-mean-embeddings#prop-33-4",
-    "to": "conditional-mean-embeddings#algo-33-1",
-    "note": "identifies the empirical estimator as minimizer"
-  },
-  {
-    "from": "conditional-mean-embeddings#prop-33-4",
-    "to": "kernel-ridge-and-friends#def-4-2",
-    "note": "CME is vector-valued ridge regression"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-2",
-    "to": "conditional-mean-embeddings#prop-33-3",
-    "note": "posterior as reweighted conditional embedding"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-2",
-    "to": "conditional-mean-embeddings#def-33-2",
-    "note": "prior-weighted covariance operators"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-2",
-    "to": "conditional-mean-embeddings#algo-33-1",
-    "note": "sum rule reuses empirical CME"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-2",
-    "to": "kernel-ridge-and-friends#lem-4-5",
-    "note": "push-through identity to Gram form"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-3",
-    "to": "conditional-mean-embeddings#algo-33-2",
-    "note": "correction step is Kernel Bayes' Rule"
-  },
-  {
-    "from": "conditional-mean-embeddings#algo-33-3",
-    "to": "conditional-mean-embeddings#prop-33-3",
-    "note": "prediction pushes through conditional operator"
-  }
+ {
+  "from": "conditional-mean-embeddings#def-33-1",
+  "to": "kernel-mean-embeddings#def-29-1",
+  "note": "conditional analogue of the mean embedding"
+ },
+ {
+  "from": "conditional-mean-embeddings#def-33-2",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing property characterizes the operators"
+ },
+ {
+  "from": "conditional-mean-embeddings#prop-33-3",
+  "to": "conditional-mean-embeddings#def-33-1",
+  "note": "produces the conditional mean embedding"
+ },
+ {
+  "from": "conditional-mean-embeddings#prop-33-3",
+  "to": "conditional-mean-embeddings#def-33-2",
+  "note": "built from the covariance operators"
+ },
+ {
+  "from": "conditional-mean-embeddings#prop-33-3",
+  "to": "kernels-and-rkhs#def-2-8",
+  "note": "reproducing property drives the proof"
+ },
+ {
+  "from": "conditional-mean-embeddings#prop-33-3",
+  "to": "preliminaries#def-p-7",
+  "note": "covariance operator is self-adjoint"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-1",
+  "to": "conditional-mean-embeddings#prop-33-3",
+  "note": "regularized empirical conditional operator"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-1",
+  "to": "conditional-mean-embeddings#def-33-2",
+  "note": "empirical covariance operators"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-1",
+  "to": "kernel-ridge-and-friends#lem-4-5",
+  "note": "push-through identity to Gram form"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-1",
+  "to": "kernel-ridge-and-friends#def-4-2",
+  "note": "weights are a ridge solution"
+ },
+ {
+  "from": "conditional-mean-embeddings#prop-33-4",
+  "to": "conditional-mean-embeddings#algo-33-1",
+  "note": "identifies the empirical estimator as minimizer"
+ },
+ {
+  "from": "conditional-mean-embeddings#prop-33-4",
+  "to": "kernel-ridge-and-friends#def-4-2",
+  "note": "CME is vector-valued ridge regression"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-2",
+  "to": "conditional-mean-embeddings#prop-33-3",
+  "note": "posterior as reweighted conditional embedding"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-2",
+  "to": "conditional-mean-embeddings#def-33-2",
+  "note": "prior-weighted covariance operators"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-2",
+  "to": "conditional-mean-embeddings#algo-33-1",
+  "note": "sum rule reuses empirical CME"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-2",
+  "to": "kernel-ridge-and-friends#lem-4-5",
+  "note": "push-through identity to Gram form"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-3",
+  "to": "conditional-mean-embeddings#algo-33-2",
+  "note": "correction step is Kernel Bayes' Rule"
+ },
+ {
+  "from": "conditional-mean-embeddings#algo-33-3",
+  "to": "conditional-mean-embeddings#prop-33-3",
+  "note": "prediction pushes through conditional operator"
+ },
+ {
+  "from": "conditional-mean-embeddings#def-33-1",
+  "to": "preliminaries#def-p-13",
+  "note": "embeds the conditional expectation"
+ }
 ]

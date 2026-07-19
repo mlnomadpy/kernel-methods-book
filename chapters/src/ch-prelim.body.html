@@ -1,5 +1,5 @@
 <h1>Mathematical Preliminaries</h1>
-<p class="lead">Kernel methods sit at a crossroads of linear algebra, real and functional analysis, probability, and convex optimization. This chapter gathers, in one place, the results the rest of the book uses by name. It is a reference, not a course: each section states the definitions and facts a later chapter leans on, with just enough intuition to make them usable. Read it straight through for a refresher, or jump to a result when a chapter cites it.</p>
+<p class="lead">Kernel methods sit at a crossroads of linear algebra, real and functional analysis, probability, and convex optimization, and the book's later parts reach further, into spectral graph theory, groups and their actions, couplings of measures, the tensor calculus of paths, and inner products without positivity. This chapter gathers, in one place, the results the rest of the book uses by name. It is a reference, not a course: each section states the definitions and facts a later chapter leans on, with just enough intuition to make them usable. Read it straight through for a refresher, or jump to a result when a chapter cites it.</p>
 
 <h2 id="linear-algebra">Linear algebra and matrices</h2>
 
@@ -35,7 +35,7 @@ $$ (A + UCV)^{-1} = A^{-1} - A^{-1}U\bigl(C^{-1} + VA^{-1}U\bigr)^{-1}VA^{-1}, $
 <div class="box def"><span class="box-title">Inner product and Hilbert space</span>
 <p>An <strong>inner product</strong> \(\langle\cdot,\cdot\rangle\) on a real vector space \(H\) is symmetric, linear in each argument, and positive: \(\langle f, f\rangle \geq 0\) with equality only at \(f = 0\). It induces the norm \(\lVert f\rVert = \sqrt{\langle f,f\rangle}\). A <strong>Hilbert space</strong> is an inner-product space that is complete in this norm. \(\mathbb{R}^d\) and the sequence space \(\ell^2\) of square-summable sequences are the model examples; a reproducing kernel Hilbert space is a Hilbert space of functions.</p></div>
 
-<p>Three inequalities are used constantly. <strong>Cauchy-Schwarz</strong>, \(\lvert\langle f, g\rangle\rvert \leq \lVert f\rVert\,\lVert g\rVert\), with equality iff \(f\) and \(g\) are parallel, is the workhorse behind nearly every bound in the book (it turns the reproducing property into the pointwise bound \(\lvert f(x)\rvert \leq \lVert f\rVert\sqrt{k(x,x)}\)). The <strong>triangle inequality</strong> \(\lVert f+g\rVert \leq \lVert f\rVert + \lVert g\rVert\) follows from it. And the <strong>Pythagorean identity</strong> \(\lVert f+g\rVert^2 = \lVert f\rVert^2 + \lVert g\rVert^2\) when \(\langle f,g\rangle = 0\) drives the orthogonal-decomposition proof of the representer theorem.</p>
+<p>Three inequalities are used constantly. <strong>Cauchy-Schwarz</strong>, \(\lvert\langle f, g\rangle\rvert \leq \lVert f\rVert\,\lVert g\rVert\), with equality iff \(f\) and \(g\) are parallel, is the workhorse behind nearly every bound in the book (it turns the reproducing property into the pointwise bound \(\lvert f(x)\rvert \leq \lVert f\rVert\sqrt{k(x,x)}\)). The <strong>triangle inequality</strong> \(\lVert f+g\rVert \leq \lVert f\rVert + \lVert g\rVert\) follows from it. And the <strong>Pythagorean identity</strong> \(\lVert f+g\rVert^2 = \lVert f\rVert^2 + \lVert g\rVert^2\) when \(\langle f,g\rangle = 0\) drives the orthogonal-decomposition proof of the representer theorem. All three lean on positivity of the inner product; the section on <a href="#indefinite-inner-products">indefinite inner products</a> at the end of this chapter records what breaks when positivity is dropped.</p>
 
 <div class="box thm"><span class="box-title">Orthogonal projection and the Riesz representation theorem</span>
 <p>In a Hilbert space, any closed subspace \(V\) admits a unique <strong>orthogonal projection</strong>: every \(f\) splits as \(f = f_V + f_\perp\) with \(f_V \in V\), \(f_\perp \perp V\), and \(f_V\) the closest point of \(V\) to \(f\). The <strong>Riesz representation theorem</strong> says every continuous linear functional \(L: H \to \mathbb{R}\) is an inner product against a unique vector: \(L(f) = \langle f, g_L\rangle\) for some \(g_L \in H\). Applied to the evaluation functional \(f \mapsto f(x)\), Riesz produces the reproducing kernel; that is the definitional route to an RKHS.</p></div>
@@ -65,6 +65,8 @@ $$ (A + UCV)^{-1} = A^{-1} - A^{-1}U\bigl(C^{-1} + VA^{-1}U\bigr)^{-1}VA^{-1}, $
 $$ \Pr\bigl(\,f(X_1,\dots,X_n) - \mathbb{E}f \geq t\,\bigr) \leq \exp\!\Bigl(\frac{-2t^2}{\sum_i c_i^2}\Bigr), $$
 <p>where \(c_i\) bounds the change from moving coordinate \(i\). McDiarmid applied to the worst-case empirical error is the engine behind the Rademacher bounds of [[ch:learning-theory]]. A last modeling link: minimizing a loss is often maximum-likelihood estimation in disguise, since a loss \(\ell(y, f)\) equal to \(-\log p(y \mid f)\) makes empirical risk minimization the same as fitting a probabilistic noise model, the reading that connects the squared loss to Gaussian noise and the logistic loss to a Bernoulli model.</p>
 
+<p>This section covers what empirical risk minimization needs. The inference chapters ask for more, and the deeper material, Gaussian conditioning, Bayes' rule, score functions, U-statistics, and a precise statement of Hoeffding's inequality, is collected in the section on <a href="#probability-for-inference">conditioning, scores, and U-statistics</a> below.</p>
+
 <h2 id="optimization">Convex optimization and duality</h2>
 
 <p>Fitting a kernel machine is solving an optimization problem, and almost always a convex one, which is why the solutions are unique and computable. The vocabulary of convexity and Lagrangian duality is used throughout Parts II and VII.</p>
@@ -81,9 +83,106 @@ $$ \alpha_i \geq 0 \quad\text{(dual feasibility)}, \qquad \alpha_i\, g_i(x) = 0 
 
 <p>The algorithms that solve these problems at scale are covered in [[ch:large-scale-kernels]], but their basics belong here. <strong>Gradient descent</strong> steps against the gradient, \(x_{t+1} = x_t - \eta\nabla f(x_t)\), and converges on convex, smooth objectives; <strong>stochastic gradient descent</strong> replaces the full gradient with a cheap unbiased estimate from one example or a minibatch, trading exactness for a per-step cost independent of \(n\). Smoothness (a Lipschitz gradient) and strong convexity (a curvature lower bound) are the two properties that set the convergence rate. Finally, a <strong>quadratic program</strong>, minimizing a convex quadratic subject to linear constraints, is the exact form of the SVM dual, and interior-point and decomposition methods are how it is solved.</p>
 
+<h2 id="probability-for-inference">More probability: conditioning, scores, and U-statistics</h2>
+
+<p>The distributional chapters of the book do inference, not only estimation: they condition one Gaussian block on another, differentiate log-densities they cannot normalize, and average symmetric functions over pairs of samples. The five facts below are their toolkit.</p>
+
+<div class="box thm"><span class="box-title">Conditioning a joint Gaussian</span>
+<p>Partition a Gaussian vector as \(x = (x_1, x_2) \sim \mathcal{N}(\mu, \Sigma)\) with</p>
+$$ \mu = \begin{pmatrix} \mu_1 \\ \mu_2 \end{pmatrix}, \qquad \Sigma = \begin{pmatrix} \Sigma_{11} & \Sigma_{12} \\ \Sigma_{21} & \Sigma_{22} \end{pmatrix}, \qquad \Sigma_{22} \succ 0 . $$
+<p>Then conditionally on \(x_2\), the block \(x_1\) is again Gaussian, with</p>
+$$ \mathbb{E}[x_1 \mid x_2] = \mu_1 + \Sigma_{12}\, \Sigma_{22}^{-1} (x_2 - \mu_2), \qquad \operatorname{Cov}(x_1 \mid x_2) = \Sigma_{11} - \Sigma_{12}\, \Sigma_{22}^{-1} \Sigma_{21} . $$
+<p>The conditional mean is affine in the observed block, and the conditional covariance is the <strong>Schur complement</strong> of \(\Sigma_{22}\) in \(\Sigma\); it does not depend on the observed value at all.</p></div>
+
+<p>Read with \(\Sigma\) a kernel Gram matrix over training and test points, this theorem <em>is</em> Gaussian process regression: the posterior mean is a linear smoother in the observations and the posterior variance is a Schur complement, which is how [[ch:gaussian-processes-and-rvm]] derives its predictive equations and how the acquisition rules of [[ch:bayesian-optimization-and-bandits]] know where they are uncertain. The Schur complement is also the block that appears when the matrix inversion lemma of the linear-algebra section inverts a partitioned matrix.</p>
+
+<div class="box def"><span class="box-title">Bayes' rule and conditional expectation</span>
+<p>For random variables \(X, Y\) with joint density \(p(x, y)\), the <strong>conditional density</strong> of \(y\) given \(x\) is \(p(y \mid x) = p(x, y) / p(x)\) wherever \(p(x) \gt 0\), and <strong>Bayes' rule</strong> reverses the conditioning,</p>
+$$ p(y \mid x) = \frac{p(x \mid y)\, p(y)}{\int p(x \mid y')\, p(y')\, dy'} . $$
+<p>The <strong>conditional expectation</strong> \(\mathbb{E}[f(Y) \mid X = x] = \int f(y)\, p(y \mid x)\, dy\) is, as a function of \(x\), the best mean-square predictor of \(f(Y)\): it minimizes \(\mathbb{E}[(f(Y) - g(X))^2]\) over all measurable \(g\), and it obeys the tower property \(\mathbb{E}\bigl[\mathbb{E}[f(Y) \mid X]\bigr] = \mathbb{E}[f(Y)]\).</p></div>
+
+<p>The conditional mean embeddings of [[ch:conditional-mean-embeddings]] represent the map \(x \mapsto \mathbb{E}[\varphi(Y) \mid X = x]\) as an RKHS-valued regression and turn Bayes' rule into linear algebra on Gram matrices; the adjustment formulas of [[ch:causal-inference-with-kernels]] are conditional expectations averaged over confounders.</p>
+
+<div class="box prop"><span class="box-title">The score function and integration by parts</span>
+<p>Let \(p\) be a continuously differentiable, everywhere positive density on \(\mathbb{R}^d\). Its <strong>score function</strong> is</p>
+$$ s_p(x) = \nabla_x \log p(x) = \frac{\nabla p(x)}{p(x)}, $$
+<p>which is unchanged if \(p\) is multiplied by a constant: the score is computable even when the normalizer is not. If \(f\) is differentiable, \(\mathbb{E}_p\lVert s_p(X) f(X)\rVert\) and \(\mathbb{E}_p\lVert \nabla f(X)\rVert\) are finite, and \(p(x) f(x) \to 0\) as \(\lVert x \rVert \to \infty\), then</p>
+$$ \mathbb{E}_p\bigl[\, s_p(X)\, f(X) + \nabla f(X) \,\bigr] = 0 . $$
+</div>
+<div class="box proof"><span class="box-title">Proof</span>
+<p>In each coordinate \(i\), \(\mathbb{E}_p[\partial_i \log p \cdot f + \partial_i f] = \int \bigl( (\partial_i p)\, f + p\, \partial_i f \bigr)\, dx = \int \partial_i (p f)\, dx = 0\), the last step by integration by parts using the decay of \(p f\) at infinity. <span class="qed">\(\square\)</span></p>
+</div>
+
+<p>The identity says the operator \(f \mapsto s_p f + \nabla f\) has mean zero under \(p\) for a whole class of test functions, a fingerprint of \(p\) that never touches its normalizing constant; running the test functions over an RKHS ball turns the largest violated mean into the computable discrepancy of [[ch:kernel-stein-discrepancy]].</p>
+
+<div class="box def"><span class="box-title">U-statistics and V-statistics</span>
+<p>Let \(h(x, x')\) be a symmetric function, called the <strong>kernel</strong> of the statistic (an older usage, distinct from a positive definite kernel), and let \(X_1, \dots, X_n\) be i.i.d. from \(P\). The <strong>U-statistic</strong> and <strong>V-statistic</strong> with kernel \(h\) are</p>
+$$ U_n = \frac{1}{n(n-1)} \sum_{i \neq j} h(X_i, X_j), \qquad V_n = \frac{1}{n^2} \sum_{i, j=1}^{n} h(X_i, X_j) . $$
+<p>Every term of \(U_n\) has expectation \(\theta = \mathbb{E}[h(X, X')]\) for independent \(X, X' \sim P\), so the U-statistic is an <strong>unbiased</strong> estimator of \(\theta\) for every \(n\). The V-statistic keeps the diagonal terms \(h(X_i, X_i)\) and is biased by \(O(1/n)\), in exchange for being a plug-in: \(V_n\) is \(\theta\) computed under the empirical distribution. Kernels of order \(m\) are averaged over \(m\)-tuples of distinct indices in the same way.</p></div>
+
+<p>The squared maximum mean discrepancy of [[ch:kernel-mean-embeddings]] is estimated exactly this way, as a two-sample U- or V-statistic whose kernel is built from \(k\); the null distributions that calibrate the tests of [[ch:kernel-hypothesis-testing]] come from the degenerate case of U-statistic limit theory, where the usual Gaussian limit collapses and a weighted sum of \(\chi^2\) variables takes its place.</p>
+
+<div class="box thm"><span class="box-title">Hoeffding's inequality</span>
+<p>Let \(X_1, \dots, X_n\) be independent with \(X_i \in [a_i, b_i]\) almost surely, and let \(\bar X = \frac{1}{n} \sum_{i=1}^n X_i\). For every \(t \gt 0\),</p>
+$$ \Pr\bigl(\, \bar X - \mathbb{E}[\bar X] \geq t \,\bigr) \;\leq\; \exp\!\Bigl( \frac{-2 n^2 t^2}{\sum_{i=1}^{n} (b_i - a_i)^2} \Bigr), $$
+<p>and the same bound holds for the deviation below the mean. When all ranges equal \([a, b]\) the exponent is \(-2 n t^2 / (b - a)^2\): a bounded average deviates by more than \(t\) with probability exponentially small in \(n\).</p></div>
+
+<p>McDiarmid's bounded-differences inequality, displayed in the probability section above, generalizes this from averages to any stable function of independent variables (take \(f = \bar X\), so \(c_i = (b_i - a_i)/n\)); it is proved in [[ch:vc-theory-and-generalization]]. Hoeffding is the bound behind the single-function deviation estimates of [[ch:learning-theory]] and the sampling-error control of the randomized approximations in [[ch:large-scale-kernels]].</p>
+
+<h2 id="graphs-manifolds-groups">Graphs, manifolds, and groups</h2>
+
+<p>Several chapters replace \(\mathbb{R}^d\) by a structured domain: a similarity graph built on the sample, a curved surface, or a space acted on by a symmetry group. One matrix and one averaging construction cover most of what they need.</p>
+
+<div class="box def"><span class="box-title">The graph Laplacian</span>
+<p>Let \(W = (w_{ij})\) be symmetric nonnegative edge weights on vertices \(\{1, \dots, n\}\), with degrees \(d_i = \sum_j w_{ij}\) and degree matrix \(D = \operatorname{diag}(d_1, \dots, d_n)\). The <strong>graph Laplacian</strong> is \(L = D - W\). Its quadratic form is</p>
+$$ f^\top L f \;=\; \frac{1}{2} \sum_{i,j=1}^{n} w_{ij}\, (f_i - f_j)^2 \;\geq\; 0, $$
+<p>so \(L\) is symmetric PSD, and \(f^\top L f\) measures how much \(f\) varies across heavy edges. The constant vector satisfies \(L \mathbf{1} = 0\), and the multiplicity of the eigenvalue \(0\) is the number of connected components. The <strong>normalized Laplacians</strong> \(L_{\mathrm{sym}} = I - D^{-1/2} W D^{-1/2}\) and \(L_{\mathrm{rw}} = I - D^{-1} W\) (defined when all \(d_i \gt 0\)) rescale by degree and inherit the same structure.</p></div>
+
+<p>Eigenvectors of \(L\) with small eigenvalue are the smoothest functions on the graph, which is why spectral clustering in [[ch:kernel-clustering]] cuts along them; matrix functions of \(L\) such as the heat kernel \(e^{-tL}\) and the regularized inverse are the kernels on graphs of [[ch:graph-kernels]]; and \(L\) is the discrete stand-in for the manifold operator of the next paragraph in [[ch:geometric-and-equivariant-kernels]].</p>
+
+<p>On a smooth compact Riemannian manifold the role of \(L\) is played by the <strong>Laplace-Beltrami operator</strong>, the divergence of the gradient computed in the manifold's own metric. It is self-adjoint and positive, its spectrum is discrete, and its eigenfunctions generalize the Fourier modes: on the circle they are the sines and cosines, on the sphere the spherical harmonics. Heat and Matérn kernels on manifolds are built from these eigenpairs in [[ch:geometric-and-equivariant-kernels]], and graph Laplacians estimated from samples approximate the operator, the reading behind the spectral embeddings of [[ch:data-visualization-and-mds]].</p>
+
+<div class="box def"><span class="box-title">Group actions, invariance, and averaging</span>
+<p>A group \(G\) <strong>acts</strong> on a set \(X\) when each \(g \in G\) is assigned a transformation \(x \mapsto g \cdot x\) with \(e \cdot x = x\) and \(g \cdot (h \cdot x) = (gh) \cdot x\). A function \(f\) on \(X\) is <strong>invariant</strong> if \(f(g \cdot x) = f(x)\) for every \(g\) and \(x\). For a finite group, the <strong>averaging operator</strong></p>
+$$ (\bar f)(x) \;=\; \frac{1}{\lvert G \rvert} \sum_{g \in G} f(g \cdot x) $$
+<p>always produces an invariant function, fixes every function that is already invariant, and, when the action preserves the underlying measure, is idempotent and self-adjoint: it is the orthogonal projection onto the subspace of invariant functions. For a compact group the sum becomes an integral against the <strong>Haar measure</strong>, the unique probability measure on \(G\) invariant under the group's own translations, and the projection statement is unchanged.</p></div>
+
+<p>Averaging a kernel over the action in each argument yields an invariant kernel whose RKHS consists of invariant functions, the construction at the center of [[ch:geometric-and-equivariant-kernels]]; the virtual-sample and jittered kernels of [[ch:invariances-and-pre-images]] are this projection applied approximately, over a subset of the group.</p>
+
+<h2 id="couplings-and-transport">Couplings and linear programs</h2>
+
+<p>Comparing two distributions by physically moving the mass of one onto the other requires a name for a joint plan of movement.</p>
+
+<div class="box def"><span class="box-title">Couplings of two probability measures</span>
+<p>A <strong>coupling</strong> of probability measures \(P\) on \(X\) and \(Q\) on \(Y\) is a probability measure \(\pi\) on the product \(X \times Y\) whose marginals are \(P\) and \(Q\): \(\pi(A \times Y) = P(A)\) and \(\pi(X \times B) = Q(B)\) for all measurable \(A, B\). The set \(\Pi(P, Q)\) of couplings is convex, since a mixture of couplings has the same marginals, and it is never empty: the <strong>independent coupling</strong> \(P \otimes Q\) always belongs to it.</p></div>
+
+<p>Optimal transport selects the coupling minimizing an expected cost \(\mathbb{E}_{\pi}[c(X, Y)]\); for empirical measures this is a linear program over transport matrices with fixed row and column sums, the problem [[ch:optimal-transport-and-kernels]] solves, regularizes, and compares against the MMD. A linear program is the Lagrangian framework of the optimization section with every function affine: its dual is again a linear program, strong duality holds with no extra regularity, and dualizing the marginal constraints of the transport program is precisely what produces the Kantorovich dual used there.</p>
+
+<h2 id="paths-tensors-signatures">Paths, tensors, and iterated integrals</h2>
+
+<p>A time series is a path, and the natural polynomial features of a path are integrals against its own increments, which live in tensor powers of the state space. The <strong>tensor product</strong> \(V \otimes W\) of two vector spaces is the space of formal bilinear combinations of symbols \(v \otimes w\); for \(V = W = \mathbb{R}^d\) with basis \((e_i)\), the \(m\)-fold power \((\mathbb{R}^d)^{\otimes m}\) has basis \(e_{i_1} \otimes \cdots \otimes e_{i_m}\), so its elements are \(m\)-way arrays of \(d^m\) coordinates.</p>
+
+<div class="box def"><span class="box-title">Iterated integrals of a path</span>
+<p>Let \(x : [0, T] \to \mathbb{R}^d\) be a continuous path of bounded variation, so that integration against its increments \(dx_t\) is well defined. For each multi-index \((i_1, \dots, i_m) \in \{1, \dots, d\}^m\), the <strong>iterated integral</strong> of \(x\) is the number</p>
+$$ S^{(i_1, \dots, i_m)}(x) \;=\; \int_{0 \lt t_1 \lt t_2 \lt \cdots \lt t_m \lt T} dx^{i_1}_{t_1}\, dx^{i_2}_{t_2} \cdots dx^{i_m}_{t_m}, $$
+<p>the integral over the ordered simplex of times. For \(m = 1\) these are the total increments \(x^i_T - x^i_0\); for \(m = 2\) they record the ordered co-movement of pairs of coordinates. Collecting the degree-\(m\) integrals into a tensor \(S^{(m)}(x) \in (\mathbb{R}^d)^{\otimes m}\) for every \(m\) gives the raw material of the path's <strong>signature</strong>.</p></div>
+
+<p>The signature \((1, S^{(1)}(x), S^{(2)}(x), \dots)\) is a feature expansion of the path that is invariant to time reparameterization and determines the path up to a natural equivalence; inner products of signatures define the sequence kernels of [[ch:signature-and-time-series-kernels]], computed there by recursion on the data rather than by materializing any tensor.</p>
+
+<h2 id="indefinite-inner-products">Indefinite inner products</h2>
+
+<p>Some natural similarity functions fail positive semidefiniteness, and the geometry that accommodates them keeps the bilinear algebra of an inner product while giving up positivity.</p>
+
+<div class="box def"><span class="box-title">Indefinite and Krein inner products</span>
+<p>An <strong>indefinite inner product</strong> on a vector space \(\mathcal{K}\) is a symmetric bilinear form \(\langle \cdot, \cdot \rangle_{\mathcal K}\) with no positivity requirement, so \(\langle f, f \rangle_{\mathcal K}\) may be negative, or zero for \(f \neq 0\). The workable case is a <strong>Krein space</strong>: \(\mathcal{K}\) decomposes as an orthogonal direct sum of two Hilbert spaces \(\mathcal{H}_+\) and \(\mathcal{H}_-\) with</p>
+$$ \langle f, g \rangle_{\mathcal K} \;=\; \langle f_+, g_+ \rangle_{\mathcal{H}_+} - \langle f_-, g_- \rangle_{\mathcal{H}_-}, $$
+<p>a difference of two genuine inner products.</p></div>
+
+<p>Cauchy-Schwarz fails outright: \(\langle f, f \rangle_{\mathcal K}\) can vanish on nonzero (neutral) vectors, so it no longer induces a norm and nothing bounds \(\lvert \langle f, g \rangle_{\mathcal K} \rvert\); topology and projections must instead be borrowed from the associated Hilbert space \(\mathcal{H}_+ \oplus \mathcal{H}_-\). Kernels that decompose as a difference \(k_+ - k_-\) of two positive definite kernels reproduce in exactly such spaces, the subject of [[ch:indefinite-and-krein-kernels]].</p>
+
 <h2 id="notation-conventions">Notation and conventions</h2>
 
 <p>A few conventions hold throughout the book. Vectors are columns; \(x^\top y\) is an inner product and \(xy^\top\) an outer product. \(\mathbf{K}\) or \(K\) is the Gram matrix with entries \(K_{ij} = k(x_i, x_j)\); \(\mathcal{H}\) is a reproducing kernel Hilbert space with inner product \(\langle\cdot,\cdot\rangle_{\mathcal H}\) and norm \(\lVert\cdot\rVert_{\mathcal H}\); \(\Phi\) is a feature map with \(k(x,x') = \langle \Phi(x), \Phi(x')\rangle\). Training data is \((x_i, y_i)_{i=1}^n\), and \(n\) is the sample size, \(d\) the input dimension. The symbols \(\lambda\) (a regularization weight or an eigenvalue), \(\alpha\) (dual coefficients), and \(\sigma\) (a kernel bandwidth) recur; where an overload could confuse, the surrounding text disambiguates. The full symbol table and a glossary of terms are collected in the <a href="glossary.html">Notation and Glossary</a>.</p>
 
 <div class="box rmk"><span class="box-title">How to use this chapter</span>
-<p>Nothing here is proved in full; each result is stated so a later chapter can cite it and keep moving. When a chapter writes "by the spectral theorem" or "Bochner's theorem gives," this is where the statement lives. Standard references for the material are, for linear algebra and analysis, any graduate text; for the probability and optimization used in learning, the treatments in the three sources this book synthesizes, and in particular the statistical-learning and optimization chapters of Schölkopf and Smola (2002) and the appendices of Shawe-Taylor and Cristianini (2004).</p></div>
+<p>Nothing here is proved in full (the one-line integration by parts above is the exception); each result is stated so a later chapter can cite it and keep moving. When a chapter writes "by the spectral theorem" or "Bochner's theorem gives," this is where the statement lives. The first five sections are the core, used from the opening chapters onward. The sections from <a href="#probability-for-inference">conditioning, scores, and U-statistics</a> through <a href="#indefinite-inner-products">indefinite inner products</a> serve the later parts of the book, on probabilistic inference, structured domains, transport, paths, and indefinite geometry; read them when the consuming chapter sends you here. Standard references for the material are, for linear algebra and analysis, any graduate text; for the probability and optimization used in learning, the treatments in the three sources this book synthesizes, and in particular the statistical-learning and optimization chapters of Schölkopf and Smola (2002) and the appendices of Shawe-Taylor and Cristianini (2004).</p></div>
