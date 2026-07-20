@@ -74,8 +74,78 @@ function indentDisplayMathInLists(md) {
   return out.join("\n");
 }
 
+// Convert \(..\) inline math to $..$, mapping vertical bars to their LaTeX
+// commands so they cannot be mistaken for pipe-table delimiters: \|x\| (norm)
+// to \lVert x\rVert and |x| (absolute value) to \lvert x\rvert. Shared by the
+// table converter (per cell) and the main text pass.
+function convertInlineMath(s) {
+  return s.replace(/\\\(([\s\S]*?)\\\)/g, (_, math) => {
+    const safeMath = math.trim()
+      .replace(/\\\|([^|\n]+)\\\|/g, "\\lVert $1\\rVert{}")
+      .replace(/\|([^|\n]+)\|/g, "\\lvert $1\\rvert{}");
+    return `$${safeMath}$`;
+  });
+}
+
+// The migrated corpus stores comparison tables as Pandoc *simple tables* marked
+// by a `---- ---- ----` rule. Parsing those is disabled in the reader, because
+// their cells are separated by whitespace runs yet not padded to the dash
+// columns (\(..\) math is narrower than its rendered form), so the fixed-width
+// reader slices cells wrong. Instead we rewrite each simple table to a
+// delimiter-based *pipe table* here, while the
+// dash rule still marks the original column positions; pipe tables are immune
+// to the width change, so `+pipe_tables` can then parse them safely.
+function convertSimpleTablesToPipe(md) {
+  const lines = md.split("\n");
+  const out = [];
+  const ruleRe = /^\s*-{3,}(?:\s+-{3,})+\s*$/;   // >=2 dash groups: a table rule
+  let i = 0;
+  while (i < lines.length) {
+    if (ruleRe.test(lines[i])) {
+      const ncol = (lines[i].match(/-{3,}/g) || []).length;
+      const indent = lines[i].match(/^\s*/)[0];   // keep the table at its list/div depth
+      // The migrated cells are separated by runs of 2+ spaces but are NOT padded
+      // to the dash columns (math is written \(..\), narrower than its rendered
+      // width), so split on whitespace runs rather than by dash position. Convert
+      // each cell's math to $..$ here so no bare | (from |x| or \|x\|) survives to
+      // collide with the pipe delimiters; escape any | that still remains.
+      const toCells = (s) => {
+        const cells = s.trim().split(/\s{2,}/).map((c) =>
+          convertInlineMath(c).replace(/(?<!\\)\|/g, "\\|"));
+        while (cells.length < ncol) cells.push("");
+        if (cells.length > ncol) cells.splice(ncol - 1, cells.length, cells.slice(ncol - 1).join(" "));
+        return cells;
+      };
+      // A header is the non-blank line directly above the rule, itself preceded
+      // by a blank line (or the table's start); otherwise the table is headerless.
+      const fenceRe = /^\s*:::/;   // a fenced-div boundary is never a table cell
+      // The line directly above the rule is the header row (headerless tables
+      // put a blank line there instead). Popping it also pulls a header that
+      // sits on a list-item continuation line back out of the preceding item.
+      let header = new Array(ncol).fill("");
+      const prev = out[out.length - 1];
+      if (prev !== undefined && prev.trim() !== "" && !ruleRe.test(prev) && !fenceRe.test(prev)) {
+        header = toCells(out.pop());
+      }
+      let j = i + 1;
+      const rows = [];
+      while (j < lines.length && lines[j].trim() !== "" && !ruleRe.test(lines[j]) && !fenceRe.test(lines[j]))
+        rows.push(toCells(lines[j++]));
+      if (j < lines.length && ruleRe.test(lines[j])) j++;   // consume a closing rule if present
+      const pipe = (cells) => indent + "| " + cells.join(" | ") + " |";
+      if (out.length && out[out.length - 1].trim() !== "") out.push("");
+      out.push(pipe(header), indent + "|" + " --- |".repeat(ncol), ...rows.map(pipe), "");
+      i = j;
+      continue;
+    }
+    out.push(lines[i++]);
+  }
+  return out.join("\n");
+}
+
 function publicationMarkdown(chapter) {
   let source = matter(fs.readFileSync(path.join(root, "manuscript", "chapters", `${chapter.src}.md`), "utf8")).content;
+  source = convertSimpleTablesToPipe(source);
   source = indentDisplayMathInLists(source);
   source = source.replace(/<p class="lead">([\s\S]*?)<\/p>/g, (_, text) => `*${text.replace(/<[^>]+>/g, "")}*`);
   // Replace each interactive widget with the static JAX-rendered plate that
@@ -95,12 +165,7 @@ function publicationMarkdown(chapter) {
     const target = chapterMap.get(slug);
     return custom || (target ? `${target.label}, ${target.title}` : slug);
   });
-  source = source.replace(/\\\(([\s\S]*?)\\\)/g, (_, math) => {
-    const safeMath = math.trim()
-      .replace(/\\\|([^|\n]+)\\\|/g, "\\lVert $1\\rVert{}")
-      .replace(/\|([^|\n]+)\|/g, "\\lvert $1\\rvert{}");
-    return `$${safeMath}$`;
-  });
+  source = convertInlineMath(source);
   source = source.replace(/\\lt(?![A-Za-z])/g, "<").replace(/\\gt(?![A-Za-z])/g, ">");
   // Chapter-local web anchors are intentionally preserved there. Prefix them
   // only in the single-file formats, where repeated ids such as `summary` and
@@ -150,7 +215,10 @@ const common = [
   // The migrated corpus contains fixed-width tables emitted by Pandoc's HTML
   // writer. Disable re-parsing those as source tables: altered math delimiters
   // can otherwise shift a cell across the writer's fixed column boundary.
-  "--from=markdown+fenced_divs+bracketed_spans+raw_html-simple_tables-multiline_tables-grid_tables-pipe_tables",
+  // Simple/multiline/grid tables stay off (their fixed-width columns mis-parse
+  // once math delimiters change width); convertSimpleTablesToPipe rewrites them
+  // to pipe tables, which are delimiter-based and safe to parse.
+  "--from=markdown+fenced_divs+bracketed_spans+raw_html-simple_tables-multiline_tables-grid_tables+pipe_tables",
   "--bibliography", path.join(root, "bibliography.bib"),
   "--citeproc", "--number-sections", "--top-level-division=chapter",
   "--quiet",
