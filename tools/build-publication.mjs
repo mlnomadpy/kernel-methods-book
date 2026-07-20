@@ -133,8 +133,17 @@ function convertSimpleTablesToPipe(md) {
         rows.push(toCells(lines[j++]));
       if (j < lines.length && ruleRe.test(lines[j])) j++;   // consume a closing rule if present
       const pipe = (cells) => indent + "| " + cells.join(" | ") + " |";
+      // Size columns by their widest cell so wide math (e.g. a quotient kernel)
+      // gets enough room instead of overflowing a narrow equal-width column into
+      // its neighbour. Pandoc reads these relative dash lengths as column widths
+      // when the table has to wrap.
+      const widths = Array.from({ length: ncol }, (_, k) => {
+        const lens = [header[k]?.length || 0, ...rows.map((r) => r[k]?.length || 0)];
+        return Math.max(3, Math.min(48, Math.max(...lens)));
+      });
+      const sep = indent + "| " + widths.map((w) => "-".repeat(w)).join(" | ") + " |";
       if (out.length && out[out.length - 1].trim() !== "") out.push("");
-      out.push(pipe(header), indent + "|" + " --- |".repeat(ncol), ...rows.map(pipe), "");
+      out.push(pipe(header), sep, ...rows.map(pipe), "");
       i = j;
       continue;
     }
