@@ -1,0 +1,55 @@
+% KOMA-Script's typearea deliberately sets a narrow classical text block,
+% which leaves most of a letter page empty at 10pt. Set an explicit type
+% area instead: 6.5in text width with a small inner binding offset.
+\usepackage{geometry}
+\geometry{letterpaper, top=1in, bottom=1in, inner=1.1in, outer=0.9in,
+  headsep=14pt, footskip=28pt}
+\usepackage{mathtools}
+% STIX Two Math ships a broken extensible horizontal brace: the stretchy
+% middle segment of \underbrace / \overbrace renders as a solid black bar.
+% Pull just those glyphs from Latin Modern Math (which draws them correctly)
+% while keeping STIX Two Math for all other math. Must come after the base
+% \setmathfont{STIX Two Math}, which pandoc emits before header-includes.
+\setmathfont{Latin Modern Math}[range={\overbrace,\underbrace,\overbracket,\underbracket}]
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{KernelInk}{HTML}{1D2126}
+\definecolor{KernelAccent}{HTML}{8A4C1F}
+\setkomafont{title}{\color{KernelInk}\fontsize{36}{41}\selectfont\bfseries}
+\setkomafont{subtitle}{\color{KernelAccent}\fontsize{17}{23}\selectfont\mdseries}
+\setkomafont{author}{\color{KernelInk}\large\bfseries}
+\setkomafont{chapter}{\color{KernelInk}\bfseries}
+\setkomafont{chapterprefix}{\color{KernelAccent}\sffamily\small\bfseries}
+\renewcommand*{\titlepagestyle}{empty}
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \raggedright
+    \vspace*{1.2cm}
+    {\sffamily\footnotesize\bfseries\color{KernelAccent}\MakeUppercase{A unified theory of learning through similarity}\par}
+    \vspace{0.55cm}
+    {\color{KernelAccent}\rule{\textwidth}{1.6pt}\par}
+    \vspace{2.1cm}
+    {\color{KernelInk}\fontsize{55}{58}\selectfont\bfseries KERNELS\par}
+    \vspace{0.28cm}
+    {\color{KernelAccent}\fontsize{29}{34}\selectfont\bfseries The Geometry of Learning\par}
+    \vspace{1.25cm}
+    {\color{KernelInk}\fontsize{17}{23}\selectfont Foundations, Algorithms, and the Frontiers\\of Machine Intelligence\par}
+    \vspace{1.5cm}
+    {\color{KernelAccent}\large\itshape Similarity becomes geometry. Geometry becomes learning.\par}
+    \vfill
+    {\sffamily\footnotesize\bfseries\color{KernelAccent}\MakeUppercase{Written by}\par}
+    \vspace{0.2cm}
+    {\color{KernelInk}\LARGE\bfseries \@author\par}
+    \vspace{0.2cm}
+    {\sffamily\small\color{KernelInk}AzettaAI · tahabouhsine.com\par}
+    \vspace{1cm}
+    {\color{KernelAccent}\rule{\textwidth}{0.7pt}\par}
+    \vspace{0.3cm}
+    {\sffamily\footnotesize\color{KernelInk}\@date\hfill KERNELS · 2026\par}
+  \end{titlepage}%
+}
+\makeatother
+\allowdisplaybreaks

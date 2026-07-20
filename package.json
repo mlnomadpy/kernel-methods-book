@@ -7,9 +7,53 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "npm run build && playwright test",
+    "notebooks:sync": "python3 -m jupytext --sync notebooks/labs/*.py",
+    "test:notebooks": "npm run notebooks:sync && KERNEL_BOOK_MODE=fast python3 tools/test-notebooks.py",
+    "test:kaggle": "python3 tools/publish_kaggle.py --dry-run",
+    "check:content": "node tools/content-audit.mjs",
+    "check:numerical": "node tools/run-numerical-checks.mjs",
+    "examples:generate": "node tools/generate-example-artifacts.mjs",
+    "check:examples": "node tools/check-example-artifacts.mjs",
+    "check:dependencies": "npm audit --audit-level=high",
+    "check:links": "node tools/check-built-links.mjs",
+    "check:depmap": "node tools/generate-depmap-nodes.mjs --check && node depmap/validate.mjs",
+    "depmap:generate": "node tools/generate-depmap-nodes.mjs",
+    "check:manifests": "node tools/check-manifests.mjs",
+    "check:solutions": "node tools/check-solutions.mjs",
+    "solutions:generate-drafts": "node tools/generate-solution-drafts.mjs",
+    "solutions:apply-batch": "node tools/apply-solution-batch.mjs",
+    "check:editorial": "node tools/check-editorial-completeness.mjs",
+    "editorial:standardize": "node tools/standardize-editorial.mjs",
+    "check:migration": "node tools/check-migration-parity.mjs",
+    "check:bibliography": "node tools/generate-bibliography.mjs --check",
+    "bibliography:generate": "node tools/generate-bibliography.mjs",
+    "bibliography:enrich": "node tools/enrich-bibliography.mjs --write && npm run bibliography:generate",
+    "bibliography:enrich:dblp": "node tools/enrich-bibliography.mjs --write --dblp && npm run bibliography:generate",
+    "bibliography:enrich:crossref": "node tools/enrich-bibliography.mjs --write --crossref && npm run bibliography:generate",
+    "vendor:assets": "node tools/vendor-assets.mjs",
+    "figures:generate": "python3 tools/figures/build_figures.py",
+    "build:pdf": "node tools/build-publication.mjs pdf",
+    "build:epub": "node tools/build-publication.mjs epub",
+    "build:publication": "npm run build:pdf && npm run build:epub",
+    "check:release": "RELEASE_VERIFIED=1 node tools/check-manifests.mjs && RELEASE_VERIFIED=1 node tools/check-solutions.mjs && RELEASE_VERIFIED=1 node tools/check-editorial-completeness.mjs && RELEASE_VERIFIED=1 node tools/check-example-artifacts.mjs && npm run check",
+    "manifests:generate": "node tools/generate-manifests.mjs",
+    "audit:record-authorial": "node tools/record-authorial-audit.mjs",
+    "audit:release": "node tools/generate-release-audit.mjs",
+    "check": "npm run check:bibliography && npm run check:migration && npm run check:content && npm run check:manifests && npm run check:solutions && npm run check:editorial && npm run check:examples && npm run test && npm run check:numerical && npm run check:depmap && npm run test:notebooks && npm run test:kaggle && npm run build && npm run check:links && npm run check:dependencies"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/stix-two-text": "5.3.0",
+    "astro": "7.1.1",
+    "gray-matter": "4.0.3",
+    "katex": "0.16.22",
+    "yaml": "2.9.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@playwright/test": "1.61.1"
   }
 }

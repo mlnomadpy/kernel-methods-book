@@ -1,6 +1,15 @@
 *.pdf
+# ...except the static print figures, which are committed so the book build can
+# embed them without a Python/JAX toolchain. Regenerate with npm run figures:generate.
+!publication/figures/
+!publication/figures/*.pdf
 .astro/
 __pycache__/
 dist/
 extract/
+private-sources/
+.build/
+release/
 node_modules/
+playwright-report/
+test-results/
