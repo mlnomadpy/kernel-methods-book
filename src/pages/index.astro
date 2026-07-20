@@ -2,12 +2,22 @@
 import Book from "../layouts/Book.astro";
 import { BOOK, escapeHtml, tocHtml } from "../lib/book.js";
 
+const [coverTitle, coverTitleContinuation] = BOOK.title.split(":", 2).map((value) => value.trim());
+const chapterCount = BOOK.parts.reduce((total, part) => total + part.chapters.length, 0);
+
+// "Start reading" points at the narrative opening (the Introduction), falling
+// back to the first chapter in book order.
+const allChapters = BOOK.parts.flatMap((part) => part.chapters);
+const startChapter = allChapters.find((ch) => ch.src === "ch00") ?? allChapters[0];
+const startHref = `${startChapter.slug}.html`;
+const pdfHref = "downloads/kernels-the-geometry-of-learning.pdf";
+const epubHref = "downloads/kernels-the-geometry-of-learning.epub";
+
 // contents list: Preliminaries unnumbered, then 1..N
-const items = [];
+const sections = [];
 let gi = 0;
 for (const part of BOOK.parts) {
-  items.push(`<div class="part">${escapeHtml(part.part)}</div>`);
-  if (part.intro) items.push(`<p class="part-intro">${escapeHtml(part.intro)}</p>`);
+  const items = [];
   for (const ch of part.chapters) {
     const marker = ch.src === "ch-prelim" ? "&middot;" : String(gi);
     items.push(
@@ -15,6 +25,11 @@ for (const part of BOOK.parts) {
     );
     gi++;
   }
+  sections.push(
+    `<section class="contents-part"><h2 class="part">${escapeHtml(part.part)}</h2>` +
+    (part.intro ? `<p class="part-intro">${escapeHtml(part.intro)}</p>` : "") +
+    `<ol>${items.join("\n")}</ol></section>`,
+  );
 }
 
 // the signature: a real Gaussian Gram matrix, K_ij = exp(-(i-j)^2 / 2 sigma^2)
@@ -32,17 +47,30 @@ for (let i = 0; i < N; i++) {
   <div class="cover">
     <div class="cover-hero">
       <div class="cover-lead">
-        <h1>{BOOK.title}</h1>
+        <p class="cover-kicker">A unified theory of learning through similarity</p>
+        <h1>
+          <span class="cover-title">{coverTitle}</span>
+          <span class="cover-title-continuation">{coverTitleContinuation}</span>
+        </h1>
         <p class="subtitle">{BOOK.subtitle}</p>
-        <p class="attribution">{BOOK.source}</p>
+        <p class="tagline">{BOOK.tagline}</p>
+        <p class="cover-story">Kernel methods are usually filed away as a finished chapter of pre&#8209;deep&#8209;learning history. This book treats them as what they are: a living language for turning structure into geometry, and geometry into learning. It follows that single idea without compromise&nbsp;— from Gram matrices to operators, from margins to probability measures, from finite samples to infinite&#8209;width networks&nbsp;— building the theory from first principles and carrying it all the way to working code.</p>
+        <p class="byline"><span>Written by</span> <a href="https://www.tahabouhsine.com" rel="author">Taha Bouhsine</a><small>AzettaAI · @azettaai</small></p>
+        <div class="cover-actions">
+          <a class="cover-btn cover-btn-primary" href={startHref}>Start reading <span aria-hidden="true">→</span></a>
+          <a class="cover-btn" href={pdfHref}>Download PDF</a>
+          <a class="cover-btn" href={epubHref}>Download EPUB</a>
+        </div>
+        <p class="cover-scope-line">{chapterCount} chapters · foundations to frontiers · free to read online · <a href="preface.html">dedication &amp; preface</a></p>
       </div>
       <div class="gram-wrap">
         <div class="gram-hero" style={`--n:${N}`} aria-hidden="true"><Fragment set:html={gcells} /></div>
         <span class="gram-cap">{"\\(K_{ij}=e^{-(i-j)^2/2\\sigma^2}\\), the object this book is about"}</span>
       </div>
     </div>
-    <ol class="contents">
-      <Fragment set:html={items.join("\n")} />
-    </ol>
+    <p class="cover-positioning">{BOOK.positioning} <a href="about.html#sources">Sources, provenance, and review policy&nbsp;→</a></p>
+    <div class="contents">
+      <Fragment set:html={sections.join("\n")} />
+    </div>
   </div>
 </Book>
