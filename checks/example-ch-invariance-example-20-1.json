@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-invariance",
+  "anchor": "example-20-1",
+  "source_file": "manuscript/chapters/ch-invariance.md",
+  "source_sha256": "7b175a751c09c7f614d708ec14b9d6cda32f6a01b664b9a04e7da76662d8fe8c",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-invariance-ex1.py"
+  ],
+  "numeric_literals": [
+    "2",
+    "0",
+    "1",
+    "1.5",
+    "0.5",
+    "0.3",
+    "0.2",
+    "0.8",
+    "0.5821",
+    "0.6435",
+    "0.2459",
+    "0.5959",
+    "3",
+    "0.5328",
+    "0.2152",
+    "0.4621",
+    "0.1956",
+    "0.4204",
+    "0.1833",
+    "0.3970",
+    "0.1759",
+    "0.6024",
+    "0.6050",
+    "0.6059",
+    "0.6062",
+    "4",
+    "0.3842",
+    "0.1717",
+    "0.384",
+    "0.172"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

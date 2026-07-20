@@ -1,0 +1,141 @@
+chapter: ch-oneclass
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "**Center in the hull.** Show directly from \\(\\sum_i\\alpha_i=1\\) and \\(\\alpha_i\\ge
+      0\\) that the SVDD center \\(c=\\sum_i\\alpha_i\\phi_i\\) lies in the convex hull of the
+      training images, and conclude it lies in their span."
+    answer: A convex hull consists exactly of finite combinations sum_i alpha_i phi_i with alpha_i>=0
+      and sum_i alpha_i=1. The SVDD center has this form, so c belongs to conv{phi_i}. Every convex
+      combination is also a linear combination; therefore the convex hull is contained in
+      span{phi_i}, and c lies in that span as well.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: "**Reading the radius.** For the five-point example, verify by hand that
+      \\(\\|x_2-c\\|^2=2\\) with \\(c=(1,1)\\), and confirm that using any of the four corners to
+      compute \\(R^2\\) gives the same value."
+    answer: The example corners are (0,0),(2,0),(2,2),(0,2) and c=(1,1). For x_2=(2,0),
+      ||x_2-c||^2=||(1,-1)||^2=1+1=2. Subtracting c from the other corners gives (-1,-1),(1,1), and
+      (-1,1), each also with squared norm two. Thus every non-boundary choice among the four support
+      corners yields the same R^2=2, as KKT requires.
+  - number: 3
+    kind: warm-up
+    status: draft
+    prompt: "**Parzen limit.** Show that when the box constraint forces \\(\\alpha_i\\le 1/m\\), the
+      only feasible point of the one-class dual is \\(\\alpha_i=1/m\\), and hence that the decision
+      function reduces to a thresholded Parzen-windows estimate."
+    answer: "There are m coordinates, each at most 1/m, while their sum must equal one. The sum of the
+      upper bounds is already one, so equality is possible only if every coordinate attains its cap:
+      alpha_i=1/m. The one-class score then contains m^{-1}sum_i k(x_i,x), the Parzen/kernel-density
+      similarity estimate, compared with the learned constant threshold rho. No data-dependent
+      reweighting remains."
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: "**Soft-sphere dual.** Starting from the soft SVDD primal \\(\\min_{R,c,\\xi}
+      R^2+C\\sum_i\\xi_i\\) subject to \\(\\|\\phi_i-c\\|^2\\le R^2+\\xi_i,\\ \\xi_i\\ge 0\\),
+      derive the dual and show the only change from the hard case is the box constraint
+      \\(0\\le\\alpha_i\\le C\\)."
+    answer: Use multipliers alpha_i>=0 for R^2+xi_i-||phi_i-c||^2>=0 and beta_i>=0 for xi_i>=0.
+      Stationarity in R^2 gives sum_i alpha_i=1; stationarity in xi_i gives C-alpha_i-beta_i=0,
+      hence 0<=alpha_i<=C. Stationarity in c gives c=sum_i alpha_i phi_i. Substitution yields
+      max_alpha sum_i alpha_i K_ii-sum_ij alpha_i alpha_j K_ij subject to sum alpha=1 and the box.
+      This is the hard SVDD dual with only the new upper bound.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: "**Positivity of the offset.** Argue that the one-class SVM solution has \\(\\rho\\gt 0\\)
+      whenever the data are separable from the origin, and explain where the assumption \\(\\rho\\gt
+      0\\) is used in the proof of the \\(\\nu\\)-property. Hint: relate \\(\\rho\\) to the margin
+      \\(\\rho/\\|w\\|\\) and use Proposition (supporting hyperplane)."
+    answer: If the feature images can be strictly separated from the origin, a supporting hyperplane has
+      <w,phi_i>>=rho>0 after canonical orientation; its geometric margin is rho/||w||, so a
+      positive-margin optimum cannot have nonpositive rho. In the nu-property proof, rho>0 activates
+      complementary slackness for the variable rho and makes the dual sum/budget constraint tight.
+      Tightness is what converts capped multipliers into the upper bound on errors and lower bound
+      on support vectors; at rho=0 only an inequality remains and the exact counting argument can
+      fail.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: "**Hard-margin blow-up.** Show that forcing \\(\\rho\\ge 0\\) in the primal changes the
+      equality constraint from \\(\\sum_i\\alpha_i=1\\) to \\(\\sum_i\\alpha_i\\ge 1\\), and argue
+      geometrically that the hard-margin limit \\(\\nu\\to 0\\) can become infeasible while the
+      free-offset problem stays feasible. Hint: a large negative \\(\\rho\\) always satisfies the
+      constraints."
+    answer: "Adding rho>=0 introduces a multiplier delta>=0 for that constraint. Stationarity in rho
+      changes -1+sum_i alpha_i=0 into -1+sum_i alpha_i-delta=0, hence sum_i alpha_i=1+delta>=1. In
+      the hard limit there is no slack to rescue data whose feature-space convex hull contains the
+      origin: no hyperplane through a nonnegative offset can put every point strictly on the
+      positive side. With rho free, choosing a sufficiently negative offset always satisfies
+      <w,phi_i>>=rho (even w=0), so feasibility is retained although the resulting separator may be
+      uninformative."
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "**Prove the equivalence in the decision function.** For a translation-invariant kernel with
+      \\(\\kappa(0)=1\\), show that the SVDD test \\(\\|\\phi(x)-c\\|^2\\gtrless R^2\\) and the
+      one-class test \\(\\langle w,\\phi(x)\\rangle\\gtrless\\rho\\) define the same boundary, and
+      express the SVDD threshold \\(R^2\\) in terms of \\(\\rho\\) and constants. Hint: expand
+      \\(\\|\\phi(x)-c\\|^2\\) and collect the terms independent of \\(x\\)."
+    answer: For a translation-invariant kernel normalized by kappa(0)=1, ||phi(x)||^2=1 for every x.
+      Taking c=w, expand ||phi(x)-c||^2=1+||c||^2-2<c,phi(x)>. Therefore the SVDD boundary equals
+      R^2 exactly when <w,phi(x)>=rho with rho=[1+||c||^2-R^2]/2. Equivalently R^2=1+||w||^2-2rho.
+      Reversing the inequality shows inside the sphere corresponds to the accepted one-class
+      half-space, so the two decision functions have the same boundary and orientation.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: '**Separation from a reference set.** Modify the one-class SVM to separate the data not from
+      the origin but from the mean \(\tfrac1t\sum_{n=1}^t\phi(z_n)\) of a second set \(\{z_n\}\).
+      Derive the dual and show the objective gains a linear term \(-q_i\) with \(q_i=\tfrac1t\sum_n
+      k(x_i,z_n)\), so that a weak model of the \"other\" class can be folded in. Hint: replace
+      \(\langle w,\phi_i\rangle\) by \(\langle w,\phi_i-\bar\phi_z\rangle\) in the margin
+      constraint.'
+    answer: Set d_i=phi(x_i)-bar phi_z and apply the ordinary one-class dual to their Gram matrix
+      G_ij=<d_i,d_j>=K_ij-q_i-q_j+r, where q_i=t^{-1}sum_n k(x_i,z_n) and r=||bar phi_z||^2. Under
+      sum_i alpha_i=1, (1/2)alpha^T G alpha=(1/2)alpha^T K alpha-q^T alpha+r/2. The constant r/2
+      drops, leaving the usual quadratic objective plus the linear term -q_i per coefficient, with
+      the same simplex/box constraints. Points similar to the reference mean are penalized, folding
+      weak negative-class information into the one-class fit.
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "**A negative that does not matter.** In the SVDD-with-negatives example, move the negative
+      to \\(x_4=(0,-3)\\), well below the targets. Show that the target-only ball (center
+      \\((0,0)\\), \\(R=2\\)) already leaves it outside, so its dual weight vanishes,
+      \\(\\alpha_4=0\\), and the solution collapses to the plain three-target SVDD. Explain through
+      complementarity why a negative that is already outside the target ball carries no weight, and
+      contrast this with the original negative at \\((0,-1)\\)."
+    answer: The target-only center is (0,0) with radius 2, while ||(0,-3)||=3>2, so the moved negative
+      already satisfies its outside-sphere constraint strictly. Complementary slackness then sets
+      the multiplier of that inactive constraint to zero. With alpha_4=0, neither center nor radius
+      receives any contribution from the negative and the solution is the three-target SVDD. The
+      original negative at (0,-1) lay inside the target ball, violated the desired exclusion, and
+      therefore carried nonzero weight that shifted or tightened the fitted sphere.
+  - number: 10
+    kind: challenge
+    status: draft
+    prompt: "**Minimum-volume sets are level sets.** Let \\(p\\) be a density on \\(\\mathbb{R}\\) with
+      no interval of constant positive value. Show that among all measurable sets \\(C\\) with
+      \\(\\int_C p=\\mu\\), the one of least Lebesgue measure is a super-level set
+      \\(\\{p\\ge\\tau\\}\\) for some \\(\\tau\\ge 0\\). Conclude that the estimated support
+      returned by the RBF one-class SVM is, in the population limit, a density level set. Hint: if
+      \\(C\\) omits a point where \\(p\\) is high while including one where \\(p\\) is lower, swap
+      two slivers of equal probability and compare their volumes."
+    answer: Suppose a feasible C contains a positive-volume sliver A where p is lower than on an omitted
+      sliver B. Choose the slivers with equal probability mass. Because volume equals probability
+      divided by average density, the higher-density B has smaller Lebesgue measure than A. Swapping
+      B into C and A out preserves probability mu while reducing volume, contradicting optimality.
+      Hence an optimizer cannot include lower-density points while excluding higher-density ones; up
+      to a boundary set it is {p>tau} plus enough of {p=tau} to reach mass mu. The
+      no-flat-positive-interval assumption removes ambiguity. Consistent RBF one-class support
+      estimation therefore converges to a density super-level/minimum-volume set.

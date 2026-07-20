@@ -1,0 +1,105 @@
+chapter: ch-cca
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: proof
+    status: draft
+    prompt: "Show why unregularized kernel CCA saturates at correlation \\(1\\). Assume \\(K_a\\) and
+      \\(K_b\\) are invertible and substitute \\(\\boldsymbol{\\alpha}' = K_a
+      \\boldsymbol{\\alpha}\\), \\(\\boldsymbol{\\beta}' = K_b \\boldsymbol{\\beta}\\) into the
+      finite-dimensional objective \\(\\boldsymbol{\\alpha}^\\top K_a K_b \\boldsymbol{\\beta}\\)
+      with constraints \\(\\boldsymbol{\\alpha}^\\top K_a^2 \\boldsymbol{\\alpha} = 1\\) and
+      \\(\\boldsymbol{\\beta}^\\top K_b^2 \\boldsymbol{\\beta} = 1\\). Show the problem becomes
+      \\(\\max\\, \\boldsymbol{\\alpha}'^\\top \\boldsymbol{\\beta}'\\) subject to
+      \\(\\lVert\\boldsymbol{\\alpha}'\\rVert = \\lVert\\boldsymbol{\\beta}'\\rVert = 1\\), whose
+      maximum is \\(1\\), attained by any \\(\\boldsymbol{\\alpha}' = \\boldsymbol{\\beta}'\\) on
+      the unit sphere. Interpret the result: the map \\(\\boldsymbol{\\alpha} \\mapsto
+      K_a\\boldsymbol{\\alpha}\\) being a bijection means the projected values
+      \\((f_a(\\mathbf{x}_1), \\ldots, f_a(\\mathbf{x}_n))\\) can be steered to any pattern, so any
+      two samples can be matched exactly. Then explain how replacing the constraint by
+      \\((1-\\tau)\\,\\boldsymbol{\\alpha}^\\top K_a^2 \\boldsymbol{\\alpha} +
+      \\tau\\,\\boldsymbol{\\alpha}^\\top K_a \\boldsymbol{\\alpha} = 1\\) breaks the degeneracy."
+    answer: Set alpha'=K_a alpha and beta'=K_b beta. Invertibility makes these changes bijective. The
+      objective becomes alpha'^T beta', while constraints become ||alpha'||=||beta'||=1.
+      Cauchy-Schwarz bounds the value by one and equality holds for every common unit vector
+      alpha'=beta'. Thus each view can interpolate any chosen sample-value pattern and the empirical
+      correlation is vacuously perfect. Adding tau alpha^T K_a alpha charges RKHS norm in addition
+      to projected variance; different sample patterns now have different cost, so arbitrary
+      interpolation is no longer free and the degeneracy is broken.
+  - number: 2
+    kind: challenge
+    status: draft
+    prompt: "The chapter argues that variance, covariance, and correlation are one eigen-decomposition
+      family tuned by a single choice. Fill in the family for a pair of centered views \\(X, Y\\):
+      (a) which matrix's eigenvectors solve the single-view maximal-variance problem (PCA); (b)
+      which matrix's singular vectors solve the maximal-covariance problem
+      \\(\\max_{\\lVert\\mathbf{w}_a\\rVert = \\lVert\\mathbf{w}_b\\rVert = 1} \\mathbf{w}_a^\\top
+      C_{XY}\\mathbf{w}_b\\); and (c) which generalized eigenproblem solves maximal correlation
+      (CCA). Then explain, using the regularized constraint
+      \\((1-\\tau)\\,\\boldsymbol{\\alpha}^\\top K_a^2 \\boldsymbol{\\alpha} +
+      \\tau\\,\\boldsymbol{\\alpha}^\\top K_a \\boldsymbol{\\alpha} = 1\\), why sending \\(\\tau\\)
+      from \\(0\\) to \\(1\\) slides kernel CCA from pure correlation toward pure covariance, and
+      why a modest \\(\\tau\\) is what buys resistance to spurious correlation."
+    answer: PCA uses eigenvectors of C_XX (or C_YY). Maximal covariance uses the leading left/right
+      singular vectors of C_XY, equivalently eigenvectors of C_XY C_YX and C_YX C_XY. CCA solves the
+      block generalized problem [[0,C_XY],[C_YX,0]]w=rho diag(C_XX,C_YY)w, with regularized
+      covariance blocks in practice. In kernel coordinates, tau=0 normalizes purely by empirical
+      projected variance and targets correlation; increasing tau replaces that freedom with
+      RKHS-norm control, moving toward covariance-like directions. A positive tau prevents
+      tiny-variance directions from being divided into spuriously huge correlations.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Expand the shrinkage constraint matrix \\((K + \\kappa I)^2\\) and name its three terms:
+      the raw projected-variance matrix \\(K^2\\), the RKHS-norm penalty, and the strict ridge. Then
+      take the linear kernel \\(k(u, v) = uv\\) on the one-dimensional points \\(u \\in \\{1, 2,
+      3\\}\\), whose Gram matrix \\(K\\) has rank \\(1\\). Check that \\(K^2\\) and the penalized
+      matrix \\(K^2 + \\tau K\\) both remain singular, while \\((K + \\kappa I)^2\\) is invertible
+      for every \\(\\kappa \\gt 0\\). Conclude why the shrinkage form is the safe default once the
+      kernel is not universal."
+    answer: "Expansion gives (K+kappa I)^2=K^2+2kappa K+kappa^2 I: raw projected variance, an RKHS/Gram
+      penalty, and a strict isotropic ridge. For u=(1,2,3), K=uu^T has eigenvalues 14,0,0. Thus
+      K^2=14K and K^2+tau K=(14+tau)K remain rank one. K+kappa I has eigenvalues
+      14+kappa,kappa,kappa, so its square has strictly positive eigenvalues for every kappa>0. The
+      full ridge is therefore necessary when null directions exist; merely adding K cannot lift its
+      nullspace."
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: Reproduce the worked example's shrinkage sweep and confirm the leading canonical correlation
+      \(\rho(\kappa)\) falls monotonically from \(1\) as \(\kappa\) grows (the check script prints
+      \(1.000,\, 0.896,\, 0.611,\, 0.413\) at \(\kappa = 0,\, 0.1,\, 0.5,\, 1\)). Then prove
+      monotonicity in general. Writing the top correlation as the maximum of
+      \(\boldsymbol{\alpha}^\top K_a K_b \boldsymbol{\beta}\) over \(\sqrt{\boldsymbol{\alpha}^\top
+      (K_a + \kappa I)^2 \boldsymbol{\alpha}} \, \sqrt{\boldsymbol{\beta}^\top (K_b + \kappa I)^2
+      \boldsymbol{\beta}} = 1\), argue that enlarging the constraint matrices from \(K^2\) to \((K +
+      \kappa I)^2\) can only shrink the attainable maximum, so \(\rho(\kappa)\) is nonincreasing.
+    answer: The reported sweep is 1.000,0.896,0.611,0.413, already nonincreasing. For
+      kappa_2>kappa_1>=0, (K+kappa_2I)^2-(K+kappa_1I)^2=2(kappa_2-kappa_1)K+(kappa_2^2-kappa_1^2)I
+      is PSD. Hence for every fixed alpha,beta, both normalization denominators weakly increase
+      while the cross numerator stays fixed, so its attainable normalized covariance cannot
+      increase. Taking the supremum over directions preserves this ordering, proving rho(kappa)
+      nonincreasing (with absolute sign handled by flipping one direction).
+  - number: 5
+    kind: warm-up
+    status: draft
+    prompt: "Place kernel CCA in the multi-view family. (a) State precisely what deep CCA (Andrew et
+      al., 2013) replaces relative to kernel CCA, and explain why it still needs the covariance
+      shrinkage \\((\\hat{\\Sigma} + r I)\\) of this chapter. (b) Describe the cross-lingual
+      paired-corpus application: what are the two views, what does a leading canonical direction
+      represent, and how is it used for retrieval across languages? (c) Relate the objective to
+      kernel PCA of the referenced chapter: which covariance or cross-covariance does each of PCA,
+      CCA, and deep CCA decompose?"
+    answer: Deep CCA replaces fixed RKHS feature maps by two learned nonlinear neural encoders, then
+      maximizes correlation between their outputs. It still whitens empirical covariances, so finite
+      samples and redundant coordinates require shrinkage Sigma+rI for invertibility and stability.
+      In cross-lingual retrieval, paired documents or sentences in two languages form the views; a
+      canonical direction is a shared latent semantic coordinate, and an item is retrieved by
+      proximity/correlation to the query in canonical space. PCA diagonalizes one view's covariance,
+      CCA whitens and decomposes cross-covariance between two fixed features, and deep CCA learns
+      the features while optimizing that same cross-covariance objective.

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-signature",
+  "anchor": "example-26-2",
+  "source_file": "manuscript/chapters/ch-signature.md",
+  "source_sha256": "611ed1c0ffa02f4adae6735c5dabff3e77090b2cc165660c245287f9ed2a816a",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-signature-ex2.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "2",
+    "3",
+    "-2",
+    "0.1353",
+    "-1",
+    "0.6065",
+    "0",
+    "0.135335",
+    "0.606531",
+    "1.056495",
+    "0.082085",
+    "1.745111",
+    "+1",
+    "+0",
+    "+0.6065",
+    "1.0565",
+    "4",
+    "+0.0821",
+    "1.7451",
+    "5"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

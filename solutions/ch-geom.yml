@@ -1,0 +1,122 @@
+chapter: ch-geom
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "A spectral filter \\(\\Phi\\) applied to a graph Laplacian \\(L=\\sum_i\\lambda_i
+      u_iu_i^\\top\\) gives the kernel \\(K=\\sum_i\\Phi(\\lambda_i)u_iu_i^\\top\\). For each of the
+      following filters, say whether \\(K\\) is positive definite and name the kernel it produces:
+      (a) \\(\\Phi(\\lambda)=e^{-t\\lambda}\\); (b)
+      \\(\\Phi(\\lambda)=(2\\nu/\\kappa^2+\\lambda)^{-\\nu}\\); (c) \\(\\Phi(\\lambda)=1/\\lambda\\)
+      on the nonzero spectrum and \\(0\\) on the null space; (d)
+      \\(\\Phi(\\lambda)=1-\\lambda/\\lambda_{\\max}\\). In one sentence, state the single condition
+      on \\(\\Phi\\) that decides positive definiteness."
+    answer: Because $L$ is diagonalized by the $u_i$, PSD is decided by $\Phi(\lambda_i)\ge0$. (a) is
+      the diffusion/heat kernel and is strictly PD for finite $t>0$. (b) is the graph Matérn kernel
+      and is strictly PD for positive $\nu,\kappa$. (c) is the Laplacian pseudoinverse
+      (Green/commute-time kernel); it is PSD but singular on the constant null space. (d) is a
+      linear low-pass spectral kernel; it is PSD because $0\le\lambda_i\le\lambda_{max}$, but
+      singular on any top-eigenvalue mode. Strict PD requires strict positivity on the entire
+      spectrum.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Work on the 4-cycle \(C_4\), whose Laplacian has eigenvalues \(0,2,2,4\) with the discrete
+      Fourier eigenvectors. Write the diffusion kernel \(e^{-tL}\) in the eigenbasis and evaluate,
+      at \(t=1\), the diagonal entry \(K_{ii}\) and the nearest-neighbor entry \(K_{i,i+1}\) as sums
+      \(\tfrac14\sum_i e^{-t\lambda_i}\cos(\cdot)\). Confirm the diagonal exceeds the off-diagonals,
+      and that all four eigenvalues \(e^{-t\lambda_i}\) are positive.
+    answer: For $C_4$, $K=U\operatorname{diag}(1,e^{-2},e^{-2},e^{-4})U^*$. Translation symmetry makes
+      $K_{ii}=\tfrac14(1+2e^{-2}+e^{-4})\approx0.32225$. At graph distance one, the Fourier phases
+      give $K_{i,i+1}=\tfrac14(1-e^{-4})\approx0.24542$; at distance two it is
+      $\tfrac14(1-2e^{-2}+e^{-4})\approx0.18754$. Thus the diagonal is largest, and the four
+      spectral eigenvalues $(1,e^{-2},e^{-2},e^{-4})$ are all positive.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Prove the spectral-filter criterion in full: if \\(A\\) is symmetric positive semidefinite
+      with eigenpairs \\((\\lambda_i,u_i)\\) and \\(\\Phi(\\lambda)\\ge 0\\) on the spectrum of
+      \\(A\\), then \\(\\Phi(A)=\\sum_i\\Phi(\\lambda_i)u_iu_i^\\top\\) is positive semidefinite,
+      and strictly positive definite when \\(\\Phi\\gt 0\\). Deduce that \\(\\exp(-tL)\\) and
+      \\((2\\nu/\\kappa^2 I+L)^{-\\nu}\\) are positive definite for every \\(t\\gt 0\\) and
+      \\(\\nu\\gt 0\\)."
+    answer: For any $v$, orthonormal expansion gives $v^\top\Phi(A)v=\sum_i\Phi(\lambda_i)(u_i^\top
+      v)^2\ge0$. If every spectral value is positive, the sum is positive for every nonzero $v$,
+      since some $u_i^\top v$ is nonzero; conversely a zero spectral value supplies a null vector.
+      For $t>0$, $e^{-t\lambda}>0$, and for $\nu,\kappa>0$, $(2\nu/\kappa^2+\lambda)^{-\nu}>0$, so
+      both filters give strictly positive-definite matrices on every finite graph.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Show, without assuming the base kernel is jointly invariant, that the double-averaged kernel
+      \(k_G(x,y)=\int_G\int_G k(gx,g'y)\,dg\,dg'\) is positive definite and satisfies
+      \(k_G(hx,y)=k_G(x,y)\) for all \(h\in G\). Identify the feature map of \(k_G\) explicitly in
+      terms of the feature map \(\Phi\) of \(k\).
+    answer: Let $\Phi$ be a feature map and normalized Haar measure exist on the compact group $G$.
+      Define $\overline\Phi(x)=\int_G\Phi(gx)\,dg$ (a Bochner integral). Then
+      $k_G(x,y)=\langle\overline\Phi(x),\overline\Phi(y)\rangle$, proving PSD without joint
+      invariance of $k$. Haar invariance gives
+      $\overline\Phi(hx)=\int_G\Phi(ghx)dg=\int_G\Phi(gx)dg$, hence $k_G(hx,y)=k_G(x,y)$.
+      Integrability of the feature orbit is the needed analytic assumption.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Prove that every function in the RKHS \(\mathcal H_{k_G}\) of a group-averaged kernel is
+      \(G\)-invariant, that is \(f(gx)=f(x)\) for all \(g\in G\) and \(f\in\mathcal H_{k_G}\).
+      Explain why this makes the invariance a hard constraint on the hypothesis space, in contrast
+      to the soft tangent-covariance penalty of the referenced chapter.
+    answer: "Since $k_G(gx,z)=k_G(x,z)$, every finite section expansion $f=\\sum_jc_jk_G(\\cdot,z_j)$
+      satisfies $f(gx)=f(x)$. Such expansions are dense in $H_{k_G}$, and point evaluation is
+      continuous, so the identity passes to every RKHS limit. Thus the entire hypothesis space
+      contains only invariant functions: violations are impossible. A tangent-covariance regularizer
+      merely charges variation along transformation directions and can trade that penalty against
+      data fit."
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: Let \(G=\{+1,-1\}\) act on \(\mathbb R\) by \(x\mapsto\pm x\) (reflection), and take the
+      base kernel \(k(x,y)=(1+xy)^2\). Compute the invariant kernel
+      \(k_G(x,y)=\tfrac12\big(k(x,y)+k(x,-y)\big)\) in closed form, and verify directly that
+      \(k_G(-x,y)=k_G(x,y)\). Which monomials in \(x,y\) survive the averaging, and which are
+      annihilated?
+    answer: Averaging over reflection gives $k_G(x,y)=\tfrac12[(1+xy)^2+(1-xy)^2]=1+x^2y^2$. It is
+      unchanged when either argument changes sign. In the expansion $1\pm2xy+x^2y^2$, the odd
+      bilinear monomial $xy$ cancels, while the constant and even monomial $x^2y^2$ survive; the
+      feature map can be taken as $(1,x^2)$.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: Establish the diffusion limit on a graph. Diagonalizing
+      \(K_\nu=\big(\tfrac{2\nu}{\kappa^2}I+L\big)^{-\nu}\), normalize the filter to
+      \(g_\nu(\lambda)=\big(1+\tfrac{\kappa^2}{2\nu}\lambda\big)^{-\nu}\) and show
+      \(g_\nu(\lambda)\to e^{-\kappa^2\lambda/2}\) as \(\nu\to\infty\) for each fixed \(\lambda\).
+      Conclude that the normalized graph Matern kernel converges entrywise to the diffusion kernel,
+      and explain what happens to the \(\lambda=0\) mode.
+    answer: After fixing the zero-mode scale, the eigenvalue filter is
+      $g_\nu(\lambda)=(1+\kappa^2\lambda/(2\nu))^{-\nu}$. Taking logarithms, $\log
+      g_\nu=-\nu\log(1+\kappa^2\lambda/(2\nu))\to-\kappa^2\lambda/2$, so $g_\nu\to
+      e^{-\kappa^2\lambda/2}$. A finite graph has finitely many modes, hence spectral and entrywise
+      convergence follow. At $\lambda=0$, $g_\nu(0)=1$ for every $\nu$, so the constant component is
+      preserved.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: On the circle \(S^1\), the Laplace-Beltrami eigenpairs are \(f_n(\theta)=e^{in\theta}\) with
+      \(\lambda_n=n^2\). Write the manifold Matern kernel
+      \(k_\nu(\theta,\theta')=\tfrac1{C_\nu}\sum_n(2\nu/\kappa^2+n^2)^{-(\nu+1/2)}e^{in(\theta-\theta')}\)
+      and show it is stationary, a function of \(\theta-\theta'\) alone. Identify the sequence
+      \(a_n=(2\nu/\kappa^2+n^2)^{-(\nu+1/2)}\) as its Fourier coefficients, and relate its
+      nonnegativity to Herglotz's theorem for positive definite sequences from the referenced
+      chapter.
+    answer: Writing $\delta=\theta-\theta'$, $k_\nu(\theta,\theta')=C_\nu^{-1}\sum_{n\in\mathbb
+      Z}a_ne^{in\delta}$ with $a_n=(2\nu/\kappa^2+n^2)^{-(\nu+1/2)}\ge0$. It therefore depends only
+      on angular displacement and is stationary; since $a_{-n}=a_n$, it is real and equals
+      $C_\nu^{-1}[a_0+2\sum_{n\ge1}a_n\cos(n\delta)]$. Herglotz's theorem identifies nonnegative
+      Fourier weights with a positive-definite stationary kernel on the circle. The series converges
+      for $\nu>0$, and $C_\nu$ only fixes scale.

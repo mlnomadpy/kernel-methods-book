@@ -1,0 +1,46 @@
+name: Book quality gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13", cache: pip}
+      - name: Install publication and notebook dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          npm ci
+          python -m pip install -r requirements-notebooks.txt
+      - name: Run content, numerical, notebook, link, and security gates
+        run: npm run check
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+      - name: Run browser and accessibility gates
+        run: npm run test:e2e
+
+  publication:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - name: Install PDF and EPUB toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-luatex texlive-latex-extra texlive-fonts-recommended fonts-stix
+          npm ci
+      - name: Build PDF and EPUB
+        run: npm run build:publication
+      - uses: actions/upload-artifact@v4
+        with:
+          name: publication-drafts
+          path: release/

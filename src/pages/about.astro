@@ -1,0 +1,33 @@
+---
+import Book from "../layouts/Book.astro";
+import publication from "../../publication.json";
+import { BOOK, escapeHtml, tocHtml } from "../lib/book.js";
+
+const editors = publication.editors.length
+  ? publication.editors.map(escapeHtml).join(", ")
+  : "Independent editor credits pending supplied legal names.";
+---
+
+<Book title={`About this edition · ${BOOK.title}`} desc="Edition, review, source, licensing, and errata information" toc={tocHtml("about")}>
+  <h1><span class="chno">Publication</span>About this edition</h1>
+  <p class="lead">This page records what edition readers are seeing, how its claims are sourced and reviewed, and how to report a correction.</p>
+  <h2 id="edition">Edition</h2>
+  <p><strong>{publication.edition}</strong>, version {publication.version}, dated {publication.date}. Literature cutoff: {publication.literature_cutoff}. Status: {publication.status}.</p>
+  <h2 id="credits">Authors and editors</h2>
+  <p><strong>Author:</strong> {publication.authors.map((author) => <span><a href={author.url}>{author.name}</a> · {author.affiliation} ({author.handle})</span>)}</p>
+  <p><strong>Editors:</strong> {editors}</p>
+  <h2 id="preface">Dedication and preface</h2>
+  <p>The book is dedicated to Taha Bouhsine's grandmother, <strong>Henya</strong>. The canonical <a href="preface.html">dedication and author’s preface</a> appear in the web, PDF, and EPUB editions.</p>
+  <h2 id="acknowledgements">Acknowledgements</h2>
+  <p>The bibliography and section-level provenance manifests record the intellectual sources. Personal acknowledgements and independent editor credits remain pending supplied names; they are never inferred from repository metadata.</p>
+  <h2 id="sources">Source methodology</h2>
+  <p>Each chapter has a public provenance manifest mapping sections to primary references. Private extracts may be used for verification but are never published automatically. Source excerpts enter the public repository only after redistribution rights are documented.</p>
+  <h2 id="review">Review policy</h2>
+  <p>{publication.review_policy} Specialist approval is additionally required for causal inference, Stein methods, signatures, optimal transport, operator-valued kernels, modern generalization, neural tangent kernels, and deep kernel learning.</p>
+  <h2 id="license">Licensing</h2>
+  <p>Original prose and figures: {publication.content_license}. Original software and notebooks: {publication.code_license}. Third-party material remains subject to its recorded license.</p>
+  <h2 id="errata">Errata and contributions</h2>
+  <p>Confirmed corrections are recorded in <code>ERRATA.md</code>. Contributions must follow <code>CONTRIBUTING.md</code>, include checks where applicable, and may not mark a chapter verified without the required independent approvals.</p>
+  <h2 id="history">Revision history</h2>
+  <p>The versioned development history is maintained in <code>REVISION_HISTORY.md</code>. A release archive must include the exact manuscript, generated bibliography, web/PDF/EPUB outputs, notebook manifest, dependency lockfiles, and signed review manifests.</p>
+</Book>

@@ -1,0 +1,149 @@
+chapter: ch-text
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Using the corpus of the worked examples, compute by hand the plain (unweighted) vector space
+      Gram matrix \(DD^\top\) and confirm that \(\kappa(d_1,d_3)=0\) while \(\kappa(d_2,d_2)=10\).
+    answer: With the term-count rows from the worked example, direct multiplication gives
+      $DD^\top=\begin{pmatrix}2&3&0&0\\3&10&3&0\\0&3&2&0\\0&0&0&5\end{pmatrix}$. Thus the
+      disjoint-vocabulary pair has $K_{13}=0$, while the squared norm of document 2 is $K_{22}=10$.
+      The matrix is symmetric and is PSD because it is a Gram matrix.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: A term appears in every document of a corpus. Show from \(w(t)=\ln(N/\mathrm{df}(t))\) that
+      its tf-idf weight is zero, and explain why this makes stop-word removal a special case of
+      tf-idf weighting.
+    answer: If a term occurs in every document, $df(t)=N$ and $w(t)=\log(N/N)=0$. Every component
+      containing that term is consequently multiplied by zero, exactly as if the term had been
+      removed. This statement uses unsmoothed idf; common smoothed conventions assign a small
+      nonzero weight instead.
+  - number: 3
+    kind: warm-up
+    status: draft
+    prompt: Show that the cosine-normalised kernel
+      \(\hat\kappa(d_1,d_2)=\kappa(d_1,d_2)/\sqrt{\kappa(d_1,d_1)\kappa(d_2,d_2)}\) is itself a
+      valid kernel, by exhibiting its feature map \(\phi(d)/\|\phi(d)\|\). Why does normalisation
+      remove the effect of document length?
+    answer: For documents with $k(d,d)=\|\phi(d)\|^2>0$, define $\widehat\phi(d)=\phi(d)/\|\phi(d)\|$.
+      Then
+      $\langle\widehat\phi(d_1),\widehat\phi(d_2)\rangle=k(d_1,d_2)/\sqrt{k(d_1,d_1)k(d_2,d_2)}$,
+      proving positive semidefiniteness. Multiplying all counts in a document by a positive length
+      factor cancels between numerator and norm. Zero-feature documents require a stated convention,
+      such as mapping them to zero.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: Let \(P\) be any \(T\times T\) proximity matrix and
+      \(\tilde\kappa(d_1,d_2)=\phi(d_1)PP^\top\phi(d_2)^\top\). Prove that \(\tilde\kappa\) is
+      positive semidefinite for every choice of \(P\), and identify the feature map. Which choices
+      of \(P\) recover (a) the plain vector space kernel, (b) the tf-idf kernel, (c) the latent
+      semantic kernel?
+    answer: Set $\psi(d)=\phi(d)P$. Then
+      $\langle\psi(d_1),\psi(d_2)\rangle=\phi(d_1)PP^\top\phi(d_2)^\top$, so the kernel is PSD for
+      every real $P$. Choose $P=I$ for the plain vector-space kernel, a diagonal matrix of idf
+      weights for tf-idf, and the top right-singular-vector matrix $P=V_k$ for the unweighted
+      latent-semantic projection (or $V_k$ followed by the chapter's chosen singular-value scaling).
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: "Verify the GVSM identity \\(\\kappa_{\\mathrm{GVSM}}(d_1,d_2)=\\phi(d_1)D^\\top
+      D\\phi(d_2)^\\top=\\langle\\phi(d_1)D^\\top,\\phi(d_2)D^\\top\\rangle\\), and interpret the
+      vector \\(\\phi(d)D^\\top\\) in words. Using the term-term matrix \\(G\\) from the
+      co-occurrence example, recompute \\(K^{\\mathrm{GVSM}}_{13}=9\\). [Hint: \\(\\phi(d)D^\\top\\)
+      has one coordinate per corpus document; the coordinate for \\(d_j\\) is the plain kernel
+      \\(\\kappa(d,d_j)\\).]{.ex-hint}"
+    answer: Associativity gives $\phi(d_1)D^\top
+      D\phi(d_2)^\top=(\phi(d_1)D^\top)(\phi(d_2)D^\top)^\top$. Coordinate $j$ of $\phi(d)D^\top$ is
+      the ordinary vector-space similarity between $d$ and corpus document $d_j$, so GVSM compares
+      documents through their similarity profiles. Substituting the displayed term-term matrix
+      $G=D^\top D$ gives $\phi(d_1)G\phi(d_3)^\top=9$, as reported; symmetry supplies the reciprocal
+      entry.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: "Starting from the GVSM kernel \\(\\phi(d_1)D^\\top D\\phi(d_2)^\\top\\), use the SVD
+      \\(D=U\\Sigma V^\\top\\) to write it as \\(\\phi(d_1)V\\Sigma^2V^\\top\\phi(d_2)^\\top\\).
+      State precisely the two modifications LSI makes to this expression and explain what each one
+      buys. [Hint: one modification changes the sum's range, the other changes the weights
+      \\(\\sigma_i^2\\).]{.ex-hint}"
+    answer: From $D=U\Sigma V^\top$, $D^\top D=V\Sigma^2V^\top$. GVSM therefore weights every
+      right-singular direction by $\sigma_i^2$. LSI first truncates the sum to the leading $k$
+      directions, discarding low-energy/noisy directions, and then uses the projected coordinates
+      specified in the chapter rather than GVSM's $\sigma_i^2$ weighting (in the unweighted form,
+      $V_kV_k^\top$). This prevents raw corpus frequency from dominating the retained semantic
+      directions.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "Show that the latent semantic kernel is kernel PCA on the bag-of-words embedding, by
+      proving the dual projection formula
+      \\((\\phi(d)V_k)_i=\\lambda_i^{-1/2}\\sum_j(v_i)_j\\kappa(d_j,d)\\), where
+      \\((\\lambda_i,v_i)\\) are the eigenpairs of \\(K=DD^\\top\\). [Hint: with \\(D=U\\Sigma
+      V^\\top\\), the left singular vectors \\(u_i\\) are the eigenvectors \\(v_i\\) of \\(K\\); the
+      term-space concept is \\(V_{\\cdot i}=\\sigma_i^{-1}D^\\top u_i\\), and \\(\\phi(d)V_{\\cdot
+      i}=\\sigma_i^{-1}\\sum_j(u_i)_j\\kappa(d_j,d)\\).]{.ex-hint}"
+    answer: Let $D=U\Sigma V^\top$ and let $u_i$ be an eigenvector of $K=DD^\top$ with eigenvalue
+      $\lambda_i=\sigma_i^2>0$. Since $V_{\cdot i}=\sigma_i^{-1}D^\top u_i$, $\phi(d)V_{\cdot
+      i}=\sigma_i^{-1}\phi(d)D^\top u_i=\lambda_i^{-1/2}\sum_j(u_i)_j k(d,d_j)$. Renaming $u_i$ as
+      the exercise's $v_i$ yields the formula. Zero eigenvalues are excluded because they define no
+      normalized principal direction.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "Prove the diffusion identity: the recurrences \\(\\hat K=\\mu D\\hat G D^\\top+K\\) and
+      \\(\\hat G=\\mu D^\\top\\hat K D+G\\), with \\(K=DD^\\top\\) and \\(G=D^\\top D\\), are solved
+      by \\(\\hat K=K(I-\\mu G)^{-1}\\) and \\(\\hat G=G(I-\\mu G)^{-1}\\), provided
+      \\(\\mu\\lt\\|G\\|^{-1}\\). [Hint: substitute the second recurrence into the first, use
+      \\(D^\\top D=G\\) and \\(DD^\\top=K\\), and sum the resulting Neumann series
+      \\(\\sum_{n\\ge0}\\mu^nG^n=(I-\\mu G)^{-1}\\), which converges because \\(\\mu\\|G\\|\\lt
+      1\\).]{.ex-hint}"
+    answer: Because $D G^n D^\top=K^{n+1}$ and $D^\top K^nD=G^{n+1}$, iterating either coupled
+      recurrence produces the convergent Neumann series. Specifically, $\widehat G=G+\mu
+      G^2+\mu^2G^3+\cdots=G(I-\mu G)^{-1}$, and then $\widehat K=K+\mu D\widehat G D^\top=K+\mu K
+      G+\mu^2KG^2+\cdots=K(I-\mu G)^{-1}$ in the compatible document-to-term operator notation used
+      in the chapter. Convergence and uniqueness follow from $\mu\|G\|<1$. Dimensionally, the last
+      expression denotes the corresponding action through $D$; equivalently the document-space form
+      is $(I-\mu K)^{-1}K$.
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "Let \\(E\\in\\mathbb{R}^{T\\times m}\\) be a word-embedding table and represent a document
+      by its normalised bag of words \\(\\phi_{\\mathrm{nbow}}(d)\\). Show that the embedding
+      document kernel
+      \\(\\kappa_{\\mathrm{emb}}(d_1,d_2)=\\phi_{\\mathrm{nbow}}(d_1)EE^\\top\\phi_{\\mathrm{nbow}}\
+      (d_2)^\\top\\) is positive semidefinite by exhibiting its feature map, and identify it as a
+      semantic-smoothing kernel with proximity matrix \\(P=E\\). Which latent kernel of this chapter
+      is the special case \\(P=V_k\\)? [Hint: the feature map is
+      \\(d\\mapsto\\mu(d)=\\phi_{\\mathrm{nbow}}(d)E\\in\\mathbb{R}^m\\), the mean word embedding;
+      the latent semantic kernel is \\(P=V_k\\).]{.ex-hint}"
+    answer: Define $\mu(d)=\phi_{nbow}(d)E\in\mathbb R^m$. Then
+      $k_{emb}(d_1,d_2)=\mu(d_1)\mu(d_2)^\top$, so it is a PSD Gram kernel. It smooths exact word
+      counts through the proximity matrix $P=E$ and represents each document by its mean word
+      embedding. Taking $P=V_k$ gives the latent semantic kernel.
+  - number: 10
+    kind: challenge
+    status: draft
+    prompt: "Using the toy embedding of the neural-embedding worked example, confirm the Word Mover's
+      Distances \\(\\mathrm{WMD}(A,B)=1.069\\), \\(\\mathrm{WMD}(A,C)=7.913\\), and
+      \\(\\mathrm{WMD}(B,C)=6.960\\), then assemble \\(K=-\\mathrm{WMD}\\) on \\(\\{A,B,C\\}\\) and
+      show it has a negative eigenvalue, so it is not a positive definite kernel. Explain why a
+      symmetric matrix with zero diagonal and any nonzero off-diagonal entry can never be positive
+      semidefinite, and name the two ways this section offers to use WMD inside a kernel method
+      regardless. [Hint: the trace is zero, so the eigenvalues sum to zero; a positive semidefinite
+      matrix with \\(K_{ii}=0\\) must have its whole \\(i\\)th row zero. Either work in the Krein
+      space of the referenced chapter or replace WMD by the positive definite embedding
+      kernel.]{.ex-hint}"
+    answer: Solving the three balanced transport problems gives $WMD(A,B)=1.0690$, $WMD(A,C)=7.9134$,
+      and $WMD(B,C)=6.9597$ (the final difference from 6.960 is rounding). The eigenvalues of
+      $K=-WMD$ are approximately $(-11.0827,1.0601,10.0226)$, so $K$ is indefinite. More generally,
+      PSD implies $|K_{ij}|^2\le K_{ii}K_{jj}$; if every diagonal is zero, every off-diagonal must
+      be zero. One may therefore use the indefinite similarity in a Krein-space method, or replace
+      it with the PSD mean-embedding/document kernel described in the section.

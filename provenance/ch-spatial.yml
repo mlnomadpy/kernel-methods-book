@@ -1,0 +1,202 @@
+chapter: ch-spatial
+slug: spatial-and-spatiotemporal-kernels
+title: Spatial and Spatiotemporal Kernel Models
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - matern1960
+  - stein1999
+  - lindgren2011spde
+  - gneiting2002space
+sections:
+  - id: spatial-random-fields
+    title: Random fields, covariance, and variograms
+    contribution: adapted-and-expanded
+    sources: &a1
+      - matern1960
+      - stein1999
+      - lindgren2011spde
+      - gneiting2002space
+    locators:
+      - source: matern1960
+        manuscript_locator: ch-spatial.md#spatial-random-fields
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#spatial-random-fields
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011spde
+        manuscript_locator: ch-spatial.md#spatial-random-fields
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gneiting2002space
+        manuscript_locator: ch-spatial.md#spatial-random-fields
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kriging
+    title: Kriging as constrained kernel prediction
+    contribution: adapted-and-expanded
+    sources:
+      - stein1999
+    locators:
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#kriging
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spatial-anisotropy
+    title: Anisotropy and nonstationarity
+    contribution: adapted-and-expanded
+    sources:
+      - matern1960
+      - stein1999
+    locators:
+      - source: matern1960
+        manuscript_locator: ch-spatial.md#spatial-anisotropy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#spatial-anisotropy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spatial-spde
+    title: Matérn fields and the SPDE connection
+    contribution: adapted-and-expanded
+    sources:
+      - lindgren2011spde
+    locators:
+      - source: lindgren2011spde
+        manuscript_locator: ch-spatial.md#spatial-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spatiotemporal-kernels
+    title: Space-time covariance design
+    contribution: adapted-and-expanded
+    sources:
+      - gneiting2002space
+    locators:
+      - source: gneiting2002space
+        manuscript_locator: ch-spatial.md#spatiotemporal-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: multivariate-spatial
+    title: Multivariate fields and change of support
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: matern1960
+        manuscript_locator: ch-spatial.md#multivariate-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#multivariate-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011spde
+        manuscript_locator: ch-spatial.md#multivariate-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gneiting2002space
+        manuscript_locator: ch-spatial.md#multivariate-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spatial-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: matern1960
+        manuscript_locator: ch-spatial.md#spatial-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#spatial-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011spde
+        manuscript_locator: ch-spatial.md#spatial-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gneiting2002space
+        manuscript_locator: ch-spatial.md#spatial-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spatial-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - matern1960
+      - stein1999
+      - lindgren2011spde
+      - gneiting2002space
+    locators:
+      - source: matern1960
+        manuscript_locator: ch-spatial.md#spatial-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#spatial-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011spde
+        manuscript_locator: ch-spatial.md#spatial-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gneiting2002space
+        manuscript_locator: ch-spatial.md#spatial-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: matern1960
+        manuscript_locator: ch-spatial.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: stein1999
+        manuscript_locator: ch-spatial.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011spde
+        manuscript_locator: ch-spatial.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gneiting2002space
+        manuscript_locator: ch-spatial.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

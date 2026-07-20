@@ -1,0 +1,12 @@
+[
+  {
+    "from": "distribution-shift-robustness-and-conformal-prediction#prop-kmm-moment-balance",
+    "to": "kernel-mean-embeddings#prop-29-6",
+    "note": "Kernel mean matching controls RKHS moments by the same MMD witness-function duality."
+  },
+  {
+    "from": "distribution-shift-robustness-and-conformal-prediction#algo-reliable-kernel-pipeline",
+    "to": "kernel-mean-embeddings#def-29-3",
+    "note": "Uses MMD as a shift diagnostic before any correction or conformal calibration."
+  }
+]

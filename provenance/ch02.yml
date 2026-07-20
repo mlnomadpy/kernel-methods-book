@@ -1,0 +1,344 @@
+chapter: ch02
+slug: kernel-tricks
+title: The Kernel Trick and the Representer Theorem
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - vapnik1995
+  - scholkopf2002
+  - aronszajn1950
+  - kimeldorf1971
+  - scholkopf2001
+  - rahimi2007
+  - shawe2004
+  - aizerman1964
+  - boser1992
+  - argyriou2009
+sections:
+  - id: motivation-from-supervised-learning
+    title: Why map data to a Hilbert space?
+    contribution: adapted-and-expanded
+    sources: &a1
+      - vapnik1995
+      - scholkopf2002
+      - aronszajn1950
+      - kimeldorf1971
+      - scholkopf2001
+      - rahimi2007
+      - shawe2004
+      - aizerman1964
+      - boser1992
+      - argyriou2009
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aizerman1964
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boser1992
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch02.md#motivation-from-supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: the-kernel-trick
+    title: The kernel trick
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aizerman1964
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boser1992
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch02.md#the-kernel-trick
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: the-representer-theorem
+    title: The representer theorem
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aizerman1964
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boser1992
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch02.md#the-representer-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: a-recipe-for-kernelizing-an-algorithm
+    title: A general recipe for kernelizing an algorithm
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aizerman1964
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boser1992
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch02.md#a-recipe-for-kernelizing-an-algorithm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aizerman1964
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boser1992
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch02.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - vapnik1995
+      - scholkopf2002
+      - aronszajn1950
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aizerman1964
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boser1992
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch02.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

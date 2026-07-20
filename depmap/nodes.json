@@ -66,10 +66,21 @@
   "title": "Orthogonal projection and the Riesz representation theorem"
  },
  {
+  "key": "preliminaries#def-bochner-integral",
+  "id": "def-bochner-integral",
+  "kind": "def",
+  "kindLabel": "Definition P.7",
+  "chapter": "preliminaries",
+  "chapterTitle": "Mathematical Preliminaries",
+  "chapterNum": "P",
+  "src": "ch-prelim",
+  "title": "Bochner integrability"
+ },
+ {
   "key": "preliminaries#def-p-7",
   "id": "def-p-7",
   "kind": "def",
-  "kindLabel": "Definition P.7",
+  "kindLabel": "Definition P.8",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -80,7 +91,7 @@
   "key": "preliminaries#thm-p-8",
   "id": "thm-p-8",
   "kind": "thm",
-  "kindLabel": "Theorem P.8",
+  "kindLabel": "Theorem P.9",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -91,7 +102,7 @@
   "key": "preliminaries#def-p-9",
   "id": "def-p-9",
   "kind": "def",
-  "kindLabel": "Definition P.9",
+  "kindLabel": "Definition P.10",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -102,7 +113,7 @@
   "key": "preliminaries#def-p-10",
   "id": "def-p-10",
   "kind": "def",
-  "kindLabel": "Definition P.10",
+  "kindLabel": "Definition P.11",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -113,7 +124,7 @@
   "key": "preliminaries#def-p-11",
   "id": "def-p-11",
   "kind": "def",
-  "kindLabel": "Definition P.11",
+  "kindLabel": "Definition P.12",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -124,7 +135,7 @@
   "key": "preliminaries#thm-p-12",
   "id": "thm-p-12",
   "kind": "thm",
-  "kindLabel": "Theorem P.12",
+  "kindLabel": "Theorem P.13",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -135,18 +146,18 @@
   "key": "preliminaries#def-p-13",
   "id": "def-p-13",
   "kind": "def",
-  "kindLabel": "Definition P.13",
+  "kindLabel": "Definition P.14",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
   "src": "ch-prelim",
-  "title": "Bayes' rule and conditional expectation"
+  "title": "Bayes’ rule and conditional expectation"
  },
  {
   "key": "preliminaries#prop-p-14",
   "id": "prop-p-14",
   "kind": "prop",
-  "kindLabel": "Proposition P.14",
+  "kindLabel": "Proposition P.15",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -157,7 +168,7 @@
   "key": "preliminaries#def-p-15",
   "id": "def-p-15",
   "kind": "def",
-  "kindLabel": "Definition P.15",
+  "kindLabel": "Definition P.16",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -168,18 +179,18 @@
   "key": "preliminaries#thm-p-16",
   "id": "thm-p-16",
   "kind": "thm",
-  "kindLabel": "Theorem P.16",
+  "kindLabel": "Theorem P.17",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
   "src": "ch-prelim",
-  "title": "Hoeffding's inequality"
+  "title": "Hoeffding’s inequality"
  },
  {
   "key": "preliminaries#def-p-17",
   "id": "def-p-17",
   "kind": "def",
-  "kindLabel": "Definition P.17",
+  "kindLabel": "Definition P.18",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -190,7 +201,7 @@
   "key": "preliminaries#def-p-18",
   "id": "def-p-18",
   "kind": "def",
-  "kindLabel": "Definition P.18",
+  "kindLabel": "Definition P.19",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -201,7 +212,7 @@
   "key": "preliminaries#def-p-19",
   "id": "def-p-19",
   "kind": "def",
-  "kindLabel": "Definition P.19",
+  "kindLabel": "Definition P.20",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -212,7 +223,7 @@
   "key": "preliminaries#def-p-20",
   "id": "def-p-20",
   "kind": "def",
-  "kindLabel": "Definition P.20",
+  "kindLabel": "Definition P.21",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -223,7 +234,7 @@
   "key": "preliminaries#def-p-21",
   "id": "def-p-21",
   "kind": "def",
-  "kindLabel": "Definition P.21",
+  "kindLabel": "Definition P.22",
   "chapter": "preliminaries",
   "chapterTitle": "Mathematical Preliminaries",
   "chapterNum": "P",
@@ -869,6 +880,17 @@
   "title": "Theorem (dual program, quantile SVR, Takeuchi, Le, Sears, and Smola 2006)"
  },
  {
+  "key": "support-vector-regression#alg-svr-distributional",
+  "id": "alg-svr-distributional",
+  "kind": "algo",
+  "kindLabel": "Algorithm 6.2",
+  "chapter": "support-vector-regression",
+  "chapterTitle": "Support Vector Regression",
+  "chapterNum": 6,
+  "src": "ch-svr",
+  "title": "Algorithm (fit a kernel quantile family)"
+ },
+ {
   "key": "support-vector-regression#def-6-8",
   "id": "def-6-8",
   "kind": "def",
@@ -905,7 +927,7 @@
   "key": "support-vector-regression#algo-6-2",
   "id": "algo-6-2",
   "kind": "algo",
-  "kindLabel": "Algorithm 6.2",
+  "kindLabel": "Algorithm 6.3",
   "chapter": "support-vector-regression",
   "chapterTitle": "Support Vector Regression",
   "chapterNum": 6,
@@ -1273,7 +1295,7 @@
   "chapterTitle": "Learning Theory in RKHS Balls",
   "chapterNum": 11,
   "src": "ch04",
-  "title": "Theorem (McDiarmid's bounded-differences inequality)"
+  "title": "Theorem (McDiarmid’s bounded-differences inequality)"
  },
  {
   "key": "learning-theory#thm-11-8",
@@ -1405,7 +1427,7 @@
   "chapterTitle": "Learning Theory in RKHS Balls",
   "chapterNum": 11,
   "src": "ch04",
-  "title": "Theorem (Slater's constraint qualification)"
+  "title": "Theorem (Slater’s constraint qualification)"
  },
  {
   "key": "learning-theory#prop-11-20",
@@ -1438,7 +1460,7 @@
   "chapterTitle": "VC Theory and Generalization",
   "chapterNum": 12,
   "src": "ch-vc",
-  "title": "Corollary (Hoeffding's inequality)"
+  "title": "Corollary (Hoeffding’s inequality)"
  },
  {
   "key": "vc-theory-and-generalization#thm-12-3",
@@ -2153,7 +2175,7 @@
   "chapterTitle": "Translation-Invariant, Semigroup, and Probabilistic Kernels",
   "chapterNum": 19,
   "src": "ch08",
-  "title": "Parseval's formula"
+  "title": "Parseval’s formula"
  },
  {
   "key": "kernel-families#thm-19-8",
@@ -3209,7 +3231,7 @@
   "chapterTitle": "Signature and Sequence-Path Kernels",
   "chapterNum": 26,
   "src": "ch-signature",
-  "title": "Theorem (Chen's identity)"
+  "title": "Theorem (Chen’s identity)"
  },
  {
   "key": "signature-and-time-series-kernels#prop-26-4",
@@ -3784,6 +3806,28 @@
   "title": "Algorithm (MMDAgg, aggregated two-sample test)"
  },
  {
+  "key": "kernel-hypothesis-testing#alg-testing-block-design",
+  "id": "alg-testing-block-design",
+  "kind": "algo",
+  "kindLabel": "Algorithm 30.4",
+  "chapter": "kernel-hypothesis-testing",
+  "chapterTitle": "Kernel Hypothesis Testing",
+  "chapterNum": 30,
+  "src": "ch-testing",
+  "title": "Algorithm (choose an MMD estimator under a compute budget)"
+ },
+ {
+  "key": "kernel-hypothesis-testing#prop-testing-exchangeability",
+  "id": "prop-testing-exchangeability",
+  "kind": "prop",
+  "kindLabel": "Proposition 30.6",
+  "chapter": "kernel-hypothesis-testing",
+  "chapterTitle": "Kernel Hypothesis Testing",
+  "chapterNum": 30,
+  "src": "ch-testing",
+  "title": "Proposition (what makes a permutation p-value exact)"
+ },
+ {
   "key": "optimal-transport-and-kernels#def-31-1",
   "id": "def-31-1",
   "kind": "def",
@@ -4045,7 +4089,7 @@
   "chapterTitle": "Conditional Mean Embeddings and Kernel Bayes' Rule",
   "chapterNum": 33,
   "src": "ch-cme",
-  "title": "Algorithm (Kernel Bayes' Rule)"
+  "title": "Algorithm (Kernel Bayes’ Rule)"
  },
  {
   "key": "conditional-mean-embeddings#algo-33-3",
@@ -4089,7 +4133,7 @@
   "chapterTitle": "Kernel Stein Discrepancy and Stein Methods",
   "chapterNum": 34,
   "src": "ch-ksd",
-  "title": "Theorem (Stein's identity)"
+  "title": "Theorem (Stein’s identity)"
  },
  {
   "key": "kernel-stein-discrepancy#def-34-4",
@@ -4422,6 +4466,17 @@
   "title": "Algorithm (stochastic gradient descent)"
  },
  {
+  "key": "large-scale-kernels#algo-eigenpro",
+  "id": "algo-eigenpro",
+  "kind": "algo",
+  "kindLabel": "Algorithm 37.1",
+  "chapter": "large-scale-kernels",
+  "chapterTitle": "Large-Scale Kernel Machines",
+  "chapterNum": 37,
+  "src": "ch13",
+  "title": "Algorithm (EigenPro-style matrix-free solve)"
+ },
+ {
   "key": "large-scale-kernels#def-37-5",
   "id": "def-37-5",
   "kind": "def",
@@ -4469,7 +4524,7 @@
   "key": "large-scale-kernels#algo-37-1",
   "id": "algo-37-1",
   "kind": "algo",
-  "kindLabel": "Algorithm 37.1",
+  "kindLabel": "Algorithm 37.2",
   "chapter": "large-scale-kernels",
   "chapterTitle": "Large-Scale Kernel Machines",
   "chapterNum": 37,
@@ -4502,7 +4557,7 @@
   "key": "large-scale-kernels#algo-37-2",
   "id": "algo-37-2",
   "kind": "algo",
-  "kindLabel": "Algorithm 37.2",
+  "kindLabel": "Algorithm 37.3",
   "chapter": "large-scale-kernels",
   "chapterTitle": "Large-Scale Kernel Machines",
   "chapterNum": 37,
@@ -4552,6 +4607,17 @@
   "chapterNum": 37,
   "src": "ch13",
   "title": "Theorem (Rahimi and Recht, 2007)"
+ },
+ {
+  "key": "large-scale-kernels#alg-large-scale-precision",
+  "id": "alg-large-scale-precision",
+  "kind": "algo",
+  "kindLabel": "Algorithm 37.4",
+  "chapter": "large-scale-kernels",
+  "chapterTitle": "Large-Scale Kernel Machines",
+  "chapterNum": 37,
+  "src": "ch13",
+  "title": "Algorithm (precision-aware matrix-free KRR)"
  },
  {
   "key": "multiple-kernel-learning#def-38-1",
@@ -4760,7 +4826,7 @@
   "chapterTitle": "Deep Learning from a Kernel Point of View",
   "chapterNum": 39,
   "src": "ch14",
-  "title": "Proposition (gradient descent as kernel regression)"
+  "title": "Proposition (NTK gradient flow; Jacot, Gabriel, and Hongler 2018)"
  },
  {
   "key": "kernels-and-deep-learning#prop-39-7",
@@ -5027,6 +5093,17 @@
   "title": "Lemma (variances sum to the information gain)"
  },
  {
+  "key": "bayesian-optimization-and-bandits#alg-bo-safe",
+  "id": "alg-bo-safe",
+  "kind": "algo",
+  "kindLabel": "Algorithm 41.3",
+  "chapter": "bayesian-optimization-and-bandits",
+  "chapterTitle": "Kernelized Bandits and Bayesian Optimization",
+  "chapterNum": 41,
+  "src": "ch-bo",
+  "title": "Algorithm (safe GP optimization)"
+ },
+ {
   "key": "kernels-now#def-42-1",
   "id": "def-42-1",
   "kind": "def",
@@ -5068,18 +5145,18 @@
   "chapterTitle": "Modern Generalization Theory",
   "chapterNum": 42,
   "src": "ch-modern",
-  "title": "Theorem (benign overfitting; Bartlett, Long, Lugosi, and Tsigler 2020)"
+  "title": "Theorem (effective-rank characterization; Bartlett, Long, Lugosi, and Tsigler 2020)"
  },
  {
-  "key": "kernels-now#prop-42-5",
-  "id": "prop-42-5",
-  "kind": "prop",
-  "kindLabel": "Proposition 42.5",
+  "key": "kernels-now#alg-modern-pac-bayes",
+  "id": "alg-modern-pac-bayes",
+  "kind": "algo",
+  "kindLabel": "Algorithm 42.1",
   "chapter": "kernels-now",
   "chapterTitle": "Modern Generalization Theory",
   "chapterNum": 42,
   "src": "ch-modern",
-  "title": "Proposition (omniscient learning curve; Sollich 1999, Bordelon et al. 2020, Canatar et al. 2021)"
+  "title": "Algorithm (a PAC-Bayes reporting protocol)"
  },
  {
   "key": "the-frontier#def-43-1",
@@ -5190,5 +5267,467 @@
   "chapterNum": 44,
   "src": "ch-apps",
   "title": "Algorithm (End-to-end kernel method)"
+ },
+ {
+  "key": "vector-and-operator-valued-kernels#def-operator-kernel",
+  "id": "def-operator-kernel",
+  "kind": "def",
+  "kindLabel": "Definition 45.1",
+  "chapter": "vector-and-operator-valued-kernels",
+  "chapterTitle": "Vector- and Operator-Valued Kernels",
+  "chapterNum": 45,
+  "src": "ch-operator",
+  "title": "Definition (operator-valued positive definite kernel)"
+ },
+ {
+  "key": "vector-and-operator-valued-kernels#thm-operator-representer",
+  "id": "thm-operator-representer",
+  "kind": "thm",
+  "kindLabel": "Theorem 45.2",
+  "chapter": "vector-and-operator-valued-kernels",
+  "chapterTitle": "Vector- and Operator-Valued Kernels",
+  "chapterNum": 45,
+  "src": "ch-operator",
+  "title": "Theorem (finite representer form)"
+ },
+ {
+  "key": "vector-and-operator-valued-kernels#prop-operator-task-rotation",
+  "id": "prop-operator-task-rotation",
+  "kind": "prop",
+  "kindLabel": "Proposition 45.3",
+  "chapter": "vector-and-operator-valued-kernels",
+  "chapterTitle": "Vector- and Operator-Valued Kernels",
+  "chapterNum": 45,
+  "src": "ch-operator",
+  "title": "Proposition (task rotation decouples a separable kernel)"
+ },
+ {
+  "key": "vector-and-operator-valued-kernels#algo-operator-model-selection",
+  "id": "algo-operator-model-selection",
+  "kind": "algo",
+  "kindLabel": "Algorithm 45.1",
+  "chapter": "vector-and-operator-valued-kernels",
+  "chapterTitle": "Vector- and Operator-Valued Kernels",
+  "chapterNum": 45,
+  "src": "ch-operator",
+  "title": "Algorithm (multi-output model-selection workflow)"
+ },
+ {
+  "key": "semi-supervised-and-manifold-regularization#def-manifold-assumption",
+  "id": "def-manifold-assumption",
+  "kind": "def",
+  "kindLabel": "Definition 46.1",
+  "chapter": "semi-supervised-and-manifold-regularization",
+  "chapterTitle": "Semi-Supervised and Manifold Regularization",
+  "chapterNum": 46,
+  "src": "ch-manifold",
+  "title": "Definition (manifold or cluster assumption)"
+ },
+ {
+  "key": "semi-supervised-and-manifold-regularization#prop-graph-energy",
+  "id": "prop-graph-energy",
+  "kind": "prop",
+  "kindLabel": "Proposition 46.2",
+  "chapter": "semi-supervised-and-manifold-regularization",
+  "chapterTitle": "Semi-Supervised and Manifold Regularization",
+  "chapterNum": 46,
+  "src": "ch-manifold",
+  "title": "Proposition (Laplacian energy)"
+ },
+ {
+  "key": "semi-supervised-and-manifold-regularization#thm-manifold-representer",
+  "id": "thm-manifold-representer",
+  "kind": "thm",
+  "kindLabel": "Theorem 46.3",
+  "chapter": "semi-supervised-and-manifold-regularization",
+  "chapterTitle": "Semi-Supervised and Manifold Regularization",
+  "chapterNum": 46,
+  "src": "ch-manifold",
+  "title": "Theorem (manifold representer form)"
+ },
+ {
+  "key": "semi-supervised-and-manifold-regularization#algo-manifold-regularization",
+  "id": "algo-manifold-regularization",
+  "kind": "algo",
+  "kindLabel": "Algorithm 46.1",
+  "chapter": "semi-supervised-and-manifold-regularization",
+  "chapterTitle": "Semi-Supervised and Manifold Regularization",
+  "chapterNum": 46,
+  "src": "ch-manifold",
+  "title": "Algorithm (inductive manifold-regularized regression)"
+ },
+ {
+  "key": "semi-supervised-and-manifold-regularization#prop-harmonic-extension",
+  "id": "prop-harmonic-extension",
+  "kind": "prop",
+  "kindLabel": "Proposition 46.4",
+  "chapter": "semi-supervised-and-manifold-regularization",
+  "chapterTitle": "Semi-Supervised and Manifold Regularization",
+  "chapterNum": 46,
+  "src": "ch-manifold",
+  "title": "Proposition (graph harmonic extension)"
+ },
+ {
+  "key": "semi-supervised-and-manifold-regularization#algo-manifold-large-scale",
+  "id": "algo-manifold-large-scale",
+  "kind": "algo",
+  "kindLabel": "Algorithm 46.2",
+  "chapter": "semi-supervised-and-manifold-regularization",
+  "chapterTitle": "Semi-Supervised and Manifold Regularization",
+  "chapterNum": 46,
+  "src": "ch-manifold",
+  "title": "Algorithm (large-scale manifold regularization)"
+ },
+ {
+  "key": "inverse-learning-and-spectral-regularization#def-spectral-filter",
+  "id": "def-spectral-filter",
+  "kind": "def",
+  "kindLabel": "Definition 47.1",
+  "chapter": "inverse-learning-and-spectral-regularization",
+  "chapterTitle": "Inverse Learning and Spectral Regularization",
+  "chapterNum": 47,
+  "src": "ch-inverse",
+  "title": "Definition (spectral regularization family)"
+ },
+ {
+  "key": "inverse-learning-and-spectral-regularization#prop-landweber-stability",
+  "id": "prop-landweber-stability",
+  "kind": "prop",
+  "kindLabel": "Proposition 47.2",
+  "chapter": "inverse-learning-and-spectral-regularization",
+  "chapterTitle": "Inverse Learning and Spectral Regularization",
+  "chapterNum": 47,
+  "src": "ch-inverse",
+  "title": "Proposition (Landweber stability)"
+ },
+ {
+  "key": "inverse-learning-and-spectral-regularization#algo-spectral-regularization",
+  "id": "algo-spectral-regularization",
+  "kind": "algo",
+  "kindLabel": "Algorithm 47.1",
+  "chapter": "inverse-learning-and-spectral-regularization",
+  "chapterTitle": "Inverse Learning and Spectral Regularization",
+  "chapterNum": 47,
+  "src": "ch-inverse",
+  "title": "Algorithm (matrix-free early-stopped kernel regression)"
+ },
+ {
+  "key": "inverse-learning-and-spectral-regularization#prop-inverse-discrepancy",
+  "id": "prop-inverse-discrepancy",
+  "kind": "prop",
+  "kindLabel": "Proposition 47.3",
+  "chapter": "inverse-learning-and-spectral-regularization",
+  "chapterTitle": "Inverse Learning and Spectral Regularization",
+  "chapterNum": 47,
+  "src": "ch-inverse",
+  "title": "Proposition (monotone discrepancy crossing for Landweber)"
+ },
+ {
+  "key": "inverse-learning-and-spectral-regularization#algo-inverse-comparison",
+  "id": "algo-inverse-comparison",
+  "kind": "algo",
+  "kindLabel": "Algorithm 47.2",
+  "chapter": "inverse-learning-and-spectral-regularization",
+  "chapterTitle": "Inverse Learning and Spectral Regularization",
+  "chapterNum": 47,
+  "src": "ch-inverse",
+  "title": "Algorithm (spectral regularizer comparison)"
+ },
+ {
+  "key": "deep-kernel-learning#def-dkl",
+  "id": "def-dkl",
+  "kind": "def",
+  "kindLabel": "Definition 48.1",
+  "chapter": "deep-kernel-learning",
+  "chapterTitle": "Deep Kernel Learning",
+  "chapterNum": 48,
+  "src": "ch-dkl",
+  "title": "Definition (deep kernel learning)"
+ },
+ {
+  "key": "deep-kernel-learning#prop-dkl-gradient",
+  "id": "prop-dkl-gradient",
+  "kind": "prop",
+  "kindLabel": "Proposition 48.2",
+  "chapter": "deep-kernel-learning",
+  "chapterTitle": "Deep Kernel Learning",
+  "chapterNum": 48,
+  "src": "ch-dkl",
+  "title": "Proposition (covariance-parameter gradient)"
+ },
+ {
+  "key": "deep-kernel-learning#algo-dkl-training",
+  "id": "algo-dkl-training",
+  "kind": "algo",
+  "kindLabel": "Algorithm 48.1",
+  "chapter": "deep-kernel-learning",
+  "chapterTitle": "Deep Kernel Learning",
+  "chapterNum": 48,
+  "src": "ch-dkl",
+  "title": "Algorithm (auditable DKL training)"
+ },
+ {
+  "key": "deep-kernel-learning#prop-dkl-scale-invariance",
+  "id": "prop-dkl-scale-invariance",
+  "kind": "prop",
+  "kindLabel": "Proposition 48.3",
+  "chapter": "deep-kernel-learning",
+  "chapterTitle": "Deep Kernel Learning",
+  "chapterNum": 48,
+  "src": "ch-dkl",
+  "title": "Proposition (feature-length-scale invariance)"
+ },
+ {
+  "key": "deep-kernel-learning#algo-dkl-stress-test",
+  "id": "algo-dkl-stress-test",
+  "kind": "algo",
+  "kindLabel": "Algorithm 48.2",
+  "chapter": "deep-kernel-learning",
+  "chapterTitle": "Deep Kernel Learning",
+  "chapterNum": 48,
+  "src": "ch-dkl",
+  "title": "Algorithm (DKL stress-test protocol)"
+ },
+ {
+  "key": "smoothing-splines-and-additive-rkhs#def-spline-null-space",
+  "id": "def-spline-null-space",
+  "kind": "def",
+  "kindLabel": "Definition 49.1",
+  "chapter": "smoothing-splines-and-additive-rkhs",
+  "chapterTitle": "Smoothing Splines and Additive RKHS Models",
+  "chapterNum": 49,
+  "src": "ch-splines",
+  "title": "Definition (penalty null space)"
+ },
+ {
+  "key": "smoothing-splines-and-additive-rkhs#thm-spline-representer",
+  "id": "thm-spline-representer",
+  "kind": "thm",
+  "kindLabel": "Theorem 49.2",
+  "chapter": "smoothing-splines-and-additive-rkhs",
+  "chapterTitle": "Smoothing Splines and Additive RKHS Models",
+  "chapterNum": 49,
+  "src": "ch-splines",
+  "title": "Theorem (smoothing-spline representer form)"
+ },
+ {
+  "key": "smoothing-splines-and-additive-rkhs#prop-spline-loocv",
+  "id": "prop-spline-loocv",
+  "kind": "prop",
+  "kindLabel": "Proposition 49.3",
+  "chapter": "smoothing-splines-and-additive-rkhs",
+  "chapterTitle": "Smoothing Splines and Additive RKHS Models",
+  "chapterNum": 49,
+  "src": "ch-splines",
+  "title": "Proposition (leave-one-out residual identity)"
+ },
+ {
+  "key": "smoothing-splines-and-additive-rkhs#algo-spline-anova-fit",
+  "id": "algo-spline-anova-fit",
+  "kind": "algo",
+  "kindLabel": "Algorithm 49.1",
+  "chapter": "smoothing-splines-and-additive-rkhs",
+  "chapterTitle": "Smoothing Splines and Additive RKHS Models",
+  "chapterNum": 49,
+  "src": "ch-splines",
+  "title": "Algorithm (auditable additive RKHS fit)"
+ },
+ {
+  "key": "spatial-and-spatiotemporal-kernels#def-semivariogram",
+  "id": "def-semivariogram",
+  "kind": "def",
+  "kindLabel": "Definition 50.1",
+  "chapter": "spatial-and-spatiotemporal-kernels",
+  "chapterTitle": "Spatial and Spatiotemporal Kernel Models",
+  "chapterNum": 50,
+  "src": "ch-spatial",
+  "title": "Definition (semivariogram)"
+ },
+ {
+  "key": "spatial-and-spatiotemporal-kernels#thm-ordinary-kriging",
+  "id": "thm-ordinary-kriging",
+  "kind": "thm",
+  "kindLabel": "Theorem 50.2",
+  "chapter": "spatial-and-spatiotemporal-kernels",
+  "chapterTitle": "Spatial and Spatiotemporal Kernel Models",
+  "chapterNum": 50,
+  "src": "ch-spatial",
+  "title": "Theorem (ordinary kriging system)"
+ },
+ {
+  "key": "spatial-and-spatiotemporal-kernels#prop-spde-sparsity",
+  "id": "prop-spde-sparsity",
+  "kind": "prop",
+  "kindLabel": "Proposition 50.3",
+  "chapter": "spatial-and-spatiotemporal-kernels",
+  "chapterTitle": "Spatial and Spatiotemporal Kernel Models",
+  "chapterNum": 50,
+  "src": "ch-spatial",
+  "title": "Proposition (local basis yields sparse precision)"
+ },
+ {
+  "key": "spatial-and-spatiotemporal-kernels#algo-spatial-workflow",
+  "id": "algo-spatial-workflow",
+  "kind": "algo",
+  "kindLabel": "Algorithm 50.1",
+  "chapter": "spatial-and-spatiotemporal-kernels",
+  "chapterTitle": "Spatial and Spatiotemporal Kernel Models",
+  "chapterNum": 50,
+  "src": "ch-spatial",
+  "title": "Algorithm (spatial kernel workflow)"
+ },
+ {
+  "key": "distribution-shift-robustness-and-conformal-prediction#def-shift-types",
+  "id": "def-shift-types",
+  "kind": "def",
+  "kindLabel": "Definition 51.1",
+  "chapter": "distribution-shift-robustness-and-conformal-prediction",
+  "chapterTitle": "Distribution Shift, Robustness, and Conformal Prediction",
+  "chapterNum": 51,
+  "src": "ch-reliability",
+  "title": "Definition (common shift models)"
+ },
+ {
+  "key": "distribution-shift-robustness-and-conformal-prediction#prop-kmm-moment-balance",
+  "id": "prop-kmm-moment-balance",
+  "kind": "prop",
+  "kindLabel": "Proposition 51.2",
+  "chapter": "distribution-shift-robustness-and-conformal-prediction",
+  "chapterTitle": "Distribution Shift, Robustness, and Conformal Prediction",
+  "chapterNum": 51,
+  "src": "ch-reliability",
+  "title": "Proposition (RKHS moment balance)"
+ },
+ {
+  "key": "distribution-shift-robustness-and-conformal-prediction#thm-split-conformal-coverage",
+  "id": "thm-split-conformal-coverage",
+  "kind": "thm",
+  "kindLabel": "Theorem 51.3",
+  "chapter": "distribution-shift-robustness-and-conformal-prediction",
+  "chapterTitle": "Distribution Shift, Robustness, and Conformal Prediction",
+  "chapterNum": 51,
+  "src": "ch-reliability",
+  "title": "Theorem (split-conformal marginal coverage)"
+ },
+ {
+  "key": "distribution-shift-robustness-and-conformal-prediction#algo-reliable-kernel-pipeline",
+  "id": "algo-reliable-kernel-pipeline",
+  "kind": "algo",
+  "kindLabel": "Algorithm 51.1",
+  "chapter": "distribution-shift-robustness-and-conformal-prediction",
+  "chapterTitle": "Distribution Shift, Robustness, and Conformal Prediction",
+  "chapterNum": 51,
+  "src": "ch-reliability",
+  "title": "Algorithm (shift-aware kernel prediction)"
+ },
+ {
+  "key": "dynamical-systems-control-and-reinforcement-learning#prop-kedmd-eigenfunction",
+  "id": "prop-kedmd-eigenfunction",
+  "kind": "prop",
+  "kindLabel": "Proposition 52.1",
+  "chapter": "dynamical-systems-control-and-reinforcement-learning",
+  "chapterTitle": "Kernels for Dynamical Systems, Control, and Reinforcement Learning",
+  "chapterNum": 52,
+  "src": "ch-dynamics",
+  "title": "Proposition (empirical Koopman eigenfunction)"
+ },
+ {
+  "key": "dynamical-systems-control-and-reinforcement-learning#def-regularized-policy-evaluation",
+  "id": "def-regularized-policy-evaluation",
+  "kind": "def",
+  "kindLabel": "Definition 52.2",
+  "chapter": "dynamical-systems-control-and-reinforcement-learning",
+  "chapterTitle": "Kernels for Dynamical Systems, Control, and Reinforcement Learning",
+  "chapterNum": 52,
+  "src": "ch-dynamics",
+  "title": "Definition (regularized RKHS policy evaluation)"
+ },
+ {
+  "key": "dynamical-systems-control-and-reinforcement-learning#algo-kernel-sequential-audit",
+  "id": "algo-kernel-sequential-audit",
+  "kind": "algo",
+  "kindLabel": "Algorithm 52.1",
+  "chapter": "dynamical-systems-control-and-reinforcement-learning",
+  "chapterTitle": "Kernels for Dynamical Systems, Control, and Reinforcement Learning",
+  "chapterNum": 52,
+  "src": "ch-dynamics",
+  "title": "Algorithm (auditable sequential kernel model)"
+ },
+ {
+  "key": "scientific-computing-and-operator-learning#thm-functional-representer",
+  "id": "thm-functional-representer",
+  "kind": "thm",
+  "kindLabel": "Theorem 53.1",
+  "chapter": "scientific-computing-and-operator-learning",
+  "chapterTitle": "Kernels for Scientific Computing and Operator Learning",
+  "chapterNum": 53,
+  "src": "ch-scientific",
+  "title": "Theorem (representer theorem for linear scientific information)"
+ },
+ {
+  "key": "scientific-computing-and-operator-learning#prop-collocation-psd",
+  "id": "prop-collocation-psd",
+  "kind": "prop",
+  "kindLabel": "Proposition 53.2",
+  "chapter": "scientific-computing-and-operator-learning",
+  "chapterTitle": "Kernels for Scientific Computing and Operator Learning",
+  "chapterNum": 53,
+  "src": "ch-scientific",
+  "title": "Proposition (validity of the symmetric collocation matrix)"
+ },
+ {
+  "key": "scientific-computing-and-operator-learning#algo-scientific-kernel-workflow",
+  "id": "algo-scientific-kernel-workflow",
+  "kind": "algo",
+  "kindLabel": "Algorithm 53.1",
+  "chapter": "scientific-computing-and-operator-learning",
+  "chapterTitle": "Kernels for Scientific Computing and Operator Learning",
+  "chapterNum": 53,
+  "src": "ch-scientific",
+  "title": "Algorithm (auditable scientific kernel solver)"
+ },
+ {
+  "key": "reproducing-kernel-banach-and-variation-spaces#def-rkbs",
+  "id": "def-rkbs",
+  "kind": "def",
+  "kindLabel": "Definition 54.1",
+  "chapter": "reproducing-kernel-banach-and-variation-spaces",
+  "chapterTitle": "Reproducing-Kernel Banach and Variation Spaces",
+  "chapterNum": 54,
+  "src": "ch-rkbs",
+  "title": "Definition (reproducing-kernel Banach space)"
+ },
+ {
+  "key": "reproducing-kernel-banach-and-variation-spaces#thm-rkbs-dual-representer",
+  "id": "thm-rkbs-dual-representer",
+  "kind": "thm",
+  "kindLabel": "Theorem 54.2",
+  "chapter": "reproducing-kernel-banach-and-variation-spaces",
+  "chapterTitle": "Reproducing-Kernel Banach and Variation Spaces",
+  "chapterNum": 54,
+  "src": "ch-rkbs",
+  "title": "Theorem (dual representer principle)"
+ },
+ {
+  "key": "reproducing-kernel-banach-and-variation-spaces#prop-rkbs-sparse-extreme",
+  "id": "prop-rkbs-sparse-extreme",
+  "kind": "prop",
+  "kindLabel": "Proposition 54.3",
+  "chapter": "reproducing-kernel-banach-and-variation-spaces",
+  "chapterTitle": "Reproducing-Kernel Banach and Variation Spaces",
+  "chapterNum": 54,
+  "src": "ch-rkbs",
+  "title": "Proposition (finite atomic extreme solutions)"
+ },
+ {
+  "key": "reproducing-kernel-banach-and-variation-spaces#algo-rkbs-column-generation",
+  "id": "algo-rkbs-column-generation",
+  "kind": "algo",
+  "kindLabel": "Algorithm 54.1",
+  "chapter": "reproducing-kernel-banach-and-variation-spaces",
+  "chapterTitle": "Reproducing-Kernel Banach and Variation Spaces",
+  "chapterNum": 54,
+  "src": "ch-rkbs",
+  "title": "Algorithm (atomic column generation)"
  }
 ]

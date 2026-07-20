@@ -1,0 +1,139 @@
+chapter: ch-svr
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "**The trough.** Sketch \\(|y-f|_\\varepsilon\\) as a function of \\(f\\) for fixed \\(y\\)
+      and \\(\\varepsilon=0.5\\). Mark the flat floor and the two ramps, and explain in one sentence
+      why a point landing on the floor gets a zero dual coefficient."
+    answer: "For epsilon=0.5 the loss is zero on f in [y-0.5,y+0.5]. To the left it is y-f-0.5, a ramp
+      of slope -1, and to the right it is f-y-0.5, a ramp of slope +1. A point strictly on the flat
+      floor has zero loss derivative, so its KKT multiplier and signed representer coefficient are
+      zero: moving the fitted function infinitesimally at that point creates no first-order
+      benefit."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: "**Redo the fit.** For the five points of the first worked example but with
+      \\(\\varepsilon=1\\), find the flattest line whose tube contains all points, identify the
+      support vectors, and give \\(w\\) and \\(b\\). Compare the SV count to the
+      \\(\\varepsilon=0.5\\) case."
+    answer: "With y_i=x_i, residuals are (1-w)x-b. To fit all five within a half-width-one tube, their
+      endpoint range 4|1-w| must be at most 2, so the smallest nonnegative |w| is w=0.5. Centering
+      endpoint residuals at zero gives b=1.5: residuals are (-1,-0.5,0,0.5,1). Points x=1 and x=5
+      bind the two tube edges and are the support vectors; the three interior points have zero
+      coefficients. The support count remains two, the same as at epsilon=0.5, but the line is
+      flatter (0.5x+1.5 versus 0.75x+0.75)."
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "**Never both.** Show that at the optimum of the \\(\\varepsilon\\)-SVR dual,
+      \\(\\alpha_i\\alpha_i^\\ast=0\\) for every \\(i\\). Argue that if some solution had
+      \\(\\alpha_i,\\alpha_i^\\ast\\) both positive, subtracting
+      \\(\\min(\\alpha_i,\\alpha_i^\\ast)\\) from both leaves the objective no smaller and stays
+      feasible."
+    answer: The dual depends on alpha_i and alpha_i* through beta_i=alpha_i-alpha_i*, except for the
+      term -epsilon(alpha_i+alpha_i*). If both are positive, subtract delta=min(alpha_i,alpha_i*)
+      from both. Beta, the equality constraint, the quadratic term, and feasibility boxes remain
+      unchanged, while the epsilon term increases the maximization objective by 2epsilon delta. Thus
+      both cannot be positive at an optimum when epsilon>0. At epsilon=0 the transformed solution is
+      equally good, so an optimum can always be represented with alpha_i alpha_i*=0.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "**Fewer slacks.** Prove geometrically that \\(\\xi_i\\xi_i^\\ast=0\\), so a single slack
+      per point suffices, and rederive the dual in the signed variable
+      \\(\\beta_i=\\alpha_i-\\alpha_i^\\ast\\), whose box is \\(-C/m\\le\\beta_i\\le C/m\\)
+      (source Problem 9.2)."
+    answer: A residual cannot be simultaneously above and below the tube, so at the primal minimum at
+      most one of xi_i=max(y_i-f_i-epsilon,0) and xi_i*=max(f_i-y_i-epsilon,0) is positive; hence
+      their product is zero and one slack delta_i=max(|y_i-f_i|-epsilon,0) suffices. In the dual set
+      beta_i=alpha_i-alpha_i*. The no-overlap representation gives alpha_i+alpha_i*=|beta_i|, so the
+      objective is beta^T y-(1/2)beta^T K beta-epsilon sum_i|beta_i|, subject to sum_i beta_i=0 and
+      -C/m<=beta_i<=C/m. This is exactly the two-multiplier dual expressed in one signed coordinate.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: "**Budget is active.** In the \\(\\nu=0.6\\) row of the second example, verify by hand that
+      \\(\\sum_i|\\beta_i|=C\\nu\\) and \\(\\sum_i\\beta_i=0\\), and recompute \\(\\varepsilon\\)
+      from the two in-bound support vectors using
+      \\(\\varepsilon=\\tfrac12[(y_i-g_i)-(y_j-g_j)]\\)."
+    answer: For beta=(-0.5,1,0,-1,0.5), sum_i|beta_i|=0.5+1+0+1+0.5=3=Cnu=5*0.6, and sum_i beta_i=0. The
+      in-bound edge vectors are x_0 and x_4. With g=K beta, y_0-g_0=-0.17968487 and
+      y_4-g_4=0.47968487. Taking upper minus lower and halving gives
+      epsilon=[0.47968487-(-0.17968487)]/2=0.32968487, which rounds to the reported 0.330; their
+      midpoint gives b=0.15.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: "**Ridge in disguise.** Take the Gaussian-loss row with \\(\\varepsilon=0\\) and show that
+      the primal is kernel ridge regression from the referenced chapter. Explain why every point
+      becomes a support vector, and connect the loss of sparsity to the missing flat floor."
+    answer: "With epsilon=0 and Gaussian residual loss, the primal is a squared empirical-error term
+      plus an RKHS squared norm, differing from KRR only by the conventional constants absorbed into
+      lambda. Its stationarity equation is the same shifted Gram linear system. Squared loss has no
+      interval on which its derivative vanishes: except for nongeneric exact cancellations, every
+      residual contributes and every representer coefficient is nonzero. Thus the Gaussian row
+      recovers dense kernel ridge regression, while epsilon-insensitive SVR obtains sparsity
+      precisely from its flat floor."
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "**One-sided regression.** First show that a naive free-offset formulation seeking a flat
+      function above all observations is degenerate: \\(w=0\\) and a sufficiently large unpenalized
+      \\(b\\) has zero objective. Repair the formulation by fixing or penalizing the offset
+      (equivalently, include the constant function in the penalized RKHS), keep only the slack family
+      for observations that fall above the fitted function, derive the resulting one-sided dual, and
+      relate its single multiplier family to \\(\\nu\\)-SVR with unequal budgets on the two edges
+      (source Problem 9.4)."
+    answer: "With a free unpenalized b, the naive upper-envelope problem is trivial: w=0 and b>=max_i
+      y_i gives zero slack and zero objective. Fix b=0 (or include the constant feature in the
+      penalized RKHS) and solve min (1/2)||w||^2+(C/m)sum_i xi_i subject to <w,Phi_i>>=y_i-xi_i,
+      xi_i>=0. Multipliers satisfy 0<=alpha_i<=C/m, w=sum_i alpha_i Phi_i, and the dual is max
+      alpha^T y-(1/2)alpha^T K alpha. Only one edge multiplier family remains and there is no
+      free-offset equality in the fixed-b version. Unequal two-edge budgets recover asymmetric
+      nu-SVR; sending one edge budget to zero yields this one-sided limit."
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "**Heteroscedastic tube.** With a two-function width model \\(g_1\\equiv 1\\),
+      \\(g_2(x)=x\\), work out how the fitted envelope \\(\\zeta_1+\\zeta_2 x\\) tilts on a dataset
+      whose noise grows with \\(x\\), and state the modified budget constraints that the dual must
+      satisfy."
+    answer: "The learned half-width is h(x)=zeta_1+zeta_2 x. When empirical noise grows with x,
+      feasibility and slack cost favor zeta_2>0, so upper and lower envelopes f(x)+/-h(x) spread
+      apart to the right while retaining baseline width zeta_1. The dual carries one budget per
+      width basis: sum_i(alpha_i+alpha_i*)<=C zeta_1 and sum_i(alpha_i+alpha_i*)x_i<=C zeta_2,
+      together with sum_i(alpha_i-alpha_i*)=0 and the usual boxes. The second constraint prices
+      support mass at large x more heavily and is what identifies the tilt."
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "**Median line.** Set \\(\\tau=\\tfrac12\\) in the quantile example. Show the box collapses
+      to the symmetric \\([0,\\tfrac{C}{2m}]\\) on both sides and the pinball loss becomes
+      \\(\\tfrac12|u|\\). The fit is \\(f(x)=0.92x+0.08\\); check that it lies between the
+      \\(\\tau=0.25\\) and \\(\\tau=0.75\\) lines, and name the row of the loss table it realizes."
+    answer: At tau=1/2 both ceilings are C/(2m), and tau max(u,0)+(1-tau)max(-u,0)=|u|/2, the scaled
+      Laplacian/absolute-deviation loss. On the sample domain x=1,...,6, the median line minus the
+      tau=.25 line is (0.92x+0.08)-(0.6x+0.4)=0.32(x-1)>=0. The tau=.75 line minus the median is
+      (0.75x+1.1)-(0.92x+0.08)=0.17(6-x)>=0. Thus it lies between them at every observed x and
+      realizes the Laplacian (least-absolute-deviation) row, up to the factor one half.
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: "**The quantile bracket.** From the dual equality \\(\\sum_i(\\alpha_i-\\alpha_i^\\ast)=0\\)
+      and the asymmetric ceilings, prove that any quantile-SVR fit satisfies
+      \\(\\tfrac{\\#\\text{below}}{m}\\le\\tau\\le\\tfrac{\\#\\text{below}+\\#\\text{on}}{m}\\),
+      then verify both inequalities on the two levels of the worked example."
+    answer: "Let B,O,A be counts strictly below, on, and above the fit. Below points carry
+      alpha*=C(1-tau)/m and above points carry alpha=C tau/m; on-point multipliers fill their
+      respective intervals. Equality sum alpha=sum alpha* implies the capped mass from either strict
+      side must be supplied by the other strict side plus at most O on-point capacity. Rearrangement
+      gives B<=m tau<=B+O, hence B/m<=tau<=(B+O)/m. In the example, tau=.25 has B=1,O=2:
+      1/6<=.25<=3/6. Tau=.75 has B=3,O=2: 3/6<=.75<=5/6."

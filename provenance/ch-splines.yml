@@ -1,0 +1,197 @@
+chapter: ch-splines
+slug: smoothing-splines-and-additive-rkhs
+title: Smoothing Splines and Additive RKHS Models
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - kimeldorf1971
+  - cravenwahba1979
+  - wahba1990
+  - green1984
+sections:
+  - id: roughness-to-estimator
+    title: From roughness to a finite estimator
+    contribution: adapted-and-expanded
+    sources: &a1
+      - kimeldorf1971
+      - cravenwahba1979
+      - wahba1990
+      - green1984
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#roughness-to-estimator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch-splines.md#roughness-to-estimator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-splines.md#roughness-to-estimator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch-splines.md#roughness-to-estimator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spline-representer
+    title: The spline representer theorem
+    contribution: adapted-and-expanded
+    sources:
+      - kimeldorf1971
+      - wahba1990
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#spline-representer
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-splines.md#spline-representer
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: green-spline-krr
+    title: Green functions, splines, and kernel ridge regression
+    contribution: adapted-and-expanded
+    sources:
+      - green1984
+    locators:
+      - source: green1984
+        manuscript_locator: ch-splines.md#green-spline-krr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: smoother-matrix
+    title: The smoother matrix and effective complexity
+    contribution: adapted-and-expanded
+    sources:
+      - cravenwahba1979
+    locators:
+      - source: cravenwahba1979
+        manuscript_locator: ch-splines.md#smoother-matrix
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spline-anova
+    title: Smoothing-spline ANOVA
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#spline-anova
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch-splines.md#spline-anova
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-splines.md#spline-anova
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch-splines.md#spline-anova
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spline-bayesian-view
+    title: Bayesian interpretation and uncertainty
+    contribution: adapted-and-expanded
+    sources:
+      - kimeldorf1971
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#spline-bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spline-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#spline-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch-splines.md#spline-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-splines.md#spline-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch-splines.md#spline-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spline-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - kimeldorf1971
+      - wahba1990
+      - cravenwahba1979
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#spline-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-splines.md#spline-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch-splines.md#spline-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: kimeldorf1971
+        manuscript_locator: ch-splines.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch-splines.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-splines.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch-splines.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

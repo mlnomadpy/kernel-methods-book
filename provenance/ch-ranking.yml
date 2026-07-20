@@ -1,0 +1,338 @@
+chapter: ch-ranking
+slug: ranking-and-ordinal-regression
+title: Ranking and Ordinal Regression
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - herbrich2000
+  - joachims2002
+  - freund2003rank
+  - crammer2002
+  - shawe2004
+  - joachims1999
+  - scholkopf2002
+sections:
+  - id: the-ranking-problem
+    title: The ranking problem
+    contribution: adapted-and-expanded
+    sources: &a1
+      - herbrich2000
+      - joachims2002
+      - freund2003rank
+      - crammer2002
+      - shawe2004
+      - joachims1999
+      - scholkopf2002
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#the-ranking-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: pairs-to-classification
+    title: Reducing ranking to classification on pairs
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#pairs-to-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: ranking-svm
+    title: The soft-margin ranking SVM
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#ranking-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: online-ranking
+    title: "Online ranking: a perceptron for preferences"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#online-ranking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: ordinal-regression
+    title: "Ordinal regression: thresholds on the line"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#ordinal-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: auc
+    title: Ranking and the area under the ROC curve
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#auc
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - herbrich2000
+      - joachims2002
+      - freund2003rank
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: herbrich2000
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims2002
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: freund2003rank
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2002
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-ranking.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

@@ -1,0 +1,321 @@
+chapter: ch-prelim
+slug: preliminaries
+title: Mathematical Preliminaries
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - scholkopf2002
+  - shawe2004
+sections:
+  - id: linear-algebra
+    title: Linear algebra and matrices
+    contribution: adapted-and-expanded
+    sources: &a1
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#linear-algebra
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#linear-algebra
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: analysis
+    title: Real analysis, metrics, and Hilbert spaces
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: measure-integration
+    title: Measure, integration, and Hilbert-valued expectation
+    contribution: newly-synthesized
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#measure-integration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#measure-integration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: functional-analysis
+    title: Operators, spectra, and Fourier analysis
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#functional-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#functional-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: probability
+    title: Probability and statistics
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#probability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#probability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: optimization
+    title: Convex optimization and duality
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#optimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#optimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: probability-for-inference
+    title: "More probability: conditioning, scores, and U-statistics"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#probability-for-inference
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#probability-for-inference
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: graphs-manifolds-groups
+    title: Graphs, manifolds, and groups
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#graphs-manifolds-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#graphs-manifolds-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: couplings-and-transport
+    title: Couplings and linear programs
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#couplings-and-transport
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#couplings-and-transport
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: paths-tensors-signatures
+    title: Paths, tensors, and iterated integrals
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#paths-tensors-signatures
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#paths-tensors-signatures
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: indefinite-inner-products
+    title: Indefinite inner products
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#indefinite-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#indefinite-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: numerical-linear-algebra-clinic
+    title: Numerical linear algebra clinic
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#numerical-linear-algebra-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#numerical-linear-algebra-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: measure-probability-clinic
+    title: Measure and probability clinic
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#measure-probability-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#measure-probability-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: functional-convex-clinic
+    title: Functional and convex analysis clinic
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#functional-convex-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#functional-convex-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: structured-domain-clinic
+    title: Structured-domain clinic
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#structured-domain-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#structured-domain-clinic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: prelim-summary
+    title: Summary and further reading
+    contribution: newly-synthesized
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#prelim-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#prelim-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: notation-conventions
+    title: Notation and conventions
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#notation-conventions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#notation-conventions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-prelim.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-prelim.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

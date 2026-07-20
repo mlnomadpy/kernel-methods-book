@@ -1,0 +1,536 @@
+chapter: ch-cluster
+slug: kernel-clustering
+title: Kernel Clustering and Spectral Methods
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - dhillon2004
+  - ng2002
+  - scholkopf2002
+  - shawe2004
+  - shimalik2000
+  - vonluxburg2007
+  - fiedler1973
+  - hagen1992
+  - bengio2004
+  - williams2001
+sections:
+  - id: k-means
+    title: The K-means algorithm
+    contribution: adapted-and-expanded
+    sources: &a1
+      - dhillon2004
+      - ng2002
+      - scholkopf2002
+      - shawe2004
+      - shimalik2000
+      - vonluxburg2007
+      - fiedler1973
+      - hagen1992
+      - bengio2004
+      - williams2001
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-k-means
+    title: The kernel K-means algorithm
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#kernel-k-means
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spectral-clustering
+    title: Spectral clustering
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: graph-cut-view
+    title: "The graph-cut view: normalized cuts"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#graph-cut-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: ncut-relaxation
+    title: The relaxation to the Fiedler vector
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#ncut-relaxation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: njw-spectral-clustering
+    title: Normalized-cut spectral clustering
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#njw-spectral-clustering
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kkm-ncut-equivalence
+    title: Kernel K-means and normalized cut are one objective
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#kkm-ncut-equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: out-of-sample
+    title: Out-of-sample extension
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - dhillon2004
+      - ng2002
+      - scholkopf2002
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fiedler1973
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hagen1992
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-cluster.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

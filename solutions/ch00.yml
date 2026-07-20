@@ -1,0 +1,68 @@
+chapter: ch00
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "The chapter frames classification, regression, clustering, and correlation as four kinds of
+      pattern. For each of the following, name which kind of pattern is being sought: sorting a
+      stack of images into cats and dogs; predicting a molecule's boiling point from its structure;
+      grouping customers by how close their buying habits are; measuring how strongly the text of an
+      article moves with the photograph beside it."
+    answer: "The four tasks are, respectively: classification (assign each image to the cat or dog
+      class), regression (predict the real-valued boiling point), clustering (form groups using
+      similarity in buying habits without supplied labels), and correlation or dependence analysis
+      (quantify how two views, article text and photograph, vary together). The distinction is the
+      form of the sought output: a discrete label, a numerical response, an unsupervised partition,
+      or a strength of association."
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: A kernel method is told that it will only ever be shown the \(n \times n\) Gram matrix
+      \(K_{ij} = k(x_i, x_j)\), never the examples \(x_i\) themselves. Explain in one or two
+      sentences why this is what lets the same algorithm run unchanged on vectors, strings, and
+      graphs. Then state, in your own words, the one property the entries of \(K\) must carry so
+      that the geometric view of Section 2 applies, that is, so that \(k(x,x') = \langle \Phi(x),
+      \Phi(x') \rangle\) for some feature map \(\Phi\).
+    answer: "An algorithm that receives only the Gram matrix uses objects solely through pairwise
+      similarities. Changing vectors to strings or graphs therefore changes the kernel evaluation
+      but not the downstream linear algebra. The required property is positive semidefiniteness: for
+      every finite sample and every coefficient vector c, c^T K c >= 0 (with K symmetric).
+      Equivalently, the finite Gram matrices must be positive semidefinite; then the kernel can be
+      represented as an inner product k(x,x')=<Phi(x),Phi(x')> in a Hilbert space."
+  - number: 3
+    kind: warm-up
+    status: draft
+    prompt: The chapter says the classical way to fit a kernel machine solves a linear system over the
+      whole Gram matrix, at a cost of about \(n^2\) memory and \(n^3\) time, and that \"neither
+      exponent has an \(n\) you can escape.\" Roughly how many times more time does the solve take
+      when the dataset grows from one thousand to one million examples? Explain why the modular view
+      of Section 2 does not, on its own, remove this wall, and name which part of the book is
+      devoted to walking through it.
+    answer: "The sample size grows by a factor of 10^3, so a cubic solve grows by (10^3)^3=10^9: roughly
+      one billion times more arithmetic. Memory grows by (10^3)^2=10^6. Modularity only says that
+      the same solver can consume different Gram matrices; it does not make a dense n by n matrix
+      smaller or its factorization cheaper. The book's large-scale/scaling part addresses this wall
+      using low-rank approximations, random features, iterative and matrix-free solvers, and related
+      accelerations."
+  - number: 4
+    kind: exploration
+    status: draft
+    prompt: Open the interactive Gram-matrix figure for the twelve points on a line and narrow the
+      kernel's bandwidth toward zero while watching the table of similarities. Describe what the
+      matrix approaches, and say which matrix it comes to resemble. Then argue, from that shape
+      alone, why a kernel with a very small bandwidth \"sees\" each point as similar only to itself,
+      and why an algorithm handed such a matrix has almost no relations left to learn from.
+    answer: For distinct sample locations, shrinking a Gaussian bandwidth drives k(x_i,x_j) toward 0
+      whenever i != j while k(x_i,x_i)=1. Thus the displayed Gram matrix approaches the identity
+      matrix (or block-diagonal identity-like blocks if points coincide). Each row then contains
+      essentially one nonzero similarity, its diagonal entry. Geometrically the feature images
+      become nearly orthogonal, so the learner is told that every observation resembles only itself.
+      There is almost no shared structure from which to interpolate, cluster, or transfer
+      information; predictions can become memorization-like and unstable away from the training
+      points.

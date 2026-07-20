@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-oneclass",
+  "anchor": "example-7-4",
+  "source_file": "manuscript/chapters/ch-oneclass.md",
+  "source_sha256": "424aa41fff57ac1fa203e8c0439804dab07e09acbe93a5d2523ba5f902ff178f",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-oneclass-ex4.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "2",
+    "5",
+    "0.3989",
+    "0.1737",
+    "0.2208",
+    "0.1748",
+    "0.1009",
+    "0.17",
+    "0.22",
+    "0.15",
+    "4",
+    "0.25",
+    "3",
+    "-0.2527",
+    "2.2773",
+    "0.376"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

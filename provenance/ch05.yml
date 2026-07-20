@@ -1,0 +1,1089 @@
+chapter: ch05
+slug: support-vector-machines
+title: Support Vector Machines
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - boser1992
+  - cortes1995
+  - vapnik1995
+  - vapnik1998
+  - scholkopf2000nu
+  - platt1998
+  - platt2000
+  - weston1999
+  - crammer2001
+  - hsu2002
+  - rifkin2004
+  - lin2007
+  - vapnik2000
+  - chapelle2002
+  - scholkopf2002
+  - shawe2004
+  - burges1998tutorial
+  - cristianini2000svm
+sections:
+  - id: hinge-loss-and-large-margin
+    title: From margins to the hinge loss
+    contribution: adapted-and-expanded
+    sources: &a1
+      - boser1992
+      - cortes1995
+      - vapnik1995
+      - vapnik1998
+      - scholkopf2000nu
+      - platt1998
+      - platt2000
+      - weston1999
+      - crammer2001
+      - hsu2002
+      - rifkin2004
+      - lin2007
+      - vapnik2000
+      - chapelle2002
+      - scholkopf2002
+      - shawe2004
+      - burges1998tutorial
+      - cristianini2000svm
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#hinge-loss-and-large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: primal-problem
+    title: The primal problem
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#primal-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: lagrangian-duality
+    title: Lagrangian duality and the dual problem
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#lagrangian-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: complementary-slackness
+    title: Complementary slackness and the KKT conditions
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#complementary-slackness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: geometric-interpretation
+    title: Geometric interpretation
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#geometric-interpretation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: support-vectors
+    title: Support vectors
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#support-vectors
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: practical-remarks
+    title: Practical remarks and variants
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#practical-remarks
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: multiclass-svm
+    title: Multiclass SVM
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#multiclass-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: probabilistic-outputs
+    title: Probabilistic outputs
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#probabilistic-outputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: model-selection
+    title: Model selection
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: boser1992
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes1995
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt2000
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: weston1999
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: crammer2001
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hsu2002
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2004
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2007
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik2000
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1998tutorial
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2000svm
+        manuscript_locator: ch05.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

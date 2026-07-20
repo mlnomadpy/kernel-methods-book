@@ -1,0 +1,17 @@
+[
+  {
+    "from": "inverse-learning-and-spectral-regularization#def-spectral-filter",
+    "to": "preliminaries#thm-p-8",
+    "note": "Defines filters through functional calculus on a compact positive operator."
+  },
+  {
+    "from": "inverse-learning-and-spectral-regularization#prop-landweber-stability",
+    "to": "inverse-learning-and-spectral-regularization#def-spectral-filter",
+    "note": "Identifies the iteration as a residual polynomial filter."
+  },
+  {
+    "from": "inverse-learning-and-spectral-regularization#algo-spectral-regularization",
+    "to": "inverse-learning-and-spectral-regularization#prop-landweber-stability",
+    "note": "Uses the stable step-size range for matrix-free early stopping."
+  }
+]

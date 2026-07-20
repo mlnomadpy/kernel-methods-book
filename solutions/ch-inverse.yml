@@ -1,0 +1,41 @@
+chapter: ch-inverse
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Plot the ridge residual \(r_\lambda(\mu)\) for three values of \(\lambda\) and explain which spectral directions remain biased.
+    answer: The ridge residual is (r_\lambda(\mu)=\lambda/(\mu+\lambda)). It is near one when
+      (mu\ll\lambda) and near zero when (mu\gg\lambda). Increasing (lambda) therefore leaves more
+      spectral directions biased.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Compute the first five Landweber fitted-value filters for \(\mu\in\{1,0.1,0.01\}\) with \(\eta=1/2\).
+    answer: "The fitted-value factor is (1-(1-\\eta\\mu)^t). For (t=1,\\ldots,5), substitute (eta=1/2):
+      at (mu=1) the values are (0.5,0.75,0.875,0.9375,0.96875); at (0.1) they are (1-0.95^t); at
+      (0.01) they are (1-0.995^t). The smaller directions enter much later."
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the Landweber stability proposition and show what can fail when \(\eta\gt 2/\lVert T\rVert\).
+    answer: If (0\le\eta\mu\le1), then (1-\eta\mu\in[0,1]), so its powers stay in that interval and
+      decrease to zero for (mu>0). If (eta>2/\lVert T\rVert), a top spectral value can satisfy
+      (|1-\eta\mu|>1), making the residual oscillate with increasing magnitude.
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: >-
+      For a source condition \(f_\star=T^rw\), derive a uniform ridge-bias bound from \(\sup_\mu \mu^r\lambda/(\mu+\lambda)\). State the range of \(r\) for which your bound has the asserted power of \(\lambda\).
+    answer: Put (mu=\lambda t). Then (mu^r\lambda/(\mu+\lambda)=\lambda^r t^r/(1+t)). The supremum over
+      (t\ge0) is finite for (0\le r\le1) (for (r=1), it tends to one). Hence ridge bias is
+      (O(\lambda^r)\) through qualification one. For (r>1), this uniform argument diverges and
+      cannot assert the same power.

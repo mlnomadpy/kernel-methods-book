@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-causal",
+  "anchor": "example-35-2",
+  "source_file": "manuscript/chapters/ch-causal.md",
+  "source_sha256": "e3bab1d5a0d2f7994e9b934d65fe2169a1be93247df5f3cc4b1f180c8dcfea6f",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-causal-ex2.py"
+  ],
+  "numeric_literals": [
+    "6",
+    "-1",
+    "1",
+    "0",
+    "2",
+    "3",
+    "0.667",
+    "3.2",
+    "1.667",
+    "1.2",
+    "1.0",
+    "2.0",
+    "4",
+    "10",
+    "-6"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

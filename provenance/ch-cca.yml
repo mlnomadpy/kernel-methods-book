@@ -1,0 +1,252 @@
+chapter: ch-cca
+slug: kernel-cca-and-correlation
+title: Kernel CCA and Correlation Analysis
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - andrew2013dcca
+  - bach2002
+  - fukumizu2007cca
+  - gong2014
+  - hardoon2004
+  - lai2000kcca
+  - scholkopf2002
+  - shawe2004
+sections:
+  - id: kernel-cca
+    title: Kernel canonical correlation analysis
+    contribution: adapted-and-expanded
+    sources: &a1
+      - andrew2013dcca
+      - bach2002
+      - fukumizu2007cca
+      - gong2014
+      - hardoon2004
+      - lai2000kcca
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: andrew2013dcca
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2002
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2007cca
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gong2014
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hardoon2004
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lai2000kcca
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cca.md#kernel-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: regularization-mandatory
+    title: Why regularization is mandatory
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: andrew2013dcca
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2002
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2007cca
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gong2014
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hardoon2004
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lai2000kcca
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cca.md#regularization-mandatory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: multi-view-deep-cca
+    title: Multi-view learning and deep CCA
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: andrew2013dcca
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2002
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2007cca
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gong2014
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hardoon2004
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lai2000kcca
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cca.md#multi-view-deep-cca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: andrew2013dcca
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2002
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2007cca
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gong2014
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hardoon2004
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lai2000kcca
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cca.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - andrew2013dcca
+      - bach2002
+      - fukumizu2007cca
+    locators:
+      - source: andrew2013dcca
+        manuscript_locator: ch-cca.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2002
+        manuscript_locator: ch-cca.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2007cca
+        manuscript_locator: ch-cca.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: andrew2013dcca
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2002
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2007cca
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gong2014
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hardoon2004
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lai2000kcca
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-cca.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

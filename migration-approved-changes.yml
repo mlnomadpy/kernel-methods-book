@@ -1,0 +1,30 @@
+_all:
+  metrics: [headings]
+  reason: Added the planned common-mistakes, practical-implications, summary, and further-reading template sections.
+ch-online:
+  metrics: [headings]
+  reason: Added the planned NORMA and passive-aggressive coverage.
+ch13:
+  metrics: [headings, algorithms, chrefs]
+  reason: Added the planned matrix-free, EigenPro, mixed-precision, distributed, federated, and streaming coverage.
+ch-prelim:
+  metrics: [headings, statements, exercises, chrefs]
+  reason: Expanded the planned measure theory, Bochner integration, conditioning, convex duality, and exercises.
+ch-svr:
+  metrics: [algorithms, chrefs]
+  reason: Added expectile regression, noncrossing quantile families, and a distributional-prediction workflow.
+ch-testing:
+  metrics: [statements, algorithms]
+  reason: Added block and streaming tests, dependent-data calibration, robustness, multiplicity, and conditional two-sample coverage.
+ch-bo:
+  metrics: [algorithms]
+  reason: Added active design, safe and constrained optimization, multi-fidelity search, and asynchronous execution.
+ch-modern:
+  metrics: [algorithms]
+  reason: Added PAC-Bayes reporting, compression and stability, random-matrix diagnostics, and negative checks.
+ch-frontier:
+  metrics: [chrefs]
+  reason: Added quantum, foundation-model, responsible-learning, and operator-algebra frontier sections.
+ch-apps:
+  metrics: [chrefs]
+  reason: Added spatial, scientific, dynamics, shift, survival, and reproducibility case studies.

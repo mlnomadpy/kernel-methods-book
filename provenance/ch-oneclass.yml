@@ -1,0 +1,488 @@
+chapter: ch-oneclass
+slug: one-class-and-novelty
+title: One-Class SVMs and Novelty Detection
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - scholkopf2001oneclass
+  - tax2004
+  - scholkopf2000nu
+  - scholkopf2002
+  - shawe2004
+  - platt1998
+  - vapnik1995
+  - bendavid2002
+  - parzen1962
+  - vert2006oneclass
+sections:
+  - id: support-estimation
+    title: Estimating the support of a distribution
+    contribution: adapted-and-expanded
+    sources: &a1
+      - scholkopf2001oneclass
+      - tax2004
+      - scholkopf2000nu
+      - scholkopf2002
+      - shawe2004
+      - platt1998
+      - vapnik1995
+      - bendavid2002
+      - parzen1962
+      - vert2006oneclass
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#support-estimation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: smallest-enclosing-hypersphere
+    title: The smallest enclosing hypersphere
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#smallest-enclosing-hypersphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: one-class-svm-origin
+    title: Separating the data from the origin
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#one-class-svm-origin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: nu-property
+    title: The nu-property
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#nu-property
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: equivalence
+    title: Hypersphere equals hyperplane for RBF kernels
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#equivalence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: density-level-sets
+    title: Density level sets and the Parzen connection
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#density-level-sets
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: theory
+    title: Uniqueness, generalization, and experiments
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#theory
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - scholkopf2001oneclass
+      - tax2004
+      - scholkopf2000nu
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2001oneclass
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tax2004
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: platt1998
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bendavid2002
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parzen1962
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vert2006oneclass
+        manuscript_locator: ch-oneclass.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

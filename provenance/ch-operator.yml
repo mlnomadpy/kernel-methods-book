@@ -1,0 +1,218 @@
+chapter: ch-operator
+slug: vector-and-operator-valued-kernels
+title: Vector- and Operator-Valued Kernels
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - micchelli2005vv
+  - alvarez2012vv
+sections:
+  - id: operator-motivation
+    title: From scalar to vector-valued reproduction
+    contribution: adapted-and-expanded
+    sources:
+      - micchelli2005vv
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: operator-representer
+    title: The vector-valued representer theorem
+    contribution: adapted-and-expanded
+    sources:
+      - micchelli2005vv
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-representer
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: operator-constructions
+    title: Separable and nonseparable constructions
+    contribution: adapted-and-expanded
+    sources:
+      - alvarez2012vv
+    locators:
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-constructions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: operator-structured
+    title: Functional responses and structured outputs
+    contribution: adapted-and-expanded
+    sources: &a1
+      - micchelli2005vv
+      - alvarez2012vv
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-structured
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-structured
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: operator-learning-output
+    title: Learning the output geometry
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-learning-output
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-learning-output
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: operator-physical-fields
+    title: Differentially constrained vector fields
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-physical-fields
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-physical-fields
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: operator-structured-prediction
+    title: Structured prediction beyond vector regression
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-structured-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-structured-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: operator-functional-discretization
+    title: Functional responses and discretization
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-functional-discretization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-functional-discretization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: operator-block-solvers
+    title: Scalable block solvers
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-block-solvers
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-block-solvers
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: operator-generalization
+    title: Generalization and negative transfer
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-generalization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-generalization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: operator-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: operator-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - micchelli2005vv
+      - alvarez2012vv
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

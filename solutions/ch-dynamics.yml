@@ -1,0 +1,43 @@
+chapter: ch-dynamics
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Distinguish observation noise, process noise, projection error, and off-policy distribution mismatch in one controlled Markov example.
+    answer: >-
+      In robot navigation, observation noise corrupts the measured position, while process noise represents unpredictable motion after an action. Projection error arises when the RKHS cannot represent the true value or transition function. Off-policy mismatch arises when logged actions from a cautious controller do not cover actions proposed by an aggressive target policy. These errors require different remedies and cannot all be absorbed into a larger GP noise term.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Given paired-state Gram matrices, solve a regularized kernel-EDMD generalized eigenproblem and evaluate one empirical eigenfunction at a new state.
+    answer: >-
+      Solve \(Av=\xi(G+n\lambda I)v\), normalize \(v\) in the regularized Gram metric, and compute \(\widehat\varphi(x)=v^\top k_X(x)\). Verify the generalized residual \(\lVert Av-\xi(G+n\lambda I)v\rVert\) and compare \(\widehat\varphi(x_i')\) with \(\xi\widehat\varphi(x_i)\) on held-out paired states. A small training eigen-residual alone is insufficient.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove that the Koopman operator is linear even when the underlying state dynamics are nonlinear.
+    answer: >-
+      For observables \(g,h\) and scalars \(a,b\), \(\mathcal K(ag+bh)(x)=(ag+bh)(F(x))=a g(F(x))+b h(F(x))=a\mathcal Kg(x)+b\mathcal Kh(x)\). No linearity of \(F\) is used. The operator is linear on observables, although representing it may require an infinite-dimensional space.
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: >-
+      Derive the finite representer system for regularized kernel Bellman-residual minimization and identify the source of double-sampling bias.
+    answer: >-
+      Write \(V(\cdot)=\sum_j\alpha_j k(X_j,\cdot)\), so residuals are \(r=K\alpha-R-\gamma K'\alpha\). The squared-residual objective gives \(\{(K-\gamma K')^\top(K-\gamma K')+n\lambda K\}\alpha=(K-\gamma K')^\top R\), with null-space care if \(K\) is singular. In stochastic transitions, squaring an empirical conditional expectation with the same next-state draw correlates target noise with the residual; an unbiased product would require independent next-state draws or an instrumental projected equation.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design a safe model-based control study comparing a GP transition model, a random-feature approximation, and a linear baseline. Include trajectory splits, coverage, rollout calibration, constraints, compute, and fallback behavior.
+    answer: >-
+      Split complete episodes and reserve perturbed-dynamics episodes for stress testing. Match controllers and horizons, map state-action coverage, evaluate one-step and rollout error, proper predictive scores, constraint violations, and closed-loop reward, and report factorization or feature costs. Define a conservative fallback controller activated by coverage, uncertainty, or constraint thresholds; test the trigger under misspecification and report every intervention rather than discarding failed runs.

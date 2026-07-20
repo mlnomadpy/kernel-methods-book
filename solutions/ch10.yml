@@ -1,0 +1,159 @@
+chapter: ch10
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "The chapter keeps two problems apart: kernels *between* graphs (each data point is a whole
+      graph) and kernels *on* a graph (each data point is one node of a single fixed graph). For
+      each task below, say which of the two you are facing, and name the object the kernel would be
+      built from (a product graph, or a Laplacian): (a) predicting whether each molecule in a
+      chemical library is active against a target; (b) predicting the function of each protein in
+      one protein-protein interaction network; (c) classifying segmented images, each encoded as a
+      graph of adjacent regions; (d) ranking web pages by relevance to a small set of query pages
+      inside a single hyperlink graph."
+    answer: Tasks (a) and (c) compare whole structured objects, so they require kernels between graphs,
+      typically evaluated through a product-graph or explicit substructure construction. Tasks (b)
+      and (d) label or rank vertices inside one fixed network, so they require a kernel on a graph
+      built from that graph's Laplacian (for example diffusion or regularized-Laplacian kernels).
+      The distinction is whether the sample index ranges over graphs or over vertices of one graph.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: Consider the graph on vertices \(\{1,2,3,4\}\) with edges \(1\text{-}2\), \(2\text{-}3\),
+      \(3\text{-}4\), and \(2\text{-}4\). (a) For each of the sequences \((1,2,3,4)\),
+      \((1,2,4,2)\), \((1,2,3,2)\), decide whether it is a path, a walk that is not a path, or
+      neither. (b) Which of them *totters*, in the sense \(v_i = v_{i+2}\) for some \(i\)? (c) In
+      one sentence, explain why counting all paths in a graph is NP-hard while counting all walks is
+      not, referring to the distinctness constraint that a path carries and a walk drops.
+    answer: The sequence (1,2,3,4) follows edges and has distinct vertices, so it is a path. (1,2,4,2)
+      follows edges but repeats vertex 2, so it is a walk but not a path; it totters because its
+      second and fourth vertices coincide. (1,2,3,2) is likewise a nonpath walk and totters at
+      vertices 2 and 2. Counting paths must remember a growing globally forbidden set of visited
+      vertices, which encodes an NP-hard distinctness constraint; walks may revisit freely and can
+      be counted by powers of the adjacency matrix.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Let \\(G_1\\) be the labeled path on vertices \\((1,2,3)\\) with labels \\((X,Y,X)\\) and
+      edges \\(1\\text{-}2\\), \\(2\\text{-}3\\); let \\(G_2\\) be the single labeled edge on
+      vertices \\((a,b)\\) with labels \\((X,Y)\\) and edge \\(a\\text{-}b\\). (a) Construct the
+      product graph \\(G_1 \\times G_2\\): list its vertices (pairs of identically labeled vertices)
+      and its edges, and draw it. (b) Write its adjacency matrix \\(A\\). (c) Using the identity
+      that the \\(n\\)-th-order walk kernel equals \\(\\mathbf{1}^\\top A^n \\mathbf{1}\\), compute
+      the number of common labeled walks of length \\(1\\) and of length \\(2\\) shared by \\(G_1\\)
+      and \\(G_2\\)."
+    answer: The product vertices are (1,a), (2,b), and (3,a), since labels must match. Its edges are
+      (1,a)-(2,b) and (2,b)-(3,a), so it is a three-vertex path. In that order the adjacency matrix
+      is [[0,1,0],[1,0,1],[0,1,0]]. The length-one count is 1^T A 1=4, counting both orientations of
+      the two edges. The length-two count is 1^T A^2 1=||A1||^2=1^2+2^2+1^2=6. These are exactly the
+      common labeled walks because every product-graph step advances simultaneously in both inputs.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: Take the graph on vertices \(\{1,2,3,4\}\) with edges \(1\text{-}2\), \(2\text{-}3\),
+      \(3\text{-}4\), \(2\text{-}4\). (a) Write the adjacency matrix \(A\), the degree matrix \(D\),
+      and the Laplacian \(L = D - A\). (b) Verify directly that \(L\mathbf{1} = 0\). (c) For \(f =
+      (2,1,0,1)^\top\), compute the roughness \(\Omega(f) = \sum_{i \sim j}(f_i - f_j)^2\) by
+      summing over the four edges, and independently compute \(f^\top L f\); confirm the two agree.
+    answer: The adjacency matrix is [[0,1,0,0],[1,0,1,1],[0,1,0,1],[0,1,1,0]], D=diag(1,3,2,2), and
+      L=D-A. Each row of L sums to zero, hence L1=0. For f=(2,1,0,1), the squared differences on
+      edges 1-2,2-3,3-4,2-4 are 1,1,1,0, totaling Omega(f)=3. Direct multiplication gives
+      Lf=(1,1,-2,0), and f^T Lf=2+1=3, confirming the identity.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Let \(G\) be the triangle, the complete graph on three vertices, so \(L = 3I - J\) with
+      \(J\) the all-ones matrix. (a) Give the eigenvalues of \(L\) and a corresponding orthonormal
+      eigenbasis. (b) Using \(e^{-tL} = \sum_i e^{-t\lambda_i} u_i u_i^\top\), show that the
+      diffusion kernel is
+    answer: The constant eigenvector u_0=(1,1,1)/sqrt(3) has eigenvalue zero. Any orthonormal basis of
+      its orthogonal complement has eigenvalue three, for example u_1=(1,-1,0)/sqrt(2) and
+      u_2=(1,1,-2)/sqrt(6). Therefore
+      e^{-tL}=u_0u_0^T+e^{-3t}(u_1u_1^T+u_2u_2^T)=J/3+e^{-3t}(I-J/3). Its diagonal entries are
+      [1+2e^{-3t}]/3 and off-diagonal entries [1-e^{-3t}]/3, the complete-graph diffusion formula
+      for m=3.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Let \(A\) be the adjacency matrix of an undirected graph with no self-loops, \(D\) the
+      degree matrix, and \(L = D - A\). Prove the quadratic-form identity
+    answer: Expand f^T Lf=sum_i d_i f_i^2-sum_{i,j}A_ij f_i f_j. Because the graph is undirected, each
+      edge {i,j} contributes f_i^2+f_j^2 to the degree term and 2f_i f_j to the adjacency term. Its
+      net contribution is (f_i-f_j)^2. Summing once over undirected edges gives f^T
+      Lf=sum_{i~j}(f_i-f_j)^2>=0. This also proves that L is positive semidefinite and that
+      constants lie in its nullspace on every connected component.
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: Let \(L\) be a real symmetric matrix with eigendecomposition \(L = \sum_{i=1}^m \lambda_i
+      u_i u_i^\top\). (a) Show that for every \(t \gt 0\) the matrix exponential \(e^{-tL} =
+      \sum_{i=1}^m e^{-t\lambda_i} u_i u_i^\top\) is symmetric with strictly positive eigenvalues,
+      hence is a valid (positive definite) kernel. (b) Explain why this argument makes no use of the
+      sign of the \(\lambda_i\), so that \(e^{-tL}\) is p.d. for *any* symmetric \(L\), whereas
+      substituting the graph distance into \(\exp(-t\,d_G)\) can fail to be p.d. (recall the
+      five-vertex counterexample of the chapter).
+    answer: Spectral calculus gives e^{-tL}=U diag(e^{-t lambda_i})U^T. It is symmetric, and every
+      eigenvalue e^{-t lambda_i} is strictly positive for finite real lambda_i, so the matrix is
+      positive definite. This conclusion needs only real symmetry, not lambda_i>=0; negative
+      lambda_i merely produce eigenvalues larger than one. In contrast, entrywise exponentiation
+      exp(-t d_G(i,j)) is not the matrix exponential of a symmetric operator. It is positive
+      definite only when d_G is conditionally negative definite, a property the five-vertex
+      counterexample lacks.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: This exercise makes the expressiveness-complexity tradeoff precise from both ends. (a) For
+      the geometric walk kernel, weights factor as an initial weight \(\lambda_i(v_1)\) times
+      transition weights \(\lambda_t(v_{k-1},v_k)\) along the walk. Collecting these into
+      \(\Lambda_i\) and \(\Lambda_t\) on the product graph, derive the closed form
+    answer: "A length-n product-graph walk contributes the row vector Lambda_i Lambda_t^n followed by 1.
+      Summing n>=0 gives Lambda_i[sum_n Lambda_t^n]1=Lambda_i(I-Lambda_t)^{-1}1 exactly when the
+      spectral radius rho(Lambda_t)<1. The product graph has at most |V_1||V_2| vertices, so solving
+      this linear system is polynomial in a matrix of that dimension (and can exploit sparsity). A
+      complete kernel would satisfy d_K(G_1,G_2)=0 exactly for isomorphic graphs; three evaluations
+      K(G_1,G_1), K(G_2,G_2), K(G_1,G_2) would therefore decide isomorphism. The tractable walk
+      kernel cannot be complete. Vertex revisitation is the shared cause: dropping the path
+      no-repeat constraint enables matrix powers but loses global structure."
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "Run 1-WL color refinement, from the uniform coloring \\(c_0\\equiv 0\\), on two four-vertex
+      graphs: the path \\(P_4\\) with edges \\(1\\text{-}2,\\,2\\text{-}3,\\,3\\text{-}4\\), and the
+      star \\(K_{1,3}\\) with edges \\(1\\text{-}2,\\,1\\text{-}3,\\,1\\text{-}4\\). (a) After one
+      refinement round, write each vertex's new color as the pair \\(\\big(c_0(v),\\
+      \\{\\!\\{c_0(u):u\\sim v\\}\\!\\}\\big)\\), and give the two color histograms. (b) State
+      whether 1-WL already separates the two graphs, and which vertex invariant its round-1 colors
+      encode. (c) Contrast with the \\(6\\)-cycle versus two-triangle pair of the worked example,
+      which 1-WL never separates: what feature of those graphs defeats the test?"
+    answer: With uniform initial color, the round-one signature is determined only by degree. In P_4,
+      endpoints 1 and 4 have signature (0,{0}) and vertices 2 and 3 have (0,{0,0}), giving histogram
+      {degree-1:2, degree-2:2}. In K_{1,3}, the center has (0,{0,0,0}) and the three leaves have
+      (0,{0}), giving {degree-3:1, degree-1:3}. The histograms already differ, so 1-WL separates the
+      graphs using degree. C_6 and two disjoint triangles are both 2-regular; every vertex sees the
+      same multiset forever, leaving refinement no asymmetry from which to split colors.
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: A message-passing GNN updates \(h_v\leftarrow\mathrm{UPDATE}\big(h_v,\
+      \mathrm{AGG}\,\{\!\{h_u:u\sim v\}\!\}\big)\) and reads out a graph vector by a
+      permutation-invariant pooling. (a) Using the theorem that such a network is at most as
+      powerful as 1-WL, explain why no choice of parameters, depth, or training lets it distinguish
+      the \(6\)-cycle from the two disjoint triangles. (b) Show the mean aggregator is not injective
+      on multisets by evaluating it on \(\{\!\{a\}\!\}\) and \(\{\!\{a,a\}\!\}\), then do the same
+      for the sum to show it separates them; conclude that a mean-pooling network is strictly weaker
+      than 1-WL while a sum-based one can reach it. (c) State the condition on \(\mathrm{AGG}\),
+      \(\mathrm{UPDATE}\), and the readout under which the network attains the 1-WL ceiling.
+    answer: "Because 1-WL assigns identical color histories to C_6 and 2C_3, the message-passing
+      upper-bound theorem forces every such GNN to return identical node multisets and graph
+      readouts, regardless of learned parameters or depth. Mean is not injective:
+      mean{a}=mean{a,a}=a. Sum distinguishes multiplicity when a is nonzero: sum{a}=a while
+      sum{a,a}=2a. Thus mean aggregation can discard information retained by 1-WL, whereas sum can
+      preserve it. To attain—not exceed—the 1-WL ceiling, the neighborhood aggregator, update map,
+      and graph readout must all be injective on the relevant multisets (with sufficiently
+      expressive parameterizations)."

@@ -1,0 +1,1868 @@
+chapter: ch-apps
+slug: applications-and-practice
+title: Applications and Practice
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - leslie2002
+  - leslie2004
+  - jaakkola2000
+  - jaakkola1999fisher
+  - saigo2004
+  - haussler1999
+  - joachims1998text
+  - lodhi2002
+  - cristianini2002lsk
+  - ralaivola2005
+  - gartner2003
+  - borgwardt2005
+  - shervashidze2011
+  - scholkopf2002
+  - shawe2004
+  - chapelle2002
+  - steinwart2008
+  - rasmussen2006
+  - rahimi2007
+  - drineas2005
+  - williams2001
+  - rudi2015
+  - rudi2017falkon
+  - meanti2020
+  - le2013fastfood
+  - chang2011libsvm
+  - fan2008liblinear
+  - pedregosa2011sklearn
+  - matthews2017gpflow
+  - gardner2018gpytorch
+  - charlier2021keops
+  - sonnenburg2010shogun
+sections:
+  - id: anatomy
+    title: The anatomy of a kernel-method project
+    contribution: adapted-and-expanded
+    sources: &a1
+      - leslie2002
+      - leslie2004
+      - jaakkola2000
+      - jaakkola1999fisher
+      - saigo2004
+      - haussler1999
+      - joachims1998text
+      - lodhi2002
+      - cristianini2002lsk
+      - ralaivola2005
+      - gartner2003
+      - borgwardt2005
+      - shervashidze2011
+      - scholkopf2002
+      - shawe2004
+      - chapelle2002
+      - steinwart2008
+      - rasmussen2006
+      - rahimi2007
+      - drineas2005
+      - williams2001
+      - rudi2015
+      - rudi2017falkon
+      - meanti2020
+      - le2013fastfood
+      - chang2011libsvm
+      - fan2008liblinear
+      - pedregosa2011sklearn
+      - matthews2017gpflow
+      - gardner2018gpytorch
+      - charlier2021keops
+      - sonnenburg2010shogun
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#anatomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: three-applications
+    title: Three applications, three kernels
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#three-applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: the-recipe
+    title: The practical recipe
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#the-recipe
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: case-study-spatial
+    title: "Case study: spatial exposure mapping"
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#case-study-spatial
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: case-study-scientific
+    title: "Case study: a scientific inverse problem"
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#case-study-scientific
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: case-study-dynamics
+    title: "Case study: dynamics and off-policy evaluation"
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#case-study-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: case-study-shift
+    title: "Case study: distribution shift and calibrated decisions"
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#case-study-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: case-study-survival
+    title: "Case study: censored and time-to-event outcomes"
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#case-study-survival
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: model-cards-and-reproducibility
+    title: Model cards and reproducibility packets
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#model-cards-and-reproducibility
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: software
+    title: A map of the software
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#software
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - leslie2002
+      - leslie2004
+      - jaakkola2000
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: leslie2002
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: leslie2004
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola2000
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jaakkola1999fisher
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saigo2004
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1998text
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lodhi2002
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002lsk
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ralaivola2005
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gartner2003
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borgwardt2005
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shervashidze2011
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chapelle2002
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2015
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rudi2017falkon
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: meanti2020
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: le2013fastfood
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chang2011libsvm
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2008liblinear
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pedregosa2011sklearn
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: matthews2017gpflow
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gardner2018gpytorch
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: charlier2021keops
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sonnenburg2010shogun
+        manuscript_locator: ch-apps.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

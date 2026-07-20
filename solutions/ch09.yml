@@ -1,0 +1,107 @@
+chapter: ch09
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Take the DNA string \(x = \texttt{AGGAG}\) and \(k = 2\). List its contiguous \(2\)-mers,
+      write down the nonzero coordinates of the spectrum feature vector \(\Phi(x)\), and compute the
+      self-kernel \(K(x,x)\). Then explain in one sentence why \(K(x,x)\) always equals \(\sum_u
+      \Phi_u(x)^2\), the sum of squared \(k\)-mer counts, and why raising \(k\) toward \(|x|\)
+      drives this value down.
+    answer: The contiguous 2-mers are AG, GG, GA, AG. Thus Phi_AG=2, Phi_GG=1, Phi_GA=1 and all other
+      coordinates vanish. The self-kernel is 2^2+1^2+1^2=6. In general K(x,x)=<Phi(x),Phi(x)>=sum_u
+      Phi_u(x)^2 by construction. Increasing k leaves fewer windows and makes exact repetitions less
+      likely; at k=|x| there is one feature with count one, so the self-value is one.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Let \(x = \texttt{CACAC}\) and \(x' = \texttt{ACACA}\), both over \(\{\texttt A,\texttt
+      C\}\), with \(k = 2\). By hand, list the contiguous \(2\)-mers of each string, form the two
+      count vectors, and compute \(K(x,x')\), \(K(x,x)\), and \(K(x',x')\) for the spectrum kernel.
+      Evaluate the normalized kernel
+    answer: CACAC has 2-mers CA,AC,CA,AC; ACACA has AC,CA,AC,CA. In the coordinate order (AC,CA), both
+      count vectors are (2,2). Therefore K(x,x')=2*2+2*2=8 and both self-kernels are 2^2+2^2=8. The
+      normalized value is 8/sqrt(8*8)=1. The spectrum kernel regards the strings as identical
+      because it retains the multiset of contiguous k-mers but discards their positions and global
+      phase; these alternating strings have the same 2-mer counts.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: Compute the gap-weighted subsequence kernel \(K_{2,\lambda}(x,x')\) for \(x = \texttt{AAB}\)
+      and \(x' = \texttt{AB}\).
+    answer: For AAB, the ordered pairs select AA at (1,2) with weight lambda^2, and AB at (1,3) and
+      (2,3) with weights lambda^3 and lambda^2. Thus Phi_AB(AAB)=lambda^3+lambda^2. For AB, the only
+      pair selects AB with weight lambda^2. AA is not shared, so the inner product is
+      (lambda^3+lambda^2)lambda^2=lambda^5+lambda^4. Filling B_1 with the stated inclusion-exclusion
+      recurrence accumulates the same two AB occurrences; the companion K_2 update fires at the
+      final B match and returns these two span products, confirming the direct enumeration.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "Prove directly from the definition that the \\(k\\)-spectrum kernel is positive definite:
+      for any strings \\(x_1,\\dots,x_n\\) and any reals \\(c_1,\\dots,c_n\\), show that
+      \\(\\sum_{i,j} c_i c_j\\, K(x_i,x_j) \\ge 0\\). Identify the vector whose squared norm this
+      quadratic form equals. Explain why the mismatch and gap-weighted subsequence kernels inherit
+      positive definiteness by the very same one-line argument, and why that argument breaks for the
+      Smith-Waterman score \\(\\mathrm{SW}_{S,g}(x,y)\\)."
+    answer: Write Phi(x) for the vector of all k-mer counts. Then sum_ij c_i c_j K(x_i,x_j)=sum_ij c_i
+      c_j<Phi(x_i),Phi(x_j)>=||sum_i c_i Phi(x_i)||^2>=0. Mismatch and subsequence kernels merely
+      replace Phi by different explicit (possibly weighted) feature-count vectors, so the identical
+      squared-norm proof applies. Smith-Waterman takes a maximum over local alignments rather than
+      summing products in a fixed feature space. A pointwise maximum of positive-definite alignment
+      contributions is not a closure operation, so no corresponding squared-norm identity follows.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: This exercise works through the P-kernel framework of Haussler (1999).
+    answer: For the first distribution the Gram matrix is [[0,1/2],[1/2,0]], with eigenvectors (1,1) and
+      (1,-1) and eigenvalues 1/2 and -1/2. The negative eigenvalue disproves positive definiteness
+      despite symmetry and normalization as a joint distribution. Under conditional independence,
+      define Phi_m(x)=sqrt(P_M(m))P(x|m). Then P(x,z)=sum_m Phi_m(x)Phi_m(z)=<Phi(x),Phi(z)> in l2
+      over latent states. Equivalently it is a nonnegative sum of rank-one kernels, hence positive
+      definite.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Two steps of the local-alignment-kernel positive-definiteness argument.
+    answer: The gap factor is K_g(x,y)=h(x)h(y) with h(x)=exp[beta g(|x|)]. It is rank one, so every
+      quadratic form is [sum_i c_i h(x_i)]^2>=0 for any real gap function g. A letter kernel instead
+      contains genuinely pair-dependent entries exp[beta S(a,b)], whose indexed matrix must be
+      positive semidefinite. For convolution, let R(x) be the finite set of splits x=x_1x_2. The
+      product K_1(x_1,y_1)K_2(x_2,y_2) is positive definite on pairs, and summing it over R(x) cross
+      R(y) is the standard set-kernel construction. Hence K_1 star K_2 is positive definite.
+  - number: 7
+    kind: computation
+    status: draft
+    prompt: A corpus has \(\ell = 4\) documents. The term \(\texttt{the}\) appears in all four,
+      \(\texttt{kernel}\) in two, and \(\texttt{gene}\) in one. Using the idf weight \(w(t) =
+      \log\bigl(\ell/\mathrm{df}(t)\bigr)\), compute \(w(\texttt{the})\), \(w(\texttt{kernel})\),
+      and \(w(\texttt{gene})\). Two documents have term-frequency vectors
+    answer: The weights are w(the)=log(4/4)=0, w(kernel)=log(4/2)=log 2, and w(gene)=log(4/1)=log 4. The
+      only term with nonzero frequency in both documents and nonzero idf is kernel, so tilde
+      K(d,d')=(log 2)^2(1)(2)=2(log 2)^2, approximately 0.960906. The frequent word the is shared
+      five times in the raw product, but its document frequency equals the corpus size, making its
+      idf exactly zero and eliminating its contribution as an uninformative stop word.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: Take the generative model to be a Markov chain over \(k\)-mers, with a parameter
+      \(a_{u\to\sigma}\) for the transition from a length-\(k\) context \(u\) to the next symbol
+      \(\sigma\), and fit it at the flat setting \(\theta_0\) where every \(a_{u\to\sigma} =
+      |\Sigma|^{-1}\). Working from the log-likelihood of a sequence \(s\) and respecting the
+      multinomial constraint \(\sum_\sigma a_{u\to\sigma} = 1\), derive the Fisher score coordinate
+    answer: Let N_{u,sigma}(s) count transitions u->sigma and N_u=sum_sigma N_{u,sigma}. The
+      log-likelihood contributes sum_{u,sigma}N_{u,sigma}log a_{u,sigma}. Its unconstrained
+      derivative is N_{u,sigma}/a_{u,sigma}. Projecting this gradient onto the simplex tangent (or
+      introducing the normalization multiplier) subtracts the context-average component; at the flat
+      point this is, up to the common coordinate scale, N_{u,sigma}-N_u/|Sigma|. The first count is
+      exactly the (k+1)-mer feature for u sigma. Inner products of these score vectors therefore
+      equal the (k+1)-spectrum inner product plus centering cross-terms. Centering removes the
+      uniform next-symbol baseline for each context, so the generative Fisher construction meets the
+      discriminative spectrum kernel after accounting for expected context usage.

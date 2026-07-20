@@ -1,0 +1,409 @@
+chapter: ch01
+slug: kernels-and-rkhs
+title: Positive Definite Kernels and RKHS
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - aronszajn1950
+  - mercer1909
+  - kolmogorov1941
+  - wahba1990
+  - scholkopf2002
+  - shawe2004
+sections:
+  - id: why-pairwise-comparisons
+    title: Why pairwise comparisons?
+    contribution: adapted-and-expanded
+    sources: &a1
+      - aronszajn1950
+      - mercer1909
+      - kolmogorov1941
+      - wahba1990
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#why-pairwise-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#why-pairwise-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#why-pairwise-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#why-pairwise-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#why-pairwise-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#why-pairwise-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: positive-definite-kernels
+    title: Positive definite kernels
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#positive-definite-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#positive-definite-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#positive-definite-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#positive-definite-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#positive-definite-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#positive-definite-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernels-as-inner-products
+    title: "Kernels as inner products: Aronszajn's theorem"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#kernels-as-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#kernels-as-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#kernels-as-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#kernels-as-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#kernels-as-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#kernels-as-inner-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reproducing-kernel-hilbert-spaces
+    title: Reproducing kernel Hilbert spaces
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#reproducing-kernel-hilbert-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#reproducing-kernel-hilbert-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#reproducing-kernel-hilbert-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#reproducing-kernel-hilbert-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#reproducing-kernel-hilbert-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#reproducing-kernel-hilbert-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: pd-equals-reproducing
+    title: "The equivalence: positive definite equals reproducing"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#pd-equals-reproducing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#pd-equals-reproducing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#pd-equals-reproducing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#pd-equals-reproducing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#pd-equals-reproducing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#pd-equals-reproducing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: examples-of-rkhs
+    title: "Examples: kernels and their RKHS"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#examples-of-rkhs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#examples-of-rkhs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#examples-of-rkhs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#examples-of-rkhs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#examples-of-rkhs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#examples-of-rkhs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: combining-kernels
+    title: "Combining kernels: the cone of p.d. kernels"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#combining-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#combining-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#combining-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#combining-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#combining-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#combining-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: a-kernel-quiz
+    title: "Worked examples: a kernel quiz"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#a-kernel-quiz
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#a-kernel-quiz
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#a-kernel-quiz
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#a-kernel-quiz
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#a-kernel-quiz
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#a-kernel-quiz
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: smoothness-functional
+    title: The RKHS norm as a smoothness functional
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#smoothness-functional
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#smoothness-functional
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#smoothness-functional
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#smoothness-functional
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#smoothness-functional
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#smoothness-functional
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch01.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch01.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kolmogorov1941
+        manuscript_locator: ch01.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch01.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch01.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch01.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-svr",
+  "anchor": "example-6-3",
+  "source_file": "manuscript/chapters/ch-svr.md",
+  "source_sha256": "2777966353b5012465c5b9503b37c3d4f146152966ccdfd69a792a64cc4c3dea",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-svr-ex3.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "0.9",
+    "0.2",
+    "-0.8",
+    "0.3",
+    "1.5",
+    "5",
+    "0.565",
+    "0.502",
+    "0.4",
+    "0.330",
+    "0.6",
+    "0.60",
+    "0.00",
+    "0.80",
+    "0.40",
+    "60",
+    "80",
+    "6",
+    "-0.5",
+    "-1",
+    "0.5",
+    "3.0",
+    "0.15"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

@@ -1,0 +1,218 @@
+chapter: ch-manifold
+slug: semi-supervised-and-manifold-regularization
+title: Semi-Supervised and Manifold Regularization
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - belkin2006manifold
+  - vonluxburg2007
+sections:
+  - id: manifold-assumption
+    title: What unlabeled data can and cannot identify
+    contribution: adapted-and-expanded
+    sources: &a1
+      - belkin2006manifold
+      - vonluxburg2007
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-assumption
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-assumption
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: graph-energy
+    title: Graph energy and label propagation
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#graph-energy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#graph-energy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: manifold-objective
+    title: Manifold regularization
+    contribution: adapted-and-expanded
+    sources:
+      - belkin2006manifold
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-objective
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: manifold-consistency
+    title: Consistency and graph choices
+    contribution: adapted-and-expanded
+    sources:
+      - vonluxburg2007
+    locators:
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-consistency
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: manifold-harmonic
+    title: Harmonic extension and label propagation
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-harmonic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-harmonic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: manifold-laprls-lapsvm
+    title: Laplacian regularized least squares and SVMs
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-laprls-lapsvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-laprls-lapsvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: manifold-help-hurt
+    title: When unlabeled data help or hurt
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-help-hurt
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-help-hurt
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: manifold-graph-limits
+    title: Graph limits and density bias
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - vonluxburg2007
+    locators:
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-graph-limits
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: manifold-out-of-sample
+    title: Out-of-sample extensions
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-out-of-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: manifold-scaling
+    title: Scaling sparse graphs
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-scaling
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-scaling
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: manifold-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: manifold-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - belkin2006manifold
+      - vonluxburg2007
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

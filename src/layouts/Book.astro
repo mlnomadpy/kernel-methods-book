@@ -2,6 +2,26 @@
 // The shared page chrome: topbar, sidebar TOC, search overlay, KaTeX, fonts.
 // All URLs are relative so the site can be served from any prefix.
 const { title, desc = "", toc, onpage = "", prevHref = "", nextHref = "" } = Astro.props;
+const author = {
+  name: "Taha Bouhsine",
+  url: "https://www.tahabouhsine.com",
+  affiliation: "AzettaAI",
+};
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Book",
+  name: "Kernels: The Geometry of Learning",
+  alternativeHeadline: "Foundations, Algorithms, and the Frontiers of Machine Intelligence",
+  description: "A rigorous, unified account of kernel methods from mathematical foundations to modern machine intelligence.",
+  inLanguage: "en",
+  isAccessibleForFree: true,
+  author: {
+    "@type": "Person",
+    name: author.name,
+    url: author.url,
+    affiliation: { "@type": "Organization", name: author.affiliation },
+  },
+});
 ---
 
 <!doctype html>
@@ -11,6 +31,9 @@ const { title, desc = "", toc, onpage = "", prevHref = "", nextHref = "" } = Ast
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={desc} />
+    <meta name="author" content={author.name} />
+    <link rel="author" href={author.url} />
+    <script type="application/ld+json" set:html={structuredData}></script>
     <script is:inline>
       (function () {
         try {
@@ -19,17 +42,12 @@ const { title, desc = "", toc, onpage = "", prevHref = "", nextHref = "" } = Ast
         } catch (e) {}
       })();
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="assets/vendor.css" />
     <link rel="stylesheet" href="assets/book.css" />
     <link rel="stylesheet" href="assets/viz.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
-    <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-    <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="vendor/katex/katex.min.css" />
+    <script is:inline defer src="vendor/katex/katex.min.js"></script>
+    <script is:inline defer src="vendor/katex/auto-render.min.js"></script>
     <script is:inline defer src="assets/katex-boot.js"></script>
   </head>
   <body data-prev={prevHref} data-next={nextHref}>
@@ -79,6 +97,7 @@ const { title, desc = "", toc, onpage = "", prevHref = "", nextHref = "" } = Ast
     <button type="button" class="backtop" id="backtop" aria-label="Back to top">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"></path></svg>
     </button>
+    <script is:inline defer src="assets/smo.js"></script>
     <script is:inline defer src="assets/viz.js"></script>
     <script is:inline defer src="assets/viz-svgd-flow.js"></script>
     <script is:inline defer src="assets/viz-sinkhorn-plan.js"></script>

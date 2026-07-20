@@ -1,0 +1,594 @@
+chapter: ch-svr
+slug: support-vector-regression
+title: Support Vector Regression
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - vapnik1995
+  - vapnik1998
+  - drucker1997svr
+  - smola2004svrtutorial
+  - scholkopf2002
+  - scholkopf2000nu
+  - koenker1978quantile
+  - takeuchi2006quantile
+sections:
+  - id: epsilon-insensitive-loss
+    title: The \(\varepsilon\)-insensitive loss and where sparsity comes from
+    contribution: adapted-and-expanded
+    sources: &a1
+      - vapnik1995
+      - vapnik1998
+      - drucker1997svr
+      - smola2004svrtutorial
+      - scholkopf2002
+      - scholkopf2000nu
+      - koenker1978quantile
+      - takeuchi2006quantile
+      - newey1987expectiles
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#epsilon-insensitive-loss
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: the-primal-program
+    title: The primal program for SV regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#the-primal-program
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: the-dual-and-box-constraints
+    title: The dual and its box constraints
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#the-dual-and-box-constraints
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: geometry-of-the-tube
+    title: "Geometry of the \\(\\varepsilon\\)-tube: support vectors, sparsity, and resistance"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#geometry-of-the-tube
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: general-losses-and-ridge
+    title: General losses and the ridge connection
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#general-losses-and-ridge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: quantile-regression
+    title: Quantile regression with the pinball loss
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#quantile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: expectile-regression
+    title: Expectile regression
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - newey1987expectiles
+    locators:
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#expectile-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: noncrossing-distributional-prediction
+    title: Noncrossing distributional prediction
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#noncrossing-distributional-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: nu-sv-regression
+    title: \(\nu\)-SV regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#nu-sv-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: parametric-insensitivity
+    title: Parametric insensitivity models
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#parametric-insensitivity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: applications
+    title: Applications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#applications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - vapnik1995
+      - vapnik1998
+      - drucker1997svr
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnik1995
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: drucker1997svr
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smola2004svrtutorial
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2000nu
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koenker1978quantile
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: takeuchi2006quantile
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: newey1987expectiles
+        manuscript_locator: ch-svr.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

@@ -12,7 +12,16 @@
     {"sym": "\\xi_i,\\; C,\\; \\nu", "def": "SVM slack variables and the trade-off parameters: C prices margin violations, and nu bounds the fraction of margin errors and support vectors.", "slug": "support-vector-machines"},
     {"sym": "\\lambda_i,\\; \\psi_i", "def": "The eigenvalues and eigenfunctions of the kernel integral operator (Mercer's theorem). Their decay measures the smoothness the kernel enforces.", "slug": "mercer-and-rates"},
     {"sym": "\\mu_P = \\mathbb{E}_{X\\sim P}[k(\\cdot, X)]", "def": "The kernel mean embedding of a probability distribution P into the RKHS.", "slug": "kernel-mean-embeddings"},
-    {"sym": "\\mathrm{MMD}(P, Q)", "def": "The maximum mean discrepancy, the RKHS distance between the mean embeddings of P and Q.", "slug": "kernel-mean-embeddings"}
+    {"sym": "\\mathrm{MMD}(P, Q)", "def": "The maximum mean discrepancy, the RKHS distance between the mean embeddings of P and Q.", "slug": "kernel-mean-embeddings"},
+    {"sym": "K(x,z)\\in\\mathcal{L}(\\mathcal{Y})", "def": "An operator-valued kernel mapping an input pair to a bounded output-space operator.", "slug": "vector-and-operator-valued-kernels"},
+    {"sym": "L=D-W", "def": "The graph Laplacian used to penalize variation over an unlabeled-data graph.", "slug": "semi-supervised-and-manifold-regularization"},
+    {"sym": "g_\\lambda(\\mu),\\;r_\\lambda(\\mu)", "def": "A spectral regularization filter and its residual, 1 minus mu times the filter.", "slug": "inverse-learning-and-spectral-regularization"},
+    {"sym": "h_\\theta(x)", "def": "A trainable representation composed with a positive definite base kernel in deep kernel learning.", "slug": "deep-kernel-learning"},
+    {"sym": "f=f_0+f_1", "def": "The smoothing-spline decomposition into an unpenalized null-space component and a penalized rough component.", "slug": "smoothing-splines-and-additive-rkhs"},
+    {"sym": "C(h)", "def": "A stationary spatial covariance as a function of lag h; its validity means every finite covariance matrix is PSD.", "slug": "spatial-and-spatiotemporal-kernels"},
+    {"sym": "w(x)=p_T(x)/p_S(x)", "def": "The target-to-source density ratio used under covariate shift, defined only where the source covers the target.", "slug": "distribution-shift-robustness-and-conformal-prediction"},
+    {"sym": "(\\mathcal K g)(x)=g(F(x))", "def": "The Koopman operator advances an observable by composition with the dynamics.", "slug": "dynamical-systems-control-and-reinforcement-learning"},
+    {"sym": "\\mathcal G:u\\mapsto v", "def": "An operator-learning target mapping an input function or field to an output function or field.", "slug": "scientific-computing-and-operator-learning"}
   ],
   "terms": [
     {"term": "Positive definite kernel", "def": "A symmetric function whose Gram matrix is positive semidefinite for every finite sample; equivalently, an inner product after a feature map.", "slug": "kernels-and-rkhs"},
@@ -23,7 +32,7 @@
     {"term": "Support vector machine", "def": "A margin-maximizing classifier: the hinge loss plus an RKHS penalty, whose solution depends only on the support vectors.", "slug": "support-vector-machines"},
     {"term": "Support vector", "def": "A training point with nonzero dual coefficient; the only points that determine an SVM's decision boundary.", "slug": "support-vector-machines"},
     {"term": "Rademacher complexity", "def": "A data-dependent capacity measure: how well a function class can correlate with random noise. Controls generalization for RKHS balls.", "slug": "learning-theory"},
-    {"term": "Kernel PCA", "def": "Principal component analysis run through the kernel: the eigendecomposition of the centered Gram matrix.", "slug": "unsupervised-kernel-methods"},
+    {"term": "Kernel PCA", "def": "Principal component analysis run through the kernel: the eigendecomposition of the centered Gram matrix.", "slug": "kernel-pca"},
     {"term": "Mercer's theorem", "def": "A continuous positive definite kernel on a compact domain expands as a uniformly convergent sum of its eigenfunctions, giving an explicit feature map.", "slug": "mercer-and-rates"},
     {"term": "Bochner's theorem", "def": "A continuous translation-invariant kernel is the Fourier transform of a nonnegative measure; the basis of random Fourier features.", "slug": "kernel-families"},
     {"term": "Conditionally positive definite kernel", "def": "A kernel whose quadratic form is nonnegative on zero-sum coefficient vectors; k is CPD iff exp(tk) is positive definite for all t>0.", "slug": "kernel-families"},
@@ -40,6 +49,25 @@
     {"term": "Margin", "def": "The signed distance from a labeled point to a classifier's decision boundary; the SVM maximizes the smallest margin, and margin bounds control generalization.", "slug": "support-vector-machines"},
     {"term": "Conditional mean embedding", "def": "The RKHS operator mapping the embedding of a conditioning variable to the mean embedding of a conditional distribution, extending mean embeddings to conditional laws.", "slug": "kernel-mean-embeddings"},
     {"term": "Kernel Stein discrepancy", "def": "A discrepancy between a sample and a target density that needs only the target's score function, built from a Stein operator acting on the RKHS; used for goodness-of-fit testing.", "slug": "kernel-mean-embeddings"},
-    {"term": "Double descent", "def": "The generalization error curve that, past the interpolation threshold where a model fits the data exactly, descends a second time as capacity grows; the phenomenon that revised the classical bias-variance picture.", "slug": "kernels-now"}
+    {"term": "Double descent", "def": "The generalization error curve that, past the interpolation threshold where a model fits the data exactly, descends a second time as capacity grows; the phenomenon that revised the classical bias-variance picture.", "slug": "kernels-now"},
+    {"term": "Vector-valued RKHS", "def": "A Hilbert space of functions whose outputs lie in a Hilbert space, reproduced by an operator-valued kernel.", "slug": "vector-and-operator-valued-kernels"},
+    {"term": "Manifold regularization", "def": "Semi-supervised regularization combining an ambient RKHS norm with graph-Laplacian smoothness over labeled and unlabeled inputs.", "slug": "semi-supervised-and-manifold-regularization"},
+    {"term": "Spectral regularization", "def": "Stabilizing an ill-posed inverse by filtering covariance-operator eigenvalues rather than directly inverting weak directions.", "slug": "inverse-learning-and-spectral-regularization"},
+    {"term": "Qualification", "def": "The range of source smoothness over which a spectral filter achieves its asserted bias order.", "slug": "inverse-learning-and-spectral-regularization"},
+    {"term": "Deep kernel learning", "def": "Jointly learning a parametric feature map and the kernel or Gaussian-process readout defined on those features.", "slug": "deep-kernel-learning"},
+    {"term": "NORMA", "def": "An online regularized risk-minimization template that shrinks the current RKHS function and appends a loss-gradient kernel section.", "slug": "online-kernel-learning"},
+    {"term": "Passive-aggressive update", "def": "The smallest capped online model change that enforces the current margin or regression-tube constraint.", "slug": "online-kernel-learning"},
+    {"term": "EigenPro", "def": "A spectral preconditioner that flattens leading kernel eigenvalues to accelerate matrix-free iterative learning.", "slug": "large-scale-kernels"},
+    {"term": "Smoothing spline", "def": "A function estimator balancing data fit with a derivative-based roughness penalty; its solution is a finite kernel expansion plus a penalty null space.", "slug": "smoothing-splines-and-additive-rkhs"},
+    {"term": "Generalized additive model", "def": "A model that adds learned component functions of individual variables or small groups while retaining interpretable effect structure.", "slug": "smoothing-splines-and-additive-rkhs"},
+    {"term": "Kriging", "def": "Best linear prediction under a declared spatial covariance model, equivalent to Gaussian-process prediction for the same mean and covariance assumptions.", "slug": "spatial-and-spatiotemporal-kernels"},
+    {"term": "Variogram", "def": "Half the variance of an increment across a spatial lag, used to diagnose and model spatial dependence.", "slug": "spatial-and-spatiotemporal-kernels"},
+    {"term": "Conformal prediction", "def": "A calibration framework that converts exchangeable nonconformity scores into finite-sample marginal prediction sets.", "slug": "distribution-shift-robustness-and-conformal-prediction"},
+    {"term": "Covariate shift", "def": "A train-test change in the input distribution while the conditional outcome law given the input remains invariant.", "slug": "distribution-shift-robustness-and-conformal-prediction"},
+    {"term": "Koopman operator", "def": "A linear, generally infinite-dimensional operator that evolves observables of a nonlinear dynamical system.", "slug": "dynamical-systems-control-and-reinforcement-learning"},
+    {"term": "Probabilistic numerics", "def": "Numerical computation represented as inference, producing uncertainty about an integral, differential-equation solution, or other numerical quantity.", "slug": "scientific-computing-and-operator-learning"},
+    {"term": "Reproducing-kernel Banach space", "def": "A Banach space of functions with continuous point evaluation, extending reproducing geometry beyond quadratic Hilbert norms.", "slug": "reproducing-kernel-banach-and-variation-spaces"},
+    {"term": "Variation norm", "def": "A nonquadratic function-space norm that measures the total mass of a representing measure and can favor sparse atomic representations.", "slug": "reproducing-kernel-banach-and-variation-spaces"},
+    {"term": "Quantum kernel", "def": "A positive-definite similarity obtained from overlaps of data-encoded quantum states and estimated through a quantum circuit.", "slug": "the-frontier"}
   ]
 }

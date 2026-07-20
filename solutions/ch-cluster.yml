@@ -1,0 +1,84 @@
+chapter: ch-cluster
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "In the kernel K-means assignment step, the squared distance from point \\(\\mathbf{x}_i\\)
+      to the centroid of a candidate cluster \\(s\\) expands into three terms: the self-similarity
+      \\(K(\\mathbf{x}_i, \\mathbf{x}_i)\\), the average similarity \\(\\frac{2}{|C_s|}\\sum_{j \\in
+      C_s} K(\\mathbf{x}_i, \\mathbf{x}_j)\\), and the internal cohesion
+      \\(\\frac{1}{|C_s|^2}\\sum_{j,l \\in C_s} K(\\mathbf{x}_j, \\mathbf{x}_l)\\). Say which of the
+      three does not depend on the candidate cluster \\(s\\), and may therefore be dropped from the
+      \\(\\arg\\min\\) over \\(s\\); which depends on \\(s\\) but not on the point \\(i\\); and
+      which couples the point to the cluster. Conclude that assigning \\(\\mathbf{x}_i\\) amounts to
+      comparing, across clusters, the cohesion minus twice the average similarity."
+    answer: K(x_i,x_i) is independent of candidate cluster and can be dropped from the argmin. The
+      cohesion |C_s|^{-2}sum_{j,l in C_s}K_jl depends on s but is precomputable independently of i.
+      The middle average couples i to members of s. Thus the assignment compares cohesion_s-2
+      averageSimilarity(i,s), selecting the smallest value (equivalently the cluster offering large
+      point similarity after accounting for its baseline cohesion).
+  - number: 2
+    kind: challenge
+    status: draft
+    prompt: The graph Laplacian \(L = D - K\), with \([D]_{ii} = \sum_j K(\mathbf{x}_i, \mathbf{x}_j)\),
+      sits at the heart of the spectral methods. (a) Prove the quadratic-form identity
+      \(\mathbf{v}^\top L \mathbf{v} = \frac{1}{2}\sum_{i,j} K(\mathbf{x}_i, \mathbf{x}_j)(v_i -
+      v_j)^2\). (b) Deduce that \(L\) is positive semidefinite whenever the affinities
+      \(K(\mathbf{x}_i,\mathbf{x}_j)\) are nonnegative, and that the all-ones vector \(\mathbf{1}\)
+      is always an eigenvector with eigenvalue \(0\). (c) Argue from the identity why the smallest
+      nontrivial eigenvector varies slowly across strongly connected points and jumps across weakly
+      connected ones, so that thresholding it separates the graph along its weakest cut.
+    answer: Expand (1/2)sum_ij K_ij(v_i-v_j)^2=(1/2)sum_ij K_ij(v_i^2+v_j^2-2v_iv_j)=sum_i d_i
+      v_i^2-sum_ij K_ijv_iv_j=v^T(D-K)v. Nonnegative affinities make every summand nonnegative, so L
+      is PSD. Since D1=K1, L1=0. A small Rayleigh quotient penalizes differences v_i-v_j most
+      strongly where K_ij is large, forcing nearly equal values within dense regions while
+      permitting changes across low-weight edges. The first nonconstant minimizer therefore reveals
+      the weakest balanced transition/cut.
+  - number: 3
+    kind: challenge
+    status: draft
+    prompt: The relaxed normalized cut led to the generalized eigenproblem \(L f = \lambda D f\) and to
+      two normalized Laplacians, \(L_{\mathrm{sym}} = D^{-1/2} L D^{-1/2}\) and \(L_{\mathrm{rw}} =
+      D^{-1} L\). Make the claim that they share a spectrum precise. (a) Show that \(f\) solves \(L
+      f = \lambda D f\) if and only if \(g = D^{1/2} f\) solves \(L_{\mathrm{sym}} g = \lambda g\),
+      so the generalized pair \((L, D)\) and the symmetric matrix \(L_{\mathrm{sym}}\) have the same
+      eigenvalues, with eigenvectors related by \(D^{1/2}\). (b) Show that \(f\) solves \(L f =
+      \lambda D f\) if and only if \(L_{\mathrm{rw}} f = \lambda f\), so \(L_{\mathrm{rw}}\) has the
+      same eigenvalues again, sharing the generalized eigenvectors directly. (c) Deduce that \(0\)
+      is always an eigenvalue, with eigenvector \(\mathbf{1}\) for \(L_{\mathrm{rw}}\) and
+      \(D^{1/2}\mathbf{1}\) for \(L_{\mathrm{sym}}\), and that on a connected graph this eigenvalue
+      is simple, so the Fiedler vector for the second-smallest eigenvalue is well defined.
+    answer: "From Lf=lambda Df, multiply by D^{-1/2} after setting g=D^{1/2}f: D^{-1/2}LD^{-1/2}g=lambda
+      g, and the argument reverses when degrees are positive. Multiplying instead by D^{-1} gives
+      L_rw f=lambda f. Thus all three formulations share eigenvalues; L_rw retains f while L_sym
+      uses g. Because L1=0, L_rw1=0 and L_sym D^{1/2}1=0. On a connected positive-degree graph the
+      Laplacian nullspace contains only constants, so zero is simple and the second
+      eigenvector/Fiedler direction is well defined up to sign."
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: "A new point \\(\\mathbf{x}\\) is embedded by the Nystrom extension \\(\\phi_m(\\mathbf{x})
+      = \\frac{1}{\\lambda_m}\\sum_{i=1}^n u_m(i)\\, \\tilde{k}(\\mathbf{x}, \\mathbf{x}_i)\\),
+      where \\((\\lambda_m, \\mathbf{u}_m)\\) is an eigenpair of the normalized affinity \\(M\\)
+      with \\([M]_{ji} = \\tilde{k}(\\mathbf{x}_j, \\mathbf{x}_i)\\). (a) Verify the consistency
+      property: evaluated at a training point \\(\\mathbf{x}_j\\), the extension returns
+      \\(\\phi_m(\\mathbf{x}_j) = u_m(j)\\), so it agrees with the eigenvector it extends. (b)
+      Recalling the projection of a feature vector onto a kernel principal component from the
+      referenced chapter, explain why the extension formula is, up to the factor \\(1/\\lambda_m\\),
+      exactly that projection, so spectral embedding and kernel PCA compute one set of
+      eigenfunctions. (c) Argue that the extension is trustworthy only when the query does not
+      appreciably change the degrees and the normalization, and say what should be done when many
+      new points arrive at once."
+    answer: At a training point x_j, tilde k(x_j,x_i)=M_{ji}. Hence phi_m(x_j)=lambda_m^{-1}sum_i
+      u_m(i)M_{ji}=lambda_m^{-1}[Mu_m]_j=u_m(j). The formula is the kernel-eigenfunction/Nystrom
+      projection of a new feature vector onto the fitted principal direction, with 1/lambda_m
+      converting its kernel row to an eigenfunction value. It assumes the query leaves training
+      degrees, centering, and normalization fixed. If many new points arrive or shift those
+      quantities appreciably, recompute or incrementally update the normalized affinity eigensystem
+      rather than applying independent frozen extensions.

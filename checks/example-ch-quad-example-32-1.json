@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-quad",
+  "anchor": "example-32-1",
+  "source_file": "manuscript/chapters/ch-quad.md",
+  "source_sha256": "6e9d75dbe24d613e8d695048d74c9affdc3250b0cdea3a7042ba2597252336a2",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-quad-ex1.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "2",
+    "-1",
+    "4",
+    "0.577350",
+    "0.606531",
+    "0.135335",
+    "0.550695",
+    "0.707107",
+    "3",
+    "0.004662",
+    "0.068281",
+    "0.304856",
+    "0.337297",
+    "0.947010",
+    "5",
+    "0.003079",
+    "0.055490",
+    "0.001583",
+    "34"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

@@ -1,0 +1,164 @@
+chapter: ch12
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "Let \\(K_1, \\ldots, K_M\\) be positive definite kernels on \\(\\mathcal{X}\\) and let
+      \\(\\eta_1, \\ldots, \\eta_M \\ge 0\\). Show that the weighted sum \\(K_\\eta = \\sum_{i=1}^M
+      \\eta_i K_i\\) is again a positive definite kernel, so that every kernel in the MKL candidate
+      set is legitimate. Then explain why the constraint \\(\\sum_i \\eta_i = 1\\) is a
+      normalization rather than a restriction: given any nonnegative weights, what does rescaling
+      them do to the learned predictor if \\(\\lambda\\) is rescaled to match?"
+    answer: For finite points and coefficients c, c^T K_eta c=sum_i eta_i c^T K_i c>=0 because every
+      eta_i is nonnegative; symmetry also survives the sum. Thus K_eta is positive definite. If
+      arbitrary nonnegative weights have total s>0, write K_eta=s K_bar with normalized weights
+      eta_i/s. Scaling a kernel by s rescales its RKHS norm inversely; adjusting lambda by the
+      corresponding factor leaves the regularized predictor unchanged. The simplex removes this
+      otherwise redundant overall scale and identifies only the relative kernel weights.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: "The penalty in the weighted sum kernel theorem is \\(\\lambda \\sum_i \\lVert f_i
+      \\rVert_{\\mathcal{H}_{K_i}}^2 / \\eta_i\\), with \\(\\eta_i\\) in the denominator. Explain in
+      words why a large \\(\\eta_i\\) encourages the fit to use kernel \\(i\\) heavily while
+      \\(\\eta_i \\to 0\\) switches the kernel off entirely. Reconcile this with the equally
+      intuitive reading of \\(K_\\eta = \\sum_i \\eta_i K_i\\), where a large \\(\\eta_i\\) makes
+      kernel \\(i\\) count for more in the combined similarity: why do the two pictures, weight in
+      the kernel and reciprocal weight in the penalty, agree on which kernel is emphasized?"
+    answer: "For fixed f_i, the cost a_i^2/eta_i falls as eta_i grows, so the optimizer can cheaply
+      place more norm in an emphasized block. If eta_i tends to zero, any nonzero a_i has infinite
+      cost; finite solutions must set f_i=0. The kernel view says the same thing: multiplying K_i by
+      eta_i scales up its feature directions, making a given function in those directions require
+      less RKHS norm. Thus a large kernel contribution and a small reciprocal penalty are the primal
+      and geometric descriptions of the same rescaling."
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Prove the sum-kernel concatenation theorem from the ground up. For \\(i = 1, \\ldots, M\\)
+      let \\(\\Phi_i : \\mathcal{X} \\to \\mathcal{H}_i\\) satisfy \\(K_i(\\mathbf{x}, \\mathbf{x}')
+      = \\langle \\Phi_i(\\mathbf{x}), \\Phi_i(\\mathbf{x}') \\rangle_{\\mathcal{H}_i}\\). Define
+      the direct sum \\(\\mathcal{H}_S = \\mathcal{H}_1 \\oplus \\cdots \\oplus \\mathcal{H}_M\\)
+      with inner product \\(\\langle (u_1, \\ldots, u_M), (v_1, \\ldots, v_M)
+      \\rangle_{\\mathcal{H}_S} = \\sum_i \\langle u_i, v_i \\rangle_{\\mathcal{H}_i}\\), and set
+      \\(\\Phi_S(\\mathbf{x}) = (\\Phi_1(\\mathbf{x}), \\ldots, \\Phi_M(\\mathbf{x}))\\). Verify
+      that \\(\\langle \\cdot, \\cdot \\rangle_{\\mathcal{H}_S}\\) is a genuine inner product, and
+      show \\(\\langle \\Phi_S(\\mathbf{x}), \\Phi_S(\\mathbf{x}') \\rangle_{\\mathcal{H}_S} =
+      K_S(\\mathbf{x}, \\mathbf{x}')\\). Then give the spreadsheet reading: if each
+      \\(\\mathcal{H}_i = \\mathbb{R}^{d_i}\\), describe the feature vector
+      \\(\\Phi_S(\\mathbf{x})\\) concretely and say what removing kernel \\(j\\) does to it."
+    answer: The direct-sum form is bilinear and symmetric, is positive because sum_i||u_i||^2>=0, and
+      equals zero only when every u_i=0, so it is an inner product. Then
+      <Phi_S(x),Phi_S(x')>=sum_i<Phi_i(x),Phi_i(x')>=sum_i K_i(x,x')=K_S(x,x'). In finite dimensions
+      Phi_S(x) is the spreadsheet formed by concatenating all feature columns from blocks 1 through
+      M into a vector of length sum_i d_i. Removing kernel j deletes its entire coordinate block,
+      not merely one scalar feature.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Prove that \(K \mapsto J(K)\) is convex, where \(J(K) = \min_{f \in \mathcal{H}} \{
+      R(\mathbf{f}_n) + \lambda \lVert f \rVert_{\mathcal{H}}^2 \}\), directly from the dual
+      representation
+    answer: For fixed gamma, -R*(-2lambda gamma)-lambda gamma^T K gamma is a constant plus a linear
+      function of the matrix entries K_jk. It is therefore affine in K. J(K) is the pointwise
+      supremum of these affine functions over gamma, and every pointwise supremum of convex
+      functions is convex. The reasoning uses only the finite symmetric Gram matrix on the training
+      sample; the abstract kernel enters through that matrix. Since K_eta=sum_i eta_i K_i depends
+      affinely on eta, composition of convex J with this affine map makes the outer MKL objective
+      convex on the simplex.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Derive the group-lasso weight relation. For fixed \((f_1, \ldots, f_M)\) with \(a_i = \lVert
+      f_i \rVert_{\mathcal{H}_{K_i}} \ge 0\), show that
+    answer: Cauchy-Schwarz gives (sum_i a_i)^2=[sum_i (a_i/sqrt(eta_i))sqrt(eta_i)]^2<=(sum_i
+      a_i^2/eta_i)(sum_i eta_i)=sum_i a_i^2/eta_i. Equality requires a_i/sqrt(eta_i) proportional to
+      sqrt(eta_i), hence eta_i proportional to a_i. The Lagrangian derivative -a_i^2/eta_i^2+mu=0
+      yields the same relation; normalization gives eta_i*=a_i/sum_j a_j and objective (sum_j
+      a_j)^2. A zero-norm block receives zero weight (with the usual limiting convention), so
+      optimizing weights performs block selection simultaneously.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive single-kernel figure at the top of the chapter and sweep the bandwidth
+      of the Gaussian kernel from very narrow to very wide while watching the fitted curve on the
+      fixed data. Describe the two failure modes at the extremes: what does the fit do to the
+      training points when the bandwidth is tiny, and what does it do to the between-point structure
+      when the bandwidth is huge? Identify, if you can, a region of the input where a narrow setting
+      fits well and another where a wide setting fits better. Then argue from that single
+      observation why no one bandwidth is right everywhere, and how making several bandwidths
+      available at once and learning a convex combination \\(\\sum_i \\eta_i K_i\\) is the natural
+      response. Which combination rule, the plain sum kernel or MKL, would you expect to keep only
+      the bandwidths that a given dataset actually needs?"
+    answer: "A tiny Gaussian bandwidth creates nearly isolated basis functions: the fit can spike
+      through individual observations and says little between them. A huge bandwidth makes all
+      points look alike, washing out local changes and producing an overly global curve. Real data
+      can contain both a rapidly varying region and a slowly varying one, so one length scale need
+      not serve both. Supplying a bank of bandwidth kernels lets the optimizer combine local and
+      global similarities. A plain fixed sum keeps every supplied scale; MKL's block-l1 geometry is
+      the rule expected to set unnecessary bandwidth weights exactly to zero."
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "Work the ridge-versus-lasso specialization and connect it to the algorithm. Take
+      \\(\\mathcal{X} = \\mathbb{R}^d\\) with the rank-one coordinate kernels \\(K_i(\\mathbf{x},
+      \\mathbf{x}') = x_i x_i'\\), whose RKHS is \\(\\{ f_i(\\mathbf{x}) = \\beta_i x_i \\}\\) with
+      \\(\\lVert f_i \\rVert_{\\mathcal{H}_{K_i}} = |\\beta_i|\\). Show that learning with the sum
+      kernel is ridge regression (penalty \\(\\sum_i \\beta_i^2\\)) and learning with MKL is lasso
+      regression (penalty \\((\\sum_i |\\beta_i|)^2\\)), and explain why the second sets coordinates
+      to exactly zero while the first only shrinks them. Now run one simpleMKL step by hand on this
+      problem: at a current weight vector \\(\\eta\\), the inner solver returns
+      \\(\\boldsymbol{\\gamma}^\\ast\\); write the gradient component \\(\\partial J(K_\\eta) /
+      \\partial \\eta_i = -\\lambda \\, \\boldsymbol{\\gamma}^{\\ast\\top} K_i
+      \\boldsymbol{\\gamma}^\\ast\\) for the coordinate kernel \\(K_i\\), interpret it as scoring
+      coordinate \\(i\\) by how much of the current fit it explains, and say which coordinate the
+      next projected-gradient update on the simplex will push up."
+    answer: For coordinate kernels the sum-kernel decomposition f=sum_i beta_i x_i has squared norm
+      sum_i beta_i^2, exactly ridge. Minimizing over simplex weights changes the penalty to
+      (sum_i|beta_i|)^2, which has the same axis-aligned corners and support selection as lasso. At
+      a simpleMKL iterate, gamma^T K_i gamma=(sum_j gamma_j x_{ji})^2. Hence partial J/partial
+      eta_i=-lambda(sum_j gamma_j x_{ji})^2. Projected gradient descent increases the coordinate
+      with the most negative derivative—equivalently the largest squared alignment with the current
+      dual solution—and decreases weak coordinates, potentially to the simplex boundary.
+  - number: 8
+    kind: computation
+    status: draft
+    prompt: Reproduce the centering example. Take \(y=(+1,+1,-1,-1)\) and the two rank-one kernels
+      \(K_1=\phi_1\phi_1^\top\), \(K_2=\phi_2\phi_2^\top\) from \(\phi_1=(3,3,1,1)\) and
+      \(\phi_2=(1,0.5,-0.5,-1)\). First prove the identity \(\langle K,yy^\top\rangle_F=y^\top K y\)
+      that makes the target alignment a single quadratic form, and use it to recompute the
+      uncentered alignments \(A(K_1,yy^\top)=0.2\) and \(A(K_2,yy^\top)=0.9\). Then apply
+      \(H=I-\tfrac14\mathbf 1\mathbf 1^\top\), verify \(H\phi_1=y\) so that \(K_1\) centered equals
+      the ideal kernel \(yy^\top\), and recompute the centered alignments \(A_c(K_1,yy^\top)=1.0\)
+      and \(A_c(K_2,yy^\top)=0.9\). In one sentence, name the feature property of \(\phi_1\) that
+      fools the uncentered score and say why centering removes it.
+    answer: Frobenius bilinearity gives <K,yy^T>_F=tr(K^T yy^T)=tr(y^T K y)=y^T K y. For rank-one K=phi
+      phi^T, the numerator is (y^T phi)^2 and ||K||_F=||phi||^2, which gives the stated uncentered
+      values 0.2 and 0.9 after division by ||yy^T||_F=||y||^2=4. The mean of phi_1 is 2, so
+      Hphi_1=(1,1,-1,-1)=y and HK_1H=yy^T, giving centered alignment one. Phi_2 already has mean
+      zero, so its 0.9 alignment remains. Phi_1's large constant offset inflates its norm without
+      label information; centering removes exactly that nuisance direction.
+  - number: 9
+    kind: proof
+    status: draft
+    prompt: "Establish the two facts the two-stage method rests on. (a) Offset invariance: show that for
+      any kernels \\(K,L\\) and any constant \\(c\\), the centered alignment is unchanged under
+      \\(K\\mapsto K+c\\,\\mathbf 1\\mathbf 1^\\top\\), that is \\(A_c(K+c\\,\\mathbf 1\\mathbf
+      1^\\top,L)=A_c(K,L)\\); this is the precise sense in which centered alignment ignores the
+      nuisance that misleads the uncentered one. (b) Alignment-maximizing weights: with
+      \\(a_i=\\langle K_i^c,M_y\\rangle_F\\) and \\(M_{ij}=\\langle K_i^c,K_j^c\\rangle_F\\), show
+      that maximizing the centered alignment of \\(K_\\eta=\\sum_i\\eta_i K_i\\) to \\(yy^\\top\\)
+      over \\(\\eta\\in\\mathbb{R}^M\\), with the nonnegativity constraint relaxed, is the same as
+      maximizing \\(a^\\top\\eta/\\sqrt{\\eta^\\top M\\eta}\\), and that its maximizer is
+      \\(\\eta^\\ast\\propto M^{-1}a\\)."
+    answer: Because H1=0, H(K+c11^T)H=HKH+c(H1)(H1)^T=HKH, so every numerator and norm in centered
+      alignment is unchanged. For K_eta^c=sum_i eta_i K_i^c, its target inner product is a^T eta and
+      its squared Frobenius norm is eta^T M eta. The target norm is constant, so maximizing
+      alignment is maximizing (a^T eta)/sqrt(eta^T M eta). Let z=M^{1/2}eta; Cauchy-Schwarz gives
+      a^T eta=(M^{-1/2}a)^Tz<=sqrt(a^T M^{-1}a)sqrt(eta^T M eta), with equality when eta is
+      proportional to M^{-1}a. Nonnegativity may then require projection or a constrained solve.

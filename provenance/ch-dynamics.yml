@@ -1,0 +1,232 @@
+chapter: ch-dynamics
+slug: dynamical-systems-control-and-reinforcement-learning
+title: Kernels for Dynamical Systems, Control, and Reinforcement Learning
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - rowley2009koopman
+  - eleftheriadis2017gpssm
+  - farahmand2016policy
+  - song2013cme
+sections:
+  - id: dynamics-setting
+    title: Sequential data and four sources of error
+    contribution: adapted-and-expanded
+    sources: &a1
+      - rowley2009koopman
+      - eleftheriadis2017gpssm
+      - farahmand2016policy
+      - song2013cme
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#dynamics-setting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#dynamics-setting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#dynamics-setting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#dynamics-setting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-dynamics
+    title: Gaussian-process transition models
+    contribution: adapted-and-expanded
+    sources:
+      - eleftheriadis2017gpssm
+    locators:
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#gp-dynamics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: koopman-transfer
+    title: Koopman and transfer operators
+    contribution: adapted-and-expanded
+    sources:
+      - rowley2009koopman
+      - song2013cme
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#koopman-transfer
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#koopman-transfer
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-edmd
+    title: Kernel EDMD
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#kernel-edmd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#kernel-edmd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#kernel-edmd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#kernel-edmd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-bellman
+    title: Value functions and Bellman operators
+    contribution: adapted-and-expanded
+    sources:
+      - farahmand2016policy
+    locators:
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#kernel-bellman
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: off-policy
+    title: Off-policy evaluation and coverage
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#off-policy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#off-policy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#off-policy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#off-policy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-control
+    title: Control with learned kernel models
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#kernel-control
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#kernel-control
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#kernel-control
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#kernel-control
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dynamics-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#dynamics-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#dynamics-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#dynamics-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#dynamics-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dynamics-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - rowley2009koopman
+      - eleftheriadis2017gpssm
+      - farahmand2016policy
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#dynamics-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#dynamics-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#dynamics-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

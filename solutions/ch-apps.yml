@@ -1,0 +1,98 @@
+chapter: ch-apps
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: 'Using the decision guide, name a sensible first kernel and the chapter that builds it for
+      each: (a) a house price from ten standardized numeric features; (b) proteins classified into
+      structural families from their sequences; (c) the toxicity of small molecules given as labeled
+      graphs; (d) news articles categorized by topic; (e) two probability distributions given as
+      samples. In one sentence, say why \"there is no universally best kernel\" makes this a
+      modeling choice rather than a lookup.'
+    answer: "Sensible starting points are: (a) an RBF kernel on standardized vectors, from the
+      kernel-families chapter; (b) a spectrum or mismatch sequence kernel, from the strings
+      chapters; (c) a Weisfeiler--Lehman graph kernel, from the graph-kernels chapter; (d) a tf-idf
+      cosine or text kernel, from the text chapter; and (e) MMD with a characteristic base kernel,
+      from the testing chapter. These are starting hypotheses: the best geometry depends on
+      invariances, sample size, noise, and the downstream loss, so validation—not a universal lookup
+      table—must decide."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Take the \(3\times 3\) Gram matrix \(K=\begin{pmatrix}4 & 2 & 0\\ 2 & 9 & 3\\ 0 & 3 &
+      2\end{pmatrix}\). (a) Cosine-normalize it, \(\tilde K_{ij}=K_{ij}/\sqrt{K_{ii}K_{jj}}\), and
+      verify the diagonal is all ones. (b) Double-center the original \(K\) with
+      \(H=I-\tfrac13\mathbf 1\mathbf 1^\top\), forming \(HKH\), and verify every row sum is \(0\).
+      State in one line what each operation does to the feature-space picture.
+    answer: With diagonal square roots $(2,3,\sqrt2)$, cosine normalization gives $\widetilde
+      K=\begin{pmatrix}1&1/3&0\\1/3&1&1/\sqrt2\\0&1/\sqrt2&1\end{pmatrix}$. For
+      $H=I-\mathbf1\mathbf1^\top/3$,
+      $HKH=(1/9)\begin{pmatrix}25&-17&-8\\-17&22&-5\\-8&-5&13\end{pmatrix}$, whose row and column
+      sums are zero. Normalization puts each nonzero feature vector on the unit sphere; centering
+      subtracts the empirical feature mean. (The corrected $K_{33}=2$ also makes the stated matrix
+      genuinely positive definite.)
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Show that cosine normalization preserves positive definiteness: if \\(k\\) is a positive
+      definite kernel with \\(k(x,x)\\gt 0\\) for all \\(x\\), then \\(\\tilde
+      k(x,x')=k(x,x')/\\sqrt{k(x,x)k(x',x')}\\) is positive definite. Then identify the feature map
+      of \\(\\tilde k\\) in terms of the feature map \\(\\Phi\\) of \\(k\\)."
+    answer: Let $k(x,x')=\langle\Phi(x),\Phi(x')\rangle$ and assume $k(x,x)>0$. Define
+      $\widetilde\Phi(x)=\Phi(x)/\|\Phi(x)\|$. Then $\widetilde
+      k(x,x')=\langle\widetilde\Phi(x),\widetilde\Phi(x')\rangle$, so every finite Gram matrix is
+      PSD. Equivalently, on a sample $\widetilde K=D^{-1/2}KD^{-1/2}$ is a congruence of $K$, with
+      $D_{ii}=K_{ii}>0$.
+  - number: 4
+    kind: exploration
+    status: draft
+    prompt: Rerun the model-selection example with a third bandwidth \(\sigma=1.0\) in the grid. Before
+      computing, predict where its \(d_{\text{eff}}(0.1)\) falls relative to \(2.43\) (at
+      \(\sigma=2.0\)) and \(5.11\) (at \(\sigma=0.5\)), and whether its CV error beats the winner
+      \(0.1736\); then check with a short numpy script and explain any surprise using the spectrum.
+    answer: "The prediction is correct for effective dimension: at $\\sigma=1.0$ the eigenvalues are
+      approximately $(3.4379,1.7902,0.6123,0.1383,0.0198,0.0015)$ and $d_{eff}(0.1)=3.5387$, between
+      2.43 and 5.11. The two held-out MSEs are $0.1881$ and $0.0212$, averaging $0.1046$, so it
+      beats the earlier $0.1736$ winner. This is not a contradiction: effective dimension is
+      monotone here, while validation error is a bias--variance tradeoff and can attain its minimum
+      at an intermediate bandwidth."
+  - number: 5
+    kind: challenge
+    status: draft
+    prompt: "Explain precisely why selecting the bandwidth and reporting the error on the same folds
+      gives an optimistically biased estimate, and how nested cross-validation removes the bias.
+      Then count the model fits: for outer \\(K_1\\) folds, inner \\(K_2\\) folds, and a grid of
+      \\(G\\) settings, how many times is the base learner trained, and how does that compare with
+      the biased single-loop count?"
+    answer: A single-loop estimate is the minimum of several noisy fold estimates; the same random
+      favorable deviations that make a setting win are then counted as evidence of its performance,
+      producing selection bias. Nested CV chooses the setting using only each outer training split,
+      while the untouched outer fold estimates the entire selection procedure. Per outer fold there
+      are $K_2G$ inner fits plus one refit, hence $K_1(K_2G+1)$ base-learner fits; a final all-data
+      deployment fit adds one. The biased single loop uses $K_2G$ fits plus one refit. The outer
+      estimates are approximately unbiased for the specified training-and-selection pipeline,
+      subject to ordinary finite-sample and dependence caveats.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: Study how \(d_{\text{eff}}(\lambda)=\sum_i\lambda_i/(\lambda_i+\lambda)\) depends on the
+      ridge \(\lambda\) for a fixed Gram matrix, and connect it to Nystrom. (a) Show
+      \(d_{\text{eff}}(\lambda)\to\operatorname{rank}(K)\) as \(\lambda\to 0^+\) and \(\to 0\) as
+      \(\lambda\to\infty\), and argue it decreases in \(\lambda\). (b) Explain why a Nystrom
+      approximation with \(m\approx d_{\text{eff}}(\lambda)\) landmarks loses little accuracy at
+      ridge level \(\lambda\).
+    answer: If $\mu_i$ are the eigenvalues of $K$,
+      $d_{eff}(\lambda)=\sum_{\mu_i>0}\mu_i/(\mu_i+\lambda)$. Termwise limits give $rank(K)$ as
+      $\lambda\downarrow0$ and zero as $\lambda\to\infty$; its derivative is
+      $-\sum_i\mu_i/(\mu_i+\lambda)^2\le0$, strictly negative unless $K=0$. Ridge suppresses
+      directions below $\lambda$, so an approximation resolving roughly the $d_{eff}(\lambda)$
+      statistically active directions can preserve the regularized solution; leverage-score Nyström
+      sampling makes this statement precise. The heuristic $m\approx d_{eff}$ is not
+      unconditional—logarithmic oversampling and coherence-dependent sampling are generally
+      required.

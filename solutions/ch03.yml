@@ -1,0 +1,212 @@
+chapter: ch03
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "**Ridge as a spectral filter.** The KRR predictions at the training points are
+      \\(\\mathbf{K}\\alpha = \\mathbf{K}(\\mathbf{K} + \\lambda n I)^{-1}\\mathbf{y}\\).
+      Diagonalize \\(\\mathbf{K} = \\sum_k \\mu_k u_k u_k^\\top\\) in an orthonormal eigenbasis,
+      with eigenvalues \\(\\mu_k \\ge 0\\). (a) Show that the component of the fitted training
+      values along \\(u_k\\) is the component of \\(\\mathbf{y}\\) along \\(u_k\\) multiplied by the
+      factor \\(\\mu_k / (\\mu_k + \\lambda n)\\). (b) What are the limits of this factor as
+      \\(\\lambda \\to 0^+\\) and as \\(\\lambda \\to \\infty\\)? (c) For fixed \\(\\lambda\\),
+      explain in one sentence why the factor is close to \\(1\\) for large \\(\\mu_k\\) and close to
+      \\(0\\) for small \\(\\mu_k\\), and connect this to the claim that ridge regression keeps the
+      smooth, well-supported directions and damps the noisy ones."
+    answer: Because K and K+lambda n I have the same eigenvectors, K(K+lambda n I)^{-1}=sum_k
+      [mu_k/(mu_k+lambda n)]u_k u_k^T. Thus the u_k component of the fitted vector is (u_k^T
+      y)mu_k/(mu_k+lambda n). For mu_k>0 the factor tends to 1 as lambda tends to zero and to 0 as
+      lambda tends to infinity; for a zero eigenvalue it is always zero. At fixed lambda the factor
+      increases monotonically with mu_k. Directions strongly represented by the Gram spectrum pass
+      nearly unchanged, whereas small-eigenvalue directions are heavily attenuated, which is the
+      spectral meaning of ridge smoothing.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: "**A ridge fit by hand, two ways.** Take \\(\\mathcal{X} = \\mathbb{R}\\), the linear kernel
+      \\(K(x, x') = x x'\\), and three points \\(x_1 = 1, x_2 = 2, x_3 = 3\\) with outputs
+      \\(\\mathbf{y} = (1, 2, 2)^\\top\\). Fix the regularization so that \\(\\lambda n = 7\\). (a)
+      Using the primal ridge form \\(\\mathbf{w}_{\\mathrm{RR}} = (\\mathbf{X}^\\top\\mathbf{X} +
+      \\lambda n I)^{-1}\\mathbf{X}^\\top\\mathbf{y}\\) with the \\(3 \\times 1\\) design matrix
+      \\(\\mathbf{X} = (1,2,3)^\\top\\), show that the scalar weight is \\(w = 11/21 \\approx
+      0.52\\), and compare it with the unregularized least-squares slope \\(11/14 \\approx 0.79\\).
+      (b) The push-through identity says the same predictor is \\(\\mathbf{w}_{\\mathrm{KRR}} =
+      \\mathbf{X}^\\top(\\mathbf{K} + \\lambda n I)^{-1}\\mathbf{y}\\) with the \\(3 \\times 3\\)
+      Gram matrix \\(\\mathbf{K} = \\mathbf{X}\\mathbf{X}^\\top\\). Without inverting the \\(3
+      \\times 3\\) matrix, argue from the lemma why the two formulas must give the same \\(w\\), and
+      state which one you would actually compute here and why."
+    answer: Here X^T X=1+4+9=14 and X^T y=1+4+6=11. Primal ridge therefore gives w=11/(14+7)=11/21
+      approximately 0.5238, while unregularized least squares gives 11/14 approximately 0.7857. The
+      push-through identity X^T(XX^T+7I)^{-1}=(X^T X+7I)^{-1}X^T proves that the dual expression
+      returns the same scalar without a separate inversion calculation. In this one-feature problem
+      I would solve the 1 by 1 primal system, not the 3 by 3 Gram system; the dual form becomes
+      advantageous when the feature dimension is much larger than n or exists only implicitly
+      through a kernel.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "**Deriving the KRR closed form.** Starting from the representer-theorem expansion \\(\\hat
+      f = \\sum_i \\alpha_i K(x_i, \\cdot)\\), the KRR objective becomes"
+    answer: The Hessian of J is (2/n)(K^2+lambda n K)=(2/n)K(K+lambda n I), which is positive
+      semidefinite because it has eigenvalues (2/n)mu_k(mu_k+lambda n)>=0; hence J is convex.
+      Differentiation gives grad J=(2/n)K(K alpha-y)+2lambda K alpha=(2/n)K[(K+lambda n I)alpha-y].
+      Since every eigenvalue of K+lambda n I is at least lambda n>0, alpha_0=(K+lambda n I)^{-1}y
+      exists and is stationary, hence minimizing. If epsilon lies in ker K, alpha_0+epsilon is also
+      stationary. This coefficient ambiguity does not change the function because ||sum_i epsilon_i
+      K_{x_i}||_H^2=epsilon^T K epsilon=0.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "**The two ridge limits.** Let \\(\\alpha(\\lambda) = (\\mathbf{K} + \\lambda n
+      I)^{-1}\\mathbf{y}\\) and \\(\\hat f_\\lambda = \\sum_i \\alpha_i(\\lambda) K(x_i, \\cdot)\\).
+      (a) Show that \\(\\|\\hat f_\\lambda\\|_{\\mathcal{H}} \\to 0\\) as \\(\\lambda \\to
+      \\infty\\), so the fit collapses to the zero function and the model underfits. (b) Assume now
+      that \\(\\mathbf{K}\\) is invertible. Show that as \\(\\lambda \\to 0^+\\) the coefficients
+      converge to \\(\\alpha \\to \\mathbf{K}^{-1}\\mathbf{y}\\), and hence that the fitted training
+      values \\(\\mathbf{K}\\alpha \\to \\mathbf{y}\\): the limit interpolates the data exactly. (c)
+      Relate both limits to the bias-variance description of the \\(\\lambda\\) sweep given in the
+      RBF worked example."
+    answer: "In a Gram eigenbasis, ||f_lambda||_H^2=sum_k mu_k(u_k^T y)^2/(mu_k+lambda n)^2. Every term
+      tends to zero as lambda grows, and the finite sum therefore tends to zero: the fitted function
+      collapses to zero. If K is invertible, continuity of matrix inversion gives
+      alpha(lambda)->K^{-1}y as lambda->0+, so K alpha(lambda)->y and the training data are
+      interpolated. The first limit has maximal shrinkage, high bias, and low variance. The
+      interpolation limit has low training bias but can have high variance because small-eigenvalue
+      directions are amplified; the useful lambda lies between these extremes."
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: "**Losses as noise models, and the Huber loss.** Recall that identifying a regression loss
+      \\(\\ell(r)\\) in the residual \\(r = y - f(x)\\) with \\(-\\ln p(r)\\) turns a loss into a
+      noise density \\(p(r) \\propto e^{-\\ell(r)}\\). (a) Verify that the squared loss \\(\\ell(r)
+      = r^2/(2\\sigma^2)\\) corresponds to a Gaussian noise density and the absolute loss
+      \\(\\ell(r) = |r|\\) to a Laplacian one. (b) The Huber loss with threshold \\(\\delta \\gt
+      0\\) is"
+    answer: For squared loss, exp[-r^2/(2sigma^2)] normalizes to the N(0,sigma^2) density. For absolute
+      loss, exp(-|r|) normalizes to the Laplace density with unit scale. At r=delta the Huber inner
+      value is delta^2/2 and the outer value delta(delta-delta/2)=delta^2/2; their derivatives are
+      respectively r and delta sign(r), both delta. At r=-delta the values again agree and both
+      one-sided derivatives equal -delta. Thus h_delta is C1. Its induced density has a
+      Gaussian-shaped quadratic core but exponential tails. Large residuals exert bounded derivative
+      delta rather than an influence growing like |r|, giving robustness to outliers.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: '**Feeling the two knobs.** Use the interactive kernel-lab figure in the section \"Solving
+      KRR: a single linear system\" (the live solver of \(\alpha = (\mathbf{K} + \lambda n
+      I)^{-1}\mathbf{y}\)). Keep the data points fixed and vary the two controls in turn. (a) With
+      the bandwidth \(\sigma\) held fixed, push \(\lambda\) from large to small and describe what
+      happens to the curve: where does it start (nearly flat) and where does it end (sharp wiggles
+      chasing individual points)? Name which regime is high bias and which is high variance. (b) Now
+      hold \(\lambda\) fixed and vary \(\sigma\): explain why a small \(\sigma\) lets the curve turn
+      quickly while a large \(\sigma\) forces a smooth, slowly varying fit. (c) Find a pair
+      \((\sigma, \lambda)\) you would call a good fit, then show that you can partly undo an
+      increase in \(\lambda\) by decreasing \(\sigma\) (or vice versa). Write two or three sentences
+      on how the two knobs together control the smoothness of the fitted function.'
+    answer: "With sigma fixed, large lambda strongly shrinks the coefficients and produces an almost
+      flat, high-bias/low-variance curve. Decreasing lambda allows progressively closer
+      interpolation and eventually sharp, high-variance wiggles. With lambda fixed, a small Gaussian
+      bandwidth localizes each basis function and permits rapid turns; a large bandwidth correlates
+      distant points and forces slow variation. A defensible setting is the broad region where
+      residual structure is absent without pointwise oscillation, selected by validation rather than
+      eyesight. The controls partially compensate: decreasing sigma adds local flexibility that an
+      increased lambda removes, although they are not equivalent because one changes the geometry
+      and the other changes the norm penalty."
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: "**One Newton step of KLR is a weighted ridge regression.** For kernel logistic regression
+      the finite-dimensional objective is \\(J(\\alpha) = \\frac{1}{n}\\sum_i
+      \\ell_{\\mathrm{logistic}}(y_i[\\mathbf{K}\\alpha]_i) +
+      \\lambda\\,\\alpha^\\top\\mathbf{K}\\alpha\\), with \\(\\ell_{\\mathrm{logistic}}(u) = \\ln(1
+      + e^{-u})\\). Write \\(m_i = [\\mathbf{K}\\alpha^0]_i\\), \\(P_i =
+      \\ell'_{\\mathrm{logistic}}(y_i m_i) = -\\sigma(-y_i m_i)\\), \\(W_i =
+      \\ell''_{\\mathrm{logistic}}(y_i m_i) = \\sigma(m_i)\\sigma(-m_i)\\), and set \\(\\mathbf{P} =
+      \\operatorname{diag}(P_i)\\), \\(\\mathbf{W} = \\operatorname{diag}(W_i)\\). (a) Derive
+      \\(\\nabla J(\\alpha) = \\frac{1}{n}\\mathbf{K}\\mathbf{P}\\mathbf{y} +
+      2\\lambda\\mathbf{K}\\alpha\\) and \\(\\nabla^2 J(\\alpha) =
+      \\frac{1}{n}\\mathbf{K}\\mathbf{W}\\mathbf{K} + 2\\lambda\\mathbf{K}\\) (use \\(y_i^2 = 1\\)).
+      (b) Substitute these into the quadratic model \\(J_q\\) around \\(\\alpha^0\\) and, by
+      completing the square, show that minimizing \\(J_q\\) is exactly the weighted KRR problem"
+    answer: Let m=K alpha and u_i=y_i m_i. By the chain rule, the loss gradient is n^{-1}K diag(P_i)y
+      and the penalty contributes 2lambda K alpha. A second derivative contributes n^{-1}K
+      diag(W_i)K because y_i^2=1, giving the stated Hessian. Expanding the Newton quadratic around
+      alpha^0 and collecting its alpha-dependent terms yields n^{-1}(K alpha-z)^T W(K
+      alpha-z)+2lambda alpha^T K alpha plus a constant, where z=K alpha^0-W^{-1}Py. Since
+      P_i/W_i=-1/sigma(u_i), z_i=m_i+y_i/sigma(y_i m_i). A confidently wrong point has u_i<<0, so
+      sigma(u_i) is tiny and z moves a large distance in the corrective y_i direction; a confidently
+      correct point has sigma(u_i) near one and receives only an approximately unit corrective step
+      with small curvature weight.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "**Flat loss regions, sparsity, and what is not a likelihood.** (a) Suppose a convex
+      regression loss \\(\\ell\\) is differentiable and identically zero on an interval, as with the
+      \\(\\varepsilon\\)-insensitive loss \\(\\ell(r) = \\max(|r| - \\varepsilon, 0)\\) on
+      \\([-\\varepsilon, \\varepsilon]\\). Argue at the level of the stationarity conditions why a
+      training point whose residual lands strictly inside the flat region can be assigned
+      coefficient \\(\\alpha_i = 0\\), so that it is not a support vector, and contrast this with
+      the squared loss, whose derivative \\(2r\\) vanishes only at \\(r = 0\\) and which therefore
+      yields a dense expansion. (b) Show that the hinge loss \\(\\varphi(u) = \\max(1 - u, 0)\\) is
+      not the negative log-likelihood of any conditional model of \\(y \\in \\{-1, 1\\}\\) given
+      \\(f(x)\\): if \\(p(y \\mid f) = e^{-\\varphi(y f)}/Z\\) were such a model, the requirement
+      \\(p(1 \\mid f) + p(-1 \\mid f) = 1\\) for every \\(f\\) would have to hold; exhibit values of
+      \\(f\\) where \\(e^{-\\varphi(f)} + e^{-\\varphi(-f)}\\) is not constant, so no single
+      normalization \\(Z\\) works. Conclude why kernel logistic regression yields calibrated class
+      probabilities while the SVM does not."
+    answer: Inside the flat residual interval, ell'(r_i)=0, so that observation contributes no force to
+      the stationarity equation; its representer coefficient may be zero. Squared loss has
+      derivative 2r, which is nonzero except at exact fit, so generic data influence every
+      coefficient. For hinge loss define g(f)=exp[-phi(f)]+exp[-phi(-f)]. At f=0, g=2e^{-1}; at f=1,
+      g=1+e^{-2}; and at f=2, g=1+e^{-3}. The sum is not constant, so no f-independent normalizer Z
+      makes these two exponentials conditional probabilities. Logistic loss instead arises from a
+      normalized Bernoulli conditional model and yields calibrated probabilities; an SVM score
+      requires separate calibration.
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "**Leave-one-out from a single fit.** A kernel ridge fit at some \\(\\lambda\\) produces,
+      from the one solve, the in-sample residuals \\(\\mathbf{e} = (-0.0222,\\, 0.5993,\\,
+      -0.1084,\\, 0.5993,\\, -0.0222)\\) and the smoother diagonal \\([\\mathbf{S}_\\lambda]_{ii} =
+      (0.3624,\\, 0.3245,\\, 0.3246,\\, 0.3245,\\, 0.3624)\\). (a) Without any refitting, compute
+      the five leave-one-out residuals \\(e_i/(1 - [\\mathbf{S}_\\lambda]_{ii})\\) and the score
+      \\(\\mathrm{LOO}(\\lambda) = \\frac{1}{5}\\sum_i (\\cdot)^2\\); you should land on
+      \\(0.3205\\), more than double the resubstitution error \\(\\frac{1}{5}\\sum_i e_i^2 =
+      0.1462\\). (b) For KRR the smoother satisfies \\(\\mathbf{0} \\preceq \\mathbf{S}_\\lambda
+      \\preceq \\mathbf{I}\\); use this to show \\(0 \\le [\\mathbf{S}_\\lambda]_{ii} \\lt 1\\),
+      hence \\(1/(1 - [\\mathbf{S}_\\lambda]_{ii}) \\ge 1\\) and therefore
+      \\(\\mathrm{LOO}(\\lambda) \\ge \\frac{1}{n}\\sum_i e_i^2\\) always: the training error can
+      only understate the leave-one-out error. (c) Explain in one sentence why a coordinate with
+      \\([\\mathbf{S}_\\lambda]_{ii}\\) near \\(1\\) is a point the fit leans on, and what happens
+      to the inflation factors as \\(\\lambda \\to 0^+\\)."
+    answer: "The inflation denominators are (0.6376,0.6755,0.6754,0.6755,0.6376). Division gives
+      leave-one-out residuals approximately (-0.0348,0.8873,-0.1605,0.8873,-0.0348); their mean
+      square is 0.3205, versus training MSE 0.1462. The smoother eigenvalues mu_k/(mu_k+lambda n)
+      lie in [0,1), so 0 preceq S prec I and every diagonal is in [0,1). Consequently each squared
+      residual is multiplied by at least one, proving LOO>=training MSE. A diagonal near one marks
+      high leverage: removing that point greatly changes its own fitted value. For full-rank K, S->I
+      as lambda->0+, so denominators approach zero and the LOO inflation can explode."
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: "**Generalized cross-validation and the degrees of freedom.** Let \\(\\mathbf{S}_\\lambda =
+      \\mathbf{K}(\\mathbf{K} + \\lambda n I)^{-1}\\), and diagonalize \\(\\mathbf{K} = \\sum_k
+      \\mu_k u_k u_k^\\top\\) with eigenvalues \\(\\mu_k \\ge 0\\). (a) Show that
+      \\(\\mathrm{df}(\\lambda) = \\operatorname{tr}(\\mathbf{S}_\\lambda) = \\sum_k \\mu_k/(\\mu_k
+      + \\lambda n)\\), and that it decreases monotonically from \\(n\\) as \\(\\lambda \\to 0^+\\)
+      (assuming \\(\\mathbf{K} \\succ 0\\)) to \\(0\\) as \\(\\lambda \\to \\infty\\). (b) Starting
+      from the leave-one-out score, replace every diagonal \\([\\mathbf{S}_\\lambda]_{ii}\\) by the
+      common value \\(\\operatorname{tr}(\\mathbf{S}_\\lambda)/n\\) and show that the result is"
+    answer: The smoother shares K's eigenvectors and has eigenvalues s_k=mu_k/(mu_k+lambda n), so
+      df=tr(S)=sum_k s_k. Each derivative ds_k/dlambda=-n mu_k/(mu_k+lambda n)^2 is nonpositive. If
+      K is positive definite, df tends to n as lambda->0+ and to zero as lambda->infinity. The exact
+      LOO score is n^{-1}sum_i[e_i/(1-S_ii)]^2. Replacing every S_ii by df/n makes the denominator
+      common and gives GCV=[n^{-1}||(I-S)y||^2]/(1-df/n)^2. It requires only a trace estimate rather
+      than all leverage values and is invariant under orthogonal changes of basis, which is why it
+      scales more conveniently.

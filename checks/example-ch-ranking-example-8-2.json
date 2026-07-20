@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-ranking",
+  "anchor": "example-8-2",
+  "source_file": "manuscript/chapters/ch-ranking.md",
+  "source_sha256": "abb826e56461f1e1f66b13fb3375878052547d9305bae51528c4649725c50105",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-ranking-ex2.py"
+  ],
+  "numeric_literals": [
+    "2",
+    "4",
+    "3",
+    "0",
+    "1",
+    "23",
+    "-1",
+    "+4",
+    "8",
+    "6"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

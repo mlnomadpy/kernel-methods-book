@@ -1,0 +1,452 @@
+chapter: ch-solve
+slug: solving-the-svm
+title: "Solving the SVM: Decomposition and SMO"
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - platt1998
+  - joachims1999
+  - osuna1997
+  - fan2005
+  - keerthi2001
+  - scholkopf2002
+  - boyd2004
+  - vapnik1982
+sections:
+  - id: why-hard
+    title: Why the dual is hard at scale
+    contribution: adapted-and-expanded
+    sources: &a1
+      - platt1998
+      - joachims1999
+      - osuna1997
+      - fan2005
+      - keerthi2001
+      - scholkopf2002
+      - boyd2004
+      - vapnik1982
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#why-hard
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kkt-stopping
+    title: The KKT conditions as the stopping test
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#kkt-stopping
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: decomposition
+    title: Decomposition and chunking
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#decomposition
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: smo
+    title: Sequential minimal optimization
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#smo
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: caching-shrinking
+    title: Caching and shrinking
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#caching-shrinking
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: interior-point
+    title: Interior-point methods, the alternative
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#interior-point
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: smo-regression
+    title: SMO for regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#smo-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - platt1998
+      - joachims1999
+      - osuna1997
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: platt1998
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: joachims1999
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: osuna1997
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fan2005
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: keerthi2001
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1982
+        manuscript_locator: ch-solve.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

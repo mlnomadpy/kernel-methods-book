@@ -1,0 +1,12 @@
+[
+  {
+    "from": "smoothing-splines-and-additive-rkhs#thm-spline-representer",
+    "to": "kernel-tricks#thm-3-4",
+    "note": "Extends the RKHS projection proof by retaining the seminorm's unpenalized null space."
+  },
+  {
+    "from": "smoothing-splines-and-additive-rkhs#prop-spline-loocv",
+    "to": "kernel-ridge-and-friends#prop-4-6",
+    "note": "Uses the same linear-smoother deletion identity as kernel ridge regression."
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "chapter": "ch13",
+  "anchor": "example-37-1",
+  "source_file": "manuscript/chapters/ch13.md",
+  "source_sha256": "f27dbc508f3df2a366f0f833adb9377fa203885c826fd57b6b46a73d60618208",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch13-ex1.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "0.15",
+    "0.3",
+    "0.45",
+    "0.6",
+    "5",
+    "10",
+    "1",
+    "0.01",
+    "3",
+    "4.7879",
+    "1.0000",
+    "0.2087",
+    "0.0034",
+    "0.2121",
+    "2",
+    "0.6415",
+    "0.3217",
+    "0.2794",
+    "0.9901",
+    "0.28",
+    "0.64",
+    "4.1861",
+    "0.5889",
+    "0.594",
+    "4",
+    "35",
+    "1.0329",
+    "1.21",
+    "1.4142",
+    "2.001",
+    "0.2857"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

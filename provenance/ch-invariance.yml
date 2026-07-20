@@ -1,0 +1,450 @@
+chapter: ch-invariance
+slug: invariances-and-pre-images
+title: Invariances and the Pre-Image Problem
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - lecun1995
+  - scholkopf1996prior
+  - simard1998
+  - decoste2002
+  - mika1999
+  - burges1996
+  - romdhani2001
+  - scholkopf2002
+  - shawe2004
+sections:
+  - id: prior-knowledge
+    title: Prior knowledge and invariance
+    contribution: adapted-and-expanded
+    sources: &a1
+      - lecun1995
+      - scholkopf1996prior
+      - simard1998
+      - decoste2002
+      - mika1999
+      - burges1996
+      - romdhani2001
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#prior-knowledge
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: virtual-sv
+    title: The Virtual Support Vector method
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#virtual-sv
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: invariance-kernels
+    title: Tangent vectors, invariance kernels, and jittering
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#invariance-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: pre-image-problem
+    title: The pre-image problem
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#pre-image-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: finding-preimages
+    title: Finding approximate pre-images
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#finding-preimages
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reduced-set
+    title: Reduced set methods
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#reduced-set
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - lecun1995
+      - scholkopf1996prior
+      - simard1998
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lecun1995
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf1996prior
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: simard1998
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: decoste2002
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burges1996
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: romdhani2001
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-invariance.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

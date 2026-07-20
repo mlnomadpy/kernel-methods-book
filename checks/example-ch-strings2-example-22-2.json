@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-strings2",
+  "anchor": "example-22-2",
+  "source_file": "manuscript/chapters/ch-strings2.md",
+  "source_sha256": "0f7b4b8ab4da924d323bc558b98972c83a3b286f16aeeadb6ce10a0bae771bd1",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-strings2-ex2.py"
+  ],
+  "numeric_literals": [
+    "2",
+    "1",
+    "0",
+    "3",
+    "4",
+    "5",
+    "6",
+    "-1",
+    "0.0625",
+    "0.140625",
+    "0.4444"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

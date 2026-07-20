@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-inverse",
+  "anchor": "example-inverse-filter",
+  "source_file": "manuscript/chapters/ch-inverse.md",
+  "source_sha256": "ae3b083796f6bb5f7af09f0c501a30e5c6eb754ee3f0cea8dd7557398f237e74",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/additional-example-checks.py"
+  ],
+  "numeric_literals": [
+    "10",
+    "1",
+    "0.01",
+    "0.1",
+    "0.990",
+    "0.909",
+    "0.091",
+    "100"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

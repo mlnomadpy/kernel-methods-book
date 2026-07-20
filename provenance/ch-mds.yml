@@ -1,0 +1,474 @@
+chapter: ch-mds
+slug: data-visualization-and-mds
+title: Data Visualization and Kernel MDS
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - shawe2004
+  - young1938
+  - torgerson1952
+  - williams2002
+  - coxcox2000
+  - ham2004
+  - tenenbaum2000isomap
+  - roweis2000lle
+  - belkin2003
+  - vandermaaten2008tsne
+  - mcinnes2018umap
+sections:
+  - id: the-visualization-problem
+    title: The visualization problem
+    contribution: adapted-and-expanded
+    sources: &a1
+      - shawe2004
+      - young1938
+      - torgerson1952
+      - williams2002
+      - coxcox2000
+      - ham2004
+      - tenenbaum2000isomap
+      - roweis2000lle
+      - belkin2003
+      - vandermaaten2008tsne
+      - mcinnes2018umap
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#the-visualization-problem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: classical-mds
+    title: "From distances to inner products: classical MDS"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#classical-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: mds-pca-kernelpca
+    title: MDS is PCA is kernel PCA
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#mds-pca-kernelpca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-mds
+    title: "Kernel MDS: visualizing the feature space"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#kernel-mds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: metric-nonmetric
+    title: Metric and non-metric MDS
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#metric-nonmetric
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: manifold-learning-kernel-pca
+    title: Manifold learning as kernel PCA
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#manifold-learning-kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - shawe2004
+      - young1938
+      - torgerson1952
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ham2004
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tenenbaum2000isomap
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: roweis2000lle
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vandermaaten2008tsne
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcinnes2018umap
+        manuscript_locator: ch-mds.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

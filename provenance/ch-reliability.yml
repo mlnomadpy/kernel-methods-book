@@ -1,0 +1,187 @@
+chapter: ch-reliability
+slug: distribution-shift-robustness-and-conformal-prediction
+title: Distribution Shift, Robustness, and Conformal Prediction
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - feng2023covshift
+  - burnaev2014conformal
+  - gretton2012
+  - sriperumbudur2012
+sections:
+  - id: shift-taxonomy
+    title: A taxonomy of distribution change
+    contribution: adapted-and-expanded
+    sources: &a1
+      - feng2023covshift
+      - burnaev2014conformal
+      - gretton2012
+      - sriperumbudur2012
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#shift-taxonomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#shift-taxonomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#shift-taxonomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#shift-taxonomy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: shift-detection
+    title: Detecting shift with kernel embeddings
+    contribution: adapted-and-expanded
+    sources:
+      - gretton2012
+    locators:
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#shift-detection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-mean-matching
+    title: Kernel mean matching
+    contribution: adapted-and-expanded
+    sources:
+      - feng2023covshift
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#kernel-mean-matching
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: robustness
+    title: Robust losses and distributional neighborhoods
+    contribution: adapted-and-expanded
+    sources:
+      - sriperumbudur2012
+    locators:
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#robustness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: conformal-prediction
+    title: Conformal prediction from exchangeable scores
+    contribution: adapted-and-expanded
+    sources:
+      - burnaev2014conformal
+    locators:
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#conformal-prediction
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: conformal-under-shift
+    title: Conformal prediction under shift
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#conformal-under-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#conformal-under-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#conformal-under-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#conformal-under-shift
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reliability-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reliability-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - feng2023covshift
+      - burnaev2014conformal
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#reliability-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#reliability-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

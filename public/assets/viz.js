@@ -249,7 +249,9 @@
     return state;
   }
   function readout(host) {
-    const r = document.createElement("div"); r.className = "viz-readout"; host.append(r);
+    const r = document.createElement("div"); r.className = "viz-readout";
+    r.setAttribute("role", "status"); r.setAttribute("aria-live", "polite"); r.setAttribute("aria-atomic", "true");
+    host.append(r);
     return (t) => { r.textContent = t; };
   }
 
@@ -469,23 +471,20 @@
     let box, drag = -1, alpha = null, bias = 0;
     function kf(a, b) { return ctrl.kernel === "linear" ? a[0] * b[0] + a[1] * b[1] : Math.exp(-((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) / (2 * ctrl.bw * ctrl.bw)); }
     function train() {
-      const n = P.length, C = Math.pow(10, ctrl.C); alpha = new Float64Array(n); const y = P.map(p => p[2]);
-      const K = []; for (let i = 0; i < n; i++) { K.push([]); for (let j = 0; j < n; j++) K[i].push(kf(P[i], P[j])); }
-      // simplified SMO-style coordinate ascent
-      for (let it = 0; it < 400; it++) {
-        for (let i = 0; i < n; i++) {
-          let g = 0; for (let j = 0; j < n; j++) g += alpha[j] * y[j] * K[i][j];
-          const step = (1 - y[i] * g) / (K[i][i] + 1e-6);
-          alpha[i] = Math.max(0, Math.min(C, alpha[i] + step * 0.4 * y[i] * y[i]));
-        }
+      const y = P.map(p => p[2]);
+      const K = [];
+      for (let i = 0; i < P.length; i++) {
+        K.push([]);
+        for (let j = 0; j < P.length; j++) K[i].push(kf(P[i], P[j]));
       }
-      // bias from margin SVs
-      let bs = 0, bc = 0; for (let i = 0; i < n; i++) if (alpha[i] > 1e-4 && alpha[i] < C - 1e-4) { let s = 0; for (let j = 0; j < n; j++) s += alpha[j] * y[j] * K[j][i]; bs += y[i] - s; bc++; }
-      bias = bc ? bs / bc : 0;
+      const fit = window.KernelBookSMO.solve(K, y, Math.pow(10, ctrl.C));
+      alpha = fit.alpha;
+      bias = fit.bias;
+      return fit;
     }
     function fval(x) { let s = bias; for (let j = 0; j < P.length; j++) s += alpha[j] * P[j][2] * kf([x[0], x[1]], P[j]); return s; }
     function draw() {
-      train(); const g = setupCanvas(cv); const ctx = g.ctx; box = { x: 6, y: 6, w: g.w - 12, h: g.h - 12 };
+      const fit = train(); const g = setupCanvas(cv); const ctx = g.ctx; box = { x: 6, y: 6, w: g.w - 12, h: g.h - 12 };
       ctx.clearRect(0, 0, g.w, g.h);
       // decision field
       const step = 6;
@@ -499,7 +498,7 @@
       contour(ctx, box, XR, YR, (x, y) => fval([x, y]), -1, col.faint, 1);
       const C = Math.pow(10, ctrl.C); let nsv = 0;
       for (let i = 0; i < P.length; i++) { const isSV = alpha[i] > 1e-4; if (isSV) nsv++; const cx = sx(box, XR, P[i][0]), cy = sy(box, YR, P[i][1]); disc(ctx, cx, cy, i === drag ? 6.5 : 5, P[i][2] > 0 ? col.pos : col.neg, isSV ? col.ink : col.paper); if (isSV) { ctx.strokeStyle = col.ink; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(cx, cy, 8.5, 0, 7); ctx.stroke(); } }
-      say(`${nsv} support vectors of ${P.length} · C=${C.toFixed(1)} · ${ctrl.kernel}`);
+      say(`${nsv} support vectors of ${P.length} · C=${C.toFixed(1)} · ${ctrl.kernel} · KKT ${fit.kkt.toExponential(1)}`);
     }
     function nearest(mx, my) { let bi = -1, bd = 14 * 14; for (let i = 0; i < P.length; i++) { const dx = sx(box, XR, P[i][0]) - mx, dy = sy(box, YR, P[i][1]) - my; const d = dx * dx + dy * dy; if (d < bd) { bd = d; bi = i; } } return bi; }
     cv.addEventListener("pointerdown", (e) => { const m = pointerXY(cv, e); drag = nearest(m.x, m.y); if (drag >= 0) cv.setPointerCapture(e.pointerId); });
@@ -575,14 +574,39 @@
   };
 
   function mount(fig) {
-    if (fig.dataset.mounted) return; fig.dataset.mounted = "1";
+    if (fig.dataset.mounted || fig.dataset.mounting) return; fig.dataset.mounting = "1";
     const kind = fig.dataset.widget;
     const factory = WIDGETS[kind];
     const host = document.createElement("div");
     fig.prepend(host);
-    if (!factory) { host.innerHTML = '<div class="viz-readout">unknown widget: ' + kind + "</div>"; return; }
+    if (!factory) { delete fig.dataset.mounting; host.innerHTML = '<div class="viz-readout" role="alert">unknown widget: ' + kind + "</div>"; return; }
     let draw;
-    try { draw = factory(fig, host); } catch (e) { host.innerHTML = '<div class="viz-readout">widget error: ' + e.message + "</div>"; return; }
+    try { draw = factory(fig, host); } catch (e) { delete fig.dataset.mounting; host.innerHTML = '<div class="viz-readout" role="alert">widget error: ' + e.message + "</div>"; return; }
+    if (!host.querySelector('[role="status"]')) {
+      const status = document.createElement("div");
+      status.className = "viz-readout"; status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite"); status.textContent = "Interactive visualization initialized.";
+      host.append(status);
+    }
+    delete fig.dataset.mounting; fig.dataset.mounted = "1";
+    fig.setAttribute("role", "group");
+    const title = host.querySelector(".viz-title");
+    const caption = host.querySelector("figcaption");
+    const readoutNode = host.querySelector(".viz-readout");
+    const baseId = `viz-${kind}-${document.querySelectorAll('figure.viz[data-mounted="1"]').length}`;
+    if (title) { title.id = `${baseId}-title`; fig.setAttribute("aria-labelledby", title.id); }
+    if (caption) caption.id = `${baseId}-caption`;
+    if (readoutNode) readoutNode.id = `${baseId}-status`;
+    fig.querySelectorAll(":scope > .viz-static, :scope > .viz-fallback").forEach((node) => {
+      node.hidden = true; node.setAttribute("aria-hidden", "true");
+    });
+    host.querySelectorAll("canvas").forEach((canvas) => {
+      canvas.tabIndex = 0;
+      canvas.setAttribute("role", "img");
+      canvas.setAttribute("aria-label", `${title ? title.textContent : kind} graphical output. Use the adjacent form controls to change its parameters.`);
+    const described = [caption && caption.id, readoutNode && readoutNode.id].filter(Boolean).join(" ");
+      if (described) { canvas.setAttribute("aria-describedby", described); fig.setAttribute("aria-describedby", described); }
+    });
     fig._redraw = draw;
     // persistent visibility tracking: first entry triggers the initial draw,
     // and simulation widgets pause whenever the figure leaves the viewport.

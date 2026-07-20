@@ -1,0 +1,640 @@
+chapter: ch12
+slug: multiple-kernel-learning
+title: Multiple Kernel Learning
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - lanckriet2004
+  - lanckriet2004fusion
+  - yamanishi2004
+  - harchaoui2007
+  - bach2004
+  - rakotomamonjy2008
+  - micchelli2005
+  - kloft2011
+  - cortes2009
+  - gonen2011
+  - cristianini2002alignment
+  - cortes2012alignment
+  - shawe2004
+  - scholkopf2002
+sections:
+  - id: motivation
+    title: Choosing or combining kernels
+    contribution: adapted-and-expanded
+    sources: &a1
+      - lanckriet2004
+      - lanckriet2004fusion
+      - yamanishi2004
+      - harchaoui2007
+      - bach2004
+      - rakotomamonjy2008
+      - micchelli2005
+      - kloft2011
+      - cortes2009
+      - gonen2011
+      - cristianini2002alignment
+      - cortes2012alignment
+      - shawe2004
+      - scholkopf2002
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#motivation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: sum-kernel
+    title: The sum kernel
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: weighted-sum-kernel
+    title: The weighted sum kernel
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#weighted-sum-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: learning-the-kernel
+    title: Learning the kernel
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#learning-the-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: mkl-group-lasso
+    title: MKL is a group lasso
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#mkl-group-lasso
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: algorithm-and-extensions
+    title: Algorithm and extensions
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#algorithm-and-extensions
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: centered-alignment
+    title: Centered kernel alignment as a selection criterion
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#centered-alignment
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - lanckriet2004
+      - lanckriet2004fusion
+      - yamanishi2004
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lanckriet2004
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lanckriet2004fusion
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: yamanishi2004
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: harchaoui2007
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2004
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rakotomamonjy2008
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2005
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kloft2011
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2009
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gonen2011
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cristianini2002alignment
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cortes2012alignment
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch12.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-bo",
+  "anchor": "example-41-3",
+  "source_file": "manuscript/chapters/ch-bo.md",
+  "source_sha256": "2c6d4fe0711d9164e3721d94865e5666ea1c58dcb2d8be8e2fd06d915b2dd6d8",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-bo-ex3.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "2",
+    "1",
+    "0.5",
+    "0.01",
+    "-2",
+    "100",
+    "4",
+    "8.7015",
+    "0.9637",
+    "0.3539",
+    "+100",
+    "3",
+    "0.4334",
+    "3.7709",
+    "3.3176",
+    "8.70",
+    "3.32",
+    "3.77"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

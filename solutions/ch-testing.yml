@@ -1,0 +1,132 @@
+chapter: ch-testing
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: State precisely the difference between a Type-I and a Type-II error for the two-sample test,
+      and explain why the permutation calibration controls the Type-I error but says nothing
+      directly about the Type-II error. Then explain in one sentence why a test that always retains
+      \(H_0\) has level \(0\) yet is useless, connecting this to the definition of power.
+    answer: A Type-I error rejects H0 when P=Q; its probability is the test level. A Type-II error
+      retains H0 when P!=Q; one minus its probability is power. Under H0 the pooled observations are
+      exchangeable, so permutation ranks calibrate the rejection probability and control Type I.
+      That argument contains no lower bound on separation under alternatives, so it does not
+      directly control Type II. A test that never rejects has level zero but power zero against
+      every alternative, making it valid yet useless.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: "The biased V-statistic \\(\\widehat{\\mathrm{MMD}}^2_V = \\|\\hat\\mu_P -
+      \\hat\\mu_Q\\|_{\\mathcal H}^2\\) is always nonnegative, while the unbiased U-statistic can be
+      negative. Explain both facts from their definitions: why removing the diagonal terms can drive
+      the estimate below zero, and why this is acceptable, indeed informative, for a test statistic.
+      What does a negative \\(\\widehat{\\mathrm{MMD}}^2_U\\) tell you about the observed labeling
+      relative to random relabelings?"
+    answer: The biased statistic is ||mu_hat_P-mu_hat_Q||_H^2, a squared norm and therefore nonnegative.
+      The U-statistic removes diagonal self-kernels to estimate independent-pair expectations. Those
+      large positive terms no longer guarantee a nonnegative finite-sample combination, so sampling
+      fluctuations can make it negative even though its population target is nonnegative. This is
+      acceptable for an unbiased statistic. A negative value says the observed within-label
+      similarities are unusually small relative to cross-label similarities—evidence against
+      separation, typically unremarkable or low in the permutation distribution rather than grounds
+      for rejection.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: Reproduce the first worked example by hand for the reduced samples \(X = \{0,1\}\) and \(Y =
+      \{4,5\}\) with the Gaussian kernel of fixed bandwidth \(\sigma = 1\) (so \(2\sigma^2 = 2\)).
+      Write the four kernel values \(k(x_i,y_j)\) as exponentials, compute the unbiased
+      \(\widehat{\mathrm{MMD}}^2_U\) (each intra pair contributes its single off-diagonal term), and
+      then enumerate the \(\binom{4}{2} = 6\) relabelings to obtain the exact permutation
+      \(p\)-value. State the decision at \(\alpha = 0.05\) and comment on why such a small sample
+      cannot reject at that level.
+    answer: The cross values are k(0,4)=e^{-8}, k(0,5)=e^{-12.5}, k(1,4)=e^{-4.5}, and k(1,5)=e^{-8};
+      both within off-diagonals equal e^{-1/2}. Thus
+      U-MMD^2=2e^{-1/2}-(1/2)[2e^{-8}+e^{-12.5}+e^{-4.5}]=1.207169. Enumerating the six size-two
+      labelings gives values 1.207169 twice, -0.595753 twice, and -0.611416 twice. The exact
+      upper-tail p-value is 2/6=1/3, so do not reject at 0.05. With only six permutations the
+      smallest attainable two-sided-labeling tail mass here is already too coarse for 5 percent
+      significance.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Prove the unbiasedness of the U-statistic, \(\mathbb E[\widehat{\mathrm{MMD}}^2_U] =
+      \mathrm{MMD}^2\), by expanding \(\mathbb E[h(z_1,z_2)]\) for the core \(h(z,z') = k(x,x') +
+      k(y,y') - k(x,y') - k(x',y)\), being explicit about where the independence of \(z_1\) and
+      \(z_2\) is used. Then show, by contrast, that the V-statistic has a positive bias of order
+      \(1/n\), by identifying the extra diagonal contribution it includes.
+    answer: For independent z_1=(X,Y) and z_2=(X',Y'), expectation of h is E k(X,X')+E k(Y,Y')-E
+      k(X,Y')-E k(X',Y), exactly population MMD^2. Independence is what makes each pair distributed
+      as the required product law. The V-statistic also includes i=j. Its expected P diagonal is E
+      k(X,X)/n instead of an independent-pair contribution E k(X,X')/n, and similarly for Q. The
+      resulting bias is n^{-1}[E k(X,X)-E k(X,X')]+n^{-1}[E k(Y,Y)-E k(Y,Y')] for equal sample
+      sizes, nonnegative because each bracket is the expected squared-feature variance, hence
+      O(1/n).
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: "Show that under \\(H_0: P = Q\\) the first-order projection of the core vanishes, \\(h_1(z)
+      = \\mathbb E_{z'}[h(z,z')] - \\mathrm{MMD}^2 = 0\\) for all \\(z\\), and explain why this
+      *degeneracy* is exactly what forces the null limit to be second order, hence a chi-square
+      mixture rather than a Gaussian. Contrast with the alternative, where \\(h_1 \\neq 0\\) yields
+      asymptotic normality."
+    answer: Under P=Q, all four conditional kernel-mean terms in E_{z'}h(z,z') use the same marginal
+      embedding. For fixed z=(x,y), they cancel as m(x)+m(y)-m(x)-m(y)=0, and population MMD^2 is
+      also zero; hence h_1(z)=0. The ordinary first-order Hoeffding term vanishes, so the leading
+      fluctuation is the quadratic degenerate U-statistic, whose spectral expansion is a weighted
+      centered chi-square mixture. Under P!=Q the conditional mean difference is generally nonzero;
+      the first-order sum survives and the central limit theorem gives an asymptotically Gaussian
+      statistic.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: Using the asymptotic power expression \(\Pi \approx \Phi\!\big(\sqrt
+      n\,\mathrm{MMD}^2/\sigma_{H_1}\big)\), suppose a kernel gives \(\mathrm{MMD}^2/\sigma_{H_1} =
+      0.2\). How large must \(n\) be for the power to reach \(0.8\), given \(\Phi^{-1}(0.8) \approx
+      0.84\)? Now suppose a better kernel doubles the ratio to \(0.4\); by what factor does the
+      required \(n\) shrink? Explain why this quadratic dependence makes kernel choice worth
+      optimizing.
+    answer: Set sqrt(n)*0.2=Phi^{-1}(0.8) approximately 0.84. Then n=(0.84/0.2)^2=17.64, so at least 18
+      observations under this approximation. Doubling the ratio to 0.4 gives n=(0.84/0.4)^2=4.41,
+      about 5 after integer rounding. In continuous scaling the requirement falls by a factor of
+      four because n is inverse-quadratic in signal-to-noise ratio. Kernel improvements can
+      therefore be worth much more than a linear increase in data efficiency.
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: Explain why selecting the bandwidth to maximize the estimated signal-to-noise ratio \(\hat
+      J\) on the same sample used to compute the test statistic can inflate the Type-I error above
+      \(\alpha\), and prove that data splitting restores exact level. Be precise about which
+      independence is needed for the permutation null on the test half to remain valid.
+    answer: Maximizing J_hat over bandwidths on the test sample selects upward null fluctuations, so the
+      statistic is no longer distributed like a fixed-kernel permutation statistic and nominal
+      quantiles understate its tail. Split data into independent selection and testing halves.
+      Choose the bandwidth using only the first half, then condition on that selected value. Under
+      H0, labels on the untouched test half remain exchangeable and independent of the selection
+      event, so its permutation p-value is exactly super-uniform conditionally and therefore
+      unconditionally. Independence of the test observations/labels from every tuning decision is
+      the essential requirement.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "The median heuristic can fail when the discriminative scale differs from the data scale.
+      Construct a one-dimensional thought experiment: let \\(P\\) and \\(Q\\) share the same two
+      widely separated coarse clusters but differ only in the fine spread *within* each cluster.
+      Argue that the median pairwise distance is dominated by the across-cluster gap, so the
+      median-heuristic bandwidth is far too large to resolve the intra-cluster difference, and hence
+      the test has low power. Explain how (a) a learned or deep kernel and (b) MMDAgg each recover
+      power, and what each pays for it."
+    answer: Let both distributions mix clusters near -A and +A with identical weights, but give P narrow
+      within-cluster noise and Q broader noise. For large A, pooled pair distances are dominated by
+      the 2A across-cluster gap, so the median bandwidth smooths over the fine variance difference
+      and MMD signal is weak. A learned/deep kernel can contract nuisance coarse separation and
+      amplify local spread, paying optimization complexity and requiring held-out tuning to preserve
+      level. MMDAgg tests a calibrated collection of bandwidths and aggregates them, recovering a
+      near-local scale without training; it pays a multiple-testing/calibration penalty and extra
+      computation.

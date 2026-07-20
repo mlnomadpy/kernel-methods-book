@@ -1,0 +1,515 @@
+chapter: ch-ksd
+slug: kernel-stein-discrepancy
+title: Kernel Stein Discrepancy and Stein Methods
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - stein1972
+  - gorham2015
+  - liu2016ksd
+  - chwialkowski2016ksd
+  - gorham2017
+  - liu2016svgd
+  - oates2017
+  - hyvarinen2005
+  - muandet2017
+sections:
+  - id: unnormalized
+    title: Goodness of fit for a model you can only score
+    contribution: adapted-and-expanded
+    sources: &a1
+      - stein1972
+      - gorham2015
+      - liu2016ksd
+      - chwialkowski2016ksd
+      - gorham2017
+      - liu2016svgd
+      - oates2017
+      - hyvarinen2005
+      - muandet2017
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#unnormalized
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: stein-operator
+    title: Stein's identity and the Stein operator
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#stein-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: stein-discrepancy
+    title: From the identity to a discrepancy
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#stein-discrepancy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: ksd
+    title: The kernel Stein discrepancy
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: empirical-ksd
+    title: "Empirical KSD: U-statistics and V-statistics"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#empirical-ksd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gof-test
+    title: A goodness-of-fit test for unnormalized models
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#gof-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: svgd
+    title: Stein variational gradient descent
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#svgd
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-choice
+    title: Choosing the kernel, and a bridge to quadrature
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#kernel-choice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: stein1972
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2015
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gorham2017
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016svgd
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oates2017
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hyvarinen2005
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-ksd.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

@@ -1,0 +1,27 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import Book from "../layouts/Book.astro";
+import { BOOK, renderMath, tocHtml } from "../lib/book.js";
+import { renderCanonicalMarkdown } from "../lib/manuscript.js";
+
+function renderFrontmatter(src) {
+  const markdown = fs.readFileSync(
+    path.join(process.cwd(), "manuscript", "frontmatter", `${src}.md`),
+    "utf8",
+  );
+  return renderMath(renderCanonicalMarkdown(markdown));
+}
+
+const dedication = renderFrontmatter("dedication");
+const preface = renderFrontmatter("preface");
+---
+
+<Book title={`Dedication & Preface · ${BOOK.title}`} desc={BOOK.positioning} toc={tocHtml("preface")}>
+  <article class="frontmatter dedication" aria-label="Dedication">
+    <Fragment set:html={dedication} />
+  </article>
+  <article class="frontmatter preface" aria-label="Preface">
+    <Fragment set:html={preface} />
+  </article>
+</Book>

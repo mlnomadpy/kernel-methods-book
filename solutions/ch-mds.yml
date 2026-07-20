@@ -1,0 +1,145 @@
+chapter: ch-mds
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Show that the centering matrix \(J=I-\tfrac1n\mathbf 1\mathbf 1^\top\) is symmetric and
+      idempotent, \(J^2=J\), and that \(J\mathbf 1=0\). Conclude that \(B=-\tfrac12 JD^{(2)}J\)
+      always has \(\mathbf 1\) in its null space, so the all-ones vector is an eigenvector with
+      eigenvalue \(0\).
+    answer: J^T=J. Since P=11^T/n satisfies P^2=P, J^2=(I-P)^2=I-2P+P=J, and J1=0. Therefore
+      B1=-(1/2)JD^2J1=0. The constant vector is always a zero eigenvector, expressing that distances
+      determine configurations only up to translation and double centering chooses zero mean.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: "For the two-point set with a single distance \\(D_{12}=d\\), carry out classical MDS by
+      hand: form \\(D^{(2)}\\), double-center to get \\(B\\), and verify that the one nonzero
+      eigenvalue is \\(d^2/2\\), giving an embedding of the two points at \\(\\pm d/2\\) on a line."
+    answer: D^2=[[0,d^2],[d^2,0]] and J=(1/2)[[1,-1],[-1,1]]. Double centering gives
+      B=(d^2/4)[[1,-1],[-1,1]]. Its eigenvalues are d^2/2 along (1,-1)/sqrt(2) and zero along
+      (1,1)/sqrt(2). Coordinates sqrt(d^2/2)(1,-1)/sqrt(2)=(d/2,-d/2), whose separation is d.
+  - number: 3
+    kind: warm-up
+    status: draft
+    prompt: Take three points with all pairwise distances equal to \(1\) (an equilateral triangle).
+      Compute \(B\) by double-centering and show its nonzero eigenvalues are both \(1/2\). Explain
+      why the embedding needs exactly two dimensions and why no single axis suffices.
+    answer: For three equal unit distances, D^2=11^T-I and J11^TJ=0, so B=-(1/2)J(11^T-I)J=(1/2)J. J has
+      eigenvalue one on the two-dimensional subspace orthogonal to 1 and zero on constants. Hence B
+      has two eigenvalues 1/2 and one zero. Two positive dimensions are required; a one-dimensional
+      Gram matrix has rank at most one and cannot realize all three equal pair distances.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: "Prove that classical MDS on Euclidean distances returns the PCA scores by filling in the
+      identity \\(-\\tfrac12 JD^{(2)}J=(JX)(JX)^\\top\\) for a data matrix \\(X\\). Where exactly is
+      the centering by \\(J\\) used to kill the \\(\\|x_i\\|^2\\) and \\(\\|x_j\\|^2\\) terms?
+      [Hint: write \\(D^{(2)}=\\mathbf u\\mathbf 1^\\top-2XX^\\top+\\mathbf 1\\mathbf u^\\top\\)
+      with \\(\\mathbf u\\) the vector of squared norms \\(\\|x_i\\|^2\\), and use \\(J\\mathbf
+      1=0\\).]{.ex-hint}"
+    answer: Let u_i=||x_i||^2. Then D^2=u1^T-2XX^T+1u^T. Multiplying by J on both sides kills the first
+      and third terms because J1=0 and 1^TJ=0. Thus -(1/2)JD^2J=JXX^TJ=(JX)(JX)^T. The
+      eigencoordinates of this centered Gram matrix are exactly PCA sample scores, so classical MDS
+      on Euclidean distances recovers PCA up to rigid transformations.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Let \(K\) be a kernel matrix and \(\tilde K=JKJ\) its centering. Show that the squared
+      feature-space distances \(\|\phi(x_i)-\phi(x_j)\|^2=K_{ii}-2K_{ij}+K_{jj}\) satisfy
+      \(-\tfrac12 JD^{(2)}J=\tilde K\), so that kernel MDS and kernel PCA solve the same
+      eigenproblem. Which property of \(K\) guarantees \(\tilde K\) is positive semidefinite, so no
+      negative eigenvalues appear?
+    answer: Feature distances have D_ij^2=K_ii+K_jj-2K_ij, or D^2=u1^T+1u^T-2K. Double centering kills
+      the two diagonal-vector terms and gives -(1/2)JD^2J=JKJ=K_tilde. If K is positive
+      semidefinite, then v^TJKJv=(Jv)^TK(Jv)>=0, so the centered matrix is PSD. Kernel MDS and
+      kernel PCA therefore diagonalize the same matrix and have no negative directions for a valid
+      kernel.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: A configuration is genuinely three-dimensional. Explain, in terms of the eigenvalues of
+      \(B\), what is lost when it is plotted in two dimensions, and give a quantity built from the
+      discarded eigenvalues that measures the fraction of squared-distance structure the plot fails
+      to show. Relate this to the Eckart-Young optimality of the truncation.
+    answer: If B has three positive eigenvalues, retaining two deletes the coordinate associated with
+      lambda_3 (and any later ones). Pairwise distances are then those of the optimal rank-two Gram
+      approximation, not the original configuration. Eckart-Young says the Frobenius strain
+      ||B-B_2||_F^2 is sum_{j>2}lambda_j^2; dividing by sum_{j>0}lambda_j^2 gives the fraction of
+      squared Gram/distance structure omitted. A variance-style summary may instead report
+      sum_{j>2}lambda_j/sum_{j>0}lambda_j, but it measures trace energy rather than Frobenius
+      reconstruction error.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "Construct a symmetric dissimilarity matrix \\(D\\) (four points suffice) whose
+      double-centered \\(B\\) has a strictly negative eigenvalue, so that \\(D\\) is not the
+      distance matrix of any Euclidean configuration. Describe what classical MDS does with the
+      negative direction and why the resulting plot can still be useful. [Hint: violate the triangle
+      inequality, e.g. make one distance much larger than the sum of two others, then double-center
+      and inspect the spectrum.]{.ex-hint}"
+    answer: Take four points with d_12=3 and every other off-diagonal distance equal to one. Double
+      centering yields
+      B=[[1.875,-2.625,.375,.375],[-2.625,1.875,.375,.375],[.375,.375,-.125,-.625],[.375,.375,-.625,-.125]],
+      whose eigenvalues are 4.5,0.5,0,-1.5. The negative value proves no Euclidean configuration
+      realizes D (indeed 3>1+1 violates a triangle). Classical MDS keeps positive eigen-directions
+      and discards or separately reports negative ones, producing the closest positive-semidefinite
+      low-dimensional Gram approximation; the plot can still reveal useful relative grouping despite
+      distorted distances.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "The out-of-sample problem. Given the kernel MDS embedding of a training sample, a new point
+      \\(x\\) is placed by \\(\\tau_j(x)=\\sum_i\\alpha^{(j)}_i\\kappa(x_i,x)\\). Show that this
+      formula reproduces the training embedding when \\(x=x_m\\) is one of the training points, and
+      explain why a purely distance-based classical MDS has no comparable formula without re-solving
+      the eigenproblem on the enlarged matrix. [Hint: substitute \\(\\kappa(x_i,x_m)=\\tilde
+      K_{im}\\) after centering and use \\(\\tilde K v_j=\\lambda_j v_j\\).]{.ex-hint}"
+    answer: For a training point x_m, the centered kernel vector is column m of K_tilde. With
+      alpha^{(j)}=v_j/sqrt(lambda_j), tau_j(x_m)=alpha^T K_tilde e_m=(v_j^T/sqrt(lambda_j))lambda_j
+      v_j(m)=sqrt(lambda_j)v_j(m), exactly its training coordinate. A purely distance-only MDS fit
+      has no kernel function relating a new object to the learned eigenvectors; adding distances
+      changes the centered matrix and its means, so one normally re-centers and resolves unless an
+      explicit out-of-sample distance extension is separately derived.
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "Locally linear embedding as kernel PCA. Let \\(M=(I-W)^\\top(I-W)\\) be the LLE cost
+      matrix, symmetric positive semidefinite with eigenvalues
+      \\(0=\\mu_1\\le\\mu_2\\le\\cdots\\le\\mu_n\\) and the constant vector spanning the zero
+      eigenspace. Show that \\(K_{\\mathrm{LLE}}=\\mu_n I-M\\) is positive semidefinite, has the
+      same eigenvectors as \\(M\\), and orders them in reverse, so the top nonconstant eigenvectors
+      of \\(K_{\\mathrm{LLE}}\\) are the bottom nonconstant eigenvectors of \\(M\\). Conclude that
+      kernel PCA on \\(K_{\\mathrm{LLE}}\\) reproduces the LLE embedding. [Hint: if \\(Mu=\\mu u\\)
+      then \\(K_{\\mathrm{LLE}}u=(\\mu_n-\\mu)u\\), so the shift only relabels
+      eigenvalues.]{.ex-hint}"
+    answer: If Mu=mu u, then K_LLE u=(mu_n-mu)u. Since every mu lies in [0,mu_n], K_LLE is PSD and
+      shares all eigenvectors with M. Larger kernel eigenvalues correspond to smaller LLE costs, so
+      after omitting the constant zero-cost mode, the top kernel eigenvectors are exactly the bottom
+      nonconstant eigenvectors used by LLE. Kernel PCA on K_LLE therefore reproduces the LLE
+      coordinates up to scaling/rotation conventions.
+  - number: 10
+    kind: challenge
+    status: draft
+    prompt: "Why t-SNE is not kernel PCA. A kernel PCA embedding is the set of leading eigenvectors of
+      one fixed symmetric matrix, so every embedding coordinate is a linear function of the columns
+      of that matrix. Using the description of the t-SNE objective as a Kullback-Leibler divergence
+      between a fixed data-space affinity and a Student-\\(t\\) affinity computed from the embedding
+      itself, identify which of these two properties fails, and deduce that no fixed \\(n\\times
+      n\\) kernel can have the t-SNE map as its top eigenvectors. Explain why this also blocks the
+      out-of-sample projection formula that kernel MDS enjoys. [Hint: the map-space affinities
+      depend on the unknown embedding coordinates nonlinearly, so the matrix to be diagonalized
+      would have to depend on its own eigenvectors.]{.ex-hint}"
+    answer: "t-SNE's low-dimensional affinities q_ij are nonlinear functions of the unknown coordinates,
+      and the KL objective couples all coordinates through their normalization. There is no single
+      fixed symmetric data matrix whose leading eigenvectors minimize that objective; any putative
+      matrix would depend on the embedding it is supposed to generate. Thus both fixed-matrix
+      eigendecomposition and coordinate linearity fail. For the same reason, there is no frozen
+      eigenvector/kernel-column projection for a new point: placement requires optimizing its
+      nonlinear affinities, using a parametric t-SNE model, or refitting."

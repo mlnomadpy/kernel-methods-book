@@ -1,0 +1,107 @@
+chapter: ch-frontier
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Verify that the empirical NTK \(\Theta_\theta(x,x')=\nabla_\theta f(x)^\top\nabla_\theta
+      f(x')\) is a positive definite kernel for every fixed \(\theta\). Which property of the
+      definition can fail if two distinct inputs produce identical Jacobian rows, and what does that
+      mean for invertibility of \(\Theta(X,X)\)?
+    answer: For any coefficients $c_i$, $\sum_{ij}c_ic_j\Theta(x_i,x_j)=\|\sum_i c_i\nabla_\theta
+      f(x_i)\|^2\ge0$, so the empirical NTK is PSD (often called positive definite in the non-strict
+      convention). If two inputs have identical Jacobian rows, the feature map is not injective and
+      their Gram rows coincide. The training Gram is then singular, so the inverse in the ridgeless
+      formula must be replaced by a pseudoinverse or regularization unless the redundancy is
+      removed.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: For the linear model \(f(x;\theta)=\theta^\top x\), compute the empirical NTK and show it
+      equals the linear kernel \(x^\top x'\) for all \(\theta\). Conclude that a linear model is
+      exactly (not just approximately) in the lazy regime, and identify its \"learned function\"
+      from the Proposition on output dynamics.
+    answer: For $f(x;\theta)=\theta^\top x$, $\nabla_\theta f=x$, so $\Theta_\theta(x,x')=x^\top x'$
+      independently of $\theta$. The model equals its first-order Taylor expansion globally, hence
+      its tangent kernel never changes. Under gradient flow it converges, when the Gram is
+      invertible, to $f_0(x)+x^\top X^\top(XX^\top)^{-1}(y-X\theta_0)$, the minimum-change linear
+      interpolant; with a pseudoinverse this remains the corresponding projection for singular data.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Reproduce the tiny-NTK worked example with the alternative test point \\(x_\\ast=-0.1\\).
+      Recompute the Jacobian row at \\(x_\\ast\\) (mind which ReLUs are active), the test column
+      \\(\\Theta(x_\\ast,X)\\), and the prediction \\(f_\\infty(x_\\ast)\\). Confirm it again
+      matches the linearized-network value. [Hint: at \\(x_\\ast=-0.1\\) the second unit
+      \\(2x+b_2\\) is inactive; its three Jacobian entries vanish.]{.ex-hint}"
+    answer: At $x_*=-0.1$, only unit 1 is active, so $J_*=(0.4,0,-0.1,0,1,0)$ and $f_0(x_*)=0.4$.
+      Dotting with the three training Jacobians gives $\Theta(x_*,X)=(1.14,1.38,1.56)$. Using the
+      worked-example coefficients $(1.4545,-2.9017,1.5492)$ gives
+      $f_\infty(x_*)=0.4+\Theta(x_*,X)\alpha=0.47051$. The minimum-norm linearized parameter update
+      gives the same value to machine precision.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: "Prove that the softmax kernel \\(\\kappa(q,k)=\\exp(q^\\top k/\\tau)\\) is positive
+      definite on any bounded set of vectors. [Hint: use the Gaussian-rescaling Proposition together
+      with the fact that the Gaussian kernel is positive definite and that multiplying a kernel by
+      \\(c(q)c(k)\\) for a fixed function \\(c\\) preserves positive definiteness (a rank-one
+      rescaling).]{.ex-hint}"
+    answer: The identity $e^{q^\top k/\tau}=c(q)c(k)e^{-\|q-k\|^2/(2\tau)}$, with
+      $c(x)=e^{\|x\|^2/(2\tau)}$, expresses the softmax kernel as a Gaussian kernel multiplied by a
+      rank-one rescaling. For any sample its Gram is $DGD$ with $D_{ii}=c(q_i)>0$ and Gaussian Gram
+      $G\succeq0$, hence it is PSD. Boundedness is not needed for finite Gram positive definiteness;
+      it is useful only for uniform approximation or operator bounds.
+  - number: 5
+    kind: challenge
+    status: draft
+    prompt: "The Performer estimator averages \\(D\\) independent copies of
+      \\(\\varphi_\\omega(q)\\varphi_\\omega(k)\\). Using the Gaussian moment generating function,
+      compute \\(\\mathrm{Var}_\\omega[\\varphi_\\omega(q)\\varphi_\\omega(k)]\\) in closed form and
+      show it grows with \\(\\|q+k\\|\\). Explain why softmax attention with large scores is the
+      hard case for random-feature approximation. [Hint: \\(\\mathbb
+      E[\\varphi_\\omega(q)^2\\varphi_\\omega(k)^2]=\\mathbb
+      E[e^{2\\omega^\\top(q+k)}]e^{-\\|q\\|^2-\\|k\\|^2}\\); apply the MGF with
+      \\(a=2(q+k)\\).]{.ex-hint}"
+    answer: Let $Z=\varphi_\omega(q)\varphi_\omega(k)$. Its mean is $e^{q^\top k}$. The Gaussian MGF
+      gives $E[Z^2]=e^{-\|q\|^2-\|k\|^2}e^{2\|q+k\|^2}$. Hence
+      $Var(Z)=e^{-\|q\|^2-\|k\|^2+2\|q+k\|^2}-e^{2q^\top k}$. The variance of the average is this
+      quantity divided by $D$. The first exponent grows quadratically with $\|q+k\|$, so aligned,
+      large-norm queries and keys—exactly those producing large softmax scores—create heavy-tailed
+      estimates and require many features.
+  - number: 6
+    kind: challenge
+    status: draft
+    prompt: "On the graph Matern kernel \\(K_\\nu=(2\\nu/\\kappa^2\\,I+L)^{-\\nu}\\), diagonalize with
+      \\(L=\\sum_i\\lambda_i u_iu_i^\\top\\) and write \\(K_\\nu\\) in the eigenbasis. Take
+      \\(\\nu\\to\\infty\\) with \\(\\kappa\\) fixed and show each eigenvalue tends to
+      \\(e^{-\\kappa^2\\lambda_i/2}\\), recovering the diffusion kernel. [Hint:
+      \\((1+\\tfrac{\\kappa^2\\lambda_i}{2\\nu})^{-\\nu}\\to e^{-\\kappa^2\\lambda_i/2}\\); handle
+      the normalizing constant so that the \\(\\lambda_i=0\\) mode is fixed.]{.ex-hint}"
+    answer: With $L=\sum_i\lambda_i u_iu_i^\top$,
+      $K_\nu=\sum_i(2\nu/\kappa^2+\lambda_i)^{-\nu}u_iu_i^\top$. Normalize by multiplying by
+      $(2\nu/\kappa^2)^\nu$ so the zero-frequency eigenvalue is one. The normalized eigenvalue is
+      $(1+\kappa^2\lambda_i/(2\nu))^{-\nu}\to e^{-\kappa^2\lambda_i/2}$. Therefore the normalized
+      matrices converge spectrally to $\sum_i e^{-\kappa^2\lambda_i/2}u_iu_i^\top=e^{-\kappa^2L/2}$.
+      Without this normalization every mode, including the constant one, carries a divergent or
+      vanishing common scale.
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: Argue, using the single-index sample barrier, why increasing the width of a network in the
+      NTK regime does not help it learn \(f^\star(x)=g(\langle w^\star,x\rangle)\) faster, whereas
+      the mean-field parametrization does. Which quantity in the two limits differs, and what does
+      the difference say about the role of the read-out layer versus the hidden layer?
+    answer: "In the NTK limit, width only concentrates a fixed random feature geometry; the tangent
+      features remain at initialization, so discovering the unknown direction $w^*$ still faces the
+      fixed-kernel single-index sample barrier. In the mean-field limit, the empirical distribution
+      of hidden weights moves by a Wasserstein gradient flow, allowing neurons to align with $w^*$
+      and reduce the effective dimension. The differing quantity is the hidden feature distribution
+      (equivalently the time-varying tangent representation): frozen in NTK, evolving in mean field.
+      The readout can recombine fixed features, but only hidden-layer motion can learn the direction
+      on which $g(\\langle w^*,x\\rangle)$ depends."

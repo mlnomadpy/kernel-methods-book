@@ -1,0 +1,782 @@
+chapter: ch-gp
+slug: gaussian-processes-and-rvm
+title: Gaussian Processes and the RVM
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - rasmussen2006
+  - williams1996
+  - neal1996
+  - tipping2001
+  - mackay1992
+  - scholkopf2002
+  - williams1998classification
+  - quinonero2005
+  - snelson2006fitc
+  - titsias2009svgp
+  - hensman2013bigdata
+  - wilson2013
+  - damianou2013deepgp
+sections:
+  - id: bayesian-view
+    title: "The Bayesian view: a prior over functions"
+    contribution: adapted-and-expanded
+    sources: &a1
+      - rasmussen2006
+      - williams1996
+      - neal1996
+      - tipping2001
+      - mackay1992
+      - scholkopf2002
+      - williams1998classification
+      - quinonero2005
+      - snelson2006fitc
+      - titsias2009svgp
+      - hensman2013bigdata
+      - wilson2013
+      - damianou2013deepgp
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#bayesian-view
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gaussian-processes
+    title: The Gaussian process
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#gaussian-processes
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-regression
+    title: Gaussian process regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#gp-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: krr-gp
+    title: Kernel ridge regression is the GP posterior mean
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#krr-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: marginal-likelihood
+    title: The marginal likelihood and hyperparameter learning
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-classification
+    title: Gaussian process classification
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#gp-classification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: laplace-mechanics
+    title: "Laplace mechanics: from mode to prediction"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#laplace-mechanics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: laplacian-rvm
+    title: Sparse Bayesian priors and the Relevance Vector Machine
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#laplacian-rvm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: sparse-variational-gp
+    title: Sparse and variational Gaussian processes
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#sparse-variational-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: deep-multioutput-gp
+    title: Deep, multi-output, and spectral-mixture processes
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#deep-multioutput-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - rasmussen2006
+      - williams1996
+      - neal1996
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1996
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neal1996
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mackay1992
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: quinonero2005
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: snelson2006fitc
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: titsias2009svgp
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hensman2013bigdata
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2013
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: damianou2013deepgp
+        manuscript_locator: ch-gp.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

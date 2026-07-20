@@ -1,0 +1,128 @@
+chapter: ch11
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Let \(P\) and \(Q\) be two Gaussians on \(\mathbb R\) with the same mean but different
+      variances. Explain why comparing the raw sample means \(\hat\mu_P = \frac1N\sum_i x_i\) and
+      \(\hat\mu_Q = \frac1M\sum_j y_j\) is structurally unable to tell them apart, no matter how
+      many samples are drawn. Then give one explicit feature coordinate \(\varphi(x)\) whose mean
+      under \(P\) differs from its mean under \(Q\), and say in one sentence what an RKHS supplies
+      that a fixed finite list of such features does not.
+    answer: The raw sample mean estimates only E[X]. Equal-mean Gaussians therefore converge to the same
+      value even when their variances differ. Taking phi(x)=x^2 fixes this example because
+      E[X^2]=Var(X)+E[X]^2, so its expectation changes with variance. An RKHS mean embedding
+      supplies a possibly infinite, kernel-controlled family of feature expectations at once; with a
+      characteristic kernel that collection separates all probability distributions, rather than
+      only the moments in a chosen finite list.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: Take the point mass \(P = \delta_a\), the distribution that places all its weight at a
+      single point \(a \in \mathcal X\). Show directly from the definition \(\mu_P = \mathbb
+      E_{X\sim P}[K_X]\) that \(\mu_{\delta_a} = K_a\). Using this, argue that the empirical
+      embedding \(\hat\mu_P = \frac1N\sum_{i=1}^N K_{X_i}\) is exactly the mean embedding of the
+      empirical distribution \(\frac1N\sum_i \delta_{X_i}\), so that estimating \(\mu_P\) from data
+      is nothing more than averaging one feature vector per sample.
+    answer: "Under delta_a, X=a almost surely, so mu_{delta_a}=E[K_X]=K_a. Linearity of expectation then
+      gives the embedding of the empirical measure N^{-1}sum_i delta_{X_i} as N^{-1}sum_i
+      mu_{delta_{X_i}}=N^{-1}sum_i K_{X_i}, exactly the usual empirical embedding. Thus estimation
+      is ordinary averaging in feature space: each observation contributes one representer K_{X_i},
+      and no density estimate is required."
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: Work on \(\mathcal X = \mathbb R\) with the Gaussian kernel \(K(x,y) = \exp\!\big(-\tfrac12
+      (x-y)^2\big)\). Let the two samples be \(x_1 = 0,\ x_2 = 1\) from \(P\) and \(y_1 = 3,\ y_2 =
+      4\) from \(Q\), so \(N = M = 2\). Write out the biased estimator
+    answer: Each within-sample sum is 2+2e^{-1/2}; the cross sum is e^{-9/2}+e^{-8}+e^{-2}+e^{-9/2}.
+      Hence the biased value is (1/4)[2+2e^{-1/2}]*2-(1/2)[2e^{-9/2}+e^{-8}+e^{-2}], approximately
+      1.527586. The unbiased within terms are each e^{-1/2}, while the cross term is unchanged,
+      giving 2e^{-1/2}-(1/2)[2e^{-9/2}+e^{-8}+e^{-2}] approximately 1.134117. It is smaller because
+      the biased estimator includes four diagonal self-similarities equal to one. It remains
+      positive for these data, although an unbiased finite-sample estimate can be negative
+      elsewhere.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Starting from the definition \(\mathrm{MMD}(P,Q) = \|\mu_P - \mu_Q\|_{\mathcal H}\), derive
+      the expansion
+    answer: Bilinearity gives ||mu_P-mu_Q||^2=<mu_P,mu_P>+<mu_Q,mu_Q>-2<mu_P,mu_Q>. Substitute mu_P=E_X
+      K_X and an independent copy X'. Pulling expectations through the inner product gives
+      <mu_P,mu_P>=E_{X,X'}<K_X,K_X'>=E k(X,X'). The same step yields E k(Y,Y') for Q and E k(X,Y)
+      for the cross term. Combining the three identities produces the stated expansion; independence
+      ensures each inner product represents a product-distribution expectation.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Consider the linear kernel \(K(x,x') = x^\top x'\) on \(\mathbb R^d\). Show that its mean
+      embedding is \(\mu_P(x) = \mathbb E_{X\sim P}[X]^\top x\), so that \(\mu_P\) depends on \(P\)
+      only through its mean \(m_P = \mathbb E_{X\sim P}[X]\). Conclude that
+    answer: For the linear kernel, mu_P evaluated at x is E_X K(X,x)=E[X]^T x=m_P^T x. The RKHS is
+      ordinary Euclidean linear functionals, so ||mu_P-mu_Q||_H^2=||m_P-m_Q||_2^2. Equal-mean
+      distributions therefore have zero MMD even if all higher aspects differ, proving the kernel is
+      not characteristic. The homogeneous degree-two polynomial kernel embeds the second-moment
+      tensor E[XX^T] and can detect variance/covariance differences, but it remains blind to
+      alternatives sharing that tensor while differing in third and higher moments or other
+      distributional structure.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: "Assume the kernel is characteristic, so that \\(\\mathrm{MMD}(P,Q) = 0\\) forces \\(P =
+      Q\\). Prove that \\(\\mathrm{MMD}\\) is then a genuine metric on the set of Borel probability
+      measures: verify non-negativity, symmetry \\(\\mathrm{MMD}(P,Q) = \\mathrm{MMD}(Q,P)\\), the
+      identity of indiscernibles \\(\\mathrm{MMD}(P,Q) = 0 \\iff P = Q\\), and the triangle
+      inequality \\(\\mathrm{MMD}(P,R) \\le \\mathrm{MMD}(P,Q) + \\mathrm{MMD}(Q,R)\\). Point out
+      exactly which of these four fails, and which survive, when the kernel is not characteristic."
+    answer: MMD is an RKHS norm distance between embeddings. Norms give nonnegativity and symmetry, and
+      mu_P-mu_R=(mu_P-mu_Q)+(mu_Q-mu_R) gives the triangle inequality. MMD(P,Q)=0 is equivalent to
+      mu_P=mu_Q; characteristicness converts this to P=Q, while P=Q trivially implies equal
+      embeddings. Without characteristicness, nonnegativity, symmetry, and triangle inequality all
+      survive, as does P=Q=>MMD=0. Only the converse identity of indiscernibles fails, so MMD
+      becomes a pseudometric on distributions.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive two-sample figure and drag one point cloud away from the other while
+      watching the maximum mean discrepancy recomputed live from the points. Describe how the value
+      behaves as the clouds separate and as you bring them back to coincide, and connect what you
+      see to the three-term expansion: say which of the intra-similarity and inter-similarity
+      averages moves, and in which direction, as you pull the clouds apart. Then place the two
+      clouds on top of each other and explain why the reported discrepancy does not settle at
+      exactly zero even though the underlying distributions now match."
+    answer: Separating the clouds decreases the average cross-kernel similarity because Gaussian
+      similarities decay with distance, while each cloud's two within-similarity averages stay
+      roughly fixed if its internal shape is unchanged. The negative cross term therefore becomes
+      less negative and MMD grows. Bringing the clouds together reverses this. At overlap the
+      empirical value generally remains nonzero because two finite empirical measures contain
+      different sampled locations and the estimator fluctuates around its population target; biased
+      estimators also include diagonal self-similarities. Repeated samples or increasing sample
+      size, not merely visual overlap, drives this sampling discrepancy down.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: Two parts on the two-sample test. (a) The witness function is \(f^\star = (\mu_P -
+      \mu_Q)/\|\mu_P - \mu_Q\|_{\mathcal H}\). Using the empirical embeddings, write the estimated
+      witness \(\hat f^\star(t) \propto \frac1N\sum_i K(x_i,t) - \frac1M\sum_j K(y_j,t)\) and
+      explain why, for a Gaussian kernel, it is positive where \(P\) has more mass than \(Q\) and
+      negative where \(Q\) exceeds \(P\); relate its squared achievable gap to \(\mathrm{MMD}^2\).
+      (b) You run a permutation test with \(J = 1000\) reshufflings of the pooled labels and find
+      that \(9\) of the permuted statistics \(T_j\) exceed the observed \(T_0 =
+      n\,\widehat{\mathrm{MMD}}^2\). Compute the approximate \(p\)-value and state the decision at
+      level \(\alpha = 0.05\). Finally, argue that if you had used a linear kernel and \(P,Q\)
+      shared a mean, the test would have no population signal against that alternative and could
+      reject only at its nominal false-positive rate, however many permutations were used.
+    answer: The empirical witness numerator is N^{-1}sum_i K(x_i,t)-M^{-1}sum_j K(y_j,t), normalized by
+      the empirical MMD when nonzero. A Gaussian kernel smooths each cloud, so the difference is
+      positive in regions dominated by P points and negative where Q dominates. Its maximum
+      unit-ball expectation gap is MMD, and the squared maximum is MMD^2. With 9 exceedances among
+      1000 shuffles, the plus-one permutation estimate is (9+1)/(1000+1)=0.00999, so reject at 0.05.
+      A linear kernel has population MMD ||m_P-m_Q||; equal means give zero signal. More
+      permutations reduce Monte Carlo error but cannot add power to that statistic, although a
+      level-0.05 test can still reject by chance at its nominal rate.

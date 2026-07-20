@@ -20,8 +20,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build with Astro
-        uses: withastro/action@v3
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - name: Install Pandoc and build canonical manuscript
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          npm ci
+          npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with: {path: dist}
 
   deploy:
     needs: build

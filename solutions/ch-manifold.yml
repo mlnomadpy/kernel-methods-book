@@ -1,0 +1,41 @@
+chapter: ch-manifold
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Show that the multiplicity of eigenvalue zero of \(L\) equals the number of connected components.
+    answer: (f^\top Lf=0) exactly when adjacent vertices have equal values. Thus the null space consists
+      of functions constant on each connected component. Component indicator vectors form a basis,
+      so the zero eigenvalue has the number of components as its multiplicity.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      For a path of three vertices with endpoint labels \(+1\) and \(-1\), minimize Laplacian energy over the middle value and interpret the result.
+    answer: With middle value (t), the energy is proportional to ((1-t)^2+(t+1)^2=2t^2+2). Its
+      derivative is (4t), so (t=0). The harmonic label is the average of its two neighbors.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Derive the representer expansion by decomposing \(f\) into the span of \(k(x_i,\cdot)\) and its orthogonal complement.
+    answer: Decompose (f=f_S+f_\perp) with (S=\operatorname{span}\{k(x_i,\cdot):1\le i\le l+u\}).
+      Reproduction gives (f_\perp(x_i)=0), so both the labeled loss and graph penalty depend only on
+      (f_S). Since the ambient penalty adds (\gamma_A\lVert f_\perp\rVert^2), every minimizer has
+      (f_\perp=0).
+  - number: 4
+    kind: exploration
+    status: draft
+    prompt: >-
+      Construct a two-moons experiment in which unlabeled data helps, then rotate the labeling rule so the same geometry becomes misleading. State a rubric based on supervised ablation, graph sensitivity, and held-out error.
+    answer: "Rubric: use a held-out labeled set; compare (gamma_I=0); report graph connectivity and
+      sensitivity to neighbors and bandwidth; demonstrate a label rule aligned with the moons and
+      one cutting across them; report mean and variation over fixed seeds. Each of the five checks
+      is worth one point."

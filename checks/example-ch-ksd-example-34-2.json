@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-ksd",
+  "anchor": "example-34-2",
+  "source_file": "manuscript/chapters/ch-ksd.md",
+  "source_sha256": "2b4b7b0e63abf863d05d6f6ec278318eda5c4ea55a6a75e15a658d54ee983db6",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-ksd-ex2.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "0.1",
+    "2",
+    "3",
+    "1.0000",
+    "0.6065",
+    "0.1353",
+    "-0.8730",
+    "-1.4754",
+    "-1.4495",
+    "-0.2924",
+    "0.0000",
+    "+0.2924",
+    "4",
+    "-1.1654",
+    "-1.1571",
+    "0.8835",
+    "1.8525",
+    "2.8843",
+    "2.0000",
+    "1.8734"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

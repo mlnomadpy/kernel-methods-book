@@ -1,0 +1,43 @@
+chapter: ch-reliability
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Give one data-generating example for each shift type and explain which observable marginals would change.
+    answer: >-
+      Covariate shift occurs when a sensor is deployed in a population with different ages but the same response mechanism; \(P_X\) changes. Label shift occurs when disease prevalence changes while class-conditional measurements stay fixed; \(P_Y\) and generally \(P_X\) change. Concept shift occurs after a treatment changes outcomes at fixed covariates; \(P_{Y|X}\) changes. Support shift occurs when a new device produces covariates outside the training range; target input mass appears where training mass is absent.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Expand the empirical kernel-mean-matching objective into its quadratic-program matrix and vector terms, including the normalization constraints.
+    answer: >-
+      With source Gram matrix \(K\) and source-target matrix \(K_{ST}\), the objective equals \(\beta^\top K\beta/n^2-2\beta^\top K_{ST}1/(nm)\) plus a target-only constant. Thus one may minimize \(\tfrac12\beta^\top(2K/n^2)\beta-(2K_{ST}1/(nm))^\top\beta\), subject to \(0\le\beta_i\le B\) and \(|n^{-1}1^\top\beta-1|\le\epsilon\). Check feasibility and report the resulting effective sample size.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the RKHS moment-balance proposition and state why it does not control every bounded measurable loss.
+    answer: >-
+      Let \(\Delta\) be the difference between the weighted source and target empirical embeddings. The moment difference for \(h\) is \(\langle h,\Delta\rangle\), so Cauchy-Schwarz bounds its absolute value by \(\lVert h\rVert\lVert\Delta\rVert\le\epsilon\lVert h\rVert\). A bounded measurable loss outside the RKHS can have no finite RKHS norm and is therefore not covered; universality gives approximation possibilities, not a finite-sample uniform bound for every such loss.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove split-conformal marginal coverage from the exchangeability of score ranks, including the finite-sample quantile correction.
+    answer: >-
+      Conditional on the proper training data, the calibration scores and test score are exchangeable. With \(m\) calibration cases, the test rank among \(m+1\) scores is uniform when ties are randomized and is stochastically no larger under conservative tie handling. Choosing the \(\lceil(m+1)(1-\alpha)\rceil\)-th calibration order statistic therefore makes exclusion probability at most \(\alpha\). Averaging over the proper training data preserves the marginal guarantee.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design a deployment audit for a kernel classifier moving from one hospital or sensor network to another. Specify shift tests, overlap criteria, weighting, conformal scoring, subgroup diagnostics, and retraining triggers.
+    answer: >-
+      Reserve target labels for final evaluation, compare source and target covariates with MMD across preregistered scales, and inspect witness functions and support coverage. Apply kernel mean matching only if conditional invariance is clinically defensible, clipping weights by a validated rule and reporting effective sample size. Calibrate class-set scores on untouched representative data, report coverage, set size, error, and abstention by site and subgroup, and trigger retraining when shift, overlap, calibration, or residual performance crosses declared thresholds.

@@ -1,0 +1,23 @@
+---
+import Book from "../layouts/Book.astro";
+import paths from "../../reading-paths.json";
+import { BOOK, escapeHtml, tocHtml } from "../lib/book.js";
+
+const chapters = BOOK.parts.flatMap((part) => part.chapters);
+const bySlug = Object.fromEntries(chapters.map((chapter) => [chapter.slug, chapter]));
+const renderPath = (key, path) => {
+  const selected = path.chapters === "all" ? chapters.map((chapter) => chapter.slug) : path.chapters;
+  const rows = selected.map((slug, index) => {
+    const chapter = bySlug[slug];
+    if (!chapter) return `<li class="missing">Missing chapter: ${escapeHtml(slug)}</li>`;
+    return `<li><span class="n">${index + 1}</span><a href="${chapter.slug}.html">${escapeHtml(chapter.title)}</a></li>`;
+  }).join("\n");
+  return `<section class="reading-path" id="${key}"><h2>${escapeHtml(path.title)}</h2><p>${escapeHtml(path.description)}</p><ol class="contents">${rows}</ol></section>`;
+};
+---
+
+<Book title={`Reading paths · ${BOOK.title}`} desc="Guided routes through the kernel-methods book" toc={tocHtml("reading-paths")}>
+  <h1><span class="chno">Guide</span>Choose a reading path</h1>
+  <p class="lead">The manuscript serves several kinds of readers without duplicating or weakening the material. Choose the shortest path matching your goal; every route links into the same canonical chapters.</p>
+  <Fragment set:html={Object.entries(paths).map(([key, path]) => renderPath(key, path)).join("\n")} />
+</Book>

@@ -1,0 +1,538 @@
+chapter: ch-signature
+slug: signature-and-time-series-kernels
+title: Signature and Sequence-Path Kernels
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - lyons1998
+  - chen1958
+  - hambly2010
+  - chevyrev2016
+  - kiraly2019
+  - toth2020
+  - salvi2021
+  - cuturi2011
+  - haussler1999
+sections:
+  - id: paths-not-points
+    title: From points to paths
+    contribution: adapted-and-expanded
+    sources: &a1
+      - lyons1998
+      - chen1958
+      - hambly2010
+      - chevyrev2016
+      - kiraly2019
+      - toth2020
+      - salvi2021
+      - cuturi2011
+      - haussler1999
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#paths-not-points
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: path-signature
+    title: The path signature
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#path-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: signature-properties
+    title: Three structural properties
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#signature-properties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: computing-signature
+    title: Computing the truncated signature
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#computing-signature
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: truncated-signature-kernel
+    title: The truncated signature kernel
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#truncated-signature-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: signature-kernel-pde
+    title: The untruncated signature kernel as a Goursat PDE
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#signature-kernel-pde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: alignment-kernels
+    title: "Alignment kernels: warping done positively"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#alignment-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: random-features
+    title: Reservoir and random-feature sequence kernels
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#random-features
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - lyons1998
+      - chen1958
+      - hambly2010
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: lyons1998
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen1958
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hambly2010
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chevyrev2016
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kiraly2019
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: toth2020
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: salvi2021
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuturi2011
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haussler1999
+        manuscript_locator: ch-signature.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

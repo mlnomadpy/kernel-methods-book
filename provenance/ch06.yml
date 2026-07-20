@@ -1,0 +1,296 @@
+chapter: ch06
+slug: kernel-pca
+title: Kernel PCA and Denoising
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - scholkopf1998
+  - tsuda2003
+  - mika1999
+  - williams2002
+  - scholkopf2002
+  - shawe2004
+  - williams2001
+  - bengio2004oos
+  - nguyen2009robust
+  - tipping2001sparse
+sections:
+  - id: principal-component-analysis
+    title: Principal component analysis
+    contribution: adapted-and-expanded
+    sources: &a1
+      - scholkopf1998
+      - tsuda2003
+      - mika1999
+      - williams2002
+      - scholkopf2002
+      - shawe2004
+      - williams2001
+      - bengio2004oos
+      - nguyen2009robust
+      - tipping2001sparse
+    locators:
+      - source: scholkopf1998
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsuda2003
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004oos
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: nguyen2009robust
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001sparse
+        manuscript_locator: ch06.md#principal-component-analysis
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-pca
+    title: Kernel PCA
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf1998
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsuda2003
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004oos
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: nguyen2009robust
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001sparse
+        manuscript_locator: ch06.md#kernel-pca
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: out-of-sample-extension
+    title: Out-of-sample extension and the Nyström view
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf1998
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsuda2003
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004oos
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: nguyen2009robust
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001sparse
+        manuscript_locator: ch06.md#out-of-sample-extension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf1998
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsuda2003
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004oos
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: nguyen2009robust
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001sparse
+        manuscript_locator: ch06.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - scholkopf1998
+      - tsuda2003
+      - mika1999
+    locators:
+      - source: scholkopf1998
+        manuscript_locator: ch06.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsuda2003
+        manuscript_locator: ch06.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch06.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf1998
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsuda2003
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bengio2004oos
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: nguyen2009robust
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tipping2001sparse
+        manuscript_locator: ch06.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

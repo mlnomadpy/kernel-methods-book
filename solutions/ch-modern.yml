@@ -1,0 +1,132 @@
+chapter: ch-modern
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: In the isotropic double-descent theorem, take \(\sigma^2=0\) (no label noise). Show the
+      underparameterized risk is exactly zero and the overparameterized risk is pure bias
+      \(r^2(p-n)/p\). Explain why the peak at \(p=n\) disappears, and what this says about the
+      source of the double-descent spike.
+    answer: "Setting $\\sigma^2=0$ removes the variance term. For $p<n-1$ the stated risk is therefore
+      zero; for $p>n+1$ it is $r^2(1-n/p)=r^2(p-n)/p$. There is no divergence at $p=n$: the
+      remaining bias approaches zero there from the overparameterized side. Thus the classical
+      interpolation spike in this isotropic formula is caused by amplified label noise, while the
+      post-interpolation rise in the noiseless case is projection bias."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: "Verify the underparameterized branch numerically-by-hand for \\(n=10\\), \\(p=4\\),
+      \\(\\sigma^2=1\\): compute \\(\\sigma^2 p/(n-p-1)\\) and compare with the asymptotic
+      \\(\\sigma^2\\gamma/(1-\\gamma)\\) at \\(\\gamma=0.4\\). Which is larger, and why does the
+      finite-sample formula exceed the limit? [Hint: compare \\(p/(n-p-1)\\) with
+      \\(\\gamma/(1-\\gamma)=p/(n-p)\\); the extra \\(-1\\) in the denominator is the finite-sample
+      correction.]{.ex-hint}"
+    answer: The exact finite-sample value is $4/(10-4-1)=4/5=0.8$. The proportional-limit expression is
+      $0.4/(1-0.4)=2/3\approx0.6667$. The exact value is larger because its denominator is $n-p-1=5$
+      rather than $n-p=6$; the inverse-Wishart finite-sample correction is nonnegligible at $n=10$
+      but disappears proportionally as $n,p\to\infty$.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Show directly that ridge regression removes the divergence at \\(p=n\\). For the estimator
+      \\(\\hat\\beta_\\lambda=(X^\\top X+n\\lambda I)^{-1}X^\\top y\\), argue that the smallest
+      eigenvalue of \\(X^\\top X+n\\lambda I\\) is at least \\(n\\lambda\\), so no factor
+      \\(1/(n-p)\\) can appear, and the variance stays finite through \\(p=n\\). [Hint: bound
+      \\(\\mathrm{tr}\\big((X^\\top X+n\\lambda I)^{-2}X^\\top X\\big)\\) using the eigenvalues
+      \\(s_j\\) of \\(X^\\top X\\) and the inequality \\(s_j/(s_j+n\\lambda)^2\\le
+      1/(4n\\lambda)\\).]{.ex-hint}"
+    answer: If $s_j\ge0$ are the eigenvalues of $X^\top X$, the regularized eigenvalues are
+      $s_j+n\lambda\ge n\lambda>0$, including at $p=n$. The noise-variance trace contains $\sum_j
+      s_j/(s_j+n\lambda)^2$. The scalar function is maximized at $s_j=n\lambda$ with value
+      $1/(4n\lambda)$, so the trace is at most $rank(X)/(4n\lambda)$ (times the appropriate
+      noise/sample scaling). No inverse spectral gap $1/(n-p)$ occurs, and the variance remains
+      finite for fixed $\lambda>0$.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: "For the benign-overfitting effective ranks, take the spiked spectrum
+      \\(\\lambda_1=\\cdots=\\lambda_s=1\\) and \\(\\lambda_{s+1}=\\cdots=\\lambda_{s+m}=\\tau\\).
+      Compute \\(r_k\\) and \\(R_k\\) for \\(s\\le k\\lt s+m\\), and confirm that at the spike cutoff
+      \\(R_s=m\\) and \\(r_s=m\\tau/\\tau=m\\). Deduce the condition on \\(m\\) and \\(\\tau\\) for
+      benign overfitting with \\(n\\) samples. [Hint: a flat tail of \\(m\\) equal eigenvalues has
+      participation ratio exactly \\(m\\); benign needs \\(m\\gg n\\) and tail variance \\(m\\tau\\)
+      neither vanishing nor swamping the signal.]{.ex-hint}"
+    answer: For $s\le k<s+m$, let $q=s+m-k$ be the number of tail eigenvalues remaining. Then
+      $\sum_{j>k}\lambda_j=q\tau$, $\lambda_{k+1}=\tau$, and $\sum_{j>k}\lambda_j^2=q\tau^2$, so
+      $r_k=q$ and $R_k=q$. In particular $r_s=R_s=m$. The variance proxy at cutoff $s$ is $s/n+n/m$,
+      which vanishes when $s=o(n)$ and $m/n\to\infty$. Benignity additionally needs the
+      source/signal bias condition and a tail scale $m\tau$ that supplies many harmless directions
+      without vanishing or overwhelming the signal; effective rank alone is not sufficient.
+  - number: 5
+    kind: challenge
+    status: draft
+    prompt: "Prove the isotropic model is never benign. With \\(\\Sigma=I_p\\) and \\(p\\gt n\\), show
+      \\(k^\\star\\) is forced to be of order \\(p\\) and \\(R_{k^\\star}\\) of order
+      \\(p-k^\\star\\), so the variance term \\(k^\\star/n+n/R_{k^\\star}\\) cannot tend to zero as
+      \\(p\\) grows at fixed \\(n\\). Relate this to the overparameterized branch
+      \\(r^2(p-n)/p+\\sigma^2 n/(p-n-1)\\) staying bounded away from zero. [Hint: for a flat
+      spectrum \\(r_k(\\Sigma)=p-k\\), so \\(r_k\\ge bn\\) fails only once \\(k\\) is within
+      \\(bn\\) of \\(p\\).]{.ex-hint}"
+    answer: For $\Sigma=I_p$, $r_k=R_k=p-k$. Requiring $r_k\ge bn$ keeps $k\le p-bn$, so the threshold
+      index is within $O(n)$ of $p$ and therefore $k^*/n\asymp p/n$ when $p/n\to\infty$ (and is
+      already nonvanishing in proportional asymptotics). Meanwhile $R_{k^*}=p-k^*=O(n)$, so
+      $n/R_{k^*}$ also does not vanish. Hence $k^*/n+n/R_{k^*}$ cannot tend to zero. Consistently,
+      the exact overparameterized risk tends to $r^2$ as $p/n\to\infty$ (and has positive noise
+      variance away from that limit), so isotropic extra dimensions introduce bias rather than a
+      benign weak tail.
+  - number: 6
+    kind: challenge
+    status: draft
+    prompt: "In the omniscient learning curve, take the ridgeless limit \\(\\lambda\\to0\\) with a
+      finite number \\(M\\) of nonzero modes and \\(n\\gt M\\). Show the self-consistent equation
+      forces \\(\\kappa\\to0\\), hence \\(\\mathcal L_i\\to1\\) for every mode, \\(\\gamma\\to
+      M/n\\), and \\(E_g\\to\\sigma^2\\gamma/(1-\\gamma)=\\sigma^2 M/(n-M)\\). Interpret this as
+      ordinary least squares with \\(M\\) features. [Hint: divide the self-consistent equation by
+      \\(\\kappa\\) and let \\(\\kappa\\to0\\); the equation \\(1=\\sum_i
+      \\eta_i/(n\\eta_i+\\kappa)\\) has no positive root when \\(n\\gt M\\).]{.ex-hint}"
+    answer: At ridgelessness the nonzero-$\kappa$ equation is $1=\sum_{i=1}^M\eta_i/(n\eta_i+\kappa)$.
+      Its right side at $\kappa=0$ is $M/n<1$ when $n>M$ and decreases thereafter, so it has no
+      positive root; continuity from $\lambda>0$ forces $\kappa\to0$. Then
+      $L_i=n\eta_i/(n\eta_i+\kappa)\to1$ and $\gamma=n^{-1}\sum_iL_i^2\to M/n$. All finite modes are
+      learned, and the remaining generalization error is
+      $\sigma^2\gamma/(1-\gamma)=\sigma^2M/(n-M)$, the familiar finite-sample variance of ordinary
+      least squares with $M$ features.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "Show that when \\(n\\lt M\\) the ridgeless self-consistent equation
+      \\(1=\\sum_{i=1}^M\\eta_i/(n\\eta_i+\\kappa)\\) has a unique positive root \\(\\kappa\\gt0\\),
+      so the effective ridge is nonzero even at \\(\\lambda=0\\). Explain why this is the
+      learning-curve statement of the same implicit regularization that keeps the minimum-norm
+      interpolant well-behaved. [Hint: the right side is continuous, strictly decreasing in
+      \\(\\kappa\\), equals \\(M/n\\gt1\\) at \\(\\kappa=0^+\\) when \\(M\\gt n\\), and tends to
+      \\(0\\) as \\(\\kappa\\to\\infty\\), so it crosses \\(1\\) exactly once.]{.ex-hint}"
+    answer: "Let $F(\\kappa)=\\sum_{i=1}^M\\eta_i/(n\\eta_i+\\kappa)$ for positive modes. It is
+      continuous and strictly decreasing, with $F(0^+)=M/n>1$ and $F(\\infty)=0$. The
+      intermediate-value theorem gives one positive root and strict monotonicity makes it unique.
+      Thus even at explicit ridge zero, finite data leave a positive self-consistent effective
+      ridge: unresolved modes are attenuated, the learning-curve counterpart of the minimum-norm
+      interpolant selecting the solution with no unsupported component."
+  - number: 8
+    kind: synthesis
+    status: draft
+    prompt: Explain in one paragraph, using the effective ranks and the per-mode learnability, why a
+      kernel with a slowly decaying spectrum (large tail effective rank) both interpolates benignly
+      and learns with a shallow power-law exponent, so that safety at interpolation and slowness of
+      learning are two consequences of the same heavy tail. What does this trade-off imply for
+      choosing a kernel's bandwidth?
+    answer: "A slowly decaying kernel spectrum spreads tail mass over many weak directions, making the
+      tail participation ratio $R_k$ large; then interpolation can distribute noise across many
+      coordinates and the variance term $n/R_k$ is small. The same weak, numerous modes have
+      learnabilities $L_i=n\\eta_i/(n\\eta_i+\\kappa)$ far below one until very large $n$, producing
+      a shallow learning-curve power law. Heavy spectral tails therefore buy stability at
+      interpolation by postponing the learning of fine structure. Bandwidth controls this
+      compromise: a narrower kernel usually flattens the spectrum and can make interpolation safer
+      but learning slower and noisier in finite samples, so it should be chosen with nested
+      validation and spectral diagnostics rather than by interpolation performance alone."

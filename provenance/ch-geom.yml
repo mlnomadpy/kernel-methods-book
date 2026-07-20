@@ -1,0 +1,526 @@
+chapter: ch-geom
+slug: geometric-and-equivariant-kernels
+title: Geometric and Equivariant Kernels
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - whittle1954
+  - lindgren2011
+  - borovitskiy2020matern
+  - borovitskiy2021graph
+  - belkin2003
+  - kondor2002
+  - azangulov2022
+  - azangulov2023
+  - haasdonk2007
+  - cohen2016
+  - bietti2019
+sections:
+  - id: geometry-of-the-domain
+    title: Why the domain's geometry matters
+    contribution: adapted-and-expanded
+    sources: &a1
+      - whittle1954
+      - lindgren2011
+      - borovitskiy2020matern
+      - borovitskiy2021graph
+      - belkin2003
+      - kondor2002
+      - azangulov2022
+      - azangulov2023
+      - haasdonk2007
+      - cohen2016
+      - bietti2019
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#geometry-of-the-domain
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: matern-spde
+    title: The Matern family as a stochastic differential equation
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#matern-spde
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: manifold-kernels
+    title: Kernels on a Riemannian manifold
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#manifold-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: graph-kernels-spectral
+    title: Kernels on a weighted graph
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#graph-kernels-spectral
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: lie-groups
+    title: Lie groups and homogeneous spaces
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#lie-groups
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: invariant-kernels
+    title: Group-invariant kernels by averaging
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#invariant-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - whittle1954
+      - lindgren2011
+      - borovitskiy2020matern
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: whittle1954
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lindgren2011
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2020matern
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: borovitskiy2021graph
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2003
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kondor2002
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2022
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: azangulov2023
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2007
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cohen2016
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bietti2019
+        manuscript_locator: ch-geom.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

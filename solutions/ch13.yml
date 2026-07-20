@@ -1,0 +1,222 @@
+chapter: ch13
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "The chapter isolates three separate costs of the exact kernel solve: \\(O(n^2)\\) kernel
+      evaluations to build the Gram matrix, \\(O(n^2)\\) memory to store it, and \\(O(n^3)\\)
+      arithmetic to solve \\((K + n\\lambda I)\\boldsymbol{\\alpha} = \\mathbf{y}\\). For each
+      method below, say which of the three costs it removes and which it leaves standing: (a)
+      replacing the direct solve by conjugate gradients while keeping \\(K\\) exact; (b) sequential
+      minimal optimization and decomposition for the SVM; (c) Nystrom with \\(p \\ll n\\) sampled
+      anchors; (d) random Fourier features with \\(p\\) frequencies. One sentence per method."
+    answer: "Conjugate gradients removes the cubic factorization, replacing it by iterations, but under
+      the premise that exact K is retained it leaves O(n^2) construction and storage (or O(n^2) work
+      per matrix-free exact matvec). SMO/decomposition similarly avoids a global cubic SVM solve by
+      optimizing small working sets, while exact kernel evaluation and worst-case storage/caching
+      remain. Nystrom needs O(np) kernel values/features, O(np) storage, and roughly O(np^2+p^3)
+      training, reducing all three when p<<n. Random Fourier features avoid the Gram matrix
+      entirely: they use O(np) feature construction/storage and a p-dimensional linear solve or
+      iterative optimizer, again reducing all three for p<<n."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: "Work in double precision, \\(8\\) bytes per float. (a) At \\(n = 10^5\\), how many entries
+      does the Gram matrix \\(K\\) hold, and how many gigabytes does it occupy? (b) A dense Cholesky
+      solve costs about \\(\\tfrac{1}{3} n^3\\) floating-point operations; evaluate that at \\(n =
+      10^5\\). (c) Approximate instead by Nystrom with \\(p = 500\\): give the size in gigabytes of
+      the stored feature matrix \\(\\psi(S) \\in \\mathbb{R}^{p \\times n}\\), and the order of
+      magnitude of the training budget \\(O(p^3) + O(p^2 n)\\). (d) By what factor does the storage
+      shrink, and at what value of \\(n\\) would \\(K\\) in double precision first exceed \\(8\\)
+      gigabytes?"
+    answer: At n=10^5, K has 10^10 entries and uses 8*10^10 bytes, or 80 GB (about 74.5 GiB). One-third
+      n^3 is about 3.33*10^14 flops. A 500 by 10^5 Nystrom feature matrix has 5*10^7 doubles, 0.4
+      GB. Its budget is p^3=1.25*10^8 plus p^2 n=2.5*10^10 operations, dominated by the latter.
+      Storage shrinks by a factor 200. Using decimal 8 GB, 8n^2 first exceeds 8*10^9 when
+      n>sqrt(10^9), so the first integer is 31,623 (using 8 GiB instead gives 32,769).
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Show where the \(O(n^3)\) comes from. Solve the symmetric positive definite system
+      \(A\boldsymbol{\alpha} = \mathbf{y}\) with \(A = K + n\lambda I\) by the Cholesky
+      factorization \(A = LL^\top\), \(L\) lower triangular. (a) From the defining relation \(A_{ij}
+      = \sum_{k=1}^{j} L_{ik} L_{jk}\) for \(i \geq j\), show that computing \(L_{ij}\) requires a
+      dot product of length \(j\), so forming all of column \(j\) below the diagonal costs on the
+      order of \((n - j)\, j\) multiply-add operations. (b) Sum over columns to get \(\sum_{j=1}^{n}
+      (n-j)\, j \sim n^3/6\), hence a \(\Theta(n^3)\) factorization, and note that the two
+      triangular solves that finish the job cost only \(\Theta(n^2)\). Conclude that the cube is the
+      price of eliminating \(n\) unknowns against \(n\) equations, not of the right-hand side.
+    answer: For i>=j, Cholesky uses L_ij=[A_ij-sum_{k<j}L_ikL_jk]/L_jj, so each below-diagonal entry in
+      column j needs a dot product of length j-1. There are about n-j such entries, costing
+      Theta((n-j)j). Summing gives sum_j(n-j)j=n sum_j j-sum_j j^2=(n^3-n)/6 up to indexing
+      constants, hence Theta(n^3). Forward and backward substitution each visit the triangular
+      matrix once and cost Theta(n^2). The dominant cube is paid to construct a factor eliminating
+      all coupled unknowns; changing the right-hand side reuses the factor and needs only the
+      quadratic solves.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Show that the random Fourier feature dot product is an unbiased estimator of the kernel. Let
+      \(\psi(\mathbf{x}) = \sqrt{2/p}\,\big(\cos(\mathbf{w}_1^\top\mathbf{x} + b_1), \ldots,
+      \cos(\mathbf{w}_p^\top\mathbf{x} + b_p)\big)^\top\) with \(\mathbf{w}_j \sim q\) i.i.d. and
+      \(b_j \sim \mathcal{U}[0, 2\pi]\) i.i.d. (a) Using the identity \(2\cos(\alpha + b)\cos(\gamma
+      + b) = \cos(\alpha - \gamma) + \cos(\alpha + \gamma + 2b)\), show that averaging over \(b \sim
+      \mathcal{U}[0, 2\pi]\) annihilates the second term, so
+      \(\mathbb{E}_b\big[\,2\cos(\mathbf{w}^\top\mathbf{x} + b)\cos(\mathbf{w}^\top\mathbf{y} +
+      b)\big] = \cos\big(\mathbf{w}^\top(\mathbf{x} - \mathbf{y})\big)\). (b) Take the further
+      expectation over \(\mathbf{w} \sim q\) and invoke Bochner's theorem to conclude
+      \(\mathbb{E}\big[\langle \psi(\mathbf{x}), \psi(\mathbf{y})\rangle\big] = \kappa(\mathbf{x} -
+      \mathbf{y})\). (c) For the Gaussian kernel \(\kappa(\mathbf{z}) = e^{-\lVert
+      \mathbf{z}\rVert_2^2 / (2\sigma^2)}\), name the sampling density \(q\) explicitly.
+    answer: For one feature, the product identity gives
+      2cos(w^Tx+b)cos(w^Ty+b)=cos[w^T(x-y)]+cos[w^T(x+y)+2b]. Uniform averaging over b kills the
+      second cosine. The p-feature dot product is the average of these terms, so its expectation is
+      E_w cos[w^T(x-y)]. Bochner identifies this expectation with the shift-invariant kernel
+      kappa(x-y), proving unbiasedness. For kappa(z)=exp(-||z||^2/(2sigma^2)), the spectral sampling
+      distribution is the Gaussian q=N(0,sigma^{-2}I) under the standard characteristic-function
+      convention.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Show that the Nystrom low-rank error equals the discarded eigenvalue tail. Let the centered
+      Gram matrix have eigendecomposition \(K = \sum_{k=1}^{n} \lambda_k \mathbf{u}_k
+      \mathbf{u}_k^\top\) with \(\lambda_1 \geq \cdots \geq \lambda_n \geq 0\), and let
+      \(\Pi_{\mathcal{F}}\) be the orthogonal projection onto the span of the top \(p\) kernel
+      principal directions. (a) Show the total squared projection residual satisfies
+      \(\sum_{i=1}^{n}\lVert \varphi(\mathbf{x}_i) -
+      \Pi_{\mathcal{F}}\varphi(\mathbf{x}_i)\rVert_{\mathcal{H}}^2 = \sum_{k=p+1}^{n}\lambda_k\).
+      (b) Deduce that the approximation is exact when \(\operatorname{rank}(K) \leq p\), and that in
+      general its error is controlled entirely by the tail \(\sum_{k \gt p}\lambda_k\), which is
+      small precisely when the spectrum decays fast, the premise the chapter invokes for Nystrom.
+    answer: Let C=sum_i phi_i tensor phi_i. The top-p projection captures tr(P_p C)=sum_{k<=p}lambda_k
+      by the eigenvalue variational principle, while total energy is tr(C)=sum_k lambda_k.
+      Pythagoras therefore gives total squared residual sum_{k>p}lambda_k. If rank(K)<=p the tail is
+      empty and reconstruction is exact. Otherwise no quantity besides the discarded spectrum enters
+      this ideal top-subspace error, so fast decay makes a small p accurate and a flat spectrum
+      makes every rank-p approximation expensive.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: The sparse greedy Gram approximation of Smola and Scholkopf (2000) chooses the next anchor
+      not from all \(n\) candidates but from a small random pool, and the chapter quotes the number
+      \(59\). Justify it. Suppose a pool of \(r\) candidates is drawn uniformly at random. (a) Show
+      the probability that none of the \(r\) lands in the top \(5\%\) of all candidates is
+      \((0.95)^r\). (b) Solve \((0.95)^r \leq 0.05\) for the smallest integer \(r\) and confirm \(r
+      = 59\). (c) Explain why this guarantee is independent of \(n\), and what that independence
+      buys for the per-iteration cost of greedy selection.
+    answer: Independent uniform draws miss the top 5 percent with probability 0.95 each, hence all r
+      miss with probability 0.95^r. Solving r log(0.95)<=log(0.05) gives
+      r>=log(0.05)/log(0.95)=58.40, so the smallest integer is 59. The expression depends only on
+      the target quantile and failure probability, not n. Thus each greedy round can inspect a
+      constant-size candidate pool instead of all n points while retaining the stated probabilistic
+      quality guarantee.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive figure above in the random Fourier features section. It plots the
+      Gaussian kernel \\(\\kappa(\\mathbf{x} - \\mathbf{y})\\) against its random-feature estimate
+      as a function of the gap \\(\\mathbf{x} - \\mathbf{y}\\), and reports the running RMSE to the
+      true kernel. (a) Start at a small feature count \\(D\\): the estimate is jagged and the RMSE
+      is large. Raise \\(D\\) and watch the finite average settle onto the smooth exact kernel while
+      the RMSE falls. (b) The estimate is an average of \\(D\\) i.i.d. bounded terms, so from that
+      fact alone, what rate should the RMSE follow in \\(D\\), and by what factor must you raise
+      \\(D\\) to halve the error? (c) Redraw at fixed \\(D\\): the curve wiggles differently because
+      the frequencies are resampled. What does that resampling illustrate about the gap between the
+      pointwise variance of a single estimate and the uniform, distribution-free guarantee of the
+      Rahimi and Recht theorem?"
+    answer: The random-feature estimate is an average of D independent bounded terms, so pointwise
+      standard deviation and typical RMSE scale as D^{-1/2}. Halving error therefore requires about
+      four times as many features. At fixed D, redrawing frequencies changes the finite Monte Carlo
+      realization and hence the wiggles. This illustrates pointwise sampling variance. A uniform
+      theorem must additionally control the supremum over an input region/class, paying
+      covering-number or dimension factors; one smooth-looking draw at selected points is not itself
+      a distribution-free uniform guarantee.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: Trace the memory-versus-compute trade behind variance reduction. The chapter argues SGD's
+      noise never dies. (a) At the optimum \(\mathbf{w}^\star\), the full gradient
+      \(\tfrac{1}{n}\sum_i \nabla f_i(\mathbf{w}^\star) = 0\); construct an \(n = 2\) example in
+      which the individual gradients \(\nabla f_i(\mathbf{w}^\star)\) are nonzero yet cancel, and
+      conclude that the one-sample estimator \(\nabla f_I(\mathbf{w}^\star)\) has strictly positive
+      variance. (b) Explain why that irreducible variance forces SGD to send \(\eta_t \to 0\), which
+      is what drags its strongly convex rate down to \(O(1/t)\), whereas a variance-reduced estimate
+      whose variance vanishes as \(\mathbf{w} \to \mathbf{w}^\star\) permits a constant step and the
+      geometric rate to return. (c) SAG restores that fast rate by storing one gradient per example,
+      while SVRG spends periodic full-batch recomputation instead. State the resource each pays, and
+      compute the size in gigabytes of SAG's gradient table for \(n = 10^6\), \(p = 10^3\), in
+      double precision.
+    answer: "Take f_1(w)=(w-1)^2/2 and f_2(w)=(w+1)^2/2. Their average is minimized at w*=0, where
+      gradients are -1 and +1: the full gradient is zero but a uniformly sampled component gradient
+      has variance one. Persistent noise forces SGD step sizes toward zero to converge exactly,
+      yielding the familiar O(1/t) strongly convex rate. Variance-reduced estimators vanish at the
+      optimum, permitting constant steps and geometric convergence. SAG pays memory for n stored
+      p-vectors; SVRG pays periodic full-gradient passes. For n=10^6,p=10^3, SAG stores 10^9
+      doubles, 8*10^9 bytes=8 GB (7.45 GiB)."
+  - number: 9
+    kind: proof
+    status: draft
+    prompt: Establish the basic identities of ridge leverage scores. Let \(K = \sum_{k=1}^n \lambda_k
+      \mathbf{u}_k \mathbf{u}_k^\top\) with orthonormal eigenvectors and \(\lambda \gt 0\). (a) Show
+      that \(\ell_i(\lambda) = \sum_k \tfrac{\lambda_k}{\lambda_k + \lambda} u_{ki}^2\), and deduce
+      \(0 \leq \ell_i(\lambda) \lt 1\) for every \(i\). (b) Show that \(\sum_i \ell_i(\lambda) =
+      d_{\mathrm{eff}}(\lambda) = \sum_k \tfrac{\lambda_k}{\lambda_k + \lambda}\). (c) Determine the
+      limits of \(d_{\mathrm{eff}}(\lambda)\) as \(\lambda \to 0^+\) and as \(\lambda \to \infty\),
+      and check both against the worked example, whose spectrum \((4.7879, 1, 1, 0.2087, 0.0034, 0,
+      0)\) has five nonzero eigenvalues and whose effective dimension at \(\lambda = 0.01\) is
+      \(4.1861\).
+    answer: Spectral substitution in K(K+lambda I)^{-1} gives ell_i=sum_k
+      [lambda_k/(lambda_k+lambda)]u_{ki}^2. Every factor lies in [0,1), and the squared eigenvector
+      coordinates sum to one, so 0<=ell_i<1. Summing i and using sum_i u_{ki}^2=1 yields sum_i
+      ell_i=sum_k lambda_k/(lambda_k+lambda)=d_eff. As lambda->0+, each nonzero eigenvalue
+      contributes one and zeros contribute zero, so the limit is rank(K); as lambda->infinity the
+      limit is zero. The example therefore tends to five and has 4.1861 at 0.01, consistent with
+      partial suppression of its tiny fifth eigenvalue.
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: Show that the FALKON preconditioner is exact when the landmarks are the whole dataset. Let
+      \(K_{mm} = T^\top T\) and \(\tfrac{1}{m} T T^\top + \lambda I = A^\top A\) be the two Cholesky
+      factorizations, and \(B = T^{-1} A^{-1}\). (a) Verify the identity \(\tfrac{1}{m} K_{mm}^2 +
+      \lambda K_{mm} = (AT)^\top (AT)\). (b) Suppose \(m = n\) and the landmark set is the entire
+      dataset, so \(K_{nm} = K_{mm}\). Show that \(H = \tfrac{1}{n} K_{nm}^\top K_{nm} + \lambda
+      K_{mm}\) equals \(\tfrac{1}{m} K_{mm}^2 + \lambda K_{mm}\), and conclude \(B^\top H B = I\),
+      so preconditioned conjugate gradient converges in a single iteration. (c) For \(m \lt n\),
+      write \(B^\top H B = I + E\) and identify the matrix whose deviation from its landmark average
+      \(E\) measures. What kind of convergence, in \(m\), controls the size of \(E\)?
+    answer: Since K=T^TT, (1/m)K^2+lambda K=T^T[(1/m)TT^T+lambda I]T=T^T A^TAT=(AT)^T(AT). When m=n and
+      K_nm=K_mm, H is exactly this matrix. With B=T^{-1}A^{-1}, (AT)B=I, so B^T H B=I and CG solves
+      the identity system in one step. For m<n, E=B^T[(1/n)K_nm^T K_nm-(1/m)K_mm^2]B. It measures
+      deviation of the full-data empirical landmark-feature covariance from its landmark-only
+      average, in the preconditioned metric. Matrix concentration or leverage-aware sampling rates
+      in m control ||E|| and eigenvalue clustering.
+  - number: 11
+    kind: computation
+    status: draft
+    prompt: "Test the conjugate gradient iteration bound against the FALKON worked example. The
+      classical bound says CG reaches relative accuracy \\(\\varepsilon\\) within about
+      \\(\\tfrac{1}{2}\\sqrt{\\kappa} \\, \\ln(2/\\varepsilon)\\) iterations on a system with
+      condition number \\(\\kappa\\). The worked example reports \\(\\kappa(H) = 4.34 \\times
+      10^8\\), \\(\\kappa(M) = 2.44 \\times 10^1\\), tolerance \\(10^{-6}\\), and measured iteration
+      counts \\(751\\) and \\(25\\). (a) Evaluate the bound for the preconditioned system \\(M\\)
+      and compare with the measured \\(25\\). (b) Evaluate it for \\(H\\) and observe that the
+      prediction is around two hundred times the measured \\(751\\): explain the gap through the
+      shape of the spectrum, recalling that CG adapts to all the eigenvalues, effectively deleting a
+      few extreme ones after a few iterations, while \\(\\kappa\\) sees only the two endpoints. (c)
+      The measured \\(751\\) exceeds the dimension \\(m = 100\\), yet exact-arithmetic CG must
+      terminate in at most \\(m\\) steps. What does the overshoot demonstrate about finite-precision
+      CG on ill-conditioned systems?"
+    answer: For kappa=24.4 and epsilon=10^{-6}, the bound is 0.5*sqrt(24.4)*log(2*10^6)=35.8 iterations,
+      close in scale and conservatively above the measured 25. For kappa=4.34*10^8 it is about
+      151,100 iterations, roughly 201 times 751. The endpoint-only condition number ignores a
+      spectrum with a few extreme eigenvalues and a clustered bulk; CG rapidly constructs
+      polynomials that suppress isolated modes and converges much faster. In exact arithmetic an
+      m=100 system terminates within 100 steps. Requiring 751 shows loss of conjugacy,
+      rounding-error accumulation, and residual drift on the severely ill-conditioned
+      finite-precision system.

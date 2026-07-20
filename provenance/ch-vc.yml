@@ -1,0 +1,488 @@
+chapter: ch-vc
+slug: vc-theory-and-generalization
+title: VC Theory and Generalization
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - vapnikchervonenkis1971
+  - vapnik1995
+  - vapnik1998
+  - hoeffding1963
+  - mcdiarmid1989
+  - bartlett2002
+  - boucheron2005
+  - sauer1972
+  - scholkopf2002
+  - shawe2004
+sections:
+  - id: empirical-vs-expected-risk
+    title: The risk we want and the risk we can measure
+    contribution: adapted-and-expanded
+    sources: &a1
+      - vapnikchervonenkis1971
+      - vapnik1995
+      - vapnik1998
+      - hoeffding1963
+      - mcdiarmid1989
+      - bartlett2002
+      - boucheron2005
+      - sauer1972
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#empirical-vs-expected-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: concentration
+    title: Concentration and the law of large numbers
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#concentration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: consistency-uniform-convergence
+    title: Consistency and uniform convergence
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#consistency-uniform-convergence
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: growth-function-vc-dimension
+    title: The growth function and the VC dimension
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#growth-function-vc-dimension
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: deriving-vc-bound
+    title: Deriving a VC bound
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#deriving-vc-bound
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: srm-model-selection
+    title: Structural risk minimization
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#srm-model-selection
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: margin-controls-capacity
+    title: The margin controls capacity
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#margin-controls-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - vapnikchervonenkis1971
+      - vapnik1995
+      - vapnik1998
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sauer1972
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-vc.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

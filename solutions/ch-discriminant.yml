@@ -1,0 +1,119 @@
+chapter: ch-discriminant
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Explain in one or two sentences why maximizing the variance \(w^\top C w\) subject to
+      \(\lVert w\rVert=1\) has the same solution as maximizing the Rayleigh quotient \(w^\top C
+      w/w^\top w\) without any constraint. What role does the homogeneity of the quotient under
+      rescaling \(w\mapsto t w\) play?
+    answer: "The Rayleigh quotient is homogeneous of degree zero: replacing w by tw multiplies numerator
+      and denominator by t^2, leaving the value unchanged. Every nonzero direction therefore has a
+      unique unit-norm representative up to sign, and maximizing on the unit sphere is identical to
+      maximizing the unconstrained quotient over nonzero w. The constraint fixes scale only; the
+      eigenvector direction carries the optimization."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Repeat the kernel Fisher worked example but with the polynomial kernel
+      \(\kappa(x,x')=(\langle x,x'\rangle+1)^2\) on the same four points
+      \(x_1=(1,0),x_2=(0,1),x_3=(-1,0),x_4=(0,-1)\) and \(\mu=1\). Build \(K\), the class means
+      \(m_\pm\), the matrices \(M\) and \(N\), solve \((N+\mu I)\alpha=m_+-m_-\), and report the
+      four projections \(t=K\alpha\). Are the classes still separated?
+    answer: The polynomial Gram matrix is [[4,1,0,1],[1,4,1,0],[0,1,4,1],[1,0,1,4]]. Class mean vectors
+      are m_+=(2.5,2.5,0.5,0.5) and m_-=(0.5,0.5,2.5,2.5), so d=(2,2,-2,-2) and M=dd^T. Summing
+      within-class centered outer products gives
+      N=[[5,-5,-3,3],[-5,5,3,-3],[-3,3,5,-5],[3,-3,-5,5]]. Since Nd=0 and mu=1, alpha=(N+I)^{-1}d=d.
+      The projections are Kalpha=(8,8,-8,-8), so the two positive and two negative points remain
+      perfectly separated (scale of alpha is immaterial to the direction).
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Prove the reduction of the generalized eigenproblem: if \\(B\\) is symmetric positive
+      definite with square root \\(B^{1/2}\\), then \\(Aw=\\lambda Bw\\) is equivalent to
+      \\(B^{-1/2}AB^{-1/2}v=\\lambda v\\) under \\(v=B^{1/2}w\\), and conclude that the maximum of
+      \\(w^\\top A w/w^\\top B w\\) is the largest eigenvalue of \\(B^{-1/2}AB^{-1/2}\\). Where in
+      the argument does positive definiteness, rather than mere positive semidefiniteness, get
+      used?"
+    answer: Set v=B^{1/2}w, so w=B^{-1/2}v. Substitution in Aw=lambda Bw and left multiplication by
+      B^{-1/2} gives B^{-1/2}AB^{-1/2}v=lambda v; reversing the substitutions proves equivalence.
+      The generalized quotient becomes v^T(B^{-1/2}AB^{-1/2})v/(v^Tv), whose maximum is the largest
+      ordinary eigenvalue. Positive definiteness is used to make B^{1/2} invertible and to ensure
+      w^TBw>0 for every nonzero w. A merely semidefinite B needs restriction to its range or a
+      pseudoinverse/regularization.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Show that the between-class scatter matrix
+      \(S_B=(\mu_+^{\phi}-\mu_-^{\phi})(\mu_+^{\phi}-\mu_-^{\phi})^\top\) has rank one, and deduce
+      that the Fisher direction is \(w\propto S_W^{-1}(\mu_+^{\phi}-\mu_-^{\phi})\) with no
+      eigendecomposition required. Why does the rank-one structure mean that only one discriminant
+      direction carries information in the two-class problem?
+    answer: "Let d=mu_+^phi-mu_-^phi. Then S_B=dd^T has image span{d}, so its rank is one when d!=0
+      (zero otherwise). The generalized Fisher equation dd^T w=lambda S_W w implies w is
+      proportional to S_W^{-1}d: multiplying by S_W^{-1} shows the image of every nonzero solution
+      lies along that vector. Because S_B has only one nonzero eigen-direction, there is at most one
+      nonzero generalized eigenvalue; all other directions have zero between-class separation in a
+      two-class problem."
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: In primal PLS the loading is \(p_j=X_j^\top X_j u_j/(u_j^\top X_j^\top X_j u_j)\). Verify
+      the two conjugacy relations \(u_j^\top p_j=1\) and \(u_i^\top p_j=0\) for \(i\lt j\), and
+      explain why they imply that the scores \(\tau_j=X_j u_j\) extracted at different stages are
+      mutually orthogonal.
+    answer: By definition p_j=X_j^T X_j u_j/(u_j^T X_j^T X_j u_j), so u_j^T p_j=1. Earlier deflation
+      factors remove the previously extracted score directions, making X_j u_i=0 (or equivalently
+      the required conjugacy) for i<j; substituting into the same numerator yields u_i^T p_j=0. The
+      update X_{j+1}=X_j(I-u_j p_j^T) therefore annihilates the current score direction without
+      restoring earlier ones. Consequently tau_i^T tau_j=(X_i u_i)^T(X_j u_j)=0 for i<j, so
+      extracted score vectors are mutually orthogonal.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: "Take the PCR worked example and confirm the incremental property: compute \\(\\alpha\\) for
+      \\(k=1\\), then show that adding the \\(j=2\\) term \\(\\tfrac{1}{\\lambda_2}(v_2^\\top
+      y)v_2\\) gives the \\(k=2\\) coefficients without recomputing the first. Verify numerically
+      that \\(K\\alpha=(1,-1,0)\\) at \\(k=2\\), and explain in one sentence why the third
+      (zero-eigenvalue) direction can never be used."
+    answer: For the worked centered Gram matrix, k=1 gives alpha_1=(0.041987,0.006356,-0.048344) and
+      fitted values (0.361325,0.054700,-0.416025). The second contribution is (v_2^T y/lambda_2)v_2;
+      adding it leaves the first term untouched and yields alpha_2=(0.5,-0.75,0.25). Multiplication
+      gives K alpha_2=(1,-1,0), exactly y. The third eigenvalue is zero, so division by it is
+      undefined and its eigenvector lies in K's nullspace; no kernel expansion can create fitted
+      values in that direction.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: Contrast PCR and kernel PLS on the situation of the PCR worked example, where the predictive
+      direction has the smaller eigenvalue. Argue that PLS, extracting the direction of maximum
+      covariance with \(y\), would select that predictive direction first, whereas PCR ordered by
+      variance selects it second. What does this say about when to prefer each method?
+    answer: PCR ranks directions solely by predictor variance. In the example its first, high-eigenvalue
+      component is weakly aligned with y, so the predictive smaller-eigenvalue direction enters only
+      at k=2. PLS chooses a direction maximizing covariance with y and would select that predictive
+      direction first. PCR is attractive when dominant unsupervised variation is believed meaningful
+      or y is noisy; PLS is preferable when lower-variance directions can be predictive, though its
+      supervision can also overfit and therefore needs validation/regularization.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: The regularized kernel Fisher objective penalizes the RKHS norm \(\lVert
+      w\rVert^2=\alpha^\top K\alpha\) of the discriminant direction, which is why \(N\) is replaced
+      by \(N+\mu K\) in some formulations and by \(N+\mu I\) in others. Derive both variants from a
+      penalized quotient \(\alpha^\top M\alpha/(\alpha^\top N\alpha+\mu\,\Omega(\alpha))\), taking
+      \(\Omega(\alpha)=\alpha^\top K\alpha\) in one case and \(\Omega(\alpha)=\alpha^\top\alpha\) in
+      the other, and discuss which penalty corresponds to controlling the feature-space norm of
+      \(w\) and which to a plain ridge on the dual coefficients.
+    answer: With denominator alpha^T N alpha+mu Omega(alpha), choosing Omega=alpha^T K alpha gives
+      alpha^T(N+mu K)alpha. Since w=sum_i alpha_i Phi_i, alpha^T K alpha=||w||_H^2, so this variant
+      directly controls feature-space discriminant norm (with nullspace coefficient nonuniqueness).
+      Choosing Omega=alpha^T alpha gives alpha^T(N+mu I)alpha, an isotropic ridge on the coordinate
+      vector. It guarantees invertibility more directly but depends on the chosen dual
+      representation and is not the intrinsic RKHS norm unless K=I in those coordinates.

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-online",
+  "anchor": "example-10-3",
+  "source_file": "manuscript/chapters/ch-online.md",
+  "source_sha256": "ffe131d020041a9f4ddadd3a7c9110238ce9fb6a8076909dc91b18b6ca54b4de",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-online-ex3.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "2",
+    "+1",
+    "4",
+    "-2",
+    "-1",
+    "-4",
+    "5",
+    "12",
+    "-12",
+    "32",
+    "-32",
+    "0.05",
+    "0",
+    "9",
+    "2.1213",
+    "0.0591",
+    "0.050",
+    "0.020",
+    "0.028",
+    "0.0906",
+    "0.1101",
+    "20",
+    "0.11109",
+    "3",
+    "100",
+    "0.111111",
+    "0.1112",
+    "0.1111",
+    "1000"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

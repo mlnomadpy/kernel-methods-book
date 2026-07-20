@@ -1,0 +1,336 @@
+chapter: ch-discriminant
+slug: kernel-discriminants-and-projections
+title: Kernel Discriminants and Projections
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - shawe2004
+  - fisher1936
+  - mika1999kfd
+  - baudat2000
+  - rosipal2001
+  - wold1975
+sections:
+  - id: supervised-subspaces
+    title: From variance to prediction
+    contribution: adapted-and-expanded
+    sources: &a1
+      - shawe2004
+      - fisher1936
+      - mika1999kfd
+      - baudat2000
+      - rosipal2001
+      - wold1975
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#supervised-subspaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#supervised-subspaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#supervised-subspaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#supervised-subspaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#supervised-subspaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#supervised-subspaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: generalized-eigenproblem
+    title: The generalized eigenvalue problem and deflation
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#generalized-eigenproblem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#generalized-eigenproblem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#generalized-eigenproblem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#generalized-eigenproblem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#generalized-eigenproblem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#generalized-eigenproblem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-fisher
+    title: Kernel Fisher discriminant analysis
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#kernel-fisher
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#kernel-fisher
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#kernel-fisher
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#kernel-fisher
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#kernel-fisher
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#kernel-fisher
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: pcr
+    title: Principal components regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#pcr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#pcr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#pcr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#pcr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#pcr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#pcr
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-pls
+    title: Kernel partial least squares
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#kernel-pls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#kernel-pls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#kernel-pls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#kernel-pls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#kernel-pls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#kernel-pls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: unification
+    title: One engine, three methods
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#unification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#unification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#unification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#unification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#unification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#unification
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - shawe2004
+      - fisher1936
+      - mika1999kfd
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: baudat2000
+        manuscript_locator: ch-discriminant.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wold1975
+        manuscript_locator: ch-discriminant.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

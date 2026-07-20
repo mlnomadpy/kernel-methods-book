@@ -1,0 +1,43 @@
+chapter: ch-operator
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Prove directly that \(K(x,z)=k(x,z)B\) is positive definite when \(k\) and \(B\) are positive semidefinite.
+    answer: Write (B=A^*A). The quadratic form is (sum_{ij}k(x_i,x_j)\langle Ac_i,Ac_j\rangle).
+      Expanding the output vectors in an orthonormal basis turns this into a sum of nonnegative
+      scalar-kernel quadratic forms.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      For two inputs and two outputs, form the \(4\times4\) block Gram matrix for the linear kernel and \(B=\begin{psmallmatrix}1&1/2\\1/2&1\end{psmallmatrix}\). Compute its eigenvalues from the Kronecker spectra.
+    answer: For inputs (1,2), the scalar Gram matrix is
+      (K_X=\begin{psmallmatrix}1&2\\2&4\end{psmallmatrix}), with eigenvalues (5,0). The output
+      matrix has eigenvalues (3/2,1/2). Hence (K_X\otimes B) has eigenvalues (15/2,5/2,0,0). This
+      also checks PSD.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Complete the orthogonal-decomposition proof of the vector-valued representer theorem, explicitly showing that the perpendicular component vanishes at every training input.
+    answer: Let (S=\operatorname{span}\{K(\cdot,x_i)c:i,c\}) and decompose (f=f_S+f_\perp). Reproduction
+      gives (\langle f_\perp(x_i),c\rangle=\langle f_\perp,K(\cdot,x_i)c\rangle=0) for every (c), so
+      (f_\perp(x_i)=0). The loss is unchanged, while (\lVert f\rVert^2=\lVert f_S\rVert^2+\lVert
+      f_\perp\rVert^2); a minimum-norm minimizer therefore has (f_\perp=0).
+  - number: 4
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design a kernel for simultaneously predicting velocity and pressure. State which couplings should be encoded, how positive definiteness will be guaranteed, and how you would detect harmful transfer.
+    answer: "Rubric: identify scalar spatial kernels and a PSD output coupling; explain whether
+      incompressibility or derivative constraints require a nonseparable construction; give a
+      positivity argument; specify output scaling, conditioning diagnostics, independent-task
+      ablation, and held-out tests for negative transfer. Full credit requires all five elements."

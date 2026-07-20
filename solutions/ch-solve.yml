@@ -1,0 +1,116 @@
+chapter: ch-solve
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: State the three KKT cases for the SVM dual in words, and for each say where the point sits
+      relative to the margin. A point has \(\alpha_i=C\) but \(y_if(x_i)=1.4\gt 1\). Is its KKT
+      condition satisfied? What if instead \(0\lt\alpha_i\lt C\) and \(y_if(x_i)=1.4\)?
+    answer: "If alpha_i=0, the point must be on or beyond the correct margin: y_i f_i>=1. If
+      0<alpha_i<C, it lies exactly on the margin: y_i f_i=1. If alpha_i=C, it may lie on or inside
+      the margin: y_i f_i<=1, with strict inequality corresponding to slack. Therefore a capped
+      point with margin 1.4 violates KKT, and an interior coefficient with margin 1.4 also violates
+      KKT because its required equality is not met."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Reproduce the worked SMO step by hand. With \(K_{11}=1\), \(K_{12}=2\), \(K_{22}=4\), labels
+      \(y_1=+1\), \(y_2=-1\), \(C=1\), starting \(\alpha=(0.1,0.1)\), \(b=0\), verify \(\eta=1\),
+      the errors \(E_1=-1.1\), \(E_2=0.8\), the unclipped \(\alpha_2=2.0\), the box \([0,1]\), and
+      the final \(\alpha=(1,1)\), \(b=1.5\). Then redo the step with \(C=0.4\) and report the new
+      box \([L,H]\) and the resulting \(\alpha_2^{\text{new}}\).
+    answer: Eta=K_11+K_22-2K_12=1+4-4=1. The initial decision values are -0.1 and -0.2, so E_1=-1.1 and
+      E_2=0.8. The update gives alpha_2^unc=0.1+(-1)(-1.1-0.8)=2.0. Opposite labels preserve
+      alpha_1-alpha_2=0, hence [L,H]=[0,1]; clipping gives alpha_2=1 and alpha_1=1, with the two
+      bias candidates agreeing at b=1.5. For C=0.4 the feasible interval is [0,0.4], so the same
+      unconstrained value clips to alpha_2^new=0.4 and equality gives alpha_1^new=0.4.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Prove the Lemma that the smallest useful working set has size two. Show that under
+      \(\sum_i\alpha_iy_i=0\) a single free variable is pinned, and that with two free variables the
+      feasible set is a line segment. Explain why this equality constraint, and not the box
+      constraints, is what forbids single-variable updates.
+    answer: Fixing all coordinates except alpha_j turns sum_i alpha_i y_i=0 into alpha_j
+      y_j=-sum_{i!=j}alpha_i y_i, whose right side is constant. Since y_j is nonzero, alpha_j has
+      one forced value and cannot move. With two free coordinates the equality is y_i alpha_i+y_j
+      alpha_j=constant, a line; intersecting it with [0,C]^2 gives a line segment along which the
+      objective can improve. The box alone would permit a one-coordinate interval. It is the global
+      equality that collapses that interval to a point.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Derive the unconstrained two-variable optimum. Starting from \(W(\alpha)\), eliminate
+      \(\alpha_i\) using \(\alpha_i+s\alpha_j=\text{const}\), show that the resulting function of
+      \(\alpha_j\) has second derivative \(-\eta\) with \(\eta=K_{ii}+K_{jj}-2K_{ij}\), and conclude
+      that its maximizer is \(\alpha_j^{\text{new,unc}}=\alpha_j^{\text{old}}+y_j(E_i-E_j)/\eta\)
+      with \(E_k=f(x_k)-y_k\).
+    answer: Write s=y_i y_j and alpha_i=gamma-s alpha_j on the feasible line. Substitution into the dual
+      quadratic makes the alpha_j^2 coefficient -(1/2)[K_ii+K_jj-2K_ij], so the second derivative is
+      -eta. The remaining first derivative can be expressed using the old decision errors as
+      eta(alpha_j-alpha_j^old)-y_j(E_i-E_j), with sign chosen for maximizing W. Setting it to zero
+      yields alpha_j^new,unc=alpha_j^old+y_j(E_i-E_j)/eta. Eta is ||Phi_i-Phi_j||^2>=0; for eta>0
+      the restricted quadratic is strictly concave and this stationary point is its unique
+      unconstrained maximum.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Derive the clipping box for the same-label case \(y_i=y_j\). Along the line
+      \(\alpha_i+\alpha_j=\text{const}=k\), intersect with \(0\le\alpha_i\le C\) and
+      \(0\le\alpha_j\le C\) to show \(\alpha_j\in[\max(0,k-C),\ \min(C,k)]\), and confirm this
+      matches the Proposition with \(k=\alpha_i^{\text{old}}+\alpha_j^{\text{old}}\).
+    answer: For equal labels, feasibility fixes alpha_i+alpha_j=k, so alpha_i=k-alpha_j. The bounds
+      alpha_j>=0 and alpha_i<=C imply alpha_j>=k-C, hence the lower endpoint max(0,k-C). The bounds
+      alpha_j<=C and alpha_i>=0 imply alpha_j<=k, hence the upper endpoint min(C,k). Therefore
+      alpha_j lies in [max(0,k-C),min(C,k)], with k equal to the old sum because the pair update
+      preserves the equality constraint.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: "Take the four-point KKT example: \\(x_1=(0,0)\\), \\(x_2=(2,0)\\), \\(x_3=(1,2)\\),
+      \\(x_4=(3,2)\\), \\(y=(-1,-1,+1,+1)\\), linear kernel, \\(C=1\\). Verify the scores
+      \\(F=(0,1,2.5,3.5)\\), the sets \\(I_{\\text{up}}=\\{1,3,4\\}\\) and
+      \\(I_{\\text{low}}=\\{1,2,3\\}\\), and the selected pair \\((3,1)\\). Now change \\(\\alpha\\)
+      to \\((1,0,1,0)\\) (both support vectors at the bound \\(C\\)) and recompute the sets: which
+      points leave \\(I_{\\text{up}}\\) or \\(I_{\\text{low}}\\), and does the pair change?"
+    answer: At alpha=(0.5,0,0.5,0), alpha*y=(-0.5,0,0.5,0), and dotting the resulting w with the four
+      points gives F=(0,1,2.5,3.5). The increase/decrease rules give I_up={1,3,4}, I_low={1,2,3};
+      max F on low is point 3 and min F on up is point 1, so the pair is (3,1). With
+      alpha=(1,0,1,0), F=(0,2,5,7), I_up={1,4}, and I_low={2,3}. Point 3 leaves up and point 1
+      leaves low, but max-low remains point 3 and min-up remains point 1, so the selected pair is
+      still (3,1).
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: Explain, in terms of caching and shrinking, why SMO speeds up as it approaches the optimum
+      even though the number of KKT checks per sweep does not fall. Relate your answer to the
+      observation that most coefficients settle onto a bound early and that the non-bound support
+      vectors are the ones revisited many times.
+    answer: Near the solution, most coefficients have settled at zero or C. Shrinking temporarily
+      removes variables whose KKT status is safely fixed, so expensive objective/error updates focus
+      on the small active set even if a validation sweep still checks every index. Kernel-row and
+      error caches also become increasingly effective because the same non-bound support vectors are
+      selected repeatedly; their rows are reused rather than recomputed. Thus the logical number of
+      checks can stay similar while the costly kernel evaluations and working-set operations per
+      useful step fall substantially.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: Contrast the two solvers on cost. For \(n\) points, give the per-iteration and memory cost
+      of an interior-point method (Cholesky of an \(n\times n\) system) and of one SMO step (two
+      kernel rows). Explain why interior-point methods win on accuracy for \(n\) in the low
+      thousands but lose to decomposition as \(n\) grows, and identify the exact operation that
+      forces the crossover.
+    answer: An interior-point iteration stores an n by n system and factorizes it, costing O(n^2) memory
+      and O(n^3) arithmetic, but reaches high accuracy in few logarithmic-in-tolerance iterations.
+      One SMO update obtains two kernel rows and updates cached errors in O(n) time with O(n) active
+      storage (plus any optional cache), although many steps/sweeps may be required. For low
+      thousands, a dense factorization can fit in memory and its robust high-accuracy convergence
+      wins. As n grows, storing and especially Cholesky-factorizing the dense Hessian becomes
+      impossible; that O(n^3) factorization and O(n^2) matrix are the exact crossover operations.

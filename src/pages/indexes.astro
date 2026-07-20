@@ -1,0 +1,45 @@
+---
+import Book from "../layouts/Book.astro";
+import { BOOK, GLOSSARY, buildBook, escapeHtml, statementIndex, tocHtml } from "../lib/book.js";
+
+const statements = statementIndex();
+const book = buildBook();
+const formal = statements.filter((node) => ["thm", "lem", "prop", "cor"].includes(node.kind));
+const algorithms = statements.filter((node) => node.kind === "algo");
+const link = (node) => `<li><a href="${node.chapter}.html#${node.id}">${escapeHtml(node.kindLabel)}: ${escapeHtml(node.title)}</a> <span class="hint">${escapeHtml(node.chapterTitle)}</span></li>`;
+
+const subjects = [];
+for (const chapter of book.chapters) {
+  for (const section of chapter.sections) {
+    if (["exercises", "references"].includes(section.id)) continue;
+    subjects.push({ label: section.label.replace(/<[^>]+>/g, ""), href: `${chapter.slug}.html#${section.id}`, chapter: chapter.title });
+  }
+}
+subjects.sort((a, b) => a.label.localeCompare(b.label));
+
+const software = ["Astro 7.1.1", "KaTeX 0.16.22", "LuaLaTeX", "Pandoc", "Jupytext 1.19.4", "NumPy 2.4.4", "scikit-learn 1.9.0", "Playwright 1.61.1", "axe-core 4.12.1"];
+const datasets = ["Synthetic CC0 fixtures", "AG News (CC BY-SA 4.0, full-mode lab)", "Tox21 (CC0, full-mode lab)", "Protein benchmark (publication blocked pending redistribution verification)"];
+---
+
+<Book title={`Indexes · ${BOOK.title}`} desc="Subject, notation, theorem, algorithm, dataset, and software indexes" toc={tocHtml("indexes")}>
+  <h1><span class="chno">End matter</span>Indexes</h1>
+  <p class="lead">Generated indexes connect the canonical manuscript, glossary, formal statements, and reproducibility companion. Entries link to stable chapter anchors.</p>
+
+  <h2 id="subject">Subject index</h2>
+  <ul class="index-list"><Fragment set:html={subjects.map((item) => `<li><a href="${item.href}">${escapeHtml(item.label)}</a> <span class="hint">${escapeHtml(item.chapter)}</span></li>`).join("\n")} /></ul>
+
+  <h2 id="notation">Notation index</h2>
+  <ul class="index-list"><Fragment set:html={GLOSSARY.symbols.map((item) => `<li><a href="${item.slug}.html" aria-label="Notation: ${escapeHtml(item.sym)}">\\(${item.sym}\\)</a>: ${escapeHtml(item.def)}</li>`).join("\n")} /></ul>
+
+  <h2 id="theorems">Theorem index</h2>
+  <ol class="index-list"><Fragment set:html={formal.map(link).join("\n")} /></ol>
+
+  <h2 id="algorithms">Algorithm index</h2>
+  <ol class="index-list"><Fragment set:html={algorithms.map(link).join("\n")} /></ol>
+
+  <h2 id="datasets">Dataset index</h2>
+  <ul>{datasets.map((item) => <li>{item}</li>)}</ul>
+
+  <h2 id="software">Software index</h2>
+  <ul>{software.map((item) => <li>{item}</li>)}</ul>
+</Book>

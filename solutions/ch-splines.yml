@@ -1,0 +1,43 @@
+chapter: ch-splines
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      For the integrated squared second-derivative penalty, identify the null space and explain why its basis must appear outside the penalized kernel expansion.
+    answer: >-
+      The null space consists of affine functions because a function has zero second derivative exactly when it is \(a+bx\). The roughness penalty cannot identify or shrink these directions, so they must be represented by a separate polynomial basis. The side constraint \(P^\top c=0\) prevents the penalized kernel component from duplicating them.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Given a symmetric smoother matrix and a residual vector, compute the leave-one-out residuals, effective degrees of freedom, and generalized cross-validation score.
+    answer: >-
+      For each observation compute \(e_i^{(-i)}=e_i/(1-S_{ii})\). The effective degrees of freedom are \(\operatorname{tr}(S)\), and the GCV score is \(n^{-1}\lVert e\rVert^2/\{1-\operatorname{tr}(S)/n\}^2\). A valid calculation checks that no leverage denominator is zero and that the trace lies between zero and \(n\) for an ordinary contraction smoother.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the smoothing-spline representer theorem by decomposing the penalized component into observed kernel sections and their orthogonal complement.
+    answer: >-
+      Write \(f=p+g_\parallel+g_\perp\), where \(p\in\mathcal N_J\), \(g_\parallel\) lies in the span of \(R(x_i,\cdot)\), and \(g_\perp\) is orthogonal to that span. Reproduction gives \(g_\perp(x_i)=0\), so removing \(g_\perp\) leaves every loss term unchanged and weakly decreases the squared norm. A minimum-norm minimizer therefore has \(g_\perp=0\), yielding the stated finite form.
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: >-
+      Derive the identifiable kernel decomposition for a two-variable smoothing-spline ANOVA model containing both main effects and one interaction.
+    answer: >-
+      Center each univariate RKHS so its functions integrate or average to zero, then use \(f=\mu+f_1+f_2+f_{12}\) with kernels \(1\), \(k_1\), \(k_2\), and \(k_1k_2\). Require each main effect to have zero marginal mean and require the interaction to have zero marginal mean in either argument. These constraints make the four subspaces orthogonal under the reference product measure and prevent lower-order effects from being hidden inside \(f_{12}\).
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design a comparison among a natural spline, an RBF KRR model, and a Matérn GP for data requiring extrapolation. Specify the null-space assumptions, selection protocol, uncertainty metrics, and conditioning diagnostics.
+    answer: >-
+      Use a contiguous boundary region as the final test set and nested validation inside the observed range. Declare the natural spline's affine null space, the RBF model's mean and bandwidth, and the Matérn mean, smoothness, and noise assumptions. Compare extrapolation error, log predictive density, interval coverage and width, effective degrees of freedom, Gram condition estimates, and sensitivity to input scaling; report that only the GP intervals have a direct model-based probabilistic interpretation.

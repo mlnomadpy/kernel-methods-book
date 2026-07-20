@@ -1,0 +1,116 @@
+chapter: ch-cme
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Starting from the definition \(\mu_{Y\mid X=x}=\mathbb E[\psi(Y)\mid X=x]\) with
+      \(\psi(y)=\ell(y,\cdot)\), use the reproducing property of \(\mathcal H_{\mathcal Y}\) to show
+      the generalized conditional reproducing property \(\langle g,\mu_{Y\mid X=x}\rangle=\mathbb
+      E[g(Y)\mid X=x]\) for every \(g\in\mathcal H_{\mathcal Y}\). Specialize to
+      \(g=\ell(y_0,\cdot)\) and read off what the number \(\mu_{Y\mid X=x}(y_0)\) computes. In one
+      sentence, say how this generalizes the marginal embedding of the referenced chapter.
+    answer: By the Bochner conditional expectation rule and reproduction,
+      <g,mu_{Y|x}>=<g,E[psi(Y)|X=x]>=E[<g,psi(Y)>|X=x]=E[g(Y)|X=x]. Taking g=ell(y_0,·) gives
+      mu_{Y|x}(y_0)=E[ell(y_0,Y)|X=x], the conditional expected similarity to y_0. A marginal
+      embedding represents unconditional feature expectations; the CME indexes the same
+      representation by x and replaces expectation with conditional expectation.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Use the setup of the worked conditional-embedding example (same four points, kernels, and
+      \(n\lambda=0.5\)), but move the test input to \(x_\ast=2.5\). Form \(\mathbf k_{x_\ast}\),
+      solve \((K+0.5\,I)\boldsymbol\beta=\mathbf k_{x_\ast}\), and report \(\widehat{\mathbb
+      E}[Y\mid X=2.5]=\sum_i\beta_i y_i\) together with \(\sum_i\beta_i\). Explain, from where
+      \(x_\ast\) now sits, which two training points dominate the weights, and why the weight sum is
+      again below one.
+    answer: For x*=2.5, k_x*=(0.043937,0.324652,0.882497,0.882497). Solving (K+0.5I)beta=k gives
+      beta=(-0.018885,0.019443,0.412353,0.419981), with sum 0.832891. The plug-in conditional mean
+      is beta^T y=2.025508. Inputs x=2 and x=3 dominate because they flank 2.5 and have the largest
+      Gaussian similarities; the small negative distant weight is a regularized interpolation
+      artifact. The sum is below one because unconstrained kernel ridge weights are shrunk by the
+      0.5 ridge and are not probability-simplex weights.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Prove the operator identity \(\mathcal C_{Y\mid X}\mathcal C_{XX}=\mathcal C_{YX}\) under
+      the assumption that \(h_g(x):=\mathbb E[g(Y)\mid X=x]\in\mathcal H_{\mathcal X}\) for every
+      \(g\in\mathcal H_{\mathcal Y}\). State clearly where the tower property \(\mathbb
+      E[f(X)g(Y)]=\mathbb E[f(X)h_g(X)]\) enters, and explain in a sentence why dropping the
+      assumption breaks the argument.
+    answer: For f in H_X and g in H_Y, <g,C_{Y|X}C_XX f>_Y=<C_{Y|X}^*g,C_XX f>_X; equivalently using
+      h_g=C_{Y|X}^*g, this is E[f(X)h_g(X)]. The tower property makes it E[f(X)g(Y)], which by
+      definition equals <g,C_YX f>. Equality of all such bilinear forms proves C_{Y|X}C_XX=C_YX. If
+      h_g is not in H_X, the adjoint/inner-product representation used in the middle is unavailable,
+      so the operator identity need not exist on the claimed domain even though the scalar
+      conditional expectation does.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "Establish the push-through identity used to pass from operators to Gram matrices: for a
+      bounded operator \\(\\Phi\\) and any \\(c\\gt 0\\),
+      \\(\\Phi^{\\ast}(\\Phi\\Phi^{\\ast}+cI)^{-1}=(\\Phi^{\\ast}\\Phi+cI)^{-1}\\Phi^{\\ast}\\). Use
+      it to show \\(\\widehat{\\mathcal C}_{YX}(\\widehat{\\mathcal C}_{XX}+\\lambda
+      I)^{-1}=\\Upsilon(K+n\\lambda I)^{-1}\\Phi^{\\ast}\\), identifying
+      \\(\\Phi^{\\ast}\\Phi=K\\)."
+    answer: "Multiply Phi*(PhiPhi*+cI)^{-1} on the left by Phi*Phi+cI:
+      (Phi*Phi+cI)Phi*=Phi*(PhiPhi*+cI). Invertibility for c>0 gives
+      Phi*(PhiPhi*+cI)^{-1}=(Phi*Phi+cI)^{-1}Phi*. With empirical feature operators,
+      C_YX=(1/n)Upsilon Phi* and C_XX=(1/n)Phi Phi*. Applying the identity (and multiplying
+      numerator/denominator by n) yields Upsilon(Phi*Phi+n lambda I)^{-1}Phi*=Upsilon(K+n lambda
+      I)^{-1}Phi*, since Phi*Phi=K."
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Derive the finite-sample kernel sum rule. With a prior embedding
+      \(\widehat\mu^{\pi}_X=\Phi\mathbf m\) carried by weights \(\mathbf m\), show that
+      \(\widehat\mu^{\pi}_Y=\widehat{\mathcal C}_{Y\mid
+      X}\widehat\mu^{\pi}_X=\sum_i\rho_i\psi(y_i)\) with \(\boldsymbol\rho=(K+n\lambda
+      I)^{-1}K\mathbf m\). Then, in the setup of the Kernel Bayes' Rule example, replace the tilted
+      prior by the uniform prior \(m_i=1/5\), recompute \(\boldsymbol\rho\), and say which direction
+      the sum-rule weights shift and why.
+    answer: Applying the empirical CME to Phi m gives Upsilon(K+n lambda I)^{-1}Phi*Phi m=Upsilon rho
+      with rho=(K+n lambda I)^{-1}K m. For uniform m=(1/5)1 in the five-point example,
+      rho=(0.148384,0.170883,0.166194,0.170883,0.148384), summing to 0.804729. Unlike the tilted
+      prior, which favored large x and shifted predictive mass right, symmetry of the uniform prior
+      makes the sum-rule weights symmetric around the middle; ridge still shrinks their total below
+      one.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: Rerun the Kernel Bayes' Rule example (same sample, kernels, prior, and regularizers) but
+      with the observation changed to \(y=3.0\). Compute the posterior weights \(\mathbf w(y)\) and
+      the normalized posterior mean of \(X\). Compare with the prior mean \(3.15\) and with the
+      \(y=1.0\) result, and explain how prior and likelihood now reinforce rather than oppose each
+      other. Comment on any negative weight that appears.
+    answer: "With observation y=3, the KBR weights are approximately
+      (-0.006223,0.008552,0.169852,0.635088,0.233776), summing to 1.041045. Their raw weighted X
+      mean is 3.188625 and the normalized posterior mean is 3.062909. This is close to y=3 and only
+      slightly below the prior mean 3.15: the right-heavy prior and likelihood now reinforce each
+      other, unlike y=1 where the normalized posterior moved to 1.0817. The small negative weight at
+      x=0 is allowed because regularized inverse operators produce signed RKHS coefficients, not a
+      probability simplex; report it as a numerical caveat."
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: Derive the finite-sample Kernel Bayes' Rule weights from the operator form
+      \(\mu^{\pi}_{X\mid Y=y}=\mathcal C^{\pi}_{XY}((\mathcal C^{\pi}_{YY})^2+\delta I)^{-1}\mathcal
+      C^{\pi}_{YY}\psi(y)\), where \(\mathcal C^{\pi}_{XY}=\Phi D\Upsilon^{\ast}\) and \(\mathcal
+      C^{\pi}_{YY}=\Upsilon D\Upsilon^{\ast}\) with \(D=\mathrm{diag}(\boldsymbol\rho)\). Show that
+      the posterior embedding is \(\Phi\mathbf w(y)\) with \(\mathbf w(y)=DL((DL)^2+\delta
+      I)^{-1}D\boldsymbol\ell_y\), where \(\boldsymbol\ell_y=\Upsilon^{\ast}\psi(y)\). Then explain
+      why the square \((\mathcal C^{\pi}_{YY})^2\) is inverted rather than \(\mathcal C^{\pi}_{YY}\)
+      itself.
+    answer: Substitute C_XY^pi=Phi D Upsilon* and C_YY^pi=Upsilon D Upsilon*. Repeatedly apply the
+      push-through identity to move Upsilon/Upsilon* products into sample space, where
+      Upsilon*Upsilon=L. The regularized spectral inverse C_YY[(C_YY)^2+delta I]^{-1} acting on
+      psi(y) becomes the coefficient map L[(DL)^2+delta I]^{-1}D ell_y in the chosen ordering; left
+      multiplication by D and Phi gives Phi w with w=DL[(DL)^2+delta I]^{-1}D ell_y. The square
+      implements the Tikhonov pseudoinverse filter t/(t^2+delta), which is stable at small or signed
+      empirical eigenvalues. Directly inverting C_YY would be ill posed and, with signed rho, need
+      not even have the positive covariance structure of an ordinary conditional distribution.

@@ -1,0 +1,193 @@
+chapter: ch05
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "Evaluate the hinge loss \\(\\varphi_{\\text{hinge}}(u) = \\max(1-u,\\,0)\\) at the margins
+      \\(u = y f(x) \\in \\{-1,\\,0,\\,\\tfrac12,\\,1,\\,2\\}\\), and say which of these points pay
+      no penalty. The loss has a kink at \\(u = 1\\): write down its derivative on each side of the
+      kink, and give one valid subgradient at \\(u = 1\\) itself. Finally, explain in a sentence why
+      fixing the target margin at \\(1\\), rather than at some other positive number, costs no
+      generality."
+    answer: "At margins -1,0,1/2,1,2 the hinge losses are respectively 2,1,1/2,0,0. Points with margin
+      at least one pay no penalty. For u<1 the derivative is -1; for u>1 it is 0; at u=1 the
+      subdifferential is [-1,0], so -1/2 is one valid choice. Choosing target margin one is only a
+      normalization: multiplying f (and the corresponding norm/regularization scale) rescales any
+      positive target margin to one without changing the separating sign rule."
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: The chapter shows that the \(C\)-SVM and the \(\lambda\)-form are the same machine, related
+      by \(C = 1/(2n\lambda)\). For a training set of \(n = 100\) points regularized with \(\lambda
+      = 10^{-2}\), compute \(C\) and the width \(1/(2\lambda n)\) of the dual box \(0 \le y_i
+      \alpha_i \le 1/(2\lambda n)\). Does raising \(\lambda\) widen or narrow this box, and does
+      that correspond to a harder or a softer margin? Reconcile your answer with the rule that large
+      \(C\) means weak regularization.
+    answer: C=1/(2n lambda)=1/(2*100*0.01)=0.5. The signed dual coordinate y_i alpha_i has the same
+      upper bound 1/(2lambda n)=0.5. Increasing lambda lowers this ceiling, so the box narrows and
+      coefficients are more strongly regularized; the machine accepts a softer, wider margin with
+      more violations. Conversely a large C is a wide box, weak regularization, and a stronger
+      incentive to remove violations, approaching the hard-margin regime as C grows without bound.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Take the linear kernel \\(K(x,x') = \\langle x, x'\\rangle\\) on \\(\\mathbb{R}^2\\) and
+      three training points: \\(x_1 = (1,0)\\) with \\(y_1 = +1\\), \\(x_2 = (-1,0)\\) with \\(y_2 =
+      -1\\), and \\(x_3 = (3,0)\\) with \\(y_3 = +1\\). Assume weak regularization, so the upper box
+      cap \\(1/(2\\lambda n)\\) is inactive. The classifier \\(f(x) = \\sum_i \\alpha_i \\langle
+      x_i, x\\rangle = \\langle w, x\\rangle\\) carries no offset, so its boundary passes through
+      the origin. Argue from the two nearest opposite-class points that the boundary is the vertical
+      axis and \\(w = (1,0)\\). Then find every coefficient \\(\\alpha_i\\), identify the support
+      vectors, report the geometric margin \\(2/\\|w\\|\\), and confirm that \\(x_3\\) falls in the
+      \\(\\alpha_i = 0\\) regime of the KKT trichotomy."
+    answer: "The closest opposite-class points are x_1=(1,0) and x_2=(-1,0), so the maximum-margin
+      boundary through the origin is x^{(1)}=0 and canonical scaling gives w=(1,0): both have
+      y_i<w,x_i>=1. Since w=sum_i alpha_i x_i and alpha_3=0 for the distant point, alpha_1=1/2 and
+      alpha_2=-1/2 give w=(1/2)(1,0)+(-1/2)(-1,0)=(1,0). Thus x_1 and x_2 are support vectors; x_3
+      has margin 3>1 and alpha_3=0. The full margin-band width is 2/||w||=2."
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: The chapter states the dual of the 2-SVM, built on the squared hinge
+      \(\varphi_{\text{hinge}}\big(y_i f(x_i)\big)^2\), but leaves the derivation as an exercise.
+      Supply it. Introduce one slack \(\xi_i \ge \varphi_{\text{hinge}}\big(y_i[K\alpha]_i\big)\)
+      per point, so the primal reads
+    answer: Let a denote the primal kernel coefficients. The Lagrangian is n^{-1}||xi||^2+lambda
+      a^TKa-mu^T(D_yKa+xi-1)-nu^Txi with mu,nu>=0. Stationarity gives a=D_y mu/(2lambda) (up to a
+      nullspace representative) and xi=n(mu+nu)/2. Substitution produces mu^T1-(4lambda)^{-1}mu^T
+      D_y K D_y mu-(n/4)||mu+nu||^2. For fixed mu>=0 this is maximized at nu=0. Set alpha=D_y
+      mu/(2lambda) and divide the objective by lambda>0; the dual becomes max 2alpha^T y-alpha^T(K+n
+      lambda I)alpha subject only to y_i alpha_i>=0. Quadratic slack cost permits a finite xi for
+      every mu, so no linear stationarity equation caps mu; equivalently this is a hard-box-limit
+      SVM with shifted kernel K+n lambda I.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Work directly from the complementary slackness conditions
+    answer: If y_i f(x_i)>1, then y_i f(x_i)+xi_i-1 is strictly positive for every xi_i>=0.
+      Complementary slackness therefore forces alpha_i=0. Conversely, if 0<y_i alpha_i<1/(2lambda
+      n), the first factor alpha_i is nonzero, so y_i f(x_i)+xi_i-1=0. The coefficient is not at the
+      upper cap, so the second complementary-slackness factor is nonzero and forces xi_i=0. Hence
+      y_i f(x_i)=1. Coefficients at zero correspond to points outside the band, interior
+      coefficients to points on the band, and capped coefficients to points on or inside it;
+      precisely the points touching or crossing the margin are support vectors.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Prove the two counting bounds of the \(\nu\)-property. At a \(\nu\)-SVM optimum with \(\rho
+      \gt 0\), the constraint \(\sum_i \mu_i \ge \nu\) is tight, so \(\sum_i \mu_i = \nu\), with the
+      box \(0 \le \mu_i \le 1/n\) in force. A margin error (a point with \(\xi_i \gt 0\)) has its
+      price pinned to the ceiling, \(\mu_i = 1/n\), whereas every support vector merely has \(\mu_i
+      \gt 0\). From these facts alone, show that the fraction of margin errors is at most \(\nu\)
+      and the fraction of support vectors is at least \(\nu\).
+    answer: If n_err points have xi_i>0, each contributes mu_i=1/n. Since all other prices are
+      nonnegative, nu=sum_i mu_i>=n_err/n, so the margin-error fraction is at most nu. If n_SV
+      prices are positive, only those terms contribute to the same sum and each is at most 1/n.
+      Therefore nu=sum_i mu_i<=n_SV/n, so the support-vector fraction is at least nu. Both
+      conclusions use rho>0 to ensure the sum constraint is tight.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive SVM figure above and drag the training points. Begin with two
+      well-separated clouds and note which points light up as support vectors, those sitting on or
+      inside the margin band, and which drop out with \\(\\alpha_i = 0\\). Now drag a single point
+      across the boundary into the opposing cloud and watch it become a margin error pinned against
+      the top of the box. Next sweep the \\(C\\) control: raise \\(C\\) (weaken regularization) and
+      describe how the band narrows and the support set shrinks toward the borderline points; lower
+      \\(C\\) and watch the band widen and gather more support vectors. Finally switch the kernel
+      from linear to Gaussian and observe how the boundary bends around each cloud. Match each
+      behaviour you see to one of the three KKT regimes."
+    answer: "Expected observation: well-separated clouds leave only the closest boundary points with
+      interior nonzero coefficients; points beyond the margin have alpha=0. A dragged point placed
+      inside or across the wrong margin becomes a capped coefficient and positive-slack error.
+      Raising C widens the dual box and penalizes slack more, usually narrowing the geometric band
+      and concentrating support near the boundary; lowering C caps influence more strongly and
+      admits a wider band with more support points. A Gaussian kernel replaces the straight boundary
+      with a curved one. These are the KKT regimes alpha=0/outside, 0<y alpha<C/on-margin, and y
+      alpha=C/inside-or-error."
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: The upper box cap is \(1/(2\lambda n)\), and the chapter notes that sending \(\lambda \to
+      0\) (equivalently \(C \to \infty\)) lifts this ceiling to infinity and recovers the
+      hard-margin machine. (a) Argue from the box constraint alone why, in this limit, a single
+      point that cannot be cleanly separated can acquire an unbounded coefficient \(\alpha_i\), and
+      hence dominate \(\hat f = \sum_i \alpha_i K(x_i,\cdot)\). (b) Show that with finite
+      \(\lambda\) no coefficient can exceed \(1/(2\lambda n)\) in magnitude, and interpret this cap
+      as the mechanism by which the soft-margin machine absorbs an outlier rather than being ruled
+      by it. (c) Connect this to the \(\nu\)-SVM reading, in which the points pinned at the top of
+      the box are exactly the margin errors and \(\nu\) is the dial that bounds how many of them
+      there may be.
+    answer: As lambda->0 the upper bound 1/(2lambda n) diverges. The box alone then provides no uniform
+      control on the price assigned to an inseparable point, so its coefficient can grow and its
+      kernel section can dominate the expansion. For finite lambda, 0<=y_i alpha_i<=1/(2lambda n)
+      and |y_i|=1 imply |alpha_i|<=1/(2lambda n). This bounded influence lets the optimizer pay
+      slack for an outlier instead of distorting the whole separator without limit. In nu-SVM
+      language, margin errors are exactly the observations at the cap; the sum constraint makes nu
+      an upper bound on their fraction while simultaneously lower-bounding the support fraction.
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "A ten-class problem has \\(n = 10000\\) training points, \\(1000\\) per class. (a) How many
+      binary machines does each reduction train, and on how many points each: one-vs-all, then
+      one-vs-one? How many dual variables does the Crammer-Singer joint problem carry? (b) Prove the
+      max-wins guarantee: in a one-vs-one vote, if some class wins all \\(M - 1\\) of the contests
+      it takes part in, it strictly wins the tally. (c) In the worked one-vs-one example the 2v3
+      machine votes for class 3 on a class-1 query; explain why such bystander votes can never
+      overturn a class that sweeps its own contests, and construct a three-class outcome in which no
+      class sweeps and the vote ends in a \\(1{-}1{-}1\\) tie."
+    answer: One-vs-all trains M=10 machines, each on all 10,000 points. One-vs-one trains C(10,2)=45
+      machines, each using the 1,000+1,000=2,000 points from its pair. The Crammer-Singer
+      formulation has one score coefficient per training-point/class pair, 10,000*10=100,000 dual
+      coordinates (subject to coupling constraints). If a class wins all M-1=9 of its contests,
+      every rival has already lost once and can win at most its remaining M-2=8 contests, so the
+      sweep is a strict victory. Bystander votes therefore cannot overturn it. With three classes,
+      the cyclic outcomes 1 beats 2, 2 beats 3, and 3 beats 1 give the 1-1-1 tie.
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: "Platt scaling, twice examined. (a) Derive the smoothed target \\(t_+ = (N_+ + 1)/(N_+ +
+      2)\\): model the labels of the positive-scored calibration cell as Bernoulli with unknown
+      parameter \\(\\theta\\) under a uniform prior on \\([0,1]\\), observe \\(N_+\\) positives out
+      of \\(N_+\\), and compute the posterior mean of \\(\\theta\\); check that \\(t_- = 1/(N_- +
+      2)\\) is the same computation seen from the negative side. (b) Show that \\(p(f) = 1/(1 +
+      e^{Af + B})\\) is strictly increasing in \\(f\\) exactly when \\(A \\lt 0\\), and conclude
+      that Platt scaling never changes the ordering of scores: any negative point ranked above a
+      positive point stays ranked above it in probability. (c) With the worked example's fit, \\(A =
+      -0.909732\\) and \\(B = 0.260042\\), verify the crossover \\(f_0 = -B/A = 0.285845\\) and
+      identify the interval of scores on which the rule \\(p \\ge \\tfrac12\\) and the rule
+      \\(\\operatorname{sgn} f\\) disagree."
+    answer: A uniform Beta(1,1) prior updated with N_+ successes and no failures gives Beta(N_++1,1),
+      whose mean is (N_++1)/(N_++2)=t_+. For the negative cell, the posterior positive probability
+      is the mean of Beta(1,N_-+1), namely 1/(N_-+2)=t_-. Differentiating p(f)=[1+exp(Af+B)]^{-1}
+      gives p'(f)=-A exp(Af+B)/[1+exp(Af+B)]^2, positive exactly when A<0, so calibration preserves
+      ranking. With A=-0.909732 and B=0.260042, -B/A=0.285845 (to the printed precision). Sign
+      classification changes at f=0, whereas p>=1/2 requires f>=0.285845; they disagree for
+      0<=f<0.285845, with boundary conventions handled separately.
+  - number: 11
+    kind: challenge
+    status: draft
+    prompt: "The radius-margin score has a floor. (a) Prove that for the hard-margin machine \\(R \\ge
+      \\gamma\\), hence \\(R^2 \\|w\\|^2 \\ge 1\\): the hard-margin optimum has support vectors on
+      both margin hyperplanes, any two points on opposite hyperplanes are at distance at least
+      \\(2\\gamma\\), and both lie in the enclosing ball. (b) Show the score is scale-invariant:
+      replacing \\(K\\) by \\(c^2 K\\) (equivalently rescaling the feature map by \\(c \\gt 0\\))
+      multiplies \\(R^2\\) by \\(c^2\\) and \\(\\|w\\|^2\\) by \\(1/c^2\\), leaving
+      \\(R^2\\|w\\|^2\\) fixed, so the criterion compares kernels at different scales fairly, which
+      \\(\\|w\\|^2\\) alone would not. (c) In the worked example \\(R^2\\|w\\|^2 = 1.01\\): conclude
+      from integrality that at most one LOO error is possible there, and compare with the true count
+      of \\(0\\)."
+    answer: Choose support vectors on opposite canonical margin hyperplanes. Their projections along
+      w/||w|| differ by 2/||w||=2gamma, so their Euclidean feature-space distance is at least
+      2gamma. Any ball containing both has diameter 2R at least that distance; hence R>=gamma and
+      R^2||w||^2>=1. Rescaling Phi by c multiplies every squared radius by c^2. To preserve
+      canonical margins, w rescales by 1/c, so ||w||^2 scales by 1/c^2 and the product is invariant.
+      In the example the bound is 1.01; since the LOO error count is an integer bounded by this
+      number, it is at most one. Direct retraining gives zero, consistent with but sharper than the
+      certificate.

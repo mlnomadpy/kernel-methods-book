@@ -1,0 +1,124 @@
+chapter: ch-strings2
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Using the all-subsequences recurrence
+      \(\kappa(sa,t)=\kappa(s,t)+\sum_{k:\,t_k=a}\kappa(s,t(1{:}k-1))\), fill the table for
+      \(s=\)\"bar\" and \(t=\)\"bat\" by hand and read off \(\kappa(\text{"bar"},\text{"bat"})\).
+      List the common subsequences explicitly and check that their count, empty subsequence
+      included, matches the corner cell.
+    answer: The distinct common subsequences are the empty string, `b`, `a`, and `ba`; neither `r` nor
+      `t` can match. Therefore the corner cell is $\kappa(\texttt{bar},\texttt{bat})=4$, including
+      the empty subsequence. Filling the recurrence row by row gives the same total because every
+      update adds exactly the common subsequences ending at a matching final character.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: For the gap-weighted kernel of length \(p=2\), fill the auxiliary table \(\mathrm{DP}_2\)
+      for \(s=\)\"bat\" and \(t=\)\"bar\" and show that
+      \(\kappa_2(\text{"bat"},\text{"bar"})=\lambda^4\), the shared subsequence being \"ba\". Then
+      compute the normalised kernel and confirm it equals \((2+\lambda^2)^{-1}\), the same value the
+      text finds for \"cat\" and \"car\".
+    answer: "For length two, the only shared subsequence is `ba`, contiguous in both strings, so the
+      cross-kernel is $\\lambda^{2+2}=\\lambda^4$. Each self-kernel has the two contiguous
+      subsequences plus the gapped first-and-third subsequence:
+      $\\kappa_2(s,s)=\\kappa_2(t,t)=2\\lambda^4+\\lambda^6$. Hence
+      $\\widehat\\kappa_2=\\lambda^4/(2\\lambda^4+\\lambda^6)=1/(2+\\lambda^2)$ for $\\lambda>0$;
+      the continuous normalized limit at zero is $1/2$."
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: A complete trie of depth \(p\) over an alphabet of size \(|\Sigma|\) is used for the
+      \(p\)-spectrum kernel. Explain why at most \(p\,|\Sigma|\) nodes need be held in memory at any
+      moment, and why the leaf products \(|L_s(v)|\cdot|L_t(v)|\) sum to the correct spectrum inner
+      product. How does the cost of evaluating one string against \(\ell\) database strings compare
+      with \(\ell\) independent dynamic-programming evaluations?
+    answer: A depth-first traversal retains only the active root-to-leaf path and the not-yet-visited
+      sibling counters, at most $p|\Sigma|$ trie nodes. A leaf $v$ represents one $p$-gram $u$;
+      $|L_s(v)|$ and $|L_t(v)|$ are its occurrence counts, so summing their products is $\sum_u
+      c_u(s)c_u(t)=\langle\phi_p(s),\phi_p(t)\rangle$. Against $\ell$ database strings, the query
+      traversal and its occurrence lists are shared once; independent dynamic programs repeat that
+      work $\ell$ times and do not exploit the common trie prefixes.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Derive the inclusion-exclusion recurrence for \(\mathrm{DP}_p(k,l)\) from its definition
+      \(\mathrm{DP}_p(k,l)=\sum_{i\le k,\,j\le
+      l}\lambda^{k-i+l-j}\kappa^S_{p-1}(s(1{:}i),t(1{:}j))\). Show that the two shifted tables
+      \(\lambda\,\mathrm{DP}_p(k-1,l)\) and \(\lambda\,\mathrm{DP}_p(k,l-1)\) overlap on the block
+      indexed up to \((k-1,l-1)\), so that the term \(-\lambda^2\mathrm{DP}_p(k-1,l-1)\) corrects
+      the double count, leaving the fresh row-and-column contribution \(\kappa^S_{p-1}(k,l)\).
+    answer: Split the defining rectangle into the union of the rectangle through $(k-1,l)$ and the
+      rectangle through $(k,l-1)$. After accounting for the extra gap, their weighted sums are
+      $\lambda DP_p(k-1,l)$ and $\lambda DP_p(k,l-1)$. Their common $(k-1)\times(l-1)$ block appears
+      twice and has weight $\lambda^2DP_p(k-1,l-1)$, so subtract it once. The only entry in neither
+      shifted block is the fresh corner contribution $\kappa^S_{p-1}(k,l)$. Thus $DP_p(k,l)=\lambda
+      DP_p(k-1,l)+\lambda DP_p(k,l-1)-\lambda^2DP_p(k-1,l-1)+\kappa^S_{p-1}(k,l)$, with zero
+      boundary tables.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Prove the co-rooted recursion
+      \(\kappa_r(T_1,T_2)=\prod_i(\kappa_r(\tau(\mathrm{ch}_i(r(T_1))),\tau(\mathrm{ch}_i(r(T_2))))+1)\)
+      when the two roots share out-degree \(d^+\). Argue that a co-rooted subtree common to both
+      trees is exactly an independent choice at each matched child of a common co-rooted subtree of
+      that child or the leaf option, and that this is why the empty (improper) choice contributes
+      the \(+1\).
+    answer: "Assume the roots have the same label and out-degree and their children are matched by
+      position. A common co-rooted subtree is determined independently at every child: either choose
+      no proper subtree there (one option) or choose one of the common co-rooted subtrees counted by
+      $\\kappa_r$ for that child pair. The product rule therefore gives
+      $\\prod_i(1+\\kappa_r(T_{1i},T_{2i}))$. If root labels or degrees are incompatible the count
+      is zero. The $+1$ denotes omission of that child branch, not an additional labeled subtree."
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: For the trees \(S\) (root with a leaf and a cherry) and \(T\) (a cherry) of the worked
+      example, verify by direct enumeration that the all-subtree kernel \(\kappa(S,T)=2\) using the
+      identity \(\kappa(T_1,T_2)=\sum_{v_1,v_2}\kappa_r(\tau(v_1),\tau(v_2))\). List every node pair
+      whose co-rooted kernel is nonzero and confirm the sum. Then compute \(\kappa(S,S)\).
+    answer: For $S=((),((),()))$ and $T=((),())$, the only nonzero co-rooted comparisons are the root of
+      $S$ with the root of $T$ and the cherry child of $S$ with the root of $T$, each contributing
+      one. Thus $k(S,T)=2$. For the self-comparison, summing compatible node pairs gives $k(S,S)=5$;
+      in particular $k_r(S,S)=2$ and the cherry self-term is $1$. These integer counts agree with
+      direct enumeration of the shared rooted subtree shapes.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: The gap-weighted kernel interpolates between two limits as \(\lambda\) varies. Argue that as
+      \(\lambda\to0\) the length-\(p\) gap-weighted kernel tends to the \(p\)-spectrum kernel of
+      contiguous substrings, since a subsequence with any gap carries a strictly higher power of
+      \(\lambda\) and vanishes faster. What does the kernel tend to, up to weighting, as
+      \(\lambda\to1\)? Relate your answer to the fixed-length subsequences kernel of the text.
+    answer: Every length-$p$ occurrence has at least span $p$, so factor out the common $\lambda^{2p}$
+      from the two-string kernel. As $\lambda\to0$, every occurrence pair containing a gap has an
+      additional positive power and vanishes relative to contiguous occurrences; the rescaled or
+      cosine-normalized limit is therefore the $p$-spectrum kernel. The unnormalized kernel itself
+      tends to zero. As $\lambda\to1$, all spans receive unit weight, giving the fixed-length
+      all-subsequences kernel with multiplicity.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "Cast the gap-weighted \\(k\\)-subsequences kernel as a Haussler convolution kernel: exhibit
+      the decomposition structure \\(R\\) whose parts are the pairs
+      \\((u,\\lambda^{l(\\mathbf{i})}\\kappa_0)\\) over index tuples \\(\\mathbf{i}\\in I_k\\) with
+      \\(u=s(\\mathbf{i})\\), where \\(\\kappa_0\\) returns \\(1\\) on identical substrings and
+      \\(0\\) otherwise. Verify that the associated \\(R\\)-kernel \\(\\kappa_R(s,t)\\) reproduces
+      \\(\\sum_u\\varphi_u(s)\\varphi_u(t)\\) with
+      \\(\\varphi_u(s)=\\sum_{\\mathbf{i}:u=s(\\mathbf{i})}\\lambda^{l(\\mathbf{i})}\\), and explain
+      why the type-match indicator in the \\(R\\)-kernel is what enforces \\(u=u'\\) in the
+      product."
+    answer: Let $R(s)$ contain one decomposition $(u,\lambda^{l(\mathbf i)})$ for every index tuple
+      $\mathbf i\in I_k(s)$ with $u=s(\mathbf i)$. Use the part kernel
+      $k_0((u,w),(u',w'))=ww'\mathbf1\{u=u'\}$. Then $k_R(s,t)=\sum_{\mathbf i,\mathbf
+      j}\lambda^{l(\mathbf i)+l(\mathbf j)}\mathbf1\{s(\mathbf i)=t(\mathbf j)\}$. Grouping by the
+      common string $u$ gives $\sum_u[\sum_{\mathbf i:s(\mathbf i)=u}\lambda^{l(\mathbf
+      i)}][\sum_{\mathbf j:t(\mathbf j)=u}\lambda^{l(\mathbf j)}]=\sum_u\varphi_u(s)\varphi_u(t)$.
+      The indicator is exactly what prevents different subsequence types from being multiplied.

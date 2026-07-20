@@ -1,0 +1,119 @@
+chapter: ch-ksd
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Let \(p(x) = \tilde p(x)/Z\) be a density on \(\mathbb{R}^d\) with unknown normalizer \(Z\).
+      Show that the score \(s_p = \nabla_x \log p\) equals \(\nabla_x \log \tilde p\), so that it
+      can be computed from the unnormalized model alone. Then explain in one sentence why the
+      maximum mean discrepancy of the mean-embedding chapter cannot be used to test \(q = p\) in
+      this setting, while the kernel Stein discrepancy can.
+    answer: log p(x)=log tilde p(x)-log Z, and Z is constant in x, so grad_x log p=grad_x log tilde p.
+      MMD requires samples from both q and p (or the mean embedding of p); an unknown normalizer
+      usually prevents drawing/evaluating that reference in the intended setting. KSD instead
+      applies Stein's identity using only the score, so the unknown Z cancels and one sample from q
+      suffices.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Work on \(\mathbb{R}\) with target \(p = \mathcal N(0,1)\), score \(s_p(x) = -x\), and RBF
+      kernel \(k(x,x') = e^{-(x-x')^2/2}\), so the Stein kernel is \(u_p(x,x') = [x x' + 1 -
+      2(x-x')^2]\,e^{-(x-x')^2/2}\). For the two-point sample \(x_1 = 0,\ x_2 = 1\), write out the
+      \(2\times 2\) Stein kernel matrix entry by entry, then evaluate the V-statistic
+      \(\tfrac{1}{4}\sum_{i,j} u_p(x_i,x_j)\) and the U-statistic \(\tfrac{1}{2}\sum_{i\neq j}
+      u_p(x_i,x_j)\).
+    answer: The diagonal entries are u(0,0)=1 and u(1,1)=2. For g=0-1=-1, both off-diagonal entries are
+      [0+1-2]e^{-1/2}=-e^{-1/2}=-0.606531. Thus U=[[1,-0.606531],[-0.606531,2]]. The V-statistic is
+      [3-2e^{-1/2}]/4=0.446735. The stated U-statistic averages the two off-diagonal terms and
+      equals -e^{-1/2}=-0.606531, illustrating that diagonal removal can make an unbiased
+      squared-discrepancy estimator negative.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Prove Stein's identity in one dimension: for \\(p\\) differentiable with score \\(s_p =
+      (\\log p)' = p'/p\\) and \\(f\\) in the Stein class of \\(p\\), show \\(\\mathbb{E}_{X\\sim
+      p}[s_p(X) f(X) + f'(X)] = 0\\). State exactly where the boundary condition \\(\\lim_{\\lvert
+      x\\rvert \\to \\infty} p(x) f(x) = 0\\) enters."
+    answer: E_p[s_p(X)f(X)+f'(X)]=integral[(p'/p)f+f']p dx=integral[p'f+pf']dx=integral (pf)' dx. The
+      fundamental theorem gives [p(x)f(x)]_{-infinity}^{infinity}. The Stein-class boundary
+      condition makes both endpoint limits zero, so the expectation vanishes. This final endpoint
+      cancellation is exactly where the boundary assumption enters; without it a nonzero boundary
+      flux remains.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Starting from \(\mathrm{KSD}(q,p) = \sup_{\lVert f\rVert_{\mathcal H^d}\le 1}
+      \mathbb{E}_{X\sim q}[\mathcal{A}_p f(X)]\), use the reproducing identities \(f_i(x) = \langle
+      f_i, k(x,\cdot)\rangle\) and \(\partial_{x_i} f_i(x) = \langle f_i, \partial_{x_i}
+      k(x,\cdot)\rangle\) to write the functional as \(\langle f, \xi_{q,p}\rangle_{\mathcal H^d}\),
+      identify the witness \(\xi_{q,p}\), and conclude by Cauchy-Schwarz that \(\mathrm{KSD}(q,p) =
+      \lVert \xi_{q,p}\rVert_{\mathcal H^d}\). Name the two properties of the RKHS you use.
+    answer: "Apply reproduction componentwise: E_q[A_p f(X)]=sum_i
+      <f_i,E_q[s_{p,i}(X)k(X,·)+partial_{x_i}k(X,·)]>. Thus the vector witness has components
+      xi_{q,p,i}=E_q[s_{p,i}(X)k(X,·)+partial_{x_i}k(X,·)]. The functional is <f,xi_{q,p}> in the
+      product RKHS. Cauchy-Schwarz bounds it by ||f||||xi||, and equality is attained by f=xi/||xi||
+      when nonzero, so KSD=||xi||. The required RKHS properties are value reproduction and
+      derivative reproduction (with sufficient kernel smoothness/boundedness)."
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Derive the four-term Stein kernel for a general one-dimensional target and RBF kernel with
+      bandwidth \(h\), obtaining
+    answer: For g=x-x' and k=exp[-g^2/(2h^2)], partial_x k=-(g/h^2)k, partial_x' k=(g/h^2)k, and
+      partial_x partial_x' k=(h^{-2}-g^2h^{-4})k. Substitution into
+      s(x)s(x')k+s(x)partial_x'k+s(x')partial_xk+partial_xpartial_x'k gives
+      [s(x)s(x')+(g/h^2)(s(x)-s(x'))+h^{-2}-g^2h^{-4}]k. For the standard normal, s(x)=-x and h=1;
+      the middle term is -g^2 and the last contributes 1-g^2, yielding [xx'+1-2g^2]e^{-g^2/2}.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Show that the Stein kernel \(u_p\) is positive definite for any base kernel \(k\) and target
+      \(p\), so that both the V-statistic and any single Gram matrix \([u_p(x_i,x_j)]\) are
+      non-negative in the quadratic-form sense. Deduce that \(\widehat{\mathrm{KSD}}^2_V \ge 0\)
+      always, and explain why \(\widehat{\mathrm{KSD}}^2_U\) can nonetheless be negative.
+    answer: Define the Stein feature beta_p(x)=s_p(x)k(x,·)+grad_x k(x,·) in H^d. Expanding its inner
+      product with beta_p(x') gives u_p(x,x'). Hence sum_ij c_i c_j u_p(x_i,x_j)=||sum_i c_i
+      beta_p(x_i)||^2>=0, so every Stein Gram matrix is PSD. Taking c_i=1/n makes the V-statistic
+      this squared norm and nonnegative. The U-statistic deletes diagonal terms; the remaining
+      off-diagonal sum is no longer a complete quadratic form and may be negative, as the two-point
+      calculation shows.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: In the SVGD update \(\hat\phi(x_i) = \tfrac1n\sum_j [k(x_j,x_i) s_p(x_j) + \nabla_{x_j}
+      k(x_j,x_i)]\), consider the two limits of the base kernel bandwidth \(h\). Argue what happens
+      to the particle cloud as \(h \to \infty\) (the kernel is nearly constant) and as \(h \to 0\)
+      (the kernel is nearly a spike), and say which term, driving or repulsion, dominates in each
+      limit and why a moderate \(h\) is needed for the particles to approximate \(p\).
+    answer: As h->infinity, k approaches one while its gradient approaches zero. Repulsion disappears
+      and all particles receive nearly the same averaged score drive, encouraging collapse toward a
+      mode rather than coverage. As h->0, off-diagonal kernels vanish and the self-kernel gradient
+      is zero; each particle mostly follows its own weakened score independently, again losing
+      coordinated repulsion and global mass allocation. A moderate bandwidth lets nearby particles
+      share target-score information while the gradient term pushes them apart, balancing attraction
+      and diversity.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "Two parts on the goodness-of-fit test. (a) Explain why, under \\(H_0 : q = p\\), the
+      rescaled statistic \\(n\\,\\widehat{\\mathrm{KSD}}^2_U\\) has the non-Gaussian limit
+      \\(\\sum_j c_j (Z_j^2 - 1)\\) rather than a normal law, and connect this to the degeneracy
+      that makes the first-order term of the U-statistic vanish. (b) Suppose the wild bootstrap of
+      the test is run with \\(B = 500\\) sign-flip replicates and \\(12\\) of the bootstrap
+      statistics \\(T_b\\) exceed the observed \\(T\\). Compute the approximate \\(p\\)-value and
+      state the decision at level \\(\\alpha = 0.05\\). Then argue that a target whose score is
+      wrong only on a region the sample never visits could still yield a small statistic, and say
+      what that means for the power of the test."
+    answer: "Under q=p, Stein's identity makes the first Hoeffding projection of the U-core zero. The
+      sqrt(n) Gaussian term therefore vanishes; the second-order spectral term dominates at n
+      scaling and converges to sum_j c_j(Z_j^2-1), a centered chi-square mixture. With 12
+      exceedances in B=500 wild bootstraps, the plus-one p-value is 13/501=0.02595, so reject at
+      0.05. KSD power is still sample-distribution dependent: if q places no observations where p's
+      score is wrong, the witness sees little discrepancy. The test can have low power against
+      alternatives localized in unvisited regions despite valid null calibration."

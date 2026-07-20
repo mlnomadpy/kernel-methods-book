@@ -1,0 +1,42 @@
+---
+import fs from "node:fs";
+import matter from "gray-matter";
+import { parse as parseYaml } from "yaml";
+import Book from "../layouts/Book.astro";
+import { BOOK, escapeHtml, renderMath, tocHtml } from "../lib/book.js";
+import { renderCanonicalMarkdown } from "../lib/manuscript.js";
+
+const chapters = BOOK.parts.flatMap((part) => part.chapters);
+let authored = 0, total = 0;
+const sections = [];
+for (const chapter of chapters) {
+  const source = matter(fs.readFileSync(`manuscript/chapters/${chapter.src}.md`, "utf8")).content;
+  const kinds = [...source.matchAll(/\[([a-z-]+)\]\{\.ex-tag\}/g)].map((match) => match[1]);
+  if (!kinds.length) continue;
+  total += kinds.length;
+  const solutionPath = `solutions/${chapter.src}.yml`;
+  const data = fs.existsSync(solutionPath) ? parseYaml(fs.readFileSync(solutionPath, "utf8")) : { exercises: [] };
+  const records = new Map((data.exercises || []).map((item) => [item.number, item]));
+  const rows = kinds.map((kind, index) => {
+    const number = index + 1;
+    const record = records.get(number);
+    if (record?.answer) authored += 1;
+    const state = record?.status || "not-authored";
+    const answer = record?.answer
+      ? renderMath(renderCanonicalMarkdown(record.answer))
+      : '<p class="solution-pending">No public answer has been authored yet. This item blocks the verified release.</p>';
+    return `<details class="solution ${escapeHtml(state)}" id="${chapter.slug}-exercise-${number}">` +
+      `<summary>Exercise ${number} · ${escapeHtml(kind)} <span class="review-state">${escapeHtml(state)}</span></summary>` +
+      `<p><a href="${chapter.slug}.html#exercise-${number}">Return to the exercise prompt</a></p>${answer}</details>`;
+  }).join("\n");
+  sections.push(`<section class="solution-chapter"><h2 id="${chapter.slug}">${escapeHtml(chapter.title)}</h2>` +
+    `<p class="hint">Solution review status: ${escapeHtml(data.review_status || "not authored")}.</p>${rows}</section>`);
+}
+---
+
+<Book title={`Answers and rubrics · ${BOOK.title}`} desc="Spoiler-safe public answers and assessment rubrics" toc={tocHtml("solutions")}>
+  <h1><span class="chno">Learning companion</span>Answers and rubrics</h1>
+  <p class="lead">Answers live separately from chapter prompts and are collapsed by default. Authored coverage is {authored} of {total} exercises. A draft label means the answer has not received independent pedagogical and technical approval.</p>
+  <div class="callout"><strong>Release status.</strong> Missing and draft answers are intentionally public as a progress record, but every one blocks the Complete Edition release gate.</div>
+  <Fragment set:html={sections.join("\n")} />
+</Book>

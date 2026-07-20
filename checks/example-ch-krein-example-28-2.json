@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-krein",
+  "anchor": "example-28-2",
+  "source_file": "manuscript/chapters/ch-krein.md",
+  "source_sha256": "528bf63e55be788e5a495d9b766e4832646badb57702652f4341f7585f7fd78f",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-krein-ex1.py",
+    "checks/ch-krein-ex2.py"
+  ],
+  "numeric_literals": [
+    "-0.3261",
+    "0.3144",
+    "2.2203",
+    "2",
+    "3",
+    "-0.2666",
+    "1",
+    "-1",
+    "0.5",
+    "0",
+    "0.6761",
+    "-0.3753",
+    "-0.7559",
+    "0.7026",
+    "0.8116",
+    "1.1560",
+    "0.2354",
+    "0.3261",
+    "0.7375",
+    "0.6522",
+    "+0.6522",
+    "0.3856",
+    "4",
+    "0.129",
+    "-0.080",
+    "-0.151",
+    "0.145",
+    "-0.070",
+    "-0.154",
+    "0.446",
+    "-0.450",
+    "0.317"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

@@ -1,0 +1,71 @@
+chapter: ch-prelim
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: computation
+    status: draft
+    prompt: A Gram matrix has eigenvalues \(10,1,10^{-8}\). Compute its condition number, then compute
+      the condition number after adding ridge \(10^{-3}I\). Explain why the regularized solve is
+      more stable.
+    answer: "The unregularized spectral condition number is 10/10^{-8}=10^9. Adding 10^{-3}I shifts the
+      eigenvalues to 10.001,1.001,0.00100001, so kappa is 10.001/0.00100001, approximately
+      1.00009*10^4. Ridge prevents division by the nearly zero direction: perturbations and rounding
+      errors can now be amplified by roughly ten thousand rather than one billion, a
+      five-order-of-magnitude improvement."
+  - number: 2
+    kind: proof
+    status: draft
+    prompt: Starting from the projection theorem, prove the Pythagorean identity for \(f=f_V+f_\perp\)
+      and identify the exact step used in a representer-theorem proof.
+    answer: The projection theorem gives f_V in the closed subspace V with f_perp=f-f_V orthogonal to
+      every v in V, particularly f_V. Therefore
+      ||f||^2=<f_V+f_perp,f_V+f_perp>=||f_V||^2+||f_perp||^2. In the representer theorem,
+      V=span{K_{x_i}}. Reproduction makes f_perp(x_i)=<f_perp,K_{x_i}>=0, so deleting f_perp
+      preserves all training losses, while Pythagoras shows it cannot increase—and under strict norm
+      penalty must decrease—the regularizer.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Let \(Z=k(X,\cdot)\). Under \(\mathbb{E}\sqrt{k(X,X)}\lt\infty\), use reproduction and the
+      Bochner operator rule to show \(\langle f,\mathbb{E}Z\rangle=\mathbb{E}f(X)\).
+    answer: The Bochner integrability assumption follows from ||Z||_H=||K_X||_H=sqrt(k(X,X)) having
+      finite expectation. For any fixed f, the bounded linear functional h-><f,h> commutes with the
+      Bochner integral. Hence <f,E Z>=E<f,Z>=E<f,K_X>=E f(X), where the final equality is
+      reproduction. This identifies E K_X as the mean embedding and also shows why the diagonal
+      moment condition is the required integrability control.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: Compute the Fenchel conjugate of \(f(x)=x^2/2\) and verify Fenchel-Young equality at
+      \(u=f'(x)\).
+    answer: The conjugate is f*(u)=sup_x[ux-x^2/2]. Differentiation gives x=u, and substitution yields
+      f*(u)=u^2/2. Fenchel-Young says f(x)+f*(u)>=ux; at u=f'(x)=x, the left side is
+      x^2/2+x^2/2=x^2=ux, so equality holds. Equivalently u belongs to the subgradient of f at x
+      exactly at the maximizing conjugate pair.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: For a graph-kernel pipeline, list one assumption or diagnostic drawn from each of linear
+      algebra, probability, convex optimization, and graph geometry.
+    answer: "One defensible graph-kernel checklist is: linear algebra—verify Gram symmetry/PSD, report
+      condition number, and regularize small eigenvalues; probability—state the graph sampling
+      model, independence/exchangeability assumptions, split protocol, and uncertainty; convex
+      optimization—state convexity, constraints, KKT residual, stopping tolerance, and duality gap;
+      graph geometry—specify directedness, labels, connectivity, Laplacian normalization, and
+      whether comparisons are between graphs or between nodes of one graph. These diagnostics
+      prevent a valid formula from being applied to the wrong data-generating or geometric setting."
+  - number: 6
+    kind: challenge
+    status: draft
+    prompt: Give an example in which pointwise convergence does not justify exchanging limit and
+      expectation, then state a domination condition that repairs the argument.
+    answer: Let X be uniform on (0,1) and f_n(X)=n 1_{(0,1/n)}(X). For every fixed x>0, f_n(x)->0, but E
+      f_n=n*(1/n)=1 for all n, so lim E f_n=1 while E lim f_n=0. The missing ingredient is uniform
+      integrable control. Dominated convergence repairs the exchange if f_n->f almost surely and
+      |f_n|<=g for an integrable g; more generally uniform integrability plus convergence in
+      probability provides a related repair.

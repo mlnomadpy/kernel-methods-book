@@ -1,0 +1,120 @@
+chapter: ch06
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: computation
+    status: draft
+    prompt: A centered Gram matrix has eigenvalues \(\Delta = (10, 6, 3, 1, 0, 0, 0, 0)\) (the last four
+      vanish). (a) What fraction of the total variance is captured by projecting onto the top two
+      kernel principal components? (b) By the reconstruction-error proposition, what is the residual
+      \(J^\perp(U_2) = \sum_{i \gt 2}\Delta_i\) left by that two-dimensional summary? (c) What is
+      the smallest number of components \(k\) needed for the captured variance to reach at least
+      ninety percent of the total? (d) The stability remark ties reliability to how early the
+      spectrum falls off; comment on whether a two-dimensional projection of this dataset looks
+      trustworthy.
+    answer: The total variance is 10+6+3+1=20. The top two components capture 16/20=0.80, or 80 percent.
+      Their reconstruction residual is the discarded sum 3+1=4. Reaching 90 percent requires
+      captured variance at least 18; the top three capture 19, so k=3 is minimal. A two-dimensional
+      view captures most variation but misses one fifth of it, and the second-to-third eigengap is
+      only 3. It may be visually useful, but the 80 percent coverage and moderate gap do not justify
+      treating it as a fully reliable summary; three dimensions are better supported by the stated
+      threshold.
+  - number: 2
+    kind: proof
+    status: draft
+    prompt: Derive the centering formula. Starting from the recentered embeddings
+      \(\tilde{\varphi}(\mathbf{x}_i) = \varphi(\mathbf{x}_i) - \frac{1}{n}\sum_{a=1}^n
+      \varphi(\mathbf{x}_a)\), compute the new Gram entry \([K_c]_{ij} = \langle
+      \tilde{\varphi}(\mathbf{x}_i), \tilde{\varphi}(\mathbf{x}_j)\rangle_{\mathcal{H}}\) purely in
+      terms of the original kernel values, and show it equals
+    answer: Let m=n^{-1}sum_a phi(x_a). Bilinearity gives <phi_i-m,phi_j-m>=K_ij-n^{-1}sum_a
+      K_aj-n^{-1}sum_b K_ib+n^{-2}sum_{a,b}K_ab. With U=11^T/n, matrix multiplication gives
+      (I-U)K(I-U)=K-UK-KU+UKU. The four terms are respectively the original entry, its column mean,
+      its row mean, and the grand mean, exactly matching the scalar expansion. Since U is symmetric
+      and U^2=U, this is orthogonal centering. Only entries of K are used; feature coordinates never
+      appear.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Prove that the top-\(k\) principal subspace minimizes reconstruction error, with residual
+      equal to the sum of the discarded eigenvalues. For a \(k\)-dimensional subspace \(U \subset
+      \mathcal{H}\) with orthogonal projection \(P_U\), use the Pythagorean split \(\lVert
+      \varphi(\mathbf{x}_i)\rVert^2 = \lVert P_U \varphi(\mathbf{x}_i)\rVert^2 + \lVert P_U^\perp
+      \varphi(\mathbf{x}_i)\rVert^2\) to show that minimizing \(J^\perp(U) = \sum_i \lVert P_U^\perp
+      \varphi(\mathbf{x}_i)\rVert^2\) is the same as maximizing the captured norm \(\sum_i \lVert
+      P_U \varphi(\mathbf{x}_i)\rVert^2\). Identify that captured norm as a trace maximization over
+      rank-\(k\) projections, invoke the eigenvector characterization to conclude the maximizer is
+      the span \(U_k\) of the first \(k\) kernel principal directions, and read off
+    answer: Summing Pythagoras over observations yields J_perp(U)=sum_i||phi_i||^2-sum_i||P_U phi_i||^2,
+      so minimizing residual is equivalent to maximizing captured norm. For an orthonormal basis
+      e_1,...,e_k of U and covariance operator C=sum_i phi_i tensor phi_i, the captured term is
+      sum_m <e_m,C e_m>=tr(P_U C). Ky Fan's maximum principle says the rank-k projection maximizing
+      this trace spans C's top k eigenvectors and captures sum_{i<=k}Delta_i. Since total feature
+      energy is tr(C)=sum_i Delta_i, subtraction gives J_perp(U_k)=sum_{i>k}Delta_i.
+  - number: 4
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive Gram-matrix heatmap earlier in this chapter; this is exactly the
+      matrix kernel PCA diagonalizes. Widen the kernel bandwidth and watch the off-diagonal entries
+      fill in, then narrow it toward zero and watch the matrix drift toward the identity. Describe
+      how the spectrum you would read off changes between these regimes: for which bandwidth does
+      the variance concentrate into a few dominant eigenvalues, and for which does it flatten so
+      that no small set of components can summarize the data? Connect your observation to the
+      stability rule of thumb that kernel PCA is trustworthy exactly when the eigenvalues fall off
+      early."
+    answer: At a very small Gaussian bandwidth, distinct points are nearly orthogonal and the Gram
+      matrix approaches the identity before centering; the nonzero centered eigenvalues are then
+      comparatively flat, so no small principal subspace dominates. Widening the bandwidth creates
+      broad off-diagonal blocks and correlated rows. At an intermediate data-scale bandwidth this
+      often concentrates variance into a few eigenvalues; at the extreme constant-kernel limit
+      centering removes the common direction and leaves almost no variance. Thus useful stable KPCA
+      appears where the centered spectrum has a clear early drop, not merely at the widest possible
+      bandwidth.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Out-of-sample by hand. Using the fitted quantities from the out-of-sample worked example,
+      place the same test point \(\mathbf{z} = (-0.5, 0.5)\) yourself. Its raw kernel vector is
+      \(K(\mathbf{z}, \mathbf{x}_j) = (0.5738, 0.8948, 0.8948, 0.5738, 0.2359)\), the frozen
+      training column means are \((0.4378, 0.5604, 0.6209, 0.5604, 0.4378)\), and the training grand
+      mean is \(0.5235\). (a) Form the centered kernel vector \(\tilde{\mathbf{k}}(\mathbf{z})\),
+      identifying among its three centering terms the one that uses the test point's own mean
+      similarity and the two that are frozen training statistics. (b) With \(\boldsymbol{\alpha}_1 =
+      (-0.4984, -0.3507, 0, 0.3507, 0.4984)\), compute the first-component coordinate
+      \(\boldsymbol{\alpha}_1^\top \tilde{\mathbf{k}}(\mathbf{z})\). (c) Explain why repeating the
+      computation with the third column of \(K\) in place of \(K(\mathbf{z}, \cdot)\) returns
+      \(\mathbf{x}_3\)'s training coordinate exactly, whereas the coordinate of \(\mathbf{z}\) only
+      approximates the value a refit would give.
+    answer: The test-row mean is 0.63462. Apply tilde k_j=k_j(z)-0.63462-(training column mean)_j+0.5235
+      to obtain (0.02488,0.22328,0.16278,-0.09772,-0.31302). The first subtraction uses the new
+      point's own mean similarity; the column means and grand mean are frozen training statistics.
+      Dotting with alpha_1 gives approximately -0.280984, hence coordinate -0.2810. If z=x_3, the
+      same centering formula is exactly the third column of K_c, so the eigenvector equation
+      reproduces its training coordinate. Adding a fresh z and refitting would change both the
+      centering statistics and the eigensystem, which is why the frozen extension is only an
+      out-of-sample approximation to a refit.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: The extension agrees with kernel PCA on the sample. Let \(K_c = (I - \mathbf{1}_n) K (I -
+      \mathbf{1}_n)\) be the centered training Gram matrix with coefficients \(\boldsymbol{\alpha}_i
+      = \mathbf{u}_i / \sqrt{\Delta_i}\). Show that for a training point \(\mathbf{x}_m\) the
+      centered out-of-sample kernel vector \(\tilde{\mathbf{k}}(\mathbf{x}_m)\), with entries
+      \(\tilde{k}_j = K_{mj} - \frac{1}{n}\sum_a K_{ma} - \frac{1}{n}\sum_b K_{bj} +
+      \frac{1}{n^2}\sum_{a,b} K_{ab}\), is exactly the \(m\)-th column of \(K_c\). Conclude that
+      \(\pi_i(\mathbf{x}_m) = \boldsymbol{\alpha}_i^\top \tilde{\mathbf{k}}(\mathbf{x}_m) =
+      \sqrt{\Delta_i}\,(\mathbf{u}_i)_m\) is the training coordinate of the kernel-PCA theorem. Then
+      argue why the corresponding statement for a fresh point holds only approximately, and name the
+      two quantities that change when the point is added to the reference set.
+    answer: "For z=x_m, the raw vector has entries K_mj. Subtracting its row mean, each training column
+      mean, and adding the grand mean produces precisely [(I-U)K(I-U)]_{jm}, using symmetry to
+      identify row and column orientation. Thus tilde k(x_m)=K_c e_m. Then alpha_i^T tilde
+      k=(u_i^T/sqrt(Delta_i))K_c e_m=(Delta_i/sqrt(Delta_i))u_i^T e_m=sqrt(Delta_i)(u_i)_m, the
+      training KPCA coordinate. A new point was absent from the reference empirical measure: if
+      included, all row/column/grand means and the eigenvalues/eigenvectors would change. The frozen
+      Nyström-style coordinate therefore agrees exactly only on the fitted sample."

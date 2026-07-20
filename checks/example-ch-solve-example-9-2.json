@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-solve",
+  "anchor": "example-9-2",
+  "source_file": "manuscript/chapters/ch-solve.md",
+  "source_sha256": "9bdd63a6edede352f555b3a96b6827768086289aff4913a2bfb9fb8cda7ab503",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-solve-ex2.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "0",
+    "2",
+    "+1",
+    "-1",
+    "0.1",
+    "11",
+    "12",
+    "22",
+    "4",
+    "-0.2",
+    "-0.1",
+    "-1.1",
+    "0.2",
+    "-0.4",
+    "0.8",
+    "-2",
+    "+4",
+    "-4",
+    "3",
+    "-0.8",
+    "+1.9",
+    "2.0",
+    "+0.1",
+    "5",
+    "-0.9",
+    "1.0",
+    "6",
+    "0.9",
+    "1.5"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

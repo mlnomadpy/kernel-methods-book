@@ -1,0 +1,157 @@
+chapter: ch07
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "Write a function in eigenfunction coordinates, \\(f = \\sum_i a_i\\, \\psi_i\\), so that
+      its RKHS norm is \\(\\|f\\|_{\\mathcal H}^2 = \\sum_i a_i^2 / \\lambda_i\\). Suppose the
+      spectrum is \\(\\lambda_i = i^{-2}\\). For each of the following coefficient sequences, decide
+      whether the function lies in the RKHS, and rank those that do from smallest to largest norm:
+      (a) \\(a_i = 1\\) only for \\(i = 1\\) and \\(0\\) otherwise; (b) \\(a_i = 1\\) only for \\(i
+      = 10\\) and \\(0\\) otherwise; (c) \\(a_i = 1/i\\) for all \\(i\\); (d) \\(a_i = 1/i^2\\) for
+      all \\(i\\). Then explain in one sentence why, if the spectrum had a zero eigenvalue
+      \\(\\lambda_m = 0\\), any function with \\(a_m \\neq 0\\) would be excluded from \\(\\mathcal
+      H\\) outright."
+    answer: With lambda_i=i^{-2}, the norm contribution is a_i^2 i^2. Case (a) has norm squared 1. Case
+      (b) has norm squared 10^2=100. Case (c) contributes one at every index and diverges, so it is
+      not in the RKHS. Case (d) contributes i^{-2}, whose sum is pi^2/6, so it is in the RKHS.
+      Ranking finite norms gives (a), then (d), then (b). A zero eigenvalue makes any nonzero
+      coefficient in that direction carry infinite a_m^2/lambda_m cost; such a direction lies
+      outside the RKHS range.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Take the finite space \(\mathcal X = \{x_1, x_2\}\) with Gram matrix
+    answer: The eigenvalues are 3 and 1 with normalized eigenvectors u_1=(1,1)/sqrt(2) and
+      u_2=(1,-1)/sqrt(2). Thus U=[u_1 u_2], Lambda=diag(3,1), and K=U Lambda U^T. The feature
+      vectors are Phi(x_1)=(sqrt(3/2),1/sqrt(2)) and Phi(x_2)=(sqrt(3/2),-1/sqrt(2)). Their inner
+      product is 3/2-1/2=1=K_12, while ||Phi(x_1)||^2=3/2+1/2=2=K_11; the other entries follow
+      identically.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: On \([0,1]\) with the Lebesgue measure, take the Bernoulli kernel with \(\beta = 1\), whose
+      Fourier eigenfunctions \(\psi_{2n-1} = \sqrt 2 \sin(2\pi n x)\) and \(\psi_{2n} = \sqrt 2
+      \cos(2\pi n x)\) carry the common eigenvalue \(\lambda_{2n-1} = \lambda_{2n} = n^{-2}\).
+      Consider
+    answer: The first term is psi_1 with coefficient a_1=1 and eigenvalue lambda_1=1. The cosine at
+      frequency two is psi_4=sqrt(2)cos(4pi x), with coefficient a_4=1/4 and eigenvalue
+      lambda_4=2^{-2}=1/4. Hence ||f||_H^2=1^2/1+(1/4)^2/(1/4)=1+1/4=5/4. The first frequency
+      contributes 1 and the second 1/4. The higher frequency is penalized by the smaller eigenvalue,
+      but its amplitude was reduced enough (from 1 to 1/4) that its total norm contribution is still
+      smaller.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: On the circle \(S^1\), the quadratic kernel \(K(x,t) = (1 + x^\top t)^2\) has, by the
+      Funk-Hecke computation of the chapter, the five-coordinate Mercer feature map
+    answer: The feature inner product is
+      3/2+2x_1t_1+2x_2t_2+2x_1x_2t_1t_2+(1/2)(x_1^2-x_2^2)(t_1^2-t_2^2). On the unit circle, the
+      constant and final term combine to x_1^2t_1^2+x_2^2t_2^2+1, using x_1^2+x_2^2=t_1^2+t_2^2=1.
+      Adding the cross term 2x_1x_2t_1t_2 gives 1+(x_1t_1+x_2t_2)^2. Together with the linear
+      contribution 2(x_1t_1+x_2t_2), this is [1+x^Tt]^2, exactly K(x,t).
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Let \(\mathcal X = \{x_1, \ldots, x_m\}\) be finite, so the kernel is the symmetric positive
+      semidefinite Gram matrix \(\mathbf K\), diagonalized as \(\mathbf K = \mathbf U
+      \boldsymbol\Lambda \mathbf U^\top\) with orthonormal eigenvectors and \(\lambda_1 \geq \cdots
+      \geq \lambda_m \geq 0\). Set \(\mathbf B = \boldsymbol\Lambda^{1/2} \mathbf U^\top\). Prove
+      that \(\mathbf K = \mathbf B^\top \mathbf B\), and deduce that the columns of \(\mathbf B\)
+      form an explicit feature map \(\Phi(x_i) = \left(\sqrt{\lambda_k}\, [u_k]_i \right)_{k=1}^m\)
+      with \(K(x_i, x_j) = \langle \Phi(x_i), \Phi(x_j) \rangle\). Explain in one or two sentences
+      why this is exactly Mercer's expansion \(K(x,t) = \sum_k \lambda_k \psi_k(x)\psi_k(t)\) with
+      the sum truncated at \(m\), the coordinate \([u_k]_i\) standing in for the eigenfunction value
+      \(\psi_k(x_i)\).
+    answer: B^T B=U Lambda^{1/2}Lambda^{1/2}U^T=U Lambda U^T=K. The (i,j) entry of B^T B is the
+      Euclidean inner product between columns i and j of B. Column i has kth coordinate
+      sqrt(lambda_k)[u_k]_i, so these columns define Phi(x_i) and reproduce K_ij. On a finite
+      m-point space the integral operator is an m-dimensional matrix, so it has at most m nonzero
+      eigenmodes. The matrix formula is therefore Mercer's series with no modes beyond m, and the
+      sampled eigenvector coordinate plays the role of psi_k(x_i).
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Suppose the spectrum decays polynomially, \(0 \lt \lambda_i \leq C\, i^{-s}\) with \(s \gt
+      1\). Using the spectral bounds of the chapter, choose the head-tail split \(J\) so that
+      \(\lambda_{J+1} \leq \lambda \leq \lambda_J\), and show first that the bias obeys \(\tilde
+      B_\lambda \leq 2\lambda \|f^*\|_{\mathcal H}^2\) and that \(J = O(\lambda^{-1/s})\). Then
+      treat the excess risk, up to constants and the lower-order tail term, as the univariate
+      expression
+    answer: The chapter's spectral bias bound splits at J and bounds both head and tail by a total at
+      most 2lambda||f*||_H^2. Since lambda_J is at most C J^{-s} and lambda is comparable to the
+      crossover eigenvalue, J=O(lambda^{-1/s}). Ignoring constants, minimize g(lambda)=A
+      lambda+(B/n)lambda^{-1/s}. Setting g'=0 gives lambda^{1+1/s} proportional to n^{-1}, hence
+      lambda*=Theta(n^{-s/(s+1)}). At this value both bias and variance scale as n^{-s/(s+1)}. As s
+      grows, the exponent approaches one, reflecting nearly parametric behavior for a very rapidly
+      decaying spectrum, though it remains below one for finite s.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive Gram-matrix figure of the chapter, which assembles \\(\\mathbf K =
+      \\left(K(x_i, x_j) \\right)_{ij}\\) for a handful of points and shows both its heatmap and its
+      spectrum. This finite Gram matrix is precisely the discrete integral operator \\(L_K\\) of the
+      chapter, with the integral replaced by a sum over the sampled points. Widen and then narrow
+      the kernel bandwidth while watching the two panels. Describe how the off-diagonal structure of
+      the heatmap changes, and how the eigenvalue spectrum reshapes: which direction of the
+      bandwidth makes the spectrum decay fast (few cheap directions, a thin RKHS ellipsoid) and
+      which makes it decay slowly. Relate what you see to the statement that the eigenvalues shown
+      are the finite-sample stand-ins for the \\(\\lambda_k\\) of \\(L_K\\)."
+    answer: Widening a Gaussian kernel raises long-range off-diagonal similarities, making rows more
+      redundant and concentrating the uncentered spectrum into a few large eigenvalues; after
+      centering, an intermediate wide scale typically still gives fast early decay. Narrowing the
+      bandwidth suppresses off-diagonals and moves K toward the identity, whose eigenvalues are
+      flat, so many directions remain relevant. At the extreme constant-kernel limit centering
+      removes the sole common mode. The displayed finite eigenvalues are empirical versions of the
+      integral-operator spectrum, so the same bandwidth-dependent decay governs the apparent RKHS
+      ellipsoid and effective dimension.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: The effective dimension of a Mercer kernel measures how many coordinates of the feature map
+      \(\Phi(x) = \left(\sqrt{\lambda_k}\, \psi_k(x) \right)_k\) genuinely matter. Assume the
+      eigenfunctions are uniformly bounded, \(\sup_x \psi_k(x)^2 \leq C\). Show that the diagonal
+      tail is controlled by the spectral tail,
+    answer: Mercer's diagonal identity gives K(x,x)-sum_{k<=n}lambda_k psi_k(x)^2=sum_{k>n}lambda_k
+      psi_k(x)^2. Every term is nonnegative, and uniform boundedness gives the upper bound C
+      sum_{k>n}lambda_k. Under lambda_k<=C_0 k^{-s}, the integral test bounds the tail by a constant
+      times n^{1-s}; making it at most epsilon requires n(epsilon)=O(epsilon^{-1/(s-1)}) with
+      constants C,C_0. Under exponential decay the geometric tail is O(e^{-alpha n}), so
+      n(epsilon)=O(alpha^{-1}log(1/epsilon)). Exponential decay yields the genuinely small
+      logarithmic effective dimension.
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: "Keep the spectrum \\(\\lambda_i = i^{-2}\\) of the integral-operator worked example, whose
+      capacity exponent is \\(p = \\tfrac12\\). Suppose the target has \\(L^2_\\nu\\)
+      eigen-coordinates \\(c_i = \\langle f^*, \\psi_i \\rangle_{L^2_\\nu(\\mathcal X)} = i^{-3}\\).
+      (a) Using the coordinate form \\(\\sum_i c_i^2 / \\lambda_i^{2r} \\lt \\infty\\) of the source
+      condition, show that \\(f^* = T^r g\\) holds exactly for \\(r \\lt \\tfrac54\\). (b) Since the
+      source exponent can be taken up to but not including \\(\\tfrac54 \\gt 1\\), the KRR bias
+      saturates: give the KRR rate exponent \\(2\\min(r,1)/(2\\min(r,1)+p)\\) and the minimax
+      exponent \\(2r/(2r+p)\\) as \\(r \\to \\tfrac54\\), and state which one KRR attains. (c) In
+      one sentence, name the kind of regularizer that would close the gap."
+    answer: The source norm is sum_i c_i^2/lambda_i^{2r}=sum_i i^{-6+4r}. This p-series converges
+      exactly when -6+4r<-1, namely r<5/4. With p=1/2 and r approaching 5/4, KRR replaces r by
+      min(r,1)=1 and attains exponent 2/(2+1/2)=4/5=0.8. The minimax exponent tends to
+      (2*5/4)/(2*5/4+1/2)=5/6, about 0.8333. KRR therefore attains the saturated 4/5 rate. A
+      higher-qualification spectral regularizer—spectral cutoff, iterated Tikhonov, or suitable
+      iterative regularization—can close the gap.
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: Model the excess risk of KRR under a source condition of order \(r\) and a capacity
+      condition of exponent \(p\) by the univariate surrogate
+    answer: Differentiating E gives 2rR^2 lambda^{2r-1}-(pc sigma^2/n)lambda^{-p-1}=0. Thus
+      lambda^{2r+p} is proportional to n^{-1}, so lambda*=Theta(n^{-1/(2r+p)}); substitution makes
+      both terms Theta(n^{-2r/(2r+p)}). For the exact filter bias, consider lambda t^r/(t+lambda).
+      When r>1, t^r/(t+lambda) is increasing on the bounded spectrum because its derivative has
+      numerator t^{r-1}[(r-1)t+r lambda]>0. The supremum is therefore at ||T|| and is O(lambda), not
+      lambda^r. Squared bias is consequently O(lambda^2), capping the optimized exponent at 2/(2+p)
+      regardless of additional target smoothness.

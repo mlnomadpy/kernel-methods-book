@@ -1,0 +1,43 @@
+chapter: ch-spatial
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Explain the sign and definiteness difference between a covariance function and a semivariogram.
+    answer: >-
+      A covariance is large when two locations move together and must generate positive-semidefinite Gram matrices. A semivariogram is half the variance of an increment, is small for similar locations, and is conditionally negative definite on coefficients summing to zero. Under stationarity they satisfy \(\gamma(h)=C(0)-C(h)\), but they are not interchangeable kernel matrices.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Solve an ordinary-kriging saddle system for a supplied covariance matrix and target covariance vector, then compute the prediction variance.
+    answer: >-
+      Solve \(\begin{psmallmatrix}K&1\\1^\top&0\end{psmallmatrix}(w,\eta)^\top=(k_0,1)^\top\) and verify \(1^\top w=1\). The prediction is \(w^\top y\); with the chapter's multiplier convention its error variance is \(C(s_0,s_0)-w^\top k_0-\eta\). The result should be nonnegative up to roundoff and should increase when the target is moved away from observed sites.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove that an anisotropic covariance obtained by applying a fixed linear map to spatial differences remains positive definite.
+    answer: >-
+      Let \(c(u-v)\) be a positive-definite stationary covariance and define \(C_A(s,t)=c\{A(s-t)\}\). For any sites set \(u_i=As_i\). Then \(\sum_{ij}a_i a_j C_A(s_i,s_j)=\sum_{ij}a_i a_j c(u_i-u_j)\ge0\) by positive definiteness of \(c\). The map may be singular; validity remains, although distinct spatial directions can then become indistinguishable.
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: >-
+      Derive the covariance between two region-average observations from a point-level covariance and state a numerical quadrature strategy.
+    answer: >-
+      For averages \(Z_A=|A|^{-1}\int_A Z(s)\,ds\) and \(Z_B=|B|^{-1}\int_B Z(t)\,dt\), covariance is \((|A||B|)^{-1}\int_A\int_B C(s,t)\,ds\,dt\). Approximate each region with area-weighted quadrature nodes and form the double weighted sum of point covariances. Refine the nodes until the covariance and resulting kriging predictions stabilize, especially near short-range or singular covariance behavior.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design a blocked evaluation for a space-time environmental monitoring problem, including trend selection, covariance alternatives, support geometry, uncertainty scores, and scaling choices.
+    answer: >-
+      Hold out complete spatial regions and future time windows that match deployment. Fit trends using training blocks only, then compare separable, nonseparable, anisotropic, and SPDE-based covariance models with the same measurement-error treatment. Score RMSE, log density, interval coverage, residual variograms, and calibration by region; document region supports, coordinate projection, mesh or inducing resolution, factorization residuals, and sensitivity to covariance range bounds.

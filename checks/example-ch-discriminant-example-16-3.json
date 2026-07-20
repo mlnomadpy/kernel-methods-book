@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-discriminant",
+  "anchor": "example-16-3",
+  "source_file": "manuscript/chapters/ch-discriminant.md",
+  "source_sha256": "f27402764b981867a5cc70bb9fb9002e06a78ce4557ea53ce079d4275113da5c",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-discriminant-ex3.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "2",
+    "-1",
+    "-2",
+    "0",
+    "3",
+    "6",
+    "0.5",
+    "-0.5",
+    "4",
+    "1.5",
+    "-1.5"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

@@ -1,0 +1,124 @@
+chapter: ch01
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Two necessary conditions fall out of the definition by choosing small coefficient vectors.
+      Taking \(N = 1\), show that any p.d. kernel satisfies \(K(x, x) \ge 0\) for every \(x \in
+      \mathcal{X}\). Taking \(N = 2\) with points \(x, x'\) and the matrix it produces, show that
+      \(K(x, x')^2 \le K(x, x)\, K(x', x')\). Then use the first condition alone to explain in one
+      line why \(K(x, x') = \cos(x + x')\) is not p.d. on \(\mathbb{R}\).
+    answer: For N=1, the quadratic-form condition with coefficient a gives a^2 K(x,x)>=0; taking a=1
+      yields K(x,x)>=0. For two points, the Gram matrix [[K(x,x),K(x,x')],[K(x',x),K(x',x')]] is
+      positive semidefinite. Its determinant is therefore nonnegative, so K(x,x')^2<=K(x,x)K(x',x')
+      (symmetry was used). For K(x,x')=cos(x+x'), the diagonal is cos(2x), which is negative at
+      x=pi/2 because cos(pi)=-1. This violates the N=1 condition, so the kernel is not positive
+      definite on R.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Let \(\mathcal{X} = \mathbb{R}_+\) and \(K(x, x') = \min(x, x')\). Write down the \(3 \times
+      3\) Gram matrix \(\mathbf{K}\) for the points \(x_1 = 1\), \(x_2 = 2\), \(x_3 = 3\). Then
+      exhibit three vectors \(z_1, z_2, z_3 \in \mathbb{R}^3\) with \(\langle z_i, z_j
+      \rangle_{\mathbb{R}^3} = [\mathbf{K}]_{ij}\), and explain how they are the finite-dimensional
+      shadow of the feature map \(\Phi(x) = \mathbf{1}_{[0, x]}\) used to prove that \(\min\) is
+      p.d.
+    answer: "At x=(1,2,3), the Gram matrix is [[1,1,1],[1,2,2],[1,2,3]]. Choose z_1=(1,0,0),
+      z_2=(1,1,0), and z_3=(1,1,1). Their inner products are exactly min(i,j), hence reproduce every
+      Gram entry. These vectors record the unit intervals (0,1], (1,2], and (2,3] accumulated up to
+      each x_i. They are the finite partition version of Phi(x)=1_[0,x] in L2: the L2 inner product
+      measures the length of [0,x_i] intersect [0,x_j], which is min(x_i,x_j)."
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Consider the inhomogeneous kernel \\(K(x, x') = (1 + x x')^2\\) on \\(\\mathcal{X} =
+      \\mathbb{R}\\). Expand it into monomials, read off an explicit feature map \\(\\Phi :
+      \\mathbb{R} \\to \\mathbb{R}^3\\) with \\(K(x, x') = \\langle \\Phi(x), \\Phi(x')
+      \\rangle_{\\mathbb{R}^3}\\), and conclude that \\(K\\) is p.d. two ways: from the feature map,
+      and from the closure rules applied to the constant, linear, and squared-linear kernels."
+    answer: Expanding gives (1+xx')^2=1+2xx'+x^2 x'^2. Hence Phi(x)=(1,sqrt(2)x,x^2) satisfies
+      <Phi(x),Phi(x')>=1+2xx'+x^2x'^2. This explicit feature map proves positive definiteness.
+      Alternatively, the constant kernel 1 and linear kernel xx' are positive definite; nonnegative
+      sums and pointwise products of positive-definite kernels remain positive definite. Thus
+      1+2xx'+(xx')^2 is positive definite by the closure rules.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "Prove directly from the definition that the p.d. kernels on a set \\(\\mathcal{X}\\) form a
+      convex cone: if \\(K_1, K_2\\) are p.d. and \\(c_1, c_2 \\ge 0\\), then \\(c_1 K_1 + c_2
+      K_2\\) is p.d. Then show that a pointwise limit of p.d. kernels is p.d. (You may take symmetry
+      of each \\(K_i\\) as given; check that it too passes to the combination.)"
+    answer: For any finite points and coefficients a, sum_ij a_i a_j[c_1 K_1(x_i,x_j)+c_2 K_2(x_i,x_j)]
+      equals c_1 a^T K_1 a+c_2 a^T K_2 a, which is nonnegative because c_1,c_2>=0. Symmetry is
+      preserved by the same linear combination, proving the convex-cone claim. If K_m converges
+      pointwise to K, then for fixed finite points and a the finite sum a^T K_m a converges to a^T K
+      a. Every term in the sequence is nonnegative, so its limit is nonnegative; pointwise limits
+      also preserve symmetry. Therefore K is positive definite.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Verify the reproducing property by hand in the RKHS of the linear kernel on
+      \(\mathbb{R}^2\), where \(K(x, x') = \langle x, x' \rangle\) and functions are \(f_w(x) =
+      \langle w, x \rangle\) with \(\langle f_w, f_v \rangle_{\mathcal{H}} = \langle w, v \rangle\).
+      Fix \(w = (2, -1)\) and \(x = (3, 5)\). Compute \(f_w(x)\) directly, then identify the kernel
+      section \(K_x\) as some \(f_v\), compute \(\langle f_w, K_x \rangle_{\mathcal{H}}\), and
+      confirm the two numbers agree. State which \(v\) realizes \(K_x\).
+    answer: With w=(2,-1) and x=(3,5), direct evaluation gives f_w(x)=2*3-1*5=1. The section K_x is the
+      function y -> K(x,y)=<x,y>, so K_x=f_v with v=x=(3,5). The RKHS inner product is therefore
+      <f_w,K_x>_H=<w,x>_(R2)=1, exactly f_w(x). This identifies the reproducing identity concretely
+      and shows that the vector realizing the section is v=(3,5).
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Show that \(K(x, x') = (x - x')^2\) is *not* a p.d. kernel on \(\mathbb{R}\), even though it
+      is symmetric and its diagonal vanishes. Do so by writing the \(2 \times 2\) Gram matrix for
+      the points \(x_1 = 0\), \(x_2 = 1\), reading off its eigenvalues, and exhibiting coefficients
+      \((a_1, a_2)\) that make the quadratic form strictly negative. Contrast this with \(\min(x,
+      x')\), which the text shows *is* p.d.
+    answer: For x_1=0 and x_2=1 the Gram matrix is [[0,1],[1,0]]. Its eigenvectors (1,1) and (1,-1) have
+      eigenvalues 1 and -1. Taking a=(1,-1) gives a^T K a=-2<0, so the kernel is not positive
+      definite despite symmetry and a zero diagonal. In fact, for a positive-definite kernel
+      K(x,x)=0 would force K(x,x')=0 for all x' by the two-point inequality. The min kernel avoids
+      the problem because it is an actual L2 inner product of interval indicators.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "Open the two interactive figures of this chapter. In the Gram-matrix heatmap, place a
+      handful of points on the line, switch between the linear, polynomial, and Gaussian kernels,
+      and sweep the bandwidth: confirm that the smallest eigenvalue of the displayed matrix never
+      drops below zero, and describe what shrinking the Gaussian bandwidth does to the off-diagonal
+      entries and to the spread of eigenvalues. Then in the kernel-lab figure, drag a few data
+      points and raise the ridge weight \\(\\lambda\\): report what happens to the fitted curve and
+      relate the stiffening you observe to the bound \\(|f(x) - f(x')| \\le \\lVert f
+      \\rVert_{\\mathcal{H}}\\, d_K(x, x')\\) from the smoothness section."
+    answer: "Expected report: all three kernels produce positive-semidefinite Gram matrices up to
+      floating-point roundoff, so a displayed smallest eigenvalue may be a tiny negative number only
+      at numerical tolerance. Decreasing the Gaussian bandwidth suppresses off-diagonal similarities
+      and moves the matrix toward the identity; its eigenvalues consequently cluster near one
+      instead of showing a few dominant correlated directions. In the regression widget, increasing
+      lambda shrinks the RKHS norm and makes the curve flatter and less responsive to individual
+      points. This matches |f(x)-f(x')|<=||f||_H d_K(x,x'): stronger regularization reduces the norm
+      factor and therefore the permitted variation at a fixed kernel distance."
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: The kernel equips \(\mathcal{X}\) with the distance \(d_K(x, x') = \lVert K_x - K_{x'}
+      \rVert_{\mathcal{H}} = \big(K(x, x) - 2 K(x, x') + K(x', x')\big)^{1/2}\). Using the feature
+      map \(\Phi(x) = K_x\) into the Hilbert space \(\mathcal{H}\), prove that \(d_K\) satisfies the
+      triangle inequality \(d_K(x, z) \le d_K(x, y) + d_K(y, z)\) for all \(x, y, z \in
+      \mathcal{X}\). Then argue that \(d_K\) is only a pseudometric in general by describing when
+      \(d_K(x, x') = 0\) can occur for distinct \(x \ne x'\), and give one concrete kernel where
+      this happens.
+    answer: Since d_K(x,z)=||Phi(x)-Phi(z)||_H, write Phi(x)-Phi(z)=[Phi(x)-Phi(y)]+[Phi(y)-Phi(z)]. The
+      Hilbert-space triangle inequality gives d_K(x,z)<=d_K(x,y)+d_K(y,z). Nonnegativity and
+      symmetry follow from the norm as well. It is only a pseudometric because d_K(x,x')=0 means
+      Phi(x)=Phi(x'), which need not imply x=x'. For the constant kernel K(x,x')=1, every point maps
+      to the same one-dimensional feature vector; consequently d_K(x,x')=sqrt(1-2+1)=0 for every
+      pair, including distinct points. An injective feature map is the additional condition needed
+      for a genuine metric.

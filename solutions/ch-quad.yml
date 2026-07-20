@@ -1,0 +1,113 @@
+chapter: ch-quad
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Show that a quadrature rule is exact on the constant function \(f\equiv 1\) if and only if
+      its weights sum to one. Then, using \(e(w)^2=C-2w^\top z+w^\top Kw\), explain in one sentence
+      why the optimal weights \(w^\star=K^{-1}z\) of Proposition (optimal weights) are generally
+      *not* forced to sum to one, and what property of the kernel would be needed for the constant
+      to lie in the RKHS.
+    answer: For $Q_w[f]=\sum_iw_if(x_i)$, $Q_w[1]=\sum_iw_i$, while $P[1]=1$, proving the equivalence.
+      The unconstrained minimizer of $C-2w^Tz+w^TKw$ satisfies only $Kw=z$, so no mass constraint is
+      imposed and its entries need not sum to one. Exactness on constants is controlled by the
+      constrained rule; to include the constant in the worst-case RKHS guarantee, the function $1$
+      must itself belong to $H_k$ (for example through an explicit constant feature), which is not
+      true for every kernel/domain.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Take \(P=\tfrac12\delta_{a}+\tfrac12\delta_{b}\) with \(a\ne b\), a two-point target, and
+      any normalized kernel with \(k(x,x)=1\). Compute \(C=\mathbb E_{X,X'\sim P}[k(X,X')]\) and the
+      kernel mean \(\mu_P(x)=\tfrac12 k(a,x)+\tfrac12 k(b,x)\). Using the single node \(x_1=a\) with
+      the optimal weight from \(w^\star=K^{-1}z\) (here a scalar), find the weight and the resulting
+      worst-case squared error \(C-z^\top K^{-1}z\). For \(k(a,b)=\rho\), express both in terms of
+      \(\rho\).
+    answer: With $\rho=k(a,b)$, $C=\tfrac14[k(a,a)+k(a,b)+k(b,a)+k(b,b)]=(1+\rho)/2$ and
+      $\mu_P(x)=[k(a,x)+k(b,x)]/2$. At node $a$, $K=[1]$ and $z=\mu_P(a)=(1+\rho)/2$, so
+      $w^*=(1+\rho)/2$. The squared error is $C-z^2=(1+\rho)/2-(1+\rho)^2/4=(1-\rho^2)/4$,
+      nonnegative because a normalized PSD kernel has $|\rho|\le1$.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Prove Proposition (Monte Carlo error) in the biased-estimator form: for i.i.d. nodes and
+      uniform weights, show directly that \\(\\mathbb E[e(w)^2]=\\tfrac1n(\\mathbb
+      E[k(X,X)]-\\mathbb E[k(X,X')])\\), being careful to separate the \\(n\\) diagonal and
+      \\(n(n-1)\\) off-diagonal terms of \\(\\frac{1}{n^2}\\sum_{i,j}k(x_i,x_j)\\). Conclude that
+      the worst-case error is \\(O_P(1/\\sqrt n)\\) and that it does not depend on the placement,
+      only on the kernel and \\(P\\)."
+    answer: For uniform weights, $E[w^TKw]=n^{-2}[nE k(X,X)+n(n-1)E k(X,X')]$. Also
+      $E[w^Tz]=E_{X,X'}k(X,X')=C$. Substitution in $C-2w^Tz+w^TKw$ cancels the off-diagonal
+      population term and leaves $n^{-1}[E k(X,X)-E k(X,X')]$. Thus $E[e^2]=O(1/n)$ and Markov's
+      inequality gives $e=O_P(n^{-1/2})$. This is an expectation over iid placement; a realized rule
+      does depend on its nodes, while the expected rate and constant depend only on $k$ and $P$.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: Reproduce the first herding step of Example (three greedy herding steps) with a coarser grid
+      \(\mathcal X=\{-2,-1,0,1,2\}\) and the same \(P=\mathcal N(0,1)\),
+      \(k(x,x')=e^{-(x-x')^2/2}\). Compute the step-2 acquisition \(\mu_P(x)-k(0,x)\) on this grid,
+      show that it is maximized at \(x=\pm2\), and verify numerically that adding \(x_2=-2\) with
+      equal weights *raises* the error above \(E_1^2\). Explain why this does not contradict the
+      convergence claim of Section (super-samples and the rate).
+    answer: On $(-2,-1,0,1,2)$, $\mu_P=(0.260130,0.550695,0.707107,0.550695,0.260130)$ and
+      $k(0,x)=(0.135335,0.606531,1,0.606531,0.135335)$. Their difference is
+      $(0.124795,-0.055835,-0.292893,-0.055835,0.124795)$, maximized at $\pm2$, so the tie rule
+      selects $-2$. The one-node squared error is $0.163137$; equal weights on $(0,-2)$ give
+      $0.177781$, an increase. Fixed Frank--Wolfe steps need not decrease the objective every
+      iteration, while the theorem is an asymptotic upper bound; line search or optimal reweighting
+      would guarantee a nonincrease.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Show that Bayesian quadrature reproduces optimal weighting. Starting from the jointly
+      Gaussian vector \(\big(f(x_1),\dots,f(x_n),P[f]\big)\) with the covariances
+      \(K_{ij}=k(x_i,x_j)\), \(\operatorname{Cov}(P[f],f(x_i))=z_i\), and
+      \(\operatorname{Var}(P[f])=C\), apply the Gaussian conditioning formula to derive the
+      posterior mean \(z^\top K^{-1}f\) and variance \(C-z^\top K^{-1}z\) of Definition (Bayesian
+      quadrature). Identify the posterior-mean weights with \(w^\star=K^{-1}z\) and the posterior
+      variance with \(e(w^\star)^2\).
+    answer: For the joint Gaussian vector, $Cov(f_X)=K$, $Cov(P[f],f_X)=z^T$, and $Var(P[f])=C$.
+      Gaussian conditioning therefore gives $E[P[f]\mid f_X]=z^TK^{-1}f_X$ and $Var(P[f]\mid
+      f_X)=C-z^TK^{-1}z$ (using a pseudoinverse in a compatible singular case). Since
+      $z^TK^{-1}f_X=(K^{-1}z)^Tf_X$, the weights are exactly $w^*=K^{-1}z$, and the conditional
+      variance equals the optimized RKHS worst-case squared error.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Derive the herding acquisition from the Frank-Wolfe step. For
+      \(J(g)=\tfrac12\|g-\mu_P\|_{\mathcal H}^2\) on \(\mathcal
+      M=\overline{\mathrm{conv}}\{k(x,\cdot)\}\), compute the gradient \(\nabla
+      J(g_{t-1})=g_{t-1}-\mu_P\), and show that the conditional-gradient vertex
+      \(\arg\min_{x}\langle\nabla J(g_{t-1}),k(x,\cdot)\rangle\) equals
+      \(\arg\max_x[\mu_P(x)-g_{t-1}(x)]\). Then verify that the step
+      \(g_t=(1-\tfrac1t)g_{t-1}+\tfrac1t k(x_t,\cdot)\) unrolls to the uniform average
+      \(g_t=\frac1t\sum_{s\le t}k(x_s,\cdot)\).
+    answer: The Fréchet gradient of $J(g)=\tfrac12\|g-\mu_P\|^2$ is $g-\mu_P$. By reproduction, $\langle
+      g_{t-1}-\mu_P,k(x,\cdot)\rangle=g_{t-1}(x)-\mu_P(x)$, so minimizing the linear oracle is
+      maximizing $\mu_P(x)-g_{t-1}(x)$. For the averaging update, if
+      $g_{t-1}=(t-1)^{-1}\sum_{s<t}k(x_s,\cdot)$, then
+      $(1-1/t)g_{t-1}+t^{-1}k(x_t,\cdot)=t^{-1}\sum_{s\le t}k(x_s,\cdot)$; the base case $t=1$ is
+      immediate.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: A determinantal point process on a finite candidate set \(\{x_1,\dots,x_m\}\) with kernel
+      matrix \(K\) draws a subset \(S\) with probability proportional to \(\det K_S\), the principal
+      minor on \(S\). For a size-\(2\) draw, show that \(\Pr(\{i,j\})\propto
+      k(x_i,x_i)k(x_j,x_j)-k(x_i,x_j)^2\), and deduce that for a normalized kernel the pair is
+      chosen with probability proportional to \(1-k(x_i,x_j)^2\). Explain in one or two sentences
+      how this realizes the same self-avoidance that herding produces greedily, and why it therefore
+      tends to place quadrature nodes far apart in feature space.
+    answer: The two-point principal minor is
+      $det\begin{pmatrix}k_{ii}&k_{ij}\\k_{ij}&k_{jj}\end{pmatrix}=k_{ii}k_{jj}-k_{ij}^2$. For a
+      normalized kernel this is $1-k_{ij}^2$. It vanishes for collinear identical feature vectors
+      and grows as their absolute inner product falls, so the DPP probabilistically repels redundant
+      points. Herding creates analogous repulsion deterministically through its residual
+      acquisition, and both tend to span a larger feature-space volume rather than cluster nodes.

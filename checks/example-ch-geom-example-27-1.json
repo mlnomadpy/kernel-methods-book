@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-geom",
+  "anchor": "example-27-1",
+  "source_file": "manuscript/chapters/ch-geom.md",
+  "source_sha256": "f15d011647625cd3ad0a9cf4acc91e2f178f84c7f690371522ff064657dc68d0",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-geom-ex1.py"
+  ],
+  "numeric_literals": [
+    "5",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "-1",
+    "1.382",
+    "3.618",
+    "-2",
+    "72",
+    "144",
+    "0.2895",
+    "0.0789",
+    "0.0263",
+    "0.2727",
+    "0.0909",
+    "0.5",
+    "0.2957",
+    "0.178",
+    "0.3112",
+    "0.2224",
+    "0.1221",
+    "0.2511",
+    "0.0268",
+    "0.0794",
+    "0.0167",
+    "10",
+    "0.0033",
+    "50"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

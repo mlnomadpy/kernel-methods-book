@@ -1,0 +1,110 @@
+chapter: ch-distreg
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Explain, in terms of the two-stage sampled model, why distribution regression has two
+      sources of error while ordinary regression has one. Name the integer that controls each, say
+      which limit \(\ell\to\infty\) or \(N\to\infty\) removes each error, and give a one-sentence
+      example of a real task whose natural input is a bag of samples rather than a vector.
+    answer: There are ell bags, controlling second-stage regression/generalization error across
+      distributions, and N samples per bag (or N_i), controlling error in each empirical mean
+      embedding. Sending ell->infinity removes the ordinary supervised sampling error if bag size is
+      adequate; sending N->infinity removes measurement error in the distribution-valued inputs.
+      Examples include predicting a patient's diagnosis from a bag of cell measurements, a region's
+      outcome from household samples, or a molecule's property from conformer samples.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Take the two bags \(A=\{0,1\}\) and \(B=\{2,3\}\) on \(\mathbb R\) with base kernel
+      \(k(a,b)=e^{-(a-b)^2/2}\). Compute the three empirical inner products
+      \(\langle\widehat\mu_A,\widehat\mu_A\rangle\), \(\langle\widehat\mu_B,\widehat\mu_B\rangle\),
+      and \(\langle\widehat\mu_A,\widehat\mu_B\rangle\) as averages of four base-kernel values each,
+      then form the squared empirical MMD
+      \(D_{AB}=\langle\widehat\mu_A,\widehat\mu_A\rangle+\langle\widehat\mu_B,\widehat\mu_B\rangle-2\langle\widehat\mu_A,\widehat\mu_B\rangle\)
+      and the Gaussian-on-MMD value \(\mathcal K_1(A,B)=e^{-D_{AB}/2}\). Report each number.
+    answer: For either A or B, the within average is [2+2e^{-1/2}]/4=0.803265. The cross values are
+      e^{-2},e^{-9/2},e^{-1/2},e^{-2}; their mean is 0.222078. Hence
+      D_AB=0.803265+0.803265-2(0.222078)=1.162376. With gamma=1, K_1(A,B)=exp(-D_AB/2)=0.559234.
+      Diagonals are included because these are empirical embedding inner products/biased MMD
+      distances.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: "Continue Example (predicting a label): keeping \\(\\gamma=1\\) fixed, recompute the
+      held-out prediction \\(\\widehat f(P_3)=\\mathbf k_\\ast^\\top(\\mathbf
+      K_{\\mathrm{tr}}+\\ell\\lambda I)^{-1}\\mathbf y\\) for the two ridge values
+      \\(\\lambda=0.2\\) and \\(\\lambda=0.01\\). Explain the direction each prediction moves
+      relative to the value \\(1.8719\\) at \\(\\lambda=0.05\\), and relate it to the bias term of
+      the risk decomposition."
+    answer: Using the worked Gram vector, lambda=0.2 (ell lambda=0.6) gives prediction 1.3773, while
+      lambda=0.01 (ell lambda=0.03) gives 2.1094. Relative to 1.8719 at lambda=0.05, stronger ridge
+      shrinks toward a flatter, more biased predictor; weaker ridge follows the held-out bag
+      geometry more aggressively and slightly overshoots the true label 2. The trend is exactly the
+      bias part of the risk decomposition trading against variance/conditioning.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Prove that the linear embedding kernel \(\mathcal
+      K_{\mathrm{lin}}(P,Q)=\langle\mu_P,\mu_Q\rangle_{\mathcal H}\) is positive definite directly
+      from the quadratic form, and identify its feature map. Then show it equals \(\mathbb E_{X\sim
+      P,\,Y\sim Q}[k(X,Y)]\), so its empirical version is the set kernel
+      \(\frac{1}{|A||B|}\sum_{a,b}k(a,b)\).
+    answer: For distribution coefficients c_i, sum_ij c_i c_j K_lin(P_i,P_j)=||sum_i c_i
+      mu_{P_i}||_H^2>=0, so the feature map is P->mu_P. Also <mu_P,mu_Q>=<E_X k(X,·),E_Y
+      k(Y,·)>=E_{X,Y}k(X,Y) by bilinearity/Bochner integration. Replacing expectations with bag
+      averages gives (|A||B|)^{-1}sum_{a in A,b in B}k(a,b), the standard set kernel.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Establish the finite-bag rate directly. For \(\widehat\mu_P=\frac1N\sum_{a=1}^N K_{x^a}\)
+      with \(x^a\overset{\text{i.i.d.}}{\sim}P\) and a bounded base kernel \(k(x,x)\le\kappa\), show
+      \(\mathbb E\|\widehat\mu_P-\mu_P\|_{\mathcal H}^2\le\kappa/N\), hence
+      \(\|\widehat\mu_P-\mu_P\|_{\mathcal H}=O_P(N^{-1/2})\). Then combine this with the Lipschitz
+      lemma to bound \(\|\Psi(\widehat P)-\Psi(P)\|_{\mathcal H_{\mathcal K}}\) in expectation,
+      showing the finite-bag error propagates to the second stage at the same \(N^{-1/2}\) rate.
+    answer: "Expand the mean-zero average: E||mu_hat-mu||^2=N^{-2}sum_a E||k_{X_a}-mu||^2 because
+      independent cross terms vanish. This is at most N^{-1}E||k_X||^2=N^{-1}E k(X,X)<=kappa/N.
+      Markov or Jensen then gives norm error O_P(N^{-1/2}) and E||mu_hat-mu||<=sqrt(kappa/N). If the
+      second-stage feature map is L-Lipschitz in embedding norm, E||Psi(P_hat)-Psi(P)||<=L
+      sqrt(kappa/N), so bag noise propagates at the same root-N rate."
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: "Prove the Lipschitz lemma's key inequality without quoting it: for the Gaussian-on-MMD
+      kernel, show \\(\\|\\Psi(P)-\\Psi(P')\\|_{\\mathcal H_{\\mathcal
+      K}}^2=2\\big(1-e^{-\\|\\mu_P-\\mu_{P'}\\|^2/2\\gamma^2}\\big)\\le\\gamma^{-2}\\|\\mu_P-\\mu_{\
+      P'}\\|^2\\). Deduce that as \\(\\gamma\\to\\infty\\) the second-stage feature map becomes ever
+      flatter in the embedding, and explain what that means for the bias-variance trade-off of the
+      two-stage estimator."
+    answer: Kernel-section distance gives ||Psi(P)-Psi(P')||^2=2[1-exp(-d^2/(2gamma^2))] with
+      d=||mu_P-mu_P'||. Since 1-e^{-a}<=a, this is at most d^2/gamma^2. Thus the feature map is
+      1/gamma-Lipschitz. As gamma grows, all second-stage features become nearly parallel/constant
+      and finite-bag variance sensitivity falls, but distinctions among genuinely different
+      distributions are also compressed, increasing approximation bias. Small gamma does the
+      reverse, so it must be validated jointly with ridge.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: Consider the linear embedding kernel with the linear base kernel \(k(x,x')=x^\top x'\) on
+      \(\mathbb R^d\). Show that then \(\mu_P=\mathbb E_{X\sim P}[X]=m_P\), the ordinary mean, so
+      \(\mathcal K_{\mathrm{lin}}(P,Q)=m_P^\top m_Q\) and the two-stage regressor can only fit
+      functions of the input mean. Conclude that this choice is blind to any feature of \(P\) beyond
+      its mean, and state which property of the base kernel, in the language of the referenced
+      chapter, must hold for the two-stage estimator to be able to distinguish distributions with
+      equal means. Finally, argue that using a characteristic base kernel is necessary but not
+      sufficient for the two-stage estimator to be consistent, and name the extra ingredient the
+      second stage requires.
+    answer: "For linear k, the canonical feature is x itself and mu_P=m_P=E X. Therefore
+      K_lin(P,Q)=m_P^T m_Q, so every second-stage prediction depends only on the input mean.
+      Equal-mean distributions with different variance, shape, or tails are indistinguishable. The
+      base kernel must be characteristic for its mean embedding to identify distributions. This is
+      necessary but not sufficient: the second-stage kernel/RKHS must also be rich enough (for
+      example universal on the embedding domain), regularized consistently, and supplied with ell,N
+      growth sufficient for learning the target functional."

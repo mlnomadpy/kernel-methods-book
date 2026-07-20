@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-apps",
+  "anchor": "example-44-1",
+  "source_file": "manuscript/chapters/ch-apps.md",
+  "source_sha256": "7a20e166c97ac7b5f0698ffe3647817e8d7274429074979aaa17eb6f926ec12e",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-apps-ex1.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "0.8415",
+    "0.9093",
+    "0.1411",
+    "-0.7568",
+    "-0.9589",
+    "2.5",
+    "1.7078",
+    "-1.4639",
+    "-0.8783",
+    "-0.2928",
+    "0.2928",
+    "0.8783",
+    "1.4639",
+    "0.1",
+    "0.5",
+    "2.0",
+    "0.1786",
+    "0.1686",
+    "0.1736",
+    "0.0935",
+    "0.3724",
+    "0.2330",
+    "0.0025"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

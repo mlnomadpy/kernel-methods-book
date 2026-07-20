@@ -1,0 +1,163 @@
+chapter: ch08
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "Read Bochner's theorem as a statement about spectral mass. For each of the following
+      translation-invariant profiles on \\(\\mathbb{R}\\), name the spectral measure \\(\\mu\\) and
+      say whether the profile is positive definite: (a) the constant \\(\\varphi(t)=C\\) with
+      \\(C\\ge 0\\); (b) the single cosine \\(\\varphi(t)=\\cos(\\omega_0 t)\\); (c) the box
+      \\(\\varphi(t)=\\mathbf{1}_{[-1,1]}(t)\\). In one sentence, explain why inspecting the shape
+      of \\(\\varphi\\) in the space variable is the wrong test, and what one should inspect
+      instead."
+    answer: "Under the chapter's Fourier convention, the constant C is represented by the positive
+      measure C delta_0 and is positive definite. cos(omega_0 t) is represented by
+      (delta_{omega_0}+delta_{-omega_0})/2, also positive, so it is positive definite. The box
+      profile has Fourier transform proportional to sin(omega)/omega, which changes sign; it
+      therefore cannot be the transform of a positive measure and is not positive definite.
+      Pointwise nonnegativity or visual smoothness of phi is irrelevant: Bochner requires
+      nonnegative spectral mass."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Let \(P_\theta(x)=e^{-\theta}\theta^x/x!\) be the Poisson model on \(x\in\mathbb{N}_0\),
+      with scalar parameter \(\theta\gt 0\). Compute the Fisher score
+      \(\Phi_\theta(x)=\partial_\theta\log P_\theta(x)\) and the Fisher information
+      \(I(\theta)=\mathbb{E}\big[\Phi_\theta(x)^2\big]\). Then write down the whitened Fisher vector
+      \(\phi_\theta(x)=I(\theta)^{-1/2}\Phi_\theta(x)\) and the resulting one-dimensional Fisher
+      kernel \(K(x,x')=\phi_\theta(x)\phi_\theta(x')\). Which pairs \((x,x')\) receive a positive
+      kernel value, and which a negative one?
+    answer: log P_theta(x)=-theta+x log theta-log(x!), so the score is
+      Phi_theta(x)=x/theta-1=(x-theta)/theta. Since Var(X)=theta and the score has mean zero,
+      I(theta)=E[(X-theta)^2]/theta^2=1/theta. The whitened feature is
+      phi_theta(x)=sqrt(theta)(x-theta)/theta=(x-theta)/sqrt(theta), giving
+      K(x,x')=(x-theta)(x'-theta)/theta. It is positive when both counts lie on the same side of
+      theta, negative when they lie on opposite sides, and zero when either count equals theta (when
+      theta is an attainable integer).
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Use Bochner's theorem to decide the positive definiteness of the triangle (tent) profile
+      \(\varphi(t)=\max(0,\,1-|t|)\) on \(\mathbb{R}\). Rather than integrating directly, write
+      \(\varphi\) as a self-convolution \(\varphi=b\ast b\) of a box \(b\), and use the convolution
+      theorem to compute \(\hat\varphi\). Conclude from the sign of \(\hat\varphi\) that \(\varphi\)
+      is a kernel, and contrast this with the box \(\mathbf{1}_{[-1,1]}\) of the text, which is not.
+    answer: Let b=1_{[-1/2,1/2]}. The convolution (b*b)(t) is the overlap length of the intervals
+      [-1/2,1/2] and [t-1/2,t+1/2], namely max(0,1-|t|). By the convolution theorem, hat phi=hat b
+      squared (or |hat b|^2 for the complex convention), which is everywhere nonnegative; explicitly
+      it is a squared sinc up to constants. Bochner therefore certifies the tent profile as positive
+      definite. The box itself has a sinc transform rather than a squared sinc, and its alternating
+      sign is why the box fails.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "Prove the conformal-transformation closure property of Proposition (closure properties): if
+      \\(k\\) is positive definite and \\(f:\\mathcal X\\to\\mathbb{R}\\) is any real-valued
+      function, then \\(k_f(x,x')=f(x)\\,k(x,x')\\,f(x')\\) is positive definite. Do it directly
+      from the quadratic form, without invoking a feature map, and then identify the feature map of
+      \\(k_f\\) in terms of the feature map \\(\\Phi\\) of \\(k\\)."
+    answer: For arbitrary finite x_i and coefficients c_i, sum_ij c_i c_j f(x_i)k(x_i,x_j)f(x_j) equals
+      sum_ij d_i d_j k(x_i,x_j) with d_i=c_i f(x_i). Positive definiteness of k makes this
+      nonnegative, and symmetry is immediate. If k(x,x')=<Phi(x),Phi(x')>, then Phi_f(x)=f(x)Phi(x)
+      satisfies <Phi_f(x),Phi_f(x')>=f(x)k(x,x')f(x'), identifying the transformed feature map even
+      when f changes sign.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Show that the negative squared Euclidean distance \(k(x,x')=-\|x-x'\|^2\) on
+      \(\mathbb{R}^d\) is conditionally positive definite, that is, \(\sum_{i,j}c_i
+      c_j\,k(x_i,x_j)\ge 0\) whenever \(\sum_i c_i=0\). Deduce, via the Theorem (positive definite
+      exponentials), that the Gaussian \(\exp(-t\|x-x'\|^2)\) is positive definite for every \(t\gt
+      0\), giving a Bochner-free certificate for the Gaussian kernel.
+    answer: "Expand the constrained quadratic form: sum_ij c_i c_j[-||x_i||^2-||x_j||^2+2x_i^T x_j]. The
+      first two sums vanish because each contains the factor sum_i c_i=0. The remainder is 2(sum_i
+      c_i x_i)^T(sum_j c_j x_j)=2||sum_i c_i x_i||^2>=0. Thus -||x-x'||^2 is conditionally positive
+      definite. The exponential theorem then gives exp[t(-||x-x'||^2)]=exp(-t||x-x'||^2) positive
+      definite for every t>0, without computing a Fourier transform."
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: Open the interactive figure above. It draws frequencies \(\omega_1,\dots,\omega_D\) from the
+      Gaussian's Bochner measure and averages the matching cosine features, which is exactly the
+      random Fourier feature construction of Rahimi and Recht (2007). Increase the number of
+      features \(D\) and watch the sampled kernel tighten onto the true Gaussian profile. Report
+      roughly how large \(D\) must be before the approximation is visually indistinguishable from
+      the target, and explain, using the fact that
+      \(\varphi(x-y)=\mathbb{E}_{\omega\sim\mu}\cos(\omega^\top(x-y))\), why the average sharpens as
+      \(D\) grows.
+    answer: "A valid report should record the random seed and the smallest D at which the sampled curve
+      stays within a chosen visual or numerical tolerance; there is no universal threshold because
+      it depends on the plotted domain, seed, and tolerance. The mechanism is Monte Carlo: each
+      cosine feature is a bounded draw whose expectation is phi(x-y), so their empirical average
+      converges pointwise by the law of large numbers and typically fluctuates on the D^{-1/2}
+      scale. Increasing D therefore reduces the visible ripples, while repeated seeds reveal the
+      remaining sampling uncertainty."
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: "In the generative-classification setting of Section (relation to classification), the class
+      priors are softmax-parametrized, \\(\\pi_k=e^{\\alpha_k}/\\sum_{k'}e^{\\alpha_{k'}}\\). Fill
+      in the derivation the text leaves as an exercise: show that"
+    answer: Differentiate P(x)=sum_j P(x|Y=j)pi_j. The softmax identity gives partial pi_j/partial
+      alpha_k=pi_j(delta_{jk}-pi_k). Therefore (1/P(x))partial P(x)/partial alpha_k=sum_j
+      P(x|j)pi_j[delta_{jk}-pi_k]/P(x). The first part is P(x|k)pi_k/P(x)=P(Y=k|x); the second is
+      pi_k sum_j P(Y=j|x)=pi_k. Their difference is P(Y=k|x)-pi_k. Hence the prior-score coordinates
+      measure posterior evidence relative to the baseline prior and sum to zero across classes.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: Work on the additive semigroup of natural numbers \((\mathbb{N}_0,+,\mathrm{Id})\), whose
+      bounded semicharacters are the geometric sequences \(\rho_t(n)=t^n\) with \(t\in[-1,1]\). Show
+      that the sequence \(\varphi(n)=\dfrac{1}{n+1}\) is a positive definite function on this
+      semigroup by exhibiting it as a moment sequence, \(\varphi(n)=\int_{-1}^{1}t^n\,d\mu(t)\), for
+      an explicit positive measure \(\mu\). Then verify positive definiteness directly, without
+      quoting the integral-representation theorem, and identify which classical moment problem this
+      instance recovers.
+    answer: Take mu to be Lebesgue measure on [0,1], viewed as a positive measure supported inside
+      [-1,1]. Then integral t^n dmu(t)=integral_0^1 t^n dt=1/(n+1). Directly, for any n_i and real
+      a_i, sum_ij a_i a_j phi(n_i+n_j)=integral_0^1 sum_ij a_i a_j t^{n_i+n_j}dt=integral_0^1[sum_i
+      a_i t^{n_i}]^2dt>=0. This proves semigroup positive definiteness without the representation
+      theorem. It is the classical Hausdorff moment problem on [0,1].
+  - number: 9
+    kind: computation
+    status: draft
+    prompt: Work in \(d=1\) with \(\ell=1\), where the Matern spectral density is \(\hat
+      k_\nu(\omega)\propto(2\nu+\omega^2)^{-(\nu+1/2)}\). (a) Show that the \(2m\)-th spectral
+      moment \(\int_{\mathbb{R}}\omega^{2m}\hat k_\nu(\omega)\,d\omega\) is finite if and only if
+      \(m\lt\nu\), and read off how many mean-square derivatives the
+      \(\nu=\tfrac12,\tfrac32,\tfrac52\) kernels give. (b) Let \(\nu\to\infty\) in the normalized
+      spectrum \((1+\omega^2/2\nu)^{-(\nu+1/2)}\) and show it tends to the Gaussian spectrum
+      \(e^{-\omega^2/2}\), so the family acquires finite spectral moments of every order only in the
+      limit. (c) Reproduce the \(r=0.5\) column of the worked example from the half-integer closed
+      forms, confirming \(k_{1/2}(0.5)=e^{-1/2}\) and
+      \(k_{3/2}(0.5)=(1+\tfrac{\sqrt3}{2})e^{-\sqrt3/2}\).
+    answer: At large |omega| the 2m-moment integrand behaves as |omega|^{2m-2nu-1}; its tail is
+      integrable exactly when 2m-2nu-1<-1, or m<nu. Thus nu=1/2 has no mean-square derivative,
+      nu=3/2 has one, and nu=5/2 has two. Taking logs of the normalized spectrum gives
+      -(nu+1/2)log(1+omega^2/(2nu))->-omega^2/2, proving the Gaussian limit and all finite moments
+      only there. Numerically, k_{1/2}(0.5)=e^{-0.5}=0.606531, while
+      k_{3/2}(0.5)=(1+sqrt(3)/2)e^{-sqrt(3)/2} approximately 0.784888.
+  - number: 10
+    kind: proof
+    status: draft
+    prompt: The spectral mixture kernel of Wilson and Adams (2013) is \(k(\tau)=\sum_{q=1}^Q
+      w_q\,e^{-2\pi^2\tau^2 v_q}\cos(2\pi\mu_q\tau)\). (a) Prove it is positive definite directly
+      from Bochner by exhibiting its spectral density as a nonnegative symmetric measure, a mixture
+      of Gaussian bumps at \(\pm\mu_q\). (b) Show that a single component with \(\mu_1=0\) is the
+      squared-exponential kernel, and identify its length scale \(\ell\) in terms of \(v_1\). (c)
+      Explain why a component with \(\mu_q\neq 0\) can drive \(k(\tau)\) below zero for some
+      \(\tau\), which no single Gaussian or Matern kernel can do, and what structure in the data
+      this negative correlation lets the kernel capture.
+    answer: With Fourier phase e^{2pi i s tau}, one component is generated by the nonnegative symmetric
+      density (w_q/2)[N(s;mu_q,v_q)+N(s;-mu_q,v_q)]. Its transform is w_q exp(-2pi^2 v_q
+      tau^2)cos(2pi mu_q tau); summing components preserves nonnegative spectral mass and positive
+      definiteness. For mu_1=0 the component is squared exponential. Matching exp[-tau^2/(2ell^2)]
+      gives ell=1/(2pi sqrt(v_1)). When mu_q is nonzero, the cosine changes sign and can outweigh
+      other components at selected lags, representing oscillation, seasonality, and negative
+      correlation—structure unavailable to a single everywhere-positive Gaussian or Matern profile.

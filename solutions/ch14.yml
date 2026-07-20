@@ -1,0 +1,164 @@
+chapter: ch14
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "Schoenberg's theorem says that \\(K(\\mathbf{x}, \\mathbf{y}) = \\kappa(\\langle
+      \\mathbf{x}, \\mathbf{y} \\rangle)\\) is positive definite on the sphere of every Hilbert
+      space exactly when \\(\\kappa\\) has a power series with non-negative coefficients. Decide
+      which of the following univariate functions passes the test on \\([-1, 1]\\), and for each one
+      that fails, name the offending coefficient: (a) the exponential \\(\\kappa(u) = e^{\\alpha(u -
+      1)}\\) with \\(\\alpha \\gt 0\\); (b) the inverse polynomial \\(\\kappa(u) = 1/(2 - u)\\); (c)
+      the polynomial \\(\\kappa(u) = (c + u)^p\\) with \\(c \\geq 0\\) and integer \\(p \\geq 1\\);
+      (d) \\(\\kappa(u) = 1 - u\\); (e) \\(\\kappa(u) = \\cos u\\). For (b), expand the geometric
+      series \\(1/(2 - u) = \\tfrac{1}{2}\\sum_{j \\geq 0} (u/2)^j\\) and read off the sign of every
+      coefficient."
+    answer: For (a), e^{alpha(u-1)}=e^{-alpha}sum_{j>=0}alpha^j u^j/j!, so all coefficients are
+      nonnegative. For (b), (1/2)sum_{j>=0}(u/2)^j has positive coefficients. For (c), the binomial
+      coefficients C(p,j)c^{p-j} are nonnegative when c>=0. All three pass. Function (d) has
+      coefficient -1 on u and fails. Function (e) has series 1-u^2/2!+u^4/4!-..., whose u^2
+      coefficient is negative, so it fails the every-Hilbert-sphere criterion.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Take two unit vectors \(\mathbf{z}, \mathbf{z}'\) on the sphere separated by angle \(\theta
+      = \pi/3\), so \(\langle \mathbf{z}, \mathbf{z}' \rangle = \tfrac{1}{2}\). (a) Using the table
+      of dot-product kernels, evaluate the degree-1 arc-cosine kernel
+      \(\tfrac{1}{\pi}\big(\sin\theta + (\pi - \theta)\cos\theta\big)\) and Vovk's degree-3 kernel
+      \(\tfrac{1}{3}(1 + u + u^2)\) at this angle, to three decimals. (b) Confirm the identity
+      \(\lVert \mathbf{z} - \mathbf{z}' \rVert^2 = 2 - 2\langle \mathbf{z}, \mathbf{z}' \rangle\)
+      here, and use it to check that the exponential kernel \(e^{\alpha(\langle \mathbf{z},
+      \mathbf{z}' \rangle - 1)}\) equals the Gaussian \(e^{-\frac{\alpha}{2}\lVert \mathbf{z} -
+      \mathbf{z}' \rVert^2}\) at \(\alpha = 2\). (c) Evaluate the degree-0 angular part
+      \(J_0(\theta) = \pi - \theta\) and confirm it decreases as the angle opens, consistent with
+      its reading as a count of separating hyperplanes.
+    answer: At theta=pi/3, the degree-one arc-cosine value is [sqrt(3)/2+(2pi/3)(1/2)]/pi approximately
+      0.609. Vovk degree three gives (1+1/2+1/4)/3=7/12 approximately 0.583. The squared chord
+      distance is 2-2(1/2)=1. With alpha=2, both exp[2(1/2-1)] and exp[-(2/2)*1] equal e^{-1}=0.368.
+      Finally J_0=pi-pi/3=2pi/3 approximately 2.094; it falls from pi to zero as the angle opens
+      from zero to pi, matching decreasing shared half-space activation.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Derive the degree-0 arc-cosine kernel from a random layer of step neurons. Let \(\sigma\) be
+      the Heaviside step, \(\sigma(t) = 1\) if \(t \gt 0\) and \(0\) otherwise, and draw
+      \(\mathbf{w} \sim \mathcal{N}(0, I)\). Show that
+    answer: The feature product is the indicator that both Gaussian projections are positive, so its
+      expectation is that joint event's probability. Rotational invariance lets us project w onto
+      span{x,y}; its direction there is uniform on the circle. The directions whose dot products
+      with both inputs are positive form the intersection of two semicircles, an arc of length
+      pi-theta out of total length 2pi. Thus K_RF=(pi-theta)/(2pi), depending only on angle.
+      Cho-Saul's J_0=pi-theta differs only by the conventional factor 2pi. Positive rescaling of x
+      does not change sign(w^T x), so neither event nor kernel changes.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Make precise the claim that a wide random layer is a Monte Carlo estimate of
+      \(K_{\mathrm{RF}}\). Fix inputs \(\mathbf{x}, \mathbf{y}\), draw \(\mathbf{w}_1, \ldots,
+      \mathbf{w}_m\) independently from \(\mathcal{N}(0, I)\), and set the empirical kernel
+    answer: Let xi_i=sigma(w_i^T x)sigma(w_i^T y). These variables are iid with mean K_RF and variance
+      v. Linearity gives E[Khat_m]=m^{-1}sum_i E xi_i=K_RF. Independence gives
+      Var(Khat_m)=m^{-2}sum_i Var(xi_i)=v/m, so standard deviation is sqrt(v/m)=O(m^{-1/2}); the law
+      of large numbers gives convergence. Increasing width therefore reduces Monte Carlo error
+      around the same population expectation. With frozen features it does not adapt or move the
+      target kernel itself.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Derive the two-term neural tangent kernel for the two-layer network \(f_\theta(\mathbf{x}) =
+      \tfrac{1}{\sqrt{m}} \sum_{i=1}^m v_i\, \sigma(\mathbf{w}_i^\top \mathbf{x})\) with parameters
+      \(\theta = (v_i, \mathbf{w}_i)_i\). (a) Compute the two blocks of the gradient, \(\partial
+      f_\theta / \partial v_i\) and \(\nabla_{\mathbf{w}_i} f_\theta\), and check that each carries
+      a factor \(1/\sqrt{m}\). (b) Form the gradient inner product \(\langle \nabla_\theta
+      f_{\theta_0}(\mathbf{x}), \nabla_\theta f_{\theta_0}(\mathbf{y}) \rangle\), summing both
+      blocks over \(i\). (c) With \(\mathbf{w}_i, v_i\) drawn from \(\mathcal{N}(0, I)\) and
+      \(\mathbb{E}[v_i^2] = 1\), take \(m \to \infty\) and apply the law of large numbers to obtain
+    answer: Differentiation gives partial f/partial v_i=m^{-1/2}sigma(w_i^T x) and
+      grad_{w_i}f=m^{-1/2}v_i sigma'(w_i^T x)x. The tangent inner product is m^{-1}sum_i
+      sigma(w_i^Tx)sigma(w_i^Ty)+m^{-1}sum_i v_i^2 sigma'(w_i^Tx)sigma'(w_i^Ty)(x^Ty). By
+      independence, E[v_i^2]=1, and the law of large numbers, these averages converge to the two
+      stated expectations. The first term is the output-weight/random-feature kernel. The second
+      records hidden-weight derivatives; freezing w_i deletes that gradient block and leaves K_RF.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive figure above in the section on random feature kernels. It plots a
+      target dot-product kernel against the estimate produced by a finite bank of \\(D\\) random
+      features, the same object a width-\\(D\\) hidden layer computes. Start at small \\(D\\), where
+      the estimate is visibly rough and rattles around the smooth target curve, then raise \\(D\\)
+      and watch the estimate settle onto its infinite-width limit. Answer three questions from what
+      you see: (a) roughly how does the size of the wiggle around the target shrink as you multiply
+      \\(D\\) by four, and does that match the \\(1/\\sqrt{m}\\) rate you proved above? (b) the
+      target curve itself never moves as \\(D\\) grows, only the estimate tightens onto it; which
+      fact about frozen random features does that illustrate, as opposed to what would happen if the
+      layer were being trained? (c) in the language of the chapter, in what precise sense is each
+      additional random feature one more Monte Carlo sample of the population inner product
+      \\(\\mathbb{E}_{\\mathbf{w}}[\\sigma(\\mathbf{w}^\\top \\mathbf{x})\\sigma(\\mathbf{w}^\\top
+      \\mathbf{y})]\\)?"
+    answer: Multiplying D by four should reduce typical wiggle amplitude by about one half, consistent
+      with D^{-1/2}, although a single draw need not be monotone. The unchanged target curve shows
+      that frozen random features approximate a fixed population kernel; training hidden features
+      would change their distribution and hence the representation being compared. Each new neuron
+      supplies one independent sample of the random variable sigma(w^Tx)sigma(w^Ty). The empirical
+      layer inner product is their sample mean, whose expectation is the population kernel and whose
+      variance falls inversely with D.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: Explain, and then quantify, why the lazy regime performs no feature learning. Consider the
+      linearization \(f_\theta(\mathbf{x}) \approx f_{\theta_0}(\mathbf{x}) + \langle \theta -
+      \theta_0,\, \nabla_\theta f_{\theta_0}(\mathbf{x}) \rangle\) around initialization. (a) Argue
+      from the \(1/\sqrt{m}\) prefactor of \(f_\theta = \tfrac{1}{\sqrt{m}}\sum_i v_i
+      \sigma(\mathbf{w}_i^\top \mathbf{x})\) that changing the output by an order-one amount
+      requires each of the \(m\) hidden weights to move by only about \(1/\sqrt{m}\), which vanishes
+      as \(m \to \infty\). (b) Conclude that the feature map \(\nabla_\theta f_{\theta_0}\) is
+      frozen throughout training, so the trained model is a linear predictor in a fixed feature
+      space, that is kernel ridge regression with \(K_{\mathrm{NTK}}\). (c) Contrast this with
+      genuine feature learning, in which the hidden representation reorganizes around the data, and
+      state precisely what it is about the scaling, not any added assumption, that rules such
+      reorganization out in the wide limit. Where in the two-term NTK of the previous exercise does
+      the small but non-zero movement of the hidden weights leave its trace?
+    answer: Under NTK parameterization, m neuron contributions are scaled by 1/sqrt(m). A coordinated
+      order-one output change can therefore be achieved with O(1/sqrt(m)) displacement per hidden
+      unit. This vanishes with width, keeping activations and the tangent feature map near
+      initialization, so first-order linearization remains accurate and training becomes linear
+      prediction in the fixed features grad_theta f_{theta0}. For squared loss with explicit decay
+      this corresponds to kernel regression with K_NTK (while gradient flow/early stopping has its
+      distinct spectral regularization). Genuine feature learning requires order-one representation
+      movement. The width scaling rules it out here; the sigma' (x^Ty) second NTK term is the finite
+      trace of infinitesimal hidden-weight motion.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "Trace the Nyström bridge that turns an infinite-dimensional kernel into a finite
+      neural-network layer, and follow it onto graphs. (a) For a dot-product kernel
+      \\(K(\\mathbf{x}, \\mathbf{y}) = \\kappa(\\langle \\mathbf{x}, \\mathbf{y} \\rangle)\\) with
+      feature map \\(\\varphi\\) and anchors \\(Z = [\\mathbf{z}_1, \\ldots, \\mathbf{z}_p]\\), the
+      Nyström embedding is \\(\\psi(\\mathbf{x}) = \\kappa(Z^\\top Z)^{-1/2}\\, \\kappa(Z^\\top
+      \\mathbf{x})\\). Reading the three factors from right to left, identify which is a linear map,
+      which is a pointwise nonlinearity, and which is a second linear map, and explain in what sense
+      the factor \\(\\kappa(Z^\\top Z)^{-1/2}\\) is what distinguishes projecting onto a subspace of
+      the RKHS from applying an arbitrary nonlinearity as a plain CNN does. (b) Verify the
+      normalization role of \\(\\kappa(Z^\\top Z)^{-1/2}\\) by showing that when the anchors are
+      orthonormal in feature space, so \\(\\kappa(Z^\\top Z) = I\\), the embedding reduces to
+      \\(\\psi(\\mathbf{x}) = \\kappa(Z^\\top \\mathbf{x})\\). (c) A one-layer graph convolutional
+      kernel network replaces patches by paths: it enumerates the paths \\(\\mathcal{P}_k(G, u)\\)
+      from each node \\(u\\), embeds each path's attributes through the same Nyström layer, and
+      sums. Write the node update \\(\\psi(u) = \\sum_{p \\in \\mathcal{P}_k(G, u)} \\kappa(Z^\\top
+      Z)^{-1/2} \\kappa(Z^\\top \\psi_{\\text{prev}}(p))\\) and say which of the three CKN moves
+      (extract local patterns, embed with a kernel, pool) each piece implements, and why the anchors
+      \\(Z\\) are now interpretable as learned prototypical path features."
+    answer: Reading right to left, Z^T x is a linear bank of anchor comparisons, kappa acts pointwise as
+      the nonlinear kernel profile, and multiplication by kappa(Z^T Z)^{-1/2} is a second linear
+      whitening map. That Gram normalization makes the coordinates an orthonormalized projection
+      onto span{varphi(z_j)} in the RKHS, rather than arbitrary nonlinear channels. If the anchor
+      Gram is I, its inverse square root is I and psi(x)=kappa(Z^T x). On a graph, P_k(G,u) performs
+      local path extraction; each term applies the shared Nystrom kernel embedding; summation pools
+      over paths. Learned anchors are therefore prototypical path attributes against which every
+      local path is compared in normalized RKHS coordinates.

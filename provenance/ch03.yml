@@ -1,0 +1,630 @@
+chapter: ch03
+slug: kernel-ridge-and-friends
+title: Kernel Ridge Regression and Smooth Losses
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - scholkopf2002
+  - shawe2004
+  - kimeldorf1971
+  - scholkopf2001
+  - hoerl1970
+  - saunders1998
+  - tikhonov1977
+  - girosi1995
+  - evgeniou2000
+  - huber1964
+  - vapnik1995
+  - zhu2005
+  - green1984
+  - rasmussen2006
+  - wahba1990
+  - rifkin2007rls
+  - cravenwahba1979
+  - golub1979gcv
+  - devroye1996
+  - zhang2004
+  - bartlett2006
+sections:
+  - id: supervised-learning
+    title: The supervised learning problem
+    contribution: adapted-and-expanded
+    sources: &a1
+      - scholkopf2002
+      - shawe2004
+      - kimeldorf1971
+      - scholkopf2001
+      - hoerl1970
+      - saunders1998
+      - tikhonov1977
+      - girosi1995
+      - evgeniou2000
+      - huber1964
+      - vapnik1995
+      - zhu2005
+      - green1984
+      - rasmussen2006
+      - wahba1990
+      - rifkin2007rls
+      - cravenwahba1979
+      - golub1979gcv
+      - devroye1996
+      - zhang2004
+      - bartlett2006
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoerl1970
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saunders1998
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tikhonov1977
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: girosi1995
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: evgeniou2000
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: huber1964
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhu2005
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2007rls
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: golub1979gcv
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhang2004
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch03.md#supervised-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-ridge-regression
+    title: Kernel ridge regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoerl1970
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saunders1998
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tikhonov1977
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: girosi1995
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: evgeniou2000
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: huber1964
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhu2005
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2007rls
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: golub1979gcv
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhang2004
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch03.md#kernel-ridge-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-logistic-regression
+    title: Kernel logistic regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoerl1970
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saunders1998
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tikhonov1977
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: girosi1995
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: evgeniou2000
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: huber1964
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhu2005
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2007rls
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: golub1979gcv
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhang2004
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch03.md#kernel-logistic-regression
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: large-margin
+    title: "Large-margin classifiers: a first look"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoerl1970
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saunders1998
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tikhonov1977
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: girosi1995
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: evgeniou2000
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: huber1964
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhu2005
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2007rls
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: golub1979gcv
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhang2004
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch03.md#large-margin
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoerl1970
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saunders1998
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tikhonov1977
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: girosi1995
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: evgeniou2000
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: huber1964
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhu2005
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2007rls
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: golub1979gcv
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhang2004
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch03.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - scholkopf2002
+      - shawe2004
+      - kimeldorf1971
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: kimeldorf1971
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoerl1970
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: saunders1998
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tikhonov1977
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: girosi1995
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: evgeniou2000
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: huber1964
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhu2005
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: green1984
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rifkin2007rls
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cravenwahba1979
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: golub1979gcv
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: zhang2004
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch03.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

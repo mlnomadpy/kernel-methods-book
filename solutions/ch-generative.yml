@@ -1,0 +1,119 @@
+chapter: ch-generative
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: computation
+    status: draft
+    prompt: "Verify the two-element counterexample of the opening section: for
+      \\(P(x_1,x_2)=P(x_2,x_1)=\\tfrac12\\) and zeros on the diagonal, write down the \\(2\\times
+      2\\) Gram matrix and confirm its eigenvalues are \\(\\pm\\tfrac12\\). Then show that if
+      instead \\(P(x_1,x_1)=P(x_2,x_2)=\\tfrac12\\) and the off-diagonal is zero, the distribution
+      is a P-kernel."
+    answer: "The first Gram matrix is $G=\\begin{pmatrix}0&1/2\\\\1/2&0\\end{pmatrix}$. Its
+      characteristic polynomial is $\\lambda^2-1/4$, so its eigenvalues are $1/2$ and $-1/2$; hence
+      this joint distribution is not a positive-semidefinite kernel. With mass on the diagonal
+      instead, $G=(1/2)I_2\\succeq0$. It is also explicitly a P-kernel: take hidden values $h=1,2$,
+      weights $P(h)=1/2$, and features $P(x_i\\mid h)=\\mathbf 1\\{i=h\\}$, giving
+      $P(x_i,x_j)=\\sum_h P(h)P(x_i\\mid h)P(x_j\\mid h)=(1/2)\\mathbf 1\\{i=j\\}$."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: In the 2-state HMM of the worked example, recompute \(\kappa(s,t)\) for \(s=\texttt{AA}\)
+      and \(t=\texttt{AA}\) both by enumerating the four hidden paths and by the forward recursion,
+      and confirm the two agree. Is \(\kappa(\texttt{AA},\texttt{AA})\) larger or smaller than
+      \(\kappa(\texttt{AB},\texttt{AA})\), and why?
+    answer: For $s=t=\texttt{AA}$, the four hidden paths $(1,1),(1,2),(2,1),(2,2)$ contribute
+      respectively $0.8^4(0.6)(0.7)=0.172032$, $(0.8^2)(0.3^2)(0.6)(0.3)=0.010368$,
+      $(0.3^2)(0.8^2)(0.4)(0.4)=0.009216$, and $0.3^4(0.4)(0.6)=0.001944$. Their sum is $0.19356$.
+      The forward recursion starts with $f_1=(0.6\,0.8^2,0.4\,0.3^2)=(0.384,0.036)$ and updates
+      $f_2(b)=0.8_b^2\sum_a f_1(a)T_{ab}$, yielding the same total $0.19356$. This exceeds
+      $\kappa(\texttt{AB},\texttt{AA})=0.07404$ because the high-probability state emits two A
+      symbols consistently in both strings.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Show that the fixed-length marginalization kernel with independent hidden states,
+      \\(\\kappa(s,t)=\\sum_{h\\in A^n}\\prod_i P(s_i\\mid h_i)P(t_i\\mid h_i)P(h_i)\\), factorizes
+      as \\(\\prod_{i=1}^n\\big(\\sum_{a}P(s_i\\mid a)P(t_i\\mid a)P(a)\\big)\\). Hint: apply the
+      distributive law one position at a time, or argue by induction on \\(n\\)."
+    answer: Write $q_i(a)=P(s_i\mid a)P(t_i\mid a)P(a)$. Since the hidden coordinates range
+      independently over $A$, repeated use of the distributive law gives $\sum_{h_1\in
+      A}\cdots\sum_{h_n\in A}\prod_{i=1}^n q_i(h_i)=\prod_{i=1}^n\sum_{a\in A}q_i(a)$. Substituting
+      the definition of $q_i$ is exactly the claimed factorization. For countable $A$, the same
+      exchange is justified by Tonelli because all terms are nonnegative.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "Prove that the sum \\(\\sum_{s,t\\in\\Sigma^n}\\kappa(s,t)\\) of the fixed-length kernel
+      over all string pairs equals \\(1\\). Hint: exchange the order of summation so the sum over
+      \\((s_i,t_i)\\) sits inside the product, and use that the emission normalization collapses
+      each position's factor to \\(1\\)."
+    answer: "Expand and exchange the finite nonnegative sums: $\\sum_{s,t}\\kappa(s,t)=\\sum_h
+      P(h)\\prod_{i=1}^n[\\sum_{s_i}P(s_i\\mid h_i)][\\sum_{t_i}P(t_i\\mid h_i)]$. Each bracket is
+      one by emission normalization, so the expression becomes $\\sum_h P(h)=1$. Thus the kernel
+      values form a normalized joint distribution over string pairs; the argument assumes normalized
+      hidden and emission distributions."
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Take the pair HMM recursion with a single emitting state \(a\) beyond \(a_I\),
+      self-transition probability \(1\), and emissions \(P((\sigma,\sigma)\mid a)=m\) for a match,
+      \(P((\sigma,\sigma')\mid a)=\mu\) for a mismatch, and \(P((\sigma,\varepsilon)\mid
+      a)=P((\varepsilon,\sigma)\mid a)=d\) for a gap. Fill the \(\kappa_{i,j}\) table by hand for
+      \(s=\texttt{AB}\), \(t=\texttt{A}\) and read off \(\kappa(s,t)\) in terms of \(m,\mu,d\).
+    answer: With $\kappa_{0,0}=1$ and out-of-range cells zero, the one-state recursion is
+      $\kappa_{i,j}=e(s_i,t_j)\kappa_{i-1,j-1}+d\kappa_{i-1,j}+d\kappa_{i,j-1}$. Hence
+      $\kappa_{1,0}=d$, $\kappa_{2,0}=d^2$, $\kappa_{0,1}=d$, $\kappa_{1,1}=m+2d^2$, and
+      $\kappa_{2,1}=\mu d+d(m+2d^2)+d^3=md+d\mu+3d^3$. The three $d^3$ terms are the three
+      interleavings of two deletions and one insertion; the other paths are match-then-delete and
+      delete-then-mismatch.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: "For the binary hidden tree with a single internal root and two leaves, parameters
+      \\(\\epsilon,\\delta,\\tau\\) as in the example, write \\(\\kappa(s,t)\\) explicitly for the
+      leaf pair \\(s_1=t_1=1\\) on the first leaf and \\(s_2=t_2=1\\) on the second, by carrying out
+      the root sum \\(\\sum_a P_M(a)\\prod_j\\sum_b P(b\\mid a)\\kappa_{\\mathrm{ch}_j,b}\\). Hint:
+      the leaf messages are indicators \\([\\,s_i=t_i=b\\,]\\)."
+    answer: For a root value $a$, each observed-one leaf contributes $P(1\mid a)$. Thus
+      $\kappa((1,1),(1,1))=P_M(1)P(1\mid1)^2+P_M(0)P(1\mid0)^2=\tau(1-\epsilon)^2+(1-\tau)\delta^2$.
+      The two terms correspond to the two possible root states.
+  - number: 7
+    kind: computation
+    status: draft
+    prompt: Let \(P_\theta(x)=e^{-\theta}\theta^x/x!\) be the Poisson model on \(x\in\mathbb N_0\) with
+      scalar \(\theta\gt 0\). Compute the Fisher score \(g(\theta,x)=\partial_\theta\log
+      P_\theta(x)\), the Fisher information \(I(\theta)=\mathbb E[g(\theta,x)^2]\), and the whitened
+      one-dimensional Fisher kernel \(K(x,x')=g(\theta,x)I(\theta)^{-1}g(\theta,x')\). Which pairs
+      \((x,x')\) receive a positive value at \(\theta=2\)?
+    answer: The log likelihood is $-\theta+x\log\theta-\log(x!)$, so
+      $g(\theta,x)=-1+x/\theta=(x-\theta)/\theta$. Since $\operatorname{Var}(X)=\theta$,
+      $I(\theta)=E[g^2]=1/\theta$. Therefore $K(x,x')=(x-\theta)(x'-\theta)/\theta$. At $\theta=2$
+      the value is positive exactly when both counts are greater than 2 or both are less than 2; it
+      is zero if either count equals 2 and negative when they lie on opposite sides.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "For the 2-symbol iid model of the worked example, take the generative model to be a
+      first-order Markov chain over \\(k\\)-mers with transition weights \\(a_{u\\to\\sigma}\\)
+      normalized to \\(p_{u\\to\\sigma}=a_{u\\to\\sigma}/\\sum_{\\sigma'}a_{u\\to\\sigma'}\\).
+      Differentiate the log-likelihood at the flat setting \\(a_{u\\to\\sigma}=|\\Sigma|^{-1}\\) to
+      show the score coordinate for \\(u\\to\\sigma\\) is \\(|\\{(v_1,v_2):s=v_1 u\\sigma
+      v_2\\}|-|\\Sigma|^{-1}|\\{(v_1,v_2):s=v_1 u v_2\\}|\\), and conclude that up to the centering
+      term the Fisher kernel is the \\((k{+}1)\\)-spectrum kernel. Hint: the log-likelihood is a sum
+      over positions of \\(\\log p_{s(j:j+k-1)\\to s_{j+k}}\\); see the referenced chapter."
+    answer: "Let $N_{u\\sigma}(s)$ count transitions from context $u$ to symbol $\\sigma$, and
+      $N_u(s)=\\sum_{\\sigma'}N_{u\\sigma'}(s)$. Differentiating
+      $\\sum_{u,\\sigma}N_{u\\sigma}\\log[a_{u\\sigma}/\\sum_{\\sigma'}a_{u\\sigma'}]$ gives
+      $N_{u\\sigma}/a_{u\\sigma}-N_u/\\sum_{\\sigma'}a_{u\\sigma'}$. If the flat setting is
+      parameterized in log weights (equivalently multiply this derivative by
+      $a_{u\\sigma}=1/|\\Sigma|$), the score is $N_{u\\sigma}-|\\Sigma|^{-1}N_u$, the stated
+      centered transition count. Its uncentered coordinates are precisely the occurrence counts of
+      $(k+1)$-mers $u\\sigma$, so their inner product is the $(k+1)$-spectrum kernel; the remaining
+      terms center those counts within each context. The log-weight parameterization matters:
+      raw-weight derivatives differ by a constant scale, absorbed by Fisher whitening."

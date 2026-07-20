@@ -1,0 +1,116 @@
+chapter: ch-ranking
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: For the four items of the difference-vector example, verify by hand that the score order
+      induced by \(w = (1, -1)\) is \(x_1 \succ x_3 \succ x_2 \succ x_4\), and confirm that exactly
+      the pair \((2 \succ 3)\) is inverted relative to the true order.
+    answer: "The scores are w^T x_1=4-1=3, w^T x_2=3-3=0, w^T x_3=2-0=2, and w^T x_4=1-2=-1. Sorting
+      gives x_1>x_3>x_2>x_4. Relative to x_1>x_2>x_3>x_4, only x_2 and x_3 have swapped order: their
+      preferred-pair margin is f(x_2)-f(x_3)=-2, while the other five preferred margins are
+      positive."
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: "Show that if \\(\\kappa\\) is a positive definite kernel then the pair kernel
+      \\(G_{(ij),(kl)} = K_{ik} - K_{il} - K_{jk} + K_{jl}\\) is also positive definite on the set
+      of difference vectors. (Hint: it is the ordinary Gram matrix of the vectors \\(z_{ij} =
+      \\phi(x_i) - \\phi(x_j)\\), so write a quadratic form \\(\\sum \\alpha_{ij}\\alpha_{kl} G\\)
+      as a squared norm.)"
+    answer: Let z_{ij}=Phi(x_i)-Phi(x_j). Expanding <z_{ij},z_{kl}> gives
+      K_ik-K_il-K_jk+K_jl=G_{(ij),(kl)}. Hence for arbitrary pair coefficients a_{ij}, sum
+      a_{ij}a_{kl}G equals ||sum_{ij}a_{ij}z_{ij}||_H^2>=0. Symmetry is inherited from the inner
+      product, so G is a positive-definite kernel on ordered difference pairs.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: A constant shift of the scorer, \(f \mapsto f + c\), and a positive rescaling, \(f \mapsto
+      af\) with \(a \gt 0\), leave every pairwise comparison unchanged. Use this to explain why the
+      pairwise ranking SVM has no bias term and why the induced ranking rule is identifiable only up
+      to positive scaling. Then explain how the unit-margin constraint and norm penalty nevertheless
+      choose a particular scale for the optimizer.
+    answer: "Every difference cancels a constant: (f(x_i)+c)-(f(x_j)+c)=f(x_i)-f(x_j), so an
+      unregularized bias is unidentifiable and is omitted from the pair classifier. Multiplying
+      scores by a>0 preserves every sign of a difference, so the ranking rule itself is identifiable
+      only up to positive scale. The ranking SVM nevertheless fixes a representative by demanding
+      unit pair margin and minimizing ||w|| (with slack penalty); rescaling w changes both those
+      margins and the norm, so the optimizer's numerical solution has a chosen scale even though the
+      induced order does not."
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: With \(\ell\) instances spread over \(|Y|\) ranks of equal size, count the number of
+      preferred pairs \(|P|\) as a function of \(\ell\) and \(|Y|\), and show it is
+      \(\Theta(\ell^2)\) for fixed \(|Y|\). Contrast this with the \(\Theta(\ell)\) derived examples
+      of the threshold ordinal-regression formulation, and comment on when each reduction is
+      cheaper.
+    answer: Let r=|Y| and each rank contain l/r items. All cross-rank unordered pairs are preferred, so
+      |P|=C(l,2)-r C(l/r,2)=[l^2(1-1/r)]/2. For fixed r>1 this is Theta(l^2). The threshold
+      reduction creates only the lower/upper threshold constraints associated with each instance,
+      hence Theta(l) derived examples. Pairwise reduction is affordable for modest l or when pairs
+      are sampled/sparse and directly optimizes pair risk; threshold ordinal regression is cheaper
+      when l is large and a small ordered label set is appropriate.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: Redo the perceptron-update example with learning rate \(\eta = 2\) instead of \(1\). Does
+      the single update on the pair \((2 \succ 3)\) still repair the full ranking? Compute the new
+      scores and misordered count, and relate any overshoot to the fact that the perceptron only
+      guarantees the updated pair's margin becomes positive, not that other pairs are preserved.
+    answer: The offending difference is z_23=(2,-1). With eta=2, w_1=(0,1)+2(2,-1)=(4,-1). Scores become
+      x_1:12, x_2:12, x_3:3. The updated pair 2>3 is repaired with positive margin 9, but pair 1>2
+      is now tied and therefore fails a strict ranking constraint; the misordered/nonpositive-margin
+      count remains one. The larger step overshoots in a direction that affects all scores.
+      Perceptron correction guarantees positivity only for the selected pair when the step is
+      sufficient, not preservation of previously correct pair margins.
+  - number: 6
+    kind: challenge
+    status: draft
+    prompt: "Prove the perceptron ranking mistake bound: if the difference vectors \\(z_{ij}\\) satisfy
+      \\(\\|z_{ij}\\| \\le R\\) and there is a unit vector \\(w^\\star\\) with \\(\\langle w^\\star,
+      z_{ij} \\rangle \\ge \\gamma \\gt 0\\) for all preferred pairs, then the online ranking
+      algorithm with \\(\\eta = 1\\) makes at most \\((R/\\gamma)^2\\) updates. (Hint: track
+      \\(\\langle w, w^\\star \\rangle\\) and \\(\\|w\\|^2\\) across updates exactly as in
+      Novikoff's theorem for the classification perceptron in Chapter the referenced chapter.)"
+    answer: After M mistaken-pair updates w_M=sum_t z_t. The separator progress is
+      <w_M,w*>=sum_t<w*,z_t>>=M gamma. On a mistake <w_{t-1},z_t><=0, so
+      ||w_t||^2=||w_{t-1}||^2+2<w_{t-1},z_t>+||z_t||^2<=||w_{t-1}||^2+R^2, yielding
+      ||w_M||<=sqrt(M)R. Cauchy-Schwarz gives M gamma<=||w_M||||w*||<=sqrt(M)R. For M>0, division
+      and squaring produce M<=(R/gamma)^2, exactly Novikoff's argument applied to difference
+      vectors.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "Show that the AUC identity extends to the smoothed hinge surrogate: the convex objective
+      \\(\\sum_{p,n} \\max(0,\\, 1 - (f(p) - f(n)))\\) upper bounds \\(m_+ m_-\\) times the
+      bipartite ranking risk, so minimising it minimises an upper bound on \\(1 - \\mathrm{AUC}\\).
+      Identify where the constant-\\(1\\) margin enters and why any positive margin would serve."
+    answer: "For each positive-negative pair define d=f(p)-f(n). Its misranking indicator 1[d<=0] is at
+      most max(0,1-d): when d<=0 the hinge is at least one, and when d>0 the indicator is zero.
+      Summing gives hinge objective >= number of misordered pairs =m_+m_- times bipartite ranking
+      risk =m_+m_-(1-AUC), ignoring the standard half-credit tie convention. The constant one is the
+      chosen margin normalization. Any delta>0 works after using max(0,delta-d)/delta or an
+      equivalent scorer rescaling."
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "In the threshold model, suppose PRank predicts rank \\(y = y_i + 1\\) for an instance of
+      true rank \\(y_i\\). Write out the coefficient and threshold updates of Crammer and Singer
+      (2002), and prove that the single crossed threshold \\(b_{y_i}\\) cannot pass its neighbour
+      \\(b_{y_i + 1}\\), so the thresholds remain ordered. (Hint: only thresholds strictly between
+      predicted and true ranks move, and each moves by one integer step.)"
+    answer: If the prediction is y_i+1, PRank applies coefficient change y_i-y=-1, so w' = w-Phi(x_i),
+      and moves the single crossed threshold b_{y_i} upward by one; all other thresholds remain
+      fixed. The update lowers the example's score and raises the boundary it should have fallen
+      below. PRank initializes thresholds with unit-spaced integer order and changes crossed
+      consecutive thresholds by equal integer steps. In the one-threshold case, the pre-update
+      prediction interval has b_{y_i}<=f(x_i)<b_{y_i+1}; the maintained integer-gap invariant gives
+      b_{y_i}+1<=b_{y_i+1}. Hence the moved threshold cannot pass its unchanged neighbor, and
+      induction preserves the ordered vector after every update.

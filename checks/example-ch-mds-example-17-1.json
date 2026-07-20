@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-mds",
+  "anchor": "example-17-1",
+  "source_file": "manuscript/chapters/ch-mds.md",
+  "source_sha256": "4fd1880a58903dc7fd7c5565e04a9dc8687d5f265f98ba53ee20a44a5b460646",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-mds-ex1.py"
+  ],
+  "numeric_literals": [
+    "4",
+    "3",
+    "5",
+    "0",
+    "1",
+    "2",
+    "16",
+    "25",
+    "9",
+    "0.75",
+    "-0.25",
+    "6.25",
+    "-1.75",
+    "-6.25",
+    "1.75",
+    "-2",
+    "1.5",
+    "-1.5"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

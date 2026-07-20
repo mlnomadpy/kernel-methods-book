@@ -1,0 +1,17 @@
+[
+  {
+    "from": "semi-supervised-and-manifold-regularization#prop-graph-energy",
+    "to": "preliminaries#def-p-17",
+    "note": "Uses the graph-Laplacian quadratic form and its componentwise null space."
+  },
+  {
+    "from": "semi-supervised-and-manifold-regularization#thm-manifold-representer",
+    "to": "kernel-tricks#thm-3-4",
+    "note": "Adds a sample-evaluation graph penalty to the scalar representer argument."
+  },
+  {
+    "from": "semi-supervised-and-manifold-regularization#algo-manifold-regularization",
+    "to": "semi-supervised-and-manifold-regularization#thm-manifold-representer",
+    "note": "Solves the finite coefficient system supplied by the theorem."
+  }
+]

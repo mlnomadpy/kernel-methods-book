@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-modern",
+  "anchor": "example-42-3",
+  "source_file": "manuscript/chapters/ch-modern.md",
+  "source_sha256": "90096769107f35ebb578bcbc95ac591def683f8c03487dc35b29d306666349cf",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-modern-ex3.py"
+  ],
+  "numeric_literals": [
+    "1200",
+    "-1.5",
+    "2",
+    "-2",
+    "10",
+    "-4",
+    "150",
+    "1",
+    "1.02",
+    "0.115",
+    "320",
+    "0.32",
+    "0.49",
+    "3",
+    "0.256",
+    "0.133",
+    "0.0665",
+    "0.0323",
+    "0.0150",
+    "0.00643",
+    "20",
+    "40",
+    "80",
+    "160",
+    "0.259",
+    "0.137",
+    "0.0700",
+    "0.0339",
+    "0.0166",
+    "0.00815",
+    "4",
+    "17"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

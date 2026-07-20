@@ -1,0 +1,674 @@
+chapter: ch-modern
+slug: kernels-now
+title: Modern Generalization Theory
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - belkin2019dd
+  - belkin2018understand
+  - hastie2019
+  - mei2022
+  - liang2020interpolate
+  - bartlett2020benign
+  - bordelon2020
+  - canatar2021
+  - sollich1999
+  - caponnetto2007
+  - spigler2020
+  - cui2021
+sections:
+  - id: interpolation
+    title: The interpolation revolution
+    contribution: adapted-and-expanded
+    sources: &a1
+      - belkin2019dd
+      - belkin2018understand
+      - hastie2019
+      - mei2022
+      - liang2020interpolate
+      - bartlett2020benign
+      - bordelon2020
+      - canatar2021
+      - sollich1999
+      - caponnetto2007
+      - spigler2020
+      - cui2021
+      - neyshabur2018
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#interpolation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: double-descent
+    title: Double descent
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#double-descent
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: benign-overfitting
+    title: Benign overfitting
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#benign-overfitting
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spectral-learning-curves
+    title: Spectral learning curves and scaling laws
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#spectral-learning-curves
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: pac-bayes-certificates
+    title: PAC-Bayes and data-dependent certificates
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - neyshabur2018
+    locators:
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#pac-bayes-certificates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: compression-and-stability
+    title: Compression and algorithm-dependent complexity
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#compression-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: random-matrix-diagnostics
+    title: Random-matrix equivalents and finite-sample diagnostics
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: limits-and-lower-bounds
+    title: Limits, lower bounds, and what cannot be universal
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#limits-and-lower-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: connections
+    title: Where this connects
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#connections
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - belkin2019dd
+      - belkin2018understand
+      - hastie2019
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mei2022
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2020benign
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bordelon2020
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: canatar2021
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sollich1999
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: spigler2020
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cui2021
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

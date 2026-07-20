@@ -1,0 +1,243 @@
+chapter: ch-scientific
+slug: scientific-computing-and-operator-learning
+title: Kernels for Scientific Computing and Operator Learning
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - green1984
+  - wendland2005
+  - raissi2017gpde
+  - cockayne2019probnum
+  - li2020fno
+sections:
+  - id: scientific-linear-information
+    title: Linear information about an unknown function
+    contribution: adapted-and-expanded
+    sources: &a1
+      - green1984
+      - wendland2005
+      - raissi2017gpde
+      - cockayne2019probnum
+      - li2020fno
+    locators:
+      - source: green1984
+        manuscript_locator: ch-scientific.md#scientific-linear-information
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-linear-information
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-linear-information
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-linear-information
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-linear-information
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: kernel-collocation
+    title: Symmetric kernel collocation
+    contribution: adapted-and-expanded
+    sources:
+      - wendland2005
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#kernel-collocation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: green-physics-kernels
+    title: Green kernels and physics-informed covariance
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: green1984
+        manuscript_locator: ch-scientific.md#green-physics-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#green-physics-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#green-physics-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#green-physics-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#green-physics-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-differential-observations
+    title: Gaussian processes with differential observations
+    contribution: adapted-and-expanded
+    sources:
+      - raissi2017gpde
+    locators:
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#gp-differential-observations
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: probabilistic-numerics
+    title: Probabilistic numerical methods
+    contribution: adapted-and-expanded
+    sources:
+      - cockayne2019probnum
+    locators:
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#probabilistic-numerics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-inverse-problems
+    title: Inverse scientific problems
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: green1984
+        manuscript_locator: ch-scientific.md#scientific-inverse-problems
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-inverse-problems
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-inverse-problems
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-inverse-problems
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-inverse-problems
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: operator-learning
+    title: Learning operators between function spaces
+    contribution: adapted-and-expanded
+    sources:
+      - li2020fno
+    locators:
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#operator-learning
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: green1984
+        manuscript_locator: ch-scientific.md#scientific-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - wendland2005
+      - cockayne2019probnum
+      - raissi2017gpde
+      - li2020fno
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: green1984
+        manuscript_locator: ch-scientific.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

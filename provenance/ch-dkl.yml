@@ -1,0 +1,254 @@
+chapter: ch-dkl
+slug: deep-kernel-learning
+title: Deep Kernel Learning
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - wilson2016dkl
+  - wilson2015kissgp
+  - ober2021dkl
+sections:
+  - id: dkl-model
+    title: The model and its distinction from NTK
+    contribution: adapted-and-expanded
+    sources:
+      - wilson2016dkl
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-model
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dkl-marginal-likelihood
+    title: Marginal-likelihood training
+    contribution: adapted-and-expanded
+    sources: &a1
+      - wilson2016dkl
+      - wilson2015kissgp
+      - ober2021dkl
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-marginal-likelihood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dkl-computation
+    title: Exact and approximate computation
+    contribution: adapted-and-expanded
+    sources:
+      - wilson2015kissgp
+    locators:
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-computation
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dkl-failures
+    title: Calibration and failure modes
+    contribution: adapted-and-expanded
+    sources:
+      - ober2021dkl
+    locators:
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-failures
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dkl-nongaussian
+    title: Non-Gaussian likelihoods
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-nongaussian
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-nongaussian
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-nongaussian
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dkl-variational
+    title: Variational inducing-point DKL
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wilson2015kissgp
+    locators:
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-variational
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dkl-identifiability
+    title: Identifiability and geometry control
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-identifiability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-identifiability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-identifiability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dkl-structured-inputs
+    title: Derivatives, invariances, and structured inputs
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-structured-inputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-structured-inputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-structured-inputs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dkl-ood
+    title: OOD uncertainty and conformal calibration
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-ood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-ood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-ood
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dkl-comparisons
+    title: Comparing DKL with neighboring models
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-comparisons
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dkl-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dkl-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - wilson2016dkl
+      - wilson2015kissgp
+      - ober2021dkl
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#dkl-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#dkl-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#dkl-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: wilson2016dkl
+        manuscript_locator: ch-dkl.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wilson2015kissgp
+        manuscript_locator: ch-dkl.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ober2021dkl
+        manuscript_locator: ch-dkl.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

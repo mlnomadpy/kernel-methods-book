@@ -1,0 +1,185 @@
+chapter: ch04
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: The calibration theorem asks that \(\varphi\) be convex, differentiable at \(0\), with
+      \(\varphi'(0) \lt 0\). For each of the four standard surrogates, the hinge loss \(\varphi(u) =
+      \max(1-u, 0)\), the logistic loss \(\varphi(u) = \log(1 + e^{-u})\), the squared loss
+      \(\varphi(u) = (1-u)^2\), and the exponential loss \(\varphi(u) = e^{-u}\), compute
+      \(\varphi'(0)\) and confirm that each hypothesis holds. Then consider the one-sided loss
+      \(\varphi_0(u) = \max(-u, 0)\), which charges nothing once the margin is positive. Show that
+      its right derivative at \(0\) is \(0\), so it fails the hypothesis \(\varphi'(0) \lt 0\), and
+      explain in one sentence, using the conditional risk \(C_\eta(\alpha) = \eta\,\varphi(\alpha) +
+      (1-\eta)\,\varphi(-\alpha)\), why a function that hedges to \(\alpha = 0\) at an input with
+      \(\eta(x) \ne \tfrac12\) is then not penalized for choosing the wrong sign.
+    answer: At u=0 the hinge is on its linear branch, so phi'(0)=-1. Logistic gives -1/(1+e^0)=-1/2;
+      squared loss gives -2(1-u)|_{0}=-2; exponential gives -e^{-u}|_{0}=-1. All four are convex,
+      differentiable at zero, and have negative derivative there. For phi_0(u)=max(-u,0), the left
+      derivative is -1 and the right derivative is 0, so it is not differentiable and in particular
+      has no negative right slope. Indeed C_eta(alpha)=eta max(-alpha,0)+(1-eta)max(alpha,0) is
+      minimized at alpha=0 for every eta in (0,1). It therefore permits hedging even when eta
+      differs from one half and cannot enforce the Bayes sign.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: 'Rademacher complexity measures how well a class can correlate with pure noise. (a) Explain
+      why the inner quantity \(\frac{2}{n}\sum_{i=1}^n \sigma_i f(X_i)\) is, up to the factor of
+      two, the empirical correlation between the values of \(f\) and a random relabeling of the
+      sample. (b) For the single-function class \(\mathcal F = \{f\}\), show directly from the
+      definition that \(\mathrm{Rad}_n(\mathcal F) = 0\), using only \(\mathbb E[\sigma_i] = 0\) and
+      the independence of the signs from the data; interpret this as \"a fixed pattern is free to
+      trust.\" (c) In one paragraph, connect the birthday paradox of Shawe-Taylor and Cristianini
+      (2004) to this quantity: why does searching a class over the \(2^n\) sign patterns turn a
+      coincidence into an expectation, and why is that search exactly what \(\mathrm{Rad}_n\)
+      prices?'
+    answer: Conditional on the sample values f(X_i), the signs sigma_i are independent random labels.
+      Thus n^{-1}sum_i sigma_i f(X_i) is their empirical signed correlation, with the convention
+      here multiplying by two. If F={f}, the supremum disappears and E_sigma[(2/n)sum_i sigma_i
+      f(X_i)]=(2/n)sum_i f(X_i)E sigma_i=0; averaging over X leaves zero. A fixed pattern cannot
+      adapt to noise. In the birthday-paradox analogy, any preselected coincidence is unlikely, but
+      searching exponentially many candidates makes some coincidence typical. A rich function class
+      similarly searches over many effective sign patterns and selects the one correlating best with
+      random labels. The supremum inside Rademacher complexity measures and charges exactly that
+      adaptive search.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "This is the geometric heart of the RKHS-ball capacity bound. Fix a vector \\(g \\in
+      \\mathcal H\\) and let \\(\\mathcal F_B = \\{ f \\in \\mathcal H : \\lVert f\\rVert_{\\mathcal
+      H} \\le B\\}\\). Prove that"
+    answer: Cauchy-Schwarz gives <f,g><=||f|| ||g||<=B||g|| for every f in the ball. If g is nonzero,
+      f*=B g/||g|| has norm B and attains <f*,g>=B||g||; if g=0 both sides are zero and any f is
+      optimal. Therefore the supremum equals B||g||. Substituting g=(2/n)sum_i sigma_i K_{X_i} turns
+      the inner supremum in the Rademacher definition into (2B/n)||sum_i sigma_i K_{X_i}||_H. The
+      infinite-dimensional optimization over f is thus reduced to the norm of one random representer
+      sum.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Show that bounding a single number, the norm, controls a whole infinite-dimensional class
+      pointwise. Using the reproducing property \(f(x) = \langle f, K_x\rangle_{\mathcal H}\) and
+      Cauchy-Schwarz, prove that every \(f \in \mathcal F_B\) satisfies
+    answer: The reproducing property and Cauchy-Schwarz give |f(x)|=|<f,K_x>|<=||f|| sqrt(K(x,x))<=B
+      sqrt(K(x,x)). Likewise f(x)-f(x')=<f,K_x-K_{x'}>, so |f(x)-f(x')|<=B||K_x-K_{x'}||. If
+      K(x,x)<=kappa^2, the first bound is uniformly B kappa. Expanding the second norm gives
+      ||K_x-K_{x'}||^2=K(x,x)-2K(x,x')+K(x',x'). Thus a small kernel distance forces all functions
+      in the ball to vary little between the two inputs, and B is the common smoothness budget even
+      if H is infinite-dimensional.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: The concentration step of the learning bound rests on McDiarmid's inequality applied to the
+      uniform deviation. Assume the loss takes values in \([0, M]\), and define, on the sample \(S_n
+      = (Z_1,\dots,Z_n)\) with \(Z_i = (X_i, Y_i)\),
+    answer: Replacing Z_i affects only one empirical-loss summand; the population risk is unchanged.
+      Using |sup_f a_f-sup_f b_f|<=sup_f|a_f-b_f| and losses in [0,M], the change in F is at most
+      M/n. Hence sum_i c_i^2=n(M/n)^2=M^2/n. McDiarmid yields
+      P{F-EF>=epsilon}<=exp[-2epsilon^2/(M^2/n)]=exp(-2n epsilon^2/M^2), displaying the n^{-1/2}
+      concentration scale. The subsequent symmetrization step introduces a ghost sample and
+      Rademacher signs to bound EF by the appropriate Rademacher complexity (followed by contraction
+      when a Lipschitz loss is composed with the function class).
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: 'Open the interactive kernel fit for this chapter (the \(\lambda\) slider on the figure in
+      the regularization section, [data-widget \"kernel-lab\"]{.ex-ref}). The penalized problem it
+      solves has \(\lambda\) playing the role of \(1/B\): larger \(\lambda\) means a smaller
+      effective RKHS ball. (a) Slide \(\lambda\) toward \(0\) and describe how the fitted curve
+      behaves; slide it up and describe the change. Which regime corresponds to a large radius
+      \(B\), and which to a small one? (b) The corollary bounds the estimation error by \(8
+      L_\varphi \kappa B / \sqrt n\). Predict, before moving the slider, what should happen to the
+      gap between training fit and out-of-sample behavior as you shrink the ball, and check it
+      against the figure. (c) Using the empirical norm identity \(\lVert f\rVert_{\mathcal H} =
+      \sqrt{\alpha^\top \mathbf K \alpha}\) for \(f = \sum_i \alpha_i K_{x_i}\), explain why
+      increasing \(\lambda\) literally shrinks the radius of the ball the solution occupies.'
+    answer: "As lambda approaches zero the effective norm budget grows: the fit becomes more flexible,
+      tracks training points closely, and may oscillate. Increasing lambda shrinks the solution
+      toward a smoother, flatter curve. Thus small lambda corresponds to large B, and large lambda
+      to small B. The bound 8 L_phi kappa B/sqrt(n) predicts a smaller estimation/generalization gap
+      as the ball shrinks, even though excessive shrinkage can raise approximation bias.
+      Algebraically the selected radius is ||f||=sqrt(alpha^T K alpha); increasing the coefficient
+      on this exact quantity makes large-norm candidates more expensive, so the optimizer moves to a
+      smaller RKHS ball."
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: "The theory analyzes constrained ERM over \\(\\mathcal F_B\\), but the algorithms solve the
+      penalized problem. Using the Lagrangian duality interlude, make the reduction precise. (a)
+      Write the constrained problem \\\"minimize \\(\\frac{1}{n}\\sum_i \\varphi(y_i f(x_i))\\)
+      subject to \\(\\lVert f\\rVert_{\\mathcal H}^2 \\le B^2\\)\\\" with its single inequality
+      constraint \\(g(f) = \\lVert f\\rVert_{\\mathcal H}^2 - B^2 \\le 0\\), form the Lagrangian,
+      and identify the penalized objective \\(\\frac{1}{n}\\sum_i \\varphi(y_i f(x_i)) + \\lambda
+      \\lVert f\\rVert_{\\mathcal H}^2\\) as the minimization of \\(L(f, \\lambda)\\) over \\(f\\)
+      at a fixed multiplier \\(\\lambda \\ge 0\\). (b) Verify that Slater's condition holds, so
+      strong duality gives an optimal \\(\\lambda^\\star \\ge 0\\) for which the constrained and
+      penalized minimizers coincide. (c) Invoke complementary slackness \\(\\lambda^\\star
+      g(f^\\star) = 0\\) to show that either the norm constraint is active (\\(\\lVert
+      f^\\star\\rVert_{\\mathcal H} = B\\)) or \\(\\lambda^\\star = 0\\); interpret the second case
+      as the unregularized minimizer already lying inside the ball. (d) Finally, relate this
+      norm-budget picture to the margin-VC ancestor \\(h \\le R^2 \\Lambda^2\\) of Schölkopf and
+      Smola (2002): argue that constraining \\(\\lVert f\\rVert_{\\mathcal H} \\le B\\) plays the
+      role of the bound \\(\\lVert w\\rVert \\le \\Lambda\\), and \\(\\mathbb E\\, K(X,X)\\) plays
+      the role of the data radius \\(R^2\\), so both theories charge capacity as (data size)
+      \\(\\times\\) (norm budget), never as ambient dimension."
+    answer: "Write L(f,lambda)=n^{-1}sum_i phi(y_i f(x_i))+lambda(||f||^2-B^2), lambda>=0. For fixed
+      lambda, the constant -lambda B^2 does not affect minimization over f, leaving precisely
+      empirical loss plus lambda||f||^2. When B>0, f=0 satisfies ||f||^2-B^2<0, so Slater's
+      condition holds; convexity then gives strong duality and an optimal multiplier lambda*.
+      Complementary slackness says lambda*(||f*||^2-B^2)=0: either the boundary is active or
+      lambda*=0 because the unregularized optimum is already feasible. The RKHS norm cap B is the
+      analogue of ||w||<=Lambda, while E K(X,X) measures feature-space data radius. Both capacity
+      controls depend on radius times norm, not the ambient feature dimension."
+  - number: 8
+    kind: warm-up
+    status: draft
+    prompt: "The fast-rate section trades the global rate \\(n^{-1/2}\\) for the critical radius
+      \\(r^\\star\\), the fixed point of \\(\\psi(r) = \\sqrt{\\tfrac1n\\sum_i \\min(\\lambda_i,
+      r)}\\). (a) Verify that \\(\\psi\\) is sub-root: it is nondecreasing, and \\(\\psi(r)/\\sqrt
+      r\\) is nonincreasing, so the fixed point \\(r^\\star\\) is unique. (b) For a finite-rank
+      kernel with exactly \\(m\\) nonzero eigenvalues, all equal to \\(1\\), and the rest zero,
+      solve the fixed-point equation in closed form and show \\(r^\\star = m/n\\), the parametric
+      rate of an \\(m\\)-dimensional model. (c) For the polynomial decay \\(\\lambda_i = i^{-2b}\\)
+      with \\(b \\gt \\tfrac12\\), reproduce the scaling \\(r^\\star \\asymp n^{-2b/(2b+1)}\\) by
+      splitting the sum at the crossover index \\(i \\asymp r^{-1/(2b)}\\), and check that this
+      exponent exceeds \\(\\tfrac12\\) for every such \\(b\\), so the localized rate always beats
+      the global one."
+    answer: "Each min(lambda_i,r) is nondecreasing, so psi is nondecreasing. Moreover
+      psi(r)^2/r=n^{-1}sum_i min(lambda_i/r,1), a nonincreasing function, hence psi(r)/sqrt(r) is
+      nonincreasing and the positive fixed point is unique under the usual sub-root conditions. For
+      m unit eigenvalues and m<=n, the fixed point lies below one: r=sqrt(mr/n), so r*=m/n. For
+      lambda_i=i^{-2b}, split at I approximately r^{-1/(2b)}. The head contributes Ir and the tail
+      contributes integral_I^infinity x^{-2b}dx; both scale as r^{1-1/(2b)}. Thus psi(r) scales as
+      n^{-1/2}r^{1/2-1/(4b)}, and solving r=psi(r) gives r*=n^{-2b/(2b+1)}. Since b>1/2,
+      2b/(2b+1)>1/2."
+  - number: 9
+    kind: proof
+    status: draft
+    prompt: Complete the stability calculation for regularized kernel methods. (a) Show that the
+      objective \(R_\lambda(f) = \tfrac1n\sum_i \ell(f, z_i) + \lambda\lVert f\rVert_{\mathcal
+      H}^2\) is \(2\lambda\)-strongly convex in \(\lVert\cdot\rVert_{\mathcal H}\) whenever \(\ell\)
+      is convex in \(f\), and deduce that for its minimizer \(\hat f\), \(R_\lambda(g) -
+      R_\lambda(\hat f) \ge \lambda\lVert g - \hat f\rVert_{\mathcal H}^2\) for every \(g\). (b)
+      Applying this to \(\hat f = \hat f_S\) and its leave-one-out twin \(\hat g = \hat
+      f_{S^{\setminus k}}\) and adding the two inequalities, derive \(\lVert \hat f - \hat
+      g\rVert_{\mathcal H} \le L\kappa/(2\lambda n)\), using \(L\)-Lipschitzness of \(\ell\) and
+      \(|f(x)| \le \kappa\lVert f\rVert_{\mathcal H}\). (c) Conclude the uniform stability \(\beta_n
+      \le L^2\kappa^2/(2\lambda n)\) and, via the Bousquet and Elisseeff (2002) theorem, that the
+      expected generalization gap of the support vector machine is \(O\big(1/(\lambda n)\big)\). (d)
+      In one sentence, explain why increasing \(\lambda\) improves the stability but need not
+      improve the test risk.
+    answer: The term lambda||f||^2 has Hessian 2lambda I in Hilbert geometry, while a convex loss
+      contributes nonnegative curvature; hence R_lambda is 2lambda-strongly convex and
+      R_lambda(g)-R_lambda(fhat)>=lambda||g-fhat||^2 at its minimizer. Apply this inequality in both
+      directions to the minimizers trained with and without example k and add. All shared losses
+      cancel, leaving only the replaced example. Lipschitzness and |h(x)|<=kappa||h|| bound the
+      remainder by (L kappa/n)||fhat-ghat||, yielding ||fhat-ghat||<=L kappa/(2lambda n) under the
+      chapter's normalization. A final Lipschitz bound gives beta_n<=L^2 kappa^2/(2lambda n), so
+      expected generalization gap is O((lambda n)^{-1}). Larger lambda improves stability but can
+      increase approximation bias and underfit, so test risk need not decrease monotonically.

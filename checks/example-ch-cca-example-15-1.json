@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-cca",
+  "anchor": "example-15-1",
+  "source_file": "manuscript/chapters/ch-cca.md",
+  "source_sha256": "3d6c2b4b94fe78cbd2efef8c9e500631cb2758fada53392d6d411ab28fd242cd",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-cca-ex1.py"
+  ],
+  "numeric_literals": [
+    "-1",
+    "0",
+    "2",
+    "1",
+    "1.5",
+    "0.607",
+    "0.011",
+    "0.135",
+    "0.325",
+    "0.882",
+    "0.6155",
+    "0.0955",
+    "1.000",
+    "3",
+    "0.896",
+    "0.1",
+    "0.611",
+    "0.5",
+    "0.413",
+    "4",
+    "0.519",
+    "0.635",
+    "0.572",
+    "0.632",
+    "0.627",
+    "0.456"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

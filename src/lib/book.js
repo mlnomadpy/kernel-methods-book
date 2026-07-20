@@ -1,5 +1,5 @@
 /**
- * The book pipeline: reads book.json, chapter body fragments, the bibliography,
+ * The book pipeline: reads book.yml, canonical Markdown chapters, the bibliography,
  * and the glossary, and produces fully processed chapter HTML plus the search
  * index. This is the content layer; the page chrome lives in the Astro layout.
  *
@@ -12,6 +12,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import katex from "katex";
+import { readCanonicalChapter, readYaml, renderCanonicalMarkdown } from "./manuscript.js";
 
 const ROOT = path.resolve(process.cwd());
 
@@ -19,8 +21,8 @@ function readJSON(p) {
   return JSON.parse(fs.readFileSync(path.join(ROOT, p), "utf8"));
 }
 
-export const BOOK = readJSON("book.json");
-export const BIB = readJSON("bibliography.json");
+export const BOOK = readYaml("book.yml");
+export const BIB = readJSON("bibliography.web.json");
 export const GLOSSARY = readJSON("glossary.json");
 
 export function escapeHtml(s) {
@@ -29,6 +31,100 @@ export function escapeHtml(s) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+/** Render manuscript math at build time; retain client KaTeX only for captions
+ * created dynamically by interactive figures. */
+export function renderMath(body) {
+  const protectedCode = [];
+  body = body.replace(/<(pre|code)\b[\s\S]*?<\/\1>/g, (value) => {
+    const token = `\u0000CODE${protectedCode.length}\u0000`;
+    protectedCode.push([token, value]);
+    return token;
+  });
+  const render = (source, displayMode) => katex.renderToString(source.trim(), {
+    displayMode,
+    throwOnError: false,
+    strict: "warn",
+    output: "htmlAndMathml",
+  });
+  body = body.replace(/\$\$([\s\S]*?)\$\$/g, (_, source) => render(source, true));
+  body = body.replace(/\\\(([\s\S]*?)\\\)/g, (_, source) => render(source, false));
+  for (const [token, value] of protectedCode) body = body.split(token).join(value);
+  return body;
+}
+
+/** Make horizontally scrollable publication regions reachable without a mouse.
+ * Focusability is applied at build time so the fallback remains accessible when
+ * JavaScript is unavailable. */
+export function decorateScrollableRegions(body) {
+  body = body.replace(
+    /<span class="katex-display">/g,
+    '<span class="katex-display" role="region" tabindex="0" aria-label="Scrollable mathematical expression">',
+  );
+  body = body.replace(
+    /<pre(?![^>]*\btabindex=)([^>]*)>/g,
+    '<pre$1 tabindex="0" aria-label="Scrollable code or formula">',
+  );
+  body = body.replace(
+    /<div class="tablewrap"(?![^>]*\btabindex=)([^>]*)>/g,
+    '<div class="tablewrap"$1 role="region" tabindex="0" aria-label="Scrollable table">',
+  );
+  return body;
+}
+
+/** Give exercises stable destinations and keep answers on a separate,
+ * spoiler-safe companion page. */
+export function decorateExercises(body, slug) {
+  let number = 0;
+  body = body.replace(/<li>(\s*(?:<p>)?\s*<span class="ex-tag[^>]*>)/g, (_, tag) => {
+    number += 1;
+    return `<li id="exercise-${number}">${tag}`;
+  });
+  if (number) {
+    body = body.replace(
+      '<h2 id="exercises">Exercises</h2>',
+      `<h2 id="exercises">Exercises</h2><p class="solution-link"><a href="solutions.html#${escapeHtml(slug)}-exercise-1">Open the separate answers and rubrics companion</a>. Draft answers remain visibly marked until review.</p>`,
+    );
+  }
+  return body;
+}
+
+const WIDGET_ALTS = {
+  "bo-loop": "Gaussian-process posterior and acquisition function across Bayesian-optimization iterations.",
+  "cme-explore": "Conditional mean embedding changes as the conditioning input and regularization vary.",
+  "dp-fill": "Dynamic-programming table used to compute a string-kernel recurrence.",
+  "feature-lift": "Input points lifted into a feature space where a linear separator becomes available.",
+  "gram-heatmap": "Kernel Gram matrix heatmap whose off-diagonal similarities change with bandwidth.",
+  "heat-graph": "Graph heat diffusion across vertices as diffusion time changes.",
+  "herding-greedy": "Kernel-herding points selected sequentially to reduce integration error.",
+  "kernel-lab": "Kernel ridge-regression fit for editable observations and kernel hyperparameters.",
+  "mmd-twosample": "Two sample clouds and their empirical maximum mean discrepancy.",
+  "permutation-null": "Permutation null distribution and observed statistic for a kernel hypothesis test.",
+  "rff-converge": "Random Fourier-feature kernel approximation converging toward the exact kernel.",
+  "sig-draw": "A drawn path and the low-order components of its path signature.",
+  "sinkhorn-plan": "Entropically regularized optimal-transport plan between two discrete measures.",
+  "spectrum-surgery": "Kernel eigenvalues before and after a spectral stabilization transform.",
+  "svgd-flow": "Particles transported toward a target density by the SVGD velocity field.",
+  "svm-margin": "Soft-margin SVM decision boundary, margins, support vectors, and KKT residual.",
+  "wl-refine": "Weisfeiler-Lehman vertex labels updated across refinement rounds.",
+};
+
+export function decorateWidgets(body) {
+  let index = 0;
+  return body.replace(/<figure class="viz" data-widget="([^"]+)"([^>]*)>\s*<\/figure>/g,
+    (whole, kind, attrs) => {
+      index += 1;
+      const id = `viz-fallback-${kind}-${index}`;
+      const label = WIDGET_ALTS[kind] || `Interactive ${kind.replace(/-/g, " ")} visualization.`;
+      const points = [8, 19, 13, 31, 22, 37, 28].map((y, i) => `${8 + i * 14},${42 - y * 0.7}`).join(" ");
+      return `<figure class="viz" data-widget="${kind}"${attrs} aria-describedby="${id}">` +
+        `<div class="viz-static" role="img" aria-label="${escapeHtml(label)}">` +
+        `<svg viewBox="0 0 100 48" aria-hidden="true" focusable="false"><path d="M7 4v38h89"/>` +
+        `<polyline points="${points}"/><circle cx="22" cy="29" r="2"/><circle cx="64" cy="20" r="2"/></svg></div>` +
+        `<figcaption class="viz-fallback" id="${id}"><strong>Static alternative.</strong> ${escapeHtml(label)} ` +
+        `The web control exposes the current numerical state in a live text readout.</figcaption></figure>`;
+    });
 }
 
 export function chaptersFlat() {
@@ -104,19 +200,19 @@ export function decorateBoxes(body, chLabel) {
   let nEx = 0;
   let nAlgo = 0;
   body = body.replace(
-    /<div class="box (thm|lem|prop|cor|def)">\s*<span class="box-title">([\s\S]*?)<\/span>/g,
-    (m, kind, title) => {
+    /<div class="box (thm|lem|prop|cor|def)"(?: id="([^"]+)")?>\s*<span class="box-title">([\s\S]*?)<\/span>/g,
+    (m, kind, sourceId, title) => {
       nStmt++;
       const kindName = STMT_KINDS[kind];
       const num = `${chLabel}.${nStmt}`;
-      const id = `${kind}-${String(chLabel).toLowerCase()}-${nStmt}`;
+      const id = sourceId || `${kind}-${String(chLabel).toLowerCase()}-${nStmt}`;
       const ann = boxAnnotation(title, kindName);
       return `<div class="box ${kind}" id="${id}">${boxHead(`${kindName} ${num}`, id, ann)}`;
     },
   );
   body = body.replace(
-    /<div class="box ex">\s*<span class="box-title">([\s\S]*?)<\/span>/g,
-    (m, title) => {
+    /<div class="box ex"(?: id="([^"]+)")?>\s*<span class="box-title">([\s\S]*?)<\/span>/g,
+    (m, sourceId, title) => {
       const t = title.trim();
       if (/^Exercise/i.test(t)) {
         // a couple of inline exercises reuse the example styling; keep their title
@@ -124,17 +220,17 @@ export function decorateBoxes(body, chLabel) {
       }
       nEx++;
       const num = `${chLabel}.${nEx}`;
-      const id = `example-${String(chLabel).toLowerCase()}-${nEx}`;
+      const id = sourceId || `example-${String(chLabel).toLowerCase()}-${nEx}`;
       const ann = boxAnnotation(t, "Example");
       return `<div class="box ex" id="${id}">${boxHead(`Example ${num}`, id, ann)}`;
     },
   );
   body = body.replace(
-    /<div class="box algo">\s*<span class="box-title">([\s\S]*?)<\/span>/g,
-    (m, title) => {
+    /<div class="box algo"(?: id="([^"]+)")?>\s*<span class="box-title">([\s\S]*?)<\/span>/g,
+    (m, sourceId, title) => {
       nAlgo++;
       const num = `${chLabel}.${nAlgo}`;
-      const id = `algo-${String(chLabel).toLowerCase()}-${nAlgo}`;
+      const id = sourceId || `algo-${String(chLabel).toLowerCase()}-${nAlgo}`;
       const ann = boxAnnotation(title.trim(), "Algorithm");
       return `<div class="box algo" id="${id}">${boxHead(`Algorithm ${num}`, id, ann)}`;
     },
@@ -169,24 +265,36 @@ export function transformProofs(body) {
 
 // ---- citations ------------------------------------------------------------
 
-/** 'Schölkopf, B. and Smola, A. J.' -> ['Schölkopf', 'Smola'].
- *  Handles surname particles ('De Vito', 'van der Maaten', 'von Luxburg') and
- *  non-ASCII surnames ('Alpaydın'); each surname is the word(s) right before a
- *  ', Initials' group, with the connector (comma / 'and' / '&') not captured. */
-const PARTICLES =
-  "de|De|del|Del|della|Van|van|von|Von|der|Der|den|Den|la|La|le|Le|di|Di|dos|Dos|du|Du|ten|Ten|ter|Ter|st|St";
+/** Parse BibTeX's two common author forms, preserving surname particles and
+ *  non-ASCII letters. */
+const SURNAME_PARTICLES = new Set([
+  "de", "del", "della", "van", "von", "der", "den", "la", "le", "di",
+  "dos", "du", "ten", "ter", "st",
+]);
 function surnames(authors) {
-  const out = [];
-  // Each surname is optional particles + a capitalized word, right before a
-  // ', Initials' group. No leading boundary is needed: a connector ('and', '&')
-  // is lowercase and not a particle, so it can never start a capture.
-  const re = new RegExp(
-    `((?:(?:${PARTICLES})\\s+)*\\p{Lu}[\\p{L}'’-]+),\\s+(?:\\p{Lu}\\.[-\\s]?)+`,
-    "gu",
-  );
-  let m;
-  while ((m = re.exec(authors))) out.push(m[1]);
-  return out;
+  const commaForm = [];
+  const commaPattern = /((?:(?:de|del|della|van|von|der|den|la|le|di|dos|du|ten|ter|st)\s+)*\p{Lu}[\p{L}'’-]+),\s+(?=\p{Lu})/gu;
+  let commaMatch;
+  while ((commaMatch = commaPattern.exec(authors))) commaForm.push(commaMatch[1]);
+  if (commaForm.length) return commaForm;
+  return authors
+    .split(/\s+(and|&)\s+/u)
+    .filter((part) => part !== "and" && part !== "&")
+    .map((raw) => {
+      const name = raw.trim();
+      if (!name) return "";
+      if (name.includes(",")) return name.slice(0, name.indexOf(",")).trim();
+      const words = name.split(/\s+/u);
+      let start = words.length - 1;
+      while (
+        start > 0 &&
+        SURNAME_PARTICLES.has(words[start - 1].replace(/[.'’]/gu, "").toLowerCase())
+      ) {
+        start -= 1;
+      }
+      return words.slice(start).join(" ");
+    })
+    .filter(Boolean);
 }
 
 function escapeRe(s) {
@@ -283,6 +391,30 @@ export function linkCitations(body, keys, bib) {
   return [body, stash.size];
 }
 
+/** Resolve canonical Pandoc citation markers. The bibliography order remains
+ * declared in frontmatter; an undeclared or unknown key stays visibly marked
+ * so the content audit can reject it. */
+export function expandCitationKeys(body, declaredKeys, bib) {
+  const allowed = new Set(declaredKeys);
+  let count = 0;
+  body = body.replace(
+    /<span class="citation"\s+data-cites="([^"]+)">[\s\S]*?<\/span>/g,
+    (whole, packed) => {
+      const keys = packed.trim().split(/\s+/);
+      if (keys.some((key) => !allowed.has(key) || !bib[key])) return whole;
+      count += keys.length;
+      const labels = keys.map((key) => {
+        const ref = bib[key];
+        const names = surnames(ref.authors || "");
+        const author = names.length > 2 ? `${names[0]} et al.` : names.join(" and ");
+        return `<a class="cite" href="bibliography.html#${escapeHtml(key)}" data-ref="${escapeHtml(refTooltip(ref))}">${escapeHtml(author)}, ${escapeHtml(ref.year)}</a>`;
+      });
+      return `[${labels.join("; ")}]`;
+    },
+  );
+  return [body, count];
+}
+
 /** One formatted bibliography entry, anchored at #key. */
 export function fmtRef(key, r, withId = true) {
   const parts = [];
@@ -298,14 +430,11 @@ export function fmtRef(key, r, withId = true) {
   return `<li${id}>${parts.join(" ")}</li>`;
 }
 
-function chapterRefsHtml(src) {
-  const p = path.join(ROOT, "chapters", "refs", `${src}.json`);
-  if (!fs.existsSync(p)) return "";
-  const keys = JSON.parse(fs.readFileSync(p, "utf8"));
+function chapterRefsHtml(keys) {
   const rows = keys.map((k) =>
     BIB[k]
       ? fmtRef(k, BIB[k], false)
-      : `<li>${escapeHtml(k)} (missing from bibliography.json)</li>`,
+      : `<li>${escapeHtml(k)} (missing from bibliography.bib)</li>`,
   );
   if (!rows.length) return "";
   return (
@@ -377,8 +506,11 @@ export function buildBook() {
   let ncites = 0;
 
   chs.forEach((ch, i) => {
-    const srcPath = path.join(ROOT, "chapters", "src", `${ch.src}.body.html`);
-    let body = fs.readFileSync(srcPath, "utf8");
+    const canonical = readCanonicalChapter(ch.src);
+    if (canonical.metadata.slug !== ch.slug || canonical.metadata.title !== ch.title) {
+      throw new Error(`Canonical metadata mismatch for ${ch.src}`);
+    }
+    let body = decorateWidgets(renderCanonicalMarkdown(canonical.markdown));
     const isPrelim = ch.src === "ch-prelim";
     const chLabel = isPrelim ? "P" : String(i);
 
@@ -390,13 +522,12 @@ export function buildBook() {
       /class="ex-tag">([a-z-]+)</g,
       (m, tag) => `class="ex-tag t-${tag}">${tag}<`,
     );
-    const keyfile = path.join(ROOT, "chapters", "refs", `${ch.src}.json`);
-    const chkeys = fs.existsSync(keyfile)
-      ? JSON.parse(fs.readFileSync(keyfile, "utf8"))
-      : [];
-    const [linked, nc] = linkCitations(body, chkeys, BIB);
-    body = linked;
-    ncites += nc;
+    body = decorateExercises(body, ch.slug);
+    const chkeys = canonical.metadata.bibliography || [];
+    const [linked, proseCitationCount] = linkCitations(body, chkeys, BIB);
+    const [keyed, keyedCitationCount] = expandCitationKeys(linked, chkeys, BIB);
+    body = keyed;
+    ncites += proseCitationCount + keyedCitationCount;
 
     const onpage = onpageNav(body);
     const sections = chapterSections(body);
@@ -426,7 +557,8 @@ export function buildBook() {
       ? "Preliminaries"
       : `Chapter ${i} &middot; ${escapeHtml(ch.part)}`;
     body = body.replace("<h1>", `<h1><span class="chno">${chno}</span>`);
-    body += chapterRefsHtml(ch.src);
+    body += chapterRefsHtml(chkeys);
+    body = decorateScrollableRegions(renderMath(body));
 
     chapters.push({ ...ch, i, isPrelim, body, onpage, sections });
   });
@@ -499,14 +631,11 @@ export function statementIndex() {
   chs.forEach((ch, i) => {
     const isPrelim = ch.src === "ch-prelim";
     const chLabel = isPrelim ? "P" : String(i);
-    const body = fs.readFileSync(
-      path.join(ROOT, "chapters", "src", `${ch.src}.body.html`),
-      "utf8",
-    );
+    const body = renderCanonicalMarkdown(readCanonicalChapter(ch.src).markdown);
     let nStmt = 0;
     let nAlgo = 0;
     const re =
-      /<div class="box (thm|lem|prop|cor|def|algo)">\s*<span class="box-title">([\s\S]*?)<\/span>/g;
+      /<div class="box (thm|lem|prop|cor|def|algo)"(?: id="([^"]+)")?>\s*<span class="box-title">([\s\S]*?)<\/span>/g;
     let m;
     while ((m = re.exec(body))) {
       const kind = m[1];
@@ -514,13 +643,13 @@ export function statementIndex() {
       if (kind === "algo") {
         nAlgo++;
         num = `${chLabel}.${nAlgo}`;
-        id = `algo-${chLabel.toLowerCase()}-${nAlgo}`;
+        id = m[2] || `algo-${chLabel.toLowerCase()}-${nAlgo}`;
       } else {
         nStmt++;
         num = `${chLabel}.${nStmt}`;
-        id = `${kind}-${chLabel.toLowerCase()}-${nStmt}`;
+        id = m[2] || `${kind}-${chLabel.toLowerCase()}-${nStmt}`;
       }
-      const title = m[2]
+      const title = m[3]
         .replace(/<[^>]+>/g, "")
         .replace(/\\\(/g, "")
         .replace(/\\\)/g, "")
@@ -565,23 +694,28 @@ export function dependencyEdges() {
  *  active chapter expands to a nested list of its sections (passed in from the
  *  page). `sections` is [{id,label}] (the active chapter's h2 headings). */
 export function tocHtml(currentSlug = null, sections = []) {
+  const partHtml = (label, inner, open) =>
+    `<details class="toc-part"${open ? " open" : ""}><summary>${escapeHtml(label)}</summary>${inner}</details>`;
   const rows = [
     `<div class="booktitle"><a href="index.html">${escapeHtml(BOOK.title)}</a></div>`,
     `<div class="bookmeta">${escapeHtml(BOOK.subtitle)}</div>`,
   ];
+  rows.push(partHtml(
+    "Front matter",
+    `<a href="preface.html"${currentSlug === "preface" ? ' class="here"' : ""}>Dedication &amp; Preface</a>`,
+    currentSlug === "preface",
+  ));
   let n = 0;
-  const partHtml = (label, inner, open) =>
-    `<details class="toc-part"${open ? " open" : ""}><summary>${escapeHtml(label)}</summary>${inner}</details>`;
 
   for (const part of BOOK.parts) {
     const links = [];
     let hasCurrent = false;
     for (const ch of part.chapters) {
-      n++;
       const here = ch.slug === currentSlug;
       if (here) hasCurrent = true;
+      const marker = ch.src === "ch-prelim" ? "&middot;" : String(++n);
       links.push(
-        `<a href="${ch.slug}.html"${here ? ' class="here"' : ""}>${n}. ${escapeHtml(ch.title)}</a>`,
+        `<a href="${ch.slug}.html"${here ? ' class="here"' : ""}>${marker}. ${escapeHtml(ch.title)}</a>`,
       );
       if (here && sections.length) {
         const secs = sections
@@ -594,11 +728,15 @@ export function tocHtml(currentSlug = null, sections = []) {
   }
 
   const endLinks = [
+    `<a href="reading-paths.html"${currentSlug === "reading-paths" ? ' class="here"' : ""}>Reading Paths</a>`,
     `<a href="glossary.html"${currentSlug === "glossary" ? ' class="here"' : ""}>Notation &amp; Glossary</a>`,
     `<a href="dependency-map.html"${currentSlug === "dependency-map" ? ' class="here"' : ""}>Dependency Map</a>`,
+    `<a href="indexes.html"${currentSlug === "indexes" ? ' class="here"' : ""}>Indexes</a>`,
+    `<a href="solutions.html"${currentSlug === "solutions" ? ' class="here"' : ""}>Answers &amp; Rubrics</a>`,
     `<a href="bibliography.html"${currentSlug === "bibliography" ? ' class="here"' : ""}>Bibliography</a>`,
+    `<a href="about.html"${currentSlug === "about" ? ' class="here"' : ""}>About This Edition</a>`,
   ];
-  const endOpen = ["glossary", "dependency-map", "bibliography"].includes(currentSlug);
+  const endOpen = ["reading-paths", "glossary", "dependency-map", "indexes", "solutions", "bibliography", "about"].includes(currentSlug);
   rows.push(partHtml("End matter", endLinks.join("\n"), endOpen));
   return rows.join("\n");
 }

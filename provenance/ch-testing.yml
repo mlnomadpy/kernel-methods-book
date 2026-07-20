@@ -1,0 +1,1378 @@
+chapter: ch-testing
+slug: kernel-hypothesis-testing
+title: Kernel Hypothesis Testing
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - gretton2006
+  - gretton2012
+  - serfling1980
+  - gretton2009fast
+  - gretton2012optkernel
+  - sutherland2017
+  - liu2020deepkernel
+  - jitkrittum2016
+  - chwialkowski2015
+  - schrab2021mmdagg
+  - gretton2005hsic
+  - gretton2008hsictest
+  - sejdinovic2013interaction
+  - fukumizu2008
+  - bounliphone2016relative
+  - liu2016ksd
+  - chwialkowski2016ksd
+  - muandet2017
+sections:
+  - id: from-discrepancy-to-decision
+    title: From a discrepancy to a decision
+    contribution: adapted-and-expanded
+    sources: &a1
+      - gretton2006
+      - gretton2012
+      - serfling1980
+      - gretton2009fast
+      - gretton2012optkernel
+      - sutherland2017
+      - liu2020deepkernel
+      - jitkrittum2016
+      - chwialkowski2015
+      - schrab2021mmdagg
+      - gretton2005hsic
+      - gretton2008hsictest
+      - sejdinovic2013interaction
+      - fukumizu2008
+      - bounliphone2016relative
+      - liu2016ksd
+      - chwialkowski2016ksd
+      - muandet2017
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#from-discrepancy-to-decision
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: v-and-u-statistics
+    title: The V-statistic and the U-statistic
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#v-and-u-statistics
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: null-distribution
+    title: Why the null law is a chi-square mixture
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#null-distribution
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: permutation-test
+    title: Calibrating the null by permutation
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#permutation-test
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: test-power
+    title: Test power and the objective for kernel choice
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#test-power
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: median-heuristic
+    title: The median heuristic and its limits
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#median-heuristic
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: learned-kernels
+    title: Learned and deep kernels
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#learned-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: linear-time
+    title: Linear-time versus quadratic-time estimators
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#linear-time
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: aggregated-tests
+    title: "Aggregating over kernels: MMDAgg"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#aggregated-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: independence-testing
+    title: Independence and interaction testing
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#independence-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: relative-and-goodness-of-fit
+    title: Relative tests and goodness-of-fit
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#relative-and-goodness-of-fit
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: block-and-streaming-tests
+    title: Block estimators and streaming tests
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#block-and-streaming-tests
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: dependent-data
+    title: Dependent observations and the wild bootstrap
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - chwialkowski2015
+    locators:
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#dependent-data
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: robust-and-multiple-testing
+    title: Robustness, multiple testing, and selective kernel choice
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - schrab2021mmdagg
+    locators:
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#robust-and-multiple-testing
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: conditional-two-sample
+    title: Conditional and localized two-sample questions
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#conditional-two-sample
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - gretton2006
+      - gretton2012
+      - serfling1980
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: gretton2006
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: serfling1980
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2009fast
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2012optkernel
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sutherland2017
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2020deepkernel
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: jitkrittum2016
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2015
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schrab2021mmdagg
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2005hsic
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: gretton2008hsictest
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sejdinovic2013interaction
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fukumizu2008
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bounliphone2016relative
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liu2016ksd
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chwialkowski2016ksd
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: muandet2017
+        manuscript_locator: ch-testing.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

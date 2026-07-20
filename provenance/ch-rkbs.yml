@@ -1,0 +1,194 @@
+chapter: ch-rkbs
+slug: reproducing-kernel-banach-and-variation-spaces
+title: Reproducing-Kernel Banach and Variation Spaces
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - zhang2009rkbs
+  - wang2024sparserkbs
+  - parhi2021banach
+sections:
+  - id: rkbs-hilbert-structure
+    title: What the Hilbert structure was buying
+    contribution: adapted-and-expanded
+    sources:
+      - zhang2009rkbs
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-hilbert-structure
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-duality
+    title: Semi-inner products and duality mappings
+    contribution: adapted-and-expanded
+    sources: &a1
+      - zhang2009rkbs
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-duality
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-representer
+    title: Banach-space representer theorems
+    contribution: adapted-and-expanded
+    sources:
+      - zhang2009rkbs
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-representer
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-sparse-atoms
+    title: Nonsmooth norms and sparse atoms
+    contribution: adapted-and-expanded
+    sources:
+      - wang2024sparserkbs
+    locators:
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-sparse-atoms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: variation-ridge-splines
+    title: Variation spaces and ridge splines
+    contribution: adapted-and-expanded
+    sources:
+      - parhi2021banach
+    locators:
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#variation-ridge-splines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-algorithms
+    title: "Algorithms: from duality to column generation"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-algorithms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-algorithms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-algorithms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-tradeoffs
+    title: Statistical and computational tradeoffs
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-tradeoffs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-tradeoffs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-tradeoffs
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-practice
+    title: Common mistakes and practical implications
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-summary
+    title: Summary and further reading
+    contribution: adapted-and-expanded
+    sources:
+      - zhang2009rkbs
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

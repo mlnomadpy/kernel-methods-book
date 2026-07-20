@@ -1,0 +1,44 @@
+chapter: ch-dkl
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Prove that \(k(h_\theta(x),h_\theta(z))\) is positive definite for fixed \(\theta\).
+    answer: For coefficients (a_i), set (z_i=h_\theta(x_i)). Then
+      (sum_{ij}a_ia_jk(h_\theta(x_i),h_\theta(x_j))=sum_{ij}a_ia_jk(z_i,z_j) \ge0) by positive
+      definiteness of the base kernel.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      For a \(2\times2\) covariance matrix, compute both marginal-likelihood terms and their change when observation noise doubles.
+    answer: For (C=\begin{psmallmatrix}a&c\\c&b\end{psmallmatrix}), use
+      (C^{-1}=(ab-c^2)^{-1}\begin{psmallmatrix}b&-c\\-c&a\end{psmallmatrix}) and (log\det
+      C=\log(ab-c^2)). Doubling noise adds the original noise variance to both (a) and (b);
+      recompute these two expressions. A full numerical answer must state the chosen covariance
+      entries and response.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Derive the covariance-parameter gradient proposition from matrix differential identities.
+    answer: Differentiate (y^\top C^{-1}y) using (dC^{-1}=-C^{-1}(dC)C^{-1}), obtaining
+      (-\alpha^\top(dC)\alpha=-\operatorname{tr}(\alpha\alpha^\top dC)). Add (d\log\det
+      C=\operatorname{tr}(C^{-1}dC)), multiply by one half, and read off the coefficient of
+      (dC=(\partial C/\partial\psi)d\psi).
+  - number: 4
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design an evaluation comparing DKL, a fixed-kernel GP, an NTK predictor, and a neural ensemble. Specify accuracy, calibration, shift, compute, and seed reporting criteria.
+    answer: "Rubric: use identical train/validation/test splits; tune all baselines comparably; report
+      task error and proper scoring rules; include reliability and interval coverage; test at least
+      one covariate shift; report wall time, memory, seeds, and failed factorizations; explain which
+      methods learn features and which use a fixed tangent kernel. Seven elements are required."

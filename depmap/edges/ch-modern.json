@@ -68,30 +68,5 @@
   "from": "kernels-now#thm-42-4",
   "to": "mercer-and-rates#thm-18-10",
   "note": "In the kernel case the effective ranks are read off the Mercer eigenvalues."
- },
- {
-  "from": "kernels-now#prop-42-5",
-  "to": "mercer-and-rates#thm-18-10",
-  "note": "The eigenbasis (eta_i, phi_i) is supplied by Mercer's theorem for the kernel integral operator."
- },
- {
-  "from": "kernels-now#prop-42-5",
-  "to": "mercer-and-rates#def-18-17",
-  "note": "Reuses the spectral regression model: target expanded in the kernel eigenbasis with independent noise sigma^2."
- },
- {
-  "from": "kernels-now#prop-42-5",
-  "to": "kernel-ridge-and-friends#def-4-2",
-  "note": "Predicts the generalization error of kernel ridge regression at ridge lambda."
- },
- {
-  "from": "kernels-now#prop-42-5",
-  "to": "mercer-and-rates#lem-18-18",
-  "note": "The derivation is the ridge bias-variance decomposition applied mode by mode."
- },
- {
-  "from": "kernels-now#prop-42-5",
-  "to": "mercer-and-rates#cor-18-20",
-  "note": "Its power-law exponent refines the KRR rates fixed by eigenvalue decay and the source condition."
  }
 ]

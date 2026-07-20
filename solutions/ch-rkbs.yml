@@ -1,0 +1,43 @@
+chapter: ch-rkbs
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Identify the exact steps of the standard RKHS representer proof that fail without an inner product.
+    answer: >-
+      The RKHS proof uses an orthogonal projection onto observed kernel sections, the Pythagorean norm identity, and reproduction by an element of the same space. A general Banach space has no canonical orthogonal complement, no Pythagorean identity, and identifies bounded evaluations with dual elements rather than primal vectors. The replacement argument therefore works through norming functionals, subgradients, and duality maps.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Compute the normalized duality map and its inverse for a finite-dimensional \(\ell_p\) space at a supplied vector.
+    answer: >-
+      For \(1<p<\infty\) with conjugate exponent \(q\), one normalized convention is \(J_p(x)_i=\lVert x\rVert_p^{\,2-p}|x_i|^{p-2}x_i\). It satisfies \(\langle x,J_p(x)\rangle=\lVert x\rVert_p^2\) and \(\lVert J_p(x)\rVert_q=\lVert x\rVert_p\). Apply the analogous \(q\)-formula to recover \(x\), checking zero coordinates separately.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Derive the first-order optimality condition showing that the norming functional of a smooth RKBS solution lies in the span of evaluation functionals.
+    answer: >-
+      Differentiate the empirical loss through the evaluation map and differentiate the smooth norm penalty through its duality map. Optimality gives \(\sum_i g_i\delta_{x_i}+\lambda c\,J(\widehat f)=0\), where \(g_i\) are loss derivatives and \(c\) is the scalar derivative of the radial penalty. Hence \(J(\widehat f)\) belongs to the span of evaluations whenever \(c\ne0\); applying \(J^{-1}\) yields the primal solution, generally nonlinearly.
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: >-
+      Prove a finite-support bound for an extreme solution of an atomic-norm interpolation problem with finitely many scalar measurements.
+    answer: >-
+      Map every atom to its vector of observed measurements. The feasible measurement vector lies in a scaled convex hull of signed atomic images. A Carathéodory argument represents it using at most one more atom than the dimension of the measurement space, with refinements possible under symmetry or equality constraints. Lifting those coefficients back gives a finite signed atomic measure with the same measurements and no larger norm; compactness or weak-star existence assumptions are needed to ensure an extreme minimizer exists.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Compare an RKHS estimator, a finite-dictionary lasso, and a continuous variation-space model on the same regression task. Specify capacity control, optimization certificates, sparsity, compute, and extrapolation diagnostics.
+    answer: >-
+      Use identical nested splits and tune the RKHS norm, lasso penalty, and variation norm on the same validation objective. Report test error, robustness, active atoms, evaluation cost, primal-dual gaps, atom-oracle tolerances, and sensitivity to initialization. Examine extrapolation and learned atom locations, and distinguish dictionary sparsity from continuous feature learning; the variation model receives credit only when its oracle certificate and improvement survive matched compute and repeated seeds.

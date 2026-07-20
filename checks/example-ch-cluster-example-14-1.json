@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-cluster",
+  "anchor": "example-14-1",
+  "source_file": "manuscript/chapters/ch-cluster.md",
+  "source_sha256": "a733324ca012b185b90cbbf619285bf118ccb23eddfd43887ef7f616603e0e55",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-cluster-ex1.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "0.1",
+    "6",
+    "-1",
+    "2.1",
+    "6.1",
+    "12.2",
+    "0.032787",
+    "0.0314",
+    "1.4524",
+    "1.5",
+    "1.5162",
+    "0.9372",
+    "-0.9372",
+    "0.4",
+    "0.0328"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

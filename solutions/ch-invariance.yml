@@ -1,0 +1,117 @@
+chapter: ch-invariance
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Explain in two sentences why the Virtual SV method generates virtual examples only from the
+      support vectors rather than from the full training set, citing the property of the SVM
+      solution that makes this sound. What is the one experimental observation from the USPS table
+      that confirms nothing is lost by this restriction?
+    answer: Only support vectors have nonzero dual coefficients and therefore determine the SVM decision
+      boundary; transforming a zero-coefficient training point cannot change the current expansion.
+      The USPS experiment reports that virtual examples generated from support vectors match the
+      accuracy obtained by virtualizing the full set, confirming no measured loss while greatly
+      reducing augmentation.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: "Using the setup of the pre-image example (points \\(x_1=(0,0)\\), \\(x_2=(2,0)\\),
+      \\(x_3=(1,1.5)\\), weights \\(\\beta=(0.5,0.3,0.2)\\), \\(\\sigma=1\\)), carry out one step of
+      the fixed-point iteration by hand starting from \\(z_0=(0.8,0.3)\\): compute the three weights
+      \\(w_i=\\beta_i e^{-\\|x_i-z_0\\|^2/2}\\) and the updated \\(z_1=\\sum_i w_i x_i/\\sum_i
+      w_i\\). Check that you recover \\(z_1\\approx(0.644,0.246)\\)."
+    answer: At $z_0=(0.8,0.3)$ the squared distances are $0.73$, $1.53$, and $1.48$. Thus
+      $(w_1,w_2,w_3)=(0.5e^{-0.365},0.3e^{-0.765},0.2e^{-0.74})\approx(0.34710,0.13960,0.09542)$.
+      Their sum is $0.58212$, and $z_1=[w_2(2,0)+w_3(1,1.5)]/\sum_iw_i=(0.64355,0.24588)$, agreeing
+      with $(0.644,0.246)$.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Derive the Gaussian-kernel fixed-point update from scratch. Starting from the objective
+      \(J(z)=\langle\Psi,\Phi(z)\rangle=\sum_i\alpha_i\exp(-\|x_i-z\|^2/2\sigma^2)\), compute
+      \(\nabla_z J\), set it to zero, and solve the resulting equation for \(z\) to obtain the
+      weighted-average form. Where in the derivation do you use that the kernel depends on \(z\)
+      only through \(\|x_i-z\|^2\)?
+    answer: "Differentiating $J(z)=\\sum_i\\alpha_i e^{-\\|x_i-z\\|^2/(2\\sigma^2)}$ gives $\\nabla
+      J=\\sigma^{-2}\\sum_i\\alpha_i k(x_i,z)(x_i-z)$. At a stationary point with nonzero
+      denominator, $\\sum_i\\alpha_i k(x_i,z)x_i=z\\sum_i\\alpha_i k(x_i,z)$, hence
+      $z=\\sum_iw_ix_i/\\sum_iw_i$ with $w_i=\\alpha_i k(x_i,z)$. Radial dependence is used when
+      differentiating: it makes the gradient of each term a scalar kernel weight times $x_i-z$. With
+      signed coefficients the iteration is not necessarily an averaging contraction and the
+      denominator may vanish."
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Prove the optimal-coefficient formula \(\beta=(K^z)^{-1}K^{zx}\alpha\) of Proposition
+      (optimal expansion coefficients) by expanding \(\|\Psi-\sum_i\beta_i\Phi(z_i)\|^2\) as a
+      quadratic in \(\beta\) and minimizing. Then verify that in the one-term case \(N_z=1\) with a
+      normalized kernel, this reduces to \(\beta=\sum_i\alpha_i k(x_i,z)\), the value used in the
+      reduced-set worked example.
+    answer: Let $\Psi=\sum_j\alpha_j\Phi(x_j)$. Expanding gives $F(\beta)=\|\Psi\|^2-2\beta^\top
+      K^{zx}\alpha+\beta^\top K^z\beta$. Thus $\nabla F=2K^z\beta-2K^{zx}\alpha$, and if $K^z$ is
+      nonsingular, $\beta=(K^z)^{-1}K^{zx}\alpha$ (otherwise use a least-norm pseudoinverse
+      solution). For one center, $K^z=[k(z,z)]=[1]$, so $\beta=\sum_j\alpha_jk(z,x_j)$.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Show that a Gaussian kernel expansion \(\Psi=\sum_{j=1}^m\alpha_j\Phi(x_j)\) with at least
+      two distinct \(x_j\) and all \(\alpha_j\neq 0\) has no exact pre-image. Use the fact that
+      distinct Gaussians are linearly independent as functions, so \(\Phi(z)=\Psi\) would express
+      one Gaussian as a nontrivial combination of Gaussians centered elsewhere.
+    answer: Suppose $\Phi(z)=\sum_j\alpha_j\Phi(x_j)$. Inner-producting with $\Phi(x)$ for arbitrary $x$
+      gives the functional identity
+      $e^{-\|x-z\|^2/(2\sigma^2)}=\sum_j\alpha_je^{-\|x-x_j\|^2/(2\sigma^2)}$. Distinct translates
+      of a Gaussian are linearly independent. After combining duplicate centers, this identity can
+      hold only if one center equals $z$ with coefficient one and every other coefficient is zero,
+      contradicting the hypothesis of at least two distinct nonzero terms. Thus no exact pre-image
+      exists under those qualifications.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: Take the three single-pixel images \(A=(1,0,0)\), \(B=(0,1,0)\), \(C=(0,0,1)\) and a linear
+      kernel. Under one-pixel translation the jittered distances give \(d(A,B)=d(B,C)=0\). Compute
+      \(d(A,C)^2=\|A\|^2-2\langle A,C\rangle+\|C\|^2\) directly and confirm the triangle inequality
+      \(d(A,C)\le d(A,B)+d(B,C)\) fails. What does this tell you about whether a jittering kernel is
+      positive definite?
+    answer: Because a one-pixel translation aligns adjacent impulses, $d(A,B)=d(B,C)=0$. Directly,
+      $d(A,C)^2=\|A\|^2-2A^\top C+\|C\|^2=1-0+1=2$, so $d(A,C)=\sqrt2>0+0$. The triangle inequality
+      fails, so this jittered dissimilarity is not a Hilbert distance. Consequently the similarity
+      constructed from it is not guaranteed PSD; its finite Gram spectrum must be checked rather
+      than calling it a kernel automatically.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: The invariance-kernel preprocessing replaces the dot product by \(\langle
+      x,x'\rangle_{T_\gamma^{-1}}\) with \(T_\gamma=(1-\gamma)T+\gamma I\) and \(T\) the tangent
+      covariance. Explain what the two limits \(\gamma\to 1\) and \(\gamma\to 0\) do, and why
+      diagonalizing \(T_\gamma\) and rescaling by inverse square-root eigenvalues amounts to
+      downweighting the directions in which the data vary most under the transformation. Relate this
+      to whitening in principal component analysis.
+    answer: As $\gamma\to1$, $T_\gamma\to I$ and the ordinary dot product is recovered. As $\gamma\to0$,
+      the metric approaches $T^{-1}$ on nonsingular tangent directions, enforcing the strongest
+      invariance; null or tiny modes require the ridge supplied by positive $\gamma$. If
+      $T=U\operatorname{diag}(\lambda_j)U^\top$, preprocessing multiplies coordinate $j$ by
+      $[(1-\gamma)\lambda_j+\gamma]^{-1/2}$, so high transformation-variance directions shrink. This
+      is PCA whitening applied to tangent variations rather than to the raw-data covariance.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: In the reduced-set construction algorithm, argue that iterating one-term pre-images greedily
+      need not reach the globally optimal \(N_z\)-term reduced set, which motivates the phase-II
+      joint optimization. Then explain why, for classification specifically, it is acceptable that
+      the residual \(\|\Psi-\Psi'\|\) does not fall to zero, by contrasting the quantity the reduced
+      set minimizes with the quantity that actually governs test error.
+    answer: The one-term step minimizes the residual along a single new atom while holding earlier
+      choices fixed. The reduced-set objective is nonconvex in all centers, so an early locally
+      attractive center can prevent the best joint configuration; no matroid or orthogonality
+      property makes greedy selection globally optimal. Phase II jointly moves all centers and
+      coefficients to escape that coordinatewise restriction. For classification the actual quantity
+      is the sign and margin of $f(x)$, not RKHS reconstruction error itself; a nonzero residual is
+      acceptable when its evaluation perturbation stays below the relevant margins, though the
+      residual still supplies a conservative bound via the reproducing inequality.

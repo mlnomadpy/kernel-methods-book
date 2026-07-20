@@ -1,0 +1,768 @@
+chapter: ch07
+slug: mercer-and-rates
+title: Mercer's Theorem, Spectra, and Rates
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - mercer1909
+  - aronszajn1950
+  - cuckersmale2002
+  - caponnetto2007
+  - smale2007
+  - steinwart2009rates
+  - fischer2020
+  - blanchard2018
+  - bach2013
+  - steinwart2008
+  - tsybakov2009
+  - dicker2015
+  - scholkopf2002
+  - shawe2004
+sections:
+  - id: from-smoothness-to-kernels
+    title: From smoothness functionals to kernels
+    contribution: adapted-and-expanded
+    sources: &a1
+      - mercer1909
+      - aronszajn1950
+      - cuckersmale2002
+      - caponnetto2007
+      - smale2007
+      - steinwart2009rates
+      - fischer2020
+      - blanchard2018
+      - bach2013
+      - steinwart2008
+      - tsybakov2009
+      - dicker2015
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#from-smoothness-to-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: the-integral-operator
+    title: Mercer kernels and their integral operator
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#the-integral-operator
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: mercers-theorem
+    title: Mercer's theorem
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#mercers-theorem
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: example-the-unit-interval
+    title: "Worked example 1: periodic kernels on \\([0,1]\\)"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#example-the-unit-interval
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: example-the-sphere
+    title: "Worked example 2: dot-product kernels on the sphere \\(S^{d-1}\\)"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#example-the-sphere
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkhs-from-the-spectrum
+    title: The RKHS built from the spectrum
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#rkhs-from-the-spectrum
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: krr-rates
+    title: Convergence rates of kernel ridge regression
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#krr-rates
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: integral-operator-minimax
+    title: "The integral-operator minimax framework: source and capacity"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#integral-operator-minimax
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: beyond-compactness
+    title: "Beyond compactness: an outlook"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#beyond-compactness
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - mercer1909
+      - aronszajn1950
+      - cuckersmale2002
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: mercer1909
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: cuckersmale2002
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: smale2007
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fischer2020
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: blanchard2018
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bach2013
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: tsybakov2009
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch07.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

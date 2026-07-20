@@ -1,0 +1,117 @@
+chapter: ch-signature
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: A path in \(\mathbb{R}^2\) visits \((0,0)\to(2,0)\to(2,3)\). Compute its level-1 signature
+      (the displacement) and its level-2 tensor \(\mathbf S^2\) using
+      \(\sum_p\tfrac12\Delta_p^{\otimes2}+\sum_{p\lt q}\Delta_p\otimes\Delta_q\). Read off the Lévy
+      area \(\tfrac12(S^{12}-S^{21})\) and check the shuffle relation \(S^{12}+S^{21}=S^1S^2\).
+    answer: The increments are $a=(2,0)$ and $b=(0,3)$, so level 1 is $a+b=(2,3)$. Level 2 is
+      $\tfrac12a^{\otimes2}+a\otimes b+\tfrac12b^{\otimes2}=\begin{pmatrix}2&6\\0&4.5\end{pmatrix}$.
+      The Lévy area is $(6-0)/2=3$. The shuffle relation reads $S^{12}+S^{21}=6=2\cdot3=S^1S^2$.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Reparametrize the path of Exercise 1 so it dwells three times as long on the first segment
+      (walk \((0,0)\to(2,0)\) over \([0,3]\), then \((2,0)\to(2,3)\) over \([3,4]\)). Recompute the
+      depth-2 signature and confirm every coordinate is unchanged. In one sentence, say which
+      feature of the raw time series this invariance throws away, and why that is usually the
+      intended behaviour.
+    answer: Changing the traversal speeds does not change either segment increment or their order.
+      Chen's product therefore gives the same level-1 vector $(2,3)$ and level-2 matrix
+      $\begin{pmatrix}2&6\\0&4.5\end{pmatrix}$. Signature reparametrization invariance discards
+      dwell time and absolute speed; this is intended when the signal of interest is the traced
+      geometric path and timing is a nuisance. If timing matters, time must be added as a channel.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Prove Chen's identity at level two: for the concatenation \\(X\\star Y\\), show
+      \\(S(X\\star Y)^{ij}=S(X)^{ij}+S(X)^{i}S(Y)^{j}+S(Y)^{ij}\\). Interpret the three terms as the
+      three ways an ordered pair of times can fall relative to the join point."
+    answer: Split the ordered integration domain $t_1<t_2$ at the join. Both times in $X$ contribute
+      $S(X)^{ij}$; both in $Y$ contribute $S(Y)^{ij}$. If $t_1$ is in $X$ and $t_2$ in $Y$, order is
+      automatic and the rectangular integral factors as $S(X)^iS(Y)^j$. The reverse cross-case
+      cannot occur because all $X$ times precede all $Y$ times. Adding the three disjoint regions
+      proves the level-two Chen identity.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: For the global alignment kernel with \(\kappa(a,b)=e^{-(a-b)^2/2}\), fill the DP table for
+      \(x=(0,1)\) and \(y=(0,0,1)\) and read off \(k_{\mathrm{GA}}(x,y)\). Then set
+      \(\kappa\equiv1\) and recompute the corner to count the alignments between a length-2 and a
+      length-3 sequence.
+    answer: With $r=e^{-1/2}$, the DP rows (including the zero boundary) are $(1,0,0,0)$, $(0,1,1,r)$,
+      and $(0,r,2r+r^2,1+3r+r^2)$. Thus $k_{GA}=1+3r+r^2\approx3.187471$. With local similarity
+      one, the table is $(1,0,0,0)$, $(0,1,1,1)$, $(0,1,3,5)$, so there are five alignments.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: 'Show that the DTW recursion and the GA recursion are the same recursion evaluated in two
+      different semirings: DTW uses \((\min,+)\) on costs, GA uses \((+,\times)\) on similarities
+      with \(\kappa=e^{-\text{cost}}\). Then argue that no similarity of the form \"\(\min\) over
+      alignments\" can be an inner product, and connect this to the indefiniteness witness in the
+      text.'
+    answer: "For each cell, DTW combines predecessor path costs with $min$ and adds the local cost: the
+      $(min,+)$ semiring. Exponentiating negative costs converts pathwise addition to
+      multiplication; summing all path weights uses $(+,\\times)$ and gives GA. A pointwise minimum
+      over alignments is not a closure operation for positive-definite kernels and therefore has no
+      general inner-product representation (special degenerate cases may). The chapter's
+      three-sequence determinant witness explicitly shows $e^{-\\gamma DTW}$ is indefinite, whereas
+      the sum-of-products construction can satisfy a PD theorem."
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Prove the global alignment kernel is positive definite under Cuturi's condition that
+      \(\kappa/(1+\kappa)\) is positive definite, by exhibiting the resulting expansion as a
+      Haussler convolution kernel. Identify the decomposition structure \(R\) (each object splits
+      into an alignment of matched single-point parts) and the type match that forces two
+      decompositions to have the same shape before their local kernels are multiplied.
+    answer: "The precise sufficient condition is Cuturi's: $q=\\kappa/(1+\\kappa)$ must be PD. Expanding
+      the alignment construction in terms of $q$ organizes every sequence into typed
+      repetitions/matched parts; only decompositions with the same alignment shape are paired, and
+      their score is a product of local $q$ kernels. Each fixed-shape product is PD, and summing
+      over shapes is a Haussler convolution kernel, hence PD. Resumming the possible repetitions
+      converts the local geometric series back to $\\kappa=q/(1-q)$ and recovers the GA recursion.
+      Merely assuming an arbitrary local $\\kappa$ is PD is not the theorem used here; the ratio
+      condition is essential to this argument."
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: The signature PDE solver in the text converges to the exact kernel as the grid refines.
+      Using the reproducing script, tabulate the finite-difference corner value at refinements
+      \(r=1,2,4,\dots\) and confirm it approaches the deep-truncation value \(3.55917\) at
+      second-order rate (the error roughly quartering when \(r\) doubles). For this particular path
+      pair, verify separately that the truncated signature kernel approaches the same limit from
+      below as depth grows. Explain why monotonicity is automatic for self-kernels but is not
+      guaranteed for a general cross-kernel, whose per-level inner products can have either sign.
+    answer: For refinements $r=(1,2,4,8,16,32,64,128)$ the PDE corners are
+      $(3.6666667,3.5789630,3.5637291,3.5602865,3.5594481,3.5592399,3.5591879,3.5591749)$,
+      approaching $3.5591706$ from above; after the pre-asymptotic steps, doubling roughly quarters
+      the error. Depths 1 through 6 give $(3,3.5,3.5555556,3.5590278,3.5591667,3.5591705)$,
+      approaching from below for this pair. Self-kernel increments are squared norms and
+      nonnegative, so self truncations are monotone. Cross-level inner products may be signed, so
+      cross-kernel monotonicity is not a general theorem; it happens numerically for these paths.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: Derive the signature-kernel Goursat PDE. Writing \(U(s,t)=\langle
+      S(X)_{0,s},S(Y)_{0,t}\rangle\), differentiate under the sum over levels and use that
+      \(\partial_s S(X)^{i_1\cdots i_k}_{0,s}=S(X)^{i_1\cdots i_{k-1}}_{0,s}\,\dot X^{i_k}_s\), the
+      fundamental theorem applied to the outermost integral. Show the mixed derivative
+      \(\partial_s\partial_t U\) reassembles into \(\langle\dot X_s,\dot Y_t\rangle\,U(s,t)\), and
+      identify the boundary values from the signature of the empty path.
+    answer: Write $U(s,t)=\sum_{m\ge0}\langle S_m(X)_{0,s},S_m(Y)_{0,t}\rangle$. Differentiating a
+      level-$m$ $X$ coordinate removes its outermost integral and appends $\dot X_s$;
+      differentiating the matching $Y$ coordinate does the same. Summing the shared last index
+      contracts the velocities to $\langle\dot X_s,\dot Y_t\rangle$, while the remaining
+      level-$(m-1)$ sum is exactly $U(s,t)$. Hence $\partial_s\partial_tU=\langle\dot X_s,\dot
+      Y_t\rangle U$. If either path interval is empty, only level zero remains, so
+      $U(s,0)=U(0,t)=1$. Interchanging differentiation and the level sum requires the
+      bounded-variation/regularity conditions stated for the signature kernel.

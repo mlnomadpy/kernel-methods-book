@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-vc",
+  "anchor": "example-12-1",
+  "source_file": "manuscript/chapters/ch-vc.md",
+  "source_sha256": "f5cff5c413a6fdd2b1c9f7d080f3e8f63ebc84126bee1642c6f394a28db0299b",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-vc-ex1.py"
+  ],
+  "numeric_literals": [
+    "+1",
+    "-1",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "7",
+    "11",
+    "16",
+    "8"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

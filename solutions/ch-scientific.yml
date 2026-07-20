@@ -1,0 +1,43 @@
+chapter: ch-scientific
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      State the smoothness needed to use point, first-derivative, and second-derivative observations with an RKHS kernel.
+    answer: >-
+      The relevant evaluation functionals must be bounded on the RKHS. Point observations require bounded point evaluation, first derivatives require the mixed kernel derivatives that represent first-derivative evaluation, and second derivatives require correspondingly higher mixed derivatives. A safe statement checks existence and continuity of every derivative \(L_xL_zk(x,z)\), rather than assuming that visual smoothness of the kernel formula is enough.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Form the functional Gram matrix for value and derivative observations of a one-dimensional RBF kernel and verify its symmetry.
+    answer: >-
+      For \(k(x,z)=\exp\{-(x-z)^2/(2\ell^2)\}\), use blocks \(k(x_i,x_j)\), \(\partial_{z}k(x_i,z_j)\), \(\partial_x k(x_i,z_j)\), and \(\partial_x\partial_z k(x_i,z_j)\). The first derivatives are opposite under argument exchange and the mixed derivative is symmetric, so the assembled block matrix is symmetric. Numerical eigenvalues should be nonnegative up to roundoff when duplicate or conflicting functionals are handled consistently.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove positive semidefiniteness of the symmetric collocation matrix using Riesz representers.
+    answer: >-
+      Let \(r_i\) represent the bounded functional \(L_i\), so \(G_{ij}=\langle r_i,r_j\rangle_{\mathcal H}\). For arbitrary coefficients \(a\), \(a^\top Ga=\lVert\sum_i a_i r_i\rVert_{\mathcal H}^2\ge0\). This also shows when singularity occurs: a nonzero coefficient vector describes a linearly dependent combination of functionals on the RKHS.
+  - number: 4
+    kind: challenge
+    status: draft
+    prompt: >-
+      Derive a kernel formulation that enforces a linear boundary condition exactly while penalizing an interior differential residual softly.
+    answer: >-
+      Choose a null-space or projected kernel whose sections satisfy \(\mathcal B u=0\), add any known nonhomogeneous lifting, and represent the remaining function in that constrained RKHS. Minimize observed-data loss plus \(\rho\sum_j\{\mathcal A u(z_j)-f(z_j)\}^2+\lambda\lVert u\rVert^2\). The representer contains data-evaluation and interior-residual functionals after projection; exact boundary satisfaction follows from the hypothesis space, while the PDE is enforced only at finite residual sites.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design a resolution-transfer benchmark comparing kernel operator regression and a Fourier neural operator on a parametric PDE family. Specify meshes, norms, boundary handling, compute, uncertainty, and failure diagnostics.
+    answer: >-
+      Define the continuous input and solution spaces, train on several coarse meshes, and test on unseen parameters and both finer and irregular meshes. Enforce identical boundary data and compare relative energy and \(L^2\) errors, residual and boundary norms, rollout or operator-composition error, memory, wall time, and mesh sensitivity. For the kernel model report conditioning and posterior or conformal uncertainty; for both models report failed cases and verify that normalization and interpolation never use test solutions.

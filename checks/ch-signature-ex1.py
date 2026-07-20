@@ -143,5 +143,5 @@ for sub in [1, 2, 4, 8, 16, 32, 64, 128]:
     print(f"  sub={sub:4d}   U(S,T) = {goursat(dX, dY, sub):.10f}")
 print(f"\ndeep truncated kernel (m=10)      = {full:.10f}")
 print(f"Goursat PDE (sub=128)             = {goursat(dX, dY, 128):.10f}")
-print("The finite-difference PDE solution converges (from below) to the full")
-print("signature inner product, which the depth-m truncation approaches from below too.")
+print("The finite-difference PDE solution converges from above to the full")
+print("signature inner product; for this pair, depth truncation approaches from below.")

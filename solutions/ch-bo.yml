@@ -1,0 +1,98 @@
+chapter: ch-bo
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: In the first worked example, round 1 has posterior mean
+      \(\mu=(-0,\,-0.003,\,-0.037,\,-0.168,\,-0.277)\) on the grid. A purely greedy rule sets
+      \(\beta_t=0\) and queries \(\arg\max_x\mu_{t-1}(x)\). Which grid point does it choose, and why
+      does that stall the search? Contrast with the GP-UCB choice \(x=1.0\), and explain in one
+      sentence what the \(\beta_t^{1/2}\sigma\) term buys.
+    answer: The largest posterior mean is the displayed $-0$ at $x=0$, an already observed endpoint.
+      Greedy selection therefore repeats a point whose mean and uncertainty are already pinned down
+      and learns essentially nothing new. GP-UCB instead selects $x=1.0$ because its large posterior
+      standard deviation dominates the slightly negative mean; $\sqrt{\beta_t}\sigma$ is an optimism
+      bonus that assigns value to information.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Using the posterior in the expected-improvement example (incumbent \(f^+=0\), the grid means
+      and standard deviations given there), compute the probability of improvement
+      \(\mathrm{PI}(x)=\Phi\big((\mu-f^+)/\sigma\big)\) at \(x=0.5\) and \(x=1.0\). Compare the two
+      rankings, PI versus EI, and explain why PI can prefer a lower-variance point that EI passes
+      over.
+    answer: At $x=0.5$, $z=-0.0030/0.7973=-0.0038$ and $PI=\Phi(z)=0.4985$. At $x=1.0$,
+      $z=-0.0374/0.9817=-0.0381$ and $PI=0.4848$. Thus PI ranks $0.5$ above $1.0$, whereas EI ranks
+      $1.0$ above $0.5$ ($0.3732$ versus $0.3166$). PI counts only the chance of crossing zero and
+      ignores how large an uncertain improvement could be; EI integrates its magnitude.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: Verify the information-gain identity by hand on two points. Take the kernel and noise of the
+      third worked example and the pair \(A=\{0,\,1\}\). Compute
+      \(I=\tfrac12\ln\det(I+\sigma^{-2}K_A)\) directly, then via the telescoping form
+      \(\tfrac12\ln(1+\sigma^{-2}\sigma_0^2(x_1))+\tfrac12\ln(1+\sigma^{-2}\sigma_1^2(x_2))\), and
+      confirm the two agree.
+    answer: Here $K_A=\begin{pmatrix}1&e^{-2}\\e^{-2}&1\end{pmatrix}$ and the noise variance is $0.01$,
+      so $I=\tfrac12\log\det(I+100K_A)=4.6060616$ nats. Sequentially, the prior variance at 0 is 1.
+      After a noisy observation there, the variance at 1 is $1-e^{-4}/1.01=0.9818657$. Therefore
+      $\tfrac12\log(101)+\tfrac12\log(1+100(0.9818657))=4.6060616$, matching the determinant
+      calculation.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Show that expected improvement is strictly increasing in the posterior standard deviation
+      \(\sigma\) for fixed mean \(\mu\ne f^+\). Conclude that, among points with equal mean, EI
+      always prefers the more uncertain one, which is its exploration mechanism.
+    answer: Put $a=\mu-f^+$ and $z=a/\sigma$. Differentiating $EI=a\Phi(z)+\sigma\phi(z)$ at fixed $a$
+      gives $a\phi(z)(-a/\sigma^2)+\phi(z)+\sigma[-z\phi(z)](-a/\sigma^2)=\phi(z)>0$; the two
+      chain-rule terms cancel. Thus EI is strictly increasing in posterior standard deviation for
+      every finite $a$ (including $a=0$), so equal-mean candidates are ranked by uncertainty.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Prove the instantaneous-regret bound \(r_t\le 2\beta_t^{1/2}\sigma_{t-1}(x_t)\) of the
+      optimism lemma from scratch, stating exactly where the confidence bound and the
+      acquisition-maximizing choice of \(x_t\) each enter. Then explain why the argument fails for
+      the greedy rule \(\beta_t=0\).
+    answer: On the confidence event, $f(x^*)\le\mu(x^*)+\sqrt{\beta_t}\sigma(x^*)$. Because $x_t$
+      maximizes that UCB, this is at most $\mu(x_t)+\sqrt{\beta_t}\sigma(x_t)$. The lower confidence
+      bound at $x_t$ gives $f(x_t)\ge\mu(x_t)-\sqrt{\beta_t}\sigma(x_t)$. Subtracting yields
+      $r_t=f(x^*)-f(x_t)\le2\sqrt{\beta_t}\sigma(x_t)$. The greedy rule maximizes only $\mu$; it
+      provides no inequality comparing the optimistic upper bounds at $x^*$ and $x_t$, so the middle
+      step fails.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: "Establish the elementary inequality used in the variance-sum lemma: for \\(u\\in[0,C_0]\\),
+      \\(u\\le\\frac{C_0}{\\ln(1+C_0)}\\ln(1+u)\\). Then apply it with \\(C_0=\\sigma^{-2}\\) to
+      complete the step
+      \\(\\sigma_{t-1}^2(x_t)\\le\\frac{1}{\\ln(1+\\sigma^{-2})}\\ln(1+\\sigma^{-2}\\sigma_{t-1}^2(\
+      x_t))\\), noting where \\(k(x,x)\\le 1\\) is used."
+    answer: The function $h(u)=\log(1+u)/u$ is decreasing for $u>0$ (equivalently $u/\log(1+u)$ is
+      increasing), so on $0<u\le C_0$, $\log(1+u)/u\ge\log(1+C_0)/C_0$. Rearranging proves the
+      claim, with continuity at zero. Set $u=\sigma^{-2}v$ and $C_0=\sigma^{-2}$. The bound
+      $k(x,x)\le1$ and variance reduction under conditioning give $0\le v=\sigma_{t-1}^2(x_t)\le1$,
+      hence the required interval; multiplying by $\sigma^2$ gives the displayed variance
+      inequality.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: Deduce a simple-regret guarantee from the cumulative bound, then read it against the
+      information-gain table. Using \(\min_{t\le T}r_t\le R_T/T\) and \(R_T\le\sqrt{C_1
+      T\beta_T\gamma_T}\), write the simple-regret rate for the squared-exponential kernel (where
+      \(\gamma_T=O((\ln T)^{d+1})\)) and for a Matern kernel with \(\gamma_T=O(T^{a})\), \(0\lt a\lt
+      1\). For which \(a\) does simple regret still vanish, and what does that say about the
+      roughest objective GP-UCB can reliably optimize?
+    answer: The best queried point has simple regret at most $R_T/T\le\sqrt{C_1\beta_T\gamma_T/T}$. With
+      $\beta_T=O(\log T)$ and squared-exponential $\gamma_T=O((\log T)^{d+1})$, this is
+      $O(\sqrt{(\log T)^{d+2}/T})$. If $\gamma_T=O(T^a)$ for a Matern kernel, it is
+      $O(T^{(a-1)/2}\sqrt{\log T})$, which vanishes exactly for $a<1$. Thus the guarantee survives
+      only while roughness and dimension leave sublinear information gain; at the boundary $a=1$
+      this proof no longer certifies consistency.

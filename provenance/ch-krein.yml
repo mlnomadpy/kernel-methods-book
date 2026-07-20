@@ -1,0 +1,576 @@
+chapter: ch-krein
+slug: indefinite-and-krein-kernels
+title: Indefinite and Krein-Space Kernels
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - ong2004krein
+  - haasdonk2005
+  - chen2009similarity
+  - loosli2016krein
+  - schleif2015
+  - oglic2018
+  - oglic2019
+  - wu2005
+  - higham1988
+  - linlin2003
+  - pekalska2005
+  - alpay1991
+  - schwartz1964
+  - vapnik1998
+sections:
+  - id: when-similarity-is-not-a-kernel
+    title: When the similarity is not a kernel
+    contribution: adapted-and-expanded
+    sources: &a1
+      - ong2004krein
+      - haasdonk2005
+      - chen2009similarity
+      - loosli2016krein
+      - schleif2015
+      - oglic2018
+      - oglic2019
+      - wu2005
+      - higham1988
+      - linlin2003
+      - pekalska2005
+      - alpay1991
+      - schwartz1964
+      - vapnik1998
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#when-similarity-is-not-a-kernel
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: krein-spaces
+    title: Krein spaces and the \(k=k_+-k_-\) decomposition
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#krein-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: stabilization
+    title: The representer theorem becomes a stabilization
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#stabilization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: spectrum-transforms
+    title: Spectrum transformations
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#spectrum-transforms
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: krein-svm
+    title: Learning the SVM in a Krein space
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#krein-svm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: summary
+    title: Summary
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - ong2004krein
+      - haasdonk2005
+      - chen2009similarity
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: ong2004krein
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: haasdonk2005
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: chen2009similarity
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: loosli2016krein
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schleif2015
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2018
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: oglic2019
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2005
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: higham1988
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: linlin2003
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: pekalska2005
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: alpay1991
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schwartz1964
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-krein.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

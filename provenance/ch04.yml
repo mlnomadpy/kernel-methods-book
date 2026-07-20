@@ -1,0 +1,882 @@
+chapter: ch04
+slug: learning-theory
+title: Learning Theory in RKHS Balls
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - bartlett2006
+  - vapnik1995
+  - bartlett2002
+  - ledoux1991
+  - mcdiarmid1989
+  - boucheron2005
+  - boyd2004
+  - scholkopf2002
+  - shawe2004
+  - steinwart2008
+  - belkin2019dd
+  - liang2020interpolate
+  - bartlett2005local
+  - bousquet2002stability
+  - koltchinskii2006
+sections:
+  - id: surrogate-losses
+    title: From the 0/1 loss to convex surrogates
+    contribution: adapted-and-expanded
+    sources: &a1
+      - bartlett2006
+      - vapnik1995
+      - bartlett2002
+      - ledoux1991
+      - mcdiarmid1989
+      - boucheron2005
+      - boyd2004
+      - scholkopf2002
+      - shawe2004
+      - steinwart2008
+      - belkin2019dd
+      - liang2020interpolate
+      - bartlett2005local
+      - bousquet2002stability
+      - koltchinskii2006
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#surrogate-losses
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: calibration
+    title: "Calibration: a small \\(\\varphi\\)-risk ensures a small 0/1 risk"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#calibration
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: empirical-risk-minimization
+    title: Empirical risk minimization
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#empirical-risk-minimization
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rademacher-complexity
+    title: Rademacher complexity
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#rademacher-complexity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: basic-learning-bounds
+    title: A basic learning bound for ERM
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#basic-learning-bounds
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: erm-in-rkhs-balls
+    title: ERM in balls of an RKHS
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#erm-in-rkhs-balls
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: fast-rates-and-stability
+    title: "Fast rates: local complexity and stability"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#fast-rates-and-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: from-constraints-to-penalties
+    title: "From constrained ERM to penalized ERM: regularization"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#from-constraints-to-penalties
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: convex-duality-interlude
+    title: "Interlude: convex optimization and Lagrangian duality"
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#convex-duality-interlude
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: towards-support-vector-machines
+    title: The support vector machine in this light
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#towards-support-vector-machines
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: common-mistakes-and-practical-implications
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#common-mistakes-and-practical-implications
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: summary-and-further-reading
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - bartlett2006
+      - vapnik1995
+      - bartlett2002
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: adapted-and-expanded
+    sources: *a1
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2002
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: ledoux1991
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mcdiarmid1989
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boucheron2005
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: liang2020interpolate
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bartlett2005local
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: bousquet2002stability
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: koltchinskii2006
+        manuscript_locator: ch04.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-20

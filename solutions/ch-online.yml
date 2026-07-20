@@ -1,0 +1,128 @@
+chapter: ch-online
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Show that the kernel perceptron's dual update follows from its primal update. Starting from
+      \(w=\sum_j\alpha_j y_j\varphi(x_j)\) with \(w_0=0\), verify that the primal move \(w\leftarrow
+      w+y_t\varphi(x_t)\) on a mistake is identical to \(\alpha_t\leftarrow\alpha_t+1\), and that
+      the prediction \(\langle w,\varphi(x)\rangle\) equals \(\sum_j\alpha_j y_j K(x_j,x)\). Explain
+      why an example never misclassified keeps \(\alpha_j=0\).
+    answer: If w=sum_j alpha_j y_j phi(x_j), a mistake at t changes w to the same sum plus y_t phi(x_t),
+      which is exactly alpha_t<-alpha_t+1. Reproduction then gives <w,phi(x)>=sum_j alpha_j
+      y_j<phi(x_j),phi(x)>=sum_j alpha_j y_j K(x_j,x). A point that is never involved in a mistake
+      is never added to the expansion, so its coefficient remains zero and it costs nothing at
+      prediction time.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: Repeat the worked kernel-perceptron example with the homogeneous quadratic kernel
+      \(K(x,z)=(xz)^2\) instead of \((1+xz)^2\), on the same four points \(x=-2,-1,1,2\) with outer
+      label \(+1\) and inner \(-1\). Write out the \(4\times4\) Gram matrix and run the
+      mistake-driven sweeps by hand until a clean pass. Does the algorithm still converge, and to
+      what \(\alpha\)? Compare the number of updates with the \((1+xz)^2\) run.
+    answer: "The homogeneous Gram matrix is the outer product of x^2=(4,1,1,4):
+      [[16,4,4,16],[4,1,1,4],[4,1,1,4],[16,4,4,16]]. Its feature space is one-dimensional,
+      Phi(x)=x^2. A no-bias classifier has score w x^2, which has the same sign at all four nonzero
+      inputs, so the outer-positive/inner-negative labels are not separable. The perceptron
+      therefore never obtains a clean pass and alpha has no finite converged value; updates continue
+      (for example the first sweep updates the first three points and ends with feature weight 2).
+      The inhomogeneous kernel's constant coordinate is essential because it permits a threshold in
+      x^2."
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "In Novikoff's proof, identify precisely where each of the two hypotheses is used: the
+      margin condition \\(y_t\\langle w^\\ast,\\varphi(x_t)\\rangle\\ge\\gamma\\) and the radius
+      condition \\(\\|\\varphi(x_t)\\|\\le R\\). Then show that the middle-term inequality
+      \\(y_{(t)}\\langle w_{t-1},\\varphi(x_{(t)})\\rangle\\le 0\\) is exactly the statement that
+      the update was triggered by a mistake, and explain why the bound would fail if updates were
+      made on correctly classified points."
+    answer: After M mistakes, inner product with the unit separator grows by at least gamma per update
+      because y_t<w*,phi_t>>=gamma, giving <w_M,w*>>=M gamma. The norm recursion is
+      ||w_t||^2=||w_{t-1}||^2+2y_t<w_{t-1},phi_t>+||phi_t||^2. The middle term is nonpositive
+      exactly because an update is triggered only when y_t f_{t-1}(x_t)<=0; the radius bound then
+      gives ||w_M||^2<=MR^2. Cauchy-Schwarz combines M gamma<=||w_M||<=sqrt(M)R. Updating correct
+      points would make the middle term positive and destroy this norm-growth control.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: Evaluate Novikoff's bound on the two-point set \(x_1=(1,0)\), \(y_1=+1\) and \(x_2=(-1,0)\),
+      \(y_2=-1\), with the linear kernel and no bias. Compute \(R\), the max-margin \(\gamma\), and
+      the bound \(R^2/\gamma^2\), then run the perceptron and count the actual updates. Now scale
+      both points by a factor \(a\gt 0\); show that \(R\), \(\gamma\), and the bound all respond so
+      that \(R^2/\gamma^2\) is unchanged, and explain why the mistake count cannot depend on the
+      overall scale.
+    answer: Both feature vectors have norm one, so R=1. The unit separator w*=(1,0) gives y_i<w*,x_i>=1
+      for both points, hence gamma=1 and the bound is one mistake. Starting at zero, the first point
+      triggers one update to w=(1,0); the second then has negative score with negative label and is
+      correct, so the actual count is one. Scaling inputs by a makes R=a and the achieved margin
+      gamma=a, leaving R^2/gamma^2=1. Predictions and mistake decisions are unchanged after the
+      correspondingly scaled first update, so absolute feature scale cannot alter the count.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: Derive the adatron gradient. Starting from
+      \(W(\alpha)=\sum_i\alpha_i-\tfrac12\sum_{i,j}\alpha_i\alpha_j y_i y_j K(x_i,x_j)\), compute
+      \(\partial W/\partial\alpha_i\) and confirm it equals \(1-y_i f(x_i)\) with
+      \(f(x_i)=\sum_j\alpha_j y_j K(x_j,x_i)\). Then argue that at any interior fixed point of the
+      projected update (one with \(0\lt\alpha_i\lt C\)) the support vector condition \(y_i
+      f(x_i)=1\) holds.
+    answer: Differentiating W gives partial_i W=1-sum_j alpha_j y_i y_j K_ij=1-y_i f(x_i). Thus
+      projected gradient ascent uses the margin deficit as its coordinate direction. At an interior
+      fixed point, projection is inactive and a nonzero step can vanish only when partial_i W=0,
+      yielding y_i f(x_i)=1. Boundary coordinates instead satisfy the one-sided KKT inequalities,
+      exactly as in the batch SVM dual.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Show that the projected adatron update never decreases \(W\) along a single coordinate for a
+      small enough step. Treating \(W\) as a function of \(\alpha_i\) with the other coordinates
+      fixed, note it is a concave quadratic \(W(\alpha_i)=\alpha_i(1-y_i \tilde f)-\tfrac12
+      K_{ii}\alpha_i^2+\text{const}\), where \(\tilde f\) collects the other terms. Find the
+      unconstrained maximizer in \(\alpha_i\), and explain why clipping it to \([0,C]\) still yields
+      the constrained maximizer along that coordinate.
+    answer: With other coordinates fixed, the coordinate quadratic has derivative 1-y_i tilde f-K_ii
+      alpha_i and curvature -K_ii<=0. For K_ii>0 its unconstrained maximizer is alpha_i^unc=(1-y_i
+      tilde f)/K_ii. A concave univariate quadratic increases up to this point and decreases
+      afterward, so its maximizer on [0,C] is simply clip(alpha_i^unc,0,C). Taking a step that lands
+      at or moves toward this clipped coordinate optimum cannot decrease W; exact coordinate
+      maximization is the safest such projected update.
+  - number: 7
+    kind: computation
+    status: draft
+    prompt: Consider the online SVR update \(f_{t+1}=(1-\eta\lambda)f_t-\eta
+      c'(x_t,y_t,f_t(x_t))K(x_t,\cdot)\) with the \(\varepsilon\)-insensitive loss. Suppose at
+      rounds \(1,2,3\) the residuals \(y_t-f_t(x_t)\) are \(+2,\,0,\,-2\) and \(\varepsilon=1\),
+      \(\eta=0.5\), \(\lambda=0.1\). Track which rounds create a new support vector and write the
+      coefficient attached to the round-1 term after rounds \(2\) and \(3\), given the geometric
+      decay factor \(1-\eta\lambda\).
+    answer: For residual r=y-f, the derivative with respect to f is -1 when r>epsilon, 0 when
+      |r|<=epsilon, and +1 when r<-epsilon. Round 1 has r=2 and creates a coefficient -eta(-1)=+0.5.
+      Round 2 lies inside the tube and creates none; existing coefficients shrink by 1-eta
+      lambda=0.95, so the first becomes 0.475. Round 3 has r=-2 and creates coefficient
+      -eta(+1)=-0.5, while the round-1 coefficient shrinks again to 0.475*0.95=0.45125. Thus only
+      rounds 1 and 3 become support vectors.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "The budget problem asks us to remove one support vector from an expansion
+      \\(f=\\sum_{j=1}^{B+1}\\beta_j K(x_j,\\cdot)\\) with least damage. Formalize the projection
+      strategy: to drop index \\(r\\), choose new coefficients \\(\\{\\beta_j'\\}_{j\\ne r}\\)
+      minimizing \\(\\big\\|\\sum_{j\\ne r}\\beta_j' K(x_j,\\cdot)-f\\big\\|_{\\mathcal H}^2\\).
+      Write this as a linear least-squares problem in the remaining coefficients, identify the
+      normal equations in terms of the Gram matrix of the kept points, and explain why removal
+      (setting \\(\\beta_j'=\\beta_j\\) for \\(j\\ne r\\) and dropping \\(\\beta_r\\)) is the
+      special case that ignores the coupling."
+    answer: Let S be the kept indices and beta'_S the new vector. The squared RKHS error is beta_S'^T
+      K_SS beta'_S-2 beta_S'^T K_{S,:}beta+beta^T K beta. Differentiation gives the normal equations
+      K_SS beta'_S=K_{S,:}beta=K_SS beta_S+k_{Sr}beta_r. If K_SS is invertible,
+      beta'_S=beta_S+K_SS^{-1}k_{Sr}beta_r; otherwise use the minimum-norm pseudoinverse solution.
+      Plain removal fixes beta'_S=beta_S and discards beta_r without redistributing its correlated
+      component, so it is the coupling-blind special case rather than the optimal projection.

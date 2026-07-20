@@ -1,0 +1,144 @@
+chapter: ch02
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: "Using only \\(K(x, x') = \\langle \\Phi(x), \\Phi(x') \\rangle_{\\mathcal{H}}\\), verify
+      the two properties a distance must have from the kernel formula \\(d_K(x, x')^2 = K(x, x) +
+      K(x', x') - 2K(x, x')\\): that \\(d_K(x, x) = 0\\) for every \\(x\\), and that \\(d_K\\) is
+      symmetric, \\(d_K(x, x') = d_K(x', x)\\). Why does positive definiteness of \\(K\\) guarantee
+      that the quantity under the square root is never negative?"
+    answer: Using the feature representation, d_K(x,x')^2=||Phi(x)-Phi(x')||_H^2. Setting x'=x gives
+      zero. Interchanging x and x' only negates the vector inside the norm, so the value is
+      unchanged; equivalently kernel symmetry makes the displayed formula symmetric. Finally, a
+      squared Hilbert norm cannot be negative. Positive definiteness is precisely what ensures that
+      a Hilbert feature representation exists (and that the corresponding two-point quadratic form
+      is nonnegative), so the radicand is always at least zero.
+  - number: 2
+    kind: warm-up
+    status: draft
+    prompt: For the normalised kernel \(\hat{K}(x, z) = K(x, z) / \sqrt{K(x, x)\, K(z, z)}\), show that
+      every feature vector \(\Phi(x) / \lVert \Phi(x) \rVert_{\mathcal{H}}\) has unit length, so
+      that \(\hat{K}(x, z)\) is the cosine of the angle between \(\Phi(x)\) and \(\Phi(z)\). Deduce
+      that \(d_{\hat{K}}(x, z)^2 = 2\big(1 - \hat{K}(x, z)\big)\), and conclude that \(0 \le
+      d_{\hat{K}}(x, z) \le 2\), with the maximum attained exactly when the two images are antipodal
+      on the unit sphere.
+    answer: Assume K(x,x)>0 for every point being normalized. Then ||Phi(x)/||Phi(x)||||=1, and hat
+      K(x,z)=<Phi(x)/||Phi(x)||,Phi(z)/||Phi(z)||>, the cosine of their Hilbert-space angle. Both
+      normalized diagonal entries equal one, hence d_hatK(x,z)^2=1+1-2 hat K(x,z)=2(1-hat K(x,z)).
+      Cauchy-Schwarz gives -1<=hat K<=1, so 0<=d_hatK^2<=4 and therefore 0<=d_hatK<=2. Equality
+      d_hatK=2 occurs exactly when the unit feature vectors are antipodal; d_hatK=0 occurs when they
+      coincide.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: Take the real line with the linear kernel \(K(x, y) = xy\) and the set \(S = \{2, 3\}\).
+      Compute the \(2 \times 2\) Gram matrix, then use the mean and variance identities to find the
+      squared length \(\lVert \mu \rVert_{\mathcal{H}}^2\) of the barycenter and the feature-space
+      variance \(\frac{1}{n}\sum_s \lVert \Phi(x_s) - \mu \rVert_{\mathcal{H}}^2\). Finally evaluate
+      the point-to-set distance \(d_K(x, S)\) at \(x = 0\) and at \(x = 2.5\), and check that the
+      minimum sits at the ordinary mean of \(S\).
+    answer: "The Gram matrix for S={2,3} is [[4,6],[6,9]]. For the linear kernel Phi(x)=x, so the
+      barycenter is mu=(2+3)/2=2.5 and ||mu||^2=6.25; equivalently (1/4) times the sum of all Gram
+      entries is 25/4. The variance is [(2-2.5)^2+(3-2.5)^2]/2=0.25. Point-to-set distance here is
+      distance to the feature mean: d_K(x,S)=|x-2.5|. Thus d_K(0,S)=2.5 (squared distance 6.25) and
+      d_K(2.5,S)=0. The unique minimum is the ordinary mean 2.5."
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: "Prove the variance identity of the chapter: with \\(\\mu = \\frac{1}{n}\\sum_{i=1}^{n}
+      \\Phi(x_i)\\),"
+    answer: "Expand and average: (1/n)sum_s
+      ||Phi_s-mu||^2=(1/n)sum_s[<Phi_s,Phi_s>-2<Phi_s,mu>+<mu,mu>]. The averaged middle inner
+      product is <(1/n)sum_s Phi_s,mu>=||mu||^2, so the last two contributions combine to -||mu||^2.
+      Now ||mu||^2=<n^{-1}sum_i Phi_i,n^{-1}sum_j Phi_j>=n^{-2}sum_{i,j}K(x_i,x_j), while
+      <Phi_s,Phi_s>=K(x_s,x_s). Substitution yields the stated diagonal-average minus grand-average
+      identity. Every term is a Gram entry, so no feature coordinates are required."
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: "Prove the centering identity. Let \\(U\\) be the \\(n \\times n\\) matrix with every entry
+      \\(1/n\\), and \\(u_i = \\Phi(x_i) - \\mu\\). First show the entrywise formula
+      \\(\\mathbf{K}^c_{ij} = \\langle u_i, u_j\\rangle_{\\mathcal{H}} = \\mathbf{K}_{ij} -
+      \\frac{1}{n}\\sum_k(\\mathbf{K}_{ik} + \\mathbf{K}_{jk}) +
+      \\frac{1}{n^2}\\sum_{k,l}\\mathbf{K}_{kl}\\), then recognise this as the matrix product
+      \\(\\mathbf{K}^c = (I - U)\\mathbf{K}(I - U)\\). Verify that \\(U^2 = U\\) and \\(UK U\\) is
+      the constant matrix of the grand mean, and check the consistency case: if the data are already
+      centred, \\(\\mu = 0\\), then \\(\\mathbf{K}^c = \\mathbf{K}\\)."
+    answer: Expanding <Phi_i-mu,Phi_j-mu> gives K_ij-<Phi_i,mu>-<mu,Phi_j>+||mu||^2. Substituting
+      mu=n^{-1}sum_k Phi_k turns these terms into K_ij-n^{-1}sum_k K_ik-n^{-1}sum_k
+      K_kj+n^{-2}sum_kl K_kl. In matrix form, (I-U)K(I-U)=K-UK-KU+UKU, exactly the same row-,
+      column-, and grand-mean corrections. Since U=11^T/n, U^2=1(1^T1)1^T/n^2=U, and UKU is the
+      constant grand-mean matrix. If mu=0, all feature row and column means vanish, hence UK=KU=0
+      and K^c=K.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: Reconstruct the orthogonal-decomposition step of the representer theorem. Let
+      \(\mathcal{H}_S = \mathrm{Span}(K_{x_1}, \dots, K_{x_n})\), write any \(f \in \mathcal{H}\) as
+      \(f = f_S + f_\perp\) with \(f_S \in \mathcal{H}_S\) and \(f_\perp \perp \mathcal{H}_S\), and
+      use the reproducing property to prove that \(f_\perp(x_i) = 0\) for every \(i\), hence
+      \(f(x_i) = f_S(x_i)\). Then invoke Pythagoras to show \(\lVert f_S \rVert_{\mathcal{H}} \le
+      \lVert f \rVert_{\mathcal{H}}\) with equality iff \(f_\perp = 0\), and explain why strict
+      monotonicity of \(\Psi\) in its last argument forces every minimiser into \(\mathcal{H}_S\).
+      Where exactly would the argument break if \(\Psi\) were only nondecreasing in the norm?
+    answer: For f=f_S+f_perp and every training point, f_perp(x_i)=<f_perp,K_{x_i}>_H=0 because K_{x_i}
+      lies in H_S. Thus f and f_S make identical training predictions. Pythagoras gives
+      ||f||^2=||f_S||^2+||f_perp||^2, so projection cannot increase the norm and equality holds only
+      when f_perp=0. If the objective is strictly increasing in its norm argument, any nonzero
+      f_perp leaves the data-fit term unchanged but strictly worsens the objective; every minimizer
+      must therefore lie in H_S. If the dependence is merely nondecreasing, projection still
+      produces a minimizer in H_S, but a flat portion of the penalty may allow additional minimizers
+      with nonzero orthogonal components, so the claim about every minimizer fails.
+  - number: 7
+    kind: exploration
+    status: draft
+    prompt: "Open the interactive figure above in the section on the two purposes of the embedding. Two
+      classes, an inner blob surrounded by a ring, cannot be separated by any straight line in the
+      plane. Raise the lift by hand and watch the third coordinate \\(x_1^2 + x_2^2\\) push the
+      outer ring up while the inner blob stays low, until a single flat plane slices them apart.
+      Answer three questions from what you see: (a) what does that separating plane correspond to
+      back in the original plane \\(\\mathcal{X}\\)? (b) the inner product in the lifted space is
+      \\(\\langle \\Phi(x), \\Phi(x')\\rangle = x_1 x_1' + x_2 x_2' + (x_1^2 + x_2^2)(x_1'^2 +
+      x_2'^2)\\), written entirely in the raw coordinates, so which theorem of this chapter lets you
+      run a linear separator in the lifted space without ever storing the extra coordinate? (c) as
+      you shrink the gap between the rings, does the lift still separate them, and what would that
+      say about the limits of a fixed feature map?"
+    answer: "A separating plane in (x_1,x_2,x_1^2+x_2^2) pulls back to a quadratic decision boundary in
+      the original plane; in the radially symmetric setup it is a circle or annulus threshold. The
+      representer theorem and kernel trick permit the lifted linear separator to be evaluated using
+      the displayed inner-product kernel without explicitly storing the third coordinate. If the
+      radial gap shrinks but remains positive, an appropriate horizontal threshold can still
+      separate the two radii, though its margin becomes small. Once the radial ranges overlap, this
+      fixed radial lift cannot separate the labels: points from different classes can have the same
+      lifted height, demonstrating that a feature map can encode the wrong invariances or
+      insufficient information."
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: "Carry out the finite reduction by hand for kernel ridge regression. Substitute the
+      representer form \\(f(x) = \\sum_{i=1}^{n} \\alpha_i K(x_i, x)\\) into the objective
+      \\(\\frac{1}{n}\\sum_{i=1}^{n}\\big(y_i - f(x_i)\\big)^2 + \\lambda \\lVert f
+      \\rVert_{\\mathcal{H}}^2\\). Show that \\(f(x_j) = [\\mathbf{K}\\alpha]_j\\) and \\(\\lVert f
+      \\rVert_{\\mathcal{H}}^2 = \\alpha^\\top \\mathbf{K}\\alpha\\), so the problem becomes
+      \\(\\min_{\\alpha \\in \\mathbb{R}^n} \\frac{1}{n}\\lVert y - \\mathbf{K}\\alpha\\rVert^2 +
+      \\lambda\\, \\alpha^\\top \\mathbf{K}\\alpha\\). Differentiate and conclude that a minimiser
+      solves the linear system \\((\\mathbf{K} + n\\lambda I)\\alpha = y\\). Then reflect: the
+      support vector expansion \\(f = \\sum_i \\alpha_i K(x_i, \\cdot)\\) can have many coefficients
+      \\(\\alpha_i\\) equal to zero for other losses (hinge, \\(\\varepsilon\\)-insensitive) but
+      generically not here; what feature of the squared loss is responsible for that difference?"
+    answer: For f=sum_i alpha_i K(x_i,·), evaluation gives f(x_j)=[K alpha]_j and the RKHS norm is
+      alpha^T K alpha. The objective is n^{-1}||y-K alpha||^2+lambda alpha^T K alpha. Its gradient
+      is -(2/n)K(y-K alpha)+2 lambda K alpha, so K[(K+n lambda I)alpha-y]=0. The canonical
+      coefficient vector alpha=(K+n lambda I)^{-1}y satisfies this equation; because lambda>0 the
+      shifted matrix is invertible, and it yields the unique fitted function even when K has a
+      nullspace (nullspace coefficient changes represent the zero RKHS element). Squared loss is
+      smooth with a nonzero derivative at almost every residual, so every observation generally
+      influences the solution and alpha is dense. Hinge and epsilon-insensitive losses have flat
+      regions whose zero subgradients make nonsupport coefficients vanish.

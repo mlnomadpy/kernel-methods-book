@@ -310,6 +310,9 @@
       if (t.closest(".tablewrap")) return;
       var w = document.createElement("div");
       w.className = "tablewrap";
+      w.tabIndex = 0;
+      w.setAttribute("role", "region");
+      w.setAttribute("aria-label", "Scrollable table");
       t.parentNode.insertBefore(w, t);
       w.appendChild(t);
     });

@@ -12,6 +12,12 @@
   color: var(--accent); margin-bottom: 8px;
 }
 .viz canvas { width: 100%; display: block; border-radius: 6px; touch-action: none; cursor: default; }
+.viz canvas:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.viz-static { min-height: 180px; display: grid; place-items: center; border-radius: 6px; background: var(--card); }
+.viz-static svg { width: min(100%, 520px); height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; }
+.viz-static svg polyline { stroke: var(--accent); stroke-width: 2.2; }
+.viz-static svg circle { fill: var(--accent); stroke: none; }
+.viz[data-mounted] > .viz-static, .viz[data-mounted] > .viz-fallback { display: none; }
 .viz .viz-controls {
   display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
   margin: 10px 0 2px;
@@ -24,6 +30,19 @@
   background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 4px 8px; cursor: pointer;
 }
 .viz .viz-controls button:hover, .viz .viz-controls select:hover { border-color: var(--accent); }
+.viz .viz-controls :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (forced-colors: active) {
+  .viz, .viz-static, .viz .viz-controls button, .viz .viz-controls select { border: 1px solid CanvasText; }
+  .viz-static svg, .viz-static svg polyline { stroke: CanvasText; }
+  .viz-static svg circle { fill: CanvasText; }
+}
+
+@media print {
+  .viz > div:not(.viz-static), .viz > canvas, .viz .viz-controls, .viz .viz-readout { display: none !important; }
+  .viz > .viz-static, .viz > .viz-fallback { display: grid !important; }
+  .viz > .viz-fallback { display: block !important; }
+}
 .viz .viz-controls .val { font-variant-numeric: tabular-nums; color: var(--ink); min-width: 2.6em; display: inline-block; }
 .viz .viz-readout {
   font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: var(--muted);
