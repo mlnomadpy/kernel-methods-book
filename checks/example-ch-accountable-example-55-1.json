@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-accountable",
+  "anchor": "example-55-1",
+  "source_file": "manuscript/chapters/ch-accountable.md",
+  "source_sha256": "b9449dc3d5d15c347ca7ee539da5c8221aa23ba3ce00b8326aab2ee461d147ee",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-accountable-ex1.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "0.05",
+    "0",
+    "6",
+    "2.5",
+    "4.5",
+    "40",
+    "3",
+    "0.5",
+    "0.292",
+    "90",
+    "0.049",
+    "0.9",
+    "0.472",
+    "3.5",
+    "0.247",
+    "6.5",
+    "2",
+    "89.1",
+    "79.2"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

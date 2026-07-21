@@ -161,14 +161,23 @@ function publicationMarkdown(chapter) {
   // reproduces its default state (publication/figures/<widget>.pdf), captioned
   // from captions.json. Pandoc's implicit_figures turns an image-only paragraph
   // into a numbered figure; the caption's \(...\) math is normalised below.
-  source = source.replace(/<figure class="viz" data-widget="([^"]+)"[^>]*>[\s\S]*?<\/figure>/g,
-    (_, widget) => {
-      const caption = (figureCaptions[widget] || "").replace(/\s+/g, " ").trim();
-      // EPUB cannot embed a vector PDF; keep the textual pointer there.
-      if (format !== "pdf")
-        return `> **Interactive figure (${widget}).** ${caption} The interactive version is available in the web edition.`;
-      const rel = `publication/figures/${widget}.pdf`;
-      return `\n\n![${caption}](${rel})\n\n`;
+  source = source.replace(/<figure class="viz" data-widget="([^"]+)"[^>]*>([\s\S]*?)<\/figure>/g,
+    (_, widget, inner) => {
+      // Prefer the declarative print caption; fall back to the widget's own
+      // inline <figcaption> (used by widgets that predate captions.json).
+      let caption = figureCaptions[widget];
+      if (!caption) {
+        const cap = inner.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/i);
+        caption = cap ? cap[1] : "";
+      }
+      caption = caption.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+      // Embed the static JAX plate when one exists (PDF only); otherwise keep a
+      // textual pointer, so a widget without a rendered plate never breaks the
+      // build. EPUB cannot embed a vector PDF, so it always gets the pointer.
+      const platePath = path.join(root, "publication", "figures", `${widget}.pdf`);
+      if (format === "pdf" && fs.existsSync(platePath))
+        return `\n\n![${caption}](publication/figures/${widget}.pdf)\n\n`;
+      return `> **Interactive figure (${widget}).** ${caption} The interactive version is available in the web edition.`;
     });
   source = source.replace(/\[\[ch:([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (_, slug, custom) => {
     const target = chapterMap.get(slug);

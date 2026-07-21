@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-highstakes",
+  "anchor": "example-56-1",
+  "source_file": "manuscript/chapters/ch-highstakes.md",
+  "source_sha256": "e137668ea28f26a4c806cbb75477852857817db195523d8e2b0ee1c3ce5edc85",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-highstakes-ex1.py"
+  ],
+  "numeric_literals": [
+    "120",
+    "60",
+    "10",
+    "30",
+    "2",
+    "1",
+    "10.10",
+    "10.00",
+    "68",
+    "10.20",
+    "3",
+    "10.73"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

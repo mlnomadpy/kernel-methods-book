@@ -608,6 +608,12 @@ export function buildBook() {
     x: "The logical scaffolding of the book: which theorem, definition, and algorithm each result depends on, as an interactive graph and a full cross-linked listing.",
   });
   searchIndex.push({
+    h: "Projects and Competitions",
+    c: "End matter",
+    u: "projects.html",
+    x: "Build-it capstones and a final project, each with a dataset, a metric, and a measured baseline, and each ready to run as a Kaggle community competition.",
+  });
+  searchIndex.push({
     h: "Bibliography",
     c: "End matter",
     u: "bibliography.html",
@@ -733,10 +739,11 @@ export function tocHtml(currentSlug = null, sections = []) {
     `<a href="dependency-map.html"${currentSlug === "dependency-map" ? ' class="here"' : ""}>Dependency Map</a>`,
     `<a href="indexes.html"${currentSlug === "indexes" ? ' class="here"' : ""}>Indexes</a>`,
     `<a href="solutions.html"${currentSlug === "solutions" ? ' class="here"' : ""}>Answers &amp; Rubrics</a>`,
+    `<a href="projects.html"${currentSlug === "projects" ? ' class="here"' : ""}>Projects &amp; Competitions</a>`,
     `<a href="bibliography.html"${currentSlug === "bibliography" ? ' class="here"' : ""}>Bibliography</a>`,
     `<a href="about.html"${currentSlug === "about" ? ' class="here"' : ""}>About This Edition</a>`,
   ];
-  const endOpen = ["reading-paths", "glossary", "dependency-map", "indexes", "solutions", "bibliography", "about"].includes(currentSlug);
+  const endOpen = ["reading-paths", "glossary", "dependency-map", "indexes", "solutions", "projects", "bibliography", "about"].includes(currentSlug);
   rows.push(partHtml("End matter", endLinks.join("\n"), endOpen));
   return rows.join("\n");
 }

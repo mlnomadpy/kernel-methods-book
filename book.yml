@@ -244,3 +244,12 @@ parts:
       - src: ch-rkbs
         slug: reproducing-kernel-banach-and-variation-spaces
         title: Reproducing-Kernel Banach and Variation Spaces
+  - part: XVIII · Kernels You Can Defend
+    intro: Predictions that steer a spacecraft, propose a molecule, or drive a policy are judged by more than accuracy. What matters is their uncertainty, the training data they rest on, whether the inputs still resemble the training distribution, and whether the whole procedure can be reproduced and audited. This closing part shows that for kernel machines these accountability properties fall out of the same geometry the book has built, then follows them into the sciences that demand them.
+    chapters:
+      - src: ch-accountable
+        slug: accountable-kernels
+        title: 'Accountable Kernels: Uncertainty, Explanation, and Audit'
+      - src: ch-highstakes
+        slug: kernels-in-science-and-space
+        title: Kernels in Science and Space

@@ -1,0 +1,22 @@
+[
+ {
+  "from": "accountable-kernels#algo-55-1",
+  "to": "kernel-ridge-and-friends#def-4-2",
+  "note": "the wrapped predictor f-hat is a fitted kernel ridge regressor"
+ },
+ {
+  "from": "accountable-kernels#algo-55-1",
+  "to": "gaussian-processes-and-rvm#thm-40-2",
+  "note": "conformal certifies the interval the GP predictive equations propose"
+ },
+ {
+  "from": "accountable-kernels#algo-55-2",
+  "to": "kernel-ridge-and-friends#def-4-2",
+  "note": "hat matrix and LOO residuals of the kernel ridge solution"
+ },
+ {
+  "from": "accountable-kernels#algo-55-2",
+  "to": "kernel-tricks#thm-3-4",
+  "note": "attribution reads the weights of the representer expansion"
+ }
+]

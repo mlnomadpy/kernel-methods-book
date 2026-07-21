@@ -1,6 +1,6 @@
 # Static figures for the print edition
 
-The web edition renders 17 interactive widgets (`public/assets/viz.js` and
+The web edition renders 24 interactive widgets (`public/assets/viz.js` and
 `public/assets/viz-*.js`). The PDF/EPUB editions cannot run JavaScript, so each
 widget is reproduced here as a **static vector figure computed from the same
 mathematics**, in JAX. These scripts are the reference implementation of that
@@ -32,7 +32,7 @@ representative state. The committed PDFs are therefore byte-stable across builds
 
 ```
 pip install -r tools/figures/requirements.txt
-python3 tools/figures/build_figures.py          # all 17 figures
+python3 tools/figures/build_figures.py          # all 24 figures
 python3 tools/figures/build_figures.py sig_draw  # just one, by module name
 ```
 
