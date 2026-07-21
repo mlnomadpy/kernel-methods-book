@@ -156,6 +156,14 @@ function publicationMarkdown(chapter) {
   let source = matter(fs.readFileSync(path.join(root, "manuscript", "chapters", `${chapter.src}.md`), "utf8")).content;
   source = convertSimpleTablesToPipe(source);
   source = indentDisplayMathInLists(source);
+  // Exercises carry a bare "Hint" line before their `::: hint-body` div (the
+  // web renders it as the collapsible's summary). The PDF styles the hint box
+  // with its own "Hint." lead, so drop the now-redundant standalone word.
+  // Remove only the word; keep the blank line that the fenced div needs before it.
+  source = source.replace(
+    /^[ \t]*Hint[ \t]*\n(?=[ \t]*\n[ \t]*:{3,}[ \t]*(?:\{\.hint-body\}|hint-body)\b)/gm,
+    "",
+  );
   source = source.replace(/<p class="lead">([\s\S]*?)<\/p>/g, (_, text) => `*${text.replace(/<[^>]+>/g, "")}*`);
   // Replace each interactive widget with the static JAX-rendered plate that
   // reproduces its default state (publication/figures/<widget>.pdf), captioned
@@ -248,6 +256,9 @@ if (publicationAuthors.length) {
 }
 if (format === "pdf") common.push(
   "--pdf-engine=lualatex",
+  // Map the semantic fenced divs to styled LaTeX boxes (PDF only; the RawBlocks
+  // it emits are LaTeX, so it must not run for the HTML-based EPUB).
+  "--lua-filter", path.join(root, "publication", "filter.lua"),
   "--variable", "documentclass=scrbook",
   "--variable", "papersize=letter",
   "--variable", "fontsize=10pt",

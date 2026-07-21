@@ -16,10 +16,51 @@
 \usepackage{xcolor}
 \definecolor{KernelInk}{HTML}{1D2126}
 \definecolor{KernelAccent}{HTML}{8A4C1F}
+
+% ── Semantic containers (match the web edition's coloured boxes) ──────────────
+% Each manuscript fenced div (definition, theorem, remark, example, algorithm,
+% proof) is mapped by publication/filter.lua to one of these environments.
+\usepackage{amsthm}
+\usepackage[most]{tcolorbox}
+\definecolor{kbDef}{HTML}{2F6F4F}   % definition — green
+\definecolor{kbThm}{HTML}{8A4C1F}   % theorem/lemma/prop/cor — accent
+\definecolor{kbEx}{HTML}{3F6C9E}    % example — blue
+\definecolor{kbRmk}{HTML}{7A5A9E}   % remark — purple
+\definecolor{kbAlgo}{HTML}{1F6F7A}  % algorithm — teal
+\definecolor{kbProof}{HTML}{59616B} % proof/hint — muted
+
+% A titled box: thin tinted frame, coloured left rule, faint tinted fill, and a
+% sans-serif coloured title that sits on the box background (no separate bar).
+% The title sits on the box background (colbacktitle = colback, no title rule),
+% coloured by kind, sans-serif and bold, like the web's box header.
+\tcbset{kbbox/.style={
+  enhanced, breakable, arc=2.5pt, boxrule=0.4pt,
+  left=10pt, right=10pt, top=7pt, bottom=8pt,
+  before skip=11pt, after skip=11pt,
+  fonttitle=\sffamily\footnotesize\bfseries,
+  titlerule=0mm, toptitle=2pt, bottomtitle=1pt,
+}}
+\newtcolorbox{kbdef}[1]{kbbox, colback=kbDef!5!white, colframe=kbDef!25!white, colbacktitle=kbDef!5!white, coltitle=kbDef, borderline west={2pt}{0pt}{kbDef}, title={#1}}
+\newtcolorbox{kbthm}[1]{kbbox, colback=kbThm!5!white, colframe=kbThm!25!white, colbacktitle=kbThm!5!white, coltitle=kbThm, borderline west={2pt}{0pt}{kbThm}, title={#1}}
+\newtcolorbox{kbex}[1]{kbbox, colback=kbEx!5!white, colframe=kbEx!25!white, colbacktitle=kbEx!5!white, coltitle=kbEx, borderline west={2pt}{0pt}{kbEx}, title={#1}}
+\newtcolorbox{kbrmk}[1]{kbbox, colback=kbRmk!5!white, colframe=kbRmk!25!white, colbacktitle=kbRmk!5!white, coltitle=kbRmk, borderline west={2pt}{0pt}{kbRmk}, title={#1}}
+\newtcolorbox{kbalgo}[1]{kbbox, colback=kbAlgo!5!white, colframe=kbAlgo!25!white, colbacktitle=kbAlgo!5!white, coltitle=kbAlgo, borderline west={2pt}{0pt}{kbAlgo}, title={#1}}
+% Hints: a light, title-less aside with a run-in "Hint." lead.
+\newtcolorbox{kbhint}{enhanced, breakable, arc=2pt, boxrule=0pt,
+  colback=kbProof!6!white, colframe=kbProof!6!white,
+  borderline west={2pt}{0pt}{kbProof!45!white},
+  left=8pt, right=8pt, top=5pt, bottom=5pt, before skip=7pt, after skip=9pt,
+  fontupper=\small, before upper={\textit{\color{kbProof}Hint.}\enspace}}
+% Exercise difficulty tag.
+\newcommand{\kbextag}[1]{{\sffamily\footnotesize\bfseries\color{KernelAccent}#1}}
+% amsthm proofs: italic "Proof." lead, box background left clean.
+\renewcommand{\qedsymbol}{$\square$}
 \setkomafont{title}{\color{KernelInk}\fontsize{36}{41}\selectfont\bfseries}
 \setkomafont{subtitle}{\color{KernelAccent}\fontsize{17}{23}\selectfont\mdseries}
 \setkomafont{author}{\color{KernelInk}\large\bfseries}
-\setkomafont{chapter}{\color{KernelInk}\bfseries}
+% Restore a large chapter title (the bare \bfseries override dropped KOMA's
+% default \huge, leaving chapter titles smaller than their own sections).
+\setkomafont{chapter}{\color{KernelInk}\huge\bfseries}
 \setkomafont{chapterprefix}{\color{KernelAccent}\sffamily\small\bfseries}
 \renewcommand*{\titlepagestyle}{empty}
 \makeatletter
