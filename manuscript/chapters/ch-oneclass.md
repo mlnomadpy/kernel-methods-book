@@ -36,7 +36,7 @@ bibliography:
 ---
 # One-Class SVMs and Novelty Detection
 
-<p class="lead">Every algorithm so far in this book has been handed labels: a target value to regress, a class to separate, a pair of views to correlate. This chapter drops the labels entirely. We are given only a sample of points from some distribution and asked a deceptively simple question: which region of space does this distribution actually occupy? Answering it lets us flag a future point as normal or novel, the task of novelty detection, without ever having seen an example of the novel class. The kernel machinery of [[ch:support-vector-machines|the support vector machine]] turns out to solve this almost verbatim, in two guises that look different but coincide for the kernels we use most. We build the smallest enclosing hypersphere of Tax and Duin (2004), the origin-separating one-class SVM of Schölkopf, Platt, Shawe-Taylor, Smola and Williamson (2001), prove the beautiful \(\nu\)-property that makes a single knob control the fraction of outliers, and show that for translation-invariant kernels the sphere and the hyperplane are the same machine.</p>
+<p class="lead">Every algorithm so far in this book has been handed labels: a target value to regress, a class to separate, a pair of views to correlate. This chapter drops the labels entirely. We are given only a sample of points from some distribution and asked a deceptively simple question: which region of space does this distribution actually occupy? Answering it lets us flag a future point as normal or novel, the task of novelty detection, without ever having seen an example of the novel class. The kernel machinery of [[ch:support-vector-machines|the support vector machine]] turns out to solve this almost verbatim, in two guises that look different but coincide for the kernels we use most. We build the smallest enclosing hypersphere of Tax and Duin (2004), the origin-separating one-class SVM of Schölkopf, Platt, Shawe-Taylor, Smola and Williamson (2001), prove the \(\nu\)-property that makes a single knob control the fraction of outliers, and show that for translation-invariant kernels the sphere and the hyperplane are the same machine.</p>
 
 ## Estimating the support of a distribution {#support-estimation}
 
@@ -366,7 +366,7 @@ a Gaussian window of bandwidth \(h=1\), so \(Z=1/(\sqrt{2\pi}\,h)=0.3989\). Esti
 
 ## Uniqueness, generalization, and experiments {#theory}
 
-Two theoretical guarantees make the method trustworthy. The first is that the solution is well defined.
+A region estimated from finitely many points invites two doubts: does the optimization pin down a unique boundary, and how often will a genuinely normal point be flagged as novel? Two theoretical guarantees settle them. The first is that the solution is well defined.
 
 ::: {.proposition #prop-7-7}
 [Proposition (supporting hyperplane)]{.box-title}

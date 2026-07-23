@@ -69,6 +69,8 @@ The mechanism is visible in the minimum-norm interpolant. As \(D\to n\) from eit
 
 ### The risk of ridgeless least squares {#dd-theorem}
 
+What does the test error actually do as the model crosses the interpolation threshold? In the isotropic model the two regimes each have an exact closed form, and reading them side by side shows both branches blowing up at the boundary, which is the peak.
+
 :::: {.theorem #thm-42-2}
 [Theorem (double-descent risk of minimum-norm least squares; Belkin et al. 2019, Hastie et al. 2019, Mei and Montanari 2022)]{.box-title}
 

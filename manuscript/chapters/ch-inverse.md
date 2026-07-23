@@ -31,11 +31,11 @@ bibliography:
 ---
 # Inverse Learning and Spectral Regularization
 
-<p class="lead">Kernel regression solves an inverse problem: recover a function after a compact operator has attenuated its high-frequency directions. Regularization is therefore best understood as a spectral filter. This viewpoint unifies ridge regression, truncated eigensolvers, gradient descent, and early stopping while making their limits explicit.</p>
+<p class="lead">Why does stopping gradient descent early prevent overfitting, and why does it feel like the same medicine as adding a ridge penalty? The two look nothing alike: one is a term in the objective, the other an interrupted optimizer. The resolution is that kernel regression is an inverse problem. A compact operator has attenuated the target's high-frequency directions, and recovering them means dividing by eigenvalues that approach zero, so small perturbations in the data can dominate the solution. Every cure damps that division, and every cure is a spectral filter: ridge shrinks smoothly, spectral cutoff deletes weak directions outright, and gradient descent stopped at iteration \(t\) is a filter in which the iteration count plays the role of an inverse regularization parameter. Once the filter is the object of study, methods as different as conjugate gradients and stochastic iteration become comparable, and source conditions, qualification, and saturation say precisely where each method's accuracy ceiling sits.</p>
 
 ## Learning as an inverse problem {#inverse-formulation}
 
-For a distribution \(P_X\), define the covariance operator \(T:\mathcal{H}_k\to\mathcal{H}_k\) by
+The claim that learning is an inverse problem should be made literal: which operator stands between us and the target, and why is undoing it dangerous? For a distribution \(P_X\), define the covariance operator \(T:\mathcal{H}_k\to\mathcal{H}_k\) by
 
 $$
 Tf=\int k_x\langle k_x,f\rangle_{\mathcal{H}_k}\,dP_X(x),
@@ -53,7 +53,7 @@ Tikhonov regularization uses \(g_\lambda(\mu)=1/(\mu+\lambda)\). Spectral cutoff
 
 ## Iterative regularization and early stopping {#inverse-iterative}
 
-Gradient descent on squared loss, initialized at zero with step \(\eta\), gives after \(t\) iterations
+Nothing in gradient descent mentions a penalty, yet stopping it early has long been observed to act like one. The filter formalism turns that observation into an identity. Gradient descent on squared loss, initialized at zero with step \(\eta\), gives after \(t\) iterations
 
 $$
 g_t(\mu)=\frac{1-(1-\eta\mu)^t}{\mu},
@@ -74,7 +74,7 @@ Data-dependent stopping can balance bias and noise. A discrepancy rule stops whe
 
 ## Source conditions, qualification, and saturation {#inverse-source}
 
-A source condition writes the target as
+How much bias a filter leaves depends on the target: one concentrated on strong eigendirections is recovered easily, one buried in the weak tail is nearly hopeless. Source conditions measure where between those extremes the target sits. A source condition writes the target as
 
 $$
 f_\star=T^r w,\qquad \lVert w\rVert\le R.
@@ -89,6 +89,8 @@ No standalone convergence rate follows from a source condition. A valid rate als
 :::
 
 ## A finite spectral diagnostic {#inverse-example}
+
+Three eigenvalues are enough to see the whole mechanism in numbers.
 
 ::: {.example #example-inverse-filter}
 [Example (three spectral directions)]{.box-title}
@@ -111,7 +113,7 @@ Suppose the Gram eigenvalues are \(10,1,0.01\), with ridge parameter \(\lambda=0
 
 ## A catalog of spectral filters {#inverse-filter-catalog}
 
-Regularization methods can be compared by their fitted-value filter \(q_\lambda(\mu)=\mu g_\lambda(\mu)\) and residual \(r_\lambda=1-q_\lambda\).
+Once each method is reduced to its filter, the whole catalog fits in a table. Regularization methods can be compared by their fitted-value filter \(q_\lambda(\mu)=\mu g_\lambda(\mu)\) and residual \(r_\lambda=1-q_\lambda\).
 
 | Method | Inverse filter \(g\) | Main behavior |
 |---|---|---|
@@ -127,7 +129,7 @@ Accelerated first-order methods produce polynomial filters. Their optimization a
 
 ## Conjugate gradients as regularization {#inverse-conjugate-gradients}
 
-Conjugate gradients applied to the normal equations chooses, at iteration \(t\), the best solution in a data-dependent Krylov space. Its filter is a polynomial whose roots depend on the observed spectrum. Large, well-estimated eigendirections are often resolved early.
+The solver most often reached for on large symmetric systems is itself a regularizer, and a subtler one than anything in the table. Conjugate gradients applied to the normal equations chooses, at iteration \(t\), the best solution in a data-dependent Krylov space. Its filter is a polynomial whose roots depend on the observed spectrum. Large, well-estimated eigendirections are often resolved early.
 
 Unlike Landweber, conjugate-gradient filters are data dependent and not monotone direction by direction. The method can converge rapidly in linear-system residual while beginning to fit noise in weak directions. Early stopping therefore remains necessary.
 
@@ -135,7 +137,7 @@ Preconditioning changes the spectrum and the Krylov subspace. If stopping time i
 
 ## Choosing the regularization level {#inverse-parameter-choice}
 
-Parameter-choice rules use different information:
+Every filter leaves one number undetermined, \(\lambda\) or \(t\), and the entire statistical behavior hangs on it. Parameter-choice rules use different information:
 
 - **Discrepancy principle:** stop when the data residual reaches a known noise scale.
 - **Hold-out or cross-validation:** select predictive error on untouched observations.
@@ -157,7 +159,7 @@ Model discrepancy can prevent the residual from reaching the nominal noise scale
 
 ## Statistical rates and effective dimension {#inverse-statistical-rates}
 
-A source condition controls bias, while the effective dimension
+Bias is only half of the risk; the other half counts how many directions the filter leaves open to noise. A source condition controls bias, while the effective dimension
 
 $$
 \mathcal N(\lambda)=\operatorname{tr}\{T(T+\lambda I)^{-1}\}
@@ -175,7 +177,7 @@ Multiple passes reduce optimization bias and can eventually fit observation nois
 
 ## Beyond scalar regression {#inverse-beyond-scalar}
 
-The same framework applies to:
+Nothing in the filter story used the fact that the unknown was a scalar regression function; wherever a compact operator separates the data from the target, the same analysis applies. The same framework applies to:
 
 - conditional mean embeddings, where a covariance operator is inverted;
 - kernel instrumental variables and proximal causal equations;

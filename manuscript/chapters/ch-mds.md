@@ -59,7 +59,7 @@ An eigenproblem needs a matrix of inner products, not distances, so the crux of 
 
 ### The double-centering identity {#double-centering}
 
-Write \(d_{ij}^2=\|x_i-x_j\|^2\) for the squared distances of an unknown configuration \(x_1,\dots,x_n\), and let \(\bar x=\tfrac1n\sum_i x_i\) be its centroid. We want the centered inner products \(b_{ij}=\langle x_i-\bar x,\ x_j-\bar x\rangle\), the entries of the Gram matrix taken about the centroid. The identity that produces them from the \(d_{ij}^2\) is the engine of the whole method.
+One identity does all the work here, and the rest of classical MDS is bookkeeping around it. Write \(d_{ij}^2=\|x_i-x_j\|^2\) for the squared distances of an unknown configuration \(x_1,\dots,x_n\), and let \(\bar x=\tfrac1n\sum_i x_i\) be its centroid. We want the centered inner products \(b_{ij}=\langle x_i-\bar x,\ x_j-\bar x\rangle\), the entries of the Gram matrix taken about the centroid. The identity that produces them from the \(d_{ij}^2\) is the engine of the whole method.
 
 :::::: {.proposition #prop-17-1}
 [Proposition (double-centering)]{.box-title}

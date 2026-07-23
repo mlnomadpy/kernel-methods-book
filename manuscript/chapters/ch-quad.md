@@ -37,7 +37,7 @@ bibliography:
 
 ## The integration problem, and why randomness is wasteful {#integration-problem}
 
-Fix a probability measure \(P\) on a set \(\mathcal X\) and a function \(f:\mathcal X\to\mathbb R\). We want the integral
+Before improving on randomness we should state exactly what randomness is estimating, since every rule in this chapter will be scored against the same target. Fix a probability measure \(P\) on a set \(\mathcal X\) and a function \(f:\mathcal X\to\mathbb R\). We want the integral
 
 $$ P[f] \;=\; \mathbb E_{X\sim P}[f(X)] \;=\; \int_{\mathcal X} f\,dP, $$
 

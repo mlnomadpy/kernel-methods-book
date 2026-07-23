@@ -30,11 +30,11 @@ bibliography:
 ---
 # Vector- and Operator-Valued Kernels
 
-<p class="lead">Scalar kernels predict one number at a time. Many scientific tasks instead return a vector field, a collection of related responses, or an entire function. Operator-valued kernels preserve the RKHS machinery while allowing the output coordinates to share information. This chapter develops the construction, its representer theorem, and the block systems used in practice.</p>
+<p class="lead">A clinician predicting a patient's response to a treatment rarely wants one number: dosage response, side-effect risk, and biomarker trajectories are separate outputs of the same underlying physiology, and evidence about one is evidence about the others. A molecular force field must return a whole vector of forces whose components are physically coupled. Training a separate scalar model per output throws the shared information away, while a single joint model needs a notion of similarity that acts on outputs as well as inputs. Operator-valued kernels supply it: the kernel value at a pair of inputs is no longer a number but an operator on the output space, encoding which output directions borrow strength from which. The RKHS machinery survives the upgrade intact. By the end of the chapter we can state the vector-valued representer theorem, reduce learning to a block linear system with exploitable Kronecker structure, learn the output coupling itself from data, and diagnose the failure mode that haunts multi-task learning: negative transfer.</p>
 
 ## From scalar to vector-valued reproduction {#operator-motivation}
 
-Let the output space \(\mathcal{Y}\) be a real separable Hilbert space. It may be \(\mathbb{R}^q\), an \(L^2\) space of curves, or another function space. Write \(\mathcal{L}(\mathcal{Y})\) for its bounded linear operators. An operator-valued kernel assigns an operator, rather than a scalar, to every input pair.
+The first task is to decide what object replaces the scalar kernel value when a prediction is a vector: it must compare two inputs and, at the same time, say how the output coordinates communicate. Let the output space \(\mathcal{Y}\) be a real separable Hilbert space. It may be \(\mathbb{R}^q\), an \(L^2\) space of curves, or another function space. Write \(\mathcal{L}(\mathcal{Y})\) for its bounded linear operators. An operator-valued kernel assigns an operator, rather than a scalar, to every input pair.
 
 ::: {.definition #def-operator-kernel}
 [Definition (operator-valued positive definite kernel)]{.box-title}
@@ -57,6 +57,8 @@ $$
 This identity is the correct replacement for scalar evaluation. It says that every direction \(y\) of the output is represented by one section \(K(\cdot,x)y\).
 
 ## The vector-valued representer theorem {#operator-representer}
+
+With outputs now vectors, does regularized learning still collapse onto the training points? It does, and the coefficients become output vectors rather than scalars.
 
 :::: {.theorem #thm-operator-representer}
 [Theorem (finite representer form)]{.box-title}
@@ -86,7 +88,7 @@ The same numerical warnings as scalar KRR apply, but the matrix is now \(nq\) by
 
 ## Separable and nonseparable constructions {#operator-constructions}
 
-The simplest construction is separable:
+The definition admits far more kernels than anyone can search, so practice starts from constructions whose validity and meaning are easy to check. The simplest construction is separable:
 
 $$
 K(x,z)=k(x,z)B,
@@ -112,7 +114,7 @@ is more expressive and remains positive definite when every \(k_r\) and \(B_r\) 
 
 ## Functional responses and structured outputs {#operator-structured}
 
-When \(\mathcal{Y}=L^2(T)\), the kernel value \(K(x,z)\) is itself an integral operator. A common construction uses
+Nothing so far requires the output to be finite dimensional: an entire curve, a spectrum, or a dose-response profile can be a single response. When \(\mathcal{Y}=L^2(T)\), the kernel value \(K(x,z)\) is itself an integral operator. A common construction uses
 
 $$
 [K(x,z)g](t)=k(x,z)\int_T b(t,s)g(s)\,ds.
@@ -147,7 +149,7 @@ The formula shows when transfer occurs. Output directions with large \(\sigma_j\
 
 ## Differentially constrained vector fields {#operator-physical-fields}
 
-Vector-valued kernels can encode conservation and potential structure. If a smooth scalar kernel is \(\psi(x,z)\), differential operators applied to its arguments create matrix-valued kernels. In Euclidean space, Hessian-based constructions can produce curl-free fields, while a complementary projection produces divergence-free fields.
+Some output couplings are laws rather than statistical conveniences: physics may demand that a predicted field be curl-free or divergence-free everywhere, not just near the data. Vector-valued kernels can encode conservation and potential structure. If a smooth scalar kernel is \(\psi(x,z)\), differential operators applied to its arguments create matrix-valued kernels. In Euclidean space, Hessian-based constructions can produce curl-free fields, while a complementary projection produces divergence-free fields.
 
 Validity follows by viewing differentiation as a bounded linear operator on the scalar RKHS and applying it to both kernel arguments. Smoothness must be sufficient for every derivative evaluation. Boundary conditions require additional projection or a domain-specific Green kernel; a whole-space divergence-free kernel does not automatically respect a wall boundary.
 
@@ -188,7 +190,7 @@ Increasing one while fixing the others can expose a different bottleneck. Conver
 
 ## Scalable block solvers {#operator-block-solvers}
 
-For \(K_X\otimes B\), matrix-vector products can be computed as
+The \(nq\times nq\) system that loomed over the representer theorem never needs to be formed. For \(K_X\otimes B\), matrix-vector products can be computed as
 
 $$
 (K_X\otimes B)\operatorname{vec}(C)

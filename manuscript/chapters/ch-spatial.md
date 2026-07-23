@@ -38,11 +38,11 @@ bibliography:
 ---
 # Spatial and Spatiotemporal Kernel Models
 
-<p class="lead">Spatial data violate the independent-sample picture: nearby observations share weather, geology, ecology, or measurement conditions, and prediction is often required at an unobserved location rather than for another exchangeable case. Covariance kernels provide the geometry, kriging supplies the predictor, and sparse stochastic differential constructions make large fields computationally accessible.</p>
+<p class="lead">Two rain gauges a kilometer apart do not deliver two independent readings; they sit under the same storm. Spatial data breaks the assumption every method so far has leaned on, that samples are exchangeable draws, and it breaks it twice: observations are correlated through shared weather, geology, and measurement conditions, and the prediction that matters is at an unmonitored map location, not at another draw from the same population. Ignoring the dependence makes everything look deceptively easy; a random train-test split hands each test site trained neighbors, so interpolation error flatters the model precisely where deployment will punish it. This chapter turns the dependence itself into the model. A covariance kernel encodes how similarity decays with distance, direction, and time; kriging converts that kernel into the minimum-variance unbiased linear predictor with an explicit variance; and the Matérn SPDE construction trades dense covariance matrices for sparse precision matrices, keeping large fields computable. Validation designed around the deployment geometry then keeps the whole pipeline honest.</p>
 
 ## Random fields, covariance, and variograms {#spatial-random-fields}
 
-Let \(Z(s)\) be a second-order random field indexed by a spatial location \(s\in\mathcal D\). Write \(m(s)=\mathbb E Z(s)\) and
+Before any prediction we need a vocabulary for the statement that nearby readings agree. The probabilistic version indexes a random quantity by location and asks how its fluctuations covary across the map. Let \(Z(s)\) be a second-order random field indexed by a spatial location \(s\in\mathcal D\). Write \(m(s)=\mathbb E Z(s)\) and
 
 $$
 C(s,t)=\operatorname{Cov}\{Z(s),Z(t)\}.
@@ -66,7 +66,7 @@ Variograms remove an unknown constant mean through increments and can remain mea
 
 ## Kriging as constrained kernel prediction {#kriging}
 
-Suppose \(y_i=Z(s_i)+\varepsilon_i\) with independent noise variance \(\tau^2\). A linear predictor at \(s_0\) has the form \(\widehat Z(s_0)=w^\top y\). Under a known constant mean, ordinary kriging minimizes prediction variance subject to \(1^\top w=1\).
+With a covariance in hand, prediction at an unmonitored site reduces to a question of weights: how much should each station's reading count, given that close stations echo one another while remote ones speak almost independently? Suppose \(y_i=Z(s_i)+\varepsilon_i\) with independent noise variance \(\tau^2\). A linear predictor at \(s_0\) has the form \(\widehat Z(s_0)=w^\top y\). Under a known constant mean, ordinary kriging minimizes prediction variance subject to \(1^\top w=1\).
 
 :::: {.theorem #thm-ordinary-kriging}
 [Theorem (ordinary kriging system)]{.box-title}
@@ -95,7 +95,7 @@ Suppose a monitoring network contains dense local clusters and sparse remote reg
 
 ## Anisotropy and nonstationarity {#spatial-anisotropy}
 
-Geometric anisotropy replaces Euclidean distance by
+Correlation rarely decays at the same rate in every direction; a pollutant plume stretches along the prevailing wind, and a temperature field follows the coastline. The simplest repair reshapes distance itself. Geometric anisotropy replaces Euclidean distance by
 
 $$
 r_A(s,t)=\lVert A(s-t)\rVert,
@@ -109,7 +109,7 @@ Compactly supported kernels from approximation theory create sparse covariance m
 
 ## Matérn fields and the SPDE connection {#spatial-spde}
 
-The Matérn covariance links smoothness, dimension, and differential operators. In Euclidean space, a Matérn field can be characterized formally through an SPDE of the form
+Kriging as written factors a dense covariance matrix, a cost that closes the door on fields observed at very many sites. A route around it starts from an unexpected place: a differential equation. The Matérn covariance links smoothness, dimension, and differential operators. In Euclidean space, a Matérn field can be characterized formally through an SPDE of the form
 
 $$
 (\kappa^2-\Delta)^{\alpha/2}Z=\mathcal W,
@@ -129,7 +129,7 @@ This changes the computational object from a dense covariance to a sparse precis
 
 ## Space-time covariance design {#spatiotemporal-kernels}
 
-A separable space-time covariance has
+Environmental data almost always carries a time stamp as well as a coordinate, and the first modelling decision is whether space and time merely multiply or genuinely interact. A separable space-time covariance has
 
 $$
 C\{(s,t),(s',t')\}=C_S(s,s')C_T(t,t').
@@ -143,7 +143,7 @@ Irregularly sampled time series need not form a rectangular grid. Matrix-free co
 
 ## Multivariate fields and change of support {#multivariate-spatial}
 
-Several physical quantities observed at the same locations require a matrix-valued covariance. Linear models of coregionalization use
+A monitoring station rarely measures one thing: temperature, humidity, and ozone arrive together, and each variable carries information about the others. Several physical quantities observed at the same locations require a matrix-valued covariance. Linear models of coregionalization use
 
 $$
 K(s,t)=\sum_r c_r(s,t)B_r,

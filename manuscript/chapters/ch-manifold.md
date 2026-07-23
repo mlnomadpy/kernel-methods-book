@@ -28,7 +28,7 @@ bibliography:
 ---
 # Semi-Supervised and Manifold Regularization
 
-<p class="lead">Unlabeled observations reveal where probability mass lies, but not automatically where labels change. Manifold regularization makes a precise conditional bet: the target varies smoothly along high-density geometry. A graph Laplacian estimates that geometry, while an ambient RKHS supplies out-of-sample prediction.</p>
+<p class="lead">Labels are expensive and unlabeled data is nearly free: a few thousand scans a specialist can annotate sit beside millions no one has time to touch, and a handful of labeled documents float in an ocean of unlabeled text. A classifier trained only on the labels we can afford throws that ocean away. The trouble is that unlabeled points reveal only where the data lies, the marginal \(P_X\), and \(P_X\) alone cannot say how the labels fall; without some assumption tying the two together, more unlabeled data buys nothing. Manifold regularization supplies that link as a precise conditional bet: the target varies smoothly along the high-density shape the data traces out. A graph Laplacian estimates that shape from all the points at once, and an ambient RKHS norm turns the estimate into a function that also predicts at points never seen, separating transductive label propagation from inductive prediction and marking exactly when the unlabeled data helps and when it hurts.</p>
 
 ## What unlabeled data can and cannot identify {#manifold-assumption}
 
@@ -44,7 +44,7 @@ If two classes overlap throughout the same connected high-density region, unlabe
 
 ## Graph energy and label propagation {#graph-energy}
 
-Build a weighted graph on all \(n=l+u\) observations, with symmetric weights \(W_{ij}\ge 0\), degree matrix \(D_{ii}=\sum_jW_{ij}\), and Laplacian \(L=D-W\). For the vector \(f=(f(x_1),\ldots,f(x_n))^\top\),
+To act on the manifold assumption we need a computable stand-in for the shape of the data. A neighborhood graph is the standard one: join nearby points, let the graph's connectivity trace the high-density regions the assumption cares about, and measure how much a labeling disagrees across neighbors by a single quadratic form. Build a weighted graph on all \(n=l+u\) observations, with symmetric weights \(W_{ij}\ge 0\), degree matrix \(D_{ii}=\sum_jW_{ij}\), and Laplacian \(L=D-W\). For the vector \(f=(f(x_1),\ldots,f(x_n))^\top\),
 
 $$
 f^\top Lf=\frac12\sum_{i,j}W_{ij}(f_i-f_j)^2.
@@ -62,7 +62,7 @@ Label propagation minimizes this energy while fixing or penalizing the labeled v
 
 ## Manifold regularization {#manifold-objective}
 
-Manifold regularization adds both an ambient and an intrinsic penalty:
+The transductive limit of the previous section is exactly what we now remove: to score a point that was never in the graph, the model must be a function defined everywhere, not a list of vertex values. Manifold regularization adds both an ambient and an intrinsic penalty:
 
 $$
 \min_{f\in\mathcal{H}_k}\frac1l\sum_{i=1}^l\ell(y_i,f(x_i))
@@ -103,7 +103,7 @@ The graph Laplacian is not a fixed population operator. Its limit depends on nei
 
 ## Harmonic extension and label propagation {#manifold-harmonic}
 
-Partition graph vertices into labeled and unlabeled sets and write the Laplacian in blocks:
+Return to pure label propagation and make its solution explicit. We hold the labeled values fixed and minimize the graph energy over the unlabeled ones, and that minimizer has a closed form. Partition graph vertices into labeled and unlabeled sets and write the Laplacian in blocks:
 
 $$
 L=

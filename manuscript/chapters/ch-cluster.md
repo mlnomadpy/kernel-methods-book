@@ -36,7 +36,7 @@ bibliography:
 ---
 # Kernel Clustering and Spectral Methods
 
-<p class="lead">Clustering asks us to partition a dataset into a small number of coherent groups with no labels to guide us, judging coherence entirely by how similar the points look to one another. When that similarity is measured through a kernel, the flat cell boundaries of ordinary K-means bend into curved ones that follow the geometry the kernel encodes. This chapter carries the clustering objective into a reproducing-kernel Hilbert space, giving kernel K-means and, through a spectral relaxation of the same combinatorial cost, the family of spectral clustering algorithms.</p>
+<p class="lead">Two interlocking rings of points have an obvious grouping to the eye: an inner ring and an outer one. Yet K-means, which carves space with flat cell boundaries, slices a straight line through both and splits each ring in half. Clustering must partition a dataset into coherent groups with no labels to guide it, judging coherence entirely by how similar the points look, and when the natural groups are not convex blobs the straight-line method reads the geometry wrong. Measuring that similarity through a kernel is the fix: a flat boundary in feature space pulls back to a curved boundary that bends to follow the shape the data actually take. This chapter carries the clustering objective into a reproducing-kernel Hilbert space, giving kernel K-means and, through a spectral relaxation of the same combinatorial cost, the family of spectral clustering algorithms.</p>
 
 ## The K-means algorithm {#k-means}
 
@@ -44,7 +44,7 @@ We turn from finding coordinates to finding groups. Clustering asks us to partit
 
 ### An optimization point of view {#kmeans-objective}
 
-Given data points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) in \(\mathbb{R}^p\) and a target number of clusters \(k\), K-means represents each cluster by a centroid \(\boldsymbol{\mu}_j \in \mathbb{R}^p\) and assigns each point an index \(s_i \in \{1, \ldots, k\}\) naming its cluster. It seeks the assignments and centroids that minimize the total squared distance from each point to the centroid of its cluster:
+K-means is usually taught as a procedure, but the procedure is easier to kernelize once we know what it is trying to minimize. So we start from the objective. Given data points \(\mathbf{x}_1, \ldots, \mathbf{x}_n\) in \(\mathbb{R}^p\) and a target number of clusters \(k\), K-means represents each cluster by a centroid \(\boldsymbol{\mu}_j \in \mathbb{R}^p\) and assigns each point an index \(s_i \in \{1, \ldots, k\}\) naming its cluster. It seeks the assignments and centroids that minimize the total squared distance from each point to the centroid of its cluster:
 
 $$
 \min_{\substack{\boldsymbol{\mu}_j \in \mathbb{R}^p,\ j = 1, \ldots, k \\ s_i \in \{1, \ldots, k\},\ i = 1, \ldots, n}} \ \sum_{i=1}^n \lVert \mathbf{x}_i - \boldsymbol{\mu}_{s_i} \rVert_2^2.

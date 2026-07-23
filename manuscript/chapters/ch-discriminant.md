@@ -32,7 +32,7 @@ bibliography:
 ---
 # Kernel Discriminants and Projections
 
-<p class="lead">The subspace methods of [[ch:kernel-pca|kernel PCA]] and [[ch:kernel-cca-and-correlation|kernel CCA]] read structure off the data without ever looking at a label. This chapter turns the same Gram matrix to supervised ends. When a label or a target is available, the question is no longer where the data spreads out the most, but which directions in feature space separate the classes or predict the response. We build three answers, all from one algebraic engine. Kernel Fisher discriminant analysis maximizes a ratio of between-class to within-class scatter and lands on a regularized generalized eigenproblem. Principal components regression keeps the eigenvectors of the kernel matrix but reweights them by how well each predicts the target. Kernel partial least squares abandons variance altogether and greedily extracts the directions of maximum covariance with the response, deflating the Gram matrix after each. Seen together, they are the supervised face of a single idea: optimize a Rayleigh quotient, or iterate a deflation, on the kernel matrix.</p>
+<p class="lead">Reduce a dataset to its few directions of largest variance, fit a regressor in that subspace, and you may have just discarded the one direction that predicts the target. Variance and relevance are not the same thing: a signal can hide in a direction the data barely spreads along. The unsupervised subspace methods take no notice, since [[ch:kernel-pca|kernel PCA]] and [[ch:kernel-cca-and-correlation|kernel CCA]] pick directions by an internal criterion and never ask whether those directions have anything to do with a label. This chapter admits the label into the objective and builds three supervised subspace methods on one algebraic engine. Kernel Fisher discriminant analysis maximizes a ratio of between-class to within-class scatter and lands on a regularized generalized eigenproblem. Principal components regression keeps the kernel eigenvectors but reweights them by how well each predicts the target. Kernel partial least squares extracts the directions of maximum covariance with the response, deflating the Gram matrix after each. Seen together, they are the supervised face of one idea: optimize a Rayleigh quotient, or iterate a deflation, on the kernel matrix.</p>
 
 ## From variance to prediction {#supervised-subspaces}
 
@@ -114,7 +114,7 @@ Fisher (1936) asked for the one-dimensional projection of a two-class dataset th
 
 ### Between-class and within-class scatter {#kfd-scatter}
 
-Work in the feature space with map \(\phi\). Write the two classes as index sets of sizes \(\ell_+\) and \(\ell_-\), and let the class means in feature space be
+Both goals, distant class means and tight classes, become quadratic forms in the projection direction, so we build one scatter matrix for each and read Fisher's criterion off their ratio. Work in the feature space with map \(\phi\). Write the two classes as index sets of sizes \(\ell_+\) and \(\ell_-\), and let the class means in feature space be
 
 $$\mu_c^{\phi}=\frac{1}{\ell_c}\sum_{i\in c}\phi(x_i),\qquad c\in\{+,-\}.$$
 

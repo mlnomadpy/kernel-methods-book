@@ -41,6 +41,8 @@ In a ranking problem the training data comes with a relative ordering rather tha
 
 The goal is a ranking rule, a map \(r : X \to Y\) that assigns each instance a rank consistent with the preferences seen in training and, we hope, with the preferences of unseen data. Two features of the problem distinguish it from ordinary classification. First, the labels are not exchangeable: confusing rank 5 with rank 4 is a milder error than confusing rank 5 with rank 1, because the labels themselves are ordered. Second, what we ultimately care about is often not the absolute rank but the relative order of pairs, which is exactly what a search or recommendation system exposes to a user. Herbrich, Graepel, and Obermayer (2000) introduced the large-margin treatment of this problem under the name ordinal regression, and Joachims (2002) showed that framing web-search relevance as a ranking task, learned from click-through pairs, outperforms treating it as regression on relevance scores.
 
+Before any optimisation, we pin down the two objects everything else manipulates: the preference relation the ranks induce on instances, and the rule we are trying to learn.
+
 ::: {.definition #def-8-1}
 [Definition (preference relation and ranking rule)]{.box-title}
 
