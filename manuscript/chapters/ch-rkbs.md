@@ -37,11 +37,11 @@ bibliography:
 ---
 # Reproducing-Kernel Banach and Variation Spaces
 
-<p class="lead">RKHS geometry makes evaluation linear, regularization quadratic, and representer theorems almost effortless. The same geometry also favors dense squared norms. Banach and variation spaces keep bounded evaluation while replacing the inner product by duality and nonsmooth norms, allowing sparse atoms and finite-width feature representations to emerge from infinite-dimensional optimization.</p>
+<p class="lead">Ask kernel ridge regression for a sparse solution and it will refuse. The refusal is geometric: a squared Hilbert norm spreads energy across every correlated direction, so the minimizer touches every kernel section, and no amount of tuning makes most coefficients exactly zero. The same geometry blocks a second wish. A shallow neural network is a sum of finitely many ridge functions, yet an optimization over all such sums, with a quadratic penalty, has no reason to return a finite sum. Both wishes call for a space with a different unit ball. Reproducing-kernel Banach spaces keep the one property learning cannot do without, bounded point evaluation, while replacing the inner product by duality and the squared norm by nonsmooth atomic norms whose extreme points are single features. By the end of the chapter the representer theorem lives in the dual, sparsity falls out of convex geometry rather than heuristics, and a finite-width network appears as the exact solution of a convex variational problem over a variation space.</p>
 
 ## What the Hilbert structure was buying {#rkbs-hilbert-structure}
 
-Three familiar RKHS moves depend on the inner product:
+Before trading away the inner product we should know exactly what it was paying for, because each convenience will need either a replacement or an obituary. Three familiar RKHS moves depend on it:
 
 1. Every bounded functional has a unique representer in the same space.
 2. Orthogonal projection separates observed kernel sections from an irrelevant complement.
@@ -61,7 +61,7 @@ Unlike the Hilbert case, a positive-definite symmetric scalar kernel is not by i
 
 ## Semi-inner products and duality mappings {#rkbs-duality}
 
-In a smooth Banach space, the normalized duality map \(J:\mathcal B\to\mathcal B^\ast\) satisfies
+An RKHS silently identifies each function with the functional it represents, and every representer argument leans on that identification. A Banach space grants no such identification for free, but a smooth one offers a substitute. In a smooth Banach space, the normalized duality map \(J:\mathcal B\to\mathcal B^\ast\) satisfies
 
 $$
 \langle f,J(f)\rangle=\lVert f\rVert_{\mathcal B}^2,
@@ -81,7 +81,7 @@ For \(\ell_p\)-type geometry with \(p\ne2\), the duality map raises coordinate m
 
 ## Banach-space representer theorems {#rkbs-representer}
 
-Consider
+The question that decides whether any of this is usable is whether regularized learning over an infinite-dimensional Banach space still collapses to finitely many degrees of freedom. Consider
 
 $$
 \min_{f\in\mathcal B}
@@ -108,7 +108,7 @@ The theorem is finite dimensional in the dual, not necessarily a linear primal k
 
 ## Nonsmooth norms and sparse atoms {#rkbs-sparse-atoms}
 
-Nonsmooth spaces such as \(\ell_1\), spaces of finite measures, and total-variation spaces do not have a single smooth duality map. Optimality uses subgradients and extreme points. The representer can become sparse because an optimizer of a convex problem over a measure ball may be supported on finitely many atoms.
+Sparsity lives where the norm has corners, so the smooth theory above cannot deliver it. Nonsmooth spaces such as \(\ell_1\), spaces of finite measures, and total-variation spaces do not have a single smooth duality map. Optimality uses subgradients and extreme points. The representer can become sparse because an optimizer of a convex problem over a measure ball may be supported on finitely many atoms.
 
 ::: {.proposition #prop-rkbs-sparse-extreme}
 [Proposition (finite atomic extreme solutions)]{.box-title}
@@ -130,7 +130,7 @@ An RKHS squared norm spreads a solution across correlated directions because ene
 
 ## Variation spaces and ridge splines {#variation-ridge-splines}
 
-A shallow ridge-function model has
+The most consequential client of this atomic machinery is the shallow neural network. A shallow ridge-function model has
 
 $$
 f(x)=\int a(w,b)\,\sigma(w^\top x-b)\,d\nu(w,b).
@@ -144,7 +144,7 @@ This is a bridge to feature learning. A fixed RKHS optimizes coefficients in a f
 
 ## Algorithms: from duality to column generation {#rkbs-algorithms}
 
-Finite dictionaries reduce atomic regularization to lasso-like optimization. Continuous dictionaries require finding an atom most correlated with a residual or dual certificate. Conditional-gradient and exchange methods alternate between a linear minimization oracle and coefficient refitting.
+A finite representer theorem guarantees that a sparse solution exists; it says nothing about how to find its atoms. Finite dictionaries reduce atomic regularization to lasso-like optimization. Continuous dictionaries require finding an atom most correlated with a residual or dual certificate. Conditional-gradient and exchange methods alternate between a linear minimization oracle and coefficient refitting.
 
 :::: {.algorithm #algo-rkbs-column-generation}
 [Algorithm (atomic column generation)]{.box-title}

@@ -38,11 +38,11 @@ bibliography:
 ---
 # Distribution Shift, Robustness, and Conformal Prediction
 
-<p class="lead">A model can be accurate on held-out data and fail immediately after deployment because the held-out data came from the same sampling system as training. Kernel embeddings make distribution change measurable, importance weighting makes a restricted form of change correctable, and conformal prediction turns residual ranks into finite-sample prediction sets. Each tool has precise assumptions, and none converts arbitrary shift into a solved problem.</p>
+<p class="lead">The model was accurate yesterday and wrong today, and nothing in the training pipeline warned you. Held-out accuracy certifies performance on data drawn from the same sampling system as training; replace a sensor, move to a new hospital, or simply let time pass, and that certificate is void while every validation dashboard still shows green. The tools built so far assume the deployment point looks like the training data, which is exactly the assumption the world breaks. Three tools form the replacement chain: kernel embeddings make distribution change measurable, importance weighting makes a restricted form of change correctable, and conformal prediction turns residual ranks into finite-sample prediction sets. Each has precise assumptions, and none converts arbitrary shift into a solved problem; the honest product is a chain of assumptions, diagnostics, corrections, and guarantees that fails visibly instead of silently.</p>
 
 ## A taxonomy of distribution change {#shift-taxonomy}
 
-Let \(P\) denote the training distribution and \(Q\) the deployment distribution on \((X,Y)\).
+Not all change is alike: a shifted input distribution, a changed labeling mechanism, and a region never seen in training call for different responses, so the first step is a vocabulary. Let \(P\) denote the training distribution and \(Q\) the deployment distribution on \((X,Y)\).
 
 ::: {.definition #def-shift-types}
 [Definition (common shift models)]{.box-title}
@@ -73,7 +73,7 @@ provided \(Q_X\) is absolutely continuous with respect to \(P_X\). No finite wei
 
 ## Detecting shift with kernel embeddings {#shift-detection}
 
-The MMD from [[ch:kernel-mean-embeddings]] compares the input marginals through
+Correction presupposes detection: before reweighting anything, we need a statistic that says whether the deployment inputs differ from training at all. The MMD from [[ch:kernel-mean-embeddings]] compares the input marginals through
 
 $$
 \operatorname{MMD}_k(P_X,Q_X)=\lVert\mu_{P_X}-\mu_{Q_X}\rVert_{\mathcal H_k}.
@@ -99,7 +99,7 @@ Suppose an MMD test detects that deployment inputs differ from training inputs. 
 
 ## Kernel mean matching {#kernel-mean-matching}
 
-Kernel mean matching estimates weights without separately estimating two densities. Choose nonnegative weights \(\beta_i\) so the weighted training embedding approaches the deployment embedding:
+The density ratio \(w\) involves two unknown densities, and estimating each separately in high dimension is harder than the reweighting problem requires. Kernel mean matching estimates weights without separately estimating two densities. Choose nonnegative weights \(\beta_i\) so the weighted training embedding approaches the deployment embedding:
 
 $$
 \min_{\beta}\left\lVert
@@ -151,7 +151,7 @@ Robust model design should report the perturbation model, radius selection, clea
 
 ## Conformal prediction from exchangeable scores {#conformal-prediction}
 
-Conformal prediction wraps a fitted model with a rank calibration step. Split the data into a proper training set and a calibration set. Fit \(\widehat f\) on training data and compute nonconformity scores \(r_i=s(X_i,Y_i;\widehat f)\) on calibration data. For a new input \(x\), form
+Weighting and robustness both lean on assumptions about how the world changed. A complementary guarantee asks for much less: not a better point prediction, but a set around any prediction whose coverage holds by construction. Conformal prediction wraps a fitted model with a rank calibration step. Split the data into a proper training set and a calibration set. Fit \(\widehat f\) on training data and compute nonconformity scores \(r_i=s(X_i,Y_i;\widehat f)\) on calibration data. For a new input \(x\), form
 
 $$
 \mathcal C_\alpha(x)=\{y:s(x,y;\widehat f)\le q_{1-\alpha}\},

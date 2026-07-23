@@ -20,6 +20,30 @@ local function inlines_to_latex(inlines)
   return (pandoc.write(pandoc.Pandoc({ pandoc.Plain(inlines) }), "latex"):gsub("%s+$", ""))
 end
 
+-- Review-boilerplate paragraphs inside formal boxes ("**Assumptions.** ...",
+-- "**Proof status.** ...", "**Verification artifact.** ...") are metadata, not
+-- mathematics. Keep them, but set them small and muted so the statement stays
+-- the visual subject of the box.
+local meta_leads = {
+  ["Assumptions."] = true, ["Proof status."] = true,
+  ["Verification artifact."] = true,
+}
+local function demote_meta_paragraphs(blocks)
+  for i, blk in ipairs(blocks) do
+    if blk.t == "Para" and blk.content[1] and blk.content[1].t == "Strong" then
+      local lead = pandoc.utils.stringify(blk.content[1])
+      if meta_leads[lead] then
+        blocks[i] = pandoc.Div({
+          pandoc.RawBlock("latex", "\\kbmetaopen{}"),
+          blk,
+          pandoc.RawBlock("latex", "\\kbmetaclose{}"),
+        })
+      end
+    end
+  end
+  return blocks
+end
+
 -- Pull a leading `[...]{.box-title}` span off the content and return it as a
 -- LaTeX string (or nil). Drops the span, and the paragraph if it held nothing
 -- else.
@@ -45,10 +69,19 @@ function Div(el)
     if el.classes:includes(kind) then
       local title = extract_title(el.content) or default_label[kind]
       local lbl = el.identifier ~= "" and ("\\label{" .. el.identifier .. "}") or ""
+      el.content = demote_meta_paragraphs(el.content)
       table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{" .. env .. "}{" .. title .. "}" .. lbl))
       table.insert(el.content, pandoc.RawBlock("latex", "\\end{" .. env .. "}"))
       return el.content
     end
+  end
+
+  -- The chapter lead paragraph: a styled opener block (see kblead in the
+  -- preamble). The build script emits it as `::: {.lead}` for the PDF.
+  if el.classes:includes("lead") then
+    table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{kblead}"))
+    table.insert(el.content, pandoc.RawBlock("latex", "\\end{kblead}"))
+    return el.content
   end
 
   if el.classes:includes("proof") then

@@ -30,11 +30,11 @@ bibliography:
 ---
 # Deep Kernel Learning
 
-<p class="lead">Deep kernel learning composes a trainable representation with a positive definite base kernel, then performs Gaussian-process or kernel inference on top. It can learn task-specific geometry while retaining predictive covariance, but joint optimization creates identifiability, calibration, and approximation failures that a fixed-kernel analysis does not expose.</p>
+<p class="lead">A neural network learns the representation a task demands but returns a bare number; a Gaussian process returns honest uncertainty but only over the geometry it is handed. Deep kernel learning promises both at once: push the inputs through a trainable feature map, place a positive definite kernel on the learned coordinates, and train the whole stack by marginal likelihood, so predictions carry task-specific similarity and a predictive covariance. The promise is real, but naive joint optimization can quietly break both halves. The feature map can collapse distinct inputs to a point while the likelihood keeps improving through noise and mean terms, scale symmetries leave the objective flat and the parameters uninterpretable, and the error bars can end up most confident exactly where the data give the least support. This chapter builds the model, derives the marginal-likelihood gradient that trains it, scales it with inducing points and structured interpolation, and assembles the diagnostics that separate a working deep kernel from a confident failure: calibration, geometry, and honest ablations.</p>
 
 ## The model and its distinction from NTK {#dkl-model}
 
-Let \(h_\theta:\mathcal{X}\to\mathbb{R}^p\) be a neural feature map and let \(k_\phi\) be a positive definite base kernel. Define
+The construction takes one line; its consequences take the rest of the chapter. Let \(h_\theta:\mathcal{X}\to\mathbb{R}^p\) be a neural feature map and let \(k_\phi\) be a positive definite base kernel. Define
 
 $$
 k_{\theta,\phi}(x,z)=k_\phi(h_\theta(x),h_\theta(z)).
@@ -52,7 +52,7 @@ This is not the neural tangent kernel limit. In standard NTK analysis, the tange
 
 ## Marginal-likelihood training {#dkl-marginal-likelihood}
 
-For Gaussian regression, let \(C=K_{\theta,\phi}+\sigma^2I\). The negative log marginal likelihood, up to an additive constant, is
+With network weights now inside the kernel, something must train them, and cross-validating millions of parameters is not an option. The natural objective is the same evidence that tuned length scales for an ordinary GP, now asked to shape an entire representation. For Gaussian regression, let \(C=K_{\theta,\phi}+\sigma^2I\). The negative log marginal likelihood, up to an additive constant, is
 
 $$
 \mathcal{L}(\theta,\phi,\sigma)=\frac12y^\top C^{-1}y+\frac12\log\det C.
@@ -77,7 +77,7 @@ The representation can shrink pairwise distances while the base length scale exp
 
 ## Exact and approximate computation {#dkl-computation}
 
-Exact training requires an \(n\times n\) factorization, \(O(n^3)\) time and \(O(n^2)\) memory. Inducing-point methods replace the full process by \(m\) representative locations, often costing \(O(nm^2+m^3)\). Structured kernel interpolation places inducing points on a grid and interpolates feature-space covariances, enabling fast matrix-vector products when the learned representation and grid retain the required structure [@wilson2015kissgp].
+Every gradient step above touches the full Gram matrix, so the first practical question is what a step costs. Exact training requires an \(n\times n\) factorization, \(O(n^3)\) time and \(O(n^2)\) memory. Inducing-point methods replace the full process by \(m\) representative locations, often costing \(O(nm^2+m^3)\). Structured kernel interpolation places inducing points on a grid and interpolates feature-space covariances, enabling fast matrix-vector products when the learned representation and grid retain the required structure [@wilson2015kissgp].
 
 :::: {.algorithm #algo-dkl-training}
 [Algorithm (auditable DKL training)]{.box-title}
@@ -91,6 +91,8 @@ Exact training requires an \(n\times n\) factorization, \(O(n^3)\) time and \(O(
 ::::
 
 ## Calibration and failure modes {#dkl-failures}
+
+The most instructive DKL failures are quiet: training proceeds smoothly and produces confident nonsense. The simplest such failure is worth examining first.
 
 ::: {.example #example-dkl-collapse}
 [Example (representation collapse)]{.box-title}
@@ -118,7 +120,7 @@ Class probabilities should be assessed with log loss, Brier score, reliability d
 
 ## Variational inducing-point DKL {#dkl-variational}
 
-Let inducing variables \(u=f(Z)\) live at locations \(Z\) in learned feature space. A sparse variational GP optimizes a lower bound over \(q(u)\), kernel parameters, inducing locations, and network parameters. The inducing set is not merely a computational cache: it determines which posterior directions can be represented.
+Sparse approximation acquires a new twist when the space the inducing points live in is itself being learned. Let inducing variables \(u=f(Z)\) live at locations \(Z\) in learned feature space. A sparse variational GP optimizes a lower bound over \(q(u)\), kernel parameters, inducing locations, and network parameters. The inducing set is not merely a computational cache: it determines which posterior directions can be represented.
 
 Three design choices must be distinguished:
 
@@ -132,7 +134,7 @@ The evidence lower bound can improve while predictive variance deteriorates if t
 
 ## Identifiability and geometry control {#dkl-identifiability}
 
-For an RBF readout, multiplying all features by \(a\) and multiplying the length scale by the same factor leaves pairwise normalized distances unchanged. Neural weights, feature normalization, output scale, kernel amplitude, and observation noise create further symmetries or near-symmetries.
+When training logs show feature norms drifting upward while the length scale grows in lockstep, the optimizer is not misbehaving; the model has a flat direction. For an RBF readout, multiplying all features by \(a\) and multiplying the length scale by the same factor leaves pairwise normalized distances unchanged. Neural weights, feature normalization, output scale, kernel amplitude, and observation noise create further symmetries or near-symmetries.
 
 ::: {.proposition #prop-dkl-scale-invariance}
 [Proposition (feature-length-scale invariance)]{.box-title}
@@ -176,7 +178,7 @@ Conformal prediction from [[ch:distribution-shift-robustness-and-conformal-predi
 
 ## Comparing DKL with neighboring models {#dkl-comparisons}
 
-DKL sits among several models:
+A DKL score in isolation answers nothing; the claim that joint feature learning earns its complexity is inherently comparative. DKL sits among several models:
 
 - **fixed deep features plus GP:** isolates the value of joint feature learning;
 - **NTK or NNGP:** uses a fixed infinite-width kernel and convex readout dynamics;

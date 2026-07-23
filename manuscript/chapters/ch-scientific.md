@@ -42,11 +42,11 @@ bibliography:
 ---
 # Kernels for Scientific Computing and Operator Learning
 
-<p class="lead">Scientific learning asks more than prediction at another row of a data table. It may require a function satisfying a differential equation, an inverse coefficient compatible with boundary measurements, or an operator mapping one field to another across discretizations. Kernels handle these tasks by representing continuous functions, evaluating linear physics operators through differentiated kernels, and quantifying numerical uncertainty when a probabilistic model is justified.</p>
+<p class="lead">A curve that passes through every measurement can still be physically impossible: it can violate the equation that governs the field, contradict the boundary conditions, or fail to conserve what the physics conserves. Scientific learning asks more than prediction at another row of a data table; it may require a function satisfying a differential equation, an inverse coefficient compatible with boundary measurements, or an operator mapping one field to another across discretizations. Ordinary kernel regression, built on point evaluations of a scalar response, does not obviously accommodate derivatives, fluxes, integrals, or equation residuals. It does, and cheaply: every bounded linear functional of an RKHS function has a representer obtained by applying the functional to a kernel argument. From that one fact we build symmetric collocation solvers for boundary-value problems, Gaussian processes conditioned on derivative and residual observations, probabilistic numerical methods with honest interpretations, and kernel operator regression that stands comparison with neural operators, provided numerical error is decomposed rather than hidden.</p>
 
 ## Linear information about an unknown function {#scientific-linear-information}
 
-Let \(u\in\mathcal H_k\) be an unknown function and suppose the available information consists of bounded linear functionals
+What do a thermocouple reading, a measured flux, and a PDE residual have in common? Each extracts one number from the unknown function in a linear way, and that shared structure is all the theory needs. Let \(u\in\mathcal H_k\) be an unknown function and suppose the available information consists of bounded linear functionals
 
 $$
 y_i=L_i u+\varepsilon_i.
@@ -84,7 +84,7 @@ Positive semidefiniteness follows because \(G\) is the Gram matrix of the Riesz 
 
 ## Symmetric kernel collocation {#kernel-collocation}
 
-Consider a linear boundary-value problem
+The most direct use of functional representers is to solve a differential equation by regression: make the equation and its boundary conditions the observations. Consider a linear boundary-value problem
 
 $$
 \mathcal A u=f\quad\text{in }\Omega,
@@ -130,7 +130,7 @@ The parameter \(\rho\) expresses trust in the equation relative to observations.
 
 ## Gaussian processes with differential observations {#gp-differential-observations}
 
-If \(u\sim\mathcal{GP}(m,k)\), bounded linear transformations remain jointly Gaussian. For linear functionals \(L_i\) and \(M_j\),
+Collocation returns a single function; it does not say how much to trust it between the collocation sites. A probabilistic reading of the same construction does. If \(u\sim\mathcal{GP}(m,k)\), bounded linear transformations remain jointly Gaussian. For linear functionals \(L_i\) and \(M_j\),
 
 $$
 \operatorname{Cov}(L_i u,M_j u)
@@ -143,7 +143,7 @@ The posterior covariance measures uncertainty under the GP prior, observation mo
 
 ## Probabilistic numerical methods {#probabilistic-numerics}
 
-A probabilistic numerical method places a probability model on an unknown mathematical object and conditions on information produced by a numerical procedure. Bayesian quadrature in [[ch:kernel-quadrature-and-herding]] is one example; differential-equation solvers are another [@cockayne2019probnum].
+The GP treatment of a differential equation is one instance of a broader stance: treat numerical error itself as something to be modeled, not merely bounded. A probabilistic numerical method places a probability model on an unknown mathematical object and conditions on information produced by a numerical procedure. Bayesian quadrature in [[ch:kernel-quadrature-and-herding]] is one example; differential-equation solvers are another [@cockayne2019probnum].
 
 Three questions keep the interpretation honest:
 
@@ -155,7 +155,7 @@ Posterior variance can guide adaptive mesh refinement by selecting information w
 
 ## Inverse scientific problems {#scientific-inverse-problems}
 
-In an inverse problem, observations depend on an unknown coefficient through a forward solution operator:
+So far the unknown was the solution field itself. Often the real target sits one level deeper: the conductivity, source, or material coefficient that produced the field we can measure. In an inverse problem, observations depend on an unknown coefficient through a forward solution operator:
 
 $$
 y=\mathcal G(a)+\varepsilon.
@@ -167,7 +167,7 @@ Identifiability precedes optimization. If distinct coefficients produce indistin
 
 ## Learning operators between function spaces {#operator-learning}
 
-Many scientific tasks observe pairs of functions \((a_i,u_i)\) and seek an operator \(\mathcal G:a\mapsto u\). A scalar kernel on input functions combined with an operator-valued output kernel yields
+Solving one boundary-value problem per parameter setting is wasteful when the same equation must be solved thousands of times. The alternative is to learn the solution map itself. Many scientific tasks observe pairs of functions \((a_i,u_i)\) and seek an operator \(\mathcal G:a\mapsto u\). A scalar kernel on input functions combined with an operator-valued output kernel yields
 
 $$
 \widehat{\mathcal G}(a)=\sum_i K(a,a_i)c_i,

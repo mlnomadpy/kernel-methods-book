@@ -156,6 +156,10 @@ function publicationMarkdown(chapter) {
   let source = matter(fs.readFileSync(path.join(root, "manuscript", "chapters", `${chapter.src}.md`), "utf8")).content;
   source = convertSimpleTablesToPipe(source);
   source = indentDisplayMathInLists(source);
+  // The manuscript writes straight quotes as `\"`. The markdown escape
+  // suppresses smart typography, so the print edition shows typewriter quotes.
+  // Unescape them; pandoc's `smart` extension then curls them properly.
+  source = source.replace(/\\"/g, '"');
   // Exercises carry a bare "Hint" line before their `::: hint-body` div (the
   // web renders it as the collapsible's summary). The PDF styles the hint box
   // with its own "Hint." lead, so drop the now-redundant standalone word.
@@ -164,7 +168,12 @@ function publicationMarkdown(chapter) {
     /^[ \t]*Hint[ \t]*\n(?=[ \t]*\n[ \t]*:{3,}[ \t]*(?:\{\.hint-body\}|hint-body)\b)/gm,
     "",
   );
-  source = source.replace(/<p class="lead">([\s\S]*?)<\/p>/g, (_, text) => `*${text.replace(/<[^>]+>/g, "")}*`);
+  // The chapter lead: a styled opener environment in the PDF (filter.lua maps
+  // the `.lead` div to kblead); plain italics in the HTML-based EPUB.
+  source = source.replace(/<p class="lead">([\s\S]*?)<\/p>/g, (_, text) => {
+    const body = text.replace(/<[^>]+>/g, "").trim();
+    return format === "pdf" ? `::: {.lead}\n${body}\n:::` : `*${body}*`;
+  });
   // Replace each interactive widget with the static JAX-rendered plate that
   // reproduces its default state (publication/figures/<widget>.pdf), captioned
   // from captions.json. Pandoc's implicit_figures turns an image-only paragraph
@@ -206,7 +215,27 @@ function frontmatterMarkdown(item) {
   return fs.readFileSync(
     path.join(root, "manuscript", "frontmatter", `${item.src}.md`),
     "utf8",
-  ).trim();
+  )
+    // Social handles like `@azettaai` read as citation keys under citeproc and
+    // render as "(azettaai?)". Escape the marker; frontmatter has no citations.
+    .replace(/(^|[\s(])@(?=[A-Za-z])/g, "$1\\@")
+    .trim();
+}
+
+// LaTeX-escape a plain YAML string (part titles and intros from book.yml).
+function texEscape(s) {
+  return s
+    .replace(/\\/g, "\\textbackslash{}")
+    .replace(/([&%$#_{}])/g, "\\$1")
+    .replace(/~/g, "\\textasciitilde{}")
+    .replace(/\^/g, "\\textasciicircum{}");
+}
+
+// A part opener page: numeral, title, and the part's intro from book.yml.
+function partOpener(part) {
+  const [numeral, ...rest] = part.part.split("·").map((s) => s.trim());
+  const title = rest.join(" · ") || numeral;
+  return `\\kbpart{${texEscape(numeral)}}{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
 }
 
 const header = `---
@@ -217,16 +246,33 @@ lang: en-US
 rights: "Content CC BY-NC-SA 4.0; original code MIT"
 ---`;
 const openingMatter = (book.frontmatter || []).map(frontmatterMarkdown);
+// The bibliography as a real backmatter chapter: citeproc fills the `#refs`
+// div, and the unnumbered heading gives it running heads and a TOC entry.
+const bibliographySection = format === "pdf"
+  // \chapter* leaves the previous chapter's running-head marks in place;
+  // reset them so the bibliography pages carry their own header.
+  ? "# Bibliography {.unnumbered}\n\n\\markboth{Bibliography}{Bibliography}\n\n::: {#refs}\n:::"
+  : "# Bibliography {.unnumbered}\n\n::: {#refs}\n:::";
+// Mainmatter for the PDF: every part opens on its own page with the intro from
+// book.yml, and the chapter counter starts at -1 so the Preliminaries chapter
+// is Chapter 0 — matching the web edition's labels and this build's own
+// cross-reference text ("Chapter 1" = the Introduction).
+const pdfMainmatter = book.parts.flatMap((part) => [
+  partOpener(part),
+  ...part.chapters.map(publicationMarkdown),
+]);
 const publicationSections = format === "pdf"
   ? [
       header,
       "\\frontmatter",
       ...openingMatter,
       "\\tableofcontents",
-      "\\mainmatter",
-      ...chapters.map(publicationMarkdown),
+      "\\mainmatter\n\\setcounter{chapter}{-1}",
+      ...pdfMainmatter,
+      "\\backmatter",
+      bibliographySection,
     ]
-  : [header, ...openingMatter, ...chapters.map(publicationMarkdown)];
+  : [header, ...openingMatter, ...chapters.map(publicationMarkdown), bibliographySection];
 const combined = publicationSections.join("\n\n\\cleardoublepage\n\n");
 const buildDir = path.join(root, ".build", "publication");
 const releaseDir = path.join(root, "release");
@@ -254,19 +300,30 @@ const common = [
 if (publicationAuthors.length) {
   common.push("--metadata", "author=" + publicationAuthors.join("; "));
 }
-if (format === "pdf") common.push(
-  "--pdf-engine=lualatex",
-  // Map the semantic fenced divs to styled LaTeX boxes (PDF only; the RawBlocks
-  // it emits are LaTeX, so it must not run for the HTML-based EPUB).
-  "--lua-filter", path.join(root, "publication", "filter.lua"),
-  "--variable", "documentclass=scrbook",
-  "--variable", "papersize=letter",
-  "--variable", "fontsize=10pt",
-  "--variable", "mainfont=STIX Two Text",
-  "--variable", "mathfont=STIX Two Math",
-  "--variable", "colorlinks=true",
-  "--include-in-header", path.join(root, "publication", "preamble.tex"),
-);
+if (format === "pdf") {
+  // Publication metadata the static preamble cannot know (edition, version):
+  // generated per build and included before preamble.tex, whose \providecommand
+  // fallbacks then stand down.
+  const metaTex = path.join(buildDir, "meta.tex");
+  fs.writeFileSync(metaTex, [
+    `\\newcommand{\\kbeditionline}{${texEscape(publication.edition || "Draft")} · version ${texEscape(publication.version || "")}}`,
+    "",
+  ].join("\n"));
+  common.push(
+    "--pdf-engine=lualatex",
+    // Map the semantic fenced divs to styled LaTeX boxes (PDF only; the RawBlocks
+    // it emits are LaTeX, so it must not run for the HTML-based EPUB).
+    "--lua-filter", path.join(root, "publication", "filter.lua"),
+    "--variable", "documentclass=scrbook",
+    "--variable", "papersize=letter",
+    "--variable", "fontsize=10pt",
+    "--variable", "mainfont=STIX Two Text",
+    "--variable", "mathfont=STIX Two Math",
+    "--variable", "colorlinks=true",
+    "--include-in-header", metaTex,
+    "--include-in-header", path.join(root, "publication", "preamble.tex"),
+  );
+}
 if (format === "epub") common.push(
   "--toc",
   "--epub-cover-image", path.join(root, "publication", "cover.svg"),

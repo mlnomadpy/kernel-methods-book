@@ -33,7 +33,7 @@ bibliography:
 ---
 # Support Vector Regression
 
-<p class="lead">The support vector machine of [[ch:support-vector-machines]] learns a real-valued decision function but uses only its sign. This chapter keeps the function and throws away the sign: we estimate a real target \(y\in\mathbb{R}\) instead of a label \(y\in\{\pm 1\}\), and we ask that the estimator inherit the one property that made the classifier so useful, sparsity. The engine of that inheritance is a single change to the loss. Where least squares charges for every deviation, Vapnik's \(\varepsilon\)-insensitive loss forgives small ones, opening a flat-bottomed valley of zero cost around the target. Points that fall into the valley cost nothing, contribute nothing, and drop out of the solution, so the regressor is written in terms of a small subset of the data, the support vectors, exactly as in classification. We build the primal program, derive its dual and the box constraints that structure it, read the geometry of the resulting \(\varepsilon\)-tube, and then meet the \(\nu\)-variant that trades the awkward parameter \(\varepsilon\) for a parameter \(\nu\) with a clean statistical meaning: it bounds the fraction of points allowed outside the tube. We follow Vapnik (1995) and Schölkopf and Smola (2002) throughout, with the \(\nu\)-formulation from Schölkopf, Smola, Williamson, and Bartlett (2000).</p>
+<p class="lead">Many targets come with a tolerance: a forecast that lands within half a degree is simply right, and nobody pays for the decimals. Least squares does not think this way; it charges for every deviation, however small, so every training point leaves its mark on the fit. The support vector machine of [[ch:support-vector-machines]] runs on the opposite bargain, a loss that ignores comfortable points entirely, and that indifference is exactly what makes its solution sparse. This chapter carries the bargain from labels to real targets. Vapnik's \(\varepsilon\)-insensitive loss opens a flat-bottomed valley of zero cost around each target; points that fall into the valley cost nothing, contribute nothing, and drop out of the solution, so the regressor is written on a small subset of the data, the support vectors, exactly as in classification. We build the primal program, derive its dual and the box constraints that structure it, read the geometry of the resulting \(\varepsilon\)-tube, and then meet the \(\nu\)-variant that trades the awkward parameter \(\varepsilon\) for a parameter \(\nu\) with a clean statistical meaning: it bounds the fraction of points allowed outside the tube. We follow Vapnik (1995) and Schölkopf and Smola (2002) throughout, with the \(\nu\)-formulation from Schölkopf, Smola, Williamson, and Bartlett (2000).</p>
 
 ## The \(\varepsilon\)-insensitive loss and where sparsity comes from {#epsilon-insensitive-loss}
 
@@ -57,7 +57,7 @@ The graph is a trough: a flat floor of zero on the interval \([-\varepsilon,\var
 
 ## The primal program for SV regression {#the-primal-program}
 
-We estimate an affine function in a feature space induced by a kernel,
+The loss fixes what a deviation costs; it remains to say what we fit and what keeps the fit simple. We estimate an affine function in a feature space induced by a kernel,
 
 $$f(x)=\langle w,x\rangle+b,$$
 
@@ -285,7 +285,7 @@ Six points \(x=(1,2,3,4,5,6)\), \(y=(1.0,\,2.6,\,2.0,\,4.2,\,3.4,\,5.6)\), linea
 
 ## Expectile regression {#expectile-regression}
 
-Quantiles minimize an asymmetric absolute loss. Expectiles replace the absolute deviation by an asymmetrically weighted square [@newey1987expectiles]. For level \(\tau\in(0,1)\), define
+The pinball loss buys its coverage guarantee with a kink at zero, and some applications would rather trade that guarantee for a smoother objective that ordinary least-squares machinery can chase. Quantiles minimize an asymmetric absolute loss. Expectiles replace the absolute deviation by an asymmetrically weighted square [@newey1987expectiles]. For level \(\tau\in(0,1)\), define
 
 $$\ell_\tau^{\mathrm{exp}}(y,f)=\lvert\tau-\mathbf 1\{y\lt f\}\rvert\,(y-f)^2.$$
 

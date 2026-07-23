@@ -33,11 +33,11 @@ bibliography:
 ---
 # Kernels for Dynamical Systems, Control, and Reinforcement Learning
 
-<p class="lead">A dynamical system is not a bag of independent input-output pairs. Its observations are linked by evolution, its errors propagate through time, and control changes the distribution from which future data arrive. Kernels enter at three complementary levels: as priors for unknown transition functions, as feature spaces in which nonlinear evolution becomes a linear operator, and as regularizers for value functions and policies.</p>
+<p class="lead">A robot that plans with a learned model of its own dynamics is betting on that model hundreds of steps ahead: a bias too small to notice in one-step validation is fed back as the next input, compounds along the rollout, and can steer the plan into states no training trajectory ever visited. This is why a dynamical system cannot be treated as a bag of independent input-output pairs. Its observations are linked by evolution, its errors propagate through time, and control changes the distribution from which future data arrive, so the IID toolkit of earlier chapters must be rebuilt rather than reused. Kernels enter at three complementary levels: as Gaussian-process priors for unknown transition functions, as feature spaces in which nonlinear evolution becomes a linear operator, and as regularizers for value functions and policies. By the end we can fit each of these, separate model, sampling, projection, and off-policy error, and evaluate the result as a closed-loop system rather than a regressor.</p>
 
 ## Sequential data and four sources of error {#dynamics-setting}
 
-Consider a controlled Markov system
+Before any estimator, we need a precise account of the ways a trajectory can mislead us. Consider a controlled Markov system
 
 $$
 X_{t+1}=F(X_t,A_t)+\varepsilon_t,
@@ -78,7 +78,7 @@ For control, posterior variance is not a safety certificate. It measures uncerta
 
 ## Koopman and transfer operators {#koopman-transfer}
 
-For deterministic dynamics \(x'=F(x)\), the Koopman operator acts on observables rather than states:
+A GP model accepts the nonlinearity of \(F\) and manages it with uncertainty. There is a second option: change what we track until the evolution becomes linear. For deterministic dynamics \(x'=F(x)\), the Koopman operator acts on observables rather than states:
 
 $$
 [\mathcal K g](x)=g\{F(x)\}.
@@ -97,7 +97,7 @@ under the regularized empirical construction from [[ch:conditional-mean-embeddin
 
 ## Kernel EDMD {#kernel-edmd}
 
-Extended dynamic mode decomposition approximates the Koopman operator in a finite dictionary. A kernel replaces an explicit large dictionary by its Gram matrix. Given paired states \(x_i\) and \(x_i'=F(x_i)\), define
+The Koopman operator acts on an infinite-dimensional space of observables; to compute with it we must project onto something finite. Extended dynamic mode decomposition approximates the Koopman operator in a finite dictionary. A kernel replaces an explicit large dictionary by its Gram matrix. Given paired states \(x_i\) and \(x_i'=F(x_i)\), define
 
 $$
 G_{ij}=k(x_i,x_j),
@@ -125,7 +125,7 @@ Small regularization can create unstable spectral estimates when Gram eigenvalue
 
 ## Value functions and Bellman operators {#kernel-bellman}
 
-For a fixed policy \(\pi\), the discounted value function satisfies
+When trajectories come with rewards, the object of interest is no longer the dynamics but what they are worth: how much return a policy collects from each starting state. For a fixed policy \(\pi\), the discounted value function satisfies
 
 $$
 V^\pi(x)=r^\pi(x)+\gamma\,\mathbb E\{V^\pi(X')\mid X=x,A\sim\pi\}.

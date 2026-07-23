@@ -36,11 +36,11 @@ bibliography:
 ---
 # Optimal Transport and Kernels
 
-<p class="lead">The previous chapter on [[ch:kernel-mean-embeddings|mean embeddings]] turned every distribution into a single RKHS vector and compared distributions by the distance between those vectors, the maximum mean discrepancy, an integral probability metric over the unit ball of the RKHS. That construction is blind to the geometry of the sample space in a precise way: it compares \(P\) and \(Q\) only through a fixed feature map, and the ground distance between points enters only as far as the kernel chooses to let it. This chapter develops the other great way to compare distributions, optimal transport, which measures the least work needed to reshape one pile of mass into the other and so is built directly on the geometry of the ground space. We meet the Kantorovich formulation and its dual, find that the 1-Wasserstein distance is again an integral probability metric but now over the 1-Lipschitz functions rather than an RKHS ball, and confront the price of that geometric fidelity: the empirical Wasserstein distance converges at the dimension-cursed rate \(n^{-1/d}\), whereas the MMD converges at \(n^{-1/2}\) in every dimension. Entropic regularization and the Sinkhorn algorithm make transport computable, and Sinkhorn divergences debias it into a one-parameter family that interpolates between optimal transport at one end and a kernel MMD at the other, closing the circle between the two halves of this book.</p>
+<p class="lead">Slide one pile of sand ten meters, then ten kilometers: a narrow Gaussian kernel reports nearly the same discrepancy both times, because once two distributions sit more than a few bandwidths apart the MMD saturates and stops growing. Yet how far the mass must travel is often exactly what matters, when the objects compared are shapes, color histograms, or word embeddings. The discrepancies built from [[ch:kernel-mean-embeddings|mean embeddings]] read \(P\) and \(Q\) only through a fixed feature map; the geometry of the ground space enters only as far as the kernel chooses to let it. Optimal transport instead measures the least work needed to reshape one pile of mass into the other, and so is built directly on that geometry. We meet the Kantorovich formulation and its dual, find that the 1-Wasserstein distance is again an integral probability metric but over the 1-Lipschitz functions rather than an RKHS ball, and confront the price of geometric fidelity: the dimension-cursed empirical rate \(n^{-1/d}\) against the MMD's dimension-free \(n^{-1/2}\). Entropic regularization and the Sinkhorn algorithm make transport computable, and the debiased Sinkhorn divergence interpolates between optimal transport at one end and a kernel MMD at the other, closing the circle between the two halves of this book.</p>
 
 ## Two ways to measure the distance between distributions {#two-geometries}
 
-Recall the integral probability metric of the previous chapter. Given a class \(\mathcal F\) of test functions, the distance between \(P\) and \(Q\) is the largest gap any allowed function can open between their means,
+Before building transport, it is worth pinning down exactly what the kernel discrepancies fail to see, and the integral probability metric of the previous chapter is the right lens. Given a class \(\mathcal F\) of test functions, the distance between \(P\) and \(Q\) is the largest gap any allowed function can open between their means,
 
 $$D_{\mathcal F}(P,Q)=\sup_{f\in\mathcal F}\Big(\mathbb E_{X\sim P}[f(X)]-\mathbb E_{Y\sim Q}[f(Y)]\Big).$$
 
@@ -205,7 +205,7 @@ The entropy term is strictly convex, so the minimizer is unique; as \(\varepsilo
 
 ### The scaling form of the solution {#sinkhorn-derivation}
 
-The entropy penalty does something remarkable to the shape of the solution: it forces the optimal plan to be a diagonal rescaling of a fixed matrix, and the rescaling is found by alternating normalizations. This is the Sinkhorn fixed point, and it falls straight out of the Lagrangian.
+The entropy penalty forces a specific shape onto the solution: the optimal plan must be a diagonal rescaling of a fixed matrix, and the rescaling is found by alternating normalizations. This is the Sinkhorn fixed point, and it falls straight out of the Lagrangian.
 
 :::: {.proposition #prop-31-5}
 [Proposition (Sinkhorn scaling form)]{.box-title}
