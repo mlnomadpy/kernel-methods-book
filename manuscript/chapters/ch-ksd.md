@@ -9,12 +9,18 @@ prerequisites:
   - conditional-mean-embeddings
 objectives:
   - >-
-    Explain the central definitions and claims in Kernel Stein Discrepancy and
-    Stein Methods.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Prove Stein's identity and identify the boundary condition that makes
+    integration by parts valid.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Derive the four-term Stein kernel and compute empirical KSD from samples and
+    an unnormalized target score.
+  - >-
+    Separate zero-discrepancy identification from the stronger claim that KSD
+    controls weak convergence.
+  - Calibrate a KSD goodness-of-fit test with a null-valid wild bootstrap.
+  - >-
+    Decompose an SVGD step into score attraction and kernel repulsion and
+    diagnose bandwidth or step-size failure.
 review_status: draft
 reviewers:
   technical: null
@@ -161,11 +167,11 @@ The four terms come from expanding the inner product coordinatewise with the fou
 :::: {.theorem #thm-34-7}
 [Theorem (KSD as a double expectation, Liu, Lee, and Jordan, 2016)]{.box-title}
 
-With \(u_p\) the Stein kernel,
+With \(u_p\) the Stein kernel and the expectations finite,
 
 $$ \mathrm{KSD}^2(q,p) = \mathbb{E}_{X,X'\sim q}\big[u_p(X,X')\big], $$
 
-where \(X, X'\) are independent draws from \(q\). The quantity is non-negative, and if the base kernel \(k\) is sufficiently rich (\(C_0\)-universal, integrally strictly positive definite) and mild integrability holds, then \(\mathrm{KSD}(q,p) = 0\) if and only if \(q = p\).
+where \(X, X'\) are independent draws from \(q\). The quantity is non-negative.
 
 **Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
 **Proof status.** Proved immediately below.
@@ -178,13 +184,15 @@ The witness expansion above gives \(\mathrm{KSD}(q,p) = \lVert \xi_{q,p}\rVert_{
 
 $$ \mathrm{KSD}^2(q,p) = \big\langle \mathbb{E}_{X}[\beta_p(X,\cdot)],\ \mathbb{E}_{X'}[\beta_p(X',\cdot)]\big\rangle_{\mathcal H^d} = \mathbb{E}_{X,X'\sim q}\big\langle \beta_p(X,\cdot), \beta_p(X',\cdot)\big\rangle_{\mathcal H^d} = \mathbb{E}_{X,X'\sim q}\big[u_p(X,X')\big]. $$
 
-Non-negativity is immediate, since it is a squared norm. As \(\mathrm{KSD}^2 = \lVert \xi_{q,p}\rVert^2\), it vanishes exactly when \(\xi_{q,p} = 0\); a \(C_0\)-universal kernel makes the map \(q \mapsto \xi_{q,p}\) injective in the sense that \(\xi_{q,p} = 0\) forces the score difference \(s_p - s_q\) to vanish \(q\)-almost everywhere, hence \(q = p\) (Chwialkowski, Strathmann, and Gretton, 2016; Gorham and Mackey, 2017). [\(\square\)]{.qed}
+Non-negativity is immediate, since it is a squared norm. [\(\square\)]{.qed}
 ::::
+
+The norm identity alone does not make KSD a metric. The implication \(\mathrm{KSD}(q,p)=0\Rightarrow q=p\) additionally needs the Stein identity to hold for the chosen RKHS, enough smoothness and positivity of the densities, integrability of the Stein feature, and a base kernel rich enough to identify the score difference; Chwialkowski, Strathmann, and Gretton (2016) give one such set of conditions. Even identification at zero is weaker than convergence control: a sequence can have KSD tending to zero while its mass escapes to infinity, the failure addressed by the inverse-multiquadric result later in the chapter.
 
 ::: {.corollary #cor-34-8}
 [Corollary (the Stein kernel is positive definite)]{.box-title}
 
-For fixed \(p\) and any base kernel \(k\), the Stein kernel \(u_p\) is a positive definite kernel on \(\mathbb{R}^d\), because \(u_p(x,x') = \langle \beta_p(x,\cdot), \beta_p(x',\cdot)\rangle_{\mathcal H^d}\) is a Gram inner product of the feature map \(x \mapsto \beta_p(x,\cdot)\). Consequently the empirical KSD is a genuine kernel statistic, and its double sum over any sample is non-negative.
+For fixed \(p\) and a differentiable base kernel \(k\) whose derivative representers belong to \(\mathcal H\), the Stein kernel \(u_p\) is a positive definite kernel on \(\mathbb{R}^d\), because \(u_p(x,x') = \langle \beta_p(x,\cdot), \beta_p(x',\cdot)\rangle_{\mathcal H^d}\) is a Gram inner product of the feature map \(x \mapsto \beta_p(x,\cdot)\). Consequently the empirical V-statistic \(\frac1{n^2}\sum_{i,j}u_p(x_i,x_j)\) is a genuine squared feature norm and is non-negative. The diagonal-free U-statistic is unbiased for the population square but can be negative.
 
 **Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
 **Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
@@ -319,15 +327,15 @@ The consequence is that the steepest descent direction on the KL divergence is t
 
 $$ \hat\phi(x_i) = \frac{1}{n}\sum_{j=1}^n \Big[\, \underbrace{k(x_j, x_i)\, s_p(x_j)}_{\text{driving force}} + \underbrace{\nabla_{x_j} k(x_j, x_i)}_{\text{repulsion}} \,\Big]. $$
 2.  Update every particle in parallel, \(x_i \leftarrow x_i + \epsilon\,\hat\phi(x_i)\).
-3.  Repeat from step 1 until the particles stop moving, that is until the empirical KSD falls below a tolerance.
+3.  Repeat from step 1 until a declared iteration budget, a small-update criterion, or a validation diagnostic is reached. Monitor empirical KSD, but do not assume it decreases monotonically for a finite step size.
 ::::
 
 <figure class="viz" data-widget="svgd-flow">
 
-<figcaption>Eighty particles start in a clump at \(x=-5\) and follow the exact SVGD update above, computed live with the analytic score of the two-mode target \(p=\tfrac12\,\mathcal N(-2,0.6^2)+\tfrac12\,\mathcal N(2,0.8^2)\). The driving force alone would pile every particle onto the peak of the near mode; it is the kernel repulsion \(\nabla_{x_j}k(x_j,x_i)\) that spreads the swarm through that mode and pushes a front across the low-density valley until both modes are populated. The readout is the empirical kernel Stein discrepancy, the V-statistic \(\widehat{\mathrm{KSD}}^2\) with the same RBF kernel, recomputed as the particles flow; watch it fall by orders of magnitude, and switch the bandwidth to see how the reach of the repulsion reroutes the whole flow.</figcaption>
+<figcaption>Eighty particles start in a clump at \(x=-5\) and follow the SVGD update above with the analytic score of the two-mode target \(p=\tfrac12\,\mathcal N(-2,0.6^2)+\tfrac12\,\mathcal N(2,0.8^2)\). Attraction moves particles toward high density while the kernel derivative spreads them; the KSD readout is a diagnostic, not a guaranteed Lyapunov curve for a finite step. Changing bandwidth shows the central trade-off: local repulsion may strand particles in one mode, while global repulsion can move the cloud coherently but blur local structure.</figcaption>
 </figure>
 
-The two terms in the update have a clean mechanical reading. The driving force \(k(x_j, x_i) s_p(x_j)\) is a kernel-weighted average of the score, pushing each particle toward regions where \(\log p\) increases, that is toward the high-density part of the target; a lone particle would follow \(s_p\) and slide to a mode. The repulsion \(\nabla_{x_j} k(x_j, x_i)\) points particles away from one another, and without it every particle would collapse onto the same mode. Their balance is what makes the particles spread out into the shape of \(p\) rather than piling up at its peak. Both terms use only \(s_p\), so SVGD samples an unnormalized posterior with no MCMC and no normalizer, which is why it reappears in [[ch:gaussian-processes-and-rvm|Bayesian inference]] as a fast deterministic alternative to sampling.
+The two terms in the update have a clean mechanical reading. The driving force \(k(x_j, x_i) s_p(x_j)\) is a kernel-weighted average of the score, pushing each particle toward regions where \(\log p\) increases, that is toward the high-density part of the target; a lone particle would follow \(s_p\) and slide to a mode. The repulsion \(\nabla_{x_j} k(x_j, x_i)\) points particles away from one another, and without it every particle would collapse onto the same mode. Their balance is what makes the particles spread out into the shape of \(p\) rather than piling up at its peak. Both terms use only \(s_p\), so SVGD provides deterministic approximate inference for an unnormalized posterior without evaluating its normalizer. Unlike an exact MCMC method, finite-particle SVGD does not automatically deliver asymptotically exact samples or Monte Carlo error bars; its output must be diagnosed as an approximation.
 
 ::::: {.example #example-34-2}
 [Example (one SVGD step toward a standard Gaussian)]{.box-title}
@@ -370,12 +378,12 @@ The score that drives the KSD is the same quantity estimated by score matching (
 
 ## Summary {#summary}
 
-When a target density \(p\) is known only up to its normalizer, the score \(s_p = \nabla \log p\) is the one handle that survives, because the constant \(Z\) disappears under the log-gradient. Stein's identity turns the score into an operator \(\mathcal{A}_p f = s_p^\top f + \nabla \cdot f\) whose expectation under \(p\) is zero, so its expectation under any other \(q\) measures the score gap \(s_p - s_q\). Maximizing that expectation over the unit ball of a vector RKHS gives the kernel Stein discrepancy, the RKHS norm of a Stein-transformed witness, with the closed-form double expectation \(\mathrm{KSD}^2(q,p) = \mathbb{E}_{X,X'\sim q}[u_p(X,X')]\) of the Stein kernel \(u_p\), itself positive definite and built from four terms in \(s_p\) and the derivatives of the base kernel. Estimated by its U-statistic or V-statistic over a sample, the KSD drives a goodness-of-fit test for unnormalized models, calibrated by a wild bootstrap because the null is a degenerate \(\chi^2\) mixture. The same witness is the steepest-descent direction of the KL divergence, so following it moves particles toward \(p\): Stein variational gradient descent balances a score-driven attraction toward high density against a kernel repulsion that prevents collapse, and samples an unnormalized posterior with no MCMC. Every one of these uses of the Stein operator, testing, sampling, and control-variate integration, reads the target only through its score.
+When a target density \(p\) is known only up to its normalizer, the score \(s_p = \nabla \log p\) is the one handle that survives, because the constant \(Z\) disappears under the log-gradient. Stein's identity turns the score into an operator \(\mathcal{A}_p f = s_p^\top f + \nabla \cdot f\) whose expectation under \(p\) is zero, so its expectation under any other \(q\) measures the score gap \(s_p - s_q\). Maximizing that expectation over the unit ball of a vector RKHS gives the kernel Stein discrepancy, the RKHS norm of a Stein-transformed witness, with the closed-form double expectation \(\mathrm{KSD}^2(q,p) = \mathbb{E}_{X,X'\sim q}[u_p(X,X')]\) of the Stein kernel \(u_p\), itself positive definite and built from four terms in \(s_p\) and the derivatives of the base kernel. Identification at zero and control of weak convergence require additional boundary, tail, target, and kernel assumptions. Estimated by its U-statistic or V-statistic over a sample, the KSD drives a goodness-of-fit test for unnormalized models, calibrated by a wild bootstrap because the null is a degenerate \(\chi^2\) mixture. The same witness is the infinitesimal steepest-descent direction of the KL divergence, so SVGD uses a score-driven attraction and kernel repulsion to construct a deterministic particle approximation. Testing, approximate inference, and control-variate integration all read the target only through its score, but each requires its own validity diagnostics.
 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel Stein Discrepancy and Stein Methods**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Kernel Stein Discrepancy and Stein Methods**, verify the integration-by-parts boundary condition before invoking Stein's identity and check that score and kernel derivatives are integrable under the sample law. Distinguish three claims: the KSD is computable, zero KSD identifies the target under additional assumptions, and vanishing KSD controls convergence only for suitable target-kernel pairs. For testing, use a bootstrap justified by the dependence structure. For SVGD, report kernel bandwidth, step schedule, particle count, stopping rule, and mode coverage; a falling training KSD alone is not evidence of calibrated posterior samples.
 
 ## Exercises {#exercises}
 

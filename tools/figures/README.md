@@ -1,41 +1,41 @@
-# Static figures for the print edition
+# Static figures for every edition
 
-The web edition renders 24 interactive widgets (`public/assets/viz.js` and
-`public/assets/viz-*.js`). The PDF/EPUB editions cannot run JavaScript, so each
-widget is reproduced here as a **static vector figure computed from the same
-mathematics**, in JAX. These scripts are the reference implementation of that
-math: one file per widget, reproducing its *default on-load state*.
+Every chapter has a purposeful visual explanation. Interactive web figures
+progressively enhance a verified static plate; figures that do not benefit
+from controls use that plate directly. The same deterministic source produces
+SVG for web/EPUB and PDF for print, so readers do not receive different
+mathematics in different editions.
 
 ## Layout
 
 - `_style.py` — shared palette (matches `public/assets/book.css` and
   `publication/preamble.tex`), typography, and `save()` helper. Every figure
   imports this as `import _style as S`.
-- `<widget>.py` — one script per widget. Its module docstring names the source
-  widget file. Numerics are done in JAX (`jax.numpy`, float64); rendering uses
-  matplotlib with the shared style. Each writes
-  `publication/figures/<widget>.pdf`.
+- `<figure>.py` — one script per figure. Interactive counterparts name their
+  widget in the module docstring. Numerics use NumPy or JAX as appropriate;
+  rendering uses Matplotlib with the shared style. Each writes both
+  `publication/figures/<figure>.pdf` and `public/figures/<figure>.svg`.
 - `build_figures.py` — runs every figure script.
 
-The generated PDFs live in `publication/figures/` and are committed, so the
-book build (`tools/build-publication.mjs`) only embeds them — it never runs
-Python. Regenerate them only when a widget's math changes.
+The generated vector assets are committed, so publication builds never require
+Python. `npm run check:figures` fails when an embedded ID lacks its source,
+SVG, PDF, intrinsic SVG dimensions, or a structurally valid output.
 
 ## Determinism
 
-Widgets that scatter points with `Math.random` in the browser are reproduced
-with a fixed-seed generator (`S.rng(0)`), and simulation widgets (SVGD, Sinkhorn,
-Bayesian optimization, herding, the permutation null) are run to a fixed,
-representative state. The committed PDFs are therefore byte-stable across builds.
+Stochastic figures use a declared fixed seed (`S.rng(0)` unless the source
+states otherwise), and simulation figures are run to a fixed representative
+state. `S.save()` removes volatile metadata and fixes the SVG hash salt.
 
 ## Regenerate
 
 ```
 pip install -r tools/figures/requirements.txt
-python3 tools/figures/build_figures.py          # all 24 figures
+python3 tools/figures/build_figures.py          # all figures
 python3 tools/figures/build_figures.py sig_draw  # just one, by module name
+npm run check:figures
 ```
 
-Then rebuild the book with `npm run build:pdf`. Captions for the plates live in
-`publication/figures/captions.json` (declarative, since the web captions refer
-to interaction that does not exist on a static page).
+Then rebuild with `npm run build:publication`. Legacy interactive plates use
+print-specific captions from `publication/figures/captions.json`; static-first
+figures keep their interpretive manuscript caption in every edition.

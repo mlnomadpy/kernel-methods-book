@@ -8,11 +8,21 @@ tier: advanced
 prerequisites:
   - kernel-stein-discrepancy
 objectives:
-  - Explain the central definitions and claims in Causal Inference with Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Explain why dependence does not identify intervention and separate
+    statistical from causal assumptions.
+  - >-
+    Construct HSIC and KCIT statistics while stating when their null
+    calibrations are valid.
+  - >-
+    Derive the conditional-moment equation behind kernel instrumental-variable
+    regression.
+  - >-
+    Diagnose weak instruments, invalid exclusion, regularization, and
+    ill-posedness in a two-stage kernel fit.
+  - >-
+    Distinguish pointwise effects, interventional mean embeddings, and nonlinear
+    distributional summaries.
 review_status: draft
 reviewers:
   technical: null
@@ -55,10 +65,12 @@ The second ingredient is intervention, which we must define before we can estima
 ::: {.definition #def-35-1}
 [Definition (intervention and structural function)]{.box-title}
 
-In a structural causal model each variable is produced by a deterministic mechanism from its direct causes and an independent noise term. The intervention \(\operatorname{do}(X=x)\) replaces the mechanism for \(X\) by the constant \(x\), leaving every other mechanism intact, and induces the interventional distribution \(P(Y \mid \operatorname{do}(X=x))\). When \(Y = f(X) + e\) with \(e\) the aggregate noise, the *structural function* \(f(x) = \mathbb{E}[Y \mid \operatorname{do}(X=x)]\) is the object of interest, and it need not equal the observational regression \(\mathbb{E}[Y \mid X=x]\).
+In a structural causal model each variable is produced by a deterministic mechanism from its direct causes and an independent noise term. The intervention \(\operatorname{do}(X=x)\) replaces the mechanism for \(X\) by the constant \(x\), leaving every other mechanism intact, and induces the interventional distribution \(P(Y \mid \operatorname{do}(X=x))\). When \(Y = f(X) + e\) with centered aggregate noise \(\mathbb E[e]=0\), the *structural function* \(f(x) = \mathbb{E}[Y \mid \operatorname{do}(X=x)]\) is the object of interest, and it need not equal the observational regression \(\mathbb{E}[Y \mid X=x]\).
 :::
 
-The inequality \(f(x) \ne \mathbb{E}[Y\mid X=x]\) is the entire difficulty of effect estimation. It fails exactly when a confounder makes \(X\) and the noise \(e\) dependent, so that the regression reads off a mixture of the causal response and the confounder's shadow. Sections on treatment effects below recover \(f\) despite this, first through instruments and then through proxies.
+The possible inequality \(f(x) \ne \mathbb{E}[Y\mid X=x]\) is the entire difficulty of effect estimation. The equality fails when a confounder makes \(X\) and the noise \(e\) dependent, so that the regression reads off a mixture of the causal response and the confounder's shadow. Sections on treatment effects below recover \(f\) despite this, first through instruments and then through proxies.
+
+<figure class="viz" data-figure="confounding-intervention" data-alt="A confounded observational sample has an upward fitted regression line even though the structural intervention response slopes downward. The comparison shows that association and causal effect can have opposite signs."><figcaption>Hidden confounding can reverse the sign: the observational regression rises because \(U\) drives both treatment and outcome, while the intervention curve falls because setting \(X\) breaks the arrow from \(U\) into \(X\). A more flexible kernel can fit either curve, but only the causal assumptions determine which curve is the estimand.</figcaption></figure>
 
 ## Dependence as a distance between embeddings {#hsic}
 
@@ -218,6 +230,8 @@ By the representer theorem \(\hat f = \sum_i \alpha_i \phi(x_i)\), and collectin
 4.  Return \(\hat f(\cdot) = \sum_i \alpha_i\, k_X(x_i,\cdot)\); the effect of moving \(X\) from \(x\) to \(x'\) is \(\hat f(x')-\hat f(x)\).
 ::::
 
+The two ridge systems solve different inverse problems, so tune and diagnose them separately. Reuse Cholesky factorizations instead of explicit inverses, report the spectra of \(K_Z+n\lambda I\) and \(G+m\xi I\), and compare first-stage predictive strength with a weak-instrument baseline. A numerically stable second stage cannot recover directions the instrument barely excites; that is an identification-strength failure, not an optimizer failure.
+
 ::::: {.example #example-35-2}
 [Example (recovering a structural slope with an instrument)]{.box-title}
 
@@ -249,7 +263,7 @@ after which the interventional mean is recovered by averaging out the proxy, \(\
 
 ## Beyond the mean: distributional and counterfactual effects {#distributional-effects}
 
-A structural function returns the mean outcome under intervention, but a mean can hide the story: a treatment that helps half the population and harms the other half has zero average effect. Because the entire apparatus is built on embeddings, nothing forces us to stop at the mean. Replacing the scalar outcome \(Y\) by its feature map \(\phi_Y(Y)\) and running the same estimators embeds the whole interventional distribution as a mean embedding \(\mu_{Y\mid \operatorname{do}(x)} = \mathbb{E}[\phi_Y(Y)\mid \operatorname{do}(X=x)]\), the counterfactual mean embedding of Muandet, Kanagawa, Saengkyongam, and Marukatat (2021). From it one reads any smooth functional of the interventional law, its variance, its quantiles, or the probability of exceeding a threshold, by the ordinary embedding calculus of [[ch:kernel-mean-embeddings|the mean-embedding chapter]]. When the treatment itself is a distribution or a function rather than a point, the same lift connects to [[ch:distribution-regression|distribution regression]] (Szabó et al. 2016), closing the loop with the rest of this part of the book.
+A structural function returns the mean outcome under intervention, but a mean can hide the story: a treatment that helps half the population and harms the other half has zero average effect. Because the entire apparatus is built on embeddings, nothing forces us to stop at the mean. Replacing the scalar outcome \(Y\) by its feature map \(\phi_Y(Y)\) and running the same estimators embeds the whole interventional distribution as a mean embedding \(\mu_{Y\mid \operatorname{do}(x)} = \mathbb{E}[\phi_Y(Y)\mid \operatorname{do}(X=x)]\), the counterfactual mean embedding of Muandet, Kanagawa, Saengkyongam, and Marukatat (2021). It directly returns expectations of test functions that belong to the outcome RKHS. Variances, quantiles, and threshold probabilities require their corresponding functions to be representable or an additional reconstruction step; they are not automatically linear readouts of an arbitrary embedding. When the treatment itself is a distribution or a function rather than a point, the same lift connects to [[ch:distribution-regression|distribution regression]] (Szabó et al. 2016), closing the loop with the rest of this part of the book.
 
 ## What kernels buy, and what they do not {#assumptions}
 
@@ -270,11 +284,11 @@ Causal inference splits into two problems, and embeddings answer a piece of each
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Causal Inference with Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Causal Inference with Kernels**, write the identification assumptions before fitting the kernel. KCIT needs a conditional-null calibration rather than an ordinary row permutation; KIV needs relevance, exogeneity, exclusion, and regularized inversion; proximal methods replace these with proxy and completeness assumptions. Report first-stage strength, ridge values, conditioning, overlap or support limitations, and sensitivity to plausible violations. A flexible RKHS reduces functional-form bias, but it can also fit a misidentified target with great precision.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Causal Inference with Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@gretton2005hsic], [@fukumizu2008], [@sriperumbudur2010].
+Gretton et al. [@gretton2005hsic] provide the embedding view of dependence, Fukumizu et al. [@fukumizu2008] develop the conditional operator, and Sriperumbudur et al. [@sriperumbudur2010] clarify when the kernels identify distributions. Those statistical tools become causal only after a graph, instrument, proxy structure, or intervention design supplies identification. For a defensible analysis, present that causal ledger beside the Gram-matrix diagnostics rather than burying it behind the fit.
 
 ## Exercises {#exercises}
 

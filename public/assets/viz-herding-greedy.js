@@ -174,9 +174,9 @@
       }
       ctx.fillStyle = pal.faint; ctx.font = "10px sans-serif"; ctx.textAlign = "left";
       ctx.fillText("worst-case error vs n (log): uniform (blue), optimal weights (green), E[Monte Carlo] (dashed), 1/n slope (dotted)", Bx.x, Bx.y - 5);
-      ro.textContent = n === 0 ? "press place node or run" :
+      ro(n === 0 ? "press place node or run" :
         "n = " + n + " · e_n uniform = " + errU[n].toFixed(4) + " · optimal weights = " + errW[n].toFixed(4) +
-        " · E[e_MC] = " + Math.sqrt((1 - C) / n).toFixed(4);
+        " · E[e_MC] = " + Math.sqrt((1 - C) / n).toFixed(4));
     }
 
     reset();

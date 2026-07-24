@@ -9,12 +9,20 @@ prerequisites:
   - gaussian-processes-and-rvm
 objectives:
   - >-
-    Explain the central definitions and claims in Kernelized Bandits and
-    Bayesian Optimization.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Build the sequential surrogate-acquisition-update loop for an expensive
+    noisy objective.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Derive GP-UCB and expected improvement and explain how each prices
+    exploration.
+  - >-
+    Interpret information gain as the spectral budget behind kernelized regret
+    guarantees.
+  - >-
+    Choose safe, constrained, multi-fidelity, batch, or asynchronous variants
+    from the experiment's real constraints.
+  - >-
+    Audit Bayesian optimization under kernel misspecification,
+    acquisition-optimization error, and stopping bias.
 review_status: draft
 reviewers:
   technical: null
@@ -380,11 +388,13 @@ Bayesian optimization is the Gaussian process turned from a predictor into a dec
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernelized Bandits and Bayesian Optimization**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Do not confuse maximizing the acquisition with maximizing the objective: report how accurately the inner acquisition problem was solved. A GP-UCB regret theorem assumes a fixed kernel, controlled noise, an appropriate confidence schedule, and exact or sufficiently accurate acquisition maximization; re-estimating hyperparameters after every query changes that argument. Expected improvement and Thompson sampling are effective policies, not automatic no-regret certificates under every implementation.
+
+Noisy incumbents, safety constraints, and costs must enter the state explicitly. Use posterior means or replicated measurements rather than the largest noisy observation as the incumbent, count failed and unsafe evaluations in the budget, and stop according to a declared decision criterion. A safe acquisition is only as safe as the calibration of its constraint model.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernelized Bandits and Bayesian Optimization; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@shahriari2016], [@frazier2018], [@srinivas2010].
+Bayesian optimization turns posterior uncertainty into a spending rule for scarce experiments. GP-UCB adds an explicit optimism bonus, expected improvement prices the magnitude of beating the incumbent, and Thompson sampling randomizes through a posterior draw. Information gain links the kernel spectrum to cumulative regret, but the guarantee is conditional on the model and optimization assumptions that make the confidence band valid. Practical extensions change the decision set rather than the principle: safety restricts admissible queries, fidelity adds cost, and batches value diversity among simultaneous experiments. Surveys by [@shahriari2016] and [@frazier2018] give the wider landscape; the information-gain analysis begins with [@srinivas2010].
 
 ## Exercises {#exercises}
 

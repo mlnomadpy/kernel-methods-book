@@ -8,13 +8,13 @@ tier: advanced
 prerequisites:
   - generative-and-marginalization-kernels
 objectives:
+  - Compute low-order signature terms for piecewise-linear paths.
+  - 'Use reparametrization invariance, Chen''s identity, and shuffle relations.'
+  - Compare truncation with the Goursat-PDE signature kernel.
   - >-
-    Explain the central definitions and claims in Signature and Sequence-Path
-    Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Explain why dynamic time warping is indefinite and global alignment is
+    valid.
+  - Match signature depth and alignment temperature to the sequence task.
 review_status: draft
 reviewers:
   technical: null
@@ -63,7 +63,7 @@ where \(\mathbf{S}^k\) is the level-\(k\) tensor collecting the \(d^k\) coordina
 
 <figure class="viz" data-widget="sig-draw">
 
-<figcaption>Draw with the pointer; the widget accumulates the exact depth-2 signature of the piecewise-linear path through the sampled points, one Chen concatenation per segment. Level 1 is the displacement; at level 2 the diagonal is determined, \(S^{11}=\tfrac12(S^1)^2\) and \(S^{22}=\tfrac12(S^2)^2\), and the genuinely new coordinate is the Lévy area \(\tfrac12(S^{12}-S^{21})\), the signed area between the stroke and its chord, shaded on the canvas. These numbers are iterated integrals of the trace alone, so reparametrization invariance is testable by hand: retrace the same shape quickly or slowly and the signature agrees, with the previous stroke kept faint for the comparison.</figcaption>
+<figcaption>The shaded path carries its exact depth-2 signature, accumulated one Chen concatenation per segment. Level 1 is displacement; at level 2 the diagonal is fixed by \(S^{11}=\tfrac12(S^1)^2\) and \(S^{22}=\tfrac12(S^2)^2\), while the new coordinate is the Lévy area \(\tfrac12(S^{12}-S^{21})\), the signed area between the stroke and its chord. Retracing the same geometry at a different speed leaves these iterated integrals unchanged; the web version lets the reader test that invariance.</figcaption>
 </figure>
 
 The lowest levels already have plain meaning. Level \(0\) is always \(1\). Level \(1\) is the total increment,
@@ -408,7 +408,7 @@ a scaled Gaussian, hence positive definite. Equivalently \(\kappa=e^{-\phi_\sigm
 
 The truncated signature is an explicit but geometrically large feature map, and the signature PDE avoids the map at the cost of a solve per pair. Between these lies the same Monte-Carlo idea that turned the [[ch:kernel-families|Bochner integral]] into random Fourier features: approximate the expensive feature map by a handful of cheap random ones. Two related constructions do this for sequences.
 
-The first is *random signature features*. Rather than store all \(d^m\) coordinates of the depth-\(m\) signature, project them onto a few random directions, or replace the tensor products by random tensor sketches; the resulting low-dimensional random feature has inner product close to the true signature kernel in expectation, and Toth and Oberhauser (2020) use exactly such [[ch:kernel-families|random Fourier]] signature features to scale Gaussian processes with signature covariances to long series. The second is *reservoir computing*. Drive a fixed random recurrent dynamical system, a reservoir, with the input sequence and read out its state; because the state of a generic controlled system is a rich nonlinear functional of the driving path, its coordinates span a space close to that of the signature, and a linear readout on the reservoir state approximates a linear model on signature features. These randomized-signature and reservoir maps trade the exactness of the truncated kernel for a fixed, tunable feature budget, and they are the practical bridge from the elegant but expensive exact kernels to streaming, real-time sequence models. As always, the random feature is unbiased and its fluctuation shrinks like \(1/\sqrt{D}\) in the number \(D\) of features, the same rate the [[ch:kernel-families|random Fourier]] construction enjoys.
+The first is *random signature features*. Rather than store all \(d^m\) coordinates of the depth-\(m\) signature, project them onto a few random directions, or replace the tensor products by random tensor sketches; the resulting low-dimensional random feature has inner product close to the true signature kernel in expectation, and Toth and Oberhauser (2020) use exactly such [[ch:kernel-families|random Fourier]] signature features to scale Gaussian processes with signature covariances to long series. The second is *reservoir computing*. Drive a fixed random recurrent dynamical system, a reservoir, with the input sequence and read out its state; because the state of a generic controlled system is a rich nonlinear functional of the driving path, its coordinates span a space close to that of the signature, and a linear readout on the reservoir state approximates a linear model on signature features. These randomized-signature and reservoir maps trade the exactness of the truncated kernel for a fixed, tunable feature budget, and they are the practical bridge from exact but expensive kernels to streaming, real-time sequence models. For Monte Carlo feature constructions, unbiasedness and a \(D^{-1/2}\) fluctuation rate require the sampling and moment assumptions of the particular estimator; a generic reservoir map has no such automatic guarantee.
 
 ## Summary {#summary}
 
@@ -417,11 +417,11 @@ A sequence of vectors is best read as a sampled path, and the canonical feature 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Signature and Sequence-Path Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Reparametrization invariance removes speed information, so include time as an additional path channel when absolute timing predicts the label. Signature dimension grows as \(\sum_{j=0}^m d^j\); report depth, channel scaling, and any tensor sketch rather than quoting only sequence length. Validate the Goursat solver against low-depth or straight-line cases and refine the mesh until the corner value stabilizes. Dynamic time warping is not positive definite merely because its alignments look sensible. For a global-alignment kernel, check the local-kernel transform required by the positivity proof and use log-domain recurrences when the alignment sum spans many orders of magnitude.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Signature and Sequence-Path Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@lyons1998], [@chen1958], [@hambly2010].
+Use signatures when order matters but sampling speed should not: Chen's identity makes a path compositional, truncation gives a finite feature budget, and the PDE recovers the full kernel without enumerating tensors. Use global alignment when local timing deformations themselves are the object of comparison. The algebra begins with [@chen1958], the analytic theory with [@lyons1998], and uniqueness modulo tree-like pieces with [@hambly2010]; scalable approximations should always be compared against a low-depth exact calculation.
 
 ## Exercises {#exercises}
 

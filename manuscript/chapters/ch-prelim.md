@@ -76,6 +76,12 @@ Any \(M \in \mathbb{R}^{m\times n}\) factors as \(M = U\Sigma V^\top\) with \(U,
 
 Numerical solvability is not the same as algebraic invertibility. For a strictly positive definite symmetric matrix, the spectral **condition number** is \(\kappa_2(A)=\lambda_{\max}(A)/\lambda_{\min}(A)\). Relative perturbations can be amplified by roughly this factor. Kernel matrices with repeated or nearly repeated observations can be positive definite yet numerically unusable. Prefer a Cholesky or QR solve to forming \(A^{-1}\), add a documented ridge or jitter only when the model permits it, and report the residual in the original system.
 
+The spectrum makes the conditioning problem visible. In the next plate, one direction is a million times weaker than the leading direction; adding \(\lambda I\) shifts every eigenvalue by the same amount, barely moving the strong directions while lifting the weak one. This improves the solve, but it also changes the estimator, so the numerical benefit and the statistical bias must be reported together.
+
+<figure class="viz" data-figure="conditioning-clinic" data-alt="Two logarithmic bar charts compare four Gram-matrix eigenvalues before and after adding a ridge of 0.01. The smallest eigenvalue rises from one hundred-thousandth to roughly one hundredth, reducing the condition number from one million to one thousand."><figcaption>Ridge regularization stabilizes a Gram solve by lifting weak eigendirections: here \(\kappa_2\) falls from \(10^6\) to about \(10^3\), while the leading eigenvalues barely change. The same lift that repairs conditioning also suppresses information in those weak directions.</figcaption></figure>
+
+For the displayed spectrum \((10,1,10^{-2},10^{-5})\), the raw condition number is \(10/10^{-5}=10^6\). Adding \(10^{-2}I\) changes it to \(10.01/0.01001=1000\). The calculation explains both the gain and the failure mode: a perturbation aligned with the weakest eigenvector is far less amplified, but a true signal component in that direction is also shrunk. A stable residual therefore does not prove that the regularized answer solves the original statistical problem.
+
 Two identities save real computation in the book. The **matrix inversion lemma** (Sherman-Morrison-Woodbury),
 
 $$ (A + UCV)^{-1} = A^{-1} - A^{-1}U\bigl(C^{-1} + VA^{-1}U\bigr)^{-1}VA^{-1}, $$
@@ -396,7 +402,7 @@ Nothing here is proved in full (the one-line integration by parts above is the e
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Mathematical Preliminaries**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Do not treat a formal inverse as a numerical algorithm: inspect the spectrum, solve by factorization, and distinguish regularization from harmless roundoff protection. In analysis, name the hypothesis that permits each interchange of limit, derivative, supremum, and expectation. In optimization, convexity alone does not guarantee existence, strong duality, or convergence of a chosen algorithm; carry the qualification, coercivity, and step-size assumptions with the result. Across structured domains, state the measure, normalization, metric, and boundary convention before importing a Euclidean theorem.
 
 ## Exercises {#exercises}
 

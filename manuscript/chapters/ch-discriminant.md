@@ -9,12 +9,20 @@ prerequisites:
   - kernel-cca-and-correlation
 objectives:
   - >-
-    Explain the central definitions and claims in Kernel Discriminants and
-    Projections.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Derive Fisher discrimination as a generalized Rayleigh quotient and state
+    when regularization makes its denominator positive definite.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Express between-class and within-class scatter in Gram-matrix coordinates
+    and distinguish coefficient ridge from an RKHS-norm penalty.
+  - >-
+    Diagnose when principal components regression discards a low-variance but
+    predictive direction.
+  - >-
+    Derive kernel partial least-squares directions from covariance with the
+    response and track what deflation removes at each step.
+  - >-
+    Choose among kernel Fisher, kernel PCR, and kernel PLS by matching the
+    supervised objective to the prediction problem.
 review_status: draft
 reviewers:
   technical: null
@@ -38,7 +46,11 @@ bibliography:
 
 Unsupervised subspace analysis chooses directions by an internal criterion. Principal components analysis picks the directions of largest variance; it never asks whether those directions have anything to do with a label. That is often exactly the wrong instinct for a supervised task. As Shawe-Taylor and Cristianini (2004) put it plainly, what matters for prediction is not the size of the variance of the data but how well a direction can be used to predict the output, and it can happen that the high-variance directions found by PCA are uncorrelated with the target while a direction of relatively low variance carries all the predictive signal. A supervised subspace method must therefore let the label into the objective.
 
-Remarkably, doing so does not change the shape of the computation. Almost every method in this chapter reduces to one of two canonical operations on symmetric matrices built from the Gram matrix: solving a generalized eigenvalue problem \(Aw=\lambda Bw\), or iterating a deflation that strips off one direction and repeats. Fisher discriminant analysis is a generalized eigenproblem where \(A\) encodes class separation and \(B\) encodes within-class spread. Partial least squares is a deflation loop where the extracted direction maximizes covariance with the target. Principal components regression sits between them, an eigenproblem in the inputs followed by a target-driven reweighting. Because each operation touches the data only through inner products, all three pass into a kernel-defined feature space through the same dual representation used for [[ch:kernel-pca|kernel PCA]]. We begin with the shared engine.
+The conflict is visible even in two dimensions. A cloud may stretch widely from left to right while its labels change only across a narrow vertical gap. PCA follows the wide spread; Fisher's criterion follows the gap.
+
+<figure class="viz" data-figure="variance-vs-relevance" data-alt="Two elongated classes overlap along a high-variance horizontal direction but separate along a low-variance vertical direction. A horizontal arrow marks the first principal component and a vertical arrow marks the Fisher discriminant."><figcaption>The direction of greatest variation need not be the direction of greatest predictive relevance: PCA follows total spread, while Fisher discrimination follows separation relative to within-class spread.</figcaption></figure>
+
+Doing so does not change the shape of the computation. Almost every method in this chapter reduces to one of two canonical operations on symmetric matrices built from the Gram matrix: solving a generalized eigenvalue problem \(Aw=\lambda Bw\), or iterating a deflation that strips off one direction and repeats. Fisher discriminant analysis is a generalized eigenproblem where \(A\) encodes class separation and \(B\) encodes within-class spread. Partial least squares is a deflation loop where the extracted direction maximizes covariance with the target. Principal components regression sits between them, an eigenproblem in the inputs followed by a target-driven reweighting. Because each operation touches the data only through inner products, all three pass into a kernel-defined feature space through the same dual representation used for [[ch:kernel-pca|kernel PCA]]. We begin with the shared engine.
 
 ## The generalized eigenvalue problem and deflation {#generalized-eigenproblem}
 
@@ -146,7 +158,7 @@ where \(K_c\) is the \(\ell\times\ell_c\) block of columns of the Gram matrix be
 
 $$J(\alpha)=\frac{\alpha^\top M\alpha}{\alpha^\top N\alpha}.$$
 
-Now the singularity bites. The matrix \(N\) is built from \(\ell\) feature vectors centered within their classes, so it is at most of rank \(\ell-2\); in a feature space of dimension larger than the sample it is always singular. Its null space contains directions along which \(\alpha^\top N\alpha=0\) while \(\alpha^\top M\alpha\gt 0\), which would send \(J\) to infinity and pick out a meaningless direction that fits the training split perfectly and generalizes not at all. The cure, exactly the regularization of the generalized eigenproblem above, is to add a multiple of the identity, replacing \(N\) by \(N+\mu I\). This penalizes the RKHS norm \(\lVert w\rVert^2=\alpha^\top K\alpha\) of the direction (a ridge on \(\alpha\) in practice), restores invertibility, and stabilizes the solution. Since \(M\) is rank one, the maximizer is the single linear solve
+Now the singularity bites. The matrix \(N\) is built from \(\ell\) feature vectors centered within their classes, so it is at most of rank \(\ell-2\); in a feature space of dimension larger than the sample it is always singular. Its null space contains directions along which \(\alpha^\top N\alpha=0\) while \(\alpha^\top M\alpha\gt 0\), which would send \(J\) to infinity and pick out a meaningless direction that fits the training split perfectly and generalizes not at all. One cure is coefficient ridge, replacing \(N\) by \(N+\mu I\). This penalizes \(\alpha^\top\alpha\), restores invertibility, and stabilizes the solution. It is not the same as penalizing the feature-space norm: because \(w=\sum_i\alpha_i\phi(x_i)\), an RKHS-norm penalty is \(\lVert w\rVert^2=\alpha^\top K\alpha\) and produces \(N+\mu K\). Both variants can be useful, but they encode different geometries and should be named accordingly. With coefficient ridge, and because \(M\) is rank one, the maximizer is the single linear solve
 
 $$\alpha\ \propto\ (N+\mu I)^{-1}(m_+-m_-).$$
 
@@ -333,18 +345,22 @@ The three algorithms differ only in which matrices they feed to the shared engin
 
 Reading down the last two columns tells the whole story. PCA and PCR both diagonalize the kernel matrix, but PCR then lets the target choose how much of each eigenvector to keep. Fisher and PLS both let the target choose the direction itself, one through a generalized eigenproblem, the other through a deflation. The regularization that rescues Fisher from its singular scatter matrix is the same \(+\mu I\) that the generalized eigenproblem needs whenever the denominator is only positive semidefinite, which in a rich feature space is always. What began as unsupervised subspace analysis becomes, with the label admitted into \(A\) or into the deflation target, a supervised one, at no change to the underlying linear algebra.
 
-## Summary {#summary}
+## Practical decision guide {#summary}
 
 Supervised subspace methods choose directions in a kernel feature space by how well they separate classes or predict a target, and they all reduce to generalized eigenproblems or deflations on the Gram matrix. Kernel Fisher discriminant analysis maximizes the ratio of between-class to within-class scatter; because the within-class scatter is singular in feature space, it must be regularized, after which the rank-one numerator makes the solution a single linear solve. Principal components regression keeps the kernel eigenvectors but reweights them by their covariance with the target, and its worked failure mode, discarding a low-variance predictive direction, motivates the covariance-driven alternative. Kernel partial least squares extracts the directions of maximum covariance with the response and deflates the kernel matrix after each, combining target alignment with an unbounded number of components. The next parts put these projections to work alongside [[ch:support-vector-machines|the supervised margin methods]] and revisit their statistical footing through [[ch:mercer-and-rates|Mercer's theorem and spectral rates]].
 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel Discriminants and Projections**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+- Do not treat leading variance as a proxy for predictive value. Check response association before truncating an eigenspace.
+- State which Fisher regularizer you use: \(N+\mu I\) controls dual coefficients, whereas \(N+\mu K\) controls the RKHS norm of the discriminant.
+- Fit every projection and deflation step on training data only. Recomputing components after seeing validation or test responses leaks supervision.
+- Watch generalized-eigenproblem conditioning and report the ridge, retained rank, and spectral gap. An apparently decisive direction can be a nearly singular denominator.
+- Compare supervised projections against both the original kernel predictor and an unsupervised KPCA baseline; dimension reduction is not automatically beneficial.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel Discriminants and Projections; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@shawe2004], [@fisher1936], [@mika1999kfd].
+Supervised subspace methods differ in what they call relevant. Kernel Fisher discrimination maximizes class separation relative to within-class scatter, PCR first keeps directions of large input variance and only then regresses, and PLS extracts directions of large covariance with the response. Their algebra is spectral, but their statistical questions are not interchangeable. The central practical lesson is to choose the quotient or deflation rule that matches the target, regularize the geometry you actually intend to control, and judge the reduced representation by held-out prediction rather than by variance captured. See [@fisher1936], [@mika1999kfd], [@rosipal2001], and [@shawe2004].
 
 ## Exercises {#exercises}
 

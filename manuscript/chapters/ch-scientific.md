@@ -114,9 +114,13 @@ Two kernel solvers may use the same interior differential residuals but differen
 **Verification artifact.** checks/example-ch-scientific-example-scientific-boundary.json records the example source hash and verification scope.
 :::
 
+The distinction can be measured rather than asserted. In the plate below, three value observations admit many smooth interpolants. Adding boundary evaluations and residual functionals for \(-u''=\pi^2\sin(\pi x)\) selects one of them and reduces the equation residual at independent sites by more than an order of magnitude. That improvement is evidence about this discretized problem, not a replacement for an error theorem between sites.
+
+<figure class="viz" data-figure="collocation-residual" data-alt="The left panel compares the exact sine solution with a values-only RBF fit and a fit constrained by three values, the differential equation, and zero boundary conditions. The right panel shows that the physics-augmented fit has a much smaller equation residual at independent locations."><figcaption>Observation, boundary, and differential-equation functionals contribute different representers to one finite system. Their combination can control behavior between sparse observations, but only when the operator, boundary conditions, and kernel smoothness are the right ones.</figcaption></figure>
+
 ## Green kernels and physics-informed covariance {#green-physics-kernels}
 
-When a Green function for \(\mathcal A\) and the boundary conditions is available, it can define a kernel whose sections already respect the operator geometry. This mirrors the spline construction in [[ch:smoothing-splines-and-additive-rkhs]]. Physics can also be encoded by applying projection operators to a base kernel, yielding divergence-free, curl-free, or conservation-compatible vector fields.
+When the boundary-value operator has an inverse with the required symmetry and positivity, its Green function can define a reproducing or covariance kernel whose sections respect the operator geometry. A generic Green function need not be symmetric or positive definite, so existence of a fundamental solution alone is not enough. This qualified construction mirrors the spline setting in [[ch:smoothing-splines-and-additive-rkhs]]. Physics can also be encoded by applying compatible linear maps or orthogonal projections to a base kernel, yielding divergence-free, curl-free, or conservation-compatible vector fields.
 
 A hard constraint restricts the hypothesis space. A soft residual penalty allows model discrepancy:
 

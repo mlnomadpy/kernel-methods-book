@@ -9,12 +9,12 @@ prerequisites:
   - kernel-families
 objectives:
   - >-
-    Explain the central definitions and claims in Invariances and the Pre-Image
-    Problem.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Distinguish data augmentation, tangent penalties, and orbit-averaged
+    kernels.
+  - Explain how group averaging removes within-orbit variation.
+  - Derive and diagnose the Gaussian pre-image fixed-point iteration.
+  - Compute optimal reduced-set coefficients from Gram blocks.
+  - Balance invariance and compression against information loss.
 review_status: draft
 reviewers:
   technical: null
@@ -39,9 +39,9 @@ bibliography:
 
 ## Prior knowledge and invariance {#prior-knowledge}
 
-In 1995 LeCun et al. (1995) compared learning algorithms on handwritten digits and remarked that the optimal margin classifier, the early support vector machine, was remarkable precisely because it used no prior knowledge at all: it would perform identically if the image pixels were scrambled by a fixed permutation. That is a striking property, and also a damning one. A method blind to the spatial layout of an image is throwing away most of what makes the problem solvable. Within a few years the same group had closed the gap, and the tool that closed it was the systematic incorporation of prior knowledge, following Schölkopf, Burges, and Vapnik (1996).
+In 1995 LeCun et al. (1995) compared learning algorithms on handwritten digits and remarked that the optimal margin classifier, the early support vector machine, was notable precisely because it used no prior knowledge at all: it would perform identically if the image pixels were scrambled by a fixed permutation. That is a striking property, and also a damning one. A method blind to the spatial layout of an image is throwing away most of what makes the problem solvable. Within a few years the same group had closed the gap, and the tool that closed it was the systematic incorporation of prior knowledge, following Schölkopf, Burges, and Vapnik (1996).
 
-By prior knowledge we mean everything about the task that is available beyond the training examples themselves. Some of it is generic. Every kernel already encodes a smoothness assumption: using a kernel \(k\) as a regularizer penalizes \(\|\Upsilon f\|^2\) for an operator \(\Upsilon\) whose Green function is \(k\), so that patterns close in input space are pushed toward the same label. Some prior knowledge is more specific, such as knowing that in digit images the correlations between nearby pixels are more reliable than those between distant ones, which one builds in through kernels that emphasize local products of pixels. The sharpest and most useful form, and the subject of this chapter, is knowledge of a transformation that must not change the answer.
+By prior knowledge we mean everything about the task that is available beyond the training examples themselves. Some of it is generic. Every RKHS kernel encodes a notion of inexpensive and expensive functions through \(\|f\|_{\mathcal H_k}\). For Green-function kernels this norm can be written as an operator penalty \(\|\Upsilon f\|^2\), but that differential-operator representation is a special construction, not a property of every kernel. Some prior knowledge is more specific, such as knowing that in digit images the correlations between nearby pixels are more reliable than those between distant ones, which one builds in through kernels that emphasize local products of pixels. The sharpest and most useful form, and the subject of this chapter, is knowledge of a transformation that must not change the answer.
 
 :::: {.definition #def-20-1}
 [Definition (invariance under a transformation)]{.box-title}
@@ -54,6 +54,12 @@ Common examples are the group of translations, rotations, or line-thickness chan
 ::::
 
 Schölkopf, Burges, and Vapnik (1996) distinguish three ways to exploit such knowledge, and the rest of the first half of the chapter is an unpacking of these three. First, one can generate artificial training examples, virtual examples, by applying the transformations to the data and hoping the machine learns the invariance from the enlarged set. Second, one can change the learning algorithm itself, modifying the objective so the estimated function is forced to have small derivative along the tangent directions. Third, one can change the representation, mapping the data into a space where the invariance becomes trivial, for instance replacing each point by a feature that the transformation leaves fixed. The third is the most powerful when the required map can be found, but it is often unavailable or too global for a locally defined invariance, so in practice the first two dominate. A fourth, hybrid idea folds the transformation directly into the kernel.
+
+The geometric target is easiest to see for rotations. Before averaging, one object has many representatives along its orbit. Averaging a suitable feature map over the rotations erases the angle while retaining the orbit label, here the squared radius. An invariant kernel then compares orbit representatives, not arbitrary poses.
+
+<figure class="viz" data-figure="orbit-averaging" data-alt="Two rotation orbits appear as circles of sampled points in input space. In invariant feature space, every rotated representative on a circle collapses to one point indexed by the circle's squared radius."><figcaption>Group averaging removes variation within a rotation orbit while preserving information that separates different orbits. Invariance is a quotient of the original geometry, so anything that varies only along the orbit is deliberately discarded.</figcaption></figure>
+
+This picture also exposes the design risk: averaging over too large a group can collapse objects that the task needs to distinguish. The transformation family must therefore come from the prediction problem, not from visual convenience.
 
 ## The Virtual Support Vector method {#virtual-sv}
 
@@ -292,11 +298,11 @@ Two problems, one map. Incorporating invariances pushes prior knowledge forward 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Invariances and the Pre-Image Problem**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Do not impose a transformation merely because it is available: over-invariance identifies inputs whose labels may differ. A jittering similarity need not be positive definite, so inspect its Gram spectrum before feeding it to a solver that assumes convexity. The Gaussian pre-image update is a local fixed-point method, not a global convergence theorem; monitor the objective, guard a near-zero denominator, and restart from several initial points. Exact pre-images of multi-centre Gaussian expansions generally do not exist. For reduced sets, report both feature-space residual and task performance, because the smallest residual need not give the best classification boundary.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Invariances and the Pre-Image Problem; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@lecun1995], [@scholkopf1996prior], [@simard1998].
+Use the first half as a decision tree: augment support vectors when transformations are cheap and discrete, penalize tangent directions for local differentiable symmetries, and average features only when the intended quotient is known. Use the second half when a feature-space solution must return to input space or be compressed, with the residual and downstream error kept separate. The historical path from prior knowledge to virtual support vectors and tangent distance begins with [@lecun1995], [@scholkopf1996prior], and [@simard1998]; reduced-set and pre-image methods connect forward to [[ch:large-scale-kernels]].
 
 ## Exercises {#exercises}
 

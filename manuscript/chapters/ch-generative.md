@@ -8,13 +8,11 @@ tier: advanced
 prerequisites:
   - graph-kernels
 objectives:
-  - >-
-    Explain the central definitions and claims in Kernels from Generative
-    Models.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+  - Factor a P-kernel into an explicit probabilistic feature map.
+  - Prove that averaging a complete-data feature map preserves positivity.
+  - Compute marginalized HMM and tree kernels by message passing.
+  - Contrast posterior averaging with Fisher-score whitening.
+  - Diagnose model misspecification and hidden-state computational costs.
 review_status: draft
 reviewers:
   technical: null
@@ -92,6 +90,12 @@ which shows each \(m\)-term is positive semidefinite. The full kernel is the non
 ::::
 
 The proof exhibits the feature map explicitly: stacking the values across models, \(\Phi(x)=\big(\sqrt{P_M(m)}\,P(x\mid m)\big)_{m\in M}\), gives \(P(x,z)=\langle\Phi(x),\Phi(z)\rangle\). The coordinates of \(\Phi\) are indexed by the latent models, and two objects are similar when the models that explain one tend to explain the other. This is precisely the conditional-independence, or R-convolution, structure that Haussler (1999) identified as the backbone of kernels on discrete structures: build a kernel on a completed object, then average over the ways of completing it. Watkins (2000) arrived at the same conditional-independence principle independently, together with its use for hidden Markov models. The construction is the probabilistic face of the convolution kernels of [[ch:efficient-string-and-tree-kernels|the efficient string and tree kernels chapter]], which realize the same \"sum a product over decompositions\" pattern deterministically.
+
+A posterior-marginalized variant makes the same geometry easier to see. Map each complete object \((x,m)\) to the one-hot feature of its latent state and average under \(P(m\mid x)\). The observed object then carries a soft profile over explanations, and with the identity kernel on latent states the marginalized kernel is simply the dot product of two posterior vectors.
+
+<figure class="viz" data-figure="latent-marginalization" data-alt="Three observed objects connect to three latent states with line widths proportional to posterior probability. A Gram heat map shows that objects A and B are similar because they place most probability on the same hidden states, while C favors another state."><figcaption>Marginalization compares distributions over hidden explanations rather than selecting one explanation. Positive definiteness survives because posterior averaging happens in feature space before the inner product is taken.</figcaption></figure>
+
+This soft comparison is useful only to the extent that the latent model is useful. If its states explain nuisance variation, posterior overlap faithfully builds the wrong geometry; the kernel guarantee is algebraic, not a guarantee of relevance.
 
 The remaining sections instantiate the latent variable \(m\) as ever richer generative processes: an independent hidden label at each position, a Markov chain of hidden states, an alignment with gaps, and a tree of evolutionary ancestors. In each case the sum over \(m\) is astronomically large, and in each case a dynamic program collapses it.
 
@@ -287,11 +291,11 @@ The P-kernel and the conditional-independence route to positive definiteness are
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernels from Generative Models**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Symmetry and nonnegativity do not make a joint probability a kernel; verify a feature factorization or finite positive semidefiniteness. Conditional independence is a sufficient construction, not a claim that the fitted latent states are scientifically correct. Scale HMM and tree messages, report state count and transition sparsity, and compare the dynamic program with a tiny enumerated case. Fisher whitening can explode along poorly identified parameter directions, so regularize the information matrix and state its effective rank. Most importantly, a valid marginalized kernel can encode a misspecified model perfectly: assess whether its latent distinctions align with the prediction target.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernels from Generative Models; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@haussler1999], [@watkins2000], [@durbin1998].
+Marginalized kernels and Fisher kernels ask complementary questions of a model. The first compares the hidden explanations that two observations support; the second compares the parameter directions in which they would move one fitted model. Dynamic programming makes both feasible for structured latent spaces, but positive definiteness says nothing about model relevance. The convolution and conditional-independence foundations are in [@haussler1999] and [@watkins2000], with HMM computation in [@durbin1998]; distribution-valued extensions appear in [[ch:kernel-mean-embeddings]].
 
 ## Exercises {#exercises}
 

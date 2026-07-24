@@ -1,0 +1,638 @@
+{
+  "version": 1,
+  "figures": {
+    "conformal-coverage": {
+      "id": "conformal-coverage",
+      "mode": "interactive",
+      "source": "tools/figures/conformal_coverage.py",
+      "web": "public/figures/conformal-coverage.svg",
+      "print": "publication/figures/conformal-coverage.pdf",
+      "chapters": [
+        "ch-accountable",
+        "ch-reliability"
+      ]
+    },
+    "influence-glow": {
+      "id": "influence-glow",
+      "mode": "interactive",
+      "source": "tools/figures/influence_glow.py",
+      "web": "public/figures/influence-glow.svg",
+      "print": "publication/figures/influence-glow.pdf",
+      "chapters": [
+        "ch-accountable"
+      ]
+    },
+    "drift-mmd": {
+      "id": "drift-mmd",
+      "mode": "interactive",
+      "source": "tools/figures/drift_mmd.py",
+      "web": "public/figures/drift-mmd.svg",
+      "print": "publication/figures/drift-mmd.pdf",
+      "chapters": [
+        "ch-accountable"
+      ]
+    },
+    "active-variance": {
+      "id": "active-variance",
+      "mode": "interactive",
+      "source": "tools/figures/active_variance.py",
+      "web": "public/figures/active-variance.svg",
+      "print": "publication/figures/active-variance.pdf",
+      "chapters": [
+        "ch-accountable"
+      ]
+    },
+    "power-function": {
+      "id": "power-function",
+      "mode": "static",
+      "source": "tools/figures/power_function.py",
+      "web": "public/figures/power-function.svg",
+      "print": "publication/figures/power-function.pdf",
+      "chapters": [
+        "ch-approx"
+      ]
+    },
+    "kernel-workflow": {
+      "id": "kernel-workflow",
+      "mode": "static",
+      "source": "tools/figures/kernel_workflow.py",
+      "web": "public/figures/kernel-workflow.svg",
+      "print": "publication/figures/kernel-workflow.pdf",
+      "chapters": [
+        "ch-apps"
+      ]
+    },
+    "bo-loop": {
+      "id": "bo-loop",
+      "mode": "interactive",
+      "source": "tools/figures/bo_loop.py",
+      "web": "public/figures/bo-loop.svg",
+      "print": "publication/figures/bo-loop.pdf",
+      "chapters": [
+        "ch-bo"
+      ]
+    },
+    "confounding-intervention": {
+      "id": "confounding-intervention",
+      "mode": "static",
+      "source": "tools/figures/confounding_intervention.py",
+      "web": "public/figures/confounding-intervention.svg",
+      "print": "publication/figures/confounding-intervention.pdf",
+      "chapters": [
+        "ch-causal"
+      ]
+    },
+    "cca-paired-projections": {
+      "id": "cca-paired-projections",
+      "mode": "static",
+      "source": "tools/figures/cca_paired_projections.py",
+      "web": "public/figures/cca-paired-projections.svg",
+      "print": "publication/figures/cca-paired-projections.pdf",
+      "chapters": [
+        "ch-cca"
+      ]
+    },
+    "clustering-rings": {
+      "id": "clustering-rings",
+      "mode": "static",
+      "source": "tools/figures/clustering_rings.py",
+      "web": "public/figures/clustering-rings.svg",
+      "print": "publication/figures/clustering-rings.pdf",
+      "chapters": [
+        "ch-cluster"
+      ]
+    },
+    "cme-explore": {
+      "id": "cme-explore",
+      "mode": "interactive",
+      "source": "tools/figures/cme_explore.py",
+      "web": "public/figures/cme-explore.svg",
+      "print": "publication/figures/cme-explore.pdf",
+      "chapters": [
+        "ch-cme"
+      ]
+    },
+    "variance-vs-relevance": {
+      "id": "variance-vs-relevance",
+      "mode": "static",
+      "source": "tools/figures/variance_vs_relevance.py",
+      "web": "public/figures/variance-vs-relevance.svg",
+      "print": "publication/figures/variance-vs-relevance.pdf",
+      "chapters": [
+        "ch-discriminant"
+      ]
+    },
+    "bags-to-embeddings": {
+      "id": "bags-to-embeddings",
+      "mode": "static",
+      "source": "tools/figures/bags_to_embeddings.py",
+      "web": "public/figures/bags-to-embeddings.svg",
+      "print": "publication/figures/bags-to-embeddings.pdf",
+      "chapters": [
+        "ch-distreg"
+      ]
+    },
+    "dkl-collapse": {
+      "id": "dkl-collapse",
+      "mode": "static",
+      "source": "tools/figures/dkl_collapse.py",
+      "web": "public/figures/dkl-collapse.svg",
+      "print": "publication/figures/dkl-collapse.pdf",
+      "chapters": [
+        "ch-dkl"
+      ]
+    },
+    "rollout-error": {
+      "id": "rollout-error",
+      "mode": "static",
+      "source": "tools/figures/rollout_error.py",
+      "web": "public/figures/rollout-error.svg",
+      "print": "publication/figures/rollout-error.pdf",
+      "chapters": [
+        "ch-dynamics"
+      ]
+    },
+    "learned-kernel-lifecycle": {
+      "id": "learned-kernel-lifecycle",
+      "mode": "static",
+      "source": "tools/figures/learned_kernel_lifecycle.py",
+      "web": "public/figures/learned-kernel-lifecycle.svg",
+      "print": "publication/figures/learned-kernel-lifecycle.pdf",
+      "chapters": [
+        "ch-frontier"
+      ]
+    },
+    "latent-marginalization": {
+      "id": "latent-marginalization",
+      "mode": "static",
+      "source": "tools/figures/latent_marginalization.py",
+      "web": "public/figures/latent-marginalization.svg",
+      "print": "publication/figures/latent-marginalization.pdf",
+      "chapters": [
+        "ch-generative"
+      ]
+    },
+    "heat-graph": {
+      "id": "heat-graph",
+      "mode": "interactive",
+      "source": "tools/figures/heat_graph.py",
+      "web": "public/figures/heat-graph.svg",
+      "print": "publication/figures/heat-graph.pdf",
+      "chapters": [
+        "ch-geom"
+      ]
+    },
+    "gp-posterior-anatomy": {
+      "id": "gp-posterior-anatomy",
+      "mode": "static",
+      "source": "tools/figures/gp_posterior_anatomy.py",
+      "web": "public/figures/gp-posterior-anatomy.svg",
+      "print": "publication/figures/gp-posterior-anatomy.pdf",
+      "chapters": [
+        "ch-gp"
+      ]
+    },
+    "quasiperiodic-gp": {
+      "id": "quasiperiodic-gp",
+      "mode": "interactive",
+      "source": "tools/figures/quasiperiodic_gp.py",
+      "web": "public/figures/quasiperiodic-gp.svg",
+      "print": "publication/figures/quasiperiodic-gp.pdf",
+      "chapters": [
+        "ch-highstakes"
+      ]
+    },
+    "matched-filter": {
+      "id": "matched-filter",
+      "mode": "interactive",
+      "source": "tools/figures/matched_filter.py",
+      "web": "public/figures/matched-filter.svg",
+      "print": "publication/figures/matched-filter.pdf",
+      "chapters": [
+        "ch-highstakes"
+      ]
+    },
+    "onthefly-mlip": {
+      "id": "onthefly-mlip",
+      "mode": "interactive",
+      "source": "tools/figures/onthefly_mlip.py",
+      "web": "public/figures/onthefly-mlip.svg",
+      "print": "publication/figures/onthefly-mlip.pdf",
+      "chapters": [
+        "ch-highstakes"
+      ]
+    },
+    "orbit-averaging": {
+      "id": "orbit-averaging",
+      "mode": "static",
+      "source": "tools/figures/orbit_averaging.py",
+      "web": "public/figures/orbit-averaging.svg",
+      "print": "publication/figures/orbit-averaging.pdf",
+      "chapters": [
+        "ch-invariance"
+      ]
+    },
+    "spectral-filters": {
+      "id": "spectral-filters",
+      "mode": "static",
+      "source": "tools/figures/spectral_filters.py",
+      "web": "public/figures/spectral-filters.svg",
+      "print": "publication/figures/spectral-filters.pdf",
+      "chapters": [
+        "ch-inverse"
+      ]
+    },
+    "spectrum-surgery": {
+      "id": "spectrum-surgery",
+      "mode": "interactive",
+      "source": "tools/figures/spectrum_surgery.py",
+      "web": "public/figures/spectrum-surgery.svg",
+      "print": "publication/figures/spectrum-surgery.pdf",
+      "chapters": [
+        "ch-krein"
+      ]
+    },
+    "svgd-flow": {
+      "id": "svgd-flow",
+      "mode": "interactive",
+      "source": "tools/figures/svgd_flow.py",
+      "web": "public/figures/svgd-flow.svg",
+      "print": "publication/figures/svgd-flow.pdf",
+      "chapters": [
+        "ch-ksd"
+      ]
+    },
+    "manifold-graph-energy": {
+      "id": "manifold-graph-energy",
+      "mode": "static",
+      "source": "tools/figures/manifold_graph_energy.py",
+      "web": "public/figures/manifold-graph-energy.svg",
+      "print": "publication/figures/manifold-graph-energy.pdf",
+      "chapters": [
+        "ch-manifold"
+      ]
+    },
+    "mds-double-centering": {
+      "id": "mds-double-centering",
+      "mode": "static",
+      "source": "tools/figures/mds_double_centering.py",
+      "web": "public/figures/mds-double-centering.svg",
+      "print": "publication/figures/mds-double-centering.pdf",
+      "chapters": [
+        "ch-mds"
+      ]
+    },
+    "double-descent": {
+      "id": "double-descent",
+      "mode": "static",
+      "source": "tools/figures/double_descent.py",
+      "web": "public/figures/double-descent.svg",
+      "print": "publication/figures/double-descent.pdf",
+      "chapters": [
+        "ch-modern"
+      ]
+    },
+    "oneclass-boundary": {
+      "id": "oneclass-boundary",
+      "mode": "static",
+      "source": "tools/figures/oneclass_boundary.py",
+      "web": "public/figures/oneclass-boundary.svg",
+      "print": "publication/figures/oneclass-boundary.pdf",
+      "chapters": [
+        "ch-oneclass"
+      ]
+    },
+    "online-budget": {
+      "id": "online-budget",
+      "mode": "static",
+      "source": "tools/figures/online_budget.py",
+      "web": "public/figures/online-budget.svg",
+      "print": "publication/figures/online-budget.pdf",
+      "chapters": [
+        "ch-online"
+      ]
+    },
+    "operator-valued-field": {
+      "id": "operator-valued-field",
+      "mode": "static",
+      "source": "tools/figures/operator_valued_field.py",
+      "web": "public/figures/operator-valued-field.svg",
+      "print": "publication/figures/operator-valued-field.pdf",
+      "chapters": [
+        "ch-operator"
+      ]
+    },
+    "sinkhorn-plan": {
+      "id": "sinkhorn-plan",
+      "mode": "interactive",
+      "source": "tools/figures/sinkhorn_plan.py",
+      "web": "public/figures/sinkhorn-plan.svg",
+      "print": "publication/figures/sinkhorn-plan.pdf",
+      "chapters": [
+        "ch-ot"
+      ]
+    },
+    "conditioning-clinic": {
+      "id": "conditioning-clinic",
+      "mode": "static",
+      "source": "tools/figures/conditioning_clinic.py",
+      "web": "public/figures/conditioning-clinic.svg",
+      "print": "publication/figures/conditioning-clinic.pdf",
+      "chapters": [
+        "ch-prelim"
+      ]
+    },
+    "herding-greedy": {
+      "id": "herding-greedy",
+      "mode": "interactive",
+      "source": "tools/figures/herding_greedy.py",
+      "web": "public/figures/herding-greedy.svg",
+      "print": "publication/figures/herding-greedy.pdf",
+      "chapters": [
+        "ch-quad"
+      ]
+    },
+    "ranking-differences": {
+      "id": "ranking-differences",
+      "mode": "static",
+      "source": "tools/figures/ranking_differences.py",
+      "web": "public/figures/ranking-differences.svg",
+      "print": "publication/figures/ranking-differences.pdf",
+      "chapters": [
+        "ch-ranking"
+      ]
+    },
+    "hilbert-vs-variation": {
+      "id": "hilbert-vs-variation",
+      "mode": "static",
+      "source": "tools/figures/hilbert_vs_variation.py",
+      "web": "public/figures/hilbert-vs-variation.svg",
+      "print": "publication/figures/hilbert-vs-variation.pdf",
+      "chapters": [
+        "ch-rkbs"
+      ]
+    },
+    "collocation-residual": {
+      "id": "collocation-residual",
+      "mode": "static",
+      "source": "tools/figures/collocation_residual.py",
+      "web": "public/figures/collocation-residual.svg",
+      "print": "publication/figures/collocation-residual.pdf",
+      "chapters": [
+        "ch-scientific"
+      ]
+    },
+    "sig-draw": {
+      "id": "sig-draw",
+      "mode": "interactive",
+      "source": "tools/figures/sig_draw.py",
+      "web": "public/figures/sig-draw.svg",
+      "print": "publication/figures/sig-draw.pdf",
+      "chapters": [
+        "ch-signature"
+      ]
+    },
+    "smo-working-set": {
+      "id": "smo-working-set",
+      "mode": "static",
+      "source": "tools/figures/smo_working_set.py",
+      "web": "public/figures/smo-working-set.svg",
+      "print": "publication/figures/smo-working-set.pdf",
+      "chapters": [
+        "ch-solve"
+      ]
+    },
+    "anisotropic-covariance": {
+      "id": "anisotropic-covariance",
+      "mode": "static",
+      "source": "tools/figures/anisotropic_covariance.py",
+      "web": "public/figures/anisotropic-covariance.svg",
+      "print": "publication/figures/anisotropic-covariance.pdf",
+      "chapters": [
+        "ch-spatial"
+      ]
+    },
+    "spline-decomposition": {
+      "id": "spline-decomposition",
+      "mode": "static",
+      "source": "tools/figures/spline_decomposition.py",
+      "web": "public/figures/spline-decomposition.svg",
+      "print": "publication/figures/spline-decomposition.pdf",
+      "chapters": [
+        "ch-splines"
+      ]
+    },
+    "dp-fill": {
+      "id": "dp-fill",
+      "mode": "interactive",
+      "source": "tools/figures/dp_fill.py",
+      "web": "public/figures/dp-fill.svg",
+      "print": "publication/figures/dp-fill.pdf",
+      "chapters": [
+        "ch-strings2"
+      ]
+    },
+    "epsilon-tube": {
+      "id": "epsilon-tube",
+      "mode": "static",
+      "source": "tools/figures/epsilon_tube.py",
+      "web": "public/figures/epsilon-tube.svg",
+      "print": "publication/figures/epsilon-tube.pdf",
+      "chapters": [
+        "ch-svr"
+      ]
+    },
+    "permutation-null": {
+      "id": "permutation-null",
+      "mode": "interactive",
+      "source": "tools/figures/permutation_null.py",
+      "web": "public/figures/permutation-null.svg",
+      "print": "publication/figures/permutation-null.pdf",
+      "chapters": [
+        "ch-testing"
+      ]
+    },
+    "tfidf-geometry": {
+      "id": "tfidf-geometry",
+      "mode": "static",
+      "source": "tools/figures/tfidf_geometry.py",
+      "web": "public/figures/tfidf-geometry.svg",
+      "print": "publication/figures/tfidf-geometry.pdf",
+      "chapters": [
+        "ch-text"
+      ]
+    },
+    "universality-capacity": {
+      "id": "universality-capacity",
+      "mode": "static",
+      "source": "tools/figures/universality_capacity.py",
+      "web": "public/figures/universality-capacity.svg",
+      "print": "publication/figures/universality-capacity.pdf",
+      "chapters": [
+        "ch-universal"
+      ]
+    },
+    "vc-shattering": {
+      "id": "vc-shattering",
+      "mode": "static",
+      "source": "tools/figures/vc_shattering.py",
+      "web": "public/figures/vc-shattering.svg",
+      "print": "publication/figures/vc-shattering.pdf",
+      "chapters": [
+        "ch-vc"
+      ]
+    },
+    "gram-heatmap": {
+      "id": "gram-heatmap",
+      "mode": "interactive",
+      "source": "tools/figures/gram_heatmap.py",
+      "web": "public/figures/gram-heatmap.svg",
+      "print": "publication/figures/gram-heatmap.pdf",
+      "chapters": [
+        "ch00",
+        "ch01",
+        "ch02",
+        "ch06",
+        "ch07",
+        "ch08",
+        "ch13"
+      ]
+    },
+    "kernel-lab": {
+      "id": "kernel-lab",
+      "mode": "interactive",
+      "source": "tools/figures/kernel_lab.py",
+      "web": "public/figures/kernel-lab.svg",
+      "print": "publication/figures/kernel-lab.pdf",
+      "chapters": [
+        "ch01",
+        "ch03",
+        "ch04",
+        "ch12"
+      ]
+    },
+    "feature-lift": {
+      "id": "feature-lift",
+      "mode": "interactive",
+      "source": "tools/figures/feature_lift.py",
+      "web": "public/figures/feature-lift.svg",
+      "print": "publication/figures/feature-lift.pdf",
+      "chapters": [
+        "ch02",
+        "ch11"
+      ]
+    },
+    "complexity-tradeoff": {
+      "id": "complexity-tradeoff",
+      "mode": "static",
+      "source": "tools/figures/complexity_tradeoff.py",
+      "web": "public/figures/complexity-tradeoff.svg",
+      "print": "publication/figures/complexity-tradeoff.pdf",
+      "chapters": [
+        "ch04"
+      ]
+    },
+    "svm-margin": {
+      "id": "svm-margin",
+      "mode": "interactive",
+      "source": "tools/figures/svm_margin.py",
+      "web": "public/figures/svm-margin.svg",
+      "print": "publication/figures/svm-margin.pdf",
+      "chapters": [
+        "ch05"
+      ]
+    },
+    "kpca-rings": {
+      "id": "kpca-rings",
+      "mode": "static",
+      "source": "tools/figures/kpca_rings.py",
+      "web": "public/figures/kpca-rings.svg",
+      "print": "publication/figures/kpca-rings.pdf",
+      "chapters": [
+        "ch06"
+      ]
+    },
+    "spectrum-smoothness": {
+      "id": "spectrum-smoothness",
+      "mode": "static",
+      "source": "tools/figures/spectrum_smoothness.py",
+      "web": "public/figures/spectrum-smoothness.svg",
+      "print": "publication/figures/spectrum-smoothness.pdf",
+      "chapters": [
+        "ch07"
+      ]
+    },
+    "rff-converge": {
+      "id": "rff-converge",
+      "mode": "interactive",
+      "source": "tools/figures/rff_converge.py",
+      "web": "public/figures/rff-converge.svg",
+      "print": "publication/figures/rff-converge.pdf",
+      "chapters": [
+        "ch08",
+        "ch13",
+        "ch14"
+      ]
+    },
+    "sequence-feature-map": {
+      "id": "sequence-feature-map",
+      "mode": "static",
+      "source": "tools/figures/sequence_feature_map.py",
+      "web": "public/figures/sequence-feature-map.svg",
+      "print": "publication/figures/sequence-feature-map.pdf",
+      "chapters": [
+        "ch09"
+      ]
+    },
+    "wl-refine": {
+      "id": "wl-refine",
+      "mode": "interactive",
+      "source": "tools/figures/wl_refine.py",
+      "web": "public/figures/wl-refine.svg",
+      "print": "publication/figures/wl-refine.pdf",
+      "chapters": [
+        "ch10"
+      ]
+    },
+    "mmd-twosample": {
+      "id": "mmd-twosample",
+      "mode": "interactive",
+      "source": "tools/figures/mmd_twosample.py",
+      "web": "public/figures/mmd-twosample.svg",
+      "print": "publication/figures/mmd-twosample.pdf",
+      "chapters": [
+        "ch11"
+      ]
+    },
+    "kernel-weight-path": {
+      "id": "kernel-weight-path",
+      "mode": "static",
+      "source": "tools/figures/kernel_weight_path.py",
+      "web": "public/figures/kernel-weight-path.svg",
+      "print": "publication/figures/kernel-weight-path.pdf",
+      "chapters": [
+        "ch12"
+      ]
+    },
+    "approximation-decision-map": {
+      "id": "approximation-decision-map",
+      "mode": "static",
+      "source": "tools/figures/approximation_decision_map.py",
+      "web": "public/figures/approximation-decision-map.svg",
+      "print": "publication/figures/approximation-decision-map.pdf",
+      "chapters": [
+        "ch13"
+      ]
+    },
+    "finite-vs-infinite-width": {
+      "id": "finite-vs-infinite-width",
+      "mode": "static",
+      "source": "tools/figures/finite_vs_infinite_width.py",
+      "web": "public/figures/finite-vs-infinite-width.svg",
+      "print": "publication/figures/finite-vs-infinite-width.pdf",
+      "chapters": [
+        "ch14"
+      ]
+    }
+  }
+}

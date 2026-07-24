@@ -149,9 +149,9 @@
       drawHist(ctx, colB, { x: half + 18, y: h - 92, w: half - 48, h: 62 }, pal);
       ctx.strokeStyle = pal.rule;
       ctx.beginPath(); ctx.moveTo(half, 8); ctx.lineTo(half, h - 8); ctx.stroke();
-      ro.textContent = "round " + round +
+      ro("round " + round +
         (divergedAt ? " · distinguished at round " + divergedAt : " · histograms equal so far") +
-        (stable ? " · stable: refinement has converged" : "");
+        (stable ? " · stable: refinement has converged" : ""));
     }
 
     reset();

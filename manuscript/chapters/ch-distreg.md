@@ -9,12 +9,20 @@ prerequisites:
   - causal-inference-with-kernels
 objectives:
   - >-
-    Explain the central definitions and claims in Distribution Regression and
-    Functional Data.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Formalize the two-stage sampling model and keep bag-count error separate
+    from within-bag error.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Compute empirical mean embeddings and Gaussian-on-MMD similarities directly
+    from bag samples.
+  - >-
+    Prove positive definiteness of linear and Gaussian kernels on embedded
+    distributions.
+  - >-
+    Implement two-stage kernel ridge regression with stable solves and an
+    explicit \(O(\ell^2N^2)\) Gram-build budget.
+  - >-
+    State the source, capacity, and bag-growth assumptions behind consistency
+    rather than treating characteristicness as a rate theorem.
 review_status: draft
 reviewers:
   technical: null
@@ -70,6 +78,8 @@ We do not have \(P_i\), only its bag, so we use the empirical embedding, the mea
 $$ \widehat\mu_i:=\mu_{\widehat P_i}=\frac1N\sum_{a=1}^N K_{x_i^a}=\frac1N\sum_{a=1}^N k(x_i^a,\cdot)\in\mathcal H. $$
 
 This is nothing but the average of one feature per sample, the same kernel-smoothed fingerprint of the bag met before. Stage one, then, turns each bag into a point \(\widehat\mu_i\in\mathcal H\), and the gap \(\|\widehat\mu_i-\mu_{P_i}\|_{\mathcal H}\) between this point and the true one is precisely the finite-bag error, which we will bound in a moment.
+
+<figure class="viz" data-figure="bags-to-embeddings" data-alt="Three bags contain different one-dimensional sample clouds. Each bag is transformed into a smooth kernel mean curve, and distances between those curves become a small second-stage Gram matrix."><figcaption>Distribution regression has two geometries: points within a bag are averaged into one mean embedding, then whole bags are compared through distances between those embeddings. Larger bags stabilize the curves; more labelled bags stabilize the regression across curves.</figcaption></figure>
 
 ## A kernel on distributions: the kernel of kernels {#kernel-on-distributions}
 
@@ -131,6 +141,8 @@ The only property of \(\mathcal H\) the proof used is that it is an inner produc
 ::::
 
 The construction is nothing more than: average the base kernel across every pair of bags to get inner products, read off distances, and pass them through a Gaussian. The worked example carries three tiny bags plus a fourth all the way to the matrix.
+
+The exact Gram build costs \(O(\ell^2N^2)\) base-kernel evaluations for \(\ell\) equal-size bags of \(N\) points, before the \(O(\ell^3)\) ridge factorization. Compute each symmetric block once, stream blocks when memory is tight, and reuse the resulting matrix across ridge values. For large bags, explicit finite-dimensional base features can reduce each bag to one averaged feature vector, after which cross-bag inner products cost only the feature dimension; that approximation changes stage one and must be validated against held-out bag pairs.
 
 :::::: {.example #example-36-1}
 [Example (empirical embeddings and the Gaussian-on-MMD Gram matrix)]{.box-title}
@@ -268,7 +280,7 @@ Let \(\widehat f\) be the two-stage estimator built from the empirical embedding
 
 $$ \underbrace{\mathcal R(\widehat f)-\mathcal R(f_\rho)}_{\text{total}}\ \lesssim\ \underbrace{\|\widehat f-\widetilde f\|^2}_{\text{stage 1: finite bags}}\ +\ \underbrace{\|\widetilde f-f_\lambda\|^2}_{\text{stage 2: finite bags count }\ell}\ +\ \underbrace{\|f_\lambda-f_\rho\|^2}_{\text{approximation}}, $$
 
-where the stage-one term is \(O_P\big(\lambda^{-2}N^{-1}\big)\) by the two lemmas, the stage-two estimation term vanishes as \(\ell\to\infty\), and the approximation term vanishes as \(\lambda\to 0\).
+where all norms are taken in the prediction space induced by the meta-distribution. The first term isolates replacing true embeddings by empirical ones, the second is ordinary finite-\(\ell\) ridge estimation, and the third is regularization bias.
 
 **Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
 **Proof status.** Proved immediately below.
@@ -277,7 +289,7 @@ where the stage-one term is \(O_P\big(\lambda^{-2}N^{-1}\big)\) by the two lemma
 ::: {.proof}
 [Proof]{.box-title}
 
-The triangle inequality for the risk, written through the RKHS norm that dominates it, gives \(\|\widehat f-f_\rho\|\le\|\widehat f-\widetilde f\|+\|\widetilde f-f_\lambda\|+\|f_\lambda-f_\rho\|\), which squares to the three displayed terms up to a constant. The middle and right terms are the standard bias-variance split of kernel ridge regression with \(\ell\) exact examples: the estimation term \(\|\widetilde f-f_\lambda\|\) is the variance of a ridge fit from \(\ell\) samples and tends to \(0\) as \(\ell\to\infty\) for fixed \(\lambda\), while the approximation term \(\|f_\lambda-f_\rho\|\) is the ridge bias and tends to \(0\) as \(\lambda\to0\) when \(f_\rho\) lies in the closure of \(\mathcal H_{\mathcal K}\). For the first term, \(\widehat f\) and \(\widetilde f\) are the same ridge map applied to feature vectors \(\Psi(\widehat P_i)\) and \(\Psi(P_i)\); the ridge solution is Lipschitz in its inputs with constant \(O(\lambda^{-1})\), and by the Lipschitz lemma each input differs by \(\frac1\gamma\|\widehat\mu_i-\mu_{P_i}\|\), whose square has expectation \(O(N^{-1})\) by the finite-bag lemma. Hence \(\|\widehat f-\widetilde f\|^2=O_P(\lambda^{-2}N^{-1})\). [\(\square\)]{.qed}
+For square loss, excess risk is the squared \(L^2\) distance to the regression function \(f_\rho\). Insert \(\widetilde f\) and \(f_\lambda\), apply the triangle inequality, and then use \((a+b+c)^2\le3(a^2+b^2+c^2)\) to obtain the three terms. The two-stage interpretation is exact. Rates for the individual terms need more assumptions: the finite-bag lemma and the Lipschitz embedding kernel give an \(O_P(N^{-1/2})\) perturbation of each second-stage feature, but the ridge map amplifies that perturbation according to \(\lambda\), the sample geometry, output bounds, and the source/capacity regime. The middle and right terms are the usual estimation and approximation pieces of kernel ridge regression. Szabó et al. (2016) control all three together under the conditions stated in the theorem below. [\(\square\)]{.qed}
 :::
 
 The decomposition already tells the qualitative story: drive \(\lambda\to0\) to kill the bias, take \(\ell\to\infty\) to kill the estimation variance, and take \(N\to\infty\) fast enough that \(\lambda^{-2}N^{-1}\to0\) despite the shrinking \(\lambda\). The bag size must grow with the number of bags, but not arbitrarily fast. Szabó, Sriperumbudur, Póczos, and Gretton (2016) turned this heuristic into the first sharp analysis, under the standard smoothness (source) and effective-dimension (capacity) conditions of [[ch:mercer-and-rates|the rates chapter]] on the second-stage regression.
@@ -291,7 +303,7 @@ Under source and capacity conditions on the second-stage kernel ridge problem an
 **Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
 :::
 
-The headline is worth stating plainly. Distribution regression is consistent, and the price of never seeing the true input distributions, only bags of samples, is asymptotically nil as long as the bags grow with the number of bags. The delicate point their analysis settled is that both \(\ell\) and \(N\) must diverge and that the required growth of \(N\) can be characterized; finite bags do not preclude learning, they only set how fast \(\lambda\) may shrink.
+The headline is worth stating plainly but not universally. Under the theorem's source, capacity, boundedness, and Hölder-continuity assumptions, the price of seeing only bag samples is asymptotically nil for a sufficient joint schedule of \(N(\ell)\) and \(\lambda(\ell)\). The polynomial exponent is not universal: it changes with the source smoothness, effective dimension, and continuity exponent. Finite bags do not preclude learning, but they constrain how fast \(\lambda\) may shrink and which oracle rate can be matched.
 
 ## Set kernels and support measure machines {#set-kernels-smm}
 
@@ -307,7 +319,7 @@ This is the *set kernel*, the average base kernel over all cross pairs, a specia
 A *support measure machine* (Muandet et al. 2012) is a large-margin classifier whose training examples are probability measures \(P_1,\dots,P_\ell\), each with a label, fitted by the SVM dual on the Gram matrix \(\mathbf K_{ij}=\mathcal K_\gamma(P_i,P_j)\). It is exactly the SVM of the earlier chapters with points replaced by embeddings, so the representer theorem, the dual quadratic program, and the kernelization all carry over unchanged. When only samples are available, each \(\mathcal K_\gamma(P_i,P_j)\) is estimated from the two bags as in the Gram-matrix algorithm, making the support measure machine the classification twin of the two-stage regressor.
 :::
 
-For any of this to learn an arbitrary target, the embedding kernel must be rich enough on the space of measures, the distributional analogue of a characteristic or universal kernel. Christmann and Steinwart (2010) supplied the guarantee: Gaussian-type kernels built on the embeddings are universal on the space of probability measures, so kernel machines using them can approximate any continuous functional of the distribution, and are therefore consistent for classification and regression alike. A complementary line avoids the embedding entirely: Póczos, Rinaldo, Singh, and Wasserman (2013) estimate functionals of the input density directly, by nonparametric density or nearest-neighbour methods, giving a distribution-free route to distribution regression with its own consistency guarantees. The embedding approach and the density approach are the two poles of the field, trading the RKHS's smoothing for direct estimation.
+For any of this to learn an arbitrary continuous target, the embedding kernel must be rich enough on the space of measures, the distributional analogue of a universal kernel. Under the topology and compactness conditions in Christmann and Steinwart (2010), Gaussian-type kernels built on injective embeddings are universal on the relevant measure space, so their RKHS can approximate continuous distribution functionals. This approximation property is one ingredient of consistency, not a finite-sample rate by itself. A complementary line avoids the embedding entirely: Póczos, Rinaldo, Singh, and Wasserman (2013) estimate functionals of the input density directly, by nonparametric density or nearest-neighbour methods, giving a distribution-free route to distribution regression with its own consistency guarantees. The embedding approach and the density approach are the two poles of the field, trading the RKHS's smoothing for direct estimation.
 
 ## Functional data: when the input is a function {#functional-data}
 
@@ -332,11 +344,11 @@ When each training example is a probability distribution seen only through a bag
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Distribution Regression and Functional Data**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Distribution Regression and Functional Data**, split validation by bags, never by points within a bag, or information from one distribution leaks into both train and test sets. Report the number of bags, the distribution of bag sizes, both kernel bandwidths, ridge strength, Gram conditioning, and exact or approximate Gram-build cost. A characteristic base kernel only prevents stage-one collisions; stage two still needs adequate capacity, regularization, and enough labelled bags. Do not quote an oracle rate without the source, capacity, boundedness, Hölder, and \(N(\ell)\) assumptions that make it apply.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Distribution Regression and Functional Data; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@szabo2016dr], [@muandet2012smm], [@christmann2010].
+Szabó et al. [@szabo2016dr] give the two-stage statistical analysis, Muandet et al. [@muandet2012smm] develop learning directly on measures, and Christmann and Steinwart [@christmann2010] supply universality results under explicit topological conditions. The operational task board is therefore two-dimensional: improve within-bag resolution or its approximation, and independently improve the number and coverage of labelled bags. Neither can substitute for the other.
 
 ## Exercises {#exercises}
 

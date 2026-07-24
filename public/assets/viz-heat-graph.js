@@ -127,8 +127,8 @@
       ctx.fillText("0", cb.x + 18, cb.y + cb.h);
       ctx.fillText("r(src, j)", cb.x - 6, cb.y - 8);
       const far = (src >= 8 && src <= 15) || src === 20 || src === 21 || src === 23 ? 2 : 10;
-      ro.textContent = "source node " + src + " · corr to far-cluster node " + far + ": " + corr(far).toFixed(3) +
-        " · click any node to move the source";
+      ro("source node " + src + " · corr to far-cluster node " + far + ": " + corr(far).toFixed(3) +
+        " · click any node to move the source");
     }
 
     recompute();

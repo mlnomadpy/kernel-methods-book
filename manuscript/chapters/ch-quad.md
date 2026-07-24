@@ -8,11 +8,21 @@ tier: advanced
 prerequisites:
   - optimal-transport-and-kernels
 objectives:
-  - Explain the central definitions and claims in Kernel Quadrature and Herding.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Prove that RKHS worst-case integration error is an MMD to a weighted node
+    measure.
+  - >-
+    Derive optimal quadrature weights and connect their residual to orthogonal
+    projection.
+  - >-
+    Recover the same weights and error from Gaussian-process conditioning while
+    separating posterior uncertainty from frequentist calibration.
+  - >-
+    Run kernel herding as a Frank-Wolfe method and state exactly when its
+    \(O(1/n)\) error rate applies.
+  - >-
+    Compare greedy, leverage-score, and determinantal node selection under a
+    fixed evaluation budget.
 review_status: draft
 reviewers:
   technical: null
@@ -199,7 +209,7 @@ $$ K=\begin{pmatrix} 1 & 0.606531 & 0.135335\\ 0.606531 & 1 & 0.606531\\ 0.13533
 
 ## Bayesian quadrature {#bayesian-quadrature}
 
-The optimal-weight rule can be derived a second way that supplies something the worst-case view does not: an honest posterior uncertainty about the integral. Instead of treating \(f\) as an unknown element of a norm ball, treat it as a random function with a Gaussian process prior whose covariance is the kernel \(k\). Then the integral \(P[f]\) is a random scalar, and conditioning on the observed evaluations gives a full posterior over it. This is Bayesian quadrature, introduced by O'Hagan (1991) as Bayes-Hermite quadrature and revived for machine learning as Bayesian Monte Carlo by Rasmussen and Ghahramani (2003). The construction belongs to the same circle of ideas as [[ch:gaussian-processes-and-rvm|Gaussian process regression]]: a GP prior, linear observations, a Gaussian posterior.
+The optimal-weight rule can be derived a second way that supplies something the worst-case view does not: a posterior distribution for the integral under an explicit model of \(f\). Instead of treating \(f\) as an unknown element of a norm ball, treat it as a random function with a Gaussian process prior whose covariance is the kernel \(k\). Then the integral \(P[f]\) is a random scalar, and conditioning on the observed evaluations gives a full posterior over it. This is Bayesian quadrature, introduced by O'Hagan (1991) as Bayes-Hermite quadrature and revived for machine learning as Bayesian Monte Carlo by Rasmussen and Ghahramani (2003). The construction belongs to the same circle of ideas as [[ch:gaussian-processes-and-rvm|Gaussian process regression]]: a GP prior, linear observations, a Gaussian posterior.
 
 Put \(f\sim\mathcal{GP}(0,k)\). Integration against \(P\) is a linear functional, so the pair \(\big(f(x_1),\dots,f(x_n),\,P[f]\big)\) is jointly Gaussian. The node evaluations have covariance \(K_{ij}=k(x_i,x_j)\); the cross-covariance between \(P[f]\) and \(f(x_i)\) is \(\mathbb E[P[f]\,f(x_i)]=\int k(x,x_i)\,dP(x)=\mu_P(x_i)=z_i\); and the prior variance of \(P[f]\) is \(\mathbb E[P[f]^2]=\iint k(x,x')\,dP(x)\,dP(x')=C\). Conditioning the Gaussian on the observed values \(f_i=f(x_i)\) yields a Gaussian posterior for the integral with the standard formulas.
 
@@ -211,7 +221,7 @@ Under a \(\mathcal{GP}(0,k)\) prior on \(f\), given evaluations \(f=(f_1,\dots,f
 $$ \mathbb E\big[P[f]\mid f\big] = z^\top K^{-1} f, \qquad \mathrm{Var}\big[P[f]\mid f\big] = C - z^\top K^{-1} z. $$
 ::::
 
-Two things deserve to be spelled out. First, the posterior mean is itself a quadrature rule: \(z^\top K^{-1}f=\sum_i w_i^\star f_i\) with weights \(w^\star=K^{-1}z\), the very weights of the optimal rule above. Bayesian quadrature and worst-case-optimal quadrature are the same estimator, reached from a probabilistic and a minimax door. Second, the posterior variance \(C-z^\top K^{-1}z\) is precisely the minimal worst-case squared error \(e(w^\star)^2\). The GP's stated uncertainty about the integral coincides with the rule's guaranteed error against the unit ball, so the error bar is not a heuristic but the exact worst case over the RKHS. This is why Example (optimal weights beat uniform) is simultaneously a Bayesian quadrature calculation: the number \(0.003079\) is at once the squared worst-case error and the posterior variance of the integral for those three nodes.
+Two things deserve to be spelled out. First, the posterior mean is itself a quadrature rule: \(z^\top K^{-1}f=\sum_i w_i^\star f_i\) with weights \(w^\star=K^{-1}z\), the very weights of the optimal rule above. Bayesian quadrature and worst-case-optimal quadrature are the same estimator, reached from a probabilistic and a minimax door. Second, the posterior variance \(C-z^\top K^{-1}z\) is precisely the minimal worst-case squared error \(e(w^\star)^2\). This is an exact algebraic identity, but it is not automatic frequentist calibration: the posterior credible interval has its advertised probability only under the GP model, while the RKHS statement is a deterministic unit-ball bound. Example (optimal weights beat uniform) is simultaneously a Bayesian quadrature calculation: the number \(0.003079\) is at once the squared worst-case error and the model-based posterior variance for those three nodes.
 
 :::: {.algorithm #algo-32-1}
 [Algorithm (Bayesian quadrature weights)]{.box-title}
@@ -227,6 +237,8 @@ Two things deserve to be spelled out. First, the posterior mean is itself a quad
 3.  Return the estimate \(\widehat Z=w^\top f=\sum_i w_i f_i\).
 4.  Return the variance \(V=C-z^\top w=C-z^\top K^{-1}z\).
 ::::
+
+Implement step 2 with a Cholesky solve rather than an explicit inverse. If the nodes nearly coincide, \(K\) becomes ill-conditioned and the weights can become large with alternating signs; report \(\operatorname{cond}(K)\), add a declared nugget when needed, and check that the computed variance is nonnegative up to rounding. The dense setup costs \(O(n^3)\), but the same factorization serves both the weights and the variance.
 
 The bottleneck is the kernel mean vector \(z\): it needs the integrals \(\mu_P(x_i)=\int k(x_i,x)\,dP(x)\) in closed form or by a cheap sub-routine. These are tabulated for the pairs that matter in practice, Gaussian kernel against a Gaussian or mixture-of-Gaussians measure, and Bayesian quadrature is used exactly where evaluations of \(f\) are expensive enough that solving an \(n\times n\) system to squeeze each one dry is worthwhile. Briol et al. (2019) survey this probabilistic view of integration, its convergence theory, and the calibration of the posterior variance.
 
@@ -262,6 +274,8 @@ with \(x_1=\arg\max_x\mu_P(x)\), and the step size \(1/t\) makes the running ite
 
 <figcaption>Each step places the exact argmax of the herding criterion for the standard normal target and unit-bandwidth Gaussian kernel, using the closed-form embedding \(\mu_P(x)=e^{-x^2/4}/\sqrt{2}\). The lower panel tracks the true worst-case integration error: uniform weights against the optimally reweighted same nodes and the exact Monte Carlo expectation, the comparison worked in the examples above.</figcaption>
 </figure>
+
+Read the lower panel as a comparison at a fixed node budget, not as a universal rate claim. The greedy nodes reduce uncovered embedding residual; optimal reweighting then projects onto their span. Whether the resulting slope beats Monte Carlo asymptotically depends on the marginal-polytope condition stated next.
 
 The greedy criterion is cheap: each step is one pass over the candidates evaluating a scalar acquisition, with no linear solve. We trace three steps on the same target and kernel as before, so the two examples can be compared directly.
 
@@ -316,11 +330,11 @@ Numerical integration in an RKHS is embedding approximation. The worst-case erro
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel Quadrature and Herding**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Kernel Quadrature and Herding**, verify that the kernel mean \(z_i=\int k(x_i,x)\,dP(x)\) and the self-similarity \(C\) are known or estimated independently of the expensive integrand. Solve \(Kw=z\) stably and inspect large signed weights, because a small formal worst-case error can coexist with catastrophic numerical sensitivity. Treat the Bayesian variance as model-based uncertainty unless calibration has been checked. Finally, do not quote the \(O(1/n)\) herding error without the interior condition; the generic infinite-dimensional guarantee is weaker.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel Quadrature and Herding; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@ohagan1991], [@rasmussen2003bmc], [@welling2009herding].
+O'Hagan [@ohagan1991] and Rasmussen and Ghahramani [@rasmussen2003bmc] develop the probabilistic route to quadrature; Welling [@welling2009herding] supplies the deterministic greedy route. Their common object is the residual mean embedding. In practice, choose the route by the desired output: signed optimal weights and a model-based variance for one integral, or uniformly weighted representative points for reuse across many downstream queries.
 
 ## Exercises {#exercises}
 

@@ -40,6 +40,9 @@ for (const [order, chapter] of chapters.entries()) {
   if (h1s.length !== 1) errors.push(`${chapter.src}: expected exactly one h1, found ${h1s.length}`);
   if (h1s[0]?.[1].trim() !== chapter.title) errors.push(`${chapter.src}: h1 differs from book.yml title`);
   if ((source.match(/<p class="lead">/g) || []).length !== 1) errors.push(`${chapter.src}: expected exactly one lead paragraph`);
+  if (!/data-(?:widget|figure)="[a-z0-9-]+"/.test(source)) {
+    errors.push(`${chapter.src}: chapter lacks a purposeful visualization`);
+  }
 
   const ids = [
     ...[...source.matchAll(/\{#([a-z0-9-]+)[^}]*\}/g)].map((match) => match[1]),
@@ -57,6 +60,25 @@ for (const [order, chapter] of chapters.entries()) {
   }
   for (const match of source.matchAll(/\[\[ch:([a-z0-9-]+)/g)) {
     if (!slugs.has(match[1])) errors.push(`${chapter.src}: unknown chapter reference ${match[1]}`);
+  }
+  for (const match of source.matchAll(
+    /<figure class="viz" data-figure="([a-z0-9-]+)"([^>]*)>([\s\S]*?)<\/figure>/g,
+  )) {
+    const [, figure, attrs, inner] = match;
+    if (!/\bdata-alt="[^"]+"/.test(attrs)) {
+      errors.push(`${chapter.src}: static figure ${figure} lacks data-alt`);
+    }
+    if (!/<figcaption[^>]*>[\s\S]*?<\/figcaption>/i.test(inner)) {
+      errors.push(`${chapter.src}: static figure ${figure} lacks figcaption`);
+    }
+    for (const [target, file] of [
+      ["web", `public/figures/${figure}.svg`],
+      ["PDF", `publication/figures/${figure}.pdf`],
+    ]) {
+      if (!fs.existsSync(path.join(root, file))) {
+        errors.push(`${chapter.src}: static figure ${figure} lacks ${target} asset ${file}`);
+      }
+    }
   }
   if (/—/.test(source)) errors.push(`${chapter.src}: em dash violates the authoring contract`);
   for (const match of source.matchAll(/\$\$([\s\S]*?)\$\$|\\\(([\s\S]*?)\\\)/g)) {

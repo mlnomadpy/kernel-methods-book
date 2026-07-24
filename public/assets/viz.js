@@ -11,6 +11,17 @@
 (function () {
   "use strict";
 
+  // A reproducible stream keeps examples stable across refreshes and aligned
+  // with their print counterparts.
+  let randomState = 0x6d2b79f5;
+  function random() {
+    randomState = (randomState + 0x6d2b79f5) | 0;
+    let t = randomState;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+
   // ---- theme ---------------------------------------------------------------
   function palette() {
     const cs = getComputedStyle(document.documentElement);
@@ -70,7 +81,13 @@
       for (let j = 0; j <= i; j++) {
         let s = A[i * n + j] + (i === j ? reg : 0);
         for (let k = 0; k < j; k++) s -= L[i * n + k] * L[j * n + k];
-        if (i === j) L[i * n + i] = Math.sqrt(Math.max(s, 1e-12));
+        if (i === j) {
+          const scale = Math.max(1, Math.abs(A[i * n + i]) + Math.abs(reg));
+          if (!Number.isFinite(s) || s < -1e-10 * scale) {
+            throw new Error("kernel system is not positive definite at the published regularization");
+          }
+          L[i * n + i] = Math.sqrt(Math.max(s, 1e-12 * scale));
+        }
         else L[i * n + j] = s / L[j * n + j];
       }
     }
@@ -164,7 +181,14 @@
       raf = requestAnimationFrame(frame);
     }
     const sim = {
-      start() { if (!running) { running = true; last = 0; } if (!raf) raf = requestAnimationFrame(frame); },
+      start(userInitiated = true) {
+        if (!userInitiated && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          opts.draw();
+          return;
+        }
+        if (!running) { running = true; last = 0; }
+        if (!raf) raf = requestAnimationFrame(frame);
+      },
       stop() { running = false; last = 0; if (raf) { cancelAnimationFrame(raf); raf = 0; } },
       toggle() { if (running) sim.stop(); else sim.start(); return running; },
       kick() { if (running && !raf) { last = 0; raf = requestAnimationFrame(frame); } },
@@ -177,6 +201,16 @@
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden)
       document.querySelectorAll("figure.viz[data-widget]").forEach((f) => (f._vizSims || []).forEach((s) => s.kick()));
+  });
+
+  // One observer serves all figures and catches container changes that a
+  // viewport-only resize listener misses.
+  let resizeTimer = 0;
+  const figureResizeObserver = new ResizeObserver((entries) => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      for (const entry of entries) if (entry.target._redraw) entry.target._redraw();
+    }, 100);
   });
 
   // Coalesce pointermove to one handler call per animation frame, so a
@@ -206,7 +240,12 @@
     const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
     const w = Math.max(1, Math.round(rect.width));
     const h = Math.max(1, Math.round(parseFloat(cv.dataset.h || rect.height || 320)));
-    cv.width = w * dpr; cv.height = h * dpr;
+    const pixelWidth = Math.round(w * dpr);
+    const pixelHeight = Math.round(h * dpr);
+    if (cv.width !== pixelWidth || cv.height !== pixelHeight) {
+      cv.width = pixelWidth;
+      cv.height = pixelHeight;
+    }
     cv.style.height = h + "px";
     const ctx = cv.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -346,7 +385,7 @@
     host.append(cap);
     // two rings of points
     const inner = [], outer = [];
-    for (let i = 0; i < 40; i++) { const a = i / 40 * 6.283; const r = 0.9 + Math.random() * 0.35; inner.push([r * Math.cos(a), r * Math.sin(a)]); const R = 2.1 + Math.random() * 0.4; outer.push([R * Math.cos(a), R * Math.sin(a)]); }
+    for (let i = 0; i < 40; i++) { const a = i / 40 * 6.283; const r = 0.9 + random() * 0.35; inner.push([r * Math.cos(a), r * Math.sin(a)]); const R = 2.1 + random() * 0.4; outer.push([R * Math.cos(a), R * Math.sin(a)]); }
     function draw() {
       const g = setupCanvas(cv); const ctx = g.ctx; ctx.clearRect(0, 0, g.w, g.h);
       const t = ctrl.t, cx = g.w / 2, cy = g.h * 0.52, sc = Math.min(g.w, g.h) / 6.2;
@@ -373,7 +412,7 @@
     const cv = document.createElement("canvas"); cv.dataset.h = 300; host.append(cv);
     const col = palette();
     let pts = [];
-    for (let i = 0; i < 12; i++) pts.push([-3 + 6 * i / 11 + (Math.random() - 0.5) * 0.3]);
+    for (let i = 0; i < 12; i++) pts.push([-3 + 6 * i / 11 + (random() - 0.5) * 0.3]);
     const ctrl = mkControls(host, [
       { type: "select", name: "kernel", label: "kernel", value: "gaussian", options: [{ value: "gaussian", label: "Gaussian" }, { value: "laplace", label: "Laplace" }, { value: "linear", label: "linear" }, { value: "poly", label: "polynomial" }] },
       { type: "range", name: "bw", label: "bandwidth", min: 0.2, max: 3, step: 0.05, value: 1, fmt: (v) => (+v).toFixed(2) },
@@ -424,7 +463,7 @@
     cap.innerHTML = "The Gaussian kernel \\(k(x,x')=e^{-(x-x')^2/2}\\) (solid neutral curve) against its random Fourier feature estimate \\(\\hat k=\\frac1D\\sum_j\\cos(w_j x+b_j)\\cos(w_j x'+b_j)\\) (orange), as a function of the gap \\(x-x'\\). Bochner's theorem says the true kernel is the average; a few hundred random features already track it closely. Raise D and watch the estimate settle onto the target.";
     host.append(cap);
     let W = [], B = [];
-    function resample() { W = []; B = []; for (let j = 0; j < 400; j++) { W.push(gauss()); B.push(Math.random() * 6.283); } }
+    function resample() { W = []; B = []; for (let j = 0; j < 400; j++) { W.push(gauss()); B.push(random() * 6.283); } }
     resample();
     function draw() {
       const g = setupCanvas(cv); const ctx = g.ctx; const box = { x: 34, y: 10, w: g.w - 44, h: g.h - 26 };
@@ -450,7 +489,7 @@
     }
     return draw;
   };
-  let _g2; function gauss() { if (_g2 != null) { const v = _g2; _g2 = null; return v; } const u = Math.random() || 1e-9, v = Math.random(); const r = Math.sqrt(-2 * Math.log(u)); _g2 = r * Math.sin(6.283 * v); return r * Math.cos(6.283 * v); }
+  let _g2; function gauss() { if (_g2 != null) { const v = _g2; _g2 = null; return v; } const u = random() || 1e-9, v = random(); const r = Math.sqrt(-2 * Math.log(u)); _g2 = r * Math.sin(6.283 * v); return r * Math.cos(6.283 * v); }
 
   // -- svm-margin: two draggable classes, live max-margin boundary ----------
   WIDGETS["svm-margin"] = function (fig, host) {
@@ -591,13 +630,13 @@
     delete fig.dataset.mounting; fig.dataset.mounted = "1";
     fig.setAttribute("role", "group");
     const title = host.querySelector(".viz-title");
-    const caption = host.querySelector("figcaption");
+    const caption = fig.querySelector(":scope > figcaption") || host.querySelector("figcaption");
     const readoutNode = host.querySelector(".viz-readout");
     const baseId = `viz-${kind}-${document.querySelectorAll('figure.viz[data-mounted="1"]').length}`;
     if (title) { title.id = `${baseId}-title`; fig.setAttribute("aria-labelledby", title.id); }
     if (caption) caption.id = `${baseId}-caption`;
     if (readoutNode) readoutNode.id = `${baseId}-status`;
-    fig.querySelectorAll(":scope > .viz-static, :scope > .viz-fallback").forEach((node) => {
+    fig.querySelectorAll(":scope > .viz-static").forEach((node) => {
       node.hidden = true; node.setAttribute("aria-hidden", "true");
     });
     host.querySelectorAll("canvas").forEach((canvas) => {
@@ -621,7 +660,7 @@
       }
     }, { rootMargin: "200px" });
     io.observe(fig);
-    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (fig._redraw) fig._redraw(); }, 150); });
+    figureResizeObserver.observe(fig);
   }
 
   function boot() {

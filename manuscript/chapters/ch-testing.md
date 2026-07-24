@@ -8,11 +8,21 @@ tier: practitioner
 prerequisites:
   - kernel-mean-embeddings
 objectives:
-  - Explain the central definitions and claims in Kernel Hypothesis Testing.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Separate the biased MMD V-statistic from the unbiased U-statistic and
+    explain why only the latter can be negative.
+  - >-
+    Derive why degeneracy produces a chi-square-mixture null law while fixed
+    alternatives are asymptotically normal.
+  - >-
+    Construct an exact permutation test from exchangeability and compute its
+    finite-sample p-value resolution.
+  - >-
+    Choose bandwidths or learned kernels for power without contaminating the
+    final test.
+  - >-
+    Match quadratic, block, linear-time, or streaming estimators to compute and
+    dependence constraints.
 review_status: draft
 reviewers:
   technical: null
@@ -42,11 +52,11 @@ bibliography:
 ---
 # Kernel Hypothesis Testing
 
-<p class="lead">A clinical trial does not end with the remark that the treatment arm looked different; it ends with a decision, reject or retain, together with a guarantee on how often that decision is wrong when there is no real effect. A test is not a number: it is a decision procedure with controlled errors. The MMD of [[ch:kernel-mean-embeddings|the previous chapter]] supplies the number, a statistic that is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\); but a finite sample makes it positive even when \(P = Q\), and the sketch of a two-sample test given there left the real machinery unbuilt. This chapter builds it. We separate the biased V-statistic from the unbiased U-statistic, explain precisely why the null law degenerates into a chi-square mixture while the alternative is asymptotically normal, and calibrate an exact level-\(\alpha\) test by permutation. Power, the probability of catching a real difference, is then a quantity we can optimize: a signal-to-noise ratio governs it, the median heuristic guesses it and can fail badly, and learned kernels, linear-time estimators, and aggregated tests are the modern answers. The same machinery then tests independence through HSIC and, via the [[ch:kernel-stein-discrepancy|kernel Stein discrepancy]], goodness-of-fit against a fixed model.</p>
+<p class="lead">A clinical trial does not end with the remark that the treatment arm looked different; it ends with a decision, reject or retain, together with a guarantee on how often that decision is wrong when there is no real effect. A test is not a number: it is a decision procedure with controlled errors. The MMD of [[ch:kernel-mean-embeddings|the previous chapter]] supplies the number, a population discrepancy that is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\); but a finite sample makes its estimate fluctuate away from zero even when \(P = Q\), and the sketch of a two-sample test given there left the real machinery unbuilt. This chapter builds it. We separate the biased V-statistic from the unbiased U-statistic, explain precisely why the null law degenerates into a chi-square mixture while the alternative is asymptotically normal, and calibrate an exact level-\(\alpha\) test by permutation. Power, the probability of catching a real difference, is then a quantity we can optimize: a signal-to-noise ratio governs it, the median heuristic guesses it and can fail badly, and learned kernels, linear-time estimators, and aggregated tests are the modern answers. The same machinery then tests independence through HSIC and, via the [[ch:kernel-stein-discrepancy|kernel Stein discrepancy]], goodness-of-fit against a fixed model.</p>
 
 ## From a discrepancy to a decision {#from-discrepancy-to-decision}
 
-We are given samples \(x_1,\dots,x_n \sim P\) and \(y_1,\dots,y_m \sim Q\) and must decide between the null hypothesis \(H_0: P = Q\) and the alternative \(H_1: P \neq Q\). The MMD supplies a statistic that is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\), and positive otherwise, but a positive estimate is not yet a verdict. A finite sample produces a positive \(\widehat{\mathrm{MMD}}^2\) even when \(P = Q\), simply from sampling noise. The whole problem is to decide when the observed value is too large to be noise. The kernel two-sample test that solves it was introduced by Gretton et al. (2006); we build out its testing theory here.
+We are given samples \(x_1,\dots,x_n \sim P\) and \(y_1,\dots,y_m \sim Q\) and must decide between the null hypothesis \(H_0: P = Q\) and the alternative \(H_1: P \neq Q\). The population MMD is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\), and positive otherwise, but a nonzero estimate is not yet a verdict. A finite sample makes \(\widehat{\mathrm{MMD}}^2\) fluctuate when \(P = Q\): the biased V-statistic stays nonnegative, while the unbiased U-statistic may land on either side of zero. The whole problem is to decide when the observed value is too large to be noise. The kernel two-sample test that solves it was introduced by Gretton et al. (2006); we build out its testing theory here.
 
 A test is a rule that outputs reject or retain. It can be wrong in two ways, and the asymmetry between them is the foundation of the theory.
 
@@ -383,11 +393,11 @@ A kernel two-sample test is the MMD plus a decision rule with guarantees. The un
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel Hypothesis Testing**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Kernel Hypothesis Testing**, validity comes from the calibration scheme, not from a large MMD value. Verify exchangeability before permuting rows; clustered, temporal, or spatial data need transformations that preserve their null dependence. Freeze preprocessing and kernel selection before the final test, or use a method whose theorem explicitly accounts for selection. Report the effect estimate, attainable p-value resolution, permutation count, randomization correction, and power against a scientifically meaningful alternative. Repeated deployment monitoring also needs an anytime-valid or predeclared-horizon design; repeatedly applying a level-\(\alpha\) batch test is not a level-\(\alpha\) monitor.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel Hypothesis Testing; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@gretton2006], [@gretton2012], [@serfling1980].
+Gretton et al. [@gretton2006; @gretton2012] develop the two-sample statistic, its degenerate null law, and practical calibration; Serfling [@serfling1980] supplies the U-statistic theory underneath it. For a new application, write down the null invariance first, then choose the statistic and kernel, and only then choose a calibration that respects the sampling design. That order prevents the most common failure in kernel testing: optimizing a sensitive statistic while quietly invalidating the decision rule.
 
 ## Exercises {#exercises}
 

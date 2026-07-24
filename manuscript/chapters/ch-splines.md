@@ -10,19 +10,17 @@ prerequisites:
   - kernel-ridge-and-friends
   - mercer-and-rates
 objectives:
-  - Derive a smoothing spline from a roughness-penalized variational problem.
+  - Derive the finite spline estimator from a differential roughness penalty.
   - >-
-    Separate the penalized RKHS component from the unpenalized polynomial null
-    space.
+    Separate and identify the unpenalized null space from the penalized RKHS
+    component.
   - >-
-    Interpret the smoother matrix through effective degrees of freedom and
-    generalized cross-validation.
+    Read effective degrees of freedom and leave-one-out error from the smoother
+    matrix.
+  - Construct identifiable additive and tensor-product interaction spaces.
   - >-
-    Construct additive and tensor-product RKHS models with identifiable
-    interactions.
-  - >-
-    Relate splines, kernel ridge regression, Gaussian processes, and Green
-    functions.
+    Explain when the spline, KRR, Green-function, and Gaussian-process views
+    coincide.
 review_status: draft
 reviewers:
   technical: null
@@ -118,6 +116,8 @@ Consider two estimators with similar in-sample residuals. One uses a derivative 
 
 **Verification artifact.** checks/example-ch-splines-example-spline-nullspace.json records the example source hash and verification scope.
 :::
+
+<figure class="viz" data-figure="spline-decomposition" data-alt="Three aligned panels show an affine null-space trend, a wavy penalized component, and their sum. The final spline overlays the affine trend to show which part remains when the rough component is strongly shrunk."><figcaption>A smoothing spline is not only a kernel expansion. Its unpenalized null-space trend determines large-\(\lambda\) behavior and extrapolation, while the penalized component pays for curvature; forgetting the first term changes the estimator rather than simplifying it.</figcaption></figure>
 
 ## The smoother matrix and effective complexity {#smoother-matrix}
 

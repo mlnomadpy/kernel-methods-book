@@ -9,12 +9,20 @@ prerequisites:
   - kernels-now
 objectives:
   - >-
-    Explain the central definitions and claims in The Frontier: Feature Learning
-    and Beyond.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Distinguish lazy, mean-field, and maximal-update limits by parameter
+    movement and representation change.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Explain the sample-complexity barrier of a fixed rotation-invariant kernel
+    on single-index targets.
+  - >-
+    Identify where kernels enter attention, deep architectures, manifold
+    methods, and foundation-model features.
+  - >-
+    Decide whether a claimed learned kernel is fixed, label-adapted,
+    task-adapted, or merely a similarity heuristic.
+  - >-
+    Audit a learned-kernel pipeline for approximation, shift, privacy, fairness,
+    and update-sensitive claims.
 review_status: draft
 reviewers:
   technical: null
@@ -153,6 +161,12 @@ It is tempting to read the NTK theorem as a fact about neural networks. Chizat, 
 ### The parametrization decides the regime {#parametrization}
 
 Which limit a wide network falls into is not fixed by the architecture; it is fixed by how the weights and learning rates are scaled with width. Under the *NTK (standard) parametrization*, the natural width-scaling of initialization and step size sends the network into the lazy limit above: features do not move. Under the *mean-field parametrization* of a two-layer network, one instead writes the output as an average \(f(x)=\frac1m\sum_{j=1}^m a_j\sigma(w_j^\top x)\) and lets the empirical distribution of the neurons \((a_j,w_j)\) evolve. Mei, Montanari, and Nguyen (2018) and Chizat and Bach (2018) proved that as \(m\to\infty\) this evolution is a Wasserstein gradient flow on the space of probability measures over neurons: the units genuinely move, and the representation is learned. Yang and Hu (2021) unified the picture with the *maximal-update parametrization* (\(\mu\)P), the unique width-scaling under which every layer's features update by an \(\Theta(1)\) amount in the infinite-width limit, so feature learning persists at any width. The abstract point is that the same network admits a one-parameter family of infinite-width limits, and only the endpoints are the fixed-kernel and the feature-learning worlds; the choice of parametrization selects among them.
+
+The distinction is easiest to audit as a lifecycle. A prior architecture supplies an initial geometry, labels may or may not move it, the final representation induces a trained similarity, and deployment subjects that similarity to a distribution it did not choose. Calling the result a learned kernel is informative only if each transition is named.
+
+<figure class="viz" data-figure="learned-kernel-lifecycle" data-alt="A five-stage lifecycle runs from raw objects through prior geometry, label-driven feature learning, a trained kernel, and a shift audit. An annotation notes that negligible feature movement collapses the learning stage to the NTK regime.">
+<figcaption>Geometry enters before training, may adapt through labels, and can fail again under shift. In the lazy regime the feature-learning stage collapses, leaving the initial tangent geometry essentially fixed.</figcaption>
+</figure>
 
 ## Why a fixed kernel cannot learn features {#curse}
 
@@ -339,11 +353,13 @@ The open questions live right on that boundary and remain genuinely open. What i
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **The Frontier: Feature Learning and Beyond**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+“Learned kernel” must name what learned what: a frozen foundation-model representation, an NTK fixed at initialization, a label-adapted feature map, and a jointly trained similarity have different statistical dependencies. Report feature movement, parametrization, width scaling, and the stage at which labels enter. Do not claim feature learning from improved fit alone.
+
+Frontier constructions need especially narrow claims. Row-normalized attention is a smoother but not generally a symmetric PSD kernel matrix; quantum estimation speed does not imply end-to-end learning advantage; and a strong frozen embedding can hide shift or fairness failures inherited from pretraining. Every benchmark should include a fixed-kernel baseline, a representation-learning baseline, compute and data budgets, and an out-of-distribution audit.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in The Frontier: Feature Learning and Beyond; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@jacot2018], [@arora2019cntk], [@chizat2019].
+The boundary of the kernel view is set by representation movement. In the lazy regime a wide network follows the fixed tangent geometry of [@jacot2018] and its convolutional extensions such as [@arora2019cntk]; in mean-field or maximal-update regimes the hidden features move and the relevant function class can be larger than the initial RKHS. Attention, geometric priors, quantum feature maps, and foundation-model embeddings all reuse kernel ideas, but each inserts geometry at a different stage of the lifecycle. The practical synthesis from [@chizat2019] is to audit scale and parametrization first: architecture alone does not tell us whether the model is a kernel machine or a feature learner.
 
 ## Exercises {#exercises}
 

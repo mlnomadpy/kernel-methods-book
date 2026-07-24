@@ -128,6 +128,8 @@ An RKHS squared norm spreads a solution across correlated directions because ene
 **Verification artifact.** checks/example-ch-rkbs-example-rkbs-dense-sparse.json records the example source hash and verification scope.
 :::
 
+<figure class="viz" data-figure="hilbert-vs-variation" data-alt="Two fitted curves nearly overlap a target made from two localized bumps. A coefficient plot shows the quadratic solution spreading weight across most correlated atoms, while the atomic-norm solution uses only a few nonzero coefficients."><figcaption>Similar prediction error can hide very different representations. A Hilbert penalty spreads energy smoothly across correlated atoms; a variation penalty pays total atomic mass and therefore lands on a sparse face of the feasible geometry.</figcaption></figure>
+
 ## Variation spaces and ridge splines {#variation-ridge-splines}
 
 The most consequential client of this atomic machinery is the shallow neural network. A shallow ridge-function model has

@@ -8,11 +8,13 @@ tier: practitioner
 prerequisites:
   - efficient-string-and-tree-kernels
 objectives:
-  - Explain the central definitions and claims in Kernels for Text.
-  - Apply the chapter's principal methods and interpret their outputs.
+  - Construct and normalize bag-of-words and tf-idf document vectors.
+  - Explain how weighting changes angles and nearest documents.
+  - Verify positive definiteness of proximity and latent-semantic kernels.
+  - Compute a truncated-SVD document kernel and interpret discarded directions.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Decide when sequence, embedding, or transport geometry is needed beyond
+    words.
 review_status: draft
 reviewers:
   technical: null
@@ -92,6 +94,12 @@ In kernel form the weighting is a diagonal linear map. Let \(R\) be the diagonal
 $$\tilde\kappa(d_1,d_2)=\phi(d_1)\,R R^\top\phi(d_2)^\top=\sum_{t}w(t)^2\,\mathrm{tf}(t,d_1)\,\mathrm{tf}(t,d_2),$$
 
 the vector space kernel with each term's contribution scaled by \(w(t)^2\). It is computed by the same list merge as before, now carrying the squared weights, so the tf-idf kernel costs no more than the plain one. Because idf uses no label information, it can even be estimated from a large external unlabelled corpus that supplies background knowledge about which terms are rare.
+
+Weighting changes geometry, not merely scale. In the small corpus below, the shared term “the” pulls every raw-count vector toward every other one. Its idf weight is zero, so after weighting the angles are determined by topic-bearing terms and the nearest-document relationships become sharper.
+
+<figure class="viz" data-figure="tfidf-geometry" data-alt="Two document cosine-similarity matrices compare raw counts with tf-idf weights for four tiny documents. A bar chart shows that the term the receives zero weight because it appears in every document, while rarer topical terms receive positive weight."><figcaption>Tf-idf rotates document geometry by suppressing corpus-wide coordinates before cosine normalization. A common word can create broad raw-count similarity yet contribute nothing once the corpus reveals that it cannot discriminate documents.</figcaption></figure>
+
+The transformation can also fail: on a tiny or shifted corpus, a genuinely useful term may look ubiquitous and be suppressed. Fit idf weights on a representative training or background corpus, freeze them before evaluation, and report that corpus as part of the model.
 
 :::: {.algorithm #algo-23-1}
 [Algorithm (tf-idf document-term matrix and vector space kernel)]{.box-title}
@@ -380,11 +388,11 @@ Text becomes geometry through the bag of words, and the vector space kernel is t
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernels for Text**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Fit the vocabulary, document frequencies, and latent semantic basis on training or background text only; recomputing them on the test corpus leaks its geometry. Cosine normalization is undefined for an empty vector, so specify tokenization, stop-word handling, and the fallback for documents with no retained terms. An arbitrary term-similarity matrix need not be positive semidefinite: factor it as \(PP^\top\), repair its spectrum explicitly, or use an indefinite method. Tune the SVD rank against held-out data rather than treating more components as automatically better. When comparing contextual embeddings, tf-idf, and transport, keep preprocessing, dimensionality, and computational budget visible.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernels for Text; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@salton1975], [@salton1988], [@joachims1998text].
+The practical sequence is cumulative: begin with normalized tf-idf, add a positive semantic proximity when synonymy matters, use a truncated latent basis when corpus-level concepts are stable, and restore order only when the task depends on it. Each step changes the geometry and introduces a new fitted object that belongs inside the validation pipeline. The vector-space lineage is developed in [@salton1975] and [@salton1988], and its kernel-machine use in [@joachims1998text]; [[ch:string-kernels]] and [[ch:optimal-transport-and-kernels]] supply the structured alternatives.
 
 ## Exercises {#exercises}
 

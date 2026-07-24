@@ -9,12 +9,20 @@ prerequisites:
   - kernel-quadrature-and-herding
 objectives:
   - >-
-    Explain the central definitions and claims in Conditional Mean Embeddings
-    and Kernel Bayes' Rule.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Derive the conditional embedding operator and identify the range assumption
+    hidden in its formal inverse.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Compute regularized empirical conditional embeddings and conditional
+    expectations from one shared Gram factorization.
+  - >-
+    Interpret conditional embedding estimation as vector-valued kernel ridge
+    regression.
+  - >-
+    Apply kernel sum, chain, and Bayes rules while distinguishing an RKHS
+    embedding from a probability vector.
+  - >-
+    Diagnose regularization, conditioning, and signed-weight failures in a
+    kernel Bayes filter.
 review_status: draft
 reviewers:
   technical: null
@@ -140,7 +148,11 @@ $$\widehat{\mathbb E}\big[g(Y)\mid X=x\big]=\big\langle g,\widehat\mu_{Y\mid X=x
 <figcaption>Dragging the conditioning point applies the exact estimator \(\beta(x^*)=(K_X+n\lambda I)^{-1}k_X(x^*)\) to sixty fixed samples: the side profile is the embedded conditional \(\sum_i\beta_i\,l(\cdot,y_i)\) and the dot its conditional mean. The Cholesky factor is shared across every \(x^*\), so each drag costs one triangular solve; the sliders expose the bandwidth and ridge trade-off the chapter derives.</figcaption>
 </figure>
 
+The visual question is how a point observation becomes a distribution-valued prediction. As \(x^\ast\) moves, the weights change first, then the entire conditional profile moves; bandwidth controls locality and \(\lambda\) controls how violently the weights can respond. A plausible-looking conditional mean is not enough, so inspect the profile, weight norm, and condition number together.
+
 Regularization is not optional decoration here. The matrix \(K\) is often numerically singular (repeated or nearby inputs make its columns almost dependent), and even in the population the operator inverse is unbounded, so the raw \(K^{-1}\mathbf k_x\) would be a wild, high-variance vector. The term \(n\lambda I\) floors the spectrum of \(K\) at \(n\lambda\), trading a little bias for a large reduction in variance, exactly the bias-variance dial of ridge regression.
+
+For many test inputs, factor \(K+n\lambda I\) once by Cholesky at \(O(n^3)\) cost and reuse the factor, reducing each new conditional query to two triangular solves plus kernel evaluation. Never form the inverse explicitly. Report \(\lambda\), \(\operatorname{cond}(K+n\lambda I)\), the norm and sum of \(\boldsymbol\beta(x)\), and a held-out conditional prediction error; these reveal extrapolation and unstable cancellation that the displayed embedding alone can hide.
 
 ::::: {.example #example-33-1}
 [Example (predicting a conditional expectation)]{.box-title}
@@ -164,6 +176,8 @@ $$K=\begin{pmatrix}1&0.6065&0.1353&0.0111\\0.6065&1&0.6065&0.1353\\0.1353&0.6065
 **Verification artifact.** checks/example-ch-cme-example-33-1.json records the example source hash and verification scope.
 :::::
 
+The scalar query \(g(y)=y\) in step 4 is deliberately labelled a plug-in: on an unbounded domain the identity function need not belong to the Gaussian RKHS, so the conditional-reproducing guarantee does not automatically cover it. The genuine RKHS query in step 5 is covered. To estimate a raw conditional mean rigorously, use an output kernel whose RKHS contains or uniformly approximates the identity on the working domain, and include the approximation error.
+
 ## The regression view {#cme-as-regression}
 
 The estimator \(\Upsilon(K+n\lambda I)^{-1}\Phi^{\ast}\) was derived by regularizing an operator inverse, which left open both the range assumption and the question of what, precisely, it estimates when that assumption fails. Grünewälder, Lever, Baldassarre, Patterson, Gretton, and Pontil (2012) gave the reassuring answer: the empirical conditional mean embedding is the solution of a vector-valued ridge regression, and this holds with no assumption on the range of \(\mathcal C_{XX}\).
@@ -183,7 +197,7 @@ is minimized by \(\widehat{\mathcal C}_{Y\mid X}=\Upsilon(K+n\lambda I)^{-1}\Phi
 **Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
 ::::
 
-Three payoffs follow from this identification. It is an honest definition: \(\widehat{\mathcal C}_{Y\mid X}\) is always the minimizer of a well-posed risk, whether or not the population range assumption holds, so we never rely on \(\mathbb E[g(Y)\mid X=\cdot]\in\mathcal H_{\mathcal X}\) to compute anything. It exposes the estimator as ridge regression, with \(\boldsymbol\beta(x)\) the ridge weights, making the whole toolbox of vector-valued RKHS regression available. And it delivers consistency: as \(n\to\infty\) with \(\lambda=\lambda_n\to 0\) at a suitable rate, \(\|\widehat\mu_{Y\mid X=x}-\mu_{Y\mid X=x}\|_{\mathcal H_{\mathcal Y}}\to 0\) in probability, with rates that sharpen under smoothness (source) conditions on the target, in the same spirit as the learning rates of [[ch:mercer-and-rates|the rates chapter]]. Song et al. (2009) first proved consistency; the regression analysis of Grünewälder et al. (2012) tightened the rates, and the survey of Muandet, Fukumizu, Sriperumbudur, and Schölkopf (2017) collects the sharpest current statements.
+Three payoffs follow from this identification. It is an honest definition: \(\widehat{\mathcal C}_{Y\mid X}\) is always the minimizer of a well-posed empirical risk, whether or not the population range assumption holds, so computation never requires \(\mathbb E[g(Y)\mid X=\cdot]\in\mathcal H_{\mathcal X}\). It exposes the estimator as ridge regression, with \(\boldsymbol\beta(x)\) the ridge weights, making the vector-valued regression toolbox available. Consistency is then a learning-theory statement rather than a consequence of the formal inverse: it requires a schedule \(\lambda_n\to0\), enough data relative to that schedule, and assumptions on the target and kernel spectrum. Song et al. (2009) and Grünewälder et al. (2012) give such results under their stated source and regularity conditions; [[ch:mercer-and-rates|the rates chapter]] explains why those conditions cannot be omitted.
 
 ## Kernel probability rules {#kernel-prob-rules}
 
@@ -233,7 +247,7 @@ Turning the operators into Gram matrices with the push-through identity gives th
 1.  Kernel sum rule: solve \((K+n\varepsilon I)\boldsymbol\rho=K\mathbf m\) for the prior-weighted embedding weights \(\boldsymbol\rho\), and set \(D=\mathrm{diag}(\boldsymbol\rho)\).
 2.  Form the observation vector \(\boldsymbol\ell_y=(\ell(y_1,y),\dots,\ell(y_n,y))^{\top}\).
 3.  Kernel Bayes' rule: compute \(\mathbf w(y)=DL\big((DL)^2+\delta I\big)^{-1}D\,\boldsymbol\ell_y\).
-4.  Return \(\widehat{\mathbb E}[g(X)\mid Y=y]=\sum_{i=1}^n w_i(y)\,g(x_i)\); if a distribution is wanted, project \(\mathbf w\) onto the nonnegative simplex (or normalize).
+4.  Return \(\widehat{\mathbb E}[g(X)\mid Y=y]=\sum_{i=1}^n w_i(y)\,g(x_i)\). If a literal discrete distribution is required downstream, construct and validate a separate nonnegative approximation; normalizing or projecting \(\mathbf w\) changes the RKHS estimator and must be reported as an additional approximation.
 ::::
 
 ::::: {.example #example-33-2}
@@ -287,11 +301,11 @@ Conditioning, the workhorse of probabilistic modeling, becomes a linear operator
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Conditional Mean Embeddings and Kernel Bayes' Rule**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Conditional Mean Embeddings and Kernel Bayes' Rule**, never read \(\mathcal C_{YX}\mathcal C_{XX}^{-1}\) as an everywhere-defined bounded operator without a range argument. Use the regularized estimator, solve rather than invert, and report conditioning and weight diagnostics. Keep three objects separate: the exact conditional embedding, its regularized population approximation, and its finite-sample ridge estimate. Kernel Bayes weights may be signed and need not sum to one; silently normalizing them creates a different estimator, not a repaired theorem.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Conditional Mean Embeddings and Kernel Bayes' Rule; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@song2009cme], [@baker1973], [@fukumizu2004].
+Song et al. [@song2009cme] develop empirical conditional embeddings, while Baker [@baker1973] and Fukumizu et al. [@fukumizu2004] supply the operator background. The safest practical route is the regression route: declare the vector-valued prediction target, regularize the Gram solve, validate conditional queries on held-out pairs, and treat the operator calculus as a compact language for composing those fitted maps rather than as permission to invert compact population operators.
 
 ## Exercises {#exercises}
 

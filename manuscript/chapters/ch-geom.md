@@ -8,13 +8,11 @@ tier: advanced
 prerequisites:
   - signature-and-time-series-kernels
 objectives:
-  - >-
-    Explain the central definitions and claims in Geometric and Equivariant
-    Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+  - Build heat and Matérn kernels from a domain Laplacian spectrum.
+  - Interpret diffusion time and smoothness on manifolds and weighted graphs.
+  - Explain why substituting geodesic distance into a Gaussian can fail.
+  - Construct invariant kernels by averaging over a compact group.
+  - Distinguish invariant outputs from equivariant feature transformations.
 review_status: draft
 reviewers:
   technical: null
@@ -171,7 +169,7 @@ These kernels are the tunable-smoothness completion of the family in [[ch:graph-
 
 <figure class="viz" data-widget="heat-graph">
 
-<figcaption>Node colors are the exact spectral-filter kernel \(r(i,j)\) built from the eigenpairs of this graph's Laplacian, computed once at load. Click any node to move the source: with a small time \(t\) (or small \(\kappa\)) similarity stays inside the source's cluster, and raising it lets the kernel diffuse across the three-edge bridge, the locality dial the text derives.</figcaption>
+<figcaption>Node colors show the spectral-filter kernel \(r(i,j)\) built from the graph Laplacian eigenpairs. At small time \(t\), or small \(\kappa\), similarity remains inside the source cluster; increasing the scale carries mass across the three-edge bridge. The web version moves the source and filter scale, making diffusion time a visible locality parameter.</figcaption>
 </figure>
 
 ::::: {.example #example-27-1}
@@ -313,11 +311,11 @@ Two constructions carry a kernel onto a geometric domain. The spectral route rea
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Geometric and Equivariant Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Replacing Euclidean distance by geodesic distance inside a Gaussian does not generally preserve positive definiteness; construct from the Laplacian spectrum or prove conditional negative definiteness. On graphs, state whether the combinatorial or normalized Laplacian is used and how edge weights set the units of diffusion time. Spectral truncation changes both locality and rank, so report the retained eigenvalue range and inspect the omitted tail. Group averaging requires a normalized invariant measure, typically Haar probability on a compact group, and numerical quadrature gives only approximate invariance. Finally, distinguish invariance, which removes the group coordinate, from equivariance, which transforms outputs with it.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Geometric and Equivariant Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@whittle1954], [@lindgren2011], [@borovitskiy2020matern].
+The safe construction principle is spectral: let the domain provide the eigenfunctions and apply a nonnegative filter to its Laplacian eigenvalues. Heat and Matérn filters then become geometry-aware smoothness priors, while Haar averaging handles known symmetries by quotienting their orbits. The SPDE route begins with [@whittle1954] and [@lindgren2011], and the manifold Matérn construction is developed in [@borovitskiy2020matern]. The same filters reappear in [[ch:inverse-learning-and-spectral-regularization]] as regularization operators.
 
 ## Exercises {#exercises}
 

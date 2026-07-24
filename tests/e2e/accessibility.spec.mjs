@@ -24,7 +24,7 @@ for (const route of widgetPages) {
         await expect(canvases.first()).toHaveAttribute("aria-describedby", /.+/);
       }
       await expect(figure.locator("figcaption:not([hidden])").first()).toBeVisible();
-      await expect(figure.locator('[role="status"]').first()).toBeAttached();
+      await expect(figure.locator('[role="status"]').first()).not.toBeEmpty();
     }
   });
 }
@@ -46,8 +46,30 @@ test("static widget alternatives survive without JavaScript", async ({ browser }
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto("/support-vector-machines.html");
-  await expect(page.locator(".viz-static").first()).toBeVisible();
-  await expect(page.locator("figcaption.viz-fallback").first()).toContainText("Static alternative");
+  const plate = page.locator(".viz-static img.viz-plate").first();
+  await expect(plate).toBeVisible();
+  await expect(plate).toHaveAttribute("src", /figures\/svm-margin\.svg$/);
+  await expect(plate).toHaveAttribute("alt", /decision boundary/i);
+  await expect(page.locator("figcaption.viz-fallback").first()).toBeVisible();
+  await context.close();
+});
+
+test("nonfigure chapters do not download the visualization runtime", async ({ page }) => {
+  const requests = [];
+  page.on("request", (request) => requests.push(request.url()));
+  await page.goto("/preliminaries.html");
+  expect(requests.filter((url) => /\/assets\/viz(?:-|\.js)/.test(url))).toEqual([]);
+});
+
+test("reduced motion leaves auto-running simulations paused", async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await page.goto("/kernel-stein-discrepancy.html");
+  const status = page.locator('figure[data-widget="svgd-flow"] [role="status"]').first();
+  await expect(status).not.toBeEmpty();
+  const before = await status.textContent();
+  await page.waitForTimeout(300);
+  expect(await status.textContent()).toBe(before);
   await context.close();
 });
 

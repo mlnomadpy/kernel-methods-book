@@ -19,6 +19,9 @@ const publicationAuthors = (publication.authors || [])
 const figureCaptions = JSON.parse(
   fs.readFileSync(path.join(root, "publication", "figures", "captions.json"), "utf8"),
 );
+const figureRegistry = JSON.parse(
+  fs.readFileSync(path.join(root, "publication", "figures", "registry.json"), "utf8"),
+).figures;
 const chapters = book.parts.flatMap((part) => part.chapters);
 const chapterMap = new Map(chapters.map((chapter, index) => [chapter.slug, {
   label: chapter.src === "ch-prelim" ? "Preliminaries" : `Chapter ${index}`,
@@ -180,6 +183,8 @@ function publicationMarkdown(chapter) {
   // into a numbered figure; the caption's \(...\) math is normalised below.
   source = source.replace(/<figure class="viz" data-widget="([^"]+)"[^>]*>([\s\S]*?)<\/figure>/g,
     (_, widget, inner) => {
+      const record = figureRegistry[widget];
+      if (!record || record.mode !== "interactive") throw new Error(`Widget ${widget} is absent from the figure registry`);
       // Prefer the declarative print caption; fall back to the widget's own
       // inline <figcaption> (used by widgets that predate captions.json).
       let caption = figureCaptions[widget];
@@ -188,14 +193,37 @@ function publicationMarkdown(chapter) {
         caption = cap ? cap[1] : "";
       }
       caption = caption.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-      // Embed the static JAX plate when one exists (PDF only); otherwise keep a
-      // textual pointer, so a widget without a rendered plate never breaks the
-      // build. EPUB cannot embed a vector PDF, so it always gets the pointer.
-      const platePath = path.join(root, "publication", "figures", `${widget}.pdf`);
-      if (format === "pdf" && fs.existsSync(platePath))
-        return `\n\n![${caption}](publication/figures/${widget}.pdf)\n\n`;
+      // PDF and web/EPUB plates are generated from the same Python figure.
+      const pdfPlate = path.join(root, record.print);
+      const webPlate = path.join(root, record.web);
+      if (format === "pdf" && fs.existsSync(pdfPlate))
+        return `\n\n![${caption}](${record.print})\n\n`;
+      if (format === "epub" && fs.existsSync(webPlate))
+        return `\n\n![${caption}](${record.web})\n\n`;
       return `> **Interactive figure (${widget}).** ${caption} The interactive version is available in the web edition.`;
     });
+  // Static-first figures use the same id for the SVG web/EPUB asset and PDF
+  // publication plate. Their interpretive caption stays in the manuscript.
+  source = source.replace(
+    /<figure class="viz" data-figure="([a-z0-9-]+)"[^>]*>([\s\S]*?)<\/figure>/g,
+    (_, figure, inner) => {
+      const record = figureRegistry[figure];
+      if (!record || record.mode !== "static") throw new Error(`Static figure ${figure} is absent from the figure registry`);
+      const cap = inner.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/i);
+      const caption = (cap ? cap[1] : "")
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (!caption) throw new Error(`${chapter.src}: static figure ${figure} needs a figcaption`);
+      const pdfPlate = path.join(root, record.print);
+      const webPlate = path.join(root, record.web);
+      if (format === "pdf" && fs.existsSync(pdfPlate))
+        return `\n\n![${caption}](${record.print})\n\n`;
+      if (format === "epub" && fs.existsSync(webPlate))
+        return `\n\n![${caption}](${record.web})\n\n`;
+      throw new Error(`${chapter.src}: static figure ${figure} is missing its ${format} plate`);
+    },
+  );
   source = source.replace(/\[\[ch:([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (_, slug, custom) => {
     const target = chapterMap.get(slug);
     return custom || (target ? `${target.label}, ${target.title}` : slug);

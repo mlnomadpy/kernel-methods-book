@@ -9,14 +9,19 @@ prerequisites:
   - mercer-and-rates
   - kernel-ridge-and-friends
 objectives:
-  - Express kernel learning as a compact-operator inverse problem.
-  - 'Compare Tikhonov, cutoff, iterative, and early-stopping filters.'
   - >-
-    Define source conditions, qualification, and saturation without overstating
-    rates.
+    Diagonalize a kernel inverse problem and identify noise amplification in
+    weak directions.
   - >-
-    Use discrepancy and validation criteria with numerical conditioning
-    diagnostics.
+    Compare Tikhonov, cutoff, Landweber, and conjugate-gradient regularization
+    by their filters.
+  - Translate source conditions into interpolation-space membership.
+  - >-
+    State qualification and saturation together with the assumptions needed for
+    a rate.
+  - >-
+    Select a stopping or regularization level with residual, conditioning, and
+    validation diagnostics.
 review_status: draft
 reviewers:
   technical: null
@@ -36,13 +41,16 @@ bibliography:
 
 ## Learning as an inverse problem {#inverse-formulation}
 
-The claim that learning is an inverse problem should be made literal: which operator stands between us and the target, and why is undoing it dangerous? For a distribution \(P_X\), define the covariance operator \(T:\mathcal{H}_k\to\mathcal{H}_k\) by
+The claim that learning is an inverse problem should be made literal: which operator stands between us and the target, and why is undoing it dangerous? Let \(S:\mathcal H_k\to L^2(P_X)\) be the canonical inclusion, \((Sf)(x)=f(x)\). Two related operators appear:
 
 $$
-Tf=\int k_x\langle k_x,f\rangle_{\mathcal{H}_k}\,dP_X(x),
+T=S^\ast S:\mathcal H_k\to\mathcal H_k,
+\qquad
+L=SS^\ast:L^2(P_X)\to L^2(P_X).
 $$
 
-where \(k_x=k(x,\cdot)\). The population normal equation is \(Tf=g\). When \(T\) is compact, its eigenvalues \(\mu_j\) approach zero. Direct inversion multiplies error in the \(j\)-th coordinate by \(1/\mu_j\), so small empirical perturbations can dominate the solution [@rosinverse2004].
+The first is the RKHS covariance operator,
+\(Tf=\int k_x\langle k_x,f\rangle_{\mathcal H_k}\,dP_X(x)\), with \(k_x=k(x,\cdot)\); the second is the usual kernel integral operator. Their nonzero eigenvalues agree, and \(S\) maps corresponding eigendirections between the two spaces. The population normal equation in \(\mathcal H_k\) is \(Tf=g\). When these operators are compact, their eigenvalues \(\mu_j\) approach zero. Direct inversion multiplies perturbations in the \(j\)-th coordinate by \(1/\mu_j\), so empirical noise can dominate the solution [@rosinverse2004].
 
 ::: {.definition #def-spectral-filter}
 [Definition (spectral regularization family)]{.box-title}
@@ -96,19 +104,19 @@ The source condition reads as a statement about a single target, but it secretly
 ::: {.definition #def-inverse-power-space}
 [Definition (power spaces of the integral operator)]{.box-title}
 
-For \(\theta \ge 0\), the power space of order \(\theta\) is the range of the fractional operator power,
+For \(\theta \ge 0\), use the integral operator \(L=SS^\ast\) on \(L^2(P_X)\) and define the power space, modulo the null space of \(L\), by
 
 $$
-[\mathcal{H}]^{\theta} := \operatorname{ran} T^{\theta/2}
+[\mathcal{H}]^{\theta} := \operatorname{ran} L^{\theta/2}
 = \Big\{ \textstyle\sum_i a_i\, \mu_i^{\theta/2}\, \psi_i \;:\; \textstyle\sum_i a_i^2 \lt \infty \Big\},
 $$
 
-with the norm that makes \(T^{\theta/2}\) an isometry from \(L^2\) onto \([\mathcal{H}]^{\theta}\). Here \((\mu_i, \psi_i)\) is the eigensystem of \(T\) on \(L^2\).
+with the quotient norm induced by the minimum-norm preimage under \(L^{\theta/2}\). Here \((\mu_i,\psi_i)\) is the positive eigensystem of \(L\) on \(L^2(P_X)\).
 :::
 
-The endpoints anchor the ladder: \(\theta = 0\) recovers \(L^2\) itself, and \(\theta = 1\) recovers the RKHS \(\mathcal{H}\), because \(T^{1/2}\) is exactly the isometry between \(L^2\) and \(\mathcal{H}\) that the spectral construction of [[ch:mercer-and-rates]] exhibits. Between the endpoints, \(0 \lt \theta \lt 1\) describes targets that are rougher than any RKHS member yet not arbitrary: they lie in the real interpolation spaces between \(L^2\) and \(\mathcal{H}\), which is why the ladder is called the interpolation-space scale [@steinwart2012]. Above the RKHS, \(\theta \gt 1\) singles out the extra-smooth targets for which saturation becomes the binding constraint. In the Sobolev picture the ladder is literal: for a Matern kernel whose RKHS is a Sobolev space of smoothness \(m\), the power space \([\mathcal{H}]^{\theta}\) is a Sobolev space of smoothness \(\theta m\), so the abstract exponent \(\theta\) is ordinary differentiability measured in units of the kernel's own smoothness.
+The endpoints anchor the ladder on the closure of the positive eigenspace: \(\theta=0\) gives the relevant \(L^2(P_X)\) space, and \(\theta=1\) gives the image of the RKHS under \(S\). Between them, \(0\lt\theta\lt1\) describes targets rougher than RKHS members yet spectrally controlled; under the standard compact-embedding hypotheses these are interpolation spaces between \(L^2(P_X)\) and the embedded RKHS [@steinwart2012]. Values \(\theta\gt1\) describe extra alignment with stable directions, where filter qualification can become the bottleneck. For Matérn kernels on regular bounded domains with a compatible sampling measure, these power spaces are norm-equivalent to an associated Sobolev smoothness scale; the identification is not automatic on an arbitrary domain or measure.
 
-The payoff is a precise language for misspecification. A rate theorem that assumes \(f_\star \in \mathcal{H}\) is the special case \(\theta = 1\); the general statements of [@caponnetto2007] and [@steinwart2012] assume only \(f_\star \in [\mathcal{H}]^{\theta}\) for some \(\theta \gt 0\) and pay for smaller \(\theta\) with slower rates, degrading continuously rather than failing outright when the model is wrong. The same exponent controls which filters can exploit the smoothness: a filter of qualification \(q\) converts source exponents up to \(\theta = 2q\) into rate improvements and wastes anything beyond. Reading the ladder alongside the effective dimension gives the complete modern rate picture: one exponent for how smooth the target is, one decay index for how big the space is, and the minimax rate a function of the pair.
+The payoff is a precise language for misspecification. An RKHS target is the case \(\theta=1\); smaller positive \(\theta\) permits rougher targets, with rates that depend jointly on this source exponent, effective-dimension decay, noise, and parameter choice. The exact relation between a filter's qualification \(q\) and the largest exploitable \(\theta\) depends on the convention used for the source power, so a theorem must state both rather than quote a bare factor of two. Reading the ladder alongside effective dimension gives the modern rate picture: one exponent describes target alignment, one decay law describes capacity, and the loss and noise model complete the bound.
 
 ## A finite spectral diagnostic {#inverse-example}
 
@@ -146,6 +154,8 @@ Once each method is reduced to its filter, the whole catalog fits in a table. Re
 | Gradient flow | \(\{1-\exp(-t\mu)\}/\mu\) | continuous-time shrinkage |
 
 Cutoff has excellent bias behavior on retained directions but is discontinuous in the estimated spectrum. Tikhonov is stable and convenient but saturates for sufficiently smooth source conditions. Iteration can increase qualification, although numerical and sampling errors accumulate.
+
+<figure class="viz" data-figure="spectral-filters" data-alt="A logarithmic eigenvalue axis compares three retained-fraction curves. Ridge rises smoothly, spectral cutoff jumps at the regularization threshold, and early stopping rises gradually with a shape distinct from ridge."><figcaption>Regularizers differ by which eigendirections they allow through: cutoff makes a hard decision, ridge shrinks continuously, and early stopping learns strong directions before weak ones. Matching methods by the label \(\lambda\) or by iteration count is meaningless unless their retained spectra or effective degrees of freedom are also matched.</figcaption></figure>
 
 Accelerated first-order methods produce polynomial filters. Their optimization acceleration does not automatically imply better statistical regularization: oscillating residual polynomials can amplify noisy directions. Every accelerated method needs a spectral stability analysis together with its stopping rule.
 

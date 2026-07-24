@@ -9,12 +9,20 @@ prerequisites:
   - kernel-pca
 objectives:
   - >-
-    Explain the central definitions and claims in Kernel Clustering and Spectral
-    Methods.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Expand distances to feature-space centroids into kernel evaluations and
+    implement the alternating kernel K-means updates.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Rewrite the discrete partition objective as a trace maximization and
+    identify exactly which constraint spectral relaxation removes.
+  - >-
+    Derive normalized cut as a generalized Rayleigh quotient and interpret the
+    Fiedler vector, its eigenvalue, and the rounding gap.
+  - >-
+    Explain the equivalence between normalized cut and weighted kernel K-means,
+    including the role of degree normalization.
+  - >-
+    Apply a Nyström out-of-sample extension and diagnose when a new batch has
+    changed the graph enough to require refitting.
 review_status: draft
 reviewers:
   technical: null
@@ -139,6 +147,8 @@ $$
 The three terms are the squared norm of the point, its average similarity to the cluster, and the internal cohesion of the cluster. Every operation is a kernel evaluation, so kernel K-means never touches \(\mathcal{H}\) directly. It alternates the centroid step (bookkeeping the memberships \(C_j\)) and this assignment step until convergence, a greedy descent on the objective just like ordinary K-means.
 
 A concrete case makes the three terms tangible. Take two concentric rings of points with a Gaussian kernel whose bandwidth is smaller than the gap between the rings, so that \(K(\mathbf{x}_i, \mathbf{x}_j)\) is appreciable only when \(i\) and \(j\) sit on the same ring. Then a candidate cluster that mixes the two rings gives its members a small average-similarity term \(\frac{2}{|C_s|}\sum_{j \in C_s} K(\mathbf{x}_i, \mathbf{x}_j)\) and is penalized, whereas the two single-ring clusters make that term large. The assignment step therefore pushes each point toward the ring it belongs to and recovers a grouping that ordinary K-means cannot: with flat cell boundaries the linear method can only cut the pair of rings with a straight line through both, splitting each ring in half.
+
+<figure class="viz" data-figure="clustering-rings" data-alt="Three panels show concentric-ring data, the left-right partition returned by ordinary Euclidean K-means, and the inner-versus-outer partition returned by Gaussian kernel K-means. Point color and marker shape both identify the assigned cluster."><figcaption>Euclidean centroids impose a straight Voronoi cut through both rings; kernel centroids measure within-ring similarity and recover the nonlinear inner-versus-outer partition.</figcaption></figure>
 
 ### An equivalent objective {#kernel-k-means-equivalent}
 
@@ -486,11 +496,15 @@ This is not a new mechanism but one already met under another name. The extensio
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel Clustering and Spectral Methods**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+- Kernel K-means still minimizes a non-convex objective. Run multiple deterministic initializations and report objective values, not only the best-looking partition.
+- Keep similarity and positive definiteness separate. Spectral clustering can use nonnegative graph affinities even when they are not a Mercer kernel.
+- Degree normalization changes the cut objective. State whether the graph is unnormalized, random-walk normalized, or symmetrically normalized.
+- A relaxed eigenvector is continuous; a discrete cluster assignment requires rounding, and the rounding gap can matter.
+- Nyström extension assumes a new point does not materially change graph degrees or connectivity. Refit when a batch alters the graph.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel Clustering and Spectral Methods; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@dhillon2004], [@ng2002], [@scholkopf2002].
+Kernel K-means replaces Euclidean centroid distances by Gram-matrix expressions, allowing a nonlinear feature geometry to turn non-convex clusters into compact groups. Its trace form exposes a spectral relaxation, while normalized cut reaches the same algebra from graph partitioning and degree normalization. The eigenvectors solve the relaxed problem; K-means or thresholding returns the discrete partition, and Nyström extension carries the fitted embedding to stable new points. The method should therefore be reported as a pipeline of kernel or graph construction, normalization, relaxation, rounding, and validation. See [@dhillon2004], [@ng2002], [@shimalik2000], and [@scholkopf2002].
 
 ## Exercises {#exercises}
 

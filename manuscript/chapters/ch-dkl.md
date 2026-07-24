@@ -10,12 +10,19 @@ prerequisites:
   - kernels-and-deep-learning
   - large-scale-kernels
 objectives:
-  - Construct a learned feature map with a Gaussian-process kernel readout.
   - >-
-    Differentiate marginal-likelihood terms and identify their competing
-    effects.
-  - 'Compare exact, inducing-point, and structured-interpolation computation.'
-  - Diagnose calibration failures and distinguish DKL from NTK regimes.
+    Construct a positive-definite kernel by composing a trainable feature map
+    with a base kernel.
+  - >-
+    Differentiate the marginal likelihood and interpret its fit and
+    covariance-volume terms.
+  - 'Distinguish DKL from fixed NTK, deep-GP, and frozen-feature baselines.'
+  - >-
+    Choose among exact, inducing-point, and structured-interpolation
+    computation.
+  - >-
+    Detect representation collapse, scale non-identifiability, and unsupported
+    OOD confidence.
 review_status: draft
 reviewers:
   technical: null
@@ -101,6 +108,8 @@ If \(h_\theta(x)\) maps many distinct inputs to nearly the same point, an RBF re
 
 **Verification artifact.** checks/example-ch-dkl-example-dkl-collapse.json records the example source hash and verification scope.
 :::
+
+<figure class="viz" data-figure="dkl-collapse" data-alt="Two kernel similarity matrices compare the same ordered inputs. Before feature learning the matrix has a narrow diagonal band; after a saturating feature map collapses the inputs, nearly the entire matrix has high similarity."><figcaption>A composed kernel remains positive definite after representation collapse, so validity alone cannot protect the geometry. When distant inputs become nearly identical in feature space, the GP readout loses the distances it would need to express unfamiliarity and can become confident for the wrong reason.</figcaption></figure>
 
 Other failures include vanishing learned noise, unstable Cholesky factors, inducing points that cover only dense modes, and overconfident extrapolation. Approximate objectives can distort posterior variances even when point predictions look strong. Deep-kernel model selection should therefore include proper scoring rules and coverage curves rather than RMSE alone. Empirical work has shown that DKL uncertainty behavior is sensitive to architecture and training choices [@ober2021dkl].
 

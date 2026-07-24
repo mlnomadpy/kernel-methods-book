@@ -8,13 +8,11 @@ tier: advanced
 prerequisites:
   - geometric-and-equivariant-kernels
 objectives:
-  - >-
-    Explain the central definitions and claims in Indefinite and Krein-Space
-    Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+  - Detect indefiniteness from Gram spectra and quadratic forms.
+  - Decompose an RKKS kernel as a difference of two positive kernels.
+  - Explain why learning becomes a saddle-point stabilization.
+  - 'Compare clipping, flipping, and shifting by their geometric distortion.'
+  - Solve and diagnose a finite-sample Krein-space classifier.
 review_status: draft
 reviewers:
   technical: null
@@ -216,7 +214,7 @@ The RKKS theory tells us the geometry is coherent and the solution is a finite e
 
 <figure class="viz" data-widget="spectrum-surgery">
 
-<figcaption>The bars are the exact spectrum of the tanh similarity on ten points, eigendecomposed live; negative bars are the Krein part, and steepening \(a\) drives them further negative. Each repair recomposes the matrix from surgically altered eigenvalues, and the Frobenius readout compares all three at once: clip changes the matrix least, the nearest-PSD fact proved above.</figcaption>
+<figcaption>The bars are the spectrum of a tanh similarity on ten points; negative bars form the Krein part, and a steeper slope drives them farther below zero. Each repair recomposes the matrix from altered eigenvalues. The Frobenius comparison shows that clipping changes the finite Gram matrix least, exactly the nearest-PSD result proved above; the web version varies the slope and repair.</figcaption>
 </figure>
 
 Each transform embodies a different belief about the negative eigenvalues, and each pays a different price. Clip declares them noise and deletes them; it yields \(K_+\), which is exactly the nearest positive semidefinite matrix to \(K\) in Frobenius norm (Higham 1988), so it is the least violent repair, but it throws away whatever signal the negative part carried. Flip declares the negative directions informative and keeps their magnitude, \(|\lambda_i|\), which preserves all spectral energy but reverses the geometry along those directions. Shift lifts the entire spectrum by \(|\lambda_{\min}|\); it preserves every eigenvector and every off-diagonal similarity, touching only the diagonal, but it inflates each point's self-similarity and can be a large perturbation when \(\lambda_{\min}\) is very negative.
@@ -324,11 +322,11 @@ Symmetric similarities that are not positive definite are common, not exotic: th
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Indefinite and Krein-Space Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Declare an eigenvalue tolerance relative to \(\|K\|\); tiny negative values from rounding are not evidence of meaningful Krein geometry. A finite Gram decomposition does not by itself define one globally valid out-of-sample kernel split. Clip, flip, and shift are different models, not interchangeable numerical cleanups, and a transductive spectrum repair needs an explicit rule for new points. In an RKKS the indefinite form is not a norm and regularized learning is a saddle-point stabilization, so do not reuse RKHS convexity arguments unchanged. State whether prediction uses the original indefinite similarity or the repaired matrix, and compare both accuracy and spectral distortion.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Indefinite and Krein-Space Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@ong2004krein], [@haasdonk2005], [@chen2009similarity].
+There are two honest responses to an indefinite similarity. Repair the finite spectrum and accept the geometry that clip, flip, or shift creates, or retain the signed geometry and solve a stabilized min-max problem in an RKKS. The decomposition theory and representer result are developed in [@ong2004krein], with indefinite SVM treatments in [@haasdonk2005] and [@chen2009similarity]. Whichever route is chosen, make the negative eigenspace and the out-of-sample rule part of the reported model.
 
 ## Exercises {#exercises}
 

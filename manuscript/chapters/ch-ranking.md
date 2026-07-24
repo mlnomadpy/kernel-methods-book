@@ -9,12 +9,12 @@ prerequisites:
   - one-class-and-novelty
 objectives:
   - >-
-    Explain the central definitions and claims in Ranking and Ordinal
-    Regression.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Convert pairwise preferences into labeled difference vectors and a valid
+    pair kernel.
+  - Derive the ranking SVM and interpret its pairwise hinge loss.
+  - Implement a perceptron update for violated preferences.
+  - Distinguish pairwise ranking from threshold-based ordinal regression.
+  - Prove the connection between bipartite ranking error and AUC.
 review_status: draft
 reviewers:
   technical: null
@@ -74,6 +74,10 @@ Because the reduction never touches \(\phi\) except through inner products, it s
 $$\langle z_{ij},\, z_{kl} \rangle = \langle \phi(x_i) - \phi(x_j),\, \phi(x_k) - \phi(x_l) \rangle = K_{ik} - K_{il} - K_{jk} + K_{jl},$$
 
 where \(K_{ab} = \kappa(x_a, x_b)\) is the Gram matrix of the original data. So the pairwise problem has its own kernel, computed from the base kernel with no explicit features, and any dual algorithm of Chapter [[ch:support-vector-machines|Support Vector Machines]] runs on it unchanged. The one cost is size: with \(\ell\) instances there can be on the order of \(\ell^2\) preferred pairs, so the pairwise sample grows quadratically, a point flagged by Shawe-Taylor and Cristianini (2004) and addressed in practice by Joachims (2002) through a decomposition that never materialises all pairs at once.
+
+The reduction is more than an algebraic convenience. Every arrow from a less-preferred item to a more-preferred one becomes a point in difference space; reversing the preference negates that point. A ranking scorer is therefore a hyperplane through the origin that keeps preferred differences on its positive side.
+
+<figure class="viz" data-figure="ranking-differences" data-alt="The left panel shows four ranked items with arrows from lower-ranked to higher-ranked items. The right panel maps those arrows to positive difference vectors and their mirrored negatives, separated by a line through the origin."><figcaption>Pairwise ranking converts order into geometry: a preference \(x_i\succ x_j\) becomes the positive example \(\phi(x_i)-\phi(x_j)\), while the reverse comparison is its negative. One origin-passing classifier therefore represents a globally consistent scoring direction.</figcaption></figure>
 
 ### The ranking risk and misordered pairs {#ranking-risk}
 
@@ -283,11 +287,11 @@ Three positive items with scores \((0.9, 0.6, 0.4)\) and three negative items wi
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Ranking and Ordinal Regression**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Pairs derived from the same query or item are dependent, so a random split of pairs leaks objects across training and evaluation; split at the query, user, or item group that will be new at deployment. The pair reduction can be quadratic in the number of items and may overweight large groups unless losses are normalized per group. AUC evaluates positive-negative order only and says nothing about probability calibration or the top of a long ranked list. For ordinal models, verify threshold ordering explicitly so predicted ranks remain coherent.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Ranking and Ordinal Regression; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@herbrich2000], [@joachims2002], [@freund2003rank].
+Pairwise ranking becomes ordinary margin learning on differences, with a four-term kernel that never materializes the feature map. This reduction makes the ranking SVM and perceptron immediate, but it can expand \(\ell\) items into \(O(\ell^2)\) comparisons and can overcount dependent pairs. Ordinal regression instead learns ordered thresholds around one score, and bipartite ranking connects pair inversions exactly to \(1-\mathrm{AUC}\). See [@herbrich2000] for the difference-space construction, [@joachims2002] for scalable ranking SVMs, and [@freund2003rank] for the online ranking perspective.
 
 ## Exercises {#exercises}
 

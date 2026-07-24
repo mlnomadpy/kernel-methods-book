@@ -9,12 +9,20 @@ prerequisites:
   - kernel-clustering
 objectives:
   - >-
-    Explain the central definitions and claims in Kernel CCA and Correlation
-    Analysis.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Derive classical CCA as a generalized eigenproblem and interpret canonical
+    scores as paired, variance-normalized projections.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Kernelize both views through representer expansions and prove why the
+    unregularized empirical problem saturates at correlation one.
+  - >-
+    Form the regularized kernel CCA eigenproblem and explain how its shrinkage
+    parameter trades correlation against covariance.
+  - >-
+    Compute canonical scores for new paired observations and distinguish sample
+    correlation from population dependence.
+  - >-
+    Compare linear CCA, kernel CCA, and deep CCA by representation, capacity,
+    regularization, and computational cost.
 review_status: draft
 reviewers:
   technical: null
@@ -146,6 +154,10 @@ and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau 
 
 Kernel CCA in this regularized form is a practical tool for learning shared representations across modalities. A representative application is finding a joint latent representation of images and their text tags, aligning the visual and textual views of a collection so that the two can be compared or retrieved against each other (Gong and Lazebnik, 2014).
 
+The output is easier to read in score space than in coefficient space. Each paired observation produces two numbers, one from each view; useful canonical directions make those numbers line up without collapsing either view to a constant. The figure contrasts the raw coordinates, where the shared factor is obscured by view-specific variation, with the regularized canonical scores, where paired observations track one another.
+
+<figure class="viz" data-figure="cca-paired-projections" data-alt="Two paired two-dimensional views share a latent variable hidden by nuisance variation. After regularized CCA, their one-dimensional canonical scores lie close to the diagonal, so matching observations receive similar scores."><figcaption>CCA is successful when paired observations agree after projection: regularization suppresses view-specific directions and exposes the shared coordinate rather than manufacturing perfect in-sample correlation.</figcaption></figure>
+
 ### Variance, covariance, and correlation as one family {#cca-covariance-family}
 
 It is worth stepping back to see that the unsupervised methods of this chapter are the same construction tuned by a single choice: what we ask of a pair of directions. Shawe-Taylor and Cristianini (2004) organize their whole treatment this way. Given one view, asking for the direction of maximal variance gives PCA, the eigenvectors of the covariance matrix. Given two paired views \(X\) and \(Y\), we can instead ask for a pair of directions \((\mathbf{w}_a, \mathbf{w}_b)\) maximizing the raw covariance of the projections,
@@ -257,11 +269,15 @@ For a book-length treatment of the methods in this chapter, Schölkopf and Smola
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel CCA and Correlation Analysis**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+- Never report the unregularized training correlation as evidence of dependence: with invertible Gram matrices it equals one by construction.
+- Center both Gram matrices using the training sample, and reuse those training means for test points. Re-centering a query changes the fitted problem.
+- Tune shrinkage on held-out paired data. A tiny ridge can make the eigenproblem numerically solvable while still leaving a statistically unstable direction.
+- Inspect canonical scores as well as the leading correlation. A high score driven by one or two pairs, or one that disappears under resampling, is not a robust shared representation.
+- Compare against linear CCA. A nonlinear map earns its complexity only when its held-out alignment improves.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel CCA and Correlation Analysis; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@andrew2013dcca], [@bach2002], [@fukumizu2007cca].
+CCA searches for two variance-normalized projections whose scores covary as strongly as possible. Kernelization makes those projections nonlinear but also makes perfect empirical correlation trivial whenever both Gram matrices are invertible. RKHS-norm shrinkage is therefore part of the estimand, not merely a numerical patch: it restricts which score patterns each view may realize and turns the problem back into a meaningful generalized eigenproblem. Covariance analysis, CCA, kernel CCA, and deep CCA differ mainly in the representation and normalization they choose; all must control expressive directions and be judged on held-out paired observations. For primary treatments, see [@bach2002], [@hardoon2004], [@fukumizu2007cca], and [@andrew2013dcca].
 
 ## Exercises {#exercises}
 

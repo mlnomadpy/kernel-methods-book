@@ -9,12 +9,14 @@ prerequisites:
   - support-vector-regression
 objectives:
   - >-
-    Explain the central definitions and claims in One-Class SVMs and Novelty
-    Detection.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Formulate support estimation as a soft minimum-volume problem in feature
+    space.
+  - Derive the SVDD and origin-separating one-class SVM duals.
+  - Prove and interpret the \(\nu\)-property for outliers and support vectors.
+  - Explain when the hypersphere and hyperplane formulations are equivalent.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Connect Gaussian one-class decisions to density level sets and identify
+    calibration limits.
 review_status: draft
 reviewers:
   technical: null
@@ -55,6 +57,10 @@ and \(C(\mu)\) denotes a set attaining the infimum. With \(\lambda\) the Lebesgu
 ::::
 
 Replacing \(P\) by the empirical distribution \(P_m^{\text{emp}}(C)=\tfrac1m\sum_i \mathbf 1_C(x_i)\) gives an estimator, but a naive one is useless: an unconstrained \(\mathcal C\) lets us wrap the region tightly around the exact training points, capturing every one while generalizing to nothing. As always, we need to restrict \(\mathcal C\), and as always the restriction will be a smoothness penalty in a kernel feature space rather than a hard limit on shape. The two algorithms of this chapter implement exactly this: they fix the fraction of training points to capture and then find the smoothest region with that property, where smoothness is measured by a support-vector regularizer. Both connect back to [[ch:kernel-mean-embeddings|support estimation via embeddings]], and both, as we will see, are unlabeled cousins of the classifiers from the previous chapters.
+
+The mass target is easiest to understand as a moving density level. In the illustration, increasing \(\nu\) permits the estimator to reject more observations, so the accepted region contracts around the two dense modes. The contour is drawn from a deterministic Gaussian kernel estimate to expose the level-set geometry; the optimization below learns the corresponding level through support-vector constraints rather than fixing it by hand.
+
+<figure class="viz" data-figure="oneclass-boundary" data-alt="Two panels show the same two-cluster sample and kernel density contours. At nu 0.1 the broad contour accepts 90 percent of points; at nu 0.3 a tighter, indented contour accepts about 70 percent and marks more points as rejected."><figcaption>The parameter \(\nu\) is a mass budget, not a geometric radius. Allowing a larger rejected fraction raises the learned level and contracts the normal region toward dense structure; it does not guarantee a particular Euclidean shape.</figcaption></figure>
 
 ## The smallest enclosing hypersphere {#smallest-enclosing-hypersphere}
 
@@ -396,11 +402,11 @@ On real data the theory bears out. Schölkopf, Platt, Shawe-Taylor, Smola and Wi
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **One-Class SVMs and Novelty Detection**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Without labeled anomalies, kernel and bandwidth selection cannot be justified by ordinary classification accuracy; use held-out normal data, controlled contaminations, or domain constraints and say which signal selected the model. The \(\nu\)-property concerns empirical outliers and support vectors, not a calibrated probability that the next point is abnormal. The SVDD and origin-separating formulations coincide only when \(k(x,x)\) is constant. Monitor that diagonal, the support-vector fraction, and score drift before interpreting a boundary geometrically.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in One-Class SVMs and Novelty Detection; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@scholkopf2001oneclass], [@tax2004], [@scholkopf2000nu].
+One-class learning estimates a high-mass region rather than a second class. SVDD encloses feature vectors with a soft ball; the one-class SVM separates them from the origin; and a translation-invariant kernel makes the two duals and their boundaries coincide. The parameter \(\nu\) upper-bounds the empirical outlier fraction and lower-bounds the support-vector fraction under the stated feasibility conditions, but it is not a guaranteed future false-alarm rate. For the original formulations and the \(\nu\)-property, see [@scholkopf2001oneclass; @scholkopf2000nu]; [@tax2004] develops the data-description view.
 
 ## Exercises {#exercises}
 

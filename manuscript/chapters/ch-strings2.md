@@ -8,13 +8,11 @@ tier: advanced
 prerequisites:
   - string-kernels
 objectives:
-  - >-
-    Explain the central definitions and claims in Efficient String and Tree
-    Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
-  - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+  - 'Derive prefix recurrences for all-, fixed-, and gap-weighted subsequences.'
+  - Fill and verify a dynamic-programming table by hand.
+  - 'State time and memory costs, including when rolling rows are valid.'
+  - Choose between dynamic programs and trie-based counting.
+  - Recognize string and tree kernels as convolution-kernel instances.
 review_status: draft
 reviewers:
   technical: null
@@ -182,7 +180,7 @@ $$\mathrm{DP}_q(k,l)=\kappa^S_{q-1}(k,l)+\lambda\,\mathrm{DP}_q(k-1,l)+\lambda\,
 
 <figure class="viz" data-widget="dp-fill">
 
-<figcaption>The table is the chapter's exact recursion filling in evaluation order for any two words you type: matched letters seed \(\mathrm{DPS}\) entries in accent, and each cell combines its left, upper, and diagonal neighbors with the stated \(\lambda\) weights. Setting cat against car with \(\lambda=0.5\) and \(p=2\) reproduces the worked example: \(K_2=\lambda^4=0.0625\), normalized \(0.4444\).</figcaption>
+<figcaption>The table follows the exact evaluation order of the recurrence: matched letters seed the accented suffix entries, and each new cell combines its left, upper, and diagonal neighbors with the stated \(\lambda\) weights. For “cat” and “car” with \(\lambda=0.5\) and \(p=2\), the corner calculation gives \(K_2=\lambda^4=0.0625\), or \(0.4444\) after normalization; the web version permits other word pairs.</figcaption>
 </figure>
 
 Each level fills one \(|s|\times|t|\) table with constant work per cell, so the kernel costs \(O(p\,|s|\,|t|)\) time, the headline result of the section. The subtracted term \(-\lambda^2\mathrm{DP}_q(k-1,l-1)\) is pure inclusion-exclusion: the two shifted tables \(\lambda\,\mathrm{DP}_q(k-1,l)\) and \(\lambda\,\mathrm{DP}_q(k,l-1)\) both include the block up to \((k-1,l-1)\), so it is counted twice and must be removed once. We fill the tables by hand for a two-letter difference.
@@ -345,11 +343,11 @@ The feature spaces of string and tree kernels are astronomically large, but thei
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Efficient String and Tree Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Most implementation errors live on the table boundary: define the empty-prefix values before translating a recurrence into code, and verify a tiny pair by explicit enumeration. Rolling rows reduce memory only when the next level no longer needs overwritten entries. For long strings or small \(\lambda\), rescale tables or work in a stable numeric representation rather than accepting underflow as zero similarity. Normalize only after computing nonzero self-kernels. Trie bounds depend on the populated alphabet and mismatch neighborhood, while tree-kernel costs depend on branching and child ordering, so report those structural quantities rather than quoting time in \(n\) alone.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Efficient String and Tree Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@watkins2000], [@lodhi2002], [@shawe2004].
+The reusable idea is not one recurrence but the state-design pattern: identify the smallest prefix or subtree summary from which one more symbol can be appended, then prove that the table counts exactly the intended decompositions. Dynamic programming is the right tool for gapped and recursively composed features; tries win for contiguous sparse dictionaries. The subsequence recurrences originate with [@lodhi2002], while [@watkins2000] and [@shawe2004] place them in the broader convolution-kernel construction used again for graphs and latent models.
 
 ## Exercises {#exercises}
 

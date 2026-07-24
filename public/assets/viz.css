@@ -1,55 +1,126 @@
-/* Interactive figures for the book. One mounted widget per <figure class="viz">. */
+/* Kernel-geometry figure system.
+ *
+ * The asymmetric accent rail is the signature: ordinary observations sit in
+ * the quiet ink frame; the kernel-induced view enters through the colored
+ * edge. Static Python plates and interactive widgets share this shell.
+ */
 .viz {
-  margin: 1.8em 0;
+  position: relative;
+  margin: 2.15em 0 2.35em;
   border: 1px solid var(--rule);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--paper) 94%, var(--muted) 6%);
-  padding: 14px 14px 12px;
+  border-left: 3px solid var(--accent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--paper) 97%, var(--muted) 3%);
+  padding: clamp(12px, 2.5vw, 20px);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--ink) 7%, transparent);
 }
 .viz .viz-title {
+  margin: 0 0 11px;
   font-family: ui-sans-serif, system-ui, sans-serif;
-  font-size: .82rem; font-weight: 700; letter-spacing: .03em;
-  color: var(--accent); margin-bottom: 8px;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
-.viz canvas { width: 100%; display: block; border-radius: 6px; touch-action: none; cursor: default; }
+.viz canvas { width: 100%; display: block; border-radius: 2px; touch-action: none; cursor: default; }
 .viz canvas:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.viz-static { min-height: 180px; display: grid; place-items: center; border-radius: 6px; background: var(--card); }
+.viz-static {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--paper);
+}
 .viz-static svg { width: min(100%, 520px); height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; }
 .viz-static svg polyline { stroke: var(--accent); stroke-width: 2.2; }
 .viz-static svg circle { fill: var(--accent); stroke: none; }
-.viz[data-mounted] > .viz-static, .viz[data-mounted] > .viz-fallback { display: none; }
+.viz-static .viz-plate, .viz-plate {
+  display: block;
+  width: min(100%, 760px);
+  height: auto;
+  max-height: 72vh;
+  object-fit: contain;
+}
+.viz--static .viz-static { min-height: 0; }
+.viz[data-mounted] > .viz-static { display: none; }
 .viz .viz-controls {
   display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
-  margin: 10px 0 2px;
+  margin: 14px 0 2px;
+  padding: 11px 0 0;
+  border-top: 1px solid var(--rule);
   font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; color: var(--muted);
 }
 .viz .viz-controls label { display: inline-flex; align-items: center; gap: 6px; }
-.viz .viz-controls input[type=range] { accent-color: var(--accent); width: 130px; vertical-align: middle; }
+.viz .viz-controls input[type=range] {
+  accent-color: var(--accent);
+  width: clamp(130px, 20vw, 190px);
+  min-height: 30px;
+  vertical-align: middle;
+}
 .viz .viz-controls select, .viz .viz-controls button {
+  min-height: 34px;
   font-family: inherit; font-size: 12px; color: var(--ink);
-  background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 4px 8px; cursor: pointer;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; padding: 6px 10px; cursor: pointer;
 }
 .viz .viz-controls button:hover, .viz .viz-controls select:hover { border-color: var(--accent); }
 .viz .viz-controls :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-
-@media (forced-colors: active) {
-  .viz, .viz-static, .viz .viz-controls button, .viz .viz-controls select { border: 1px solid CanvasText; }
-  .viz-static svg, .viz-static svg polyline { stroke: CanvasText; }
-  .viz-static svg circle { fill: CanvasText; }
-}
-
-@media print {
-  .viz > div:not(.viz-static), .viz > canvas, .viz .viz-controls, .viz .viz-readout { display: none !important; }
-  .viz > .viz-static, .viz > .viz-fallback { display: grid !important; }
-  .viz > .viz-fallback { display: block !important; }
-}
 .viz .viz-controls .val { font-variant-numeric: tabular-nums; color: var(--ink); min-width: 2.6em; display: inline-block; }
 .viz .viz-readout {
   font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: var(--muted);
   margin-top: 8px; font-variant-numeric: tabular-nums;
 }
-.viz figcaption { margin-top: 10px; font-size: .84rem; color: var(--muted); line-height: 1.5; }
+.viz figcaption {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  font-size: .84rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.viz figcaption::before {
+  content: "Figure";
+  margin-right: .55em;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.viz .viz-mode { color: var(--faint); font-size: .78rem; }
 .viz .hint { color: var(--faint); font-size: .78rem; }
+
+@media (max-width: 560px) {
+  .viz { margin-inline: -8px; padding: 11px; box-shadow: none; }
+  .viz .viz-controls { display: grid; grid-template-columns: 1fr; }
+  .viz .viz-controls label { justify-content: space-between; }
+  .viz .viz-controls input[type=range] { width: min(55vw, 210px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viz *, .viz *::before, .viz *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .viz, .viz-static, .viz .viz-controls button, .viz .viz-controls select { border: 1px solid CanvasText; }
+  .viz { border-left-width: 3px; }
+  .viz-static svg, .viz-static svg polyline { stroke: CanvasText; }
+  .viz-static svg circle { fill: CanvasText; }
+}
+
+@media print {
+  .viz { box-shadow: none; break-inside: avoid; }
+  .viz > div:not(.viz-static), .viz > canvas, .viz .viz-controls, .viz .viz-readout { display: none !important; }
+  .viz > .viz-static, .viz > .viz-fallback { display: grid !important; }
+  .viz > .viz-fallback { display: block !important; }
+}
 
 /* bibliography */
 .bib-list { list-style: none; padding: 0; }

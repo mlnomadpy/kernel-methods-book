@@ -24,6 +24,7 @@ function readJSON(p) {
 export const BOOK = readYaml("book.yml");
 export const BIB = readJSON("bibliography.web.json");
 export const GLOSSARY = readJSON("glossary.json");
+export const FIGURES = readJSON("publication/figures/registry.json").figures;
 
 export function escapeHtml(s) {
   return String(s)
@@ -112,19 +113,62 @@ const WIDGET_ALTS = {
 
 export function decorateWidgets(body) {
   let index = 0;
-  return body.replace(/<figure class="viz" data-widget="([^"]+)"([^>]*)>\s*<\/figure>/g,
-    (whole, kind, attrs) => {
+  return body.replace(/<figure class="viz" data-widget="([^"]+)"([^>]*)>([\s\S]*?)<\/figure>/g,
+    (whole, kind, attrs, inner) => {
       index += 1;
       const id = `viz-fallback-${kind}-${index}`;
       const label = WIDGET_ALTS[kind] || `Interactive ${kind.replace(/-/g, " ")} visualization.`;
-      const points = [8, 19, 13, 31, 22, 37, 28].map((y, i) => `${8 + i * 14},${42 - y * 0.7}`).join(" ");
+      const inlineCaption = inner.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/i)?.[1]?.trim();
+      const record = FIGURES[kind];
+      if (!record || record.mode !== "interactive") throw new Error(`Widget ${kind} is absent from the figure registry`);
+      const svgPath = path.join(ROOT, record.web);
+      const fallback = fs.existsSync(svgPath)
+        ? `<img class="viz-plate" src="${record.web.replace(/^public\//, "")}" alt="${escapeHtml(label)}" loading="lazy" decoding="async" />`
+        : (() => {
+            const points = [8, 19, 13, 31, 22, 37, 28]
+              .map((y, i) => `${8 + i * 14},${42 - y * 0.7}`)
+              .join(" ");
+            return `<svg viewBox="0 0 100 48" aria-hidden="true" focusable="false"><path d="M7 4v38h89"/>` +
+              `<polyline points="${points}"/><circle cx="22" cy="29" r="2"/><circle cx="64" cy="20" r="2"/></svg>`;
+          })();
       return `<figure class="viz" data-widget="${kind}"${attrs} aria-describedby="${id}">` +
-        `<div class="viz-static" role="img" aria-label="${escapeHtml(label)}">` +
-        `<svg viewBox="0 0 100 48" aria-hidden="true" focusable="false"><path d="M7 4v38h89"/>` +
-        `<polyline points="${points}"/><circle cx="22" cy="29" r="2"/><circle cx="64" cy="20" r="2"/></svg></div>` +
-        `<figcaption class="viz-fallback" id="${id}"><strong>Static alternative.</strong> ${escapeHtml(label)} ` +
-        `The web control exposes the current numerical state in a live text readout.</figcaption></figure>`;
+        `<div class="viz-static">${fallback}</div>` +
+        `<figcaption class="viz-fallback" id="${id}">${inlineCaption || escapeHtml(label)} ` +
+        `<span class="viz-mode">Interactive controls enhance this static plate.</span></figcaption></figure>`;
     });
+}
+
+/** Render a deterministic Python-generated plate without requiring JavaScript.
+ *
+ * Canonical manuscript syntax:
+ *   <figure class="viz" data-figure="power-function" data-alt="...">
+ *     <figcaption>Interpretive caption.</figcaption>
+ *   </figure>
+ *
+ * The matching SVG is generated into public/figures by tools/figures; the PDF
+ * build resolves the same id to publication/figures/<id>.pdf.
+ */
+export function decorateStaticFigures(body) {
+  return body.replace(
+    /<figure class="viz" data-figure="([a-z0-9-]+)"([^>]*)>([\s\S]*?)<\/figure>/g,
+    (whole, kind, attrs, inner) => {
+      const alt = attrs.match(/\bdata-alt="([^"]+)"/)?.[1];
+      const caption = inner.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/i)?.[1]?.trim();
+      if (!alt || !caption) {
+        throw new Error(`Static figure ${kind} requires data-alt and figcaption`);
+      }
+      const record = FIGURES[kind];
+      if (!record || record.mode !== "static") throw new Error(`Static figure ${kind} is absent from the figure registry`);
+      const svgPath = path.join(ROOT, record.web);
+      if (!fs.existsSync(svgPath)) {
+        throw new Error(`Static figure ${kind} is missing public/figures/${kind}.svg`);
+      }
+      return `<figure class="viz viz--static" data-figure="${kind}">` +
+        `<div class="viz-static"><img class="viz-plate" src="${record.web.replace(/^public\//, "")}" ` +
+        `alt="${escapeHtml(alt)}" loading="lazy" decoding="async" /></div>` +
+        `<figcaption>${caption}</figcaption></figure>`;
+    },
+  );
 }
 
 export function chaptersFlat() {
@@ -510,7 +554,9 @@ export function buildBook() {
     if (canonical.metadata.slug !== ch.slug || canonical.metadata.title !== ch.title) {
       throw new Error(`Canonical metadata mismatch for ${ch.src}`);
     }
-    let body = decorateWidgets(renderCanonicalMarkdown(canonical.markdown));
+    let body = renderCanonicalMarkdown(canonical.markdown);
+    body = decorateWidgets(body);
+    body = decorateStaticFigures(body);
     const isPrelim = ch.src === "ch-prelim";
     const chLabel = isPrelim ? "P" : String(i);
 
@@ -560,7 +606,10 @@ export function buildBook() {
     body += chapterRefsHtml(chkeys);
     body = decorateScrollableRegions(renderMath(body));
 
-    chapters.push({ ...ch, i, isPrelim, body, onpage, sections });
+    const widgets = [...new Set(
+      [...body.matchAll(/data-widget="([a-z0-9-]+)"/g)].map((match) => match[1]),
+    )];
+    chapters.push({ ...ch, i, isPrelim, body, onpage, sections, widgets });
   });
 
   // prev/next cards

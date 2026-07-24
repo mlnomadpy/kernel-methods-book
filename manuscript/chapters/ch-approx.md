@@ -179,6 +179,10 @@ The error is the inner product of \(f\) with the representer \(r_x = k(\cdot, x)
 
 The closed form deserves a second look, because we have met it before. It is precisely the posterior variance of a noise-free Gaussian process with covariance \(k\) conditioned on observations at \(X\), as derived in [[ch:gaussian-processes-and-rvm]]. The identical formula carries two meanings: for the Bayesian it is an average-case error bar under a prior, and for the approximation theorist it is a worst-case error bar over the unit ball of the native space [@rasmussen2006]. The same object, integrated over the domain, became the worst-case quadrature error of [[ch:kernel-quadrature-and-herding]]; here we meet its pointwise ancestor. We return to this two-way reading at the end of the chapter.
 
+The pointwise shape matters as much as the formula. Uncertainty vanishes at every interpolation site, grows in the gaps between sites, and becomes largest where the design leaves the domain least covered. For the minimum kernel this geometry can be computed exactly, so the interpolant and its sharp native-space envelope can be placed on the same axes.
+
+<figure class="viz" data-figure="power-function" data-alt="A piecewise-linear minimum-kernel interpolant passes through three observations of a quadratic target. A shaded error envelope has zero width at each interpolation site and widens between sites in proportion to the power function."><figcaption>The power function is a geometric error bar: it vanishes where data pin down the interpolant and widens in poorly covered gaps, simultaneously representing worst-case native-space error and noise-free Gaussian-process uncertainty.</figcaption></figure>
+
 ## Fill distance, separation radius, and convergence rates {#approx-fill-distance}
 
 The power function converts geometry into error, so the next step is to summarize the geometry of \(X\) in two numbers.

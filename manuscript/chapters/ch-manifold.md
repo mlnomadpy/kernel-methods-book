@@ -9,12 +9,17 @@ prerequisites:
   - kernel-clustering
   - kernels-and-rkhs
 objectives:
-  - Explain the manifold assumption and when unlabeled data can help.
-  - Derive graph-Laplacian and ambient RKHS penalties.
   - >-
-    Distinguish transductive label propagation from inductive manifold
+    State the extra assumption that makes unlabeled inputs informative about
+    labels.
+  - Derive Laplacian energy and harmonic extension on a finite graph.
+  - >-
+    Separate transductive label propagation from inductive manifold
     regularization.
-  - 'Assess consistency, scaling, and out-of-sample limitations.'
+  - 'Diagnose connectivity, density bias, graph scale, and out-of-sample failure.'
+  - >-
+    Decide whether unlabeled data helped by a supervised ablation and
+    graph-sensitivity study.
 review_status: draft
 reviewers:
   technical: null
@@ -59,6 +64,8 @@ For symmetric nonnegative \(W\), \(L\) is positive semidefinite and \(f^\top Lf=
 :::
 
 Label propagation minimizes this energy while fixing or penalizing the labeled values. Its output is naturally transductive: it labels the vertices already in the graph. Adding a new point requires rebuilding or extending the graph.
+
+<figure class="viz" data-figure="manifold-graph-energy" data-alt="Two moon-shaped point clouds are connected by a sparse neighborhood graph. Four square vertices carry labels in the first panel; the second panel shows harmonic scores propagated along each moon, with blue positive values on the upper arc and red negative values on the lower arc."><figcaption>Graph smoothness propagates labels along well-connected paths rather than across empty Euclidean space. The result is useful only because the labels agree with the graph: changing the labeling rule while keeping the same unlabeled geometry would turn the same propagation mechanism into systematic bias.</figcaption></figure>
 
 ## Manifold regularization {#manifold-objective}
 

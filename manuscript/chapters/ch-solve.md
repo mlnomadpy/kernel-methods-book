@@ -8,13 +8,15 @@ tier: advanced
 prerequisites:
   - ranking-and-ordinal-regression
 objectives:
+  - Turn the SVM KKT conditions into a numerical stopping test.
+  - Derive the feasible interval and analytic two-variable SMO update.
   - >-
-    Explain the central definitions and claims in Solving the SVM: Decomposition
-    and SMO.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Select a working set from KKT violations and explain why one variable cannot
+    move alone.
+  - Recover the bias and handle degenerate or nearly zero curvature safely.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Compare decomposition, SMO, shrinking, caching, and interior-point
+    tradeoffs.
 review_status: draft
 reviewers:
   technical: null
@@ -216,6 +218,10 @@ If \(\alpha_i^{\text{new}}\) is non-bound (strictly inside \((0,C)\)) then \(b_1
 
 The full SMO solver wraps this step in the selection rule of the previous section: an outer loop sweeps the data for a KKT-violating point \(i\), and an inner heuristic chooses the partner \(j\) that maximizes \(|E_i-E_j|\), the numerator of the step, so that the pair moves as far as possible. Platt's second-choice hierarchy tries the non-bound points first, then all points, before giving up on \(i\). Because each step touches only two rows of the kernel, SMO never stores the Gram matrix, and its memory footprint is linear in \(n\).
 
+The geometry below compresses the derivation. The equality constraint cuts the two-dimensional box down to a line segment; after substitution, the dual objective along that segment is a concave parabola. An SMO step finds the vertex and clips it to the segment endpoint when the unconstrained optimum lies outside.
+
+<figure class="viz" data-figure="smo-working-set" data-alt="The left panel shows a diagonal feasible line inside the square box for two dual coefficients, with an arrow from the old pair to the clipped endpoint. The right panel shows the concave dual objective along that line, whose unconstrained peak lies beyond the allowed interval."><figcaption>An SMO update is an exact one-dimensional optimization: the equality constraint supplies the feasible line, the box supplies its endpoints, and concavity makes clipping the parabola's vertex the constrained maximizer.</figcaption></figure>
+
 ::::: {.example #example-9-2}
 [Example (a full analytic SMO step)]{.box-title}
 
@@ -257,18 +263,18 @@ The same machinery solves the [[ch:support-vector-regression|support vector regr
 
 Within each combination the subproblem is again a one-dimensional concave quadratic in the difference \(\delta=(\alpha_i-\alpha_i^\ast)-(\alpha_i^{\text{old}}-\alpha_i^{\ast,\text{old}})\), and its curvature is the same \(\eta=K_{ii}+K_{jj}-2K_{ij}\) as in classification. The unconstrained step moves \(\delta\) proportionally to the difference of the regression residuals \((f(x_i)-y_i)-(f(x_j)-y_j)\), which plays the role that \(E_i-E_j\) played for classification, and the result is clipped to a box \([L,H]\) obtained from the constraints on all four multipliers. The threshold \(b\) is recovered from the non-bound multipliers exactly as before, using the condition \(f(x_i)-y_i=\pm\varepsilon\) that holds at the edges of the tube. The pair selection again maximizes the residual discrepancy, so that the chosen patterns permit the largest step. The upshot is that regression reuses the classification step almost verbatim, at the cost of iterating over the handful of sign cases.
 
-## Summary {#summary}
+## Operational view {#summary}
 
 Solving the SVM is an exercise in respecting the \(n\times n\) Gram matrix, which is too large to store or factorize once \(n\) passes a few thousand. The KKT conditions supply an exact, \(O(n)\) stopping test and, through the KKT gap, a score for how far each variable is from optimality. Decomposition exploits the sparsity of the solution by optimizing a small working set at a time and swapping in the worst KKT violators, and its extreme case, sequential minimal optimization, shrinks the working set to the two variables that the equality constraint makes the minimum useful size. That minimality is the payoff: the two-variable subproblem is a clipped parabola with a closed-form maximizer, so SMO needs no inner solver and only linear memory. Caching the rows of active support vectors and shrinking away the bound variables make the sweeps cheap, while interior-point methods offer high-accuracy solutions when the matrix does fit. The regression variant carries four multipliers per pair but reuses the same analytic step. Between these tools and the low-rank approximations of the next scaling route, the convex program that defines the support vector machine becomes solvable at the scale real data demand; the [[ch:online-kernel-learning|online kernel methods]] push the same ideas to the streaming setting.
 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Solving the SVM: Decomposition and SMO**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Do not stop because successive coefficients barely move; stop when the global KKT violation or duality gap is below a declared tolerance. When \(\eta\) is zero or numerically tiny, the analytic division is unsafe, so compare the objective at the feasible endpoints. Shrinking is provisional: restore the full active set and recheck every KKT condition before declaring convergence. Report cache size and hit rate, kernel-evaluation count, objective progress, and support-vector count, since wall time alone hides why one working-set rule wins.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Solving the SVM: Decomposition and SMO; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@platt1998], [@joachims1999], [@osuna1997].
+An SVM solver succeeds by turning optimality conditions into local work. KKT residuals identify a violating pair, the equality constraint reduces that pair to a line segment, and SMO maximizes the resulting concave quadratic exactly before refreshing the bias. Row caching and shrinking reduce kernel work, but the solver must still report its KKT tolerance, objective progress, cache policy, and behavior when \(\eta\) is tiny. [@platt1998] gives the original SMO construction, [@joachims1999] the large-scale decomposition perspective, and [@osuna1997] the theorem that justifies decomposition.
 
 ## Exercises {#exercises}
 

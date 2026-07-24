@@ -8,11 +8,21 @@ tier: advanced
 prerequisites:
   - kernel-hypothesis-testing
 objectives:
-  - Explain the central definitions and claims in Optimal Transport and Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Formulate Monge and Kantorovich transport and explain why couplings repair
+    mass splitting.
+  - >-
+    Derive weak duality and read \(W_1\) as an integral probability metric over
+    1-Lipschitz functions.
+  - >-
+    Compute one-dimensional Wasserstein distances by sorting and contrast them
+    with kernel discrepancies.
+  - >-
+    Implement Sinkhorn scaling with an explicit marginal-residual stopping rule
+    and diagnose small-\(\varepsilon\) instability.
+  - >-
+    Choose among MMD, optimal transport, and Sinkhorn divergence by balancing
+    geometry, sample complexity, and computation.
 review_status: draft
 reviewers:
   technical: null
@@ -173,7 +183,7 @@ ground cost \(c(x,y)=|x-y|\) for \(W_1\) and \(|x-y|^2\) for \(W_2\).
 
 ## Sample complexity: the price of geometry {#sample-complexity}
 
-Geometry-awareness is not free. The cleanest way to see the cost is to ask how fast each distance, estimated from \(n\) samples, converges to its population value, and the answer separates the two IPMs sharply. The MMD is estimated by plugging empirical measures into its closed form; because the estimator is essentially an average of bounded kernel evaluations, its error concentrates at the parametric rate
+Geometry-awareness is not free. The cleanest way to see the cost is to ask how fast each distance, estimated from \(n\) samples, converges to its population value, and the answer separates the two IPMs sharply. For a bounded kernel, the MMD is estimated by plugging empirical measures into its closed form; because the estimator is essentially an average of bounded kernel evaluations, its error concentrates at the parametric rate
 
 $$\bigl|\widehat{\mathrm{MMD}}-\mathrm{MMD}\bigr|=O_P\!\bigl(n^{-1/2}\bigr),$$
 
@@ -251,6 +261,8 @@ The fixed-point equations *are* the algorithm: hold \(v\) and set \(u=a\oslash(K
 
 <figcaption>The heatmap is the entropic plan \(\pi=\operatorname{diag}(u)\,K\,\operatorname{diag}(v)\) under the algorithm exactly as stated, one full update \(u\leftarrow a\oslash(Kv)\), \(v\leftarrow b\oslash(K^\top u)\) per tick, transporting a two-bump source \(a\) (bars, left) to a wide bump \(b\) (bars, bottom) on \(28\) grid points with cost \(C_{ij}=(x_i-y_j)^2\). The readout is the exact row-marginal violation \(\|\pi\mathbf 1-a\|_1\), which falls monotonically until it crosses the stopping threshold \(10^{-6}\) and the iteration halts with the converged cost \(\langle C,\pi\rangle\); the dark ticks on the left bars are the current row sums \(\pi\mathbf 1\) closing onto \(a\). Lower \(\varepsilon\) and the plan sharpens toward the monotone optimal map while the iteration count multiplies; raise it and the plan blurs toward the independent coupling \(ab^\top\).</figcaption>
 </figure>
+
+The teaching question in the plate is not merely whether the residual falls. It is what the regularizer buys: increasing \(\varepsilon\) makes the Gibbs matrix easier to scale but spreads each shipment, while decreasing it recovers sharper geometry at the price of slower convergence and eventual underflow in the direct exponential representation. Production solvers therefore use log-domain updates when \(C/\varepsilon\) is large and report both row and column residuals.
 
 :::::: {.example #example-31-2}
 [Example (Sinkhorn iterations on a tiny cost matrix)]{.box-title}
@@ -335,11 +347,11 @@ Optimal transport measures the least work to reshape one distribution into anoth
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Optimal Transport and Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Optimal Transport and Kernels**, specify the ground cost, its units, and the moment assumptions that make the chosen Wasserstein distance finite. Do not compare a regularized transport cost with an unregularized one without naming \(\varepsilon\), and do not treat \(\mathrm{OT}_\varepsilon(P,P)\) as zero; use the debiased Sinkhorn divergence when identity of indiscernibles matters. Numerically, report marginal residuals, iteration cap, precision, and whether updates ran in the log domain. Statistically, remember that an interpretable ground geometry does not remove the high-dimensional empirical curse.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Optimal Transport and Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@kantorovich1942], [@villani2009], [@sejdinovic2013].
+Kantorovich [@kantorovich1942] introduced the coupling relaxation, and Villani [@villani2009] develops its modern geometry and duality. The comparison with energy distance and MMD is made precise by Sejdinovic et al. [@sejdinovic2013]. The practical decision is now explicit: use transport when movement in the ground space is the estimand, MMD when stable high-dimensional estimation is primary, and Sinkhorn divergence when a controlled compromise is preferable to either endpoint.
 
 ## Exercises {#exercises}
 

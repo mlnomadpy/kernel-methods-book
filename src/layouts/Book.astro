@@ -1,7 +1,23 @@
 ---
 // The shared page chrome: topbar, sidebar TOC, search overlay, KaTeX, fonts.
 // All URLs are relative so the site can be served from any prefix.
-const { title, desc = "", toc, onpage = "", prevHref = "", nextHref = "" } = Astro.props;
+const {
+  title,
+  desc = "",
+  toc,
+  onpage = "",
+  prevHref = "",
+  nextHref = "",
+  widgets = [],
+} = Astro.props;
+const coreWidgets = new Set([
+  "kernel-lab", "feature-lift", "gram-heatmap", "rff-converge",
+  "svm-margin", "mmd-twosample",
+]);
+const widgetModules = [...new Set(widgets)]
+  .filter((widget) => !coreWidgets.has(widget))
+  .map((widget) => `assets/viz-${widget}.js`);
+const hasWidgets = widgets.length > 0;
 const author = {
   name: "Taha Bouhsine",
   url: "https://www.tahabouhsine.com",
@@ -97,26 +113,9 @@ const structuredData = JSON.stringify({
     <button type="button" class="backtop" id="backtop" aria-label="Back to top">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-7 7 7-7 7 7"></path></svg>
     </button>
-    <script is:inline defer src="assets/smo.js"></script>
-    <script is:inline defer src="assets/viz.js"></script>
-    <script is:inline defer src="assets/viz-svgd-flow.js"></script>
-    <script is:inline defer src="assets/viz-sinkhorn-plan.js"></script>
-    <script is:inline defer src="assets/viz-bo-loop.js"></script>
-    <script is:inline defer src="assets/viz-permutation-null.js"></script>
-    <script is:inline defer src="assets/viz-sig-draw.js"></script>
-    <script is:inline defer src="assets/viz-wl-refine.js"></script>
-    <script is:inline defer src="assets/viz-heat-graph.js"></script>
-    <script is:inline defer src="assets/viz-spectrum-surgery.js"></script>
-    <script is:inline defer src="assets/viz-herding-greedy.js"></script>
-    <script is:inline defer src="assets/viz-cme-explore.js"></script>
-    <script is:inline defer src="assets/viz-dp-fill.js"></script>
-    <script is:inline defer src="assets/viz-conformal-coverage.js"></script>
-    <script is:inline defer src="assets/viz-influence-glow.js"></script>
-    <script is:inline defer src="assets/viz-drift-mmd.js"></script>
-    <script is:inline defer src="assets/viz-active-variance.js"></script>
-    <script is:inline defer src="assets/viz-quasiperiodic-gp.js"></script>
-    <script is:inline defer src="assets/viz-matched-filter.js"></script>
-    <script is:inline defer src="assets/viz-onthefly-mlip.js"></script>
+    {widgets.includes("svm-margin") && <script is:inline defer src="assets/smo.js"></script>}
+    {hasWidgets && <script is:inline defer src="assets/viz.js"></script>}
+    {widgetModules.map((src) => <script is:inline defer src={src}></script>)}
     <script is:inline defer src="assets/nav.js"></script>
   </body>
 </html>

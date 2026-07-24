@@ -74,6 +74,8 @@ A transition model can have small held-out one-step error while its simulated tr
 **Verification artifact.** checks/example-ch-dynamics-example-dynamics-rollout.json records the example source hash and verification scope.
 :::
 
+<figure class="viz" data-figure="rollout-error" data-alt="The first panel shows true and learned trajectories that begin together but slowly separate over forty rollout steps. The second panel shows absolute state error rising far above the small one-step error marked by a horizontal reference line."><figcaption>A one-step error is repeatedly fed back as a new input, so rollout error measures a different object from held-out transition error. Here a one-percent error in the growth factor looks negligible at step one yet becomes more than fifteen times larger over the horizon.</figcaption></figure>
+
 For control, posterior variance is not a safety certificate. It measures uncertainty under the GP model and approximation. Safe deployment additionally requires constraint models, conservative reachable sets, fallback actions, and tests under model misspecification.
 
 ## Koopman and transfer operators {#koopman-transfer}

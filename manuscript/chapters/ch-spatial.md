@@ -14,14 +14,12 @@ objectives:
     Distinguish covariance, correlation, and variogram descriptions of spatial
     dependence.
   - >-
-    Construct anisotropic, nonstationary, and space-time kernels without losing
-    positive definiteness.
+    Derive ordinary and universal kriging with the correct unbiasedness
+    constraints.
   - >-
-    Derive ordinary and universal kriging as Gaussian-process prediction with an
-    explicit trend space.
-  - >-
-    Explain the Matérn SPDE connection and the computational value of sparse
-    precision matrices.
+    Construct anisotropic, nonstationary, and space-time covariances without
+    losing validity.
+  - Explain how the Matérn SPDE trades dense covariance for sparse precision.
   - Design validation that respects spatial and temporal dependence.
 review_status: draft
 reviewers:
@@ -66,7 +64,7 @@ Variograms remove an unknown constant mean through increments and can remain mea
 
 ## Kriging as constrained kernel prediction {#kriging}
 
-With a covariance in hand, prediction at an unmonitored site reduces to a question of weights: how much should each station's reading count, given that close stations echo one another while remote ones speak almost independently? Suppose \(y_i=Z(s_i)+\varepsilon_i\) with independent noise variance \(\tau^2\). A linear predictor at \(s_0\) has the form \(\widehat Z(s_0)=w^\top y\). Under a known constant mean, ordinary kriging minimizes prediction variance subject to \(1^\top w=1\).
+With a covariance in hand, prediction at an unmonitored site reduces to a question of weights: how much should each station's reading count, given that close stations echo one another while remote ones speak almost independently? Suppose \(y_i=Z(s_i)+\varepsilon_i\) with independent noise variance \(\tau^2\). A linear predictor at \(s_0\) has the form \(\widehat Z(s_0)=w^\top y\). With an unknown constant mean, ordinary kriging minimizes prediction variance subject to \(1^\top w=1\); with a known mean, simple kriging first subtracts it and needs no such constraint.
 
 :::: {.theorem #thm-ordinary-kriging}
 [Theorem (ordinary kriging system)]{.box-title}
@@ -106,6 +104,8 @@ where \(A\) rotates and rescales directions. If \(c(r)\) is a valid isotropic co
 Nonstationary models may use spatially varying length scales, local mixtures, deformation maps, or process convolutions. A deformation \(u:\mathcal D\to\mathbb R^p\) gives \(C(s,t)=c\{u(s)-u(t)\}\), which is valid by composition. It can nevertheless fold distant locations together or become weakly identifiable. Maps and local range estimates should be inspected directly.
 
 Compactly supported kernels from approximation theory create sparse covariance matrices when observation pairs beyond a range have zero covariance. Sparsity is valuable, but a hard support radius is a scientific assumption. Tapering an existing covariance alters both prediction and uncertainty and needs sensitivity analysis [@matern1960; @stein1999].
+
+<figure class="viz" data-figure="anisotropic-covariance" data-alt="Three contour maps show covariance around a marked location. Circular contours represent a short isotropic range, elongated contours represent directional anisotropy, and curved asymmetric contours around an off-center location represent a location-dependent range."><figcaption>Range changes the size of a correlation neighborhood, anisotropy changes its direction, and nonstationarity lets that neighborhood change with location. Each is a different scientific claim, so a visually plausible contour is not enough: the construction must preserve positive definiteness for every collection of sites.</figcaption></figure>
 
 ## Matérn fields and the SPDE connection {#spatial-spde}
 

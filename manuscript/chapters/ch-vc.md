@@ -8,11 +8,21 @@ tier: advanced
 prerequisites:
   - learning-theory
 objectives:
-  - Explain the central definitions and claims in VC Theory and Generalization.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Distinguish concentration for one fixed classifier from uniform convergence
+    over a data-selected class.
+  - >-
+    Compute growth functions and VC dimensions by identifying both a shattered
+    configuration and a labeling that cannot be realized.
+  - >-
+    Derive a finite-sample VC bound using symmetrization, the union bound, and
+    Sauer's lemma, and interpret why its constants are conservative.
+  - >-
+    Use structural risk minimization to balance empirical error against a
+    capacity penalty across nested classes.
+  - >-
+    Prove that a radius-margin constraint controls the VC dimension of
+    hyperplanes independently of ambient feature dimension.
 review_status: draft
 reviewers:
   technical: null
@@ -175,6 +185,10 @@ Let \(\mathcal{F}=\{x\mapsto\operatorname{sgn}(w^\top x+b)\}\) be the oriented a
 **Verification artifact.** checks/example-ch-vc-example-12-2.json records the example source hash and verification scope.
 ::::
 
+The two examples contain the definition's logical asymmetry: to prove shattering we must realize every labeling of one configuration, while to disprove it one impossible labeling suffices. The figure places those witnesses side by side. Three non-collinear points admit every halfplane labeling; for four square corners, the alternating XOR labels are the obstruction.
+
+<figure class="viz" data-figure="vc-shattering" data-alt="Two panels compare three points with several separating lines, indicating that all labelings are realizable, against four square corners with alternating positive and negative labels whose convex hulls cross, making that XOR labeling impossible for a line."><figcaption>Shattering is an all-labelings claim: a triangle passes it for halfplanes, whereas one alternating labeling of four square corners is enough to stop the VC dimension at three.</figcaption></figure>
+
 ## Deriving a VC bound {#deriving-vc-bound}
 
 We can now assemble the generalization bound. We want to control the uniform deviation \(\mathbb{P}\{\sup_{f}(R[f]-R_{\mathrm{emp}}[f])\ge\epsilon\}\), and the obstacle is that the supremum ranges over a possibly infinite class. Two devices remove the obstacle: symmetrization, which replaces the unknown true risk by a second empirical risk on a fictitious sample and thereby confines everything to \(2m\) points, and the union bound, which handles the now finitely many labelings those points admit. We follow the account of Schölkopf and Smola (2002) and Vapnik (1998), keeping to pattern recognition with \(\{\pm1\}\) outputs.
@@ -317,11 +331,15 @@ That refinement is the natural next step and the reason for the two-chapter spli
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **VC Theory and Generalization**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+- A classifier that is fixed before sampling needs pointwise concentration; a classifier selected from data needs a uniform bound over its whole class.
+- To prove a VC dimension, supply both halves: one configuration that is shattered and one reason no larger configuration can be.
+- Do not read the constants in a worst-case VC bound as a test-error forecast. The theorem certifies uniform control, often conservatively.
+- Structural risk minimization compares empirical risk plus capacity penalty on the same sample; selecting the hierarchy after inspecting test performance voids the argument.
+- For margin classes, distinguish an a priori radius-margin budget from the data-dependent margin returned by an SVM.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in VC Theory and Generalization; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@vapnikchervonenkis1971], [@vapnik1995], [@vapnik1998].
+VC theory turns the combinatorial ability to realize labelings into a uniform law of large numbers. The growth function counts those labelings, Sauer's lemma compresses that count to the VC dimension, and symmetrization plus concentration converts it into a finite-sample risk bound. Structural risk minimization then makes capacity part of model selection. For hyperplanes the ambient feature dimension can disappear when radius and margin are controlled, which explains how kernel classifiers can generalize in vast spaces without making those spaces harmless. See [@vapnikchervonenkis1971], [@vapnik1995], [@vapnik1998], and [@bartlett2002].
 
 ## Exercises {#exercises}
 

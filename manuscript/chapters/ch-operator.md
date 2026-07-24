@@ -9,14 +9,17 @@ prerequisites:
   - kernels-and-rkhs
   - kernel-tricks
 objectives:
+  - Verify operator-valued positive definiteness from the block quadratic form.
+  - Derive the vector-valued representer expansion and its block linear system.
   - >-
-    Define operator-valued positive definiteness and the associated
-    vector-valued RKHS.
-  - Derive the finite representer form and its block linear system.
-  - 'Distinguish separable, nonseparable, and structured-output constructions.'
+    Read a separable kernel's output eigendirections as channels of information
+    transfer.
   - >-
-    Diagnose computational and modeling tradeoffs in multi-output kernel
-    learning.
+    Choose among separable, nonseparable, functional-response, and
+    structured-output models.
+  - >-
+    Audit block solvers, output rank, and negative transfer against
+    independent-task baselines.
 review_status: draft
 reviewers:
   technical: null
@@ -103,6 +106,10 @@ Take \(B=\begin{psmallmatrix}1&\rho\\\rho&1\end{psmallmatrix}\) with \(|\rho|\le
 
 **Verification artifact.** checks/example-ch-operator-example-operator-two-task.json records the example source hash and verification scope.
 :::
+
+The coupling is easiest to see by asking what happens when only the first output is observed. With \(B=I\), the resulting kernel section has no second coordinate. A positive off-diagonal entry rotates that same scalar section into the second output, so borrowing strength is a geometric operation, not a vague promise of multi-task learning.
+
+<figure class="viz" data-figure="operator-valued-field" data-alt="Two panels show the vector response to a unit observation in output one. With an identity output matrix only output one responds; with positive off-diagonal coupling, output two receives a smaller dashed response with the same input shape."><figcaption>An operator-valued kernel answers two questions at once: the scalar kernel determines how influence travels across inputs, while the output matrix determines which response coordinates receive it. Off-diagonal coupling therefore creates transfer, and a wrong coupling creates negative transfer.</figcaption></figure>
 
 Separable kernels impose the same input geometry on every output eigendirection. A sum
 

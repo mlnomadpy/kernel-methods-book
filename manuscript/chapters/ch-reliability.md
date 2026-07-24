@@ -177,6 +177,11 @@ For regression, \(s(x,y)=|y-\widehat f(x)|\) gives a constant-width residual int
 
 Marginal coverage is not conditional coverage at every \(x\). A method can attain the theorem while under-covering a small subgroup and over-covering elsewhere. Report coverage and width by scientifically relevant groups, regions, and difficulty strata.
 
+<figure class="viz" data-widget="conformal-coverage">
+
+<figcaption>Split conformal turns a sorted calibration-residual list into a coverage statement. Changing the target coverage changes the finite-sample rank and therefore the interval width; reducing the calibration sample makes those available ranks coarser. The visual separates the theorem's marginal guarantee from local behavior, which must still be audited by group or difficulty.</figcaption>
+</figure>
+
 ## Conformal prediction under shift {#conformal-under-shift}
 
 Ordinary conformal validity can fail when deployment examples are not exchangeable with calibration data. Under covariate shift with known or estimated density ratios, weighted conformal quantiles can target the deployment distribution. Their reliability depends on the same overlap and conditional invariance assumptions as importance weighting.
