@@ -3,7 +3,7 @@ id: ch-ksd
 slug: kernel-stein-discrepancy
 title: Kernel Stein Discrepancy and Stein Methods
 part: IX · Kernel Probabilistic Inference
-order: 34
+order: 36
 tier: advanced
 prerequisites:
   - conditional-mean-embeddings

@@ -3,7 +3,7 @@ id: ch-operator
 slug: vector-and-operator-valued-kernels
 title: Vector- and Operator-Valued Kernels
 part: XIV · Advanced Extensions
-order: 45
+order: 47
 tier: advanced
 prerequisites:
   - kernels-and-rkhs

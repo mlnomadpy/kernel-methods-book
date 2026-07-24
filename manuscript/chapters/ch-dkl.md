@@ -3,7 +3,7 @@ id: ch-dkl
 slug: deep-kernel-learning
 title: Deep Kernel Learning
 part: XIV · Advanced Extensions
-order: 48
+order: 50
 tier: advanced
 prerequisites:
   - gaussian-processes-and-rvm

@@ -2,12 +2,58 @@
   "graduate": {
     "title": "Graduate self-study",
     "description": "The mathematical spine of the book, with the main supervised, spectral, scalable, and Bayesian methods.",
-    "chapters": ["preliminaries", "introduction", "kernels-and-rkhs", "kernel-tricks", "kernel-ridge-and-friends", "support-vector-machines", "learning-theory", "kernel-pca", "mercer-and-rates", "kernel-families", "large-scale-kernels", "gaussian-processes-and-rvm", "smoothing-splines-and-additive-rkhs", "spatial-and-spatiotemporal-kernels", "distribution-shift-robustness-and-conformal-prediction", "applications-and-practice", "vector-and-operator-valued-kernels", "semi-supervised-and-manifold-regularization", "inverse-learning-and-spectral-regularization", "scientific-computing-and-operator-learning"]
+    "chapters": [
+      "preliminaries",
+      "introduction",
+      "kernels-and-rkhs",
+      "kernel-tricks",
+      "kernel-ridge-and-friends",
+      "support-vector-machines",
+      "learning-theory",
+      "kernel-pca",
+      "mercer-and-rates",
+      "kernel-interpolation-and-approximation",
+      "kernel-families",
+      "large-scale-kernels",
+      "gaussian-processes-and-rvm",
+      "smoothing-splines-and-additive-rkhs",
+      "spatial-and-spatiotemporal-kernels",
+      "distribution-shift-robustness-and-conformal-prediction",
+      "applications-and-practice",
+      "vector-and-operator-valued-kernels",
+      "semi-supervised-and-manifold-regularization",
+      "inverse-learning-and-spectral-regularization",
+      "scientific-computing-and-operator-learning"
+    ]
   },
   "practitioner": {
     "title": "Practitioner",
     "description": "A method-first path from kernel choice and model fitting to testing, scaling, uncertainty, and applications.",
-    "chapters": ["introduction", "kernel-tricks", "kernel-ridge-and-friends", "support-vector-machines", "support-vector-regression", "one-class-and-novelty", "kernel-clustering", "kernel-families", "string-kernels", "kernels-for-text", "graph-kernels", "kernel-hypothesis-testing", "large-scale-kernels", "gaussian-processes-and-rvm", "bayesian-optimization-and-bandits", "smoothing-splines-and-additive-rkhs", "spatial-and-spatiotemporal-kernels", "distribution-shift-robustness-and-conformal-prediction", "dynamical-systems-control-and-reinforcement-learning", "scientific-computing-and-operator-learning", "applications-and-practice", "semi-supervised-and-manifold-regularization", "deep-kernel-learning"]
+    "chapters": [
+      "introduction",
+      "kernel-tricks",
+      "kernel-ridge-and-friends",
+      "support-vector-machines",
+      "support-vector-regression",
+      "one-class-and-novelty",
+      "kernel-clustering",
+      "kernel-families",
+      "string-kernels",
+      "kernels-for-text",
+      "graph-kernels",
+      "kernel-hypothesis-testing",
+      "large-scale-kernels",
+      "gaussian-processes-and-rvm",
+      "bayesian-optimization-and-bandits",
+      "smoothing-splines-and-additive-rkhs",
+      "spatial-and-spatiotemporal-kernels",
+      "distribution-shift-robustness-and-conformal-prediction",
+      "dynamical-systems-control-and-reinforcement-learning",
+      "scientific-computing-and-operator-learning",
+      "applications-and-practice",
+      "semi-supervised-and-manifold-regularization",
+      "deep-kernel-learning"
+    ]
   },
   "research": {
     "title": "Research reference",

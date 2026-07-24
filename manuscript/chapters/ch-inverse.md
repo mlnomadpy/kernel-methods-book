@@ -3,7 +3,7 @@ id: ch-inverse
 slug: inverse-learning-and-spectral-regularization
 title: Inverse Learning and Spectral Regularization
 part: XIV · Advanced Extensions
-order: 47
+order: 49
 tier: advanced
 prerequisites:
   - mercer-and-rates
@@ -28,6 +28,7 @@ bibliography:
   - rosinverse2004
   - caponnetto2007
   - raskutti2014early
+  - steinwart2012
 ---
 # Inverse Learning and Spectral Regularization
 
@@ -87,6 +88,27 @@ Larger \(r\) means the target is better aligned with stable, high-eigenvalue dir
 
 No standalone convergence rate follows from a source condition. A valid rate also needs assumptions on eigenvalue or effective-dimension decay, noise, sampling, and the rule selecting \(\lambda\) or \(t\). Statements may be upper bounds, lower bounds, or minimax equivalences, and those statuses must remain separate [@caponnetto2007].
 :::
+
+## Interpolation spaces and the source ladder {#inverse-interpolation-spaces}
+
+The source condition reads as a statement about a single target, but it secretly defines a family of function spaces, and making that family explicit is what lets the theory speak about targets the RKHS does not contain. If \(f_\star = T^r w\) for some \(w\), then \(f_\star\) belongs to the range of \(T^r\), and as \(r\) varies these ranges form a nested ladder: larger \(r\) gives a smaller, smoother class, smaller \(r\) a larger, rougher one.
+
+::: {.definition #def-inverse-power-space}
+[Definition (power spaces of the integral operator)]{.box-title}
+
+For \(\theta \ge 0\), the power space of order \(\theta\) is the range of the fractional operator power,
+
+$$
+[\mathcal{H}]^{\theta} := \operatorname{ran} T^{\theta/2}
+= \Big\{ \textstyle\sum_i a_i\, \mu_i^{\theta/2}\, \psi_i \;:\; \textstyle\sum_i a_i^2 \lt \infty \Big\},
+$$
+
+with the norm that makes \(T^{\theta/2}\) an isometry from \(L^2\) onto \([\mathcal{H}]^{\theta}\). Here \((\mu_i, \psi_i)\) is the eigensystem of \(T\) on \(L^2\).
+:::
+
+The endpoints anchor the ladder: \(\theta = 0\) recovers \(L^2\) itself, and \(\theta = 1\) recovers the RKHS \(\mathcal{H}\), because \(T^{1/2}\) is exactly the isometry between \(L^2\) and \(\mathcal{H}\) that the spectral construction of [[ch:mercer-and-rates]] exhibits. Between the endpoints, \(0 \lt \theta \lt 1\) describes targets that are rougher than any RKHS member yet not arbitrary: they lie in the real interpolation spaces between \(L^2\) and \(\mathcal{H}\), which is why the ladder is called the interpolation-space scale [@steinwart2012]. Above the RKHS, \(\theta \gt 1\) singles out the extra-smooth targets for which saturation becomes the binding constraint. In the Sobolev picture the ladder is literal: for a Matern kernel whose RKHS is a Sobolev space of smoothness \(m\), the power space \([\mathcal{H}]^{\theta}\) is a Sobolev space of smoothness \(\theta m\), so the abstract exponent \(\theta\) is ordinary differentiability measured in units of the kernel's own smoothness.
+
+The payoff is a precise language for misspecification. A rate theorem that assumes \(f_\star \in \mathcal{H}\) is the special case \(\theta = 1\); the general statements of [@caponnetto2007] and [@steinwart2012] assume only \(f_\star \in [\mathcal{H}]^{\theta}\) for some \(\theta \gt 0\) and pay for smaller \(\theta\) with slower rates, degrading continuously rather than failing outright when the model is wrong. The same exponent controls which filters can exploit the smoothness: a filter of qualification \(q\) converts source exponents up to \(\theta = 2q\) into rate improvements and wastes anything beyond. Reading the ladder alongside the effective dimension gives the complete modern rate picture: one exponent for how smooth the target is, one decay index for how big the space is, and the minimax rate a function of the pair.
 
 ## A finite spectral diagnostic {#inverse-example}
 

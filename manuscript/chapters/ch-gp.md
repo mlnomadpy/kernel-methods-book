@@ -3,7 +3,7 @@ id: ch-gp
 slug: gaussian-processes-and-rvm
 title: Gaussian Processes and the RVM
 part: XI · The Bayesian View
-order: 40
+order: 42
 tier: core
 prerequisites:
   - kernels-and-deep-learning

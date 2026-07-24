@@ -3,7 +3,7 @@ id: ch-highstakes
 slug: kernels-in-science-and-space
 title: Kernels in Science and Space
 part: XVIII · Kernels You Can Defend
-order: 56
+order: 58
 tier: advanced
 prerequisites:
   - accountable-kernels

@@ -98,11 +98,17 @@ parts:
         slug: data-visualization-and-mds
         title: Data Visualization and Kernel MDS
   - part: VI · The Geometry of the Space
-    intro: Why did any of it work? This part opens the RKHS with Mercer's theorem, reads its spectrum as a measure of smoothness, and turns eigenvalue decay into concrete rates of convergence.
+    intro: Why did any of it work? This part opens the RKHS with Mercer's theorem, reads its spectrum as a measure of smoothness, and turns eigenvalue decay into concrete rates of convergence. It then asks what the space can reach, first deterministically, through interpolation error and stability governed by the geometry of the sample, and then qualitatively, through the universality that licenses consistency and the capacity that prices it.
     chapters:
       - src: ch07
         slug: mercer-and-rates
         title: Mercer's Theorem, Spectra, and Rates
+      - src: ch-approx
+        slug: kernel-interpolation-and-approximation
+        title: Kernel Interpolation and Approximation Theory
+      - src: ch-universal
+        slug: universality-capacity-and-consistency
+        title: Universality, Capacity, and Consistency
   - part: VII · Designing Kernels for Data
     intro: "Everything so far assumed a kernel was handed to you. This part builds them: for vectors by symmetry and probability, for prior knowledge through invariance, for the structured data (sequences, text, graphs) where the kernel is the only bridge to the RKHS toolbox, for paths and time series, for curved and symmetric domains, and even for the indefinite similarities that fall outside the positive-definite world."
     chapters:

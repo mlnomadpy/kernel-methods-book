@@ -3,7 +3,7 @@ id: ch-testing
 slug: kernel-hypothesis-testing
 title: Kernel Hypothesis Testing
 part: VIII · Kernels and Distributions
-order: 30
+order: 32
 tier: practitioner
 prerequisites:
   - kernel-mean-embeddings

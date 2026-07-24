@@ -3,7 +3,7 @@ id: ch-ot
 slug: optimal-transport-and-kernels
 title: Optimal Transport and Kernels
 part: VIII · Kernels and Distributions
-order: 31
+order: 33
 tier: advanced
 prerequisites:
   - kernel-hypothesis-testing

@@ -3,7 +3,7 @@ id: ch-frontier
 slug: the-frontier
 title: 'The Frontier: Feature Learning and Beyond'
 part: XII · Kernels Now
-order: 43
+order: 45
 tier: advanced
 prerequisites:
   - kernels-now

@@ -3,7 +3,7 @@ id: ch-quad
 slug: kernel-quadrature-and-herding
 title: Kernel Quadrature and Herding
 part: VIII · Kernels and Distributions
-order: 32
+order: 34
 tier: advanced
 prerequisites:
   - optimal-transport-and-kernels

@@ -3,7 +3,7 @@ id: ch-krein
 slug: indefinite-and-krein-kernels
 title: Indefinite and Krein-Space Kernels
 part: VII · Designing Kernels for Data
-order: 28
+order: 30
 tier: advanced
 prerequisites:
   - geometric-and-equivariant-kernels

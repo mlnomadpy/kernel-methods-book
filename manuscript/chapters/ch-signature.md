@@ -3,7 +3,7 @@ id: ch-signature
 slug: signature-and-time-series-kernels
 title: Signature and Sequence-Path Kernels
 part: VII · Designing Kernels for Data
-order: 26
+order: 28
 tier: advanced
 prerequisites:
   - generative-and-marginalization-kernels

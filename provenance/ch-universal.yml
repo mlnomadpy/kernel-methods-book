@@ -1,0 +1,303 @@
+chapter: ch-universal
+slug: universality-capacity-and-consistency
+title: Universality, Capacity, and Consistency
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - steinwart2001
+  - steinwart2008
+  - steinwart2009rates
+  - micchelli2006
+  - sriperumbudur2011
+  - sriperumbudur2010
+  - widom1963
+  - mercer1909
+  - caponnetto2007
+  - devroye1996
+  - vapnik1998
+  - scholkopf2002
+sections:
+  - id: univ-approximation-question
+    title: The approximation question learning cannot skip
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2008
+    locators:
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-approximation-question
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-universal-kernels
+    title: Universal kernels
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2001
+      - micchelli2006
+    locators:
+      - source: steinwart2001
+        manuscript_locator: ch-universal.md#univ-universal-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2006
+        manuscript_locator: ch-universal.md#univ-universal-kernels
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-hierarchy
+    title: The universality hierarchy
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - sriperumbudur2011
+      - sriperumbudur2010
+    locators:
+      - source: sriperumbudur2011
+        manuscript_locator: ch-universal.md#univ-hierarchy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2010
+        manuscript_locator: ch-universal.md#univ-hierarchy
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-consistency
+    title: Universal consistency of kernel machines
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2001
+      - steinwart2008
+      - steinwart2009rates
+    locators:
+      - source: steinwart2001
+        manuscript_locator: ch-universal.md#univ-consistency
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-consistency
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch-universal.md#univ-consistency
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-capacity
+    title: 'Capacity: covering and entropy numbers'
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2008
+      - vapnik1998
+    locators:
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-universal.md#univ-capacity
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-eigenvalues
+    title: Eigenvalue asymptotics
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - widom1963
+      - mercer1909
+      - caponnetto2007
+      - steinwart2008
+    locators:
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: widom1963
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-no-free-lunch
+    title: The no-free-lunch tension
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - devroye1996
+      - vapnik1998
+      - caponnetto2007
+    locators:
+      - source: devroye1996
+        manuscript_locator: ch-universal.md#univ-no-free-lunch
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-universal.md#univ-no-free-lunch
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-universal.md#univ-no-free-lunch
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-example
+    title: A worked spectral capacity computation
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - caponnetto2007
+    locators:
+      - source: caponnetto2007
+        manuscript_locator: ch-universal.md#univ-example
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-practice
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2008
+      - sriperumbudur2011
+    locators:
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2011
+        manuscript_locator: ch-universal.md#univ-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: univ-summary
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2001
+      - steinwart2008
+      - steinwart2009rates
+      - micchelli2006
+      - sriperumbudur2011
+      - sriperumbudur2010
+      - widom1963
+      - mercer1909
+      - caponnetto2007
+      - devroye1996
+      - vapnik1998
+      - scholkopf2002
+    locators:
+      - source: steinwart2001
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2006
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2011
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2010
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: widom1963
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2001
+      - steinwart2008
+      - micchelli2006
+      - sriperumbudur2011
+      - caponnetto2007
+      - devroye1996
+    locators:
+      - source: steinwart2001
+        manuscript_locator: ch-universal.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli2006
+        manuscript_locator: ch-universal.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: sriperumbudur2011
+        manuscript_locator: ch-universal.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-universal.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch-universal.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-23

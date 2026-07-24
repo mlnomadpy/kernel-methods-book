@@ -3,7 +3,7 @@ id: ch-geom
 slug: geometric-and-equivariant-kernels
 title: Geometric and Equivariant Kernels
 part: VII · Designing Kernels for Data
-order: 27
+order: 29
 tier: advanced
 prerequisites:
   - signature-and-time-series-kernels

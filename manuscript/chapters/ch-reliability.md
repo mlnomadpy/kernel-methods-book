@@ -3,7 +3,7 @@ id: ch-reliability
 slug: distribution-shift-robustness-and-conformal-prediction
 title: 'Distribution Shift, Robustness, and Conformal Prediction'
 part: XV · Classical and Reliable Kernel Models
-order: 51
+order: 53
 tier: core
 prerequisites:
   - kernel-ridge-and-friends

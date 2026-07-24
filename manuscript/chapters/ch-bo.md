@@ -3,7 +3,7 @@ id: ch-bo
 slug: bayesian-optimization-and-bandits
 title: Kernelized Bandits and Bayesian Optimization
 part: XI · The Bayesian View
-order: 41
+order: 43
 tier: practitioner
 prerequisites:
   - gaussian-processes-and-rvm

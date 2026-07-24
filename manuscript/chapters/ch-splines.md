@@ -3,7 +3,7 @@ id: ch-splines
 slug: smoothing-splines-and-additive-rkhs
 title: Smoothing Splines and Additive RKHS Models
 part: XV · Classical and Reliable Kernel Models
-order: 49
+order: 51
 tier: core
 prerequisites:
   - kernels-and-rkhs

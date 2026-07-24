@@ -3,7 +3,7 @@ id: ch-apps
 slug: applications-and-practice
 title: Applications and Practice
 part: XIII · Practice
-order: 44
+order: 46
 tier: core
 prerequisites:
   - the-frontier

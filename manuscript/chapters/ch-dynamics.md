@@ -3,7 +3,7 @@ id: ch-dynamics
 slug: dynamical-systems-control-and-reinforcement-learning
 title: 'Kernels for Dynamical Systems, Control, and Reinforcement Learning'
 part: XVI · Dynamics and Scientific Learning
-order: 52
+order: 54
 tier: advanced
 prerequisites:
   - conditional-mean-embeddings

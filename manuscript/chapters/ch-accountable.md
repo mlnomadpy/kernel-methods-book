@@ -3,7 +3,7 @@ id: ch-accountable
 slug: accountable-kernels
 title: 'Accountable Kernels: Uncertainty, Explanation, and Audit'
 part: XVIII · Kernels You Can Defend
-order: 55
+order: 57
 tier: advanced
 prerequisites:
   - reproducing-kernel-banach-and-variation-spaces

@@ -3,7 +3,7 @@ id: ch-distreg
 slug: distribution-regression
 title: Distribution Regression and Functional Data
 part: IX · Kernel Probabilistic Inference
-order: 36
+order: 38
 tier: advanced
 prerequisites:
   - causal-inference-with-kernels

@@ -3,7 +3,7 @@ id: ch-scientific
 slug: scientific-computing-and-operator-learning
 title: Kernels for Scientific Computing and Operator Learning
 part: XVI · Dynamics and Scientific Learning
-order: 53
+order: 55
 tier: advanced
 prerequisites:
   - mercer-and-rates

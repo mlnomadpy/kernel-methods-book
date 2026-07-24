@@ -3,7 +3,7 @@ id: ch-strings2
 slug: efficient-string-and-tree-kernels
 title: Efficient String and Tree Kernels
 part: VII · Designing Kernels for Data
-order: 22
+order: 24
 tier: advanced
 prerequisites:
   - string-kernels

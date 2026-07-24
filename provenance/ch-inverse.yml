@@ -7,6 +7,7 @@ references:
   - rosinverse2004
   - caponnetto2007
   - raskutti2014early
+  - steinwart2012
 sections:
   - id: inverse-formulation
     title: Learning as an inverse problem
@@ -57,6 +58,24 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: inverse-interpolation-spaces
+    title: Interpolation spaces and the source ladder
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - steinwart2012
+      - caponnetto2007
+    locators:
+      - source: steinwart2012
+        manuscript_locator: ch-inverse.md#inverse-interpolation-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-inverse.md#inverse-interpolation-spaces
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
   - id: inverse-example
     title: A finite spectral diagnostic
     contribution: adapted-and-expanded

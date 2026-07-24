@@ -3,7 +3,7 @@ id: ch-manifold
 slug: semi-supervised-and-manifold-regularization
 title: Semi-Supervised and Manifold Regularization
 part: XIV · Advanced Extensions
-order: 46
+order: 48
 tier: advanced
 prerequisites:
   - kernel-clustering

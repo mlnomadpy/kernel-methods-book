@@ -3,7 +3,7 @@ id: ch-rkbs
 slug: reproducing-kernel-banach-and-variation-spaces
 title: Reproducing-Kernel Banach and Variation Spaces
 part: XVII · Beyond Hilbert Geometry
-order: 54
+order: 56
 tier: research
 prerequisites:
   - kernels-and-rkhs

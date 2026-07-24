@@ -3,7 +3,7 @@ id: ch-modern
 slug: kernels-now
 title: Modern Generalization Theory
 part: XII · Kernels Now
-order: 42
+order: 44
 tier: advanced
 prerequisites:
   - bayesian-optimization-and-bandits
@@ -34,6 +34,8 @@ bibliography:
   - spigler2020
   - cui2021
   - neyshabur2018
+  - elkaroui2010
+  - cheng2013
 ---
 # Modern Generalization Theory
 
@@ -296,6 +298,8 @@ Modern proportional asymptotics replace random traces of resolvents by determini
 $$m_n(-\lambda)=\frac1n\operatorname{tr}(K+n\lambda I)^{-1},$$
 
 and derivatives of this resolvent trace control variance and effective degrees of freedom. When \(n\) and feature dimension grow together under a specified random-design model, \(m_n\) can converge to the solution of a fixed-point equation. The resulting formulas predict test risk, but they are not distribution-free finite-sample guarantees. Their validity depends on the design ensemble, aspect ratio, spectral convergence, noise model, and whether the target is deterministic or random.
+
+Where do such deterministic equivalents come from for a kernel matrix, whose entries are nonlinear functions of the data? The founding result is El Karoui's: when \(n\) and \(d\) grow proportionally and the entries of \(K\) are a smooth function of inner products \(x_i^\top x_j / d\) or of scaled distances, the kernel matrix is asymptotically indistinguishable in operator norm from a linear surrogate, a weighted sum of the all-ones matrix, the sample Gram matrix \(XX^\top/d\), and the identity, with weights given by the first Taylor coefficients of the kernel profile at its concentration point [@elkaroui2010]. In this regime the nonlinearity survives only through a handful of scalars: the bulk spectrum is a shifted and scaled Marchenko-Pastur law, and the identity term acts as an implicit ridge that the kernel adds on its own, before any explicit regularization. This is a sharp warning and a useful tool at once. The warning: with high-dimensional near-orthogonal inputs, a Gaussian kernel machine behaves like linear ridge regression, and no bandwidth tuning will recover the low-dimensional intuition. The tool: that same self-induced ridge is one mechanism behind the benign bulk behavior met in the interpolation sections, and the Taylor weights predict exactly how strong it is. Beyond the linear surrogate, the spectrum of inner-product kernel matrices admits finer descriptions that track the nonlinearity's higher moments and separate bulk from outlier eigenvalues [@cheng2013]; those refinements matter when the kernel profile is not smooth at the origin or the data carry spiked structure.
 
 The practical use is a three-way diagnostic. Compare the observed learning curve with the deterministic-equivalent prediction, a nonparametric bootstrap over examples, and held-out risk. If the first fails while the latter two agree, the asymptotic model is misspecified. If the bootstrap is erratic, influential observations or dependence may invalidate iid reasoning. If all three disagree, first audit leakage, preprocessing, and numerical conditioning before telling a new generalization story.
 

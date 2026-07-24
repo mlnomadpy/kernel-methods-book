@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-approx",
+  "anchor": "example-approx-power",
+  "source_file": "manuscript/chapters/ch-approx.md",
+  "source_sha256": "f158e85f773bca78a9cd82baaae93071a2a59c8730da073da4d5cb5cb20ba3d9",
+  "verification_status": "literal-audit",
+  "executable_checks": [],
+  "numeric_literals": [
+    "2",
+    "0.25",
+    "0.5",
+    "1",
+    "0.0625",
+    "0.1875",
+    "0.75",
+    "-0.5",
+    "-0.75",
+    "1.5",
+    "-0.125",
+    "0.375",
+    "0",
+    "0.625",
+    "0.125",
+    "0.3536",
+    "4",
+    "3",
+    "1.1547",
+    "0.4082",
+    "0.5625"
+  ],
+  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

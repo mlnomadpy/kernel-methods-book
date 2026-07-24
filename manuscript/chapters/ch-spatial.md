@@ -3,7 +3,7 @@ id: ch-spatial
 slug: spatial-and-spatiotemporal-kernels
 title: Spatial and Spatiotemporal Kernel Models
 part: XV · Classical and Reliable Kernel Models
-order: 50
+order: 52
 tier: advanced
 prerequisites:
   - kernel-families

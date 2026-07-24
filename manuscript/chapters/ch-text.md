@@ -3,7 +3,7 @@ id: ch-text
 slug: kernels-for-text
 title: Kernels for Text
 part: VII · Designing Kernels for Data
-order: 23
+order: 25
 tier: practitioner
 prerequisites:
   - efficient-string-and-tree-kernels

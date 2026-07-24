@@ -3,7 +3,7 @@ id: ch-causal
 slug: causal-inference-with-kernels
 title: Causal Inference with Kernels
 part: IX · Kernel Probabilistic Inference
-order: 35
+order: 37
 tier: advanced
 prerequisites:
   - kernel-stein-discrepancy

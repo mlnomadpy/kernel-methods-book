@@ -3,7 +3,7 @@ id: ch-cme
 slug: conditional-mean-embeddings
 title: Conditional Mean Embeddings and Kernel Bayes' Rule
 part: IX · Kernel Probabilistic Inference
-order: 33
+order: 35
 tier: advanced
 prerequisites:
   - kernel-quadrature-and-herding
