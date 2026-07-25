@@ -2,8 +2,8 @@
 id: ch-solve
 slug: solving-the-svm
 title: 'Solving the SVM: Decomposition and SMO'
-part: III · Optimization and Implementation
-order: 9
+part: III · Optimization and Scaling
+order: 10
 tier: advanced
 prerequisites:
   - ranking-and-ordinal-regression
@@ -66,6 +66,10 @@ $$\alpha_i=0\ \Rightarrow\ y_if(x_i)\ge 1,\qquad 0\lt\alpha_i\lt C\ \Rightarrow\
 The reading is geometric. A point with \(\alpha_i=0\) sits outside the margin and does not participate; a non-bound point with \(0\lt\alpha_i\lt C\) sits exactly on the margin, \(y_if(x_i)=1\); a point at the upper bound \(\alpha_i=C\) has been pushed inside the margin or misclassified. A point that violates its condition is one whose coefficient is not yet where optimality demands, and the size of the violation measures how far the current solution is from the optimum.
 
 This is more than a yes-or-no test. Schölkopf and Smola (2002, Proposition 10.1) show that the aggregate violation, the KKT gap, upper-bounds the suboptimality of the regularized risk itself, so one can bound the distance to the optimal objective without knowing that optimum. Crucially the gap is computable in \(O(n)\) time once the function values \(f(x_i)\) are known, which are maintained anyway during training, so checking convergence is almost free relative to the cost of the iterations. The gap does the double duty promised in the introduction: a global stopping rule for the whole solver, and, restricted to a working set, the score that tells decomposition which variables to work on next.
+
+Objective values can look stationary before optimality has been certified. The representative trace below separates visual objective flattening from the quantities that justify termination: the duality gap and maximum KKT violation. A solver should stop only when the declared certificate crosses its tolerance, not when successive objective values become hard to distinguish.
+
+<figure class="viz" data-figure="svm-kkt-convergence" data-alt="A normalized SVM dual objective appears to flatten while the duality gap and maximum KKT violation continue decreasing toward a declared stopping tolerance."><figcaption>A flat objective trace is not a stopping rule. The duality gap and maximum KKT violation remain interpretable optimality certificates, and training terminates only after the chosen certificate falls below the declared tolerance.</figcaption></figure>
 
 It is worth stressing why the stopping test lives in the margins \(y_if(x_i)\) rather than in the coefficients \(\alpha_i\) themselves. What the user ultimately wants is the function \(f\), and if the dual objective has a flat direction, a whole subspace of coefficient vectors yields the identical \(f\). An algorithm that waited for the coefficients to converge might wait forever inside that subspace, wasting effort on differences that never reach the output. Proximity in the solution, measured by the KKT gap, is the right currency; proximity in the parameters is not.
 

@@ -2,7 +2,7 @@
 id: ch-svr
 slug: support-vector-regression
 title: Support Vector Regression
-part: II · Supervised Machines with a Fixed Kernel
+part: II · Learning with a Fixed Kernel
 order: 6
 tier: practitioner
 prerequisites:

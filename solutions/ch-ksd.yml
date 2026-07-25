@@ -106,7 +106,7 @@ exercises:
       \\(\\sum_j c_j (Z_j^2 - 1)\\) rather than a normal law, and connect this to the degeneracy
       that makes the first-order term of the U-statistic vanish. (b) Suppose the wild bootstrap of
       the test is run with \\(B = 500\\) sign-flip replicates and \\(12\\) of the bootstrap
-      statistics \\(T_b\\) exceed the observed \\(T\\). Compute the approximate \\(p\\)-value and
+      statistics \\(T_b\\) exceed the observed \\(T\\). Compute the finite-\\(B\\) corrected \\(p\\)-value and
       state the decision at level \\(\\alpha = 0.05\\). Then argue that a target whose score is
       wrong only on a region the sample never visits could still yield a small statistic, and say
       what that means for the power of the test."
@@ -117,3 +117,26 @@ exercises:
       0.05. KSD power is still sample-distribution dependent: if q places no observations where p's
       score is wrong, the witness sees little discrepancy. The test can have low power against
       alternatives localized in unvisited regions despite valid null calibration."
+  - number: 9
+    kind: synthesis
+    status: draft
+    prompt: "Separate the logical content of the following four statements: (i)
+      \\(\\mathrm{KSD}(q,p)=0\\Rightarrow q=p\\); (ii)
+      \\(\\mathrm{KSD}(q_m,p)\\to0\\Rightarrow q_m\\Rightarrow p\\); (iii) a
+      wild-bootstrap KSD test has asymptotically valid null level; and (iv) one empirical
+      SVGD update decreases the KL divergence. For each, name the additional assumptions
+      required or explain why the chapter does not claim it."
+    answer: "(i) is population identification for one fixed pair. In the chapter it requires
+      positive smooth densities on a common connected domain, Stein-class boundary and
+      integrability conditions, square-integrability of the score ratio, and a
+      cc-universal kernel. (ii) is convergence determination, which is stronger because it
+      must also prevent mass escape. The stated theorem assumes a distantly dissipative
+      target with globally Lipschitz score and an IMQ kernel with exponent in (-1,0).
+      (iii) is a calibration statement about a statistic, not about identification. The
+      cited result is asymptotic and requires stationarity, a Lipschitz Stein kernel, a
+      finite second diagonal moment, summable tau-mixing, and a multiplier process matched
+      to the dependence; i.i.d. signs are justified only in the i.i.d. case. (iv) is not
+      claimed. The proved identity gives the derivative of population KL at step zero for a
+      smooth diffeomorphic perturbation and exact expectation. A finite empirical particle
+      average and nonzero step introduce particle and discretization errors, so descent
+      needs additional smoothness, concentration, and step-size control."

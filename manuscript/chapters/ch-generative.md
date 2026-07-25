@@ -2,8 +2,8 @@
 id: ch-generative
 slug: generative-and-marginalization-kernels
 title: Kernels from Generative Models
-part: VII · Designing Kernels for Data
-order: 27
+part: VI · Designing Kernels
+order: 36
 tier: advanced
 prerequisites:
   - graph-kernels

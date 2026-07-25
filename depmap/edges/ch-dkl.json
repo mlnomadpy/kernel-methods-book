@@ -5,13 +5,13 @@
     "note": "Uses a Gaussian-process readout on a trainable representation."
   },
   {
-    "from": "deep-kernel-learning#prop-dkl-gradient",
+    "from": "deep-kernel-learning#thm-dkl-gradient",
     "to": "preliminaries#thm-p-12",
     "note": "Differentiates the Gaussian covariance likelihood."
   },
   {
-    "from": "deep-kernel-learning#algo-dkl-training",
-    "to": "deep-kernel-learning#prop-dkl-gradient",
-    "note": "Optimizes representation and covariance parameters through the likelihood gradient."
+    "from": "deep-kernel-learning#algo-dkl-stress-test",
+    "to": "deep-kernel-learning#thm-dkl-gradient",
+    "note": "Audits a trained representation whose covariance parameters are optimized through the likelihood gradient."
   }
 ]

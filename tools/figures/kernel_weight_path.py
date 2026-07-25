@@ -1,19 +1,27 @@
 """Sparse multiple-kernel weight path under increasing selection pressure."""
+import jax
+
+jax.config.update("jax_enable_x64", True)
+import jax.numpy as jnp
 import numpy as np
 
 import _style as S
 
 S.apply_style()
 
-pressure = np.linspace(0.0, 0.92, 220)
-scores = np.array([1.00, 0.72, 0.38, 0.14])
-raw = np.maximum(scores[:, None] - pressure[None, :], 0.0)
-weights = raw / np.maximum(raw.sum(axis=0, keepdims=True), 1e-12)
-active = (raw > 0).sum(axis=0)
+pressure_jax = jnp.linspace(0.0, 0.92, 220)
+scores_jax = jnp.array([1.00, 0.72, 0.38, 0.14])
+raw_jax = jnp.maximum(scores_jax[:, None] - pressure_jax[None, :], 0.0)
+weights_jax = raw_jax / jnp.maximum(raw_jax.sum(axis=0, keepdims=True), 1e-12)
+active_jax = (raw_jax > 0).sum(axis=0)
 
-assert np.allclose(weights[:, raw.sum(axis=0) > 0].sum(axis=0), 1.0)
-assert np.all(np.diff(active) <= 0)
-assert active[0] == 4 and active[-1] == 1
+assert bool(jnp.allclose(weights_jax[:, raw_jax.sum(axis=0) > 0].sum(axis=0), 1.0))
+assert bool(jnp.all(jnp.diff(active_jax) <= 0))
+assert int(active_jax[0]) == 4 and int(active_jax[-1]) == 1
+assert bool(jnp.all(jnp.isfinite(weights_jax)))
+pressure, scores, weights, active = map(
+    np.asarray, (pressure_jax, scores_jax, weights_jax, active_jax)
+)
 
 fig, ax = S.new_axes(5.35, 3.05)
 styles = [

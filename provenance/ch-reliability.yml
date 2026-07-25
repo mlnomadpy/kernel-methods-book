@@ -11,177 +11,251 @@ references:
 sections:
   - id: shift-taxonomy
     title: A taxonomy of distribution change
-    contribution: adapted-and-expanded
-    sources: &a1
+    contribution: original-synthesis-with-proof
+    sources:
       - feng2023covshift
-      - burnaev2014conformal
-      - gretton2012
-      - sriperumbudur2012
     locators:
       - source: feng2023covshift
         manuscript_locator: ch-reliability.md#shift-taxonomy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: burnaev2014conformal
-        manuscript_locator: ch-reliability.md#shift-taxonomy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-reliability.md#shift-taxonomy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-reliability.md#shift-taxonomy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Section 2.3, equations (2)-(4), pp. 3-4"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: shift-detection
-    title: Detecting shift with kernel embeddings
-    contribution: adapted-and-expanded
+  - id: mmd-paper-module
+    title: "Paper module: MMD as a two-sample test"
+    contribution: primary-paper-reconstruction
     sources:
       - gretton2012
     locators:
       - source: gretton2012
-        manuscript_locator: ch-reliability.md#shift-detection
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-reliability.md#mmd-paper-module
+        source_locator: "Sections 2.1-2.3, Lemmas 3, 4, and 6; Theorems 7 and 12, pp. 725-737"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-mean-matching
-    title: Kernel mean matching
-    contribution: adapted-and-expanded
+    title: Kernel mean matching as an inverse problem
+    contribution: original-derivation-and-synthesis
+    sources:
+      - gretton2012
+      - feng2023covshift
+    locators:
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#kernel-mean-matching
+        source_locator: "Section 2.2, Lemma 4, pp. 726-727"
+        status: source-locator-checked-against-primary-paper
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#kernel-mean-matching
+        source_locator: "Section 2.3, equations (3)-(4), pp. 3-4"
+        status: source-locator-checked-against-primary-paper
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: covariate-rates
+    title: "Paper module: rates under covariate shift"
+    contribution: primary-paper-reconstruction
     sources:
       - feng2023covshift
     locators:
       - source: feng2023covshift
-        manuscript_locator: ch-reliability.md#kernel-mean-matching
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-reliability.md#covariate-rates
+        source_locator: "Sections 2.3 and 3; Assumptions 1-3; Theorems 1-3; Corollary 1, pp. 3-7"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: robustness
     title: Robust losses and distributional neighborhoods
-    contribution: adapted-and-expanded
+    contribution: original-synthesis
     sources:
       - sriperumbudur2012
     locators:
       - source: sriperumbudur2012
         manuscript_locator: ch-reliability.md#robustness
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3, integral probability metrics and empirical estimation"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: conformal-prediction
-    title: Conformal prediction from exchangeable scores
-    contribution: adapted-and-expanded
+    title: Conformal prediction from exchangeable ranks
+    contribution: adapted-proof-and-pedagogical-reconstruction
     sources:
       - burnaev2014conformal
     locators:
       - source: burnaev2014conformal
         manuscript_locator: ch-reliability.md#conformal-prediction
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Section 3 and Proposition 2, pp. 3-4"
+        status: source-locator-checked-against-primary-paper
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: crr-paper-module
+    title: "Paper module: conformalized ridge regression"
+    contribution: primary-paper-reconstruction
+    sources:
+      - burnaev2014conformal
+    locators:
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#crr-paper-module
+        source_locator: "Sections 2-6; Proposition 2; Theorem 3; assumptions A1-A4, pp. 2-11"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: conformal-under-shift
     title: Conformal prediction under shift
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: feng2023covshift
-        manuscript_locator: ch-reliability.md#conformal-under-shift
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: burnaev2014conformal
-        manuscript_locator: ch-reliability.md#conformal-under-shift
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-reliability.md#conformal-under-shift
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-reliability.md#conformal-under-shift
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: reliability-practice
-    title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: feng2023covshift
-        manuscript_locator: ch-reliability.md#reliability-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: burnaev2014conformal
-        manuscript_locator: ch-reliability.md#reliability-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-reliability.md#reliability-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-reliability.md#reliability-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: reliability-summary
-    title: Summary and further reading
-    contribution: adapted-and-expanded
+    contribution: original-synthesis
     sources:
       - feng2023covshift
       - burnaev2014conformal
     locators:
       - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#conformal-under-shift
+        source_locator: "Section 2.3, density-ratio regimes and truncation, pp. 3-4"
+        status: source-locator-checked-against-primary-paper
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#conformal-under-shift
+        source_locator: "Section 3, IID validity boundary, pp. 3-4"
+        status: source-locator-checked-against-primary-paper
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reliability-worked-example
+    title: A worked deployment calculation
+    contribution: original-worked-example
+    sources:
+      - feng2023covshift
+      - burnaev2014conformal
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#reliability-worked-example
+        source_locator: "Section 2.3, equations (3)-(4), weighting and truncation"
+        status: conceptual-source-checked
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#reliability-worked-example
+        source_locator: "Section 3, finite-sample conformal validity"
+        status: conceptual-source-checked
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reliable-pipeline
+    title: An auditable reliability pipeline
+    contribution: original-synthesis
+    sources:
+      - feng2023covshift
+      - burnaev2014conformal
+      - gretton2012
+      - sriperumbudur2012
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#reliable-pipeline
+        source_locator: "Sections 2.3-3, overlap and weighting assumptions"
+        status: conceptual-source-checked
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#reliable-pipeline
+        source_locator: "Sections 3-4, validity and efficiency assumptions"
+        status: conceptual-source-checked
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#reliable-pipeline
+        source_locator: "Sections 4-6, test calibration and computational variants"
+        status: conceptual-source-checked
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#reliable-pipeline
+        source_locator: "Sections 2-3, function-class-dependent IPM estimation"
+        status: bibliographic-locator-checked
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reliability-practice
+    title: Common mistakes and practical implications
+    contribution: original-synthesis
+    sources:
+      - feng2023covshift
+      - burnaev2014conformal
+      - gretton2012
+      - sriperumbudur2012
+    locators:
+      - source: feng2023covshift
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: "Sections 2.3-3"
+        status: conceptual-source-checked
+      - source: burnaev2014conformal
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: "Sections 3-4"
+        status: conceptual-source-checked
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: "Sections 2 and 4-6"
+        status: conceptual-source-checked
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#reliability-practice
+        source_locator: "Sections 2-3"
+        status: bibliographic-locator-checked
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: reliability-summary
+    title: Summary and further reading
+    contribution: original-synthesis
+    sources:
+      - feng2023covshift
+      - burnaev2014conformal
+      - gretton2012
+      - sriperumbudur2012
+    locators:
+      - source: feng2023covshift
         manuscript_locator: ch-reliability.md#reliability-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2.3-3"
+        status: conceptual-source-checked
       - source: burnaev2014conformal
         manuscript_locator: ch-reliability.md#reliability-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 3-4"
+        status: conceptual-source-checked
+      - source: gretton2012
+        manuscript_locator: ch-reliability.md#reliability-summary
+        source_locator: "Sections 2 and 4-6"
+        status: conceptual-source-checked
+      - source: sriperumbudur2012
+        manuscript_locator: ch-reliability.md#reliability-summary
+        source_locator: "Sections 2-3"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-exercises
+    sources:
+      - feng2023covshift
+      - burnaev2014conformal
+      - gretton2012
+      - sriperumbudur2012
     locators:
       - source: feng2023covshift
         manuscript_locator: ch-reliability.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2.3-3"
+        status: conceptual-source-checked
       - source: burnaev2014conformal
         manuscript_locator: ch-reliability.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 3-4"
+        status: conceptual-source-checked
       - source: gretton2012
         manuscript_locator: ch-reliability.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2 and 4"
+        status: conceptual-source-checked
       - source: sriperumbudur2012
         manuscript_locator: ch-reliability.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_method: direct primary-source locator mapping for paper modules and claim-level conceptual mapping elsewhere
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24

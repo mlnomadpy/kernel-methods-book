@@ -2,8 +2,8 @@
 id: ch-distreg
 slug: distribution-regression
 title: Distribution Regression and Functional Data
-part: IX · Kernel Probabilistic Inference
-order: 38
+part: 'VIII · Conditional, Stein, and Causal Inference'
+order: 48
 tier: advanced
 prerequisites:
   - causal-inference-with-kernels
@@ -220,6 +220,10 @@ $$ \mathbf K_{\mathrm{tr}}=\begin{pmatrix}1&0.7218&0.4006\\0.7218&1&0.4561\\0.40
 :::::
 
 ## Consistency and the two error sources {#consistency}
+
+There are two sample sizes and therefore two learning curves: the number \(N\) of labelled distributions and the number \(m\) of observations used to represent each distribution. Improving only one eventually hits the floor imposed by the other.
+
+<figure class="viz" data-figure="distribution-regression-two-stage-curve" data-alt="Learning curves separate error from the number of labelled bags and error from samples per bag. A second panel shows the optimal allocation under fixed total sampling budgets."><figcaption>Distribution regression is a two-stage sampling problem. More labelled bags reduce the second-stage regression error but cannot remove a poor empirical embedding; larger bags stabilize each embedding but leave too few labelled tasks under a fixed budget. The right panel shows the resulting interior allocation rather than a universal preference for either axis.</figcaption></figure>
 
 The example's two apologies, ridge bias and tiny bags, are the whole story of the theory. We now make them quantitative. The clean way is to compare the estimator we can compute, which uses the empirical embeddings \(\widehat\mu_i\), against an oracle estimator that uses the true embeddings \(\mu_{P_i}\), and then against the target itself. Two short lemmas supply the pieces.
 

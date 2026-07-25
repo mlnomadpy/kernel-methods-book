@@ -1,23 +1,30 @@
 """Distance-to-Gram-to-coordinate pipeline for classical MDS."""
 import matplotlib.pyplot as plt
+from jax import config
+import jax.numpy as jnp
 import numpy as np
 
 import _style as S
 
+config.update("jax_enable_x64", True)
 S.apply_style()
-X = np.array([[-2.0, -1.5], [2.0, -1.5], [2.0, 1.5], [-2.0, 1.5]])
-D2 = np.sum((X[:, None, :] - X[None, :, :]) ** 2, axis=2)
-J = np.eye(4) - np.ones((4, 4)) / 4
+X = jnp.array([[-2.0, -1.5], [2.0, -1.5], [2.0, 1.5], [-2.0, 1.5]], dtype=jnp.float64)
+D2 = jnp.sum(jnp.square(X[:, None, :] - X[None, :, :]), axis=2)
+J = jnp.eye(4, dtype=jnp.float64) - jnp.ones((4, 4), dtype=jnp.float64) / 4
 row_centered = J @ D2
 B = -0.5 * row_centered @ J
-values, vectors = np.linalg.eigh(B)
-order = np.argsort(values)[::-1]
+values, vectors = jnp.linalg.eigh(B)
+order = jnp.argsort(values)[::-1]
 values, vectors = values[order], vectors[:, order]
-coords = vectors[:, :2] * np.sqrt(values[:2])
+coords = vectors[:, :2] * jnp.sqrt(jnp.maximum(values[:2], 0.0))
 
-recovered_d2 = np.sum((coords[:, None, :] - coords[None, :, :]) ** 2, axis=2)
-assert np.allclose(D2, recovered_d2, atol=1e-10)
-assert np.allclose(B @ np.ones(4), 0, atol=1e-10)
+recovered_d2 = jnp.sum(jnp.square(coords[:, None, :] - coords[None, :, :]), axis=2)
+error = jnp.max(jnp.abs(D2 - recovered_d2))
+assert bool(jnp.all(jnp.isfinite(coords)))
+assert bool(jnp.allclose(B, B.T, atol=1e-12, rtol=0.0))
+assert float(error) < 1e-10
+assert float(jnp.max(jnp.abs(B @ jnp.ones(4)))) < 1e-10
+D2, row_centered, B, coords = map(np.asarray, (D2, row_centered, B, coords))
 
 fig, axes = plt.subplots(1, 4, figsize=(7.5, 2.25))
 images = [
@@ -37,4 +44,4 @@ axes[3].set_aspect("equal")
 S.finish(axes[3])
 fig.tight_layout(w_pad=0.7)
 S.save(fig, "mds-double-centering")
-print(f"distance_reconstruction_error={np.max(np.abs(D2 - recovered_d2)):.3e}")
+print(f"distance_reconstruction_error={float(error):.3e}")

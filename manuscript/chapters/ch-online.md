@@ -2,8 +2,8 @@
 id: ch-online
 slug: online-kernel-learning
 title: Online Kernel Learning
-part: III · Optimization and Implementation
-order: 10
+part: III · Optimization and Scaling
+order: 11
 tier: advanced
 prerequisites:
   - solving-the-svm

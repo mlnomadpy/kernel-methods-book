@@ -2,8 +2,8 @@
 id: ch-krein
 slug: indefinite-and-krein-kernels
 title: Indefinite and Krein-Space Kernels
-part: VII · Designing Kernels for Data
-order: 30
+part: VI · Designing Kernels
+order: 40
 tier: advanced
 prerequisites:
   - geometric-and-equivariant-kernels
@@ -211,6 +211,10 @@ The RKKS theory tells us the geometry is coherent and the solution is a finite e
 4.  *Shift:* set \(\tilde\lambda_i=\lambda_i-\lambda_{\min}\) with \(\lambda_{\min}=\min_i\lambda_i\lt 0\), giving \(\tilde K=K-\lambda_{\min} I\).
 5.  Return \(\tilde K=U\operatorname{diag}(\tilde\lambda)U^\top\).
 ::::
+
+<figure class="viz" data-figure="krein-positive-negative-decomposition" data-alt="A signed eigenvalue bar chart is followed by heat maps of an indefinite matrix K and its two positive semidefinite components K plus and K minus, whose difference reconstructs K.">
+<figcaption>The decomposition \(K=K_+-K_-\) is geometry, not cosmetic spectrum repair. Both components are positive semidefinite and the negative component carries the directions that clipping deletes; any repair therefore changes a declared part of the original similarity.</figcaption>
+</figure>
 
 <figure class="viz" data-widget="spectrum-surgery">
 

@@ -1,15 +1,16 @@
 /* Kernel-geometry figure system.
  *
- * The asymmetric accent rail is the signature: ordinary observations sit in
- * the quiet ink frame; the kernel-induced view enters through the colored
- * edge. Static Python plates and interactive widgets share this shell.
+ * The split spectral rail is the signature: copper marks the question, mineral
+ * blue marks the geometry induced by the kernel. Static Python plates and
+ * interactive widgets share this shell.
  */
 .viz {
   position: relative;
   margin: 2.15em 0 2.35em;
   border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent);
-  border-radius: 3px;
+  border-left: 4px solid transparent;
+  border-image: linear-gradient(to bottom, var(--accent) 0 36%, var(--spectral) 36% 100%) 1;
+  border-radius: 2px;
   background: color-mix(in srgb, var(--paper) 97%, var(--muted) 3%);
   padding: clamp(12px, 2.5vw, 20px);
   box-shadow: 0 8px 28px color-mix(in srgb, var(--ink) 7%, transparent);
@@ -21,7 +22,7 @@
   font-weight: 700;
   letter-spacing: .09em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--spectral);
 }
 .viz canvas { width: 100%; display: block; border-radius: 2px; touch-action: none; cursor: default; }
 .viz canvas:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
@@ -31,7 +32,7 @@
   place-items: center;
   overflow: hidden;
   border-radius: 2px;
-  background: var(--paper);
+  background: #f5f7f5;
 }
 .viz-static svg { width: min(100%, 520px); height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; }
 .viz-static svg polyline { stroke: var(--accent); stroke-width: 2.2; }
@@ -42,6 +43,7 @@
   height: auto;
   max-height: 72vh;
   object-fit: contain;
+  background: #f5f7f5;
 }
 .viz--static .viz-static { min-height: 0; }
 .viz[data-mounted] > .viz-static { display: none; }
@@ -87,7 +89,7 @@
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--spectral);
 }
 .viz .viz-mode { color: var(--faint); font-size: .78rem; }
 .viz .hint { color: var(--faint); font-size: .78rem; }

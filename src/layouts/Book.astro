@@ -1,6 +1,9 @@
 ---
 // The shared page chrome: topbar, sidebar TOC, search overlay, KaTeX, fonts.
 // All URLs are relative so the site can be served from any prefix.
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
 const {
   title,
   desc = "",
@@ -16,6 +19,9 @@ const coreWidgets = new Set([
 ]);
 const widgetModules = [...new Set(widgets)]
   .filter((widget) => !coreWidgets.has(widget))
+  // Static-first figures may retain data-widget metadata for their fallback
+  // shell without having a JavaScript enhancer. Never emit a broken script URL.
+  .filter((widget) => existsSync(join(process.cwd(), "public", "assets", `viz-${widget}.js`)))
   .map((widget) => `assets/viz-${widget}.js`);
 const hasWidgets = widgets.length > 0;
 const author = {

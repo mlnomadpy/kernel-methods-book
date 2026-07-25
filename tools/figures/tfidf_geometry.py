@@ -1,16 +1,22 @@
 """TF-idf removes corpus-wide terms and changes document angles."""
 from __future__ import annotations
 
-import matplotlib.pyplot as plt
+import jax
+from jax import config
+
+config.update("jax_enable_x64", True)
+import jax.numpy as jnp
 import numpy as np
 
-from _style import DIVERGING, HEAT, INK, MUTED, RULE, apply_style, save
+import _style as S
+from _style import ACCENT, HEAT, INK, MUTED, POS, RULE, apply_style, save
+import matplotlib.pyplot as plt
 
 apply_style()
 
 documents = ("D1", "D2", "D3", "D4")
 terms = ("the", "kernel", "graph", "method", "trick", "walk")
-counts = np.array(
+counts = jnp.array(
     [
         [1, 1, 0, 1, 0, 0],
         [1, 1, 0, 0, 1, 0],
@@ -21,23 +27,26 @@ counts = np.array(
 )
 
 
-def cosine_gram(matrix: np.ndarray) -> np.ndarray:
-    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
-    if np.any(norms == 0):
-        raise RuntimeError("Every document must retain at least one weighted term.")
+@jax.jit
+def cosine_gram(matrix: jax.Array) -> jax.Array:
+    norms = jnp.linalg.norm(matrix, axis=1, keepdims=True)
     normalized = matrix / norms
     return normalized @ normalized.T
 
 
-document_frequency = np.count_nonzero(counts, axis=0)
-idf = np.log(len(documents) / document_frequency)
+document_frequency = jnp.count_nonzero(counts, axis=0)
+assert bool(jnp.all(document_frequency > 0))
+idf = jnp.log(jnp.asarray(len(documents), dtype=jnp.float64) / document_frequency)
 raw = cosine_gram(counts)
 weighted = cosine_gram(counts * idf)
-if not np.allclose(np.diag(weighted), 1.0):
-    raise RuntimeError("Normalized tf-idf vectors must have unit self-similarity.")
+assert bool(jnp.all(jnp.isfinite(jnp.stack((raw, weighted)))))
+assert bool(jnp.allclose(jnp.diag(weighted), 1.0, rtol=1e-12, atol=1e-12))
+assert bool(jnp.allclose(raw, raw.T, rtol=0.0, atol=1e-14))
+assert bool(jnp.all(jnp.linalg.eigvalsh(weighted) >= -1e-12))
+raw_h, weighted_h, idf_h = map(np.asarray, (raw, weighted, idf))
 
 fig, axes = plt.subplots(1, 3, figsize=(7.4, 2.65), gridspec_kw={"width_ratios": [1, 1, 0.82]})
-for ax, matrix, title in zip(axes[:2], (raw, weighted), ("Raw-count cosine", "Tf-idf cosine")):
+for ax, matrix, title in zip(axes[:2], (raw_h, weighted_h), ("Raw-count cosine", "Tf-idf cosine")):
     ax.imshow(matrix, cmap=HEAT, vmin=0, vmax=1)
     ax.set_xticks(range(4), documents)
     ax.set_yticks(range(4), documents)
@@ -48,8 +57,10 @@ for ax, matrix, title in zip(axes[:2], (raw, weighted), ("Raw-count cosine", "Tf
     for spine in ax.spines.values():
         spine.set_color(RULE)
 
-axes[2].barh(np.arange(len(terms)), idf, color=[RULE, "#8a4c1f", "#8a4c1f", "#3f6c9e", "#59616b", "#59616b"])
-axes[2].set_yticks(np.arange(len(terms)), terms)
+S.bars(
+    axes[2], np.arange(len(terms)), idf_h, orientation="horizontal",
+    labels=terms, highlight=np.flatnonzero(idf_h > np.median(idf_h)),
+)
 axes[2].invert_yaxis()
 axes[2].set_xlabel("idf weight")
 axes[2].set_title("Corpus decides what counts")

@@ -2,8 +2,8 @@
 id: ch-apps
 slug: applications-and-practice
 title: Applications and Practice
-part: XIII · Practice
-order: 46
+part: XII · Reliable Practice
+order: 59
 tier: core
 prerequisites:
   - the-frontier

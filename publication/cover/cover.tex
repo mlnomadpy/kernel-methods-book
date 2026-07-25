@@ -1,0 +1,111 @@
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage[papersize={19.4in,11.25in},margin=0in]{geometry}
+\pagestyle{empty}
+
+% Production dimensions: 8.5 x 11 inch trim, 0.125 inch bleed, 2.15 inch
+% provisional spine. The spine must be recalculated from the printer's paper
+% stock before final export.
+\newlength\KBTrimWidth \setlength\KBTrimWidth{8.5in}
+\newlength\KBTrimHeight \setlength\KBTrimHeight{11in}
+\newlength\KBBleed \setlength\KBBleed{0.125in}
+\newlength\KBSpine \setlength\KBSpine{2.15in}
+
+\setmainfont{STIX Two Text}
+\setmathfont{Libertinus Math}
+\newfontfamily\kbmono{IBM Plex Mono}[
+  Path=publication/fonts/,
+  UprightFont=ibm-plex-mono-latin-400-normal.ttf,
+  BoldFont=ibm-plex-mono-latin-600-normal.ttf]
+\definecolor{KernelInk}{HTML}{142330}
+\definecolor{KernelBlue}{HTML}{173D5A}
+\definecolor{KernelMuted}{HTML}{52626D}
+\definecolor{KernelIvory}{HTML}{F3F0E8}
+\definecolor{KernelRed}{HTML}{984A39}
+\definecolor{KernelRule}{HTML}{C9D2D3}
+
+\begin{document}
+\begin{tikzpicture}[remember picture,overlay,x=1in,y=1in]
+  \fill[KernelIvory] (current page.south west) rectangle (current page.north east);
+  % Back-cover and front-cover measures begin after the outer bleed.
+  \coordinate (SW) at ([xshift=\KBBleed,yshift=\KBBleed]current page.south west);
+  \coordinate (NE) at ([xshift=-\KBBleed,yshift=-\KBBleed]current page.north east);
+
+  % Spine boundaries.
+  \draw[KernelRule,line width=.35pt]
+    ([xshift=\dimexpr\KBBleed+\KBTrimWidth\relax]current page.south west) --
+    ([xshift=\dimexpr\KBBleed+\KBTrimWidth\relax]current page.north west);
+  \draw[KernelRule,line width=.35pt]
+    ([xshift=\dimexpr\KBBleed+\KBTrimWidth+\KBSpine\relax]current page.south west) --
+    ([xshift=\dimexpr\KBBleed+\KBTrimWidth+\KBSpine\relax]current page.north west);
+
+  % Back cover.
+  \node[anchor=north west,text width=6.55in,align=left,text=KernelInk]
+    at ([xshift=.72in,yshift=10.05in]SW)
+    {\fontsize{25}{30}\selectfont\bfseries Geometry is the hidden decision
+      behind every kernel method.};
+  \node[anchor=north west,text width=6.55in,align=left,text=KernelMuted]
+    at ([xshift=.72in,yshift=8.85in]SW)
+    {\fontsize{12.2}{18}\selectfont
+      This book develops kernel methods from their mathematical foundations
+      through approximation, learning theory, randomized computation,
+      structured data, uncertainty, scientific machine learning, and modern
+      operator methods. Proofs, algorithms, numerical checks, and geometric
+      visualizations are designed to be read as one connected argument.};
+  \draw[KernelBlue,line width=.75pt]
+    ([xshift=.72in,yshift=1.15in]SW) -- ([xshift=7.35in,yshift=1.15in]SW);
+  \node[anchor=south west,text=KernelMuted,font=\sffamily\scriptsize]
+    at ([xshift=.72in,yshift=.72in]SW)
+    {THEORY · GEOMETRY · ALGORITHMS · PRACTICE};
+
+  % Front cover origin is bleed + back + spine.
+  \coordinate (F) at
+    ([xshift=\dimexpr\KBBleed+\KBTrimWidth+\KBSpine\relax,
+      yshift=\KBBleed]current page.south west);
+  \node[anchor=north west,text=KernelMuted,font=\sffamily\scriptsize]
+    at ([xshift=.72in,yshift=10.28in]F)
+    {A MATHEMATICAL MONOGRAPH ON KERNEL METHODS};
+  \draw[KernelBlue,line width=.75pt]
+    ([xshift=.72in,yshift=9.88in]F) -- ([xshift=7.78in,yshift=9.88in]F);
+  \node[anchor=north west,text=KernelInk]
+    at ([xshift=.72in,yshift=8.92in]F)
+    {\fontsize{48}{52}\selectfont Kernels};
+  \node[anchor=north west,text=KernelBlue]
+    at ([xshift=.72in,yshift=7.97in]F)
+    {\fontsize{27}{33}\selectfont\itshape The Geometry of Learning};
+  \node[anchor=north west,text width=6.4in,align=left,text=KernelMuted]
+    at ([xshift=.72in,yshift=7.18in]F)
+    {\fontsize{14}{20}\selectfont Foundations, algorithms, and the frontiers
+      of machine intelligence};
+
+  % Kernel sections: mathematical structure, not decorative illustration.
+  \begin{scope}[shift={([xshift=1.05in,yshift=3.25in]F)},x=.72in,y=.72in]
+    \draw[KernelRule,line width=.45pt] (0,0) -- (8.55,0);
+    \foreach \c/\h/\op in {.4/1.05/32,1.7/1.45/44,3.0/1.85/58,4.3/2.12/76,5.6/1.82/60,6.9/1.38/45,8.0/.92/32}{
+      \draw[KernelBlue!\op,line width=.72pt,samples=52,smooth,domain=0:8.55]
+        plot (\x,{\h*exp(-1.22*(\x-\c)^2)});
+      \fill[KernelRed] (\c,0) circle (1.1pt);
+    }
+  \end{scope}
+  \node[anchor=south west,text=KernelInk]
+    at ([xshift=1.1in,yshift=1.65in]F)
+    {\fontsize{17}{24}\selectfont
+      \(k(x,z)=\langle\Phi(x),\Phi(z)\rangle_{\mathcal H}\)};
+  \draw[KernelBlue,line width=.75pt]
+    ([xshift=.72in,yshift=1.15in]F) -- ([xshift=7.78in,yshift=1.15in]F);
+  \node[anchor=south west,text=KernelInk]
+    at ([xshift=.72in,yshift=.67in]F)
+    {\fontsize{17}{21}\selectfont Taha Bouhsine};
+
+  % Spine.
+  \node[rotate=90,anchor=center,text=KernelInk]
+    at ([xshift=\dimexpr\KBBleed+\KBTrimWidth+.5\KBSpine\relax,
+         yshift=.5\paperheight]current page.south west)
+    {\fontsize{16}{20}\selectfont
+      \textbf{Kernels: The Geometry of Learning}\quad
+      {\color{KernelMuted}Taha Bouhsine}};
+\end{tikzpicture}
+\end{document}

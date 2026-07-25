@@ -2,8 +2,8 @@
 id: ch-text
 slug: kernels-for-text
 title: Kernels for Text
-part: VII · Designing Kernels for Data
-order: 25
+part: VI · Designing Kernels
+order: 34
 tier: practitioner
 prerequisites:
   - efficient-string-and-tree-kernels

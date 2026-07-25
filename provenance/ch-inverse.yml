@@ -8,273 +8,265 @@ references:
   - caponnetto2007
   - raskutti2014early
   - steinwart2012
+  - blanchard2018
 sections:
   - id: inverse-formulation
-    title: Learning as an inverse problem
-    contribution: adapted-and-expanded
+    title: The two inverse problems hidden in regression
+    contribution: newly-synthesized-with-full-derivation
+    permission: original prose and derivation; cited ideas remain attributed
     sources:
       - rosinverse2004
+      - caponnetto2007
     locators:
       - source: rosinverse2004
         manuscript_locator: ch-inverse.md#inverse-formulation
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3 and 4
+        status: author-checked-against-primary-source
+      - source: caponnetto2007
+        manuscript_locator: ch-inverse.md#inverse-formulation
+        source_locator: Hypotheses 1 and 2; Equations 12 to 16
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
-    permission: citation-only
-  - id: inverse-iterative
-    title: Iterative regularization and early stopping
-    contribution: adapted-and-expanded
-    sources: &a1
+  - id: inverse-paper-rosasco
+    title: Rosasco et al. make the analogy literal
+    contribution: primary-paper-deep-module
+    permission: original reconstruction and derivation
+    sources:
       - rosinverse2004
-      - caponnetto2007
-      - raskutti2014early
     locators:
       - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-iterative
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-iterative
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-iterative
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-inverse.md#inverse-paper-rosasco
+        source_locator: Sections 4 and 5; Theorems 1 and 2; Corollary 1
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
-    permission: citation-only
+  - id: inverse-filter-catalog
+    title: Spectral filters and what they preserve
+    contribution: newly-synthesized-with-common-notation
+    permission: original prose and comparison
+    sources:
+      - rosinverse2004
+      - blanchard2018
+    locators:
+      - source: rosinverse2004
+        manuscript_locator: ch-inverse.md#inverse-filter-catalog
+        source_locator: Section 3
+        status: author-checked-against-primary-source
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-filter-catalog
+        source_locator: Section 2.5, regularization functions
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
   - id: inverse-source
     title: Source conditions, qualification, and saturation
-    contribution: adapted-and-expanded
+    contribution: newly-synthesized-with-proved-theorem
+    permission: original proof from spectral functional calculus
     sources:
       - caponnetto2007
+      - blanchard2018
     locators:
       - source: caponnetto2007
         manuscript_locator: ch-inverse.md#inverse-source
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Definition 1(ii) and Remark 2
+        status: author-checked-against-primary-source
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-source
+        source_locator: Sections 2.4 and 2.5
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
-    permission: citation-only
+  - id: inverse-paper-rates
+    title: Source, capacity, and minimax rates
+    contribution: primary-paper-deep-module
+    permission: original reconstruction; theorem paraphrased with exact regime
+    sources:
+      - caponnetto2007
+      - blanchard2018
+    locators:
+      - source: caponnetto2007
+        manuscript_locator: ch-inverse.md#inverse-paper-rates
+        source_locator: Definition 1; Theorems 1 and 2
+        status: author-checked-against-primary-source
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-paper-rates
+        source_locator: Theorems 3.4 and 3.5
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
   - id: inverse-interpolation-spaces
-    title: Interpolation spaces and the source ladder
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
+    title: Interpolation spaces and misspecification
+    contribution: newly-synthesized
+    permission: original prose; cited space identifications remain attributed
     sources:
       - steinwart2012
       - caponnetto2007
     locators:
       - source: steinwart2012
         manuscript_locator: ch-inverse.md#inverse-interpolation-spaces
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3 and 4
+        status: exact-theorem-localization-pending-independent-verification
       - source: caponnetto2007
         manuscript_locator: ch-inverse.md#inverse-interpolation-spaces
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Remark 2
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: inverse-iterative
+    title: Early stopping from empirical complexity
+    contribution: primary-paper-deep-module
+    permission: original reconstruction and spectral derivation
+    sources:
+      - raskutti2014early
+    locators:
+      - source: raskutti2014early
+        manuscript_locator: ch-inverse.md#inverse-iterative
+        source_locator: Equations 3 to 6; Theorem 1; Section 4.1
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
   - id: inverse-example
-    title: A finite spectral diagnostic
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: A four-direction inverse audit
+    contribution: original-worked-example
+    permission: original calculation
+    sources:
+      - rosinverse2004
+      - raskutti2014early
     locators:
       - source: rosinverse2004
         manuscript_locator: ch-inverse.md#inverse-example
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-example
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 3, spectral regularization setup
+        status: concept-only; numerical example is author-derived
       - source: raskutti2014early
         manuscript_locator: ch-inverse.md#inverse-example
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: inverse-filter-catalog
-    title: A catalog of spectral filters
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-filter-catalog
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-filter-catalog
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-filter-catalog
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: inverse-conjugate-gradients
-    title: Conjugate gradients as regularization
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-conjugate-gradients
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-conjugate-gradients
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-conjugate-gradients
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2.3 and 4.1
+        status: concept-only; numerical example is author-derived
     verified_by: null
     verified_on: null
   - id: inverse-parameter-choice
-    title: Choosing the regularization level
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+    title: Parameter choice, Krylov methods, and computation
+    contribution: newly-synthesized
+    permission: original prose and audit protocol
+    sources:
+      - rosinverse2004
+      - raskutti2014early
+      - blanchard2018
     locators:
       - source: rosinverse2004
         manuscript_locator: ch-inverse.md#inverse-parameter-choice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-parameter-choice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 5.3
+        status: author-checked-against-primary-source
       - source: raskutti2014early
         manuscript_locator: ch-inverse.md#inverse-parameter-choice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3.1 and 3.4
+        status: author-checked-against-primary-source
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-parameter-choice
+        source_locator: Sections 2.5 and 3
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
-  - id: inverse-statistical-rates
-    title: Statistical rates and effective dimension
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
+  - id: inverse-comparisons
+    title: What the methods can and cannot claim
+    contribution: original-comparison
+    permission: original synthesis
     sources:
       - caponnetto2007
+      - raskutti2014early
+      - blanchard2018
     locators:
       - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-statistical-rates
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: inverse-stochastic
-    title: Stochastic and online iterative regularization
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-stochastic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-stochastic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-inverse.md#inverse-comparisons
+        source_locator: Section 4
+        status: author-checked-against-primary-source
       - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-stochastic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: inverse-beyond-scalar
-    title: Beyond scalar regression
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-beyond-scalar
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-beyond-scalar
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-beyond-scalar
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-inverse.md#inverse-comparisons
+        source_locator: Theorems 1 and 2
+        status: author-checked-against-primary-source
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-comparisons
+        source_locator: Sections 3 and 4
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
   - id: inverse-practice
     title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: inverse-summary
-    title: Summary and further reading
-    contribution: adapted-and-expanded
+    contribution: original-synthesis
+    permission: original prose
     sources:
       - rosinverse2004
       - caponnetto2007
       - raskutti2014early
     locators:
       - source: rosinverse2004
-        manuscript_locator: ch-inverse.md#inverse-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-inverse.md#inverse-practice
+        source_locator: Sections 4 to 6
+        status: author-checked-against-primary-source
       - source: caponnetto2007
-        manuscript_locator: ch-inverse.md#inverse-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-inverse.md#inverse-practice
+        source_locator: Definition 1 and Section 4
+        status: author-checked-against-primary-source
       - source: raskutti2014early
-        manuscript_locator: ch-inverse.md#inverse-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-inverse.md#inverse-practice
+        source_locator: Sections 3 and 5
+        status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
-    permission: citation-only
+  - id: inverse-summary
+    title: Summary and further reading
+    contribution: original-synthesis
+    permission: original prose
+    sources:
+      - rosinverse2004
+      - caponnetto2007
+      - raskutti2014early
+      - blanchard2018
+    locators:
+      - source: rosinverse2004
+        manuscript_locator: ch-inverse.md#inverse-summary
+        source_locator: complete paper
+        status: author-checked-against-primary-source
+      - source: caponnetto2007
+        manuscript_locator: ch-inverse.md#inverse-summary
+        source_locator: Definition 1; Theorems 1 and 2
+        status: author-checked-against-primary-source
+      - source: raskutti2014early
+        manuscript_locator: ch-inverse.md#inverse-summary
+        source_locator: Theorem 1
+        status: author-checked-against-primary-source
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-summary
+        source_locator: Sections 2 to 4
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-exercises
+    permission: original prompts and solutions
+    sources:
+      - rosinverse2004
+      - caponnetto2007
+      - raskutti2014early
     locators:
       - source: rosinverse2004
         manuscript_locator: ch-inverse.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 4 and 5
+        status: concepts adapted; exercises are original
       - source: caponnetto2007
         manuscript_locator: ch-inverse.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Definition 1 and Theorems 1 and 2
+        status: concepts adapted; exercises are original
       - source: raskutti2014early
         manuscript_locator: ch-inverse.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Equations 3 to 6 and Theorem 1
+        status: concepts adapted; exercises are original
     verified_by: null
     verified_on: null
-    permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_method: claim-site citations with primary-paper section, equation, and theorem locators
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24

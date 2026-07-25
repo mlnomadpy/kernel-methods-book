@@ -2,8 +2,8 @@
 id: ch-vc
 slug: vc-theory-and-generalization
 title: VC Theory and Generalization
-part: IV · Learning Theory
-order: 12
+part: 'IV · Generalization, Approximation, and Limits'
+order: 15
 tier: advanced
 prerequisites:
   - learning-theory

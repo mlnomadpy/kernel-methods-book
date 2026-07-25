@@ -28,6 +28,22 @@ def all_subseq_table(s, t):
     return D
 
 
+def all_subseq_rolling(s, t):
+    """Same recurrence with one retained row and a cumulative match sum."""
+    if len(t) > len(s):
+        s, t = t, s
+    previous = [1] * (len(t) + 1)
+    for a in s:
+        current = [1] + [0] * len(t)
+        cumulative = 0
+        for j, b in enumerate(t, start=1):
+            if a == b:
+                cumulative += previous[j - 1]
+            current[j] = previous[j] + cumulative
+        previous = current
+    return previous[-1]
+
+
 def brute_common_subsequences(s, t):
     """Count common subsequences (including empty) by direct enumeration."""
     from itertools import combinations
@@ -57,3 +73,19 @@ print("k('gatt','cata')  = D[4][4] =", D[4][4])
 print("k('gatta','cata') = D[5][4] =", D[5][4])
 print("brute force k('gatt','cata')  =", brute_common_subsequences("gatt", "cata"))
 print("brute force k('gatta','cata') =", brute_common_subsequences("gatta", "cata"))
+
+# Exhaustively certify the rolling-state invariant on every binary string up
+# to length four, including empty and repeated-symbol boundary cases.
+from itertools import product
+binary_strings = [
+    "".join(chars)
+    for length in range(5)
+    for chars in product("ab", repeat=length)
+]
+for left in binary_strings:
+    for right in binary_strings:
+        full = all_subseq_table(left, right)[-1][-1]
+        rolling = all_subseq_rolling(left, right)
+        brute = brute_common_subsequences(left, right)
+        assert full == rolling == brute, (left, right, full, rolling, brute)
+print("exhaustive full/rolling/brute agreement: 31 x 31 binary-string pairs")

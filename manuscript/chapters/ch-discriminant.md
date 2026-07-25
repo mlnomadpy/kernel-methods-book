@@ -2,8 +2,8 @@
 id: ch-discriminant
 slug: kernel-discriminants-and-projections
 title: Kernel Discriminants and Projections
-part: V · Structure and Subspaces
-order: 16
+part: V · Spectral Geometry and Unlabeled Structure
+order: 25
 tier: advanced
 prerequisites:
   - kernel-cca-and-correlation

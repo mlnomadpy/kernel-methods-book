@@ -1,23 +1,22 @@
 {
   "version": 1,
   "figures": {
-    "conformal-coverage": {
-      "id": "conformal-coverage",
-      "mode": "interactive",
-      "source": "tools/figures/conformal_coverage.py",
-      "web": "public/figures/conformal-coverage.svg",
-      "print": "publication/figures/conformal-coverage.pdf",
-      "chapters": [
-        "ch-accountable",
-        "ch-reliability"
-      ]
-    },
     "influence-glow": {
       "id": "influence-glow",
       "mode": "interactive",
       "source": "tools/figures/influence_glow.py",
       "web": "public/figures/influence-glow.svg",
       "print": "publication/figures/influence-glow.pdf",
+      "chapters": [
+        "ch-accountable"
+      ]
+    },
+    "influence-concentration-curve": {
+      "id": "influence-concentration-curve",
+      "mode": "static",
+      "source": "tools/figures/influence_concentration_curve.py",
+      "web": "public/figures/influence-concentration-curve.svg",
+      "print": "publication/figures/influence-concentration-curve.pdf",
       "chapters": [
         "ch-accountable"
       ]
@@ -52,6 +51,26 @@
         "ch-approx"
       ]
     },
+    "fill-distance-power-rate": {
+      "id": "fill-distance-power-rate",
+      "mode": "static",
+      "source": "tools/figures/fill_distance_power_rate.py",
+      "web": "public/figures/fill-distance-power-rate.svg",
+      "print": "publication/figures/fill-distance-power-rate.pdf",
+      "chapters": [
+        "ch-approx"
+      ]
+    },
+    "approximation-conditioning-frontier": {
+      "id": "approximation-conditioning-frontier",
+      "mode": "static",
+      "source": "tools/figures/approximation_conditioning_frontier.py",
+      "web": "public/figures/approximation-conditioning-frontier.svg",
+      "print": "publication/figures/approximation-conditioning-frontier.pdf",
+      "chapters": [
+        "ch-approx"
+      ]
+    },
     "kernel-workflow": {
       "id": "kernel-workflow",
       "mode": "static",
@@ -60,6 +79,16 @@
       "print": "publication/figures/kernel-workflow.pdf",
       "chapters": [
         "ch-apps"
+      ]
+    },
+    "bo-acquisition-comparison": {
+      "id": "bo-acquisition-comparison",
+      "mode": "static",
+      "source": "tools/figures/bo_acquisition_comparison.py",
+      "web": "public/figures/bo-acquisition-comparison.svg",
+      "print": "publication/figures/bo-acquisition-comparison.pdf",
+      "chapters": [
+        "ch-bo"
       ]
     },
     "bo-loop": {
@@ -78,6 +107,16 @@
       "source": "tools/figures/confounding_intervention.py",
       "web": "public/figures/confounding-intervention.svg",
       "print": "publication/figures/confounding-intervention.pdf",
+      "chapters": [
+        "ch-causal"
+      ]
+    },
+    "kernel-balance-variance-frontier": {
+      "id": "kernel-balance-variance-frontier",
+      "mode": "static",
+      "source": "tools/figures/kernel_balance_variance_frontier.py",
+      "web": "public/figures/kernel-balance-variance-frontier.svg",
+      "print": "publication/figures/kernel-balance-variance-frontier.pdf",
       "chapters": [
         "ch-causal"
       ]
@@ -102,12 +141,42 @@
         "ch-cluster"
       ]
     },
+    "spectral-clustering-eigengap": {
+      "id": "spectral-clustering-eigengap",
+      "mode": "static",
+      "source": "tools/figures/spectral_clustering_eigengap.py",
+      "web": "public/figures/spectral-clustering-eigengap.svg",
+      "print": "publication/figures/spectral-clustering-eigengap.pdf",
+      "chapters": [
+        "ch-cluster"
+      ]
+    },
     "cme-explore": {
       "id": "cme-explore",
       "mode": "interactive",
       "source": "tools/figures/cme_explore.py",
       "web": "public/figures/cme-explore.svg",
       "print": "publication/figures/cme-explore.pdf",
+      "chapters": [
+        "ch-cme"
+      ]
+    },
+    "cme-regularization-path": {
+      "id": "cme-regularization-path",
+      "mode": "static",
+      "source": "tools/figures/cme_regularization_path.py",
+      "web": "public/figures/cme-regularization-path.svg",
+      "print": "publication/figures/cme-regularization-path.pdf",
+      "chapters": [
+        "ch-cme"
+      ]
+    },
+    "kernel-bayes-weight-path": {
+      "id": "kernel-bayes-weight-path",
+      "mode": "static",
+      "source": "tools/figures/kernel_bayes_weight_path.py",
+      "web": "public/figures/kernel-bayes-weight-path.svg",
+      "print": "publication/figures/kernel-bayes-weight-path.pdf",
       "chapters": [
         "ch-cme"
       ]
@@ -132,6 +201,16 @@
         "ch-distreg"
       ]
     },
+    "distribution-regression-two-stage-curve": {
+      "id": "distribution-regression-two-stage-curve",
+      "mode": "static",
+      "source": "tools/figures/distribution_regression_two_stage_curve.py",
+      "web": "public/figures/distribution-regression-two-stage-curve.svg",
+      "print": "publication/figures/distribution-regression-two-stage-curve.pdf",
+      "chapters": [
+        "ch-distreg"
+      ]
+    },
     "dkl-collapse": {
       "id": "dkl-collapse",
       "mode": "static",
@@ -140,6 +219,46 @@
       "print": "publication/figures/dkl-collapse.pdf",
       "chapters": [
         "ch-dkl"
+      ]
+    },
+    "dkl-feature-movement-uncertainty": {
+      "id": "dkl-feature-movement-uncertainty",
+      "mode": "static",
+      "source": "tools/figures/dkl_feature_movement_uncertainty.py",
+      "web": "public/figures/dkl-feature-movement-uncertainty.svg",
+      "print": "publication/figures/dkl-feature-movement-uncertainty.pdf",
+      "chapters": [
+        "ch-dkl"
+      ]
+    },
+    "learned-kernel-lifecycle": {
+      "id": "learned-kernel-lifecycle",
+      "mode": "static",
+      "source": "tools/figures/learned_kernel_lifecycle.py",
+      "web": "public/figures/learned-kernel-lifecycle.svg",
+      "print": "publication/figures/learned-kernel-lifecycle.pdf",
+      "chapters": [
+        "ch-dkl"
+      ]
+    },
+    "koopman-spectrum-recovery": {
+      "id": "koopman-spectrum-recovery",
+      "mode": "static",
+      "source": "tools/figures/koopman_spectrum_recovery.py",
+      "web": "public/figures/koopman-spectrum-recovery.svg",
+      "print": "publication/figures/koopman-spectrum-recovery.pdf",
+      "chapters": [
+        "ch-dynamics"
+      ]
+    },
+    "bellman-residual-policy-loss": {
+      "id": "bellman-residual-policy-loss",
+      "mode": "static",
+      "source": "tools/figures/bellman_residual_policy_loss.py",
+      "web": "public/figures/bellman-residual-policy-loss.svg",
+      "print": "publication/figures/bellman-residual-policy-loss.pdf",
+      "chapters": [
+        "ch-dynamics"
       ]
     },
     "rollout-error": {
@@ -152,12 +271,12 @@
         "ch-dynamics"
       ]
     },
-    "learned-kernel-lifecycle": {
-      "id": "learned-kernel-lifecycle",
-      "mode": "static",
-      "source": "tools/figures/learned_kernel_lifecycle.py",
-      "web": "public/figures/learned-kernel-lifecycle.svg",
-      "print": "publication/figures/learned-kernel-lifecycle.pdf",
+    "frontier-regime-map": {
+      "id": "frontier-regime-map",
+      "mode": "interactive",
+      "source": "tools/figures/frontier_regime_map.py",
+      "web": "public/figures/frontier-regime-map.svg",
+      "print": "publication/figures/frontier-regime-map.pdf",
       "chapters": [
         "ch-frontier"
       ]
@@ -192,6 +311,16 @@
         "ch-gp"
       ]
     },
+    "gp-rvm-sparsity-comparison": {
+      "id": "gp-rvm-sparsity-comparison",
+      "mode": "static",
+      "source": "tools/figures/gp_rvm_sparsity_comparison.py",
+      "web": "public/figures/gp-rvm-sparsity-comparison.svg",
+      "print": "publication/figures/gp-rvm-sparsity-comparison.pdf",
+      "chapters": [
+        "ch-gp"
+      ]
+    },
     "quasiperiodic-gp": {
       "id": "quasiperiodic-gp",
       "mode": "interactive",
@@ -222,6 +351,16 @@
         "ch-highstakes"
       ]
     },
+    "uncertainty-decomposition-highstakes": {
+      "id": "uncertainty-decomposition-highstakes",
+      "mode": "static",
+      "source": "tools/figures/uncertainty_decomposition_highstakes.py",
+      "web": "public/figures/uncertainty-decomposition-highstakes.svg",
+      "print": "publication/figures/uncertainty-decomposition-highstakes.pdf",
+      "chapters": [
+        "ch-highstakes"
+      ]
+    },
     "orbit-averaging": {
       "id": "orbit-averaging",
       "mode": "static",
@@ -232,14 +371,24 @@
         "ch-invariance"
       ]
     },
-    "spectral-filters": {
-      "id": "spectral-filters",
+    "spectral-qualification-saturation": {
+      "id": "spectral-qualification-saturation",
       "mode": "static",
-      "source": "tools/figures/spectral_filters.py",
-      "web": "public/figures/spectral-filters.svg",
-      "print": "publication/figures/spectral-filters.pdf",
+      "source": "tools/figures/spectral_qualification_saturation.py",
+      "web": "public/figures/spectral-qualification-saturation.svg",
+      "print": "publication/figures/spectral-qualification-saturation.pdf",
       "chapters": [
         "ch-inverse"
+      ]
+    },
+    "krein-positive-negative-decomposition": {
+      "id": "krein-positive-negative-decomposition",
+      "mode": "static",
+      "source": "tools/figures/krein_positive_negative_decomposition.py",
+      "web": "public/figures/krein-positive-negative-decomposition.svg",
+      "print": "publication/figures/krein-positive-negative-decomposition.pdf",
+      "chapters": [
+        "ch-krein"
       ]
     },
     "spectrum-surgery": {
@@ -262,12 +411,42 @@
         "ch-ksd"
       ]
     },
+    "ksd-escape-failure": {
+      "id": "ksd-escape-failure",
+      "mode": "static",
+      "source": "tools/figures/ksd_escape_failure.py",
+      "web": "public/figures/ksd-escape-failure.svg",
+      "print": "publication/figures/ksd-escape-failure.pdf",
+      "chapters": [
+        "ch-ksd"
+      ]
+    },
+    "kernel-minimax-phase-diagram": {
+      "id": "kernel-minimax-phase-diagram",
+      "mode": "static",
+      "source": "tools/figures/kernel_minimax_phase_diagram.py",
+      "web": "public/figures/kernel-minimax-phase-diagram.svg",
+      "print": "publication/figures/kernel-minimax-phase-diagram.pdf",
+      "chapters": [
+        "ch-lower"
+      ]
+    },
     "manifold-graph-energy": {
       "id": "manifold-graph-energy",
       "mode": "static",
       "source": "tools/figures/manifold_graph_energy.py",
       "web": "public/figures/manifold-graph-energy.svg",
       "print": "publication/figures/manifold-graph-energy.pdf",
+      "chapters": [
+        "ch-manifold"
+      ]
+    },
+    "manifold-bandwidth-oversmoothing": {
+      "id": "manifold-bandwidth-oversmoothing",
+      "mode": "static",
+      "source": "tools/figures/manifold_bandwidth_oversmoothing.py",
+      "web": "public/figures/manifold-bandwidth-oversmoothing.svg",
+      "print": "publication/figures/manifold-bandwidth-oversmoothing.pdf",
       "chapters": [
         "ch-manifold"
       ]
@@ -322,6 +501,16 @@
         "ch-operator"
       ]
     },
+    "operator-kernel-coupling-transfer": {
+      "id": "operator-kernel-coupling-transfer",
+      "mode": "static",
+      "source": "tools/figures/operator_kernel_coupling_transfer.py",
+      "web": "public/figures/operator-kernel-coupling-transfer.svg",
+      "print": "publication/figures/operator-kernel-coupling-transfer.pdf",
+      "chapters": [
+        "ch-operator"
+      ]
+    },
     "sinkhorn-plan": {
       "id": "sinkhorn-plan",
       "mode": "interactive",
@@ -352,6 +541,46 @@
         "ch-quad"
       ]
     },
+    "nystrom-sampling-comparison": {
+      "id": "nystrom-sampling-comparison",
+      "mode": "static",
+      "source": "tools/figures/nystrom_sampling_comparison.py",
+      "web": "public/figures/nystrom-sampling-comparison.svg",
+      "print": "publication/figures/nystrom-sampling-comparison.pdf",
+      "chapters": [
+        "ch-randomized"
+      ]
+    },
+    "pivoted-cholesky-residual": {
+      "id": "pivoted-cholesky-residual",
+      "mode": "static",
+      "source": "tools/figures/pivoted_cholesky_residual.py",
+      "web": "public/figures/pivoted-cholesky-residual.svg",
+      "print": "publication/figures/pivoted-cholesky-residual.pdf",
+      "chapters": [
+        "ch-randomized"
+      ]
+    },
+    "preconditioned-cg-convergence": {
+      "id": "preconditioned-cg-convergence",
+      "mode": "static",
+      "source": "tools/figures/preconditioned_cg_convergence.py",
+      "web": "public/figures/preconditioned-cg-convergence.svg",
+      "print": "publication/figures/preconditioned-cg-convergence.pdf",
+      "chapters": [
+        "ch-randomized"
+      ]
+    },
+    "approximation-decision-map": {
+      "id": "approximation-decision-map",
+      "mode": "static",
+      "source": "tools/figures/approximation_decision_map.py",
+      "web": "public/figures/approximation-decision-map.svg",
+      "print": "publication/figures/approximation-decision-map.pdf",
+      "chapters": [
+        "ch-randomized"
+      ]
+    },
     "ranking-differences": {
       "id": "ranking-differences",
       "mode": "static",
@@ -362,12 +591,52 @@
         "ch-ranking"
       ]
     },
+    "shift-detection-delay": {
+      "id": "shift-detection-delay",
+      "mode": "static",
+      "source": "tools/figures/shift_detection_delay.py",
+      "web": "public/figures/shift-detection-delay.svg",
+      "print": "publication/figures/shift-detection-delay.pdf",
+      "chapters": [
+        "ch-reliability"
+      ]
+    },
+    "conformal-coverage": {
+      "id": "conformal-coverage",
+      "mode": "interactive",
+      "source": "tools/figures/conformal_coverage.py",
+      "web": "public/figures/conformal-coverage.svg",
+      "print": "publication/figures/conformal-coverage.pdf",
+      "chapters": [
+        "ch-reliability"
+      ]
+    },
+    "conformal-coverage-width-shift": {
+      "id": "conformal-coverage-width-shift",
+      "mode": "static",
+      "source": "tools/figures/conformal_coverage_width_shift.py",
+      "web": "public/figures/conformal-coverage-width-shift.svg",
+      "print": "publication/figures/conformal-coverage-width-shift.pdf",
+      "chapters": [
+        "ch-reliability"
+      ]
+    },
     "hilbert-vs-variation": {
       "id": "hilbert-vs-variation",
       "mode": "static",
       "source": "tools/figures/hilbert_vs_variation.py",
       "web": "public/figures/hilbert-vs-variation.svg",
       "print": "publication/figures/hilbert-vs-variation.pdf",
+      "chapters": [
+        "ch-rkbs"
+      ]
+    },
+    "rkbs-sparsity-path": {
+      "id": "rkbs-sparsity-path",
+      "mode": "static",
+      "source": "tools/figures/rkbs_sparsity_path.py",
+      "web": "public/figures/rkbs-sparsity-path.svg",
+      "print": "publication/figures/rkbs-sparsity-path.pdf",
       "chapters": [
         "ch-rkbs"
       ]
@@ -382,6 +651,26 @@
         "ch-scientific"
       ]
     },
+    "scientific-collocation-convergence": {
+      "id": "scientific-collocation-convergence",
+      "mode": "static",
+      "source": "tools/figures/scientific_collocation_convergence.py",
+      "web": "public/figures/scientific-collocation-convergence.svg",
+      "print": "publication/figures/scientific-collocation-convergence.pdf",
+      "chapters": [
+        "ch-scientific"
+      ]
+    },
+    "operator-resolution-transfer": {
+      "id": "operator-resolution-transfer",
+      "mode": "static",
+      "source": "tools/figures/operator_resolution_transfer.py",
+      "web": "public/figures/operator-resolution-transfer.svg",
+      "print": "publication/figures/operator-resolution-transfer.pdf",
+      "chapters": [
+        "ch-scientific"
+      ]
+    },
     "sig-draw": {
       "id": "sig-draw",
       "mode": "interactive",
@@ -390,6 +679,26 @@
       "print": "publication/figures/sig-draw.pdf",
       "chapters": [
         "ch-signature"
+      ]
+    },
+    "signature-truncation-discrimination": {
+      "id": "signature-truncation-discrimination",
+      "mode": "static",
+      "source": "tools/figures/signature_truncation_discrimination.py",
+      "web": "public/figures/signature-truncation-discrimination.svg",
+      "print": "publication/figures/signature-truncation-discrimination.pdf",
+      "chapters": [
+        "ch-signature"
+      ]
+    },
+    "svm-kkt-convergence": {
+      "id": "svm-kkt-convergence",
+      "mode": "static",
+      "source": "tools/figures/svm_kkt_convergence.py",
+      "web": "public/figures/svm-kkt-convergence.svg",
+      "print": "publication/figures/svm-kkt-convergence.pdf",
+      "chapters": [
+        "ch-solve"
       ]
     },
     "smo-working-set": {
@@ -432,6 +741,16 @@
         "ch-strings2"
       ]
     },
+    "structured-decoding-gap": {
+      "id": "structured-decoding-gap",
+      "mode": "interactive",
+      "source": "tools/figures/structured_decoding_gap.py",
+      "web": "public/figures/structured-decoding-gap.svg",
+      "print": "publication/figures/structured-decoding-gap.pdf",
+      "chapters": [
+        "ch-structured"
+      ]
+    },
     "epsilon-tube": {
       "id": "epsilon-tube",
       "mode": "static",
@@ -452,6 +771,26 @@
         "ch-testing"
       ]
     },
+    "kernel-test-power-surface": {
+      "id": "kernel-test-power-surface",
+      "mode": "static",
+      "source": "tools/figures/kernel_test_power_surface.py",
+      "web": "public/figures/kernel-test-power-surface.svg",
+      "print": "publication/figures/kernel-test-power-surface.pdf",
+      "chapters": [
+        "ch-testing"
+      ]
+    },
+    "mmd-estimator-runtime-variance": {
+      "id": "mmd-estimator-runtime-variance",
+      "mode": "static",
+      "source": "tools/figures/mmd_estimator_runtime_variance.py",
+      "web": "public/figures/mmd-estimator-runtime-variance.svg",
+      "print": "publication/figures/mmd-estimator-runtime-variance.pdf",
+      "chapters": [
+        "ch-testing"
+      ]
+    },
     "tfidf-geometry": {
       "id": "tfidf-geometry",
       "mode": "static",
@@ -462,12 +801,12 @@
         "ch-text"
       ]
     },
-    "universality-capacity": {
-      "id": "universality-capacity",
+    "universality-capacity-frontier": {
+      "id": "universality-capacity-frontier",
       "mode": "static",
-      "source": "tools/figures/universality_capacity.py",
-      "web": "public/figures/universality-capacity.svg",
-      "print": "publication/figures/universality-capacity.pdf",
+      "source": "tools/figures/universality_capacity_frontier.py",
+      "web": "public/figures/universality-capacity-frontier.svg",
+      "print": "publication/figures/universality-capacity-frontier.pdf",
       "chapters": [
         "ch-universal"
       ]
@@ -489,26 +828,17 @@
       "web": "public/figures/gram-heatmap.svg",
       "print": "publication/figures/gram-heatmap.pdf",
       "chapters": [
-        "ch00",
-        "ch01",
-        "ch02",
-        "ch06",
-        "ch07",
-        "ch08",
-        "ch13"
+        "ch00"
       ]
     },
-    "kernel-lab": {
-      "id": "kernel-lab",
-      "mode": "interactive",
-      "source": "tools/figures/kernel_lab.py",
-      "web": "public/figures/kernel-lab.svg",
-      "print": "publication/figures/kernel-lab.pdf",
+    "gram-validity-witness": {
+      "id": "gram-validity-witness",
+      "mode": "static",
+      "source": "tools/figures/gram_validity_witness.py",
+      "web": "public/figures/gram-validity-witness.svg",
+      "print": "publication/figures/gram-validity-witness.pdf",
       "chapters": [
-        "ch01",
-        "ch03",
-        "ch04",
-        "ch12"
+        "ch01"
       ]
     },
     "feature-lift": {
@@ -518,16 +848,45 @@
       "web": "public/figures/feature-lift.svg",
       "print": "publication/figures/feature-lift.pdf",
       "chapters": [
-        "ch02",
-        "ch11"
+        "ch02"
       ]
     },
-    "complexity-tradeoff": {
-      "id": "complexity-tradeoff",
+    "representer-orthogonal-decomposition": {
+      "id": "representer-orthogonal-decomposition",
       "mode": "static",
-      "source": "tools/figures/complexity_tradeoff.py",
-      "web": "public/figures/complexity-tradeoff.svg",
-      "print": "publication/figures/complexity-tradeoff.pdf",
+      "source": "tools/figures/representer_orthogonal_decomposition.py",
+      "web": "public/figures/representer-orthogonal-decomposition.svg",
+      "print": "publication/figures/representer-orthogonal-decomposition.pdf",
+      "chapters": [
+        "ch02"
+      ]
+    },
+    "krr-spectral-shrinkage": {
+      "id": "krr-spectral-shrinkage",
+      "mode": "static",
+      "source": "tools/figures/krr_spectral_shrinkage.py",
+      "web": "public/figures/krr-spectral-shrinkage.svg",
+      "print": "publication/figures/krr-spectral-shrinkage.pdf",
+      "chapters": [
+        "ch03"
+      ]
+    },
+    "kernel-lab": {
+      "id": "kernel-lab",
+      "mode": "interactive",
+      "source": "tools/figures/kernel_lab.py",
+      "web": "public/figures/kernel-lab.svg",
+      "print": "publication/figures/kernel-lab.pdf",
+      "chapters": [
+        "ch03"
+      ]
+    },
+    "learning-error-decomposition": {
+      "id": "learning-error-decomposition",
+      "mode": "static",
+      "source": "tools/figures/learning_error_decomposition.py",
+      "web": "public/figures/learning-error-decomposition.svg",
+      "print": "publication/figures/learning-error-decomposition.pdf",
       "chapters": [
         "ch04"
       ]
@@ -552,26 +911,34 @@
         "ch06"
       ]
     },
-    "spectrum-smoothness": {
-      "id": "spectrum-smoothness",
+    "kpca-spectrum-reconstruction": {
+      "id": "kpca-spectrum-reconstruction",
       "mode": "static",
-      "source": "tools/figures/spectrum_smoothness.py",
-      "web": "public/figures/spectrum-smoothness.svg",
-      "print": "publication/figures/spectrum-smoothness.pdf",
+      "source": "tools/figures/kpca_spectrum_reconstruction.py",
+      "web": "public/figures/kpca-spectrum-reconstruction.svg",
+      "print": "publication/figures/kpca-spectrum-reconstruction.pdf",
+      "chapters": [
+        "ch06"
+      ]
+    },
+    "mercer-spectrum-atlas": {
+      "id": "mercer-spectrum-atlas",
+      "mode": "static",
+      "source": "tools/figures/mercer_spectrum_atlas.py",
+      "web": "public/figures/mercer-spectrum-atlas.svg",
+      "print": "publication/figures/mercer-spectrum-atlas.pdf",
       "chapters": [
         "ch07"
       ]
     },
-    "rff-converge": {
-      "id": "rff-converge",
-      "mode": "interactive",
-      "source": "tools/figures/rff_converge.py",
-      "web": "public/figures/rff-converge.svg",
-      "print": "publication/figures/rff-converge.pdf",
+    "bochner-kernel-spectrum-atlas": {
+      "id": "bochner-kernel-spectrum-atlas",
+      "mode": "static",
+      "source": "tools/figures/bochner_kernel_spectrum_atlas.py",
+      "web": "public/figures/bochner-kernel-spectrum-atlas.svg",
+      "print": "publication/figures/bochner-kernel-spectrum-atlas.pdf",
       "chapters": [
-        "ch08",
-        "ch13",
-        "ch14"
+        "ch08"
       ]
     },
     "sequence-feature-map": {
@@ -584,12 +951,22 @@
         "ch09"
       ]
     },
-    "wl-refine": {
-      "id": "wl-refine",
-      "mode": "interactive",
-      "source": "tools/figures/wl_refine.py",
-      "web": "public/figures/wl-refine.svg",
-      "print": "publication/figures/wl-refine.pdf",
+    "sequence-decay-sensitivity": {
+      "id": "sequence-decay-sensitivity",
+      "mode": "static",
+      "source": "tools/figures/sequence_decay_sensitivity.py",
+      "web": "public/figures/sequence-decay-sensitivity.svg",
+      "print": "publication/figures/sequence-decay-sensitivity.pdf",
+      "chapters": [
+        "ch09"
+      ]
+    },
+    "wl-expressivity-collision": {
+      "id": "wl-expressivity-collision",
+      "mode": "static",
+      "source": "tools/figures/wl_expressivity_collision.py",
+      "web": "public/figures/wl-expressivity-collision.svg",
+      "print": "publication/figures/wl-expressivity-collision.pdf",
       "chapters": [
         "ch10"
       ]
@@ -604,6 +981,16 @@
         "ch11"
       ]
     },
+    "characteristic-kernel-witness": {
+      "id": "characteristic-kernel-witness",
+      "mode": "static",
+      "source": "tools/figures/characteristic_kernel_witness.py",
+      "web": "public/figures/characteristic-kernel-witness.svg",
+      "print": "publication/figures/characteristic-kernel-witness.pdf",
+      "chapters": [
+        "ch11"
+      ]
+    },
     "kernel-weight-path": {
       "id": "kernel-weight-path",
       "mode": "static",
@@ -614,12 +1001,12 @@
         "ch12"
       ]
     },
-    "approximation-decision-map": {
-      "id": "approximation-decision-map",
+    "scaling-cost-frontier": {
+      "id": "scaling-cost-frontier",
       "mode": "static",
-      "source": "tools/figures/approximation_decision_map.py",
-      "web": "public/figures/approximation-decision-map.svg",
-      "print": "publication/figures/approximation-decision-map.pdf",
+      "source": "tools/figures/scaling_cost_frontier.py",
+      "web": "public/figures/scaling-cost-frontier.svg",
+      "print": "publication/figures/scaling-cost-frontier.pdf",
       "chapters": [
         "ch13"
       ]

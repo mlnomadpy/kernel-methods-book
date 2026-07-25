@@ -10,34 +10,137 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Identify the exact steps of the standard RKHS representer proof that fail without an inner product.
+      For each of the three representer forms in Section [Three representer questions, not one](#rkbs-three-questions), identify whether the finite expansion is primal or dual, whether its atoms are fixed or learned, and whether sparsity follows.
     answer: >-
-      The RKHS proof uses an orthogonal projection onto observed kernel sections, the Pythagorean norm identity, and reproduction by an element of the same space. A general Banach space has no canonical orthogonal complement, no Pythagorean identity, and identifies bounded evaluations with dual elements rather than primal vectors. The replacement argument therefore works through norming functionals, subgradients, and duality maps.
+      The RKHS theorem is a primal expansion in sections centered at the
+      observed inputs; the atoms are fixed and squared-norm regularization
+      does not imply sparse coefficients. The smooth RKBS theorem is a
+      finite expansion of the dual element \(J(\widehat f)\) in observed
+      evaluation functionals; applying \(J^{-1}\) is generally nonlinear and
+      sparsity does not follow. The atomic or variation theorem is a primal
+      expansion in extreme atoms whose parameters can be learned
+      continuously, often plus a null-space term. Sparsity follows only
+      under compactness, existence, and extreme-point assumptions that give
+      a finite atomic minimizer.
   - number: 2
     kind: computation
     status: draft
     prompt: >-
-      Compute the normalized duality map and its inverse for a finite-dimensional \(\ell_p\) space at a supplied vector.
+      Verify the \(\ell_4^3\) minimizer in Section [A finite-dimensional Banach calculation](#rkbs-worked-lp). Compute its normalized duality image and exhibit coefficients placing that image in the span of the two constraint normals.
     answer: >-
-      For \(1<p<\infty\) with conjugate exponent \(q\), one normalized convention is \(J_p(x)_i=\lVert x\rVert_p^{\,2-p}|x_i|^{p-2}x_i\). It satisfies \(\langle x,J_p(x)\rangle=\lVert x\rVert_p^2\) and \(\lVert J_p(x)\rVert_q=\lVert x\rVert_p\). Apply the analogous \(q\)-formula to recover \(x\), checking zero coordinates separately.
+      Put \(r=2^{1/3}\), \(a=(1+r)^{-1}\), and \(b=r(1+r)^{-1}\).
+      The derivative of \(2a^4+(1-a)^4\) is
+      \(8a^3-4(1-a)^3\), so the optimum satisfies \(b^3=2a^3\).
+      Let \(N=(2a^4+b^4)^{1/4}\). Then
+      \(J_4(x)=N^{-2}(a^3,a^3,b^3)
+      =N^{-2}a^3(1,1,2)\).
+      Since
+      \((1,1,2)=(1,0,1)+(0,1,1)\), the dual element is in the
+      span of the two constraint normals with equal coefficients
+      \(N^{-2}a^3\). The primal vector is not their linear combination with
+      those same coefficients because \(J_4^{-1}\) is nonlinear.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Derive the first-order optimality condition showing that the norming functional of a smooth RKBS solution lies in the span of evaluation functionals.
+      Extend Theorem [smooth Banach representer principle](#thm-rkbs-dual-representer) to a convex nondifferentiable data term by using subgradients. State the condition needed on the radial norm penalty at a nonzero minimizer.
     answer: >-
-      Differentiate the empirical loss through the evaluation map and differentiate the smooth norm penalty through its duality map. Optimality gives \(\sum_i g_i\delta_{x_i}+\lambda c\,J(\widehat f)=0\), where \(g_i\) are loss derivatives and \(c\) is the scalar derivative of the radial penalty. Hence \(J(\widehat f)\) belongs to the span of evaluations whenever \(c\ne0\); applying \(J^{-1}\) yields the primal solution, generally nonlinearly.
+      For \(F(f)=\Phi(Ef)+\lambda\Psi(\lVert f\rVert)\), convex
+      optimality gives
+      \(0\in E^\ast\partial\Phi(E\widehat f)+
+      \lambda\,\partial\{\Psi(\lVert\cdot\rVert)\}(\widehat f)\).
+      At a nonzero point in a smooth Banach space, if
+      \(\Psi\) is differentiable with
+      \(\Psi'(\lVert\widehat f\rVert)>0\), the second
+      subdifferential is the singleton
+      \(\{\Psi'(\lVert\widehat f\rVert)
+      J(\widehat f)/\lVert\widehat f\rVert\}\).
+      Therefore \(J(\widehat f)\in\operatorname{ran}E^\ast\).
+      If the radial derivative can vanish, this inference can fail because
+      the norm term contributes no norming functional.
   - number: 4
-    kind: challenge
+    kind: computation
     status: draft
     prompt: >-
-      Prove a finite-support bound for an extreme solution of an atomic-norm interpolation problem with finitely many scalar measurements.
+      Derive the dual of the \(\ell_1^3\) interpolation problem in Section [Worked sparse certificate](#rkbs-worked-l1), verify the certificate \(c=(1/2,1/2)\), and use complementary slackness to recover the active coordinate.
     answer: >-
-      Map every atom to its vector of observed measurements. The feasible measurement vector lies in a scaled convex hull of signed atomic images. A Carathéodory argument represents it using at most one more atom than the dimension of the measurement space, with refinements possible under symmetry or equality constraints. Lifting those coefficients back gives a finite signed atomic measure with the same measurements and no larger norm; compactness or weak-star existence assumptions are needed to ensure an extreme minimizer exists.
+      With
+      \(A=[[1,0,1],[0,1,1]]\) and \(y=(1,1)\), the dual of
+      \(\min\{\lVert x\rVert_1:Ax=y\}\) is
+      \(\max_c y^\top c\) subject to
+      \(\lVert A^\top c\rVert_\infty\le1\).
+      For \(c=(1/2,1/2)\),
+      \(A^\top c=(1/2,1/2,1)\), so it is feasible with objective
+      one. The primal point \((0,0,1)\) is feasible with norm one, proving
+      optimality by strong duality. Complementary slackness permits a
+      nonzero coordinate only where the dual correlation has magnitude one;
+      only coordinate three saturates, recovering the support.
   - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove that an extreme solution of \(\min\{\lVert\alpha\rVert_1:A\alpha=y\}\) has at most \(\operatorname{rank}(A)\) nonzero coordinates. Explain why this finite-dimensional fact does not by itself prove the RKBS sparse representer theorem.
+    answer: >-
+      If an extreme minimizer has more active coordinates than
+      \(\operatorname{rank}(A)\), its active columns are linearly dependent.
+      Choose nonzero \(h\) supported on the active set with \(Ah=0\).
+      Basis-pursuit optimality supplies a dual certificate \(c\) with
+      \(A_S^\top c=\operatorname{sign}(\alpha_S)\), so
+      \(\operatorname{sign}(\alpha_S)^\top h_S=c^\top A_Sh_S=0\).
+      For small \(t\), the signs of \(\alpha\pm th\) do not change, so both
+      perturbations are feasible with the same \(\ell_1\) norm and have
+      midpoint \(\alpha\), contradicting extremality. The RKBS theorem additionally needs a predual and
+      weak-star existence, a data-dependent certificate, A1 to reduce the
+      exposed face to kernel sections, and A2 to identify the Banach norm
+      exactly with the coefficient \(\ell_1\) norm. Without those steps
+      there is no justified finite matrix \(A\).
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove that every function interpolating \((0,0),(1,1),(2,0)\) with distributional second derivative a finite measure satisfies \(\lVert f''\rVert_{\mathrm{TV}}\ge2\). Verify that \(s(x)=x-2(x-1)_+\) attains equality.
+    answer: >-
+      Let \(g=f'\), interpreted as a function of bounded variation. The
+      average of \(g\) on \([0,1]\) is
+      \(f(1)-f(0)=1\), while its average on \([1,2]\) is
+      \(f(2)-f(1)=-1\). There must be points, or limiting approximate
+      continuity points, on the two intervals at which values of \(g\)
+      differ by at least two. Hence
+      \(\operatorname{TV}(g)=\lVert f''\rVert_{\mathrm{TV}}\ge2\).
+      For \(s\), the slope is \(1\) before \(x=1\) and \(-1\) after it,
+      so \(s''=-2\delta_1\) and the total variation is exactly two.
+      It also interpolates the three data, proving optimality.
+  - number: 7
     kind: synthesis
     status: draft
     prompt: >-
-      Compare an RKHS estimator, a finite-dictionary lasso, and a continuous variation-space model on the same regression task. Specify capacity control, optimization certificates, sparsity, compute, and extrapolation diagnostics.
+      Compare \(\ell_2\), \(\ell_p\) for \(1\lt p\lt\infty\), and \(\ell_1\) regularization in terms of existence, uniqueness, duality-map smoothness, coefficient sparsity, and sensitivity to correlated atoms.
     answer: >-
-      Use identical nested splits and tune the RKHS norm, lasso penalty, and variation norm on the same validation objective. Report test error, robustness, active atoms, evaluation cost, primal-dual gaps, atom-oracle tolerances, and sensitivity to initialization. Examine extrapolation and learned atom locations, and distinguish dictionary sparsity from continuous feature learning; the variation model receives credit only when its oracle certificate and improvement survive matched compute and repeated seeds.
+      In finite dimensions all coercive closed problems attain minimizers.
+      Strict convexity gives uniqueness for \(\ell_p\), \(1\lt p\lt\infty\);
+      \(\ell_1\) can have a face of minimizers. The \(\ell_p\) norm is smooth
+      away from zero and has a single-valued nonlinear duality map, linear
+      only at \(p=2\). Its curved ball generally produces dense solutions.
+      The \(\ell_1\) ball is nonsmooth and its exposed faces can select exact
+      coordinate sparsity, but correlated or duplicate atoms can make the
+      sparse representation nonunique and unstable. Thus smooth uniqueness
+      and exact sparsity are different goals.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: >-
+      Design a continuous-dictionary regression experiment comparing kernel ridge regression, a fixed-dictionary lasso, and variation-norm ridge splines. Specify the atom oracle, primal and dual certificates, matched capacity tuning, extrapolation tests, compute accounting, and a case where the oracle fails.
+    answer: >-
+      Use one data-generating function with a small number of oriented ridge
+      changes plus noise. Tune all methods on nested splits with a matched
+      prediction criterion and report RKHS norm, dictionary \(\ell_1\) norm,
+      and variation norm rather than matching raw penalty parameters. Kernel
+      ridge uses a stable Gram solve and residual certificate; lasso reports
+      a primal-dual gap on a fixed direction-offset grid; the variation model
+      uses column generation with an oracle maximizing residual correlation
+      over direction and offset. Report test and extrapolation error, active
+      atoms, wall time, memory, the master-problem gap, and the oracle
+      tolerance. A useful failure case places two nearly equivalent
+      directions around a narrow ridge so local oracle optimization returns
+      a suboptimal atom. Then a small restricted-master gap must not be
+      reported as a global certificate.

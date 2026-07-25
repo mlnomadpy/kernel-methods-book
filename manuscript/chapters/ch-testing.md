@@ -2,8 +2,8 @@
 id: ch-testing
 slug: kernel-hypothesis-testing
 title: Kernel Hypothesis Testing
-part: VIII · Kernels and Distributions
-order: 32
+part: VII · Distributions as Objects
+order: 42
 tier: practitioner
 prerequisites:
   - kernel-mean-embeddings
@@ -203,6 +203,10 @@ An alternative to permutation is to bootstrap the chi-square mixture directly, e
 
 ## Test power and the objective for kernel choice {#test-power}
 
+Power depends jointly on sample size and kernel geometry. In the stylized Gaussian-shift calculation below, bandwidths that are too small fragment the signal and bandwidths that are too large wash it out; additional samples increase power but cannot make a badly mismatched bandwidth efficient. The surface holds the nominal level at \(0.05\) and visualizes the alternative, not the null calibration procedure.
+
+<figure class="viz" data-figure="kernel-test-power-surface" data-alt="A heat map of test power over sample size and kernel bandwidth has a high-power ridge at intermediate bandwidth and rising power with sample size."><figcaption>Kernel choice is part of the testing objective. Power grows with sample size along every useful bandwidth, but the strongest gain lies on an intermediate ridge; the contour lines mark 50, 80, and 95 percent power at nominal level \(0.05\).</figcaption></figure>
+
 With the level pinned by permutation, the remaining freedom is the kernel, and it is decisive. Two characteristic kernels both give valid tests, yet one may reject at \(n = 50\) where the other needs \(n = 5000\). To choose well we need to know what power depends on. Combining the two regimes of the null and alternative laws yields a clean asymptotic answer.
 
 ::::: {.proposition #prop-30-4}
@@ -291,6 +295,10 @@ with parameters \(\omega = (w, a, \varepsilon)\). The factor \(q\) and the floor
 The parameters \(\omega\) are trained on a split to maximize the same power proxy \(\hat J(\omega)\), and the other split runs the permutation test with the fitted kernel, so validity is preserved exactly as in the data-splitting algorithm. The deep-kernel test of Liu et al. (2020) substantially outstrips fixed and single-bandwidth kernels on structured data, precisely because \(\phi_w\) can place the kernel's sensitivity where \(P\) and \(Q\) actually diverge. A complementary route keeps the kernel fixed but replaces the full quadratic statistic by the witness evaluated at a few optimized locations: the analytic mean-embedding and smooth-characteristic-function tests (Chwialkowski et al., 2015) and the interpretable features of Jitkrittum et al. (2016) select test locations to maximize power, yielding tests that run in linear time and, as a bonus, report the concrete points in input space where the distributions differ most.
 
 ## Linear-time versus quadratic-time estimators {#linear-time}
+
+Computational order and estimator quality are separate axes. The following scaling plate holds the underlying discrepancy fixed and compares idealized kernel-evaluation work with variance laws for the quadratic, block, and linear-time estimators. Constants are shown deliberately: an \(O(n)\) method can be faster while paying a visibly larger variance constant.
+
+<figure class="viz" data-figure="mmd-estimator-runtime-variance" data-alt="Two log-log panels compare relative work and variance for quadratic, block, and linear-time MMD estimators as sample size grows."><figcaption>Subquadratic MMD estimators exchange pairwise averaging for computational reach. Block and linear-time estimates reduce work, but their variance constants are larger; the appropriate estimator is determined by the runtime budget and the precision required for calibration and power.</figcaption></figure>
 
 The U-statistic sums over all \(O(n^2)\) pairs, and each of the \(B\) permutations repeats that cost, so the quadratic test scales poorly. When data are abundant but the budget is fixed, it is better to spend it on more data through a cheaper estimator. The *linear-time* MMD pairs the samples and averages the core over consecutive, non-overlapping pairs,
 

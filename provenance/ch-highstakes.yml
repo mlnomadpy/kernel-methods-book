@@ -1,63 +1,119 @@
-chapter: "ch-highstakes"
-slug: "kernels-in-science-and-space"
-title: "Kernels in Science and Space"
-status: needs-verification
+chapter: ch-highstakes
+slug: kernels-in-science-and-space
+title: Kernels in Science and Space
+status: author-mapped-pending-independent-verification
 private_source_sha256: null
-references: ["aigrain2023gp", "foremanmackey2017celerite", "angus2018rotation", "rajpaul2015rv", "haywood2014corot7", "allen2012findchirp", "almosallam2016gpz", "fujimaki2005telemetry", "peng2018orbit", "deringer2021gpr", "bartok2010gap", "bartok2013soap", "bartok2018silicon", "rupp2012coulomb", "ramakrishnan2014qm9", "faber2017errors", "faber2018fchl", "christensen2020fchl", "chmiela2017gdml", "vandermause2020flare", "jinnouchi2019onthefly", "sacks1989dace", "shahriari2016", "frazier2018", "shields2021bo", "xue2016adaptive", "lookman2019active", "kennedy2001calibration", "lawrence2010coyote", "campsvalls2005hyper", "campsvalls2006composite", "campsvalls2016gpsurvey", "verrelst2012retrieval", "verrelst2013uncertainty", "verrelst2016emulation", "perezsuay2017fair"]
+references:
+  - aigrain2023gp
+  - foremanmackey2017celerite
+  - angus2018rotation
+  - rajpaul2015rv
+  - haywood2014corot7
+  - allen2012findchirp
+  - fujimaki2005telemetry
+  - peng2018orbit
+  - deringer2021gpr
+  - bartok2010gap
+  - bartok2013soap
+  - chmiela2017gdml
+  - vandermause2020flare
+  - jinnouchi2019onthefly
+  - sacks1989dace
+  - shahriari2016
+  - shields2021bo
+  - xue2016adaptive
+  - lookman2019active
+  - campsvalls2006composite
+  - campsvalls2016gpsurvey
+  - verrelst2012retrieval
+  - verrelst2013uncertainty
 sections:
-  - id: "why-these-domains"
-    title: "Why these domains demand accountable models"
-    contribution: adapted-and-expanded
+  - id: why-these-domains
+    title: Why these domains demand accountable models
+    contribution: original-synthesis
     sources: []
     locators: []
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: "space-and-astronomy"
-    title: "Space and astronomy"
+    verified_by: deterministic-protocol-audit
+    verified_on: 2026-07-25
+    permission: original
+  - id: space-and-astronomy
+    title: Space and astronomy
     contribution: adapted-and-expanded
+    sources: [aigrain2023gp, angus2018rotation, foremanmackey2017celerite, rajpaul2015rv, haywood2014corot7, allen2012findchirp, fujimaki2005telemetry, peng2018orbit]
+    locators:
+      - {source: angus2018rotation, manuscript_locator: "ch-highstakes.md#light-curves", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+      - {source: foremanmackey2017celerite, manuscript_locator: "ch-highstakes.md#light-curves", source_locator: "Sections 2--5", status: author-checked-pending-independent-verification}
+      - {source: rajpaul2015rv, manuscript_locator: "ch-highstakes.md#radial-velocity", source_locator: "Sections 2--3", status: author-checked-pending-independent-verification}
+      - {source: haywood2014corot7, manuscript_locator: "ch-highstakes.md#radial-velocity", source_locator: "Sections 3--5", status: author-checked-pending-independent-verification}
+      - {source: allen2012findchirp, manuscript_locator: "ch-highstakes.md#matched-filter", source_locator: "Sections II--IX; Equations (2.3), (4.1), (8.1)", status: author-checked-pending-independent-verification}
+      - {source: fujimaki2005telemetry, manuscript_locator: "ch-highstakes.md#telemetry-orbits", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+      - {source: peng2018orbit, manuscript_locator: "ch-highstakes.md#telemetry-orbits", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+    verified_by: author-source-map
+    verified_on: 2026-07-25
+    permission: citation-only
+  - id: molecules-and-materials
+    title: Molecules and materials
+    contribution: adapted-and-expanded
+    sources: [deringer2021gpr, bartok2010gap, bartok2013soap, chmiela2017gdml, vandermause2020flare, jinnouchi2019onthefly, sacks1989dace, shahriari2016, shields2021bo, xue2016adaptive, lookman2019active]
+    locators:
+      - {source: deringer2021gpr, manuscript_locator: "ch-highstakes.md#molecules-and-materials", source_locator: "Sections 2--6", status: author-checked-pending-independent-verification}
+      - {source: bartok2010gap, manuscript_locator: "ch-highstakes.md#force-fields", source_locator: "Method; Equations (1)--(4)", status: author-checked-pending-independent-verification}
+      - {source: bartok2013soap, manuscript_locator: "ch-highstakes.md#force-fields", source_locator: "Sections II--IV", status: author-checked-pending-independent-verification}
+      - {source: chmiela2017gdml, manuscript_locator: "ch-highstakes.md#force-fields", source_locator: "Method; Equation (1)", status: author-checked-pending-independent-verification}
+      - {source: vandermause2020flare, manuscript_locator: "ch-highstakes.md#active-learning-chemistry", source_locator: "Methods, Bayesian active learning", status: author-checked-pending-independent-verification}
+      - {source: jinnouchi2019onthefly, manuscript_locator: "ch-highstakes.md#active-learning-chemistry", source_locator: "Section II", status: author-checked-pending-independent-verification}
+      - {source: sacks1989dace, manuscript_locator: "ch-highstakes.md#bo-discovery", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+      - {source: shahriari2016, manuscript_locator: "ch-highstakes.md#bo-discovery", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+      - {source: shields2021bo, manuscript_locator: "ch-highstakes.md#bo-discovery", source_locator: "Methods", status: author-checked-pending-independent-verification}
+      - {source: xue2016adaptive, manuscript_locator: "ch-highstakes.md#bo-discovery", source_locator: "Methods", status: author-checked-pending-independent-verification}
+      - {source: lookman2019active, manuscript_locator: "ch-highstakes.md#bo-discovery", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+    verified_by: author-source-map
+    verified_on: 2026-07-25
+    permission: citation-only
+  - id: earth-observation
+    title: Earth observation
+    contribution: adapted-and-expanded
+    sources: [campsvalls2006composite, campsvalls2016gpsurvey, verrelst2012retrieval, verrelst2013uncertainty]
+    locators:
+      - {source: campsvalls2006composite, manuscript_locator: "ch-highstakes.md#earth-observation", source_locator: "Equations (1)--(4)", status: author-checked-pending-independent-verification}
+      - {source: verrelst2012retrieval, manuscript_locator: "ch-highstakes.md#earth-observation", source_locator: "Sections II--IV", status: author-checked-pending-independent-verification}
+      - {source: verrelst2013uncertainty, manuscript_locator: "ch-highstakes.md#earth-observation", source_locator: "Sections 2--4", status: author-checked-pending-independent-verification}
+      - {source: campsvalls2016gpsurvey, manuscript_locator: "ch-highstakes.md#earth-observation", source_locator: "Sections II--V", status: author-checked-pending-independent-verification}
+    verified_by: author-source-map
+    verified_on: 2026-07-25
+    permission: citation-only
+  - id: what-the-cases-share
+    title: What the cases share
+    contribution: original-synthesis
     sources: []
     locators: []
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: "molecules-and-materials"
-    title: "Molecules and materials"
-    contribution: adapted-and-expanded
+    verified_by: deterministic-protocol-audit
+    verified_on: 2026-07-25
+    permission: original
+  - id: highstakes-practice
+    title: Common mistakes and practical implications
+    contribution: original-synthesis
     sources: []
     locators: []
-    verified_by: null
-    verified_on: null
+    verified_by: deterministic-protocol-audit
+    verified_on: 2026-07-25
+    permission: original
+  - id: summary
+    title: Summary and further reading
+    contribution: original-synthesis
+    sources: [aigrain2023gp, deringer2021gpr, campsvalls2016gpsurvey]
+    locators:
+      - {source: aigrain2023gp, manuscript_locator: "ch-highstakes.md#summary", source_locator: "Sections 3--5", status: author-checked-pending-independent-verification}
+      - {source: deringer2021gpr, manuscript_locator: "ch-highstakes.md#summary", source_locator: "Sections 2--6", status: author-checked-pending-independent-verification}
+      - {source: campsvalls2016gpsurvey, manuscript_locator: "ch-highstakes.md#summary", source_locator: "Sections II--V", status: author-checked-pending-independent-verification}
+    verified_by: author-source-map
+    verified_on: 2026-07-25
     permission: citation-only
-  - id: "earth-observation"
-    title: "Earth observation"
-    contribution: adapted-and-expanded
+  - id: exercises
+    title: Exercises
+    contribution: original
     sources: []
     locators: []
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: "what-the-cases-share"
-    title: "What the cases share"
-    contribution: adapted-and-expanded
-    sources: []
-    locators: []
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: "summary"
-    title: "Summary"
-    contribution: adapted-and-expanded
-    sources: []
-    locators: []
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: "exercises"
-    title: "Exercises"
-    contribution: adapted-and-expanded
-    sources: []
-    locators: []
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+    verified_by: deterministic-checks
+    verified_on: 2026-07-25
+    permission: original

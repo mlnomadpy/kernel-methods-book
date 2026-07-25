@@ -2,8 +2,8 @@
 id: ch-mds
 slug: data-visualization-and-mds
 title: Data Visualization and Kernel MDS
-part: V · Structure and Subspaces
-order: 17
+part: V · Spectral Geometry and Unlabeled Structure
+order: 26
 tier: advanced
 prerequisites:
   - kernel-discriminants-and-projections

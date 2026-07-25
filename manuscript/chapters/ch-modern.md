@@ -2,8 +2,8 @@
 id: ch-modern
 slug: kernels-now
 title: Modern Generalization Theory
-part: XII · Kernels Now
-order: 44
+part: 'IV · Generalization, Approximation, and Limits'
+order: 21
 tier: advanced
 prerequisites:
   - bayesian-optimization-and-bandits

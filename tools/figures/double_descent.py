@@ -1,20 +1,26 @@
 """Ridgeless test risk on both sides of the interpolation threshold."""
+import jax
+import jax.numpy as jnp
 import numpy as np
 
 import _style as S
 
+import matplotlib.pyplot as plt
+
 S.apply_style()
+jax.config.update("jax_enable_x64", True)
 
 noise = 0.18
 signal = 0.58
-left = np.linspace(0.08, 0.94, 190)
-right = np.linspace(1.06, 3.0, 250)
+left = jnp.linspace(0.08, 0.94, 190)
+right = jnp.linspace(1.06, 3.0, 250)
 risk_left = noise * left / (1.0 - left)
 risk_right = signal * (1.0 - 1.0 / right) + noise / (right - 1.0)
 
-assert np.all(np.diff(risk_left) > 0)
-assert risk_right[0] > risk_right[-1]
-assert np.all(np.isfinite(risk_left)) and np.all(np.isfinite(risk_right))
+assert bool(jnp.all(jnp.diff(risk_left) > 0))
+assert bool(risk_right[0] > risk_right[-1])
+assert bool(jnp.all(jnp.isfinite(risk_left))) and bool(jnp.all(jnp.isfinite(risk_right)))
+left, right, risk_left, risk_right = map(np.asarray, (left, right, risk_left, risk_right))
 
 fig, ax = S.new_axes(5.35, 3.05)
 ax.plot(left, risk_left, color=S.INK, lw=2.2)

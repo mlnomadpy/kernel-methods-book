@@ -33,10 +33,25 @@ print(f"  true equilibrium bond length re : {re:.4f} A")
 print(f"  recovered argmin of KRR curve   : {r_hat:.4f} A   (error {abs(r_hat - re) * 1000:.1f} mA)")
 
 # closed-form leave-one-out errors: (y_i - yhat_i)/(1 - H_ii)
-Ainv = np.linalg.inv(K)
-H = rbf(r_train, r_train, ell) @ Ainv
+H = np.linalg.solve(K, rbf(r_train, r_train, ell)).T
 yhat = H @ y_train
 loo = (y_train - yhat) / (1 - np.diag(H))
 i_worst = int(np.argmax(np.abs(loo)))
 print(f"  largest |LOO error| at r = {r_train[i_worst]:.2f} A : {abs(loo[i_worst]):.3f} eV  (repulsive wall)")
 print(f"  median |LOO error| over the set : {np.median(np.abs(loo)):.4f} eV")
+
+# Held-out operational grid and compressed-region negative control.
+grid_error = np.abs(pred - morse(grid))
+compressed = grid <= 0.72
+r_thin = r_train[2:]
+y_thin = y_train[2:]
+K_thin = rbf(r_thin, r_thin, ell) + lam * np.eye(len(r_thin))
+pred_thin = rbf(grid, r_thin, ell) @ np.linalg.solve(K_thin, y_thin)
+thin_error = np.abs(pred_thin - morse(grid))
+print(f"  full-design max grid error       : {grid_error.max():.4f} eV")
+print(f"  compressed max error, full/thin  : {grid_error[compressed].max():.4f} / {thin_error[compressed].max():.4f} eV")
+
+assert abs(r_hat - 0.7425) < 1e-12
+assert r_train[i_worst] == 2.4
+assert thin_error[compressed].max() > 2 * grid_error[compressed].max()
+assert np.isfinite(loo).all()

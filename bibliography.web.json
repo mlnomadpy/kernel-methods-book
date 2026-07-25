@@ -139,6 +139,13 @@
     "venue": "Journal of Machine Learning Research 18(21), 1-38",
     "url": "https://jmlr.org/papers/v18/15-178.html"
   },
+  "bach2024learning": {
+    "authors": "Bach, Francis",
+    "year": 2024,
+    "title": "Learning Theory from First Principles",
+    "venue": "MIT Press",
+    "url": "https://mitpress.mit.edu/9780262049443/learning-theory-from-first-principles/"
+  },
   "baker1973": {
     "authors": "Baker, C. R.",
     "year": 1973,
@@ -804,6 +811,13 @@
     "venue": "AISTATS",
     "url": "https://proceedings.mlr.press/v89/feydy19a.html"
   },
+  "finley2008approx": {
+    "authors": "Finley, Thomas and Joachims, Thorsten",
+    "year": 2008,
+    "title": "Training Structural SVMs When Exact Inference Is Intractable",
+    "venue": "Proceedings of the 25th International Conference on Machine Learning",
+    "url": "https://doi.org/10.1145/1390156.1390195"
+  },
   "fiedler1973": {
     "authors": "Fiedler, M.",
     "year": 1973,
@@ -1237,6 +1251,13 @@
     "title": "Optimizing search engines using clickthrough data",
     "venue": "Proceedings of the 8th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD), 133-142",
     "url": "https://doi.org/10.1145/775066.775067"
+  },
+  "joachims2009struct": {
+    "authors": "Joachims, Thorsten and Finley, Thomas and Yu, Chun-Nam John",
+    "year": 2009,
+    "title": "Cutting-Plane Training of Structural SVMs",
+    "venue": "Machine Learning",
+    "url": "https://doi.org/10.1007/s10994-009-5108-8"
   },
   "johnson2013": {
     "authors": "Johnson, R. and Zhang, T.",
@@ -3435,5 +3456,124 @@
     "title": "The Spectrum of Random Inner-Product Kernel Matrices",
     "venue": "Random Matrices: Theory and Applications 2(4), 1350010",
     "url": "https://doi.org/10.1142/S201032631350010X"
+  },
+  "kar2012random": {
+    "authors": "Kar, Purushottam and Karnick, Harish",
+    "year": 2012,
+    "title": "Random Feature Maps for Dot Product Kernels",
+    "venue": "Proceedings of the Fifteenth International Conference on Artificial Intelligence and Statistics",
+    "url": "https://proceedings.mlr.press/v22/kar12.html"
+  },
+  "pham2013tensor": {
+    "authors": "Pham, Ninh and Pagh, Rasmus",
+    "year": 2013,
+    "title": "Fast and Scalable Polynomial Kernels via Explicit Feature Maps",
+    "venue": "Proceedings of the 19th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining",
+    "url": "https://doi.org/10.1145/2487575.2487591"
+  },
+  "avron2017rff": {
+    "authors": "Avron, Haim and Kapralov, Michael and Musco, Cameron and Musco, Christopher and Velingker, Ameya and Zandieh, Amir",
+    "year": 2017,
+    "title": "Random Fourier Features for Kernel Ridge Regression: Approximation Bounds and Statistical Guarantees",
+    "venue": "Proceedings of the 34th International Conference on Machine Learning",
+    "url": "https://proceedings.mlr.press/v70/avron17a.html"
+  },
+  "li2021rff": {
+    "authors": "Li, Zhu and Ton, Jean-Francois and Oglic, Dino and Sejdinovic, Dino",
+    "year": 2021,
+    "title": "Towards a Unified Analysis of Random Fourier Features",
+    "venue": "Journal of Machine Learning Research",
+    "url": "https://www.jmlr.org/papers/v22/20-1369.html"
+  },
+  "musco2017nystrom": {
+    "authors": "Musco, Cameron and Musco, Christopher",
+    "year": 2017,
+    "title": "Recursive Sampling for the Nystrom Method",
+    "venue": "Advances in Neural Information Processing Systems",
+    "url": "https://proceedings.neurips.cc/paper/2017/hash/a03fa30821986dff10fc66647c84c9c3-Abstract.html"
+  },
+  "harbrecht2012cholesky": {
+    "authors": "Harbrecht, Helmut and Peters, Michael and Schneider, Reinhold",
+    "year": 2012,
+    "title": "On the Low-Rank Approximation by the Pivoted Cholesky Decomposition",
+    "venue": "Applied Numerical Mathematics",
+    "url": "https://doi.org/10.1016/j.apnum.2011.10.001"
+  },
+  "li2016dpp": {
+    "authors": "Li, Chengtao and Jegelka, Stefanie and Sra, Suvrit",
+    "year": 2016,
+    "title": "Fast DPP Sampling for Nystrom with Application to Kernel Methods",
+    "venue": "Proceedings of the 33rd International Conference on Machine Learning",
+    "url": "https://proceedings.mlr.press/v48/lih16.html"
+  },
+  "yang2017sketch": {
+    "authors": "Yang, Yun and Pilanci, Mert and Wainwright, Martin J.",
+    "year": 2017,
+    "title": "Randomized Sketches for Kernels: Fast and Optimal Nonparametric Regression",
+    "venue": "The Annals of Statistics",
+    "url": "https://doi.org/10.1214/16-AOS1472"
+  },
+  "hutchinson1989": {
+    "authors": "Hutchinson, Michael F.",
+    "year": 1989,
+    "title": "A Stochastic Estimator of the Trace of the Influence Matrix for Laplacian Smoothing Splines",
+    "venue": "Communications in Statistics -- Simulation and Computation",
+    "url": "https://doi.org/10.1080/03610918908812806"
+  },
+  "ubaru2017slq": {
+    "authors": "Ubaru, Shashanka and Chen, Jie and Saad, Yousef",
+    "year": 2017,
+    "title": "Fast Estimation of Matrix Function Traces via Stochastic Lanczos Quadrature",
+    "venue": "SIAM Journal on Matrix Analysis and Applications",
+    "url": "https://doi.org/10.1137/16M1104974"
+  },
+  "zhang2019incremental": {
+    "authors": "Zhang, Xiao and Liao, Shizhong",
+    "year": 2019,
+    "title": "Incremental Randomized Sketching for Online Kernel Learning",
+    "venue": "Proceedings of the 36th International Conference on Machine Learning",
+    "url": "https://proceedings.mlr.press/v97/zhang19h.html"
+  },
+  "song2021tensor": {
+    "authors": "Song, Zhao and Woodruff, David and Yu, Zheng and Zhang, Lichen",
+    "year": 2021,
+    "title": "Fast Sketching of Polynomial Kernels of Polynomial Degree",
+    "venue": "Proceedings of the 38th International Conference on Machine Learning",
+    "url": "https://proceedings.mlr.press/v139/song21c.html"
+  },
+  "han2015logdet": {
+    "authors": "Han, Insu and Malioutov, Dmitry and Shin, Jinwoo",
+    "year": 2015,
+    "title": "Large-Scale Log-Determinant Computation through Stochastic Chebyshev Expansions",
+    "venue": "Proceedings of the 32nd International Conference on Machine Learning",
+    "url": "https://proceedings.mlr.press/v37/hana15.html"
+  },
+  "wenger2022preconditioning": {
+    "authors": "Wenger, Jonathan and Pleiss, Geoff and Hennig, Philipp and Cunningham, John and Gardner, Jacob",
+    "year": 2022,
+    "title": "Preconditioning for Scalable Gaussian Process Hyperparameter Optimization",
+    "venue": "Proceedings of the 39th International Conference on Machine Learning",
+    "url": "https://proceedings.mlr.press/v162/wenger22a.html"
+  },
+  "osokin2017structured": {
+    "authors": "Osokin, Anton and Bach, Francis and Lacoste-Julien, Simon",
+    "year": 2017,
+    "title": "On Structured Prediction Theory with Calibrated Convex Surrogate Losses",
+    "venue": "Advances in Neural Information Processing Systems 30",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2017/hash/38db3aed920cf82ab059bfccbd02be6a-Abstract.html"
+  },
+  "taskar2003m3n": {
+    "authors": "Taskar, Ben and Guestrin, Carlos and Koller, Daphne",
+    "year": 2003,
+    "title": "Max-Margin Markov Networks",
+    "venue": "Advances in Neural Information Processing Systems 16",
+    "url": "https://papers.nips.cc/paper_files/paper/2003/hash/878d5691c824ee2aaf770f7d36c151d6-Abstract.html"
+  },
+  "tsochantaridis2005structured": {
+    "authors": "Tsochantaridis, Ioannis and Joachims, Thorsten and Hofmann, Thomas and Altun, Yasemin",
+    "year": 2005,
+    "title": "Large Margin Methods for Structured and Interdependent Output Variables",
+    "venue": "Journal of Machine Learning Research",
+    "url": "https://www.jmlr.org/papers/v6/tsochantaridis05a.html"
   }
 }

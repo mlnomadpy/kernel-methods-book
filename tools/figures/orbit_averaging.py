@@ -1,28 +1,35 @@
 """Group averaging sends every point on one rotation orbit to one feature."""
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
+import jax
+from jax import config
+import jax.numpy as jnp
+import numpy as np
 
 from _style import ACCENT, INK, MUTED, POS, RULE, apply_style, save
 
+config.update("jax_enable_x64", True)
 apply_style()
 
 
-def quadratic_feature(points: np.ndarray) -> np.ndarray:
+def quadratic_feature(points: jax.Array) -> jax.Array:
     """Degree-two feature map whose rotation average retains squared radius."""
     x, y = points.T
-    return np.column_stack((x * x, y * y, np.sqrt(2.0) * x * y))
+    return jnp.stack((x * x, y * y, jnp.sqrt(2.0) * x * y), axis=1)
 
 
-angles = np.linspace(0.0, 2.0 * np.pi, 12, endpoint=False)
-unit_orbit = np.column_stack((np.cos(angles), np.sin(angles)))
-radii = np.array([0.72, 1.18])
+angles = jnp.linspace(0.0, 2.0 * jnp.pi, 12, endpoint=False, dtype=jnp.float64)
+unit_orbit = jnp.stack((jnp.cos(angles), jnp.sin(angles)), axis=1)
+radii = jnp.array([0.72, 1.18], dtype=jnp.float64)
 orbits = radii[:, None, None] * unit_orbit[None, :, :]
-averages = np.stack([quadratic_feature(orbit).mean(axis=0) for orbit in orbits])
-expected = np.column_stack((radii**2 / 2, radii**2 / 2, np.zeros_like(radii)))
-if not np.allclose(averages, expected, atol=1e-12):
+averages = jax.vmap(lambda orbit: jnp.mean(quadratic_feature(orbit), axis=0))(orbits)
+expected = jnp.stack((radii**2 / 2, radii**2 / 2, jnp.zeros_like(radii)), axis=1)
+if not bool(jnp.allclose(averages, expected, atol=1e-12, rtol=0.0)):
     raise RuntimeError("Discrete rotation average does not match the invariant feature.")
+assert bool(jnp.all(jnp.isfinite(averages)))
+assert float(jnp.max(jnp.abs(jnp.linalg.norm(orbits, axis=2) - radii[:, None]))) < 1e-12
+orbits, radii, averages = map(np.asarray, (orbits, radii, averages))
 
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(6.4, 2.8), gridspec_kw={"width_ratios": [1.2, 1]})
 colors = (POS, ACCENT)

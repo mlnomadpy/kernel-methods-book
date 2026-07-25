@@ -10,32 +10,139 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Plot the ridge residual \(r_\lambda(\mu)\) for three values of \(\lambda\) and explain which spectral directions remain biased.
-    answer: The ridge residual is (r_\lambda(\mu)=\lambda/(\mu+\lambda)). It is near one when
-      (mu\ll\lambda) and near zero when (mu\gg\lambda). Increasing (lambda) therefore leaves more
-      spectral directions biased.
+      Let \(T\) be positive and self-adjoint. Derive \(q_\lambda\) and \(r_\lambda\) for Tikhonov regularization, and explain their limits as \(\mu/\lambda\) tends to zero and infinity.
+    answer: >-
+      Tikhonov uses \(g_\lambda(\mu)=(\mu+\lambda)^{-1}\), hence
+      \(q_\lambda(\mu)=\mu/(\mu+\lambda)\) and
+      \(r_\lambda(\mu)=1-q_\lambda(\mu)=\lambda/(\mu+\lambda)\). If
+      \(\mu/\lambda\to0\), then \(q_\lambda(\mu)\to0\) and
+      \(r_\lambda(\mu)\to1\): the weak direction is suppressed and its bias remains. If
+      \(\mu/\lambda\to\infty\), then \(q_\lambda(\mu)\to1\) and
+      \(r_\lambda(\mu)\to0\): the direction passes almost unchanged. These are fitted-value
+      factors. The inverse filter itself still behaves like \(1/\mu\) in the second regime.
   - number: 2
     kind: computation
     status: draft
     prompt: >-
-      Compute the first five Landweber fitted-value filters for \(\mu\in\{1,0.1,0.01\}\) with \(\eta=1/2\).
-    answer: "The fitted-value factor is (1-(1-\\eta\\mu)^t). For (t=1,\\ldots,5), substitute (eta=1/2):
-      at (mu=1) the values are (0.5,0.75,0.875,0.9375,0.96875); at (0.1) they are (1-0.95^t); at
-      (0.01) they are (1-0.995^t). The smaller directions enter much later."
+      Reproduce every retained fraction, prediction MSE, and inverse-coordinate norm in the four-direction worked example.
+    answer: >-
+      With \(\widehat\mu=(1,0.25,0.04,0.0025)\) and
+      \(y=(2.05,0.95,0.55,0.20)\), interpolation has \(q=(1,1,1,1)\).
+      Ridge uses \(q_j=\widehat\mu_j/(\widehat\mu_j+0.05)\), giving
+      \((0.952381,0.833333,0.444444,0.047619)\). Cutoff at \(0.05\) gives
+      \((1,1,0,0)\). Landweber gives
+      \(q_j=1-(1-0.8\widehat\mu_j)^{10}\), namely
+      \((1.000000,0.892626,0.277555,0.019821)\). Multiplying each vector by \(y\)
+      and averaging \((q_jy_j-s_j)^2\) yields MSEs
+      \(0.002500,0.042202,0.079375,0.051689\). Finally evaluate
+      \(\{\sum_j(q_jy_j/\widehat\mu_j)^2\}^{1/2}\), obtaining
+      \(81.288,8.105,4.318,5.727\), respectively. The last coordinate contributes
+      \(0.20/0.0025=80\) to the interpolation inverse.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Prove the Landweber stability proposition and show what can fail when \(\eta\gt 2/\lVert T\rVert\).
-    answer: If (0\le\eta\mu\le1), then (1-\eta\mu\in[0,1]), so its powers stay in that interval and
-      decrease to zero for (mu>0). If (eta>2/\lVert T\rVert), a top spectral value can satisfy
-      (|1-\eta\mu|>1), making the residual oscillate with increasing magnitude.
+      Prove the Tikhonov source-bias theorem, including the saturation bound for \(r+s\gt1\), and give a one-eigendirection target that attains order \(\lambda\).
+    answer: >-
+      Put \(a=r+s\). Since
+      \(f_\lambda-f_\star=-r_\lambda(T)T^rw\), functional calculus gives
+      \(\lVert T^s(f_\lambda-f_\star)\rVert\leq
+      R\sup_\mu \mu^a\lambda/(\mu+\lambda)\). For \(0\leq a\leq1\), writing
+      \(\mu=\lambda u\) bounds this by
+      \(R\lambda^a\sup_{u\geq0}u^a/(1+u)\leq R\lambda^a\). For \(a\gt1\),
+      \(\mu^a\lambda/(\mu+\lambda)\leq\lambda\mu^{a-1}\leq
+      \lambda\lVert T\rVert^{a-1}\). To attain this order, let
+      \(Te_1=\mu_1e_1\) with \(\mu_1\gt0\) and choose \(w=Re_1\). The error norm is
+      exactly \(R\mu_1^a\lambda/(\mu_1+\lambda)\), which is asymptotic to
+      \(R\mu_1^{a-1}\lambda\). Thus a uniform \(\lambda^a\) rate for \(a\gt1\)
+      is false for ordinary Tikhonov.
   - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Starting from zero, diagonalize constant-step Landweber iteration and derive \(q_t(\mu)=1-(1-\eta\mu)^t\). Show that stability fails for an eigendirection when \(\eta\mu\gt2\).
+    answer: >-
+      The scalar recurrence in an eigendirection is
+      \(f_{t+1,j}=(1-\eta\mu_j)f_{t,j}+\eta g_j\), with \(f_{0,j}=0\).
+      Summing the geometric series gives
+      \(f_{t,j}=\{1-(1-\eta\mu_j)^t\}g_j/\mu_j\). Therefore
+      \(g_t(\mu)=\{1-(1-\eta\mu)^t\}/\mu\),
+      \(q_t(\mu)=1-(1-\eta\mu)^t\), and
+      \(r_t(\mu)=(1-\eta\mu)^t\). If \(\eta\mu\gt2\), then
+      \(1-\eta\mu\lt-1\), so the residual alternates sign and grows in magnitude. At
+      \(\eta\mu=2\) it oscillates without decay. Convergence requires
+      \(0\lt\eta\mu\lt2\) on every positive eigendirection, while the chapter's stronger
+      \(0\leq\eta\mu\leq1\) condition also gives monotone residuals.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      If \(\mu_j\asymp j^{-b}\) with \(b\gt1\), prove \(\mathcal N(\lambda)\asymp\lambda^{-1/b}\) by splitting the sum at the index where \(\mu_j\) is comparable to \(\lambda\). Balance bias \(\lambda^c\) and variance \(\mathcal N(\lambda)/n\).
+    answer: >-
+      Let \(J\asymp\lambda^{-1/b}\), so \(\mu_J\asymp\lambda\). For
+      \(j\leq J\), each \(\mu_j/(\mu_j+\lambda)\) is bounded above by one and
+      below by a positive constant, so the head contributes order \(J\). For \(j\gt J\),
+      the summand is comparable to \(\mu_j/\lambda\), and the tail is
+      \(\lambda^{-1}\sum_{j>J}j^{-b}\asymp
+      \lambda^{-1}J^{1-b}\asymp\lambda^{-1/b}\). Thus
+      \(\mathcal N(\lambda)\asymp\lambda^{-1/b}\). Balancing
+      \(\lambda^c\asymp n^{-1}\lambda^{-1/b}\) gives
+      \(\lambda^{c+1/b}\asymp n^{-1}\), hence
+      \(\lambda\asymp n^{-b/(bc+1)}\). Substitution gives risk order
+      \(n^{-bc/(bc+1)}\).
+  - number: 6
+    kind: synthesis
+    status: draft
+    prompt: >-
+      A paper claims the rate \(n^{-bc/(bc+1)}\) because its kernel is universal and its target is smooth. List the missing assumptions required to invoke the source-capacity theorem.
+    answer: >-
+      The claim must specify a separable RKHS and bounded measurable evaluation; i.i.d. sampling;
+      square loss; existence and choice of a minimum-norm population risk minimizer; the source
+      equation \(f_{\mathcal H}=T^{(c-1)/2}g\) with a uniform bound on \(\lVert g\rVert\);
+      two-sided polynomial eigenvalue decay \(\alpha j^{-b}\leq\mu_j\leq\beta j^{-b}\)
+      for the minimax equivalence; a Bernstein-type or otherwise sufficient noise moment
+      condition; the range \(1\lt b\lt\infty\), \(1\lt c\leq2\) for the clean displayed
+      exponent; the parameter choice \(\lambda_n\asymp n^{-b/(bc+1)}\); the excess square-loss
+      norm and probability mode; and the same prior class for the lower bound. Universality
+      supplies none of the source, capacity, noise, or lower-eigenvalue conditions.
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Compare ridge, spectral cutoff, and early stopping under a fixed budget of twenty kernel matrix-vector products. Specify a fair parameter grid, at least four diagnostics, and a failure perturbation.
+    answer: >-
+      Use one normalized Gram operator, identical train-validation-test splits, and count every
+      Gram product. Run Landweber for iterations 1 through 20. Evaluate cutoff thresholds at
+      empirical eigenvalues only if the eigendecomposition cost is charged; otherwise use an
+      approximate Lanczos basis within the same twenty products. Solve ridge by conjugate gradients
+      at a grid of effective degrees of freedom, charging each product and stopping at twenty.
+      Select all methods on validation prediction loss, not test loss. Report validation and test
+      error, training residual, coefficient or inverse norm, effective degrees of freedom,
+      perturbation sensitivity, wall time, and final solver residual. As a failure perturbation,
+      add a vector of the declared noise norm aligned with the weakest estimated eigendirection and
+      rerun selection. Report when the computational budget prevents a method from reaching its
+      nominal parameter.
+  - number: 8
     kind: challenge
     status: draft
     prompt: >-
-      For a source condition \(f_\star=T^rw\), derive a uniform ridge-bias bound from \(\sup_\mu \mu^r\lambda/(\mu+\lambda)\). State the range of \(r\) for which your bound has the asserted power of \(\lambda\).
-    answer: Put (mu=\lambda t). Then (mu^r\lambda/(\mu+\lambda)=\lambda^r t^r/(1+t)). The supremum over
-      (t\ge0) is finite for (0\le r\le1) (for (r=1), it tends to one). Hence ridge bias is
-      (O(\lambda^r)\) through qualification one. For (r>1), this uniform argument diverges and
-      cannot assert the same power.
+      For a positive empirical operator \(T_n\), prove the resolvent identity used in the Rosasco module and derive a prediction-norm perturbation bound that improves on the displayed RKHS-norm bound by using \(\lVert T_n^{1/2}(T_n+\lambda I)^{-1}\rVert\leq(2\sqrt\lambda)^{-1}\).
+    answer: >-
+      Subtract
+      \((T_n+\lambda I)\widehat f_\lambda=g_n\) and
+      \((T+\lambda I)f_\lambda=g\), then add and subtract
+      \((T_n+\lambda I)f_\lambda\). This gives
+      \((T_n+\lambda I)(\widehat f_\lambda-f_\lambda)
+      =(g_n-g)+(T-T_n)f_\lambda\), hence the displayed resolvent identity after applying
+      \((T_n+\lambda I)^{-1}\). Multiplying by \(T_n^{1/2}\) and taking norms gives
+      \[
+      \lVert T_n^{1/2}(\widehat f_\lambda-f_\lambda)\rVert
+      \leq \lVert T_n^{1/2}(T_n+\lambda I)^{-1}\rVert
+      \{\delta_{1,n}+\delta_{2,n}\lVert f_\lambda\rVert\}.
+      \]
+      Functional calculus reduces the operator norm to
+      \(\sup_{\mu\geq0}\sqrt\mu/(\mu+\lambda)\). Differentiation, or completing the square,
+      shows the maximum occurs at \(\mu=\lambda\) and equals
+      \(1/(2\sqrt\lambda)\). The prediction-seminorm bound is therefore
+      \(\{\delta_{1,n}+\delta_{2,n}\lVert f_\lambda\rVert\}/(2\sqrt\lambda)\),
+      improving the \(\lambda^{-1}\) amplification in RKHS norm.

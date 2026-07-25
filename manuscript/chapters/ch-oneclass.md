@@ -2,7 +2,7 @@
 id: ch-oneclass
 slug: one-class-and-novelty
 title: One-Class SVMs and Novelty Detection
-part: II · Supervised Machines with a Fixed Kernel
+part: II · Learning with a Fixed Kernel
 order: 7
 tier: practitioner
 prerequisites:

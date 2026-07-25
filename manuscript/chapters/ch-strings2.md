@@ -2,8 +2,8 @@
 id: ch-strings2
 slug: efficient-string-and-tree-kernels
 title: Efficient String and Tree Kernels
-part: VII · Designing Kernels for Data
-order: 24
+part: VI · Designing Kernels
+order: 33
 tier: advanced
 prerequisites:
   - string-kernels
@@ -77,7 +77,28 @@ Writing \(D[i][j]=\kappa(s(1{:}i),t(1{:}j))\) turns this into a table filled row
 4.  Return \(D[n][m]\).
 ::::
 
-Because the array \(P\) collapses the inner sum, each of the \(n\) rows costs \(O(m)\), so the whole kernel is computed in \(O(|s|\,|t|)\) time and \(O(|t|)\) working memory, an exponential saving over enumerating subsequences. The following table makes the recurrence concrete.
+The recurrence does more than suggest an implementation: its two cases partition the counted objects, so they certify that the table computes the feature-space inner product exactly.
+
+:::: {.theorem #thm-strings2-all-subsequences-dp}
+[Theorem (correctness and rolling memory for all subsequences)]{.box-title}
+
+Let \(s\in\Sigma^n\) and \(t\in\Sigma^m\), where symbols can be compared in \(O(1)\) time. In exact arithmetic, Algorithm 22.1 returns
+
+$$D[n][m]=\sum_{u\in\Sigma^\ast}\varphi_u(s)\varphi_u(t).$$
+
+The full table and a rolling implementation that retains only the previous row \(D[i-1][0{:}m]\), the current row, and one cumulative scalar for \(P\) produce identical entries. Both use \(\Theta(nm)\) symbol tests and additions. The full table uses \(\Theta(nm)\) words; the rolling implementation uses \(\Theta(m)\) words, or \(\Theta(\min(n,m))\) after swapping the strings.
+
+**Assumptions.** Finite strings, constant-time symbol equality, exact nonnegative-integer arithmetic, and the empty-subsequence convention in Definition 22.1. **Proof status.** complete.
+::::
+
+:::: {.proof}
+For prefixes \(s(1{:}i)\) and \(t(1{:}j)\), partition every common-subsequence occurrence pair according to whether its occurrence in \(s(1{:}i)\) uses position \(i\). Pairs that avoid \(i\) are counted by \(D[i-1][j]\). If the pair uses \(i\), its final symbol is \(s_i\), its occurrence in \(t(1{:}j)\) ends at a unique position \(k\le j\) with \(t_k=s_i\), and deleting both final positions leaves a common-subsequence occurrence pair in \(s(1{:}i-1)\) and \(t(1{:}k-1)\). Appending the matched positions reverses this deletion, so the cases are disjoint and exhaustive. This proves the recurrence and, by induction on \(i\), the claimed value.
+
+During row \(i\), scanning \(k=1,\ldots,m\) permits the update
+\(P[k]=P[k-1]+[t_k=s_i]D[i-1][k-1]\). The new row reads only this cumulative value and the previous row. Replacing the full table by those states therefore preserves the same induction invariant cell by cell. There are \(nm\) cells and constant work per cell. \(\square\)
+::::
+
+This is an exponential saving over enumerating subsequences. The following table makes the recurrence concrete.
 
 :::::: {.example #example-22-1}
 [Example (all-subsequences kernel on two short strings)]{.box-title}
@@ -123,7 +144,8 @@ The all-subsequences kernel mixes patterns of every length, and long ones can sw
 :::
 
 1.  Base cases: \(\kappa_0(s,t)=1\) for all \(s,t\), and \(\kappa_q(s,\varepsilon)=0\) for \(q\gt0\).
-2.  For each level \(q=1,\dots,p\) and each pair of prefixes, apply
+2.  For each level \(q=1,\dots,p\) and row \(i=1,\dots,n\), scan \(j=1,\dots,m\) while maintaining
+    \(P_q[j]=P_q[j-1]+[t_j=s_i]\kappa_{q-1}(s(1{:}i-1),t(1{:}j-1))\), and apply
 
 $$\kappa_q(sa,t)=\kappa_q(s,t)+\!\!\sum_{k:\,t_k=a}\!\!\kappa_{q-1}\big(s,\,t(1{:}k-1)\big),$$
 
@@ -131,7 +153,7 @@ $$\kappa_q(sa,t)=\kappa_q(s,t)+\!\!\sum_{k:\,t_k=a}\!\!\kappa_{q-1}\big(s,\,t(1{
 3.  Return \(\kappa_p(s,t)\).
 ::::
 
-The double loop over lengths and prefixes evaluates \(p\) tables of size \(|s|\times|t|\), so the kernel costs \(O(p\,|s|\,|t|)\). A weighted blend \(\sum_{l=1}^{p}a_l\,\kappa_l(s,t)\) with weights \(a_l\ge0\) is obtained at no extra asymptotic cost by accumulating the intermediate levels, since every \(\kappa_l\) is computed on the way to \(\kappa_p\). This fixed-length recursion is the scaffold on which the gap-weighted kernel is built next, the only change being that positions now carry a decay weight.
+The same occurrence-pair partition proves this recurrence after recording the length. With \(n=|s|\), \(m=|t|\), \(1\le p\le\min(n,m)\), constant-time symbol comparisons, and unit-cost exact additions, the algorithm takes \(\Theta(pnm)\) time. Its stated level-by-level evaluation retains the complete previous level because a future row at level \(q\) can request every prefix row of level \(q-1\); it therefore uses \(\Theta(nm)\) words with two level buffers, not merely two string-prefix rows. A weighted blend \(\sum_{l=1}^{p}a_l\,\kappa_l(s,t)\) with weights \(a_l\ge0\) is obtained at no extra asymptotic cost by accumulating the intermediate levels, since every \(\kappa_l\) is computed on the way to \(\kappa_p\). This fixed-length recursion is the scaffold on which the gap-weighted kernel is built next, the only change being that positions now carry a decay weight.
 
 ## The gap-weighted subsequences kernel {#gap-weighted}
 
@@ -183,7 +205,30 @@ $$\mathrm{DP}_q(k,l)=\kappa^S_{q-1}(k,l)+\lambda\,\mathrm{DP}_q(k-1,l)+\lambda\,
 <figcaption>The table follows the exact evaluation order of the recurrence: matched letters seed the accented suffix entries, and each new cell combines its left, upper, and diagonal neighbors with the stated \(\lambda\) weights. For “cat” and “car” with \(\lambda=0.5\) and \(p=2\), the corner calculation gives \(K_2=\lambda^4=0.0625\), or \(0.4444\) after normalization; the web version permits other word pairs.</figcaption>
 </figure>
 
-Each level fills one \(|s|\times|t|\) table with constant work per cell, so the kernel costs \(O(p\,|s|\,|t|)\) time, the headline result of the section. The subtracted term \(-\lambda^2\mathrm{DP}_q(k-1,l-1)\) is pure inclusion-exclusion: the two shifted tables \(\lambda\,\mathrm{DP}_q(k-1,l)\) and \(\lambda\,\mathrm{DP}_q(k,l-1)\) both include the block up to \((k-1,l-1)\), so it is counted twice and must be removed once. We fill the tables by hand for a two-letter difference.
+The subtracted term \(-\lambda^2\mathrm{DP}_q(k-1,l-1)\) is pure inclusion-exclusion: the two shifted tables \(\lambda\,\mathrm{DP}_q(k-1,l)\) and \(\lambda\,\mathrm{DP}_q(k,l-1)\) both include the block up to \((k-1,l-1)\), so it is counted twice and must be removed once. The resulting invariant also says exactly which arrays may be rolled.
+
+:::: {.theorem #thm-strings2-gap-dp}
+[Theorem (gap-weighted DP correctness, cost, and rolling equivalence)]{.box-title}
+
+Let \(s\in\Sigma^n\), \(t\in\Sigma^m\), \(1\le p\le\min(n,m)\), and \(0\lt\lambda\le1\). Assume constant-time symbol comparison and unit-cost exact arithmetic. Algorithm 22.3 returns
+
+$$\kappa_p(s,t)=
+\sum_{u\in\Sigma^p}
+\left(\sum_{\mathbf i:\,s(\mathbf i)=u}\lambda^{l(\mathbf i)}\right)
+\left(\sum_{\mathbf j:\,t(\mathbf j)=u}\lambda^{l(\mathbf j)}\right).$$
+
+It takes \(\Theta(pnm)\) arithmetic operations. A direct implementation with one stored suffix table for the preceding level and a full auxiliary table uses \(\Theta(nm)\) words. Replacing the auxiliary table by two rows, while retaining the complete suffix table \(\kappa^S_{q-1}\), is exactly equivalent and still uses \(\Theta(nm)\) words overall, with only \(\Theta(m)\) additional workspace. Rolling both tables by prefix rows is not valid under the level-major evaluation order, because level \(q+1\) later needs every entry of \(\kappa^S_q\).
+
+**Assumptions.** Finite strings, \(1\le p\le\min(n,m)\), \(0\lt\lambda\le1\), constant-time symbol equality, exact arithmetic, and row-major cells inside level-major evaluation. **Proof status.** complete.
+::::
+
+:::: {.proof}
+At level \(1\), \(\kappa^S_1(k,l)=[s_k=t_l]\lambda^2\) is precisely the contribution of the only length-one occurrence pair ending at \((k,l)\). Suppose the suffix table is correct at level \(q-1\). Expanding the definition of \(\mathrm{DP}_q(k,l)\), the two shifted rectangles \(\lambda\mathrm{DP}_q(k-1,l)\) and \(\lambda\mathrm{DP}_q(k,l-1)\) cover all terms except the fresh corner, overlap on the \((k-1)\)-by-\((l-1)\) rectangle with factor \(\lambda^2\), and therefore give the inclusion-exclusion recurrence in Algorithm 22.3. Multiplication by \([s_k=t_l]\lambda^2\) appends the unique final matched positions and charges their two endpoints; the geometric factors in \(\mathrm{DP}_q(k-1,l-1)\) charge the intervening gaps. Deleting those endpoints is the inverse map. Thus \(\kappa^S_q(k,l)\) counts exactly the weighted occurrence pairs ending at \((k,l)\), and summing over endpoints proves the claim by induction on \(q\).
+
+In row-major order, an auxiliary cell reads only the preceding auxiliary row, the current row's preceding cell, its diagonal predecessor, and \(\kappa^S_{q-1}(k,l)\). Two auxiliary rows therefore reproduce every full-table cell by induction on \((k,l)\). The next level, however, ranges over all \((k,l)\) of the completed suffix table, so that table cannot be discarded row by row in this evaluation schedule. Each of the \(p-1\) nontrivial levels visits \(nm\) cells with constant work. \(\square\)
+::::
+
+We fill the tables by hand for a two-letter difference.
 
 :::::: {.example #example-22-2}
 [Example (gap-weighted DP table for \"cat\" and \"car\", \(p=2\))]{.box-title}
@@ -224,6 +269,20 @@ $$\kappa^S_p(sa,tb)=\lambda^2 A_{ab}\!\!\sum_{i,j}\lambda^{\,|s|-i+|t|-j}\kappa^
 
 and the same dynamic program runs unchanged. Numeric sequences fall in scope too: with a soft-matching \(A\) that compares reals, the gap-weighted kernel applies to time series and not just to symbolic text.
 
+Exact arithmetic proves the recurrence, but machine arithmetic can still erase its answer. The unweighted all-subsequences counts can exceed fixed-width integer range, so use arbitrary-precision integers or checked additions rather than allowing wraparound. For the gap-weighted kernel, every length-\(p\) occurrence pair contributes at most \(1\) and at least \(\lambda^{n+m}\); when \((n+m)|\log\lambda|\) exceeds roughly \(-\log u_{\min}\), with \(u_{\min}\) the smallest positive representable number, some valid contributions underflow. The inclusion-exclusion update can also subtract nearly equal rounded quantities even though the defining double sum is nonnegative.
+
+:::: {.remark #rem-strings2-stability}
+[Numerical diagnostic (underflow and cancellation)]{.box-title}
+
+An implementation should report the smallest and largest positive table entries, the number of zeros produced from nonzero predecessors, and the residual
+
+$$r_q(k,l)=\widehat{\mathrm{DP}}_q(k,l)-
+\left(\widehat{\kappa}^S_{q-1}(k,l)+\lambda\widehat{\mathrm{DP}}_q(k-1,l)
++\lambda\widehat{\mathrm{DP}}_q(k,l-1)-\lambda^2\widehat{\mathrm{DP}}_q(k-1,l-1)\right).$$
+
+Compare short strings against explicit feature enumeration in higher precision. For long strings, rescale each completed level by a positive factor and carry its accumulated logarithm separately. Recover \(\log\kappa(s,t)\), \(\log\kappa(s,s)\), and \(\log\kappa(t,t)\) with their own recorded scales, then form the normalized log-kernel as \(\log\kappa(s,t)-\tfrac12\log\kappa(s,s)-\tfrac12\log\kappa(t,t)\). This avoids requiring the three evaluations to choose the same adaptive scale. If per-cell dynamic ranges remain extreme, evaluate the nonnegative defining sums in log space with log-sum-exp rather than applying a signed log transform to the inclusion-exclusion recurrence. Negative table entries larger than a declared roundoff tolerance, NaN or Inf values, and a normalized value outside \([-1,1]\) are failures, not values to clip silently.
+::::
+
 ## Beyond dynamic programming: trie-based kernels {#tries}
 
 Dynamic programming pays \(O(|s|\,|t|)\) per kernel evaluation, which is expensive when one string is compared against a whole database. For the spectrum and mismatch kernels, whose features are contiguous substrings, a different data structure wins: the trie, a \"retrieval tree\" whose root-to-node paths spell out strings. A complete trie of depth \(p\) has one node per string of length up to \(p\), and the idea is to push the length-\(p\) substrings of \(s\) and of \(t\) down the tree together, so that two substrings meet at a leaf exactly when they are equal. Only paths that both strings actually populate are ever created, and the cost is charged to those paths rather than to the product of the lengths (Leslie et al. 2002, Vishwanathan and Smola 2003).
@@ -243,11 +302,11 @@ Dynamic programming pays \(O(|s|\,|t|)\) per kernel evaluation, which is expensi
 4.  Recurse into processnode\((va)\) for each symbol \(a\in\Sigma\), then discard the subtree.
 ::::
 
-Each of the \(|s|-p+1\) substrings of \(s\) descends one level per recursion step and is touched \(O(p)\) times, and the leaf products accumulate the shared-substring counts. Evaluating a full row of the kernel matrix of \(s\) against strings \(t^{(1)},\dots,t^{(\ell)}\) costs
+Each of the \(N_s=\max(|s|-p+1,0)\) substrings of \(s\) and \(N_t=\max(|t|-p+1,0)\) substrings of \(t\) descends one level per recursion step and is touched \(p\) times. Provided the implementation visits only populated children, uses \(O(1)\)-amortized child lookup, and stores substring locations rather than copying length-\(p\) strings, a pairwise evaluation costs \(\Theta(p(N_s+N_t))\) time plus the cost of allocating the populated nodes. The leaf products are exact because every substring reaches the unique leaf spelling its \(p\)-gram, so the leaf product for \(u\) is \(c_u(s)c_u(t)\), and summing leaves gives the spectrum inner product. Evaluating a full row against strings \(t^{(1)},\dots,t^{(\ell)}\) costs
 
-$$O\Big(p\,\ell\,\textstyle\sum_{i=1}^{\ell}|t^{(i)}|\Big),$$
+$$O\left(p\ell N_s+p\sum_{i=1}^{\ell}N_{t^{(i)}}\right)$$
 
-because the trie for \(s\) is built once and reused. Since only \(p\,|\Sigma|\) nodes are ever held in memory at a time (a path plus the children being expanded), the method is far lighter than the \(|s|\,|t|\) dynamic-programming table, and as a by-product it yields every lower-order spectrum along the way, so a blended kernel \(\sum_i a_i\kappa_i\) comes for free by indexing Kern by depth (Vishwanathan and Smola 2003).
+when each comparison reuses the query's extracted locations but maintains separate database lists. A joint multi-string trie can share more prefix work, but its cost is governed by the total number of populated list entries and should not be advertised as independent of that quantity. Depth-first traversal retains at most \(O(p|\Sigma|)\) node records along the active path and its siblings, but the occurrence lists require \(O(N_s+N_t)\) words for a pairwise evaluation. The true working-memory bound is therefore \(O(N_s+N_t+p|\Sigma|)\), not \(O(p|\Sigma|)\) unless the input lists are excluded. As a by-product the traversal yields every lower-order spectrum along the way, so a blended kernel \(\sum_i a_i\kappa_i\) comes for free by indexing Kern by depth (Vishwanathan and Smola 2003).
 
 The same trie carries the *mismatch* kernel of Leslie et al. (2002, 2004). Now each substring descends not only along its own symbols but also along symbols that differ, provided the running number of mismatches, stored as a third component of each list entry, does not exceed a budget \(m\). A length-\(p\) substring can therefore end up in as many as \(\binom{p}{m}(|\Sigma|-1)^m\) leaf lists, one for each allowed error pattern, and the leaf products count \((p,m)\)-neighbouring substrings as matches. Weighting the mismatches by a cost matrix and thresholding the total cost gives a further generalisation. A *restricted gap-weighted* kernel lives on the same trie: allowing up to \(m\) gaps, each of the \(|s|-p-m+1\) substrings spawns \(\binom{p+m-1}{m-1}\) leaf entries, and the leaf computation reweights them by their recorded gap counts, at overall cost
 
@@ -326,7 +385,13 @@ The all-subtree kernel promotes the feature set from co-rooted subtrees to all s
 3.  Return \(\mathrm{DP}(n_1,n_2)\).
 ::::
 
-The two tables are indexed by pairs of nodes and each cell does work proportional to the product of the out-degrees, so the kernel costs \(O\big(|T_1|\,|T_2|\,d_{\max}^2\big)\) with \(d_{\max}\) the largest out-degree. Labelled trees are handled by adding a label-equality test to the degree test, which for sparse labellings can be exploited to build small per-label tables and sum them, avoiding the full quadratic table.
+The bottom-up order is part of the algorithm's contract. Induction on the sum of the two node heights proves that \(\mathrm{DP}_r(i_1,i_2)\) equals the co-rooted feature inner product: compatible child slots make independent choices, and the \(+1\) records omission of a proper child subtree. A second induction applies inclusion-exclusion to the two collections of subtrees lying below either root, leaving the co-rooted collection exactly once; hence \(\mathrm{DP}(i_1,i_2)\) is the all-subtree inner product for the two complete subtrees. If child positions are ordered, node labels and degrees compare in \(O(1)\), and a table lookup is \(O(1)\), a cell costs \(O(d(i_1)d(i_2))\). Thus the sharper time bound is
+
+$$O\left(\sum_{i_1\in T_1}\sum_{i_2\in T_2}d(i_1)d(i_2)\right)
+=O\big((|T_1|-1)(|T_2|-1)\big)
+=O(|T_1|\,|T_2|),$$
+
+and storing both dense tables costs \(O(|T_1|\,|T_2|)\) words. Unordered children require a separate matching or canonicalization procedure and do not inherit this bound automatically. Labelled trees are handled by adding a label-equality test to the degree test, which for sparse labellings can be exploited to build small per-label tables and sum them, avoiding the full quadratic table.
 
 ## The unifying view: convolution kernels {#convolution}
 
@@ -338,7 +403,7 @@ where the type match \([\,T(\bar x)=T(\bar z)\,]\) ensures only decompositions o
 
 ## Summary {#summary}
 
-The feature spaces of string and tree kernels are astronomically large, but their inner products are cheap because a common pattern either avoids or ends on the last symbol, which telescopes the exponential sum into a table over prefixes. The all-subsequences kernel costs \(O(|s|\,|t|)\), the fixed-length and gap-weighted kernels \(O(p\,|s|\,|t|)\) through a suffix recursion with an inclusion-exclusion auxiliary table, and small edits to that table yield character-weighted, gap-counting, and soft-matching variants at the same cost. For contiguous-substring features the trie beats dynamic programming, evaluating the spectrum and mismatch kernels in time governed by the populated paths rather than the product of the lengths. Trees inherit the same recursive style bottom up: the co-rooted subtree kernel is a product over matched children in \(O(\min(|T_1|,|T_2|))\), and the all-subtree kernel a dynamic program in \(O(|T_1|\,|T_2|\,d_{\max}^2)\). Haussler's convolution kernels reveal all of these, together with the ANOVA and graph kernels, as one construction: sum a product of part comparisons over the decompositions of a structured object. The following chapters push the same recursive computation onto [[ch:graph-kernels|graphs]] and onto kernels read from [[ch:generative-and-marginalization-kernels|generative models]].
+The feature spaces of string and tree kernels are astronomically large, but their inner products are cheap because a common pattern either avoids or ends on the last symbol, which telescopes the exponential sum into a table over prefixes. The all-subsequences kernel costs \(O(|s|\,|t|)\) time and \(O(\min(|s|,|t|))\) rolling memory; the fixed-length and gap-weighted kernels cost \(O(p\,|s|\,|t|)\) time and \(O(|s|\,|t|)\) memory under the level-major schedules proved here. Small edits to the suffix table yield character-weighted, gap-counting, and soft-matching variants at the same asymptotic cost, but finite-precision implementations must diagnose underflow and cancellation. For contiguous-substring features the trie beats dynamic programming when populated paths are sparse, with occurrence-list memory included in the accounting. Trees inherit the same recursive style bottom up: the co-rooted subtree kernel is a product over matched children, and the dense all-subtree dynamic program costs \(O(|T_1|\,|T_2|)\) time and memory for ordered children. Haussler's convolution kernels reveal all of these, together with the ANOVA and graph kernels, as one construction: sum a product of part comparisons over the decompositions of a structured object. The following chapters push the same recursive computation onto [[ch:graph-kernels|graphs]] and onto kernels read from [[ch:generative-and-marginalization-kernels|generative models]].
 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
@@ -358,7 +423,7 @@ The reusable idea is not one recurrence but the state-design pattern: identify t
     ::: hint-body
     The level-1 suffix table has \(\lambda^2\) at \((\text{b},\text{b})\) and \((\text{a},\text{a})\). Only the match at \((\text{a},\text{a})\) has a nonzero predecessor \(\mathrm{DP}_2(1,1)=\lambda^2\), so \(\kappa^S_2=\lambda^2\cdot\lambda^2=\lambda^4\); the self-kernel is \(2\lambda^4+\lambda^6\).
     :::
-3.  [computation]{.ex-tag} A complete trie of depth \(p\) over an alphabet of size \(|\Sigma|\) is used for the \(p\)-spectrum kernel. Explain why at most \(p\,|\Sigma|\) nodes need be held in memory at any moment, and why the leaf products \(|L_s(v)|\cdot|L_t(v)|\) sum to the correct spectrum inner product. How does the cost of evaluating one string against \(\ell\) database strings compare with \(\ell\) independent dynamic-programming evaluations?
+3.  [computation]{.ex-tag} A depth-first trie of depth \(p\) over an alphabet of size \(|\Sigma|\) is used for the \(p\)-spectrum kernel. Explain why at most \(O(p|\Sigma|)\) active node records are needed but the occurrence lists still require \(O(N_s+N_t)\) words for a pair. Prove that the leaf products \(|L_s(v)|\cdot|L_t(v)|\) sum to the spectrum inner product. Under the implementation assumptions in the text, how does the cost of evaluating one string against \(\ell\) database strings compare with \(\ell\) independent \(O(|s||t|)\) dynamic-programming evaluations?
 4.  [proof]{.ex-tag} Derive the inclusion-exclusion recurrence for \(\mathrm{DP}_p(k,l)\) from its definition \(\mathrm{DP}_p(k,l)=\sum_{i\le k,\,j\le l}\lambda^{k-i+l-j}\kappa^S_{p-1}(s(1{:}i),t(1{:}j))\). Show that the two shifted tables \(\lambda\,\mathrm{DP}_p(k-1,l)\) and \(\lambda\,\mathrm{DP}_p(k,l-1)\) overlap on the block indexed up to \((k-1,l-1)\), so that the term \(-\lambda^2\mathrm{DP}_p(k-1,l-1)\) corrects the double count, leaving the fresh row-and-column contribution \(\kappa^S_{p-1}(k,l)\).
     Hint
 

@@ -103,3 +103,43 @@ exercises:
       proximity/correlation to the query in canonical space. PCA diagonalizes one view's covariance,
       CCA whitens and decomposes cross-covariance between two fixed features, and deep CCA learns
       the features while optimizing that same cross-covariance objective.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: "Let \\(C\\) be a positive compact operator with eigenpairs \\((\\mu_j,e_j)\\),
+      \\(\\mu_j\\downarrow0\\). Show that injectivity of \\(C\\) does not make
+      \\(C^{-1/2}\\) bounded. State its domain and construct a sequence of unit vectors on
+      which the inverse-square-root norm diverges."
+    answer: "Injectivity says only that every mu_j is positive. Spectral calculus gives
+      D(C^{-1/2})={u=sum_j u_j e_j: sum_j |u_j|^2/mu_j<infinity}. Each e_j belongs to this
+      domain and has unit norm, but ||C^{-1/2}e_j||=mu_j^{-1/2}, which diverges because
+      mu_j tends to zero. Thus the inverse square root is an unbounded densely defined
+      operator even though C is injective."
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: "Explain why the schedule \\(\\varepsilon_n=n^{-1/4}\\) satisfies the
+      consistency theorem but \\(\\varepsilon_n=n^{-1/2}\\) does not. Separate the claims
+      “the finite problem is invertible,” “the regularized estimator converges,” and
+      “cross-validation selected a useful finite-sample value.”"
+    answer: "Both schedules are positive and tend to zero. For n^{-1/4},
+      n^{1/3} epsilon_n=n^{1/12} tends to infinity, so the sufficient theorem applies.
+      For n^{-1/2}, the product is n^{-1/6}, which tends to zero, so the theorem gives no
+      consistency conclusion. Any positive ridge makes the finite covariance blocks
+      invertible. Consistency additionally requires the sampling, compactness, range,
+      simplicity, and schedule assumptions. Cross-validation is a finite-sample model
+      selection procedure; without a separate argument for its random choice, it is not
+      the deterministic schedule covered by the theorem."
+  - number: 8
+    kind: computation
+    status: draft
+    prompt: "Run the deterministic multiview study. Report the nearly unregularized
+      training and held-out correlations, the ridge with the best held-out correlation,
+      and the permutation-control maximum. Explain why selecting by training correlation
+      chooses the failure mode."
+    answer: "At ridge 1e-6 the training correlation is 0.999999 while held-out
+      correlation is 0.381473. Ridge 3 gives the best listed held-out value, 0.424547.
+      Across the pairing-permutation control the largest absolute held-out correlation is
+      0.026603. Training-correlation selection chooses the almost-zero ridge because it
+      can fit nuisance coordinates; held-out paired correlation exposes that this is
+      interpolation rather than stable shared structure."

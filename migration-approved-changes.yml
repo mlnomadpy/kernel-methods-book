@@ -1,15 +1,45 @@
+_meta:
+  allow_order_change: true
+  reason: The full-book audit authorized a prerequisite-driven pedagogical reorder; the migration baseline remains unchanged as a historical record.
 _all:
   metrics: [headings]
   reason: Added the planned common-mistakes, practical-implications, summary, and further-reading template sections.
 ch-online:
   metrics: [headings]
   reason: Added the planned NORMA and passive-aggressive coverage.
+ch-strings2:
+  metrics: [statements, proofs]
+  reason: Added the audited recurrence-correctness and rolling-memory theorems with complete proofs.
+ch14:
+  metrics: [statements, examples]
+  reason: Added the audited deterministic finite-width failure experiment.
+ch06:
+  metrics: [statements, examples, proofs, exercises]
+  reason: Added audited population KPCA perturbation theory, pre-image boundaries, and denoising failure evidence.
+ch-cca:
+  metrics: [statements, examples, proofs, exercises]
+  reason: Added audited population KCCA operators, consistency schedules, repeated-root analysis, and held-out regularization evidence.
+ch-cme:
+  metrics: [proofs, exercises, chrefs]
+  reason: Added audited range/source/capacity conditions, regression equivalence, and repeated-update stability.
+ch-ksd:
+  metrics: [statements, examples, exercises, chrefs]
+  reason: Split identification, convergence, bootstrap, and SVGD claims and added a tail failure witness.
+ch-causal:
+  metrics: [statements, examples, proofs, exercises, chrefs]
+  reason: Added audited identification, completeness, sensitivity, and nonidentification material.
+ch-frontier:
+  metrics: [statements, examples, algorithms, proofs, exercises, widgets, chrefs]
+  reason: Reconstructed the frontier catalogue into deep regime-specific modules and an evidence ledger.
+ch-prelim:
+  metrics: [headings, statements, examples, exercises, chrefs]
+  reason: Expanded the planned measure theory, matrix concentration, conditioning, convex duality, and exercises.
+ch00:
+  metrics: [chrefs]
+  reason: Replaced the obsolete part-by-part legacy roadmap during the prerequisite-driven reorder.
 ch13:
   metrics: [headings, algorithms, chrefs]
   reason: Added the planned matrix-free, EigenPro, mixed-precision, distributed, federated, and streaming coverage.
-ch-prelim:
-  metrics: [headings, statements, exercises, chrefs]
-  reason: Expanded the planned measure theory, Bochner integration, conditioning, convex duality, and exercises.
 ch-svr:
   metrics: [algorithms, chrefs]
   reason: Added expectile regression, noncrossing quantile families, and a distributional-prediction workflow.
@@ -22,9 +52,6 @@ ch-bo:
 ch-modern:
   metrics: [algorithms]
   reason: Added PAC-Bayes reporting, compression and stability, random-matrix diagnostics, and negative checks.
-ch-frontier:
-  metrics: [chrefs]
-  reason: Added quantum, foundation-model, responsible-learning, and operator-algebra frontier sections.
 ch-apps:
   metrics: [chrefs]
   reason: Added spatial, scientific, dynamics, shift, survival, and reproducibility case studies.
@@ -46,9 +73,3 @@ ch-signature:
 ch-geom:
   metrics: [chrefs]
   reason: Added a bridge from equivariant constructions to invariance design.
-ch-ksd:
-  metrics: [chrefs]
-  reason: Removed a redundant chapter pointer while tightening convergence claims.
-ch-causal:
-  metrics: [chrefs]
-  reason: Removed a redundant pointer while separating testing from effect estimation.

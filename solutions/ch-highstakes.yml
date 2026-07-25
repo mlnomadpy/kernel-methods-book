@@ -1,0 +1,91 @@
+chapter: ch-highstakes
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: For stellar rotation, matched filtering, an on-the-fly potential, orbit correction, and satellite retrieval, name the uncertainty currency and one operational validation test.
+    answer: >-
+      Stellar rotation uses a posterior distribution for the period and should be checked by
+      injection coverage or an independent period measurement. Matched filtering begins with a
+      ranking statistic and needs end-to-end background calibration plus blind injections. An
+      on-the-fly potential uses posterior variance or a calibrated error score and must detect
+      hazardous held-out force errors before barrier crossings. Orbit correction produces a
+      predictive covariance and must pass normalized-innovation and covariance-ellipsoid coverage
+      checks on future arcs. Satellite retrieval produces predictive intervals or standard
+      deviations and must attain geographic-temporal coverage on held-out regions and seasons.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: "In the white-noise matched-filter fixture, \\(\\rho=\\lVert h\\rVert/\\sigma\\). With \\(\\lVert h\\rVert=7.372\\) and \\(\\sigma=0.9215\\), verify \\(\\rho=8\\), and compute the one-sided probability that one standard normal exceeds \\(7.37\\). Explain why this is not the search false-alarm probability."
+    answer: >-
+      The ratio is 7.372/0.9215=8. The one-sided Gaussian tail is
+      0.5 erfc(7.37/sqrt(2)), approximately 8.7e-14. It is a single-trial probability under
+      stationary Gaussian noise. A search maximizes over correlated times and templates and sees
+      non-Gaussian glitches and an estimated, drifting PSD. Its false-alarm rate therefore requires
+      the full trials factor and an empirical end-to-end background.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: "Show that the composite kernel \\(k=\\mu\\,k_1+(1-\\mu)\\,k_2\\) with \\(\\mu\\in[0,1]\\) is positive definite whenever \\(k_1,k_2\\) are, and explain why the mixing weight \\(\\mu\\) is therefore a safe, interpretable dial in the spatial-spectral remote-sensing kernel. What goes wrong if \\(\\mu\\) is allowed outside \\([0,1]\\)?"
+    answer: >-
+      For arbitrary sites and coefficients, the Gram quadratic form is
+      mu c^T K1 c+(1-mu)c^T K2 c, which is nonnegative because both coefficients and both
+      quadratic forms are nonnegative. Thus the mixture is PSD. The parameter continuously trades
+      spectral against spatial similarity while preserving kernel validity. Outside [0,1], one
+      coefficient is negative. For example, with K1=0 and K2=I, mu>1 gives (1-mu)I, whose
+      quadratic form is negative for every nonzero vector.
+  - number: 4
+    kind: computation
+    status: draft
+    prompt: Reproduce the Morse fixture and compare the full design with the design that removes the shortest-bond samples. Report equilibrium error and maximum compressed-region error. Why is leave-one-out sensitivity not a predictive interval?
+    answer: >-
+      The deterministic check recovers 0.7425 angstrom against the declared 0.7416 angstrom
+      equilibrium, an error of 0.0009 angstrom. On r<=0.72, the maximum absolute error rises from
+      0.0679 eV for the full design to 0.7872 eV after removing the two shortest-bond samples.
+      Leave-one-out residuals measure how fitted values change after deleting observed points.
+      Without a sampling model and a calibrated predictive distribution, they do not have a
+      coverage interpretation at a new configuration.
+  - number: 5
+    kind: challenge
+    status: draft
+    prompt: "An on-the-fly force field trusts the GP below a score threshold. Let \\(C_e\\) be the cost of a hazardous error and \\(C_q\\) the cost of a reference call. Derive the decision rule if \\(p(s)\\) is a calibrated hazard probability given score \\(s\\). State what cannot be derived from an uncalibrated posterior variance."
+    answer: >-
+      Trusting the surrogate has conditional expected cost Ce p(s), whereas requesting the
+      reference calculation costs Cq. Request the reference when Ce p(s)>Cq, equivalently when
+      p(s)>Cq/Ce. A posterior variance is not itself p(s). Without a calibration map estimated on
+      representative held-out trajectories, no cost-optimal variance threshold or operational
+      hazard probability follows.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: "The chapter claims the exact GP is cubic and every mature application pairs it with a scalability structure. Pick two, celerite's semi-separable covariance and inducing-point sparse GPs, and explain what structural assumption each exploits and what it gives up, connecting them to the Nyström and random-feature trade-offs of the referenced chapter."
+    answer: >-
+      Celerite restricts one-dimensional stationary covariance to a semiseparable family built from
+      exponential terms. For fixed representation rank it obtains linear-time exact operations
+      within that family, while giving up arbitrary covariance choice and general input geometry.
+      An inducing-point GP replaces the full covariance information by m pseudo-inputs or their
+      span, reducing cost while introducing a low-rank approximation. Nyström uses the same
+      landmark-span idea; random features instead approximate a feature integral. In all cases the
+      study must report rank, approximation target, residual or likelihood tolerance, timing, and
+      whether predictive calibration changes.
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: Design an Earth-observation retrieval study using the eight-field template. Explain why random pixel splitting is invalid when residuals are spatially correlated, and give one predeclared coverage failure criterion.
+    answer: >-
+      Specify sensor version, correction pipeline, bands, masks, ground-truth instrument,
+      geolocation tolerance, sites, dates, target units, and the plot or campaign as the independent
+      unit. Hold out complete regions and seasons. Fit preprocessing, kernel, hyperparameters, and
+      interval calibration only inside development data. Compare with physical or linear retrieval
+      and a nonspatial kernel. Report physical-unit MAE and RMSE, bias, interval coverage and width
+      by region, spatial residual correlation, drift, completeness, and latency. Use coordinate and
+      target permutation plus withheld-season controls. Random pixel splitting leaks regional
+      offsets through neighboring pixels. A predeclared failure rule could reject nominal 95
+      percent intervals if coverage is below 90 percent in any operational region with at least the
+      prespecified sample count.

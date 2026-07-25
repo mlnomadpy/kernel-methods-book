@@ -1,0 +1,50 @@
+chapter: ch-accountable
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      A kernel ridge model predicts a value with no error bar, and a stakeholder asks \"how sure are you.\" Name two different things that phrase could mean for this model, one answerable from the kernel geometry alone and one requiring an assumption about the noise, and say which of the two the Gaussian-process variance \(\sigma^2(x_\star)=k(x_\star,x_\star)-k(x_\star)^\top(K+\sigma^2I)^{-1}k(x_\star)\) reports honestly and why.
+    answer: >-
+      One question is geometric epistemic uncertainty: how strongly the query is constrained by the observed input locations under the chosen kernel. The Schur-complement term reports this within the GP model and, in the noiseless case, equals the squared power function. A second question is predictive coverage for a future noisy response. That requires a correct likelihood/noise model or external calibration. GP posterior variance is honest as conditional covariance under the declared covariance and likelihood; it is not a distribution-free coverage guarantee and can be overconfident under misspecification.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      A calibration set has \(n=19\) absolute residuals, sorted: \(0.10,0.12,\dots\). For \(\alpha=0.10\), which rank is the conformal quantile \(\hat q\), and what is the interval? Then show that as \(n\to\infty\) the rank \(\lceil(n+1)(1-\alpha)\rceil/n\) tends to the \((1-\alpha)\) empirical quantile, and explain why the finite-\(n\) correction always makes the interval at least as wide as the plug-in quantile would.
+    answer: >-
+      The corrected rank is \(\lceil20(0.9)\rceil=18\), so \(\hat q=s_{(18)}\) and \(C(x)=[\hat f(x)-s_{(18)},\hat f(x)+s_{(18)}]\). The abbreviated residual list does not supply the numerical eighteenth value, so no numerical radius can be inferred. Dividing the rank by \(n\), \(\lceil(n+1)(1-\alpha)\rceil/n=(1-\alpha)+O(1/n)\). Because \((n+1)(1-\alpha)\ge n(1-\alpha)\) and the ceiling rounds upward, the corrected order statistic is never below the ordinary plug-in order statistic, with the convention \(+\infty\) if the rank is \(n+1\).
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Kernel ridge regression is the linear smoother \(\hat y=Hy\), \(H=K(K+\lambda I)^{-1}\). Prove the closed-form leave-one-out identity \(y_i-\hat f^{(-i)}(x_i)=(y_i-\hat y_i)/(1-H_{ii})\).
+    answer: >-
+      Fix the fit with record \(i\) deleted and let \(u=\hat f^{(-i)}(x_i)\). Restore the full design but replace response \(y_i\) by \(u\). The restored observation has zero residual, so the minimizer and its prediction at \(i\) are unchanged. By linearity, \(u=\sum_{j\ne i}H_{ij}y_j+H_{ii}u=\hat y_i-H_{ii}y_i+H_{ii}u\). Hence \((1-H_{ii})u=\hat y_i-H_{ii}y_i\). Since \(\lambda>0\), \(I-H=\lambda(K+\lambda I)^{-1}\succ0\), so \(1-H_{ii}>0\). Subtracting the resulting \(u\) from \(y_i\) gives \((y_i-\hat y_i)/(1-H_{ii})\).
+  - number: 4
+    kind: exploration
+    status: draft
+    prompt: >-
+      Take the influence example (RBF length scale \(0.4\), ridge \(0.1\), \(x_\star=0.7\)). Predict how the ranked list of the three most influential points changes as the ridge \(\lambda\) grows large, then check with a short script, and connect the change to the leverages \(H_{ii}\) and the effective dimension of the referenced chapter.
+    answer: >-
+      As \(\lambda\to\infty\), \(A^{-1}=(K+\lambda I)^{-1}=\lambda^{-1}I+O(\lambda^{-2})\), \(H=O(\lambda^{-1})\), and the effective dimension \(\operatorname{tr}H\) tends to zero. The deletion effect satisfies \(\Delta_i=\lambda^{-1}k(x_i,x_\star)y_i+O(\lambda^{-2})\). Thus every effect shrinks, leverages stop amplifying residuals, and the ranking approaches that of \(|k(x_i,x_\star)y_i|\), not necessarily distance alone. A correct script should recompute the direct deletion fits as \(\lambda\) changes and verify the formula before interpreting rank changes.
+  - number: 5
+    kind: challenge
+    status: draft
+    prompt: >-
+      Explain precisely why the conformal coverage guarantee requires exchangeability, and construct a deployment scenario (a slow covariate shift over time) in which split conformal silently loses coverage. Then argue why an MMD drift test between the calibration window and the current window is the right guard, and what its rejection tells you to do.
+    answer: >-
+      Exchangeability makes the test score's rank among the calibration and test scores uniform, which is the entire finite-sample proof. Suppose calibration occurs in winter while a sensor's operating range drifts through summer; current residuals become stochastically larger than calibration residuals, so the rank is no longer uniform and coverage can fall. A preregistered MMD test on independent calibration and current input windows can reject equality of their input laws. Rejection says that exchangeability is doubtful, not that covariate shift specifically holds or that coverage has already failed. The release action is to abstain or investigate, collect representative labeled calibration data, and recalibrate rather than silently reuse the old quantile.
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: >-
+      The MMD drift test used the median-heuristic bandwidth. Investigate its effect on power: rerun the shifted-versus-unshifted test as the bandwidth ranges over an order of magnitude around the median, and describe the trade-off. Then explain why a characteristic kernel is necessary for the guarantee \"\(\mathrm{MMD}=0\) iff \(P=Q\)\" and give a kernel for which it fails.
+    answer: >-
+      Very short length scales make most off-diagonal similarities nearly zero, increasing estimator noise and losing broad-shift power. Very long scales make most similarities nearly constant, erasing local differences. Intermediate scales can maximize signal relative to null variability, but selecting the best scale after seeing group labels must be included inside permutation calibration. Characteristicness is needed because MMD compares mean embeddings; injectivity is exactly what lets equality of embeddings imply equality of distributions. The linear kernel is a counterexample: any two distributions with the same finite mean have MMD zero even when their variances or shapes differ.

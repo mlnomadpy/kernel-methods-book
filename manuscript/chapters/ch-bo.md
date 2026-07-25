@@ -2,8 +2,8 @@
 id: ch-bo
 slug: bayesian-optimization-and-bandits
 title: Kernelized Bandits and Bayesian Optimization
-part: XI · The Bayesian View
-order: 43
+part: IX · Gaussian Processes and Sequential Decisions
+order: 50
 tier: practitioner
 prerequisites:
   - gaussian-processes-and-rvm
@@ -176,6 +176,10 @@ Same surrogate as the GP-UCB example, conditioned on the two initial observation
 A third design is probabilistic rather than deterministic. Thompson sampling, the oldest idea of all, going back to Thompson (1933), draws one sample function \(\tilde f\) from the current GP posterior and queries its maximizer, \(x_t=\arg\max_x\tilde f(x)\). Because the sample is random, the rule explores automatically: a point is queried with exactly the posterior probability that it is the true optimum, so uncertain regions get their fair share of queries without any explicit variance term. The GP version and its regret analysis are developed by Chowdhury and Gopalan (2017), and the general principle is surveyed by Russo, Van Roy, Kazerouni, Osband, and Wen (2018). A simpler and older sibling, the probability of improvement, scores a point by \(\mathrm{PI}(x)=\Phi(z)\), the posterior probability that it beats the incumbent, but it tends to under-explore because it ignores the size of the improvement, rewarding a near-certain tiny gain over an uncertain large one. Expected improvement fixes precisely that defect by weighting the probability by the magnitude.
 
 These acquisitions are the interchangeable core of the Bayesian optimization loop. The loop itself is acquisition-agnostic: fit the surrogate, maximize the acquisition to pick the next query, evaluate, update, and repeat until the budget is spent.
+
+<figure class="viz" data-figure="bo-acquisition-comparison" data-alt="A Gaussian-process posterior appears above normalized UCB, expected-improvement, and probability-of-improvement curves. Markers show that the three criteria choose different next query locations from the same posterior.">
+<figcaption>An acquisition is a decision rule layered on the posterior, not a property of the posterior itself. UCB, EI, and PI price mean, uncertainty, and improvement differently, so identical evidence can rationally produce different next experiments.</figcaption>
+</figure>
 
 :::: {.algorithm #algo-41-2}
 [Algorithm (Bayesian optimization loop)]{.box-title}

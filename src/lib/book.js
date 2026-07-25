@@ -504,11 +504,11 @@ export function chapterSections(body) {
   }));
 }
 
-/** The 'On this page' rail from the chapter's h2/h3 headings. */
+/** The chapter's marginal map, set like a monograph's running apparatus. */
 export function onpageNav(body) {
   const heads = [...body.matchAll(/<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/g)];
   if (heads.length < 2) return "";
-  const rows = ['<div class="onpage-title">On this page</div>'];
+  const rows = ['<div class="onpage-title">Chapter map</div>'];
   for (const [, lvl, hid, txt] of heads) {
     const label = txt
       .replace(/<[^>]+>/g, "")

@@ -1,0 +1,215 @@
+chapter: ch-lower
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      Classify each claim by currency: (a) every rank-\(m\) approximation has regularized spectral
+      error at least \(0.2\); (b) every estimator has expected prediction error at least
+      \(cn^{-2/3}\); (c) every linear-span method needs
+      \(c\sqrt\kappa\log(1/\varepsilon)\) matrix-vector products; (d) every distributed
+      implementation communicates at least \(nd\) words. For each claim, name one conclusion in a
+      different currency that does not follow automatically.
+    answer: >-
+      (a) is a representation lower bound in regularized spectral error. It does not imply a
+      population-risk lower bound because the responses may avoid the poorly represented
+      directions. (b) is a statistical minimax lower bound. It does not imply that a kernel matrix
+      needs large rank or that a particular solve needs many iterations. (c) is an optimization
+      oracle lower bound. It does not imply a statistical lower bound and does not constrain a
+      method with richer access such as a factorization or precomputed eigensystem. (d) is a
+      systems or communication lower bound. It does not by itself imply poor objective value,
+      inaccurate prediction, or a rank requirement. Every cross-currency conclusion needs an
+      explicit reduction.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Reproduce the finite-rank Gaussian example with \(n=8\), \(\delta=1/4\), and noise variance
+      one. Compute parameter separation, KL divergence, the Pinsker total-variation bound, and the
+      final Le Cam risk lower bound to six decimals.
+    answer: >-
+      The two coefficients differ by \(2\delta=1/2\), so the squared
+      \(L^2(P_X)\) separation is \(4\delta^2=1/4=0.250000\). The Gaussian
+      \(n\)-sample divergence is
+      \[
+      \operatorname{KL}(P_{-\delta}^n\Vert P_\delta^n)
+      =\frac n2(2\delta)^2
+      =\frac82\frac14=1.000000.
+      \]
+      Pinsker gives
+      \(\operatorname{TV}\leq\sqrt{\operatorname{KL}/2}=1/\sqrt2=0.707107\).
+      Squared distance satisfies a loss-sum separation
+      \(\Delta=\tfrac12(2\delta)^2=2\delta^2=1/8\). Thus Le Cam gives
+      \[
+      \frac{\Delta}{4}(1-\operatorname{TV})
+      \geq\frac1{32}\left(1-\frac1{\sqrt2}\right)
+      =0.009153.
+      \]
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the total-variation form of the two-point theorem when the loss is squared metric loss.
+      Show that \(d(u,a_0)^2+d(u,a_1)^2\geq d(a_0,a_1)^2/2\), and identify \(\Delta\).
+    answer: >-
+      The triangle inequality gives
+      \(d(a_0,a_1)\leq d(u,a_0)+d(u,a_1)\). Squaring and applying
+      \((s+t)^2\leq2(s^2+t^2)\) yields
+      \[
+      d(u,a_0)^2+d(u,a_1)^2\geq\frac12d(a_0,a_1)^2.
+      \]
+      Hence the theorem's loss-sum constant is
+      \(\Delta=d(a_0,a_1)^2/2\). Define the test that selects the parameter closer to the
+      estimate. On an error under either hypothesis, the corresponding squared loss is at least
+      \(d(a_0,a_1)^2/4=\Delta/2\). The sum of the two expected losses is therefore at least
+      \(\Delta/2\) times the sum of testing errors. The smallest such error sum is
+      \(1-\operatorname{TV}(P_0^n,P_1^n)\); taking half the sum to bound the maximum risk gives
+      \[
+      \max_j\mathbb E_j d(\widehat a,a_j)^2
+      \geq\frac{\Delta}{4}
+      (1-\operatorname{TV}(P_0^n,P_1^n)).
+      \]
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Fill in the source-capacity packing algebra. With \(\mu_m\asymp m^{-1/p}\), show that
+      balancing \(a^2\lesssim R^2\mu_m^{2r}/m\) and
+      \(a^2\lesssim\sigma^2/n\) yields \(m\asymp n^{p/(2r+p)}\) and risk
+      \(ma^2\asymp n^{-2r/(2r+p)}\). Explain why a capacity upper bound alone does not justify this
+      packing.
+    answer: >-
+      Ignoring fixed class constants, balance the two restrictions:
+      \[
+      \frac{\mu_m^{2r}}{m}\asymp\frac1n.
+      \]
+      Since \(\mu_m\asymp m^{-1/p}\), the left side is
+      \(m^{-2r/p-1}\). Therefore
+      \(m^{1+2r/p}\asymp n\), or
+      \(m\asymp n^{p/(2r+p)}\). At the testing scale \(a^2\asymp1/n\), Assouad
+      accumulates \(m\) coordinate errors, giving
+      \[
+      ma^2\asymp\frac mn
+      =n^{p/(2r+p)-1}
+      =n^{-2r/(2r+p)}.
+      \]
+      An upper capacity bound only says that the spectrum is no richer than a polynomial envelope.
+      A finite-rank operator also satisfies such a bound but cannot supply arbitrarily large
+      eigenfunction blocks. The lower-bound packing needs a lower spectral condition, or another
+      explicit construction guaranteeing enough nonnegligible directions.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: >-
+      Let \(K=\operatorname{diag}(9,4,1,0.25)\), \(\gamma=1\), and require regularized spectral
+      error at most \(0.4\). Use the rank barrier to find the smallest rank not ruled out. Compare
+      with the smallest rank not ruled out when \(\gamma=0.1\).
+    answer: >-
+      A rank \(m\) approximation must satisfy
+      \(\lambda_{m+1}/(\lambda_{m+1}+\gamma)\leq0.4\). For \(\gamma=1\), the
+      tail ratios after ranks zero through three are respectively
+      \(9/10\), \(4/5\), \(1/2\), and \(0.25/1.25=0.2\). Thus ranks below three
+      are ruled out and \(m=3\) is the smallest rank not ruled out. For
+      \(\gamma=0.1\), the rank-three tail ratio is
+      \(0.25/0.35\approx0.7143\), still above \(0.4\). Only full rank, \(m=4\),
+      has zero tail and is not ruled out. Smaller ridge asks the approximation to preserve more
+      spectral directions.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove Proposition [rank barrier](#prop-lower-rank) using the dimension formula for
+      intersecting subspaces. Then construct a rank-\(m\) truncated eigendecomposition that attains
+      error \(\lambda_{m+1}/(\lambda_{m+1}+\gamma)\).
+    answer: >-
+      Let \(U\) be the span of the top \(m+1\) eigenvectors of \(K\). Since
+      \(\dim\ker\widetilde K\geq n-m\), the dimension inequality gives
+      \[
+      \dim(U\cap\ker\widetilde K)
+      \geq(m+1)+(n-m)-n=1.
+      \]
+      Choose a unit vector \(v\) in the intersection. Its Rayleigh quotient obeys
+      \(v^\top Kv\geq\lambda_{m+1}\), while
+      \(v^\top\widetilde K v=0\). The generalized Rayleigh quotient of the normalized error is
+      therefore at least
+      \(\lambda_{m+1}/(\lambda_{m+1}+\gamma)\). For attainability, write
+      \(K=\sum_{j=1}^n\lambda_j u_ju_j^\top\) and take
+      \(\widetilde K_m=\sum_{j=1}^m\lambda_j u_ju_j^\top\). In the common eigenbasis the
+      regularized normalized errors are zero for \(j\leq m\) and
+      \(\lambda_j/(\lambda_j+\gamma)\) for \(j>m\). This ratio increases with
+      \(\lambda_j\), so its maximum over the tail is exactly
+      \(\lambda_{m+1}/(\lambda_{m+1}+\gamma)\).
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: >-
+      A paper proves that \(m\) ordinary random Fourier features cannot achieve a stated
+      regularized spectral approximation for a Gaussian kernel. List the additional reductions
+      and assumptions needed before concluding that no \(m\)-feature method can attain the minimax
+      population KRR rate.
+    answer: >-
+      First, the feature class must be enlarged or the conclusion restricted: a lower bound for
+      ordinary i.i.d. Fourier sampling does not cover optimized, leverage-weighted, adaptive, or
+      non-Fourier features. Second, regularized spectral failure must be reduced to prediction-risk
+      failure by choosing responses or target functions that place mass in the distorted
+      directions. Third, those targets must satisfy the same source-radius constraint as the
+      minimax class. Fourth, the design must be connected to the population input distribution,
+      including concentration from empirical to population operators. Fifth, the noise law,
+      regularization normalization, loss, and probability mode must match the minimax theorem.
+      Sixth, the lower-bound quantifiers must account for feature randomness and estimator
+      adaptation. Without these steps the paper proves a representation barrier for one sampling
+      scheme, not a universal statistical impossibility.
+  - number: 8
+    kind: exploration
+    status: draft
+    prompt: >-
+      For a kernel system \(A=K+\gamma I\), compare three interfaces: matrix-vector products only,
+      entry queries plus adaptive Nyström sampling, and an explicit dense matrix. State which
+      first-order lower bound applies to each, what preprocessing is allowed, and which cost must be
+      included for a fair comparison.
+    answer: >-
+      With matrix-vector products only and iterates restricted to the generated Krylov or gradient
+      span, the first-order quadratic lower bound applies directly; preprocessing can use declared
+      oracle calls, and every such call must be counted. Entry queries plus adaptive Nyström
+      sampling provide richer information, so the plain linear-span lower bound does not cover the
+      landmark selection or preconditioner construction. A fair cost includes queried entries,
+      sampling scores, the landmark factorization, subsequent matrix-vector products, and memory.
+      An explicit dense matrix permits Cholesky, eigendecomposition, block methods, and arbitrary
+      entry access, so the black-box first-order restriction is inapplicable unless the algorithm
+      voluntarily obeys it. A fair comparison includes the \(O(n^2)\) storage and matrix
+      construction plus factorization or preprocessing, not only the final iterations. In all
+      three cases statistical risk remains a separate measurement.
+  - number: 9
+    kind: challenge
+    status: draft
+    prompt: >-
+      Construct a two-class adaptation witness. Choose \(P_0\) in a smaller source ball and
+      \(P_1\) only in a larger ball so that their parameters are separated by \(2s\) but
+      \(n\operatorname{KL}(P_0\Vert P_1)\leq1/8\). Use the two-point theorem to show that an
+      estimator cannot have squared error \(o(s^2)\) at both points. State why this does not prove
+      that adaptation over the full pair of classes is impossible.
+    answer: >-
+      Work in one eigen-direction \(\psi_j\). Take \(f_0=0\), which belongs to every source ball,
+      and \(f_1=2s\psi_j\), choosing \(j\) so that \(f_1\) belongs to the larger ball but violates
+      the smaller ball's coefficient constraint. Under unit-variance Gaussian regression,
+      choose \(s\) and the design so that the one-sample divergence is at most \(1/(8n)\).
+      Then the product divergence is at most \(1/8\), and Pinsker gives total variation at most
+      \(1/4\). Squared metric loss has
+      \(\Delta=\tfrac12(2s)^2=2s^2\). The two-point theorem yields
+      \[
+      \max_{j\in\{0,1\}}\mathbb E_j
+      \lVert\widehat f-f_j\rVert^2
+      \geq\frac{2s^2}{4}\left(1-\frac14\right)
+      =\frac{3s^2}{8}.
+      \]
+      Thus both pointwise risks cannot be \(o(s^2)\). This pair alone does not prove global
+      nonadaptivity: the minimax target rates over the two full classes may be slower than
+      \(s^2\), a logarithmic penalty may suffice, or another estimator may adapt at all relevant
+      resolutions. A full adaptation lower bound must calibrate a sequence of witnesses to the
+      claimed rates and quantifiers.

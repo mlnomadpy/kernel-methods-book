@@ -114,3 +114,33 @@ exercises:
       implements the Tikhonov pseudoinverse filter t/(t^2+delta), which is stable at small or signed
       empirical eigenvalues. Directly inverting C_YY would be ill posed and, with signed rho, need
       not even have the positive covariance structure of an ordinary conditional distribution.
+  - number: 8
+    kind: proof
+    status: draft
+    prompt: Prove the population regression decomposition
+      \(\mathbb E\|\psi(Y)-C\varphi(X)\|^2=\mathbb E\|\psi(Y)-m(X)\|^2+\mathbb E\|m(X)-C\varphi(X)\|^2\).
+      Identify the cross term and show exactly why it vanishes. Then explain what the minimizer is
+      when no Hilbert-Schmidt \(C_\star\) satisfies \(m(x)=C_\star\varphi(x)\).
+    answer: Write psi(Y)-C phi(X)=[psi(Y)-m(X)]+[m(X)-C phi(X)]. Expanding the squared norm gives
+      the two displayed squared terms plus twice the expected inner product of the bracketed
+      vectors. The second bracket is measurable with respect to X, whereas E[psi(Y)-m(X)|X]=0.
+      Taking the conditional expectation of their inner product therefore gives zero, and the tower
+      property removes the cross term. The first squared term does not depend on C. Consequently a
+      risk minimizer is the L2(P_X;H_Y) projection of m onto the closure of the operator-valued
+      hypothesis class. If no exact C_star exists, the minimizer is this best approximation when
+      the projection is attained, or the infimum is approached by a minimizing sequence; it is not
+      an exact conditional operator and cannot be identified with C_YX C_XX^{-1}.
+  - number: 9
+    kind: exploration
+    status: draft
+    prompt: Run `checks/ch-cme-stability.py`. Compare the repeated-update diagnostics for
+      \(\delta=10^{-2}\) and \(\delta=10^{-6}\). Report the largest negative mass, largest
+      \(\ell_1\)-norm, and final perturbation amplification. Explain why dividing every coefficient
+      vector by its sum neither removes negative mass nor establishes stability.
+    answer: The deterministic script prints the authoritative values. For delta=1e-2 the maximum
+      negative mass is 0.144328, the maximum l1 norm is 0.730646, and the final amplification is
+      0.000038. For delta=1e-6 they are 0.859314, 2.281870, and 0.029432. Thus the smaller ridge
+      produces much stronger signed cancellation and leaves substantially more sensitivity after
+      eight updates, despite tiny linear-solve residuals. Dividing by the coefficient sum scales
+      positive and negative entries together, so negative entries remain negative; it also changes
+      the map at every step and supplies no contraction bound for perturbations.

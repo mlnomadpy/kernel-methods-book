@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-structured",
+  "anchor": "example-structured-viterbi",
+  "source_file": "manuscript/chapters/ch-structured.md",
+  "source_sha256": "8b36c248bb0399a24fe78ca170a0fe31aca67eab537e7a9bfe5c3aa355e9d3c4",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-structured-ex1.py"
+  ],
+  "numeric_literals": [
+    "0",
+    "1",
+    "000",
+    "111",
+    "2.2"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

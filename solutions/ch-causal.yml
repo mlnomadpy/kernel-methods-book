@@ -106,3 +106,64 @@ exercises:
       observationally equivalent decompositions trading beta against delta; exclusion is an
       identifying assumption, not generally testable from (X,Y,Z) alone. Multiple valid instruments
       or experimental/domain restrictions can create overidentifying checks.
+  - number: 8
+    kind: proof
+    status: draft
+    prompt: Prove the RKHS balancing bound in Proposition \(\ref{prop-causal-balance}\). Then
+      construct a two-dimensional covariate example in which a linear kernel on the first
+      coordinate exactly balances that coordinate but misses confounding through the second
+      coordinate. Explain why zero empirical kernel imbalance is only as meaningful as the chosen
+      RKHS.
+    answer: Let d be the difference between the weighted treated and target empirical kernel mean
+      embeddings. By reproduction, the corresponding difference in m_1 averages is
+      \(\langle m_1,d\rangle\), whose magnitude is at most
+      \(\|m_1\|_{\mathcal H_C}\|d\|_{\mathcal H_C}\le B\Delta_{\mathcal H}\). For failure, let the
+      treated covariates be (0,1) and (2,1), and target covariates be (0,-1) and (2,-1), all equally
+      weighted. A linear kernel using only c_1 sees mean 1 in both groups, hence zero imbalance.
+      Yet if \(m_1(c)=c_2\), the treated and target conditional-outcome means differ by 2. The
+      omitted direction c_2 is outside the selected RKHS, so the zero discrepancy certifies only
+      balance of functions represented by that kernel.
+  - number: 9
+    kind: synthesis
+    status: draft
+    prompt: State the assumptions needed to identify \(\mathbb E[Y(a)]\) using an outcome bridge
+      \(h(W,a,X)\). Separate proxy restrictions, bridge existence, positivity, and both completeness
+      roles. For each assumption, state whether it is an observed-law restriction, a causal
+      restriction, or an operator injectivity condition.
+    answer: Consistency and positivity place treatment interventions in the observed support.
+      The negative-control restrictions \(Y\perp Z\mid(A,U,X)\) and
+      \(W\perp(A,Z)\mid(U,X)\) are causal proxy restrictions involving latent U and are not fully
+      testable from the observed law. Existence of h solving
+      \(E[Y-h(W,A,X)\mid Z,A,X]=0\) is an observed-law integral-equation requirement and can be
+      assessed only approximately. Completeness of Z relative to U transfers the observed bridge
+      equation to the latent-confounder equation; completeness of W given (Z,A,X) makes the bridge
+      unique in its class. Both are operator injectivity conditions. Integrability and regular
+      conditional distributions are analytic requirements. Together they imply
+      \(E[Y(a)]=E[h(W,a,X)]\).
+  - number: 10
+    kind: computation
+    status: draft
+    prompt: For the nonidentification example, verify algebraically that \(\mathcal M_1\) and
+      \(\mathcal M_2\) generate the same \(Y\), but intervention slopes \(2\) and \(3\). If
+      \(\widehat\beta_{\mathrm{IV}}=2\) and the direct effect is bounded by
+      \(|\delta|\le0.4\) with first-stage coefficient \(a=1\), report the sensitivity interval.
+    answer: Since X=Z+U, model 1 gives \(2X+3U=2Z+5U\), while model 2 gives
+      \(3X-Z+2U=3Z+3U-Z+2U=2Z+5U\). Thus their observed outcomes agree pointwise. Intervening on X
+      leaves mean-zero Z and U unchanged, giving mean outcomes 2x and 3x respectively. The IV
+      estimand equals \(\beta+\delta/a\), so \(\beta=\widehat\beta_{\mathrm{IV}}-\delta/a\).
+      With a=1 and \(|\delta|\le0.4\), the sensitivity interval is [1.6,2.4].
+  - number: 11
+    kind: synthesis
+    status: draft
+    prompt: Derive the empirical squared distance
+      \(\|\widehat\mu_1-\widehat\mu_0\|_{\mathcal H_\ell}^2\) when
+      \(\widehat\mu_a=\sum_i q_i^{(a)}\psi(Y_i)\). State what characteristicness identifies, and
+      explain why the result does not identify the joint counterfactual law of \((Y(0),Y(1))\).
+    answer: Let \(d=q^{(1)}-q^{(0)}\) and let \(L_{ij}=\ell(Y_i,Y_j)\). Bilinearity and the
+      reproducing inner product give
+      \(\|\widehat\mu_1-\widehat\mu_0\|^2=d^\top Ld\). For a characteristic outcome kernel, the
+      population distance is zero exactly when the two marginal interventional laws
+      \(P_{Y(1)}\) and \(P_{Y(0)}\) agree. These two marginals do not determine how the two potential
+      outcomes are coupled within one individual. Distinct joint counterfactual laws can share the
+      same marginals, so individual treatment-effect distributions remain unidentified without
+      further assumptions.

@@ -2,7 +2,7 @@
 id: ch-prelim
 slug: preliminaries
 title: Mathematical Preliminaries
-part: 0 · Preliminaries
+part: Reference · Mathematical Preliminaries
 order: 0
 tier: core
 prerequisites: []
@@ -16,6 +16,9 @@ objectives:
   - >-
     Work with measure-theoretic and Hilbert-valued expectations used by
     embeddings.
+  - >-
+    Apply matrix concentration to empirical covariance and Gram approximations
+    with explicit normalization.
   - >-
     Apply subgradients, Fenchel duality, KKT conditions, and convergence
     assumptions.
@@ -138,7 +141,7 @@ for every bounded linear operator \(A\). For \(Z=k(X,\cdot)\), a sufficient cond
 
 ## Operators, spectra, and Fourier analysis {#functional-analysis}
 
-Mercer's theorem and the translation-invariant kernels of Part V need a little operator theory and harmonic analysis. The finite spectral theorem generalizes to certain operators on function spaces, and Fourier analysis is what characterizes which functions are valid kernels.
+Mercer's theorem and the translation-invariant kernels developed across Parts IV and VI need a little operator theory and harmonic analysis. The finite spectral theorem generalizes to certain operators on function spaces, and Fourier analysis is what characterizes which functions are valid kernels.
 
 ::: {.definition #def-p-7}
 [Bounded, compact, self-adjoint, positive operators]{.box-title}
@@ -164,7 +167,7 @@ Learning is estimation from samples, so probability supplies both the objects (d
 ::: {.definition #def-p-9}
 [Distributions, expectation, and independence]{.box-title}
 
-A random variable \(X\) has a distribution \(P\); its **expectation** is \(\mathbb{E}[X] = \int x\, dP(x)\), a linear operator, and its **variance** is \(\operatorname{Var}(X) = \mathbb{E}[(X - \mathbb{E}X)^2]\). Variables are **independent** if their joint distribution factors; a sample is **i.i.d.** when its points are independent and identically distributed. The kernel mean embedding \(\mu_P = \mathbb{E}_{X\sim P}[k(\cdot, X)]\) of Part VI is just an expectation taken in an RKHS, and the maximum mean discrepancy compares two such embeddings.
+A random variable \(X\) has a distribution \(P\); its **expectation** is \(\mathbb{E}[X] = \int x\, dP(x)\), a linear operator, and its **variance** is \(\operatorname{Var}(X) = \mathbb{E}[(X - \mathbb{E}X)^2]\). Variables are **independent** if their joint distribution factors; a sample is **i.i.d.** when its points are independent and identically distributed. The kernel mean embedding \(\mu_P = \mathbb{E}_{X\sim P}[k(\cdot, X)]\) of Part VII is just an expectation taken in an RKHS, and the maximum mean discrepancy compares two such embeddings.
 :::
 
 Two families of results are used to turn samples into guarantees. The **laws of large numbers** say the empirical average \(\frac1n\sum_i X_i\) converges to \(\mathbb{E}[X]\) as \(n\to\infty\), and the **central limit theorem** says its fluctuations are Gaussian of size \(1/\sqrt n\); this \(1/\sqrt n\) rate is the one that appears in every generalization bound. Sharper, non-asymptotic control comes from **concentration inequalities**. **Hoeffding's inequality** bounds the deviation of a bounded average, and its generalization, **McDiarmid's bounded-differences inequality**, bounds any function of independent variables that changes little when one variable is altered:
@@ -174,6 +177,132 @@ $$ \Pr\bigl(\,f(X_1,\dots,X_n) - \mathbb{E}f \geq t\,\bigr) \leq \exp\!\Bigl(\fr
 where \(c_i\) bounds the change from moving coordinate \(i\). McDiarmid applied to the worst-case empirical error is the engine behind the Rademacher bounds of [[ch:learning-theory]]. A last modeling link: minimizing a loss is often maximum-likelihood estimation in disguise, since a loss \(\ell(y, f)\) equal to \(-\log p(y \mid f)\) makes empirical risk minimization the same as fitting a probabilistic noise model, the reading that connects the squared loss to Gaussian noise and the logistic loss to a Bernoulli model.
 
 This section covers what empirical risk minimization needs. The inference chapters ask for more, and the deeper material, Gaussian conditioning, Bayes' rule, score functions, U-statistics, and a precise statement of Hoeffding's inequality, is collected in the section on [conditioning, scores, and U-statistics](#probability-for-inference) below.
+
+### Matrix concentration for kernel approximations {#matrix-concentration}
+
+Scalar concentration controls one test direction at a time. A kernel approximation usually has to preserve every direction at once: an empirical covariance \(\widehat C=n^{-1}\sum_i z_i z_i^\top\) should be close to \(C=\mathbb E[z z^\top]\), or a random-feature Gram matrix should approximate its expectation in spectral norm. A union bound over entries obscures the geometry and can lose factors of dimension. Matrix concentration works directly with eigenvalues and operator norms.
+
+::: {.definition #def-p-matrix-variance}
+[Matrix variance and intrinsic dimension]{.box-title}
+
+For independent, mean-zero, self-adjoint random matrices \(Y_1,\ldots,Y_n\in\mathbb R^{d\times d}\), define
+
+$$
+V=\sum_{i=1}^n\mathbb E[Y_i^2],
+\qquad
+v=\lVert V\rVert_2.
+$$
+
+The scalar \(v\) is the **matrix variance proxy**. When \(v\gt0\), the ratio
+
+$$
+r(V)=\frac{\operatorname{tr}(V)}{\lVert V\rVert_2}
+$$
+
+is its **intrinsic dimension** or stable rank. It lies in \([1,d]\) and counts how many eigendirections carry substantial variance. This is a variance-side notion. The regularized effective dimension \(\operatorname{tr}(K(K+\lambda I)^{-1})\) used later in [[ch:mercer-and-rates]] and [[ch:random-features-sketches-and-randomized-kernel-linear-algebra]] is a different, regularization-dependent quantity, although both replace ambient dimension by occupied spectral dimension.
+:::
+
+::: {.theorem #thm-p-matrix-bernstein}
+[Self-adjoint matrix Bernstein inequality]{.box-title}
+
+Let \(Y_1,\ldots,Y_n\in\mathbb R^{d\times d}\) be independent, self-adjoint random matrices satisfying
+
+$$
+\mathbb E Y_i=0
+\qquad\text{and}\qquad
+\lVert Y_i\rVert_2\leq L
+\quad\text{almost surely}
+$$
+
+for every \(i\). With \(v=\lVert\sum_i\mathbb E[Y_i^2]\rVert_2\), for every \(t\geq0\),
+
+$$
+\Pr\!\left(
+\left\lVert\sum_{i=1}^nY_i\right\rVert_2\geq t
+\right)
+\leq
+2d\exp\!\left(
+-\frac{t^2}{2(v+Lt/3)}
+\right).
+$$
+
+Equivalently, with probability at least \(1-\delta\),
+
+$$
+\left\lVert\sum_{i=1}^nY_i\right\rVert_2
+\leq
+\sqrt{2v\log\!\frac{2d}{\delta}}
++\frac{2L}{3}\log\!\frac{2d}{\delta}.
+$$
+
+**Assumptions.** The matrices have fixed finite dimension, are independent and self-adjoint, are centered individually, and obey the same almost-sure spectral-norm bound \(L\). The variance uses the unnormalized sum. If the target is an average, put the factor \(1/n\) inside each \(Y_i\); then typically \(L=O(n^{-1})\) and \(v=O(n^{-1})\).
+
+**Proof status.** Standard matrix Laplace-transform result; no proof is reproduced here. The displayed two-sided norm bound follows by controlling the maximum eigenvalues of both \(\sum_iY_i\) and \(-\sum_iY_i\).
+:::
+
+The leading term is the familiar square-root variance scale, while the linear term controls rare large summands. Refined Bernstein inequalities can replace the ambient factor \(d\) by a constant multiple of \(r(V)\), subject to the precise threshold and one-sided/two-sided convention of the chosen version. This matters for kernels whose covariance lives near a low-dimensional subspace. It does not license replacing \(d\) by any convenient effective dimension: the dimension factor must be derived from the same variance or regularized operator used in the theorem.
+
+For positive random matrices there is a sharper multiplicative question: does sampling preserve the spectrum relative to its expectation?
+
+::: {.theorem #thm-p-matrix-chernoff}
+[Matrix Chernoff inequality]{.box-title}
+
+Let \(X_1,\ldots,X_n\in\mathbb R^{d\times d}\) be independent, self-adjoint random matrices with
+
+$$
+0\preceq X_i\preceq L I
+\quad\text{almost surely}.
+$$
+
+Write \(\mu_{\min}=\lambda_{\min}(\sum_i\mathbb E X_i)\) and \(\mu_{\max}=\lambda_{\max}(\sum_i\mathbb E X_i)\). For \(0\leq\varepsilon\lt1\),
+
+$$
+\Pr\!\left\{
+\lambda_{\min}\!\left(\sum_iX_i\right)
+\leq(1-\varepsilon)\mu_{\min}
+\right\}
+\leq
+d\exp\!\left(-\frac{\varepsilon^2\mu_{\min}}{2L}\right),
+$$
+
+and, for \(\varepsilon\geq0\),
+
+$$
+\Pr\!\left\{
+\lambda_{\max}\!\left(\sum_iX_i\right)
+\geq(1+\varepsilon)\mu_{\max}
+\right\}
+\leq
+d\left(\frac{e^\varepsilon}{(1+\varepsilon)^{1+\varepsilon}}\right)^{\mu_{\max}/L}.
+$$
+
+**Assumptions.** Independence, finite-dimensional self-adjointness, and the Loewner bound \(0\preceq X_i\preceq LI\) are essential. The theorem controls the unnormalized sum. For an empirical average, either divide the conclusion by \(n\) or define \(X_i/n\) as the summands.
+
+**Proof status.** Standard matrix Laplace-transform result; no proof is reproduced here.
+:::
+
+::: {.example #example-prelim-matrix-concentration}
+[A two-direction covariance fixture]{.box-title}
+
+Let \(z\) equal \(\sqrt2e_1\) or \(\sqrt2e_2\), each with probability \(1/2\). Then \(C=\mathbb E[zz^\top]=I_2\). For \(n=4\), the balanced deterministic sample \((e_1,e_1,e_2,e_2)\) after the same \(\sqrt2\) scaling gives \(\widehat C=I_2\). A \(3{:}1\) split gives
+
+$$
+\widehat C
+=
+\begin{pmatrix}
+3/2&0\\
+0&1/2
+\end{pmatrix},
+\qquad
+\lVert\widehat C-C\rVert_2=\frac12.
+$$
+
+To use Bernstein, set \(Y_i=(z_i z_i^\top-I_2)/n\). Then \(\mathbb EY_i=0\), \(\lVert Y_i\rVert_2=1/n\), \(Y_i^2=I_2/n^2\), and therefore \(L=1/n\), \(V=I_2/n\), \(v=1/n\), and \(r(V)=2\). The calculation checks every normalization by hand. At \(n=4\) and \(t=1/2\), the probability upper bound exceeds one and is therefore vacuous; concentration becomes informative only as \(n\) grows. A correct theorem need not be a sharp small-sample certificate.
+
+**Verification artifact.** checks/example-ch-prelim-example-prelim-matrix-concentration.json records the example source hash and verification scope.
+:::
+
+This module is the probabilistic bridge to regularized spectral approximation in [[ch:random-features-sketches-and-randomized-kernel-linear-algebra]] and to Nyström and iterative scaling methods in [[ch:large-scale-kernels]]. In each use, first identify the random self-adjoint summand, then its expectation, spectral bound, variance proxy, normalization, and the exact matrix quantity the downstream algorithm needs.
 
 ## Convex optimization and duality {#optimization}
 
@@ -412,3 +541,4 @@ Do not treat a formal inverse as a numerical algorithm: inspect the spectrum, so
 4. [computation]{.ex-tag} Compute the Fenchel conjugate of \(f(x)=x^2/2\) and verify Fenchel-Young equality at \(u=f'(x)\).
 5. [synthesis]{.ex-tag} For a graph-kernel pipeline, list one assumption or diagnostic drawn from each of linear algebra, probability, convex optimization, and graph geometry.
 6. [challenge]{.ex-tag} Give an example in which pointwise convergence does not justify exchanging limit and expectation, then state a domination condition that repairs the argument.
+7. [computation]{.ex-tag} In the two-direction covariance fixture, let \(N_1\) of the \(n\) samples fall on \(\sqrt2e_1\). Derive \(\widehat C\) and \(\lVert\widehat C-I_2\rVert_2\) as functions of \(N_1\), then verify \(L\), \(v\), and \(r(V)\) for the Bernstein normalization \(Y_i=(z_i z_i^\top-I_2)/n\).

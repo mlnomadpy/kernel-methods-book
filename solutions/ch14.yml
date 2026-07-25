@@ -111,28 +111,29 @@ exercises:
   - number: 7
     kind: challenge
     status: draft
-    prompt: Explain, and then quantify, why the lazy regime performs no feature learning. Consider the
+    prompt: Audit the lazy-training argument rather than assuming its conclusion. Consider the
       linearization \(f_\theta(\mathbf{x}) \approx f_{\theta_0}(\mathbf{x}) + \langle \theta -
-      \theta_0,\, \nabla_\theta f_{\theta_0}(\mathbf{x}) \rangle\) around initialization. (a) Argue
-      from the \(1/\sqrt{m}\) prefactor of \(f_\theta = \tfrac{1}{\sqrt{m}}\sum_i v_i
-      \sigma(\mathbf{w}_i^\top \mathbf{x})\) that changing the output by an order-one amount
-      requires each of the \(m\) hidden weights to move by only about \(1/\sqrt{m}\), which vanishes
-      as \(m \to \infty\). (b) Conclude that the feature map \(\nabla_\theta f_{\theta_0}\) is
-      frozen throughout training, so the trained model is a linear predictor in a fixed feature
-      space, that is kernel ridge regression with \(K_{\mathrm{NTK}}\). (c) Contrast this with
-      genuine feature learning, in which the hidden representation reorganizes around the data, and
-      state precisely what it is about the scaling, not any added assumption, that rules such
-      reorganization out in the wide limit. Where in the two-term NTK of the previous exercise does
-      the small but non-zero movement of the hidden weights leave its trace?
-    answer: Under NTK parameterization, m neuron contributions are scaled by 1/sqrt(m). A coordinated
-      order-one output change can therefore be achieved with O(1/sqrt(m)) displacement per hidden
-      unit. This vanishes with width, keeping activations and the tangent feature map near
-      initialization, so first-order linearization remains accurate and training becomes linear
-      prediction in the fixed features grad_theta f_{theta0}. For squared loss with explicit decay
-      this corresponds to kernel regression with K_NTK (while gradient flow/early stopping has its
-      distinct spectral regularization). Genuine feature learning requires order-one representation
-      movement. The width scaling rules it out here; the sigma' (x^Ty) second NTK term is the finite
-      trace of infinitesimal hidden-weight motion.
+      \theta_0,\, \nabla_\theta f_{\theta_0}(\mathbf{x}) \rangle\) for \(f_\theta =
+      \tfrac{1}{\sqrt{m}}\sum_i v_i \sigma(\mathbf{w}_i^\top \mathbf{x})\). (a) Explain why the
+      scaling makes an order-\(1/\sqrt m\) displacement per neuron *compatible* with an order-one
+      output change. (b) Name at least three additional controls needed to conclude that the tangent
+      feature map remains frozen during training. (c) Under those controls and squared-loss gradient
+      flow, diagonalize the fixed tangent Gram matrix and derive \(\mathbf r_t=e^{-t\Theta}\mathbf
+      r_0\). State when interpolation follows and why this is not automatically kernel ridge
+      regression. (d) Give two ways to leave the regime, and identify where hidden-weight derivatives
+      appear in the two-term NTK of the previous exercise.
+    answer: The 1/sqrt(m) sum permits m coherent order-1/sqrt(m) neuron-level changes to accumulate to
+      an order-one function change, but scaling alone does not bound the realized trajectory. One
+      also needs a fixed parameterization and learning-rate scale, a controlled finite time horizon
+      or integrated training direction, a Jacobian-Lipschitz bound in the visited neighborhood,
+      concentration of the initial tangent Gram matrix, and nondegeneracy if interpolation is
+      claimed. With a fixed symmetric Theta=Q Lambda Q^T, the residual equation dot(r)=-Theta r gives
+      r_t=Q exp(-t Lambda) Q^T r_0; it converges to zero exactly on positive-eigenvalue directions,
+      and full interpolation requires lambda_min(Theta)>0. Finite-time gradient flow is an
+      early-stopping spectral filter, not ridge, and the initial function remains unless centered
+      away. Mean-field scaling, width-dependent learning rates, long uncontrolled training, or
+      substantial feature motion can leave the lazy regime. Hidden-weight derivatives produce the
+      (x^T y) E[sigma' sigma'] term.
   - number: 8
     kind: challenge
     status: draft

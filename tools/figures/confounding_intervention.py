@@ -14,12 +14,16 @@ if the intended sign reversal disappears.
 """
 from __future__ import annotations
 
+import jax
+import jax.numpy as jnp
 import numpy as np
-import matplotlib.pyplot as plt
 
 import _style as S
 
+import matplotlib.pyplot as plt
+
 S.apply_style()
+jax.config.update("jax_enable_x64", True)
 
 N = 260
 BETA = -0.8
@@ -28,18 +32,18 @@ SIGMA_X = 0.55
 SIGMA_Y = 0.55
 
 
-def make_sample() -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    generator = S.rng(35)
-    u = generator.normal(size=N)
-    x = u + SIGMA_X * generator.normal(size=N)
-    y = BETA * x + GAMMA * u + SIGMA_Y * generator.normal(size=N)
+def make_sample() -> tuple[jax.Array, jax.Array, jax.Array]:
+    keys = jax.random.split(jax.random.PRNGKey(35), 3)
+    u = jax.random.normal(keys[0], (N,))
+    x = u + SIGMA_X * jax.random.normal(keys[1], (N,))
+    y = BETA * x + GAMMA * u + SIGMA_Y * jax.random.normal(keys[2], (N,))
     return u, x, y
 
 
 def main() -> str:
     _, x, y = make_sample()
-    design = np.column_stack([np.ones_like(x), x])
-    intercept, observed_slope = np.linalg.lstsq(design, y, rcond=None)[0]
+    design = jnp.column_stack([jnp.ones_like(x), x])
+    intercept, observed_slope = jnp.linalg.lstsq(design, y, rcond=None)[0]
 
     # The exact Gaussian conditional regression slope.
     population_observed_slope = BETA + GAMMA / (1.0 + SIGMA_X**2)
@@ -48,10 +52,15 @@ def main() -> str:
     assert observed_slope > 0.0
     assert abs(observed_slope - population_observed_slope) < 0.18
 
-    grid = np.linspace(-3.0, 3.0, 240)
+    grid = jnp.linspace(-3.0, 3.0, 240)
     observational = population_observed_slope * grid
     interventional = BETA * grid
 
+    assert bool(jnp.all(jnp.isfinite(jnp.concatenate((x, y, observational, interventional)))))
+    x, y, grid, observational, interventional = map(
+        np.asarray, (x, y, grid, observational, interventional)
+    )
+    intercept, observed_slope = float(intercept), float(observed_slope)
     fig, axes = plt.subplots(
         1,
         2,

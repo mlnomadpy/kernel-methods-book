@@ -4,215 +4,221 @@ title: Semi-Supervised and Manifold Regularization
 status: author-mapped-pending-independent-verification
 private_source_sha256: null
 references:
+  - belkin2003
   - belkin2006manifold
   - vonluxburg2007
 sections:
-  - id: manifold-assumption
-    title: What unlabeled data can and cannot identify
-    contribution: adapted-and-expanded
-    sources: &a1
-      - belkin2006manifold
-      - vonluxburg2007
+  - id: manifold-identifiability
+    title: The identifiability barrier
+    contribution: author-derived-proposition-and-synthesis
+    sources: [belkin2006manifold]
     locators:
       - source: belkin2006manifold
-        manuscript_locator: ch-manifold.md#manifold-assumption
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#manifold-assumption
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: graph-energy
-    title: Graph energy and label propagation
-    contribution: adapted-and-expanded
-    sources: *a1
+        manuscript_locator: ch-manifold.md#manifold-identifiability
+        source_locator: "Sections 1-2, geometric framework and relation between marginal geometry and target smoothness"
+        status: checked-against-jmlr-pdf
+    verified_by: Codex construction proof
+    verified_on: 2026-07-24
+    permission: original proof with contextual citation
+  - id: manifold-paper-eigenmaps
+    title: "Paper module I: Laplacian eigenmaps as discrete geometry"
+    contribution: reconstructed-primary-paper-module
+    sources: [belkin2003]
     locators:
-      - source: belkin2006manifold
-        manuscript_locator: ch-manifold.md#graph-energy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#graph-energy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: manifold-objective
-    title: Manifold regularization
-    contribution: adapted-and-expanded
-    sources:
-      - belkin2006manifold
-    locators:
-      - source: belkin2006manifold
-        manuscript_locator: ch-manifold.md#manifold-objective
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: manifold-consistency
-    title: Consistency and graph choices
-    contribution: adapted-and-expanded
-    sources:
-      - vonluxburg2007
-    locators:
-      - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#manifold-consistency
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+      - source: belkin2003
+        manuscript_locator: ch-manifold.md#manifold-paper-eigenmaps
+        source_locator: "Sections 2-3, graph construction, locality-preserving objective, and generalized eigenproblem"
+        status: checked-against-primary-paper-record-and-equations
+    verified_by: Codex source-and-derivation audit
+    verified_on: 2026-07-24
+    permission: original reconstruction with citation
   - id: manifold-harmonic
-    title: Harmonic extension and label propagation
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+    title: Harmonic extension as a discrete boundary-value problem
+    contribution: author-derived-proof
+    sources: [belkin2006manifold, vonluxburg2007]
     locators:
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-harmonic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2.2-2.3, graph intrinsic norm and graph-based special cases"
+        status: checked-against-jmlr-pdf
       - source: vonluxburg2007
         manuscript_locator: ch-manifold.md#manifold-harmonic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: manifold-laprls-lapsvm
-    title: Laplacian regularized least squares and SVMs
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+        source_locator: "Section 3, graph Laplacians and null spaces"
+        status: checked-against-author-pdf
+    verified_by: Codex finite-graph proof
+    verified_on: 2026-07-24
+    permission: original derivation with citations
+  - id: manifold-worked-bridge
+    title: "Worked example: one bridge controls the answer"
+    contribution: original-example
+    sources: [belkin2006manifold]
     locators:
       - source: belkin2006manifold
-        manuscript_locator: ch-manifold.md#manifold-laprls-lapsvm
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-manifold.md#manifold-worked-bridge
+        source_locator: "Section 2.2, empirical graph intrinsic regularization"
+        status: model-instantiation-checked
+    verified_by: Codex hand calculation
+    verified_on: 2026-07-24
+    permission: original worked example
+  - id: manifold-paper-regularization
+    title: "Paper module II: manifold regularization"
+    contribution: reconstructed-primary-paper-module
+    sources: [belkin2006manifold]
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-paper-regularization
+        source_locator: "Equation (4), Theorem 2, and Section 3.4"
+        status: checked-against-jmlr-pdf
+    verified_by: Codex source-and-proof audit
+    verified_on: 2026-07-24
+    permission: original reconstruction with citation
+  - id: manifold-laprls
+    title: Deriving Laplacian regularized least squares
+    contribution: author-derived-algebra
+    sources: [belkin2006manifold]
+    locators:
+      - source: belkin2006manifold
+        manuscript_locator: ch-manifold.md#manifold-laprls
+        source_locator: "Section 4.1, Laplacian regularized least squares, especially the coefficient objective following Theorem 2"
+        status: checked-against-jmlr-pdf
+    verified_by: Codex matrix-calculus audit
+    verified_on: 2026-07-24
+    permission: original derivation with citation
+  - id: manifold-graph-limit
+    title: From graph sums to a differential operator
+    contribution: author-derived-local-expansion
+    sources: [belkin2003, vonluxburg2007]
+    locators:
+      - source: belkin2003
+        manuscript_locator: ch-manifold.md#manifold-graph-limit
+        source_locator: "Sections 2-3, graph Laplacian and Laplace-Beltrami motivation"
+        status: conceptual-source
       - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#manifold-laprls-lapsvm
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        manuscript_locator: ch-manifold.md#manifold-graph-limit
+        source_locator: "Sections 3 and 8, graph Laplacians, consistency, and choice of normalization"
+        status: checked-against-author-pdf
+    verified_by: Codex Taylor-expansion audit
+    verified_on: 2026-07-24
+    permission: original derivation with citations
+  - id: manifold-normalization
+    title: Normalization changes the population geometry
+    contribution: reconstructed-and-expanded
+    sources: [vonluxburg2007]
+    locators:
+      - source: vonluxburg2007
+        manuscript_locator: ch-manifold.md#manifold-normalization
+        source_locator: "Section 3, definitions and properties of unnormalized, random-walk, and symmetric normalized Laplacians"
+        status: checked-against-author-pdf
+    verified_by: Codex algebraic audit
+    verified_on: 2026-07-24
+    permission: original derivation with citation
   - id: manifold-help-hurt
-    title: When unlabeled data help or hurt
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+    title: When unlabeled data help and when they hurt
+    contribution: original-failure-analysis
+    sources: [belkin2006manifold, vonluxburg2007]
     locators:
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-help-hurt
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 1-2 and 5, framework assumptions and experiments"
+        status: synthesis-source
       - source: vonluxburg2007
         manuscript_locator: ch-manifold.md#manifold-help-hurt
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: manifold-graph-limits
-    title: Graph limits and density bias
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - vonluxburg2007
-    locators:
-      - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#manifold-graph-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        source_locator: "Sections 2-3 and 8, graph construction and normalization cautions"
+        status: synthesis-source
+    verified_by: Codex failure-mode audit
+    verified_on: 2026-07-24
+    permission: original synthesis
   - id: manifold-out-of-sample
-    title: Out-of-sample extensions
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+    title: Out-of-sample prediction is a modeling choice
+    contribution: original-comparison
+    sources: [belkin2003, belkin2006manifold]
     locators:
+      - source: belkin2003
+        manuscript_locator: ch-manifold.md#manifold-out-of-sample
+        source_locator: "Finite point-cloud embedding construction"
+        status: comparison-source
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-out-of-sample
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#manifold-out-of-sample
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        source_locator: "Abstract, Theorem 2, and Sections 4 and 6, inductive RKHS extension"
+        status: checked-against-jmlr-pdf
+    verified_by: Codex estimator-comparison audit
+    verified_on: 2026-07-24
+    permission: original comparison
   - id: manifold-scaling
-    title: Scaling sparse graphs
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+    title: Scaling without changing the estimator silently
+    contribution: author-derived-computational-form
+    sources: [belkin2006manifold]
     locators:
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-scaling
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonluxburg2007
-        manuscript_locator: ch-manifold.md#manifold-scaling
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        source_locator: "Section 4, finite manifold-regularization algorithms"
+        status: extension-source
+    verified_by: Codex sparse-algebra audit
+    verified_on: 2026-07-24
+    permission: original computational extension
   - id: manifold-practice
     title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-synthesis
+    sources: [belkin2003, belkin2006manifold, vonluxburg2007]
     locators:
+      - source: belkin2003
+        manuscript_locator: ch-manifold.md#manifold-practice
+        source_locator: "Sections 2-3"
+        status: synthesis-source
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-5"
+        status: synthesis-source
       - source: vonluxburg2007
         manuscript_locator: ch-manifold.md#manifold-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+        source_locator: "Sections 2-3 and 8"
+        status: synthesis-source
+    verified_by: Codex editorial audit
+    verified_on: 2026-07-24
+    permission: original synthesis
   - id: manifold-summary
     title: Summary and further reading
-    contribution: adapted-and-expanded
-    sources:
-      - belkin2006manifold
-      - vonluxburg2007
+    contribution: original-synthesis
+    sources: [belkin2003, belkin2006manifold, vonluxburg2007]
     locators:
+      - source: belkin2003
+        manuscript_locator: ch-manifold.md#manifold-summary
+        source_locator: "Full paper"
+        status: synthesis-source
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Full paper, especially Theorem 2 and Section 4"
+        status: synthesis-source
       - source: vonluxburg2007
         manuscript_locator: ch-manifold.md#manifold-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+        source_locator: "Sections 2-3 and 8"
+        status: synthesis-source
+    verified_by: Codex editorial audit
+    verified_on: 2026-07-24
+    permission: original prose
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-exercises
+    sources: [belkin2003, belkin2006manifold, vonluxburg2007]
     locators:
+      - source: belkin2003
+        manuscript_locator: ch-manifold.md#exercises
+        source_locator: "Finite Laplacian eigenmap construction"
+        status: adapted-concepts
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Theorem 2 and Section 4.1"
+        status: adapted-concepts
       - source: vonluxburg2007
         manuscript_locator: ch-manifold.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+        source_locator: "Section 3"
+        status: adapted-concepts
+    verified_by: Codex solution synchronization
+    verified_on: 2026-07-24
+    permission: original exercises and solutions
+mapping_method: exact theorem, section, and equation locators checked against accessible source copies
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24

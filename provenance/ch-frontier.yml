@@ -9,1110 +9,157 @@ references:
   - chizat2019
   - chizat2018meanfield
   - mei2018meanfield
-  - yang2021tp
   - ghorbani2020
   - abbe2022staircase
   - abbe2023leap
-  - bach2017barron
-  - neal1996
-  - lee2018nngp
-  - matthews2018
-  - cho2009
-  - mairal2016
-  - tsai2019transformer
-  - katharopoulos2020
-  - choromanski2021performer
-  - borovitskiy2020matern
-  - borovitskiy2021graph
+  - havlicek2019quantum
+  - vonoswald2023icl
 sections:
   - id: two-limits
-    title: Two limits of one wide network
-    contribution: adapted-and-expanded
-    sources: &a1
-      - jacot2018
-      - arora2019cntk
-      - chizat2019
-      - chizat2018meanfield
-      - mei2018meanfield
-      - yang2021tp
-      - ghorbani2020
-      - abbe2022staircase
-      - abbe2023leap
-      - bach2017barron
-      - neal1996
-      - lee2018nngp
-      - matthews2018
-      - cho2009
-      - mairal2016
-      - tsai2019transformer
-      - katharopoulos2020
-      - choromanski2021performer
-      - borovitskiy2020matern
-      - borovitskiy2021graph
-      - havlicek2019quantum
-      - chaudhuri2011private
-      - vonoswald2023icl
+    title: "Module I: fixed tangent features or learned features?"
+    contribution: reconstructed
+    sources: [jacot2018, arora2019cntk, chizat2019, chizat2018meanfield, mei2018meanfield, ghorbani2020, abbe2022staircase, abbe2023leap]
     locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#two-limits
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - {source: jacot2018, manuscript_locator: "ch-frontier.md#lazy-regime", source_locator: "Theorems 1 and 2", status: author-verified}
+      - {source: arora2019cntk, manuscript_locator: "ch-frontier.md#lazy-regime", source_locator: "Sections 3 and 4", status: author-verified}
+      - {source: chizat2019, manuscript_locator: "ch-frontier.md#lazy-scale", source_locator: "Theorems 2.2 and 2.3", status: author-verified}
+      - {source: chizat2018meanfield, manuscript_locator: "ch-frontier.md#parametrization", source_locator: "Sections 2 and 3", status: author-mapped-pending-independent-verification}
+      - {source: mei2018meanfield, manuscript_locator: "ch-frontier.md#parametrization", source_locator: "Theorems 1 and 2", status: author-mapped-pending-independent-verification}
+      - {source: ghorbani2020, manuscript_locator: "ch-frontier.md#curse", source_locator: "Theorems 1 and 2", status: author-mapped-pending-independent-verification}
+      - {source: abbe2022staircase, manuscript_locator: "ch-frontier.md#curse", source_locator: "Sections 2 and 3", status: author-mapped-pending-independent-verification}
+      - {source: abbe2023leap, manuscript_locator: "ch-frontier.md#curse", source_locator: "Definition 1 and main theorem", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: lazy-regime
+    title: Exact tangent dynamics
+    contribution: original-synthesis
+    sources: [jacot2018, arora2019cntk]
+    locators:
+      - {source: jacot2018, manuscript_locator: "ch-frontier.md#lazy-regime", source_locator: "Theorems 1 and 2", status: author-verified}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: lazy-scale
+    title: The lazy regime is a scaling limit
+    contribution: adapted-and-expanded
+    sources: [chizat2019]
+    locators:
+      - {source: chizat2019, manuscript_locator: "ch-frontier.md#lazy-scale", source_locator: "Theorems 2.2 and 2.3", status: author-verified}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: parametrization
+    title: Mean-field feature learning
+    contribution: adapted-and-expanded
+    sources: [chizat2018meanfield, mei2018meanfield]
+    locators:
+      - {source: chizat2018meanfield, manuscript_locator: "ch-frontier.md#parametrization", source_locator: "Sections 2 and 3", status: author-mapped-pending-independent-verification}
+      - {source: mei2018meanfield, manuscript_locator: "ch-frontier.md#parametrization", source_locator: "Theorems 1 and 2", status: author-mapped-pending-independent-verification}
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: curse
-    title: Why a fixed kernel cannot learn features
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: What the separation results do and do not say
+    contribution: original-synthesis
+    sources: [ghorbani2020, abbe2022staircase, abbe2023leap]
     locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#curse
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: deep-kernels
-    title: Kernels that grow depth and learn parts
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#deep-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: attention-kernel
-    title: Attention is a kernel smoother
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#attention-kernel
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: geometry
-    title: Kernels on curved and discrete domains
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#geometry
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - {source: ghorbani2020, manuscript_locator: "ch-frontier.md#curse", source_locator: "Theorems 1 and 2", status: author-mapped-pending-independent-verification}
+      - {source: abbe2022staircase, manuscript_locator: "ch-frontier.md#curse", source_locator: "Sections 2 and 3", status: author-mapped-pending-independent-verification}
+      - {source: abbe2023leap, manuscript_locator: "ch-frontier.md#curse", source_locator: "Definition 1 and main theorem", status: author-mapped-pending-independent-verification}
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: quantum-kernels
-    title: Quantum feature maps and kernel estimation
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - havlicek2019quantum
+    title: "Module II: quantum feature kernels under finite resources"
+    contribution: reconstructed
+    sources: [havlicek2019quantum]
     locators:
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#quantum-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: foundation-model-kernels
-    title: Foundation-model representations as learned kernels
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - vonoswald2023icl
-    locators:
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#foundation-model-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: responsible-kernel-learning
-    title: Privacy, federated learning, and fairness
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - chaudhuri2011private
-    locators:
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#responsible-kernel-learning
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: operator-algebra-frontier
-    title: Operator algebra and noncommutative data
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#operator-algebra-frontier
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: frontier-update-policy
-    title: Frontier status and annual update policy
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#frontier-update-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: synthesis
-    title: "The synthesis: what the kernel view keeps, and where it stops"
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#synthesis
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - {source: havlicek2019quantum, manuscript_locator: "ch-frontier.md#quantum-kernels", source_locator: "main text, Quantum feature maps and Quantum kernel estimator", status: author-verified}
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: common-mistakes-and-practical-implications
-    title: Common mistakes and practical implications
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+  - id: quantum-evaluation
+    title: Evaluation and trainability
+    contribution: original-synthesis
+    sources: [havlicek2019quantum]
     locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - {source: havlicek2019quantum, manuscript_locator: "ch-frontier.md#quantum-evaluation", source_locator: "Methods, Quantum kernel estimation", status: author-verified}
     verified_by: null
     verified_on: null
+    permission: citation-only
+  - id: quantum-generalization
+    title: Generalization is controlled by the learned Gram geometry
+    contribution: original
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+    permission: original
+  - id: foundation-model-kernels
+    title: "Module III: foundation models as frozen feature maps"
+    contribution: reconstructed
+    sources: [vonoswald2023icl]
+    locators:
+      - {source: vonoswald2023icl, manuscript_locator: "ch-frontier.md#foundation-model-kernels", source_locator: "Proposition 1", status: author-verified}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: foundation-protocol
+    title: A leakage-safe frozen-feature protocol
+    contribution: original
+    sources: [vonoswald2023icl]
+    locators:
+      - {source: vonoswald2023icl, manuscript_locator: "ch-frontier.md#foundation-protocol", source_locator: "Proposition 1", status: author-verified}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: foundation-leakage
+    title: Leakage changes the object being evaluated
+    contribution: original
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+    permission: original
+  - id: frontier-update-policy
+    title: Evidence and maturity ledger
+    contribution: original-synthesis
+    sources: [jacot2018, chizat2019, mei2018meanfield, ghorbani2020, havlicek2019quantum, vonoswald2023icl]
+    locators:
+      - {source: jacot2018, manuscript_locator: "ch-frontier.md#frontier-update-policy", source_locator: "Theorems 1 and 2", status: author-verified}
+      - {source: chizat2019, manuscript_locator: "ch-frontier.md#frontier-update-policy", source_locator: "Theorems 2.2 and 2.3", status: author-verified}
+      - {source: mei2018meanfield, manuscript_locator: "ch-frontier.md#frontier-update-policy", source_locator: "Theorems 1 and 2", status: author-mapped-pending-independent-verification}
+      - {source: ghorbani2020, manuscript_locator: "ch-frontier.md#frontier-update-policy", source_locator: "Theorems 1 and 2", status: author-mapped-pending-independent-verification}
+      - {source: havlicek2019quantum, manuscript_locator: "ch-frontier.md#frontier-update-policy", source_locator: "main text", status: author-verified}
+      - {source: vonoswald2023icl, manuscript_locator: "ch-frontier.md#frontier-update-policy", source_locator: "Proposition 1", status: author-verified}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: synthesis
+    title: A decision procedure for frontier claims
+    contribution: original
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+    permission: original
   - id: summary-and-further-reading
     title: Summary and further reading
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - jacot2018
-      - arora2019cntk
-      - chizat2019
+    contribution: original-synthesis
+    sources: [jacot2018, chizat2019, chizat2018meanfield, mei2018meanfield, ghorbani2020, havlicek2019quantum, vonoswald2023icl]
     locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: exercises
-    title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: jacot2018
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: arora2019cntk
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2019
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chizat2018meanfield
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mei2018meanfield
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: yang2021tp
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: ghorbani2020
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2022staircase
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: abbe2023leap
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017barron
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: neal1996
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: lee2018nngp
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: matthews2018
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cho2009
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mairal2016
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: tsai2019transformer
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: katharopoulos2020
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: choromanski2021performer
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2020matern
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: borovitskiy2021graph
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: havlicek2019quantum
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chaudhuri2011private
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vonoswald2023icl
-        manuscript_locator: ch-frontier.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - {source: jacot2018, manuscript_locator: "ch-frontier.md#summary-and-further-reading", source_locator: "Theorems 1 and 2", status: author-verified}
+      - {source: chizat2019, manuscript_locator: "ch-frontier.md#summary-and-further-reading", source_locator: "Theorems 2.2 and 2.3", status: author-verified}
+      - {source: vonoswald2023icl, manuscript_locator: "ch-frontier.md#summary-and-further-reading", source_locator: "Proposition 1", status: author-verified}
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
-mapping_author:
-  name: Taha Bouhsine
-  website: https://www.tahabouhsine.com
-  affiliation: AzettaAI
-mapping_date: 2026-07-20
+  - id: exercises
+    title: Exercises
+    contribution: original
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+    permission: original

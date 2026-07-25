@@ -1,38 +1,27 @@
 title: "Kernels: The Geometry of Learning"
 subtitle: Foundations, Algorithms, and the Frontiers of Machine Intelligence
 tagline: Similarity becomes geometry. Geometry becomes learning.
-positioning: >-
-  A rigorous, unified account of kernel methods—from positive-definite
-  functions and reproducing kernel Hilbert spaces to scalable algorithms,
-  probabilistic inference, scientific applications, and modern feature
-  learning.
+positioning: A rigorous, unified account of kernel methods—from positive-definite functions and reproducing kernel Hilbert spaces to scalable algorithms, probabilistic inference, scientific applications, and modern feature learning.
 authors:
   - name: Taha Bouhsine
     url: https://www.tahabouhsine.com
     affiliation: AzettaAI
     handle: "@azettaai"
-source: >-
-  This book uses the lecture course "Machine Learning with Kernel Methods" by
-  Julien Mairal and Jean-Philippe Vert and the textbooks "Learning with
-  Kernels" and "Kernel Methods for Pattern Analysis" as foundational guides.
-  Later and specialized material is synthesized from the primary research
-  cited in each chapter. The connecting prose, pedagogical organization,
-  checked examples, and original interactive software are this edition's;
-  provenance and review status are recorded separately from attribution.
+source: This book uses the lecture course "Machine Learning with Kernel Methods" by Julien Mairal and Jean-Philippe Vert and the textbooks "Learning with Kernels" and "Kernel Methods for Pattern Analysis" as foundational guides. Francis Bach's "Learning Theory from First Principles" informs the approximation-estimation-optimization decomposition and the insistence that guarantees remain attached to executable algorithms. Later and specialized material is synthesized from the primary research cited in each chapter. The connecting prose, pedagogical organization, checked examples, and original interactive software are this edition's; provenance and review status are recorded separately from attribution.
 frontmatter:
   - src: dedication
     title: Dedication
   - src: preface
     title: Preface
 parts:
-  - part: 0 · Preliminaries
-    intro: A self-contained reference for the mathematics the book leans on, drawn from linear algebra, analysis and Hilbert spaces, probability, optimization, and functional analysis. Read it front to back for a refresher, or dip in when a later chapter cites a result by name.
+  - part: Reference · Mathematical Preliminaries
+    intro: A compact mathematical reference for the objects used throughout the book. Read the dependency map first, then use this chapter as a clinic for linear algebra, probability, optimization, operators, geometry, and concentration.
     chapters:
       - src: ch-prelim
         slug: preliminaries
         title: Mathematical Preliminaries
-  - part: I · The Idea
-    intro: "Kernel methods rest on one move: compare examples with a similarity function, and a surprising amount of learning follows. This part builds the idea from the ground up, from the definition of a valid similarity to the space it secretly defines and the theorem that makes computation possible."
+  - part: I · The Language of Kernels
+    intro: The story begins with similarity, but immediately asks what makes a similarity mathematically legal, what function space it creates, and why an infinite-dimensional problem can still collapse to finite linear algebra.
     chapters:
       - src: ch00
         slug: introduction
@@ -43,8 +32,8 @@ parts:
       - src: ch02
         slug: kernel-tricks
         title: The Kernel Trick and the Representer Theorem
-  - part: II · Supervised Machines with a Fixed Kernel
-    intro: "Fix a kernel and a supervised task. This part derives the workhorse algorithms as one recipe under different loss functions: ridge regression and the support vector machine for classification, the epsilon-insensitive machine for regression, the one-class machine for novelty, and the pairwise machine for ranking."
+  - part: II · Learning with a Fixed Kernel
+    intro: With the geometry fixed, losses and constraints determine the estimator. Ridge regression, maximum-margin classification, tolerance-based regression, novelty detection, and ranking become variations on one regularized empirical-risk problem.
     chapters:
       - src: ch03
         slug: kernel-ridge-and-friends
@@ -61,8 +50,11 @@ parts:
       - src: ch-ranking
         slug: ranking-and-ordinal-regression
         title: Ranking and Ordinal Regression
-  - part: III · Optimization and Implementation
-    intro: A kernel machine is only as useful as the solver behind it. This part opens the quadratic program the dual defines and builds the algorithms that make it tractable at scale, from decomposition and sequential minimal optimization to online updates that never store the whole Gram matrix.
+      - src: ch-structured
+        slug: structured-prediction-with-kernels
+        title: Structured Prediction with Kernels
+  - part: III · Optimization and Scaling
+    intro: A representer theorem gives a finite problem, not a cheap one. This part moves from exact quadratic optimization and decomposition methods to streaming updates, matrix-free solvers, low-rank structure, random features, and sketches.
     chapters:
       - src: ch-solve
         slug: solving-the-svm
@@ -70,8 +62,14 @@ parts:
       - src: ch-online
         slug: online-kernel-learning
         title: Online Kernel Learning
-  - part: IV · Learning Theory
-    intro: "Why should a machine fit on a sample predict on the unseen? This part answers with two lineages: the modern Rademacher and margin bounds for RKHS balls, and the classical VC and structural-risk theory that framed the field, each turning a capacity measure into a guarantee."
+      - src: ch13
+        slug: large-scale-kernels
+        title: Large-Scale Kernel Machines
+      - src: ch-randomized
+        slug: random-features-sketches-and-randomized-kernel-linear-algebra
+        title: Random Features, Sketches, and Randomized Kernel Linear Algebra
+  - part: IV · Generalization, Approximation, and Limits
+    intro: The central theoretical question is not whether a method can fit, but how approximation, estimation, optimization, and numerical errors combine. Complexity, spectra, inverse regularization, interpolation geometry, universality, consistency, and modern interpolation theory answer different pieces of that question.
     chapters:
       - src: ch04
         slug: learning-theory
@@ -79,8 +77,26 @@ parts:
       - src: ch-vc
         slug: vc-theory-and-generalization
         title: VC Theory and Generalization
-  - part: V · Structure and Subspaces
-    intro: The same Gram matrix that drives supervised learning drives the unsupervised kind. Kernel PCA, clustering, canonical correlation, the supervised discriminants, and multidimensional scaling are one family of subspace methods, each a generalized eigenproblem or deflation read through the kernel.
+      - src: ch07
+        slug: mercer-and-rates
+        title: Mercer's Theorem, Spectra, and Rates
+      - src: ch-inverse
+        slug: inverse-learning-and-spectral-regularization
+        title: Inverse Learning and Spectral Regularization
+      - src: ch-approx
+        slug: kernel-interpolation-and-approximation
+        title: Kernel Interpolation and Approximation Theory
+      - src: ch-universal
+        slug: universality-capacity-and-consistency
+        title: Universality, Capacity, and Consistency
+      - src: ch-lower
+        slug: limits-and-lower-bounds-for-kernel-learning
+        title: Limits and Lower Bounds for Kernel Learning
+      - src: ch-modern
+        slug: kernels-now
+        title: Modern Generalization Theory
+  - part: V · Spectral Geometry and Unlabeled Structure
+    intro: The centered Gram matrix is also a geometric instrument. Its eigenvectors expose nonlinear coordinates, clusters, shared views, discriminating directions, visual embeddings, and the graph geometry that lets unlabeled observations constrain a predictor.
     chapters:
       - src: ch06
         slug: kernel-pca
@@ -97,20 +113,11 @@ parts:
       - src: ch-mds
         slug: data-visualization-and-mds
         title: Data Visualization and Kernel MDS
-  - part: VI · The Geometry of the Space
-    intro: Why did any of it work? This part opens the RKHS with Mercer's theorem, reads its spectrum as a measure of smoothness, and turns eigenvalue decay into concrete rates of convergence. It then asks what the space can reach, first deterministically, through interpolation error and stability governed by the geometry of the sample, and then qualitatively, through the universality that licenses consistency and the capacity that prices it.
-    chapters:
-      - src: ch07
-        slug: mercer-and-rates
-        title: Mercer's Theorem, Spectra, and Rates
-      - src: ch-approx
-        slug: kernel-interpolation-and-approximation
-        title: Kernel Interpolation and Approximation Theory
-      - src: ch-universal
-        slug: universality-capacity-and-consistency
-        title: Universality, Capacity, and Consistency
-  - part: VII · Designing Kernels for Data
-    intro: "Everything so far assumed a kernel was handed to you. This part builds them: for vectors by symmetry and probability, for prior knowledge through invariance, for the structured data (sequences, text, graphs) where the kernel is the only bridge to the RKHS toolbox, for paths and time series, for curved and symmetric domains, and even for the indefinite similarities that fall outside the positive-definite world."
+      - src: ch-manifold
+        slug: semi-supervised-and-manifold-regularization
+        title: Semi-Supervised and Manifold Regularization
+  - part: VI · Designing Kernels
+    intro: A kernel is a modeling decision. This part builds valid similarities from spectra, invariance, splines, spatial covariance, strings, text, graphs, latent models, paths, groups, operator-valued outputs, and even indefinite geometry, while tracking both validity and computational cost.
     chapters:
       - src: ch08
         slug: kernel-families
@@ -118,6 +125,12 @@ parts:
       - src: ch-invariance
         slug: invariances-and-pre-images
         title: Invariances and the Pre-Image Problem
+      - src: ch-splines
+        slug: smoothing-splines-and-additive-rkhs
+        title: Smoothing Splines and Additive RKHS Models
+      - src: ch-spatial
+        slug: spatial-and-spatiotemporal-kernels
+        title: Spatial and Spatiotemporal Kernel Models
       - src: ch09
         slug: string-kernels
         title: Kernels for Sequences
@@ -139,11 +152,14 @@ parts:
       - src: ch-geom
         slug: geometric-and-equivariant-kernels
         title: Geometric and Equivariant Kernels
+      - src: ch-operator
+        slug: vector-and-operator-valued-kernels
+        title: Vector- and Operator-Valued Kernels
       - src: ch-krein
         slug: indefinite-and-krein-kernels
         title: Indefinite and Krein-Space Kernels
-  - part: VIII · Kernels and Distributions
-    intro: A kernel can embed not just a point but an entire probability distribution. This part builds the mean embedding, tests whether two samples come from the same law, measures distributions by the distance between embeddings and by optimal transport, and integrates against them with kernel quadrature.
+  - part: VII · Distributions as Objects
+    intro: The input to a kernel need not be a point. Mean embeddings, hypothesis tests, transport geometry, and quadrature turn probability distributions into objects that can be compared, tested, moved, and integrated.
     chapters:
       - src: ch11
         slug: kernel-mean-embeddings
@@ -157,8 +173,8 @@ parts:
       - src: ch-quad
         slug: kernel-quadrature-and-herding
         title: Kernel Quadrature and Herding
-  - part: IX · Kernel Probabilistic Inference
-    intro: Embeddings turn probability into linear algebra, and that opens inference. This part embeds conditional distributions as operators, tests goodness of fit against an unnormalized model with a Stein operator, reads causal questions through the RKHS, and learns when the training example is itself a distribution.
+  - part: VIII · Conditional, Stein, and Causal Inference
+    intro: Population identities become statistical procedures only after regularization and identification assumptions are made explicit. Conditional embeddings, Stein discrepancies, causal operators, and distribution regression develop that transition.
     chapters:
       - src: ch-cme
         slug: conditional-mean-embeddings
@@ -172,20 +188,8 @@ parts:
       - src: ch-distreg
         slug: distribution-regression
         title: Distribution Regression and Functional Data
-  - part: X · Scaling and Learning the Kernel
-    intro: The exact solve does not survive a million examples, and the kernel need not be fixed or shallow. This part removes the quadratic wall, learns the kernel itself, and reads deep networks as kernel machines.
-    chapters:
-      - src: ch13
-        slug: large-scale-kernels
-        title: Large-Scale Kernel Machines
-      - src: ch12
-        slug: multiple-kernel-learning
-        title: Multiple Kernel Learning
-      - src: ch14
-        slug: kernels-and-deep-learning
-        title: Deep Learning from a Kernel Point of View
-  - part: XI · The Bayesian View
-    intro: The same kernel that defines a norm defines a covariance. This part reads kernel ridge regression as the posterior mean of a Gaussian process, develops inference and hyperparameter learning, reaches the sparse Bayesian machines that put a probability on every prediction, and turns that uncertainty into a rule for what to measure next.
+  - part: IX · Gaussian Processes and Sequential Decisions
+    intro: An RKHS norm and a Gaussian covariance share a kernel but support different claims. This part develops posterior computation and approximation, then uses model-based uncertainty to decide what should be measured next.
     chapters:
       - src: ch-gp
         slug: gaussian-processes-and-rvm
@@ -193,50 +197,8 @@ parts:
       - src: ch-bo
         slug: bayesian-optimization-and-bandits
         title: Kernelized Bandits and Bayesian Optimization
-  - part: XII · Kernels Now
-    intro: "The two standard textbooks close around 2004, before the deep-learning era rewrote what kernels are for. This part is a guide to what came after: the interpolation revolution that revised the book's own theory of generalization, and the frontier where fixed kernels give way to learned features."
-    chapters:
-      - src: ch-modern
-        slug: kernels-now
-        title: Modern Generalization Theory
-      - src: ch-frontier
-        slug: the-frontier
-        title: "The Frontier: Feature Learning and Beyond"
-  - part: XIII · Practice
-    intro: Theory meets the terminal. This part walks end-to-end applications, the model-selection and implementation choices that decide whether a kernel method works in practice, and a map of the software that puts these methods a few lines of code away before the advanced extensions that follow.
-    chapters:
-      - src: ch-apps
-        slug: applications-and-practice
-        title: Applications and Practice
-  - part: XIV · Advanced Extensions
-    intro: Four extensions complete the bridge from scalar supervised kernel machines to structured outputs, unlabeled geometry, inverse problems, and learned representations. These chapters are advanced and retain explicit specialist-review gates.
-    chapters:
-      - src: ch-operator
-        slug: vector-and-operator-valued-kernels
-        title: Vector- and Operator-Valued Kernels
-      - src: ch-manifold
-        slug: semi-supervised-and-manifold-regularization
-        title: Semi-Supervised and Manifold Regularization
-      - src: ch-inverse
-        slug: inverse-learning-and-spectral-regularization
-        title: Inverse Learning and Spectral Regularization
-      - src: ch-dkl
-        slug: deep-kernel-learning
-        title: Deep Kernel Learning
-  - part: XV · Classical and Reliable Kernel Models
-    intro: Classical smoothing, spatial prediction, and reliability under distribution change complete the statistical foundations of kernel learning. These chapters connect RKHS regularization to splines and additive models, develop covariance design for spatial and space-time data, and make prediction sets and shift diagnostics part of the modeling workflow.
-    chapters:
-      - src: ch-splines
-        slug: smoothing-splines-and-additive-rkhs
-        title: Smoothing Splines and Additive RKHS Models
-      - src: ch-spatial
-        slug: spatial-and-spatiotemporal-kernels
-        title: Spatial and Spatiotemporal Kernel Models
-      - src: ch-reliability
-        slug: distribution-shift-robustness-and-conformal-prediction
-        title: Distribution Shift, Robustness, and Conformal Prediction
-  - part: XVI · Dynamics and Scientific Learning
-    intro: Kernel operators extend learning from static examples to evolving systems and from finite-dimensional responses to physical fields. This part develops dynamical systems, control, reinforcement learning, probabilistic numerical methods, and operator learning with explicit attention to stability and discretization.
+  - part: X · Dynamics and Scientific Learning
+    intro: Static prediction gives way to evolving systems, differential constraints, inverse problems, and learned operators. Stability, discretization, rollout error, and validation of physical quantities become first-class requirements.
     chapters:
       - src: ch-dynamics
         slug: dynamical-systems-control-and-reinforcement-learning
@@ -244,18 +206,36 @@ parts:
       - src: ch-scientific
         slug: scientific-computing-and-operator-learning
         title: Kernels for Scientific Computing and Operator Learning
-  - part: XVII · Beyond Hilbert Geometry
-    intro: Hilbert-space geometry gives kernel methods their linear algebra, but it also privileges quadratic regularization. The final research chapter replaces the inner product by Banach and variation-space geometry to expose sparse representer theorems and a direct bridge to learned finite-width features.
+  - part: XI · Learning the Representation
+    intro: The kernel itself can be selected, combined, parameterized, or replaced by a richer non-Hilbert geometry. Multiple-kernel learning, infinite-width limits, deep kernel learning, variation spaces, and current feature-learning research mark the boundary between fixed geometry and learned representation.
     chapters:
+      - src: ch12
+        slug: multiple-kernel-learning
+        title: Multiple Kernel Learning
+      - src: ch14
+        slug: kernels-and-deep-learning
+        title: Deep Learning from a Kernel Point of View
+      - src: ch-dkl
+        slug: deep-kernel-learning
+        title: Deep Kernel Learning
       - src: ch-rkbs
         slug: reproducing-kernel-banach-and-variation-spaces
         title: Reproducing-Kernel Banach and Variation Spaces
-  - part: XVIII · Kernels You Can Defend
-    intro: Predictions that steer a spacecraft, propose a molecule, or drive a policy are judged by more than accuracy. What matters is their uncertainty, the training data they rest on, whether the inputs still resemble the training distribution, and whether the whole procedure can be reproduced and audited. This closing part shows that for kernel machines these accountability properties fall out of the same geometry the book has built, then follows them into the sciences that demand them.
+      - src: ch-frontier
+        slug: the-frontier
+        title: "The Frontier: Feature Learning and Beyond"
+  - part: XII · Reliable Practice
+    intro: The final test is whether the method survives contact with changing data, software, scientific constraints, and consequential decisions. This part turns diagnostics, reproducibility, calibration, shift detection, influence, and domain validation into an end-to-end workflow.
     chapters:
+      - src: ch-reliability
+        slug: distribution-shift-robustness-and-conformal-prediction
+        title: Distribution Shift, Robustness, and Conformal Prediction
+      - src: ch-apps
+        slug: applications-and-practice
+        title: Applications and Practice
       - src: ch-accountable
         slug: accountable-kernels
-        title: 'Accountable Kernels: Uncertainty, Explanation, and Audit'
+        title: "Accountable Kernels: Uncertainty, Explanation, and Audit"
       - src: ch-highstakes
         slug: kernels-in-science-and-space
         title: Kernels in Science and Space

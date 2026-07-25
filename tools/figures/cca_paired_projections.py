@@ -1,38 +1,45 @@
 """Paired views before and after regularized linear CCA."""
-import matplotlib.pyplot as plt
+import jax
+import jax.numpy as jnp
 import numpy as np
 
 import _style as S
 
+import matplotlib.pyplot as plt
+
 S.apply_style()
-gen = S.rng(19)
+jax.config.update("jax_enable_x64", True)
 n = 70
-latent = gen.normal(size=n)
-X = np.column_stack((latent + 0.20 * gen.normal(size=n), 2.5 * gen.normal(size=n)))
-Y = np.column_stack((0.85 * latent + 0.20 * gen.normal(size=n), 2.2 * gen.normal(size=n)))
-X -= X.mean(axis=0)
-Y -= Y.mean(axis=0)
+keys = jax.random.split(jax.random.PRNGKey(19), 5)
+latent = jax.random.normal(keys[0], (n,))
+X = jnp.column_stack((latent + 0.20 * jax.random.normal(keys[1], (n,)), 2.5 * jax.random.normal(keys[2], (n,))))
+Y = jnp.column_stack((0.85 * latent + 0.20 * jax.random.normal(keys[3], (n,)), 2.2 * jax.random.normal(keys[4], (n,))))
+X = X - X.mean(axis=0)
+Y = Y - Y.mean(axis=0)
 
 ridge = 0.18
-Cxx = X.T @ X / n + ridge * np.eye(2)
-Cyy = Y.T @ Y / n + ridge * np.eye(2)
+Cxx = X.T @ X / n + ridge * jnp.eye(2)
+Cyy = Y.T @ Y / n + ridge * jnp.eye(2)
 Cxy = X.T @ Y / n
 
-def invsqrt(matrix):
-    values, vectors = np.linalg.eigh(matrix)
+def invsqrt(matrix: jax.Array) -> jax.Array:
+    values, vectors = jnp.linalg.eigh(matrix)
+    assert float(values.min()) > 0.0
     return (vectors * values**-0.5) @ vectors.T
 
 Wx, Wy = invsqrt(Cxx), invsqrt(Cyy)
-left, _, right_t = np.linalg.svd(Wx @ Cxy @ Wy)
+left, _, right_t = jnp.linalg.svd(Wx @ Cxy @ Wy, full_matrices=False)
 wx = Wx @ left[:, 0]
 wy = Wy @ right_t.T[:, 0]
 sx, sy = X @ wx, Y @ wy
-if np.corrcoef(sx, sy)[0, 1] < 0:
-    sy = -sy
-corr = float(np.corrcoef(sx, sy)[0, 1])
+correlation = lambda a, b: jnp.vdot(a - a.mean(), b - b.mean()) / (jnp.linalg.norm(a - a.mean()) * jnp.linalg.norm(b - b.mean()))
+sy = jnp.where(correlation(sx, sy) < 0.0, -sy, sy)
+corr = float(correlation(sx, sy))
+assert bool(jnp.all(jnp.isfinite(jnp.concatenate((X.ravel(), Y.ravel(), sx, sy)))))
 assert corr > 0.9
 
 fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.55))
+X, Y, sx, sy, latent = map(np.asarray, (X, Y, sx, sy, latent))
 color = np.where(latent >= 0, S.POS, S.NEG)
 axes[0].scatter(X[:, 0], X[:, 1], c=color, s=15, alpha=0.85)
 axes[1].scatter(Y[:, 0], Y[:, 1], c=color, s=15, alpha=0.85, marker="^")

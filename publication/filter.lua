@@ -1,14 +1,11 @@
--- Map the manuscript's semantic fenced divs to styled LaTeX environments so the
--- PDF matches the web edition: definition/theorem/.../remark/example/algorithm
--- become titled tcolorboxes (colours defined in preamble.tex), proofs become
--- amsthm proofs, and the inline role spans (box-title, wex-op, algo-lab, ex-tag,
--- qed) get their weight/marks back. Without this, Pandoc drops every wrapper and
--- the containers render as indistinguishable body text.
+-- Map semantic fenced divs to plain LaTeX statement environments. The
+-- environments preserve theorem/definition structure through typography and
+-- whitespace only; they are intentionally not tcolorboxes.
 
 local box_env = {
-  definition = "kbdef", theorem = "kbthm", lemma = "kbthm",
-  proposition = "kbthm", corollary = "kbthm", remark = "kbrmk",
-  example = "kbex", algorithm = "kbalgo",
+  definition = "kbdefinition", theorem = "kbtheorem", lemma = "kblemma",
+  proposition = "kbproposition", corollary = "kbcorollary",
+  remark = "kbremark", example = "kbexample", algorithm = "kbalgorithm",
 }
 local default_label = {
   definition = "Definition", theorem = "Theorem", lemma = "Lemma",
@@ -64,13 +61,29 @@ local function extract_title(blocks)
   return nil
 end
 
+-- Manuscript titles conventionally read "Theorem (Representer theorem)".
+-- amsthm already supplies "Theorem 3.7", so pass only the parenthesized name as
+-- its optional note. A free-form title remains a note rather than being lost.
+local function theorem_note(title, kind)
+  if not title or title == "" or title == default_label[kind] then return nil end
+  local prefix = default_label[kind]
+  local note = title:match("^" .. prefix .. "%s*%((.*)%)$")
+  if note then return note end
+  note = title:match("^" .. prefix .. "%s*[:%.%-]%s*(.*)$")
+  if note then return note end
+  if title:match("^" .. prefix .. "%s*$") then return nil end
+  return title
+end
+
 function Div(el)
   for kind, env in pairs(box_env) do
     if el.classes:includes(kind) then
       local title = extract_title(el.content) or default_label[kind]
+      local note = theorem_note(title, kind)
       local lbl = el.identifier ~= "" and ("\\label{" .. el.identifier .. "}") or ""
       el.content = demote_meta_paragraphs(el.content)
-      table.insert(el.content, 1, pandoc.RawBlock("latex", "\\begin{" .. env .. "}{" .. title .. "}" .. lbl))
+      local open = "\\begin{" .. env .. "}" .. (note and ("[" .. note .. "]") or "") .. lbl
+      table.insert(el.content, 1, pandoc.RawBlock("latex", open))
       table.insert(el.content, pandoc.RawBlock("latex", "\\end{" .. env .. "}"))
       return el.content
     end

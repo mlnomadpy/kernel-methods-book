@@ -2,8 +2,8 @@
 id: ch-universal
 slug: universality-capacity-and-consistency
 title: 'Universality, Capacity, and Consistency'
-part: VI · The Geometry of the Space
-order: 20
+part: 'IV · Generalization, Approximation, and Limits'
+order: 19
 tier: advanced
 prerequisites:
   - mercer-and-rates
@@ -248,7 +248,9 @@ so an entropy exponent is, after one integration, a complexity bound and hence a
 
 Universality removes the asymptotic approximation floor, but it does not tell us how large a ball is needed at a finite sample size. Enlarging the accessible RKHS ball reduces approximation bias while increasing the number of directions that data must estimate. The useful model is therefore not “universal or not” but a moving balance between license and price.
 
-<figure class="viz" data-figure="universality-capacity" data-alt="Approximation error decreases as the accessible RKHS radius grows, estimation error increases with effective dimension, and their sum has an interior minimum. A marker shows the radius that balances the two errors for a fixed sample size."><figcaption>Universality guarantees that approximation error can eventually fall, while capacity determines what it costs to make it fall now; finite-sample performance is set by the radius where approximation and estimation balance.</figcaption></figure>
+The frontier changes with sample size. A universal kernel makes larger balls available, but it does not make them statistically free; more observations merely move the point at which the estimation price overtakes the remaining approximation bias. The next plate therefore shows three finite-sample frontiers rather than one supposedly canonical optimum.
+
+<figure class="viz" data-figure="universality-capacity-frontier" data-alt="Approximation error decreases with accessible RKHS radius while three total-error curves for increasing sample sizes attain minima at progressively larger radii."><figcaption>Universality is an approximation license, not a finite-sample guarantee. Larger samples can support a richer RKHS ball, shifting the balance point to the right, but every displayed optimum still depends on the target approximation curve and the capacity law used to form the estimation term.</figcaption></figure>
 
 ## Eigenvalue asymptotics {#univ-eigenvalues}
 

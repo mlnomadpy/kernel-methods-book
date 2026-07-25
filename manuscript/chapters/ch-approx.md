@@ -2,8 +2,8 @@
 id: ch-approx
 slug: kernel-interpolation-and-approximation
 title: Kernel Interpolation and Approximation Theory
-part: VI · The Geometry of the Space
-order: 19
+part: 'IV · Generalization, Approximation, and Limits'
+order: 18
 tier: advanced
 prerequisites:
   - mercer-and-rates
@@ -185,6 +185,10 @@ The pointwise shape matters as much as the formula. Uncertainty vanishes at ever
 
 ## Fill distance, separation radius, and convergence rates {#approx-fill-distance}
 
+Point count alone does not measure coverage. Eleven quasi-uniform sites and eleven clustered sites have the same nominal budget, yet the latter leave a large unresolved gap. Computing the Gaussian power function with a Cholesky solve makes the geometric consequence explicit before any asymptotic rate is quoted.
+
+<figure class="viz" data-figure="fill-distance-power-rate" data-alt="Power functions for equally many quasi-uniform and clustered interpolation sites. The quasi-uniform design has a low envelope, while the clustered design has a large peak in its uncovered gap."><figcaption>Fill distance, not sample count, controls the worst uncovered region. The power function vanishes at the sites, remains uniformly small for the quasi-uniform design, and rises sharply across the hole left by clustered sampling.</figcaption></figure>
+
 The power function converts geometry into error, so the next step is to summarize the geometry of \(X\) in two numbers.
 
 ::: {.definition #def-approx-fill-sep}
@@ -222,6 +226,10 @@ For the Gaussian kernel the rate is spectral: \(\lVert f - s_f \rVert_{L^\infty(
 The reading is direct: each extra order of kernel smoothness buys one extra power of \(h\), and infinitely smooth kernels buy rates faster than any polynomial. The rates depend on \(X\) only through \(h\), so they reward covering, not abundance: a thousand points crowded in one corner have the same fill distance as a handful spread well. Quasi-uniformity enters when constants must not degrade as points are added, and in the sharper results of the escape section below; in practice near-uniform designs, or sequential designs that greedily shrink the largest power-function value, keep \(\rho\) bounded. The statistical, noisy analogue of this bias analysis, where rates are driven by eigenvalue decay rather than fill distance, is the subject of [[ch:mercer-and-rates]] and of [@caponnetto2007]; the two theories describe the same estimator under different data models.
 
 ## Stability and the uncertainty principle {#approx-stability}
+
+Approximation and numerical stability can move in opposite directions. For analytic kernels on increasingly dense sites, an error bound may fall exponentially while the Gram condition number grows exponentially. The schematic experiment below uses explicit monotone laws to expose that conflict; it is a regime map, not a claim that the displayed constants apply to every kernel or point set.
+
+<figure class="viz" data-figure="approximation-conditioning-frontier" data-alt="As fill distance decreases, an approximation-error curve falls exponentially while a Gram-matrix condition-number curve rises exponentially on a second logarithmic axis."><figcaption>Dense sampling can buy approximation accuracy with numerical instability. Stable factorizations, scaling, regularization, or a better basis are therefore part of approximation theory rather than implementation afterthoughts.</figcaption></figure>
 
 Everything so far argues for the smoothest kernel available: more smoothness, faster rates. The linear algebra objects. The system \(Kc = y\) must be solved, and its condition number is governed by the separation radius: for a kernel of Sobolev smoothness \(\tau\), the smallest Gram eigenvalue obeys a lower bound of order \(q_X^{2\tau - d}\), which degrades rapidly as smoothness grows or points cluster [@wendland2005]. For the Gaussian kernel, no polynomial bound holds and \(\lambda_{\min}(K)\) decays exponentially. This is not an artifact of a bad basis; there is a theorem in the way, made quantitative by Schaback [@schaback1995].
 

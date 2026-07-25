@@ -2,7 +2,7 @@
 id: ch-ranking
 slug: ranking-and-ordinal-regression
 title: Ranking and Ordinal Regression
-part: II · Supervised Machines with a Fixed Kernel
+part: II · Learning with a Fixed Kernel
 order: 8
 tier: advanced
 prerequisites:

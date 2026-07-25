@@ -10,34 +10,99 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Prove directly that \(K(x,z)=k(x,z)B\) is positive definite when \(k\) and \(B\) are positive semidefinite.
-    answer: Write (B=A^*A). The quadratic form is (sum_{ij}k(x_i,x_j)\langle Ac_i,Ac_j\rangle).
-      Expanding the output vectors in an orthonormal basis turns this into a sum of nonnegative
-      scalar-kernel quadratic forms.
+      Prove directly that \(K(x,z)=k(x,z)B\) is operator-valued positive definite when \(k\) is a scalar positive definite kernel and \(B\succeq0\).
+    answer: >-
+      Factor \(B=A^*A\). For inputs \(x_i\) and output coefficients \(c_i\), the block quadratic
+      form is \(\sum_{ij}k(x_i,x_j)\langle Ac_i,Ac_j\rangle\). Expand every \(Ac_i\) in an
+      orthonormal basis \((e_r)\). The result is
+      \(\sum_r\sum_{ij}k(x_i,x_j)\langle Ac_i,e_r\rangle\langle Ac_j,e_r\rangle\), a sum of
+      nonnegative scalar-kernel quadratic forms. Hermitian symmetry follows from symmetry of
+      \(k\) and self-adjointness of \(B\).
   - number: 2
     kind: computation
     status: draft
     prompt: >-
-      For two inputs and two outputs, form the \(4\times4\) block Gram matrix for the linear kernel and \(B=\begin{psmallmatrix}1&1/2\\1/2&1\end{psmallmatrix}\). Compute its eigenvalues from the Kronecker spectra.
-    answer: For inputs (1,2), the scalar Gram matrix is
-      (K_X=\begin{psmallmatrix}1&2\\2&4\end{psmallmatrix}), with eigenvalues (5,0). The output
-      matrix has eigenvalues (3/2,1/2). Hence (K_X\otimes B) has eigenvalues (15/2,5/2,0,0). This
-      also checks PSD.
+      Let \(K_X=\begin{psmallmatrix}1&1/2\\1/2&1\end{psmallmatrix}\) and \(B=\begin{psmallmatrix}1&1/2\\1/2&1\end{psmallmatrix}\). Compute all four eigenvalues of \(K_X\otimes B\), then give the four ridge shrinkage factors when \(n\lambda=1/2\).
+    answer: >-
+      Both factors have eigenvalues \(3/2\) and \(1/2\). Kronecker eigenvalues are all pairwise
+      products, namely \(9/4,3/4,3/4,1/4\). A block eigenvalue \(\mu\) is shrunk by
+      \(\mu/(\mu+1/2)\). The four factors are therefore \(9/11,3/5,3/5,1/3\), in the same
+      order. The repeated \(3/4\) modes combine one smooth factor direction with one rough
+      direction.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Complete the orthogonal-decomposition proof of the vector-valued representer theorem, explicitly showing that the perpendicular component vanishes at every training input.
-    answer: Let (S=\operatorname{span}\{K(\cdot,x_i)c:i,c\}) and decompose (f=f_S+f_\perp). Reproduction
-      gives (\langle f_\perp(x_i),c\rangle=\langle f_\perp,K(\cdot,x_i)c\rangle=0) for every (c), so
-      (f_\perp(x_i)=0). The loss is unchanged, while (\lVert f\rVert^2=\lVert f_S\rVert^2+\lVert
-      f_\perp\rVert^2); a minimum-norm minimizer therefore has (f_\perp=0).
+      Prove the vector-valued representer theorem by orthogonal decomposition, including the step that \(f_\perp(x_i)=0\) as an equality in \(\mathcal Y\).
+    answer: >-
+      Let \(\mathcal S\) be the closed span of all \(K(\cdot,x_i)c\) and write
+      \(f=f_\parallel+f_\perp\). For every \(c\in\mathcal Y\), reproduction gives
+      \(\langle f_\perp(x_i),c\rangle_{\mathcal Y}=\langle f_\perp,K(\cdot,x_i)c\rangle=0\).
+      Taking \(c=f_\perp(x_i)\) proves \(f_\perp(x_i)=0\). The data term is unchanged by deleting
+      \(f_\perp\), while Pythagoras strictly decreases a strictly norm-increasing penalty unless
+      \(f_\perp=0\). Hence every minimizer lies in \(\mathcal S\).
   - number: 4
+    kind: computation
+    status: draft
+    prompt: >-
+      Reproduce the missing-output worked example with \(r=1/4\), \(\rho=3/4\), and \(\tau=1/2\). Then change the second observation to \(-1\) and compute both predictions at \(x_1\).
+    answer: >-
+      For observations \((1,1)\), \(G+\tau I=\begin{psmallmatrix}3/2&3/16\\3/16&3/2\end{psmallmatrix}\)
+      and symmetry gives \(a_1=a_2=16/27\). Thus \(f_1(x_1)=19/27\) and
+      \(f_2(x_1)=16/27\). For observations \((1,-1)\), antisymmetry gives
+      \(a_1=-a_2=16/21\). The two predictions at \(x_1\) are
+      \(f_1(x_1)=13/21\) and \(f_2(x_1)=8/21\): the local positive transfer from task 1 competes
+      with negative evidence for task 2 at the other site.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Let \(\Pi\) project onto the span of all task inputs and write \(W=\Pi W+(I-\Pi)W\). Prove that every Loewner-monotone regularizer \(h(W^\top W)\) admits a shared-span minimizer.
+    answer: >-
+      Put \(\overline W=\Pi W\) and \(P=(I-\Pi)W\). Every task input lies in the range of \(\Pi\),
+      so replacing \(W\) by \(\overline W\) leaves all measured predictions unchanged. Orthogonality
+      gives \(\overline W^\top P=0\), hence
+      \(W^\top W=\overline W^\top\overline W+P^\top P\succeq\overline W^\top\overline W\).
+      Loewner monotonicity implies \(h(W^\top W)\ge h(\overline W^\top\overline W)\). Projecting any
+      minimizer therefore yields an equally good or better minimizer whose columns lie in the shared
+      data span.
+  - number: 6
     kind: synthesis
     status: draft
     prompt: >-
-      Design a kernel for simultaneously predicting velocity and pressure. State which couplings should be encoded, how positive definiteness will be guaranteed, and how you would detect harmful transfer.
-    answer: "Rubric: identify scalar spatial kernels and a PSD output coupling; explain whether
-      incompressibility or derivative constraints require a nonseparable construction; give a
-      positivity argument; specify output scaling, conditioning diagnostics, independent-task
-      ablation, and held-out tests for negative transfer. Full credit requires all five elements."
+      Compare a separable kernel \(kB\) with a nuclear-norm penalty on a task matrix. Identify the space in which each method shares information, one computational advantage, and one failure mode.
+    answer: >-
+      A separable kernel shares in output space: eigenvectors of \(B\) are task combinations, while
+      \(k\) supplies their common input geometry. Its Kronecker form enables fast spectral solves,
+      but one input kernel for every output mode can cause negative transfer. A nuclear-norm
+      penalty shares an input feature subspace by shrinking singular values of the task matrix. It
+      works with task-specific designs and convex optimization, but can suppress a genuine
+      task-specific direction. Neither low rank proves that the corresponding scientific mechanism
+      is truly shared.
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: >-
+      Assuming derivative evaluation is bounded in \(\mathcal H_\psi\), prove that \(K_{\mathrm{cf}}(x,z)=\nabla_x\nabla_z^\top\psi(x,z)\) is positive semidefinite and that every finite expansion is curl-free on a simply connected domain.
+    answer: >-
+      The derivative reproducer for coordinate \(a\) at \(x\) is
+      \(\partial_{x_a}\psi(x,\cdot)\). Therefore the block quadratic form for vectors \(c_i\) equals
+      the squared RKHS norm of
+      \(\sum_{i,a}c_{ia}\partial_{x_a}\psi(x_i,\cdot)\), so it is nonnegative. A finite expansion
+      can be written \(f(z)=\nabla_z g(z)\), where
+      \(g(z)=\sum_i c_i^\top\nabla_{x_i}\psi(x_i,z)\). Sufficient smoothness lets mixed
+      derivatives commute, giving zero curl. Simple connectivity ensures the gradient
+      interpretation is global rather than only local.
+  - number: 8
+    kind: exploration
+    status: draft
+    prompt: >-
+      Design a multi-output validation protocol that can reveal negative transfer hidden by average risk. Include missing outputs, task scaling, coupling ablations, and a decision rule for rejecting the joint model.
+    answer: >-
+      Split by observational unit before any preprocessing, standardize each output from training
+      observations only, and retain missingness through sampling masks. Fit independent, diagonal
+      \(B\), and coupled \(B\) models with equal tuning budgets. Report per-task loss and
+      calibration, macro average, worst-task degradation, and uncertainty across fixed resamples.
+      Repeat after rescaling outputs and removing each high-resource task. Reject the joint model if
+      a prespecified important task degrades beyond tolerance, if gains disappear under the
+      diagonal ablation, or if the learned coupling eigenspace is unstable.

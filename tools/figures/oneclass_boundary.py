@@ -1,37 +1,53 @@
 """oneclass-boundary: nu changes the accepted empirical mass."""
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
+import jax
+from jax import config, random
+import jax.numpy as jnp
+import numpy as np
 
 import _style as S
 
+config.update("jax_enable_x64", True)
 S.apply_style()
 
 
-def kde(query: np.ndarray, points: np.ndarray, bandwidth: float) -> np.ndarray:
-    delta = query[:, None, :] - points[None, :, :]
-    return np.exp(-np.sum(delta * delta, axis=2) / (2.0 * bandwidth**2)).mean(axis=1)
+@jax.jit
+def kde(query: jax.Array, points: jax.Array, bandwidth: float) -> jax.Array:
+    def score(q: jax.Array) -> jax.Array:
+        squared_distance = jnp.sum(jnp.square(points - q), axis=1)
+        return jnp.mean(jnp.exp(-squared_distance / (2.0 * bandwidth**2)))
+
+    return jax.vmap(score)(query)
 
 
 def main() -> str:
-    generator = S.rng(17)
-    left = generator.normal((-0.85, 0.0), (0.42, 0.5), size=(44, 2))
-    right = generator.normal((0.85, 0.1), (0.38, 0.43), size=(40, 2))
-    outliers = np.array([[2.1, 1.6], [-2.0, 1.45], [0.1, -1.75], [2.15, -1.25]])
-    points = np.vstack([left, right, outliers])
+    left_key, right_key = random.split(random.PRNGKey(17))
+    left = jnp.array([-0.85, 0.0]) + random.normal(left_key, (44, 2), dtype=jnp.float64) * jnp.array([0.42, 0.5])
+    right = jnp.array([0.85, 0.1]) + random.normal(right_key, (40, 2), dtype=jnp.float64) * jnp.array([0.38, 0.43])
+    outliers = jnp.array([[2.1, 1.6], [-2.0, 1.45], [0.1, -1.75], [2.15, -1.25]], dtype=jnp.float64)
+    points = jnp.concatenate([left, right, outliers], axis=0)
     bandwidth = 0.55
     train_score = kde(points, points, bandwidth)
-    gx = np.linspace(-2.65, 2.7, 180)
-    gy = np.linspace(-2.15, 2.2, 160)
-    xx, yy = np.meshgrid(gx, gy)
-    query = np.column_stack([xx.ravel(), yy.ravel()])
+    gx = jnp.linspace(-2.65, 2.7, 180, dtype=jnp.float64)
+    gy = jnp.linspace(-2.15, 2.2, 160, dtype=jnp.float64)
+    xx, yy = jnp.meshgrid(gx, gy)
+    query = jnp.stack([xx.ravel(), yy.ravel()], axis=1)
     density = kde(query, points, bandwidth).reshape(xx.shape)
+    nus = jnp.array([0.10, 0.30], dtype=jnp.float64)
+    thresholds = jax.vmap(lambda nu: jnp.quantile(train_score, nu))(nus)
+    accepted_masks = train_score[None, :] >= thresholds[:, None]
+    assert bool(jnp.all(jnp.isfinite(points)))
+    assert bool(jnp.all(jnp.isfinite(density)))
+    assert bool(jnp.all(jnp.isfinite(thresholds)))
+    assert float(jnp.min(density)) >= 0.0
+    points, xx, yy, density, nus, thresholds, accepted_masks = map(
+        np.asarray, (points, xx, yy, density, nus, thresholds, accepted_masks)
+    )
 
     fig, axes = plt.subplots(1, 2, figsize=(5.2, 2.65), sharex=True, sharey=True)
-    for ax, nu in zip(axes, (0.10, 0.30)):
-        threshold = float(np.quantile(train_score, nu))
-        accepted = train_score >= threshold
+    for ax, nu, threshold, accepted in zip(axes, nus, thresholds, accepted_masks):
         ax.contourf(xx, yy, density, levels=[threshold, density.max()],
                     colors=[S.RULE], alpha=0.45)
         ax.contour(xx, yy, density, levels=[threshold], colors=[S.ACCENT], linewidths=1.6)
@@ -49,7 +65,6 @@ def main() -> str:
     axes[1].text(0.04, 0.05, "more mass may be rejected", transform=axes[1].transAxes,
                  color=S.ACCENT, fontsize=8)
     fig.subplots_adjust(wspace=0.08)
-    assert np.isfinite(density).all()
     return S.save(fig, "oneclass-boundary")
 
 

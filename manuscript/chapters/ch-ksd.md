@@ -2,8 +2,8 @@
 id: ch-ksd
 slug: kernel-stein-discrepancy
 title: Kernel Stein Discrepancy and Stein Methods
-part: IX · Kernel Probabilistic Inference
-order: 36
+part: 'VIII · Conditional, Stein, and Causal Inference'
+order: 46
 tier: advanced
 prerequisites:
   - conditional-mean-embeddings
@@ -88,11 +88,20 @@ The operator earns its keep through the following identity, whose proof is nothi
 :::: {.theorem #thm-34-3}
 [Theorem (Stein's identity)]{.box-title}
 
-Let \(p\) be a differentiable density on \(\mathbb{R}^d\) and let \(f\) belong to the Stein class of \(p\), meaning \(f\) is differentiable, \(\mathbb{E}_{X\sim p}\lvert \mathcal{A}_p f(X)\rvert \lt \infty\), and the flux of \(p f\) vanishes at infinity. Then
+Let \(p\) be a strictly positive \(C^1\) density on \(\mathbb{R}^d\). Let \(f:\mathbb{R}^d\to\mathbb{R}^d\) be \(C^1\), assume \(p\,\nabla\cdot f\) and \(\nabla p^\top f\) are integrable, and require the boundary flux
+
+$$
+\lim_{R\to\infty}\int_{\lVert x\rVert=R}p(x)f(x)^\top n_R(x)\,dS(x)=0.
+$$
+
+Then \(f\) belongs to the Langevin Stein class of \(p\) and
 
 $$ \mathbb{E}_{X\sim p}\big[\mathcal{A}_p f(X)\big] = 0. $$
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+On a proper open domain \(\Omega\), replace the limit by zero normal flux on \(\partial\Omega\). Merely assuming differentiability is insufficient: a nonzero boundary term invalidates the identity.
+
+**Assumptions.** Strict positivity and \(C^1\) regularity of \(p\); \(C^1\) regularity of \(f\); integrability of both product-rule terms; and vanishing boundary flux.
+**Source.** The integration-by-parts identity is the Langevin specialization used in Chwialkowski, Strathmann, and Gretton (2016), Appendix Lemma 5.1; see also Gorham and Mackey (2017), Proposition 1, for an RKHS Stein-class condition.
 **Proof status.** Proved immediately below.
 ::::
 
@@ -167,13 +176,20 @@ The four terms come from expanding the inner product coordinatewise with the fou
 :::: {.theorem #thm-34-7}
 [Theorem (KSD as a double expectation, Liu, Lee, and Jordan, 2016)]{.box-title}
 
-With \(u_p\) the Stein kernel and the expectations finite,
+Let \(p\) be as in Theorem 34.3. Let \(k\) be a real \(C^{(1,1)}\) positive-definite kernel whose value and first-derivative sections belong to \(\mathcal H\). Assume the vector Stein feature
+
+$$
+\beta_p(X,\cdot)=s_p(X)k(X,\cdot)+\nabla_Xk(X,\cdot)
+$$
+
+is Bochner integrable under \(q\), and assume every field in the unit ball of \(\mathcal H^d\) satisfies the boundary and integrability conditions of Theorem 34.3. Then, with \(u_p\) the Stein kernel,
 
 $$ \mathrm{KSD}^2(q,p) = \mathbb{E}_{X,X'\sim q}\big[u_p(X,X')\big], $$
 
 where \(X, X'\) are independent draws from \(q\). The quantity is non-negative.
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+**Assumptions.** The stated \(C^{(1,1)}\), derivative-representer, Bochner-integrability, and RKHS Stein-class conditions.
+**Source.** Liu, Lee, and Jordan (2016), Theorem 3.6; Chwialkowski, Strathmann, and Gretton (2016), Theorem 2.1.
 **Proof status.** Proved immediately below.
 ::::
 
@@ -194,9 +210,33 @@ The norm identity alone does not make KSD a metric. The implication \(\mathrm{KS
 
 For fixed \(p\) and a differentiable base kernel \(k\) whose derivative representers belong to \(\mathcal H\), the Stein kernel \(u_p\) is a positive definite kernel on \(\mathbb{R}^d\), because \(u_p(x,x') = \langle \beta_p(x,\cdot), \beta_p(x',\cdot)\rangle_{\mathcal H^d}\) is a Gram inner product of the feature map \(x \mapsto \beta_p(x,\cdot)\). Consequently the empirical V-statistic \(\frac1{n^2}\sum_{i,j}u_p(x_i,x_j)\) is a genuine squared feature norm and is non-negative. The diagonal-free U-statistic is unbiased for the population square but can be negative.
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+**Assumptions.** The score is finite at the evaluated points, and the kernel value and first-derivative sections used to define \(\beta_p\) belong to \(\mathcal H\).
 **Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
 :::
+
+The next result is deliberately only an identification statement. It says what equality to zero means for one fixed pair \((q,p)\); it says nothing about whether small values force a sequence \(q_m\) to approach \(p\).
+
+:::: {.theorem #thm-34-8a}
+[Theorem (zero KSD identifies the target under score-separation assumptions)]{.box-title}
+
+Let \(p\) and \(q\) be strictly positive \(C^1\) densities on the same connected open subset of \(\mathbb{R}^d\). Assume the RKHS unit ball is in the Stein classes of both densities, \(\mathbb E_q[u_p(X,X)]\lt\infty\), and
+
+$$
+\mathbb E_q\left[\left\lVert\nabla\log\frac{p(X)}{q(X)}\right\rVert^2\right]\lt\infty.
+$$
+
+If \(k\) is \(cc\)-universal on the domain, then
+
+$$
+\mathrm{KSD}(q,p)=0\quad\Longleftrightarrow\quad q=p.
+$$
+
+**Scope.** This is population identification. It does not assert that \(\mathrm{KSD}(q_m,p)\to0\) implies \(q_m\Rightarrow p\), and it does not validate a finite-sample test.
+
+**Assumptions.** Common connected domain; strictly positive \(C^1\) densities; Stein-class boundary conditions; finite Stein-kernel diagonal moment; square-integrable score ratio; and \(cc\)-universality.
+**Source.** Chwialkowski, Strathmann, and Gretton (2016), Theorem 2.2 and its proof in Section 3.1.
+**Proof status.** The reverse implication follows from Stein's identity. The forward implication is source-backed; the key step uses injectivity of the \(cc\)-universal kernel embedding on the integrable score-ratio field.
+::::
 
 ::: {.remark}
 [Remark (only the score, and a mean-embedding reading)]{.box-title}
@@ -279,13 +319,33 @@ We now turn the estimator into a test of \(H_0 : q = p\) against \(H_1 : q \neq 
 :::
 
 1.  Form the Stein kernel matrix \(U_{ij} = u_p(x_i, x_j)\) from the four-term formula, using \(s_p(x_i)\), \(k(x_i,x_j)\), \(\nabla k\), and \(\nabla\nabla' k\). No normalizer is required.
-2.  Compute the test statistic \(T = \dfrac{1}{n(n-1)}\sum_{i \neq j} U_{ij}\), the unbiased U-statistic.
-3.  Draw i.i.d. Rademacher signs \(W_1^{(b)},\dots,W_n^{(b)} \in \{-1,+1\}\) and set the bootstrap statistic \(T_b = \dfrac{1}{n(n-1)}\sum_{i\neq j} W_i^{(b)} W_j^{(b)}\, U_{ij}\).
+2.  Compute the source-backed V-statistic \(T = n^{-2}\sum_{i,j} U_{ij}\).
+3.  For i.i.d. data, draw independent Rademacher signs \(W_1^{(b)},\dots,W_n^{(b)}\) and set \(T_b=n^{-2}\sum_{i,j}W_i^{(b)}W_j^{(b)}U_{ij}\). For dependent data, use the dependence-matched multiplier process in the theorem below.
 4.  Repeat step 3 for \(b = 1,\dots,B\) to build the null sample \(\{T_1,\dots,T_B\}\).
-5.  Return the \(p\)-value \(\hat p = \dfrac{1}{B}\big\lvert\{\, b : T_b \ge T \,\}\big\rvert\); reject \(H_0\) if \(\hat p \le \alpha\).
+5.  Return the finite-\(B\) corrected value \(\hat p = \dfrac{1+\big\lvert\{\, b : T_b \ge T \,\}\big\rvert}{B+1}\); reject \(H_0\) if \(\hat p \le \alpha\).
 ::::
 
-The test reuses the Stein kernel matrix \(U\) built once in step 1; every bootstrap replicate is just a re-weighted sum of its entries, so the whole procedure is one \(O(n^2)\) matrix build plus \(B\) cheap passes. Because it reads \(p\) only through the score, it applies verbatim to energy-based models and unnormalized posteriors where a two-sample test is impossible. It comes with two cautions inherited from its ingredients. First, the alternative must register in the score: any \(q\) whose score matches \(p\)'s on the support it explores will pass, so the test detects departures in \(\nabla \log q\), which for continuous densities is all departures but is worth stating. Second, the wild bootstrap, like the permutation calibration of the MMD test, assumes the multiplier signs reproduce the null dependence; the same recipe with autocorrelated multipliers extends the test to the Markov-chain samples of MCMC diagnostics, one of the primary uses of the KSD.
+:::: {.theorem #thm-34-bootstrap}
+[Theorem (scope of wild-bootstrap calibration)]{.box-title}
+
+Let \(X_1,X_2,\ldots\) be a stationary sequence with marginal \(p\). Assume the Stein V-kernel \(u_p\) is Lipschitz, \(\mathbb E[u_p(X_1,X_1)^2]\lt\infty\), and the sequence is \(\tau\)-mixing with
+
+$$
+\sum_{t=1}^{\infty}t^2\sqrt{\tau(t)}\lt\infty.
+$$
+
+Use the dependent Rademacher multiplier process of Chwialkowski, Strathmann, and Gretton, with its switching probability tending to zero at the prescribed rate. Then the conditional law of the rescaled bootstrap V-statistic consistently approximates the null law of the rescaled KSD V-statistic. Under a fixed alternative with positive population KSD, the data statistic converges to a positive constant while the bootstrap statistic collapses to zero.
+
+For i.i.d. observations, independent Rademacher multipliers are the special case. For dependent observations, replacing the dependent multiplier process by independent signs is not covered.
+
+**Scope.** The result is asymptotic. It is neither an exact finite-sample level guarantee nor a statement about power against every alternative.
+
+**Assumptions.** Stationarity, the displayed \(\tau\)-mixing summability, Lipschitz Stein V-kernel, finite squared diagonal moment, and dependence-matched multipliers.
+**Source.** Chwialkowski, Strathmann, and Gretton (2016), Section 3.2, especially Propositions 3.1 and 3.2.
+**Proof status.** Source-backed; not reproved here.
+::::
+
+The test reuses the Stein kernel matrix \(U\) built once in step 1; every bootstrap replicate is a reweighted quadratic form. A direct implementation costs \(O(n^2)\) to form \(U\) and \(O(Bn^2)\) for \(B\) dense replicates, although batching matrix products improves constants without changing that order. The displayed theorem validates the V-statistic construction. A diagonal-free U-statistic bootstrap is a related but distinct procedure and needs its own degeneracy and resampling argument. Because the test reads \(p\) only through the score, it applies to energy-based models and unnormalized posteriors. Its calibration, identification, and power are separate questions: Theorem 34.8a handles population identification, the theorem above handles null calibration, and neither prevents low power when the observed sample misses the region where the model is wrong.
 
 ## Stein variational gradient descent {#svgd}
 
@@ -296,13 +356,16 @@ Represent the current distribution by particles \(x_1,\dots,x_n\), and consider 
 :::: {.proposition #prop-34-9}
 [Proposition (steepest descent of the KL is the Stein witness, Liu and Wang, 2016)]{.box-title}
 
-Let \(q_{[T]}\) be the pushforward of \(q\) under \(T(x) = x + \epsilon\,\phi(x)\). Then
+Let \(p\) and \(q\) be strictly positive \(C^1\) densities, and let \(\phi\in\mathcal H^d\) be \(C^1\). Assume \(s_p^\top\phi\) and \(\nabla\cdot\phi\) are \(q\)-integrable, differentiation may pass through the \(q\)-expectation, and \(T_\epsilon(x)=x+\epsilon\phi(x)\) is a \(C^1\) diffeomorphism for all sufficiently small \(\lvert\epsilon\rvert\). Let \(q_{[T_\epsilon]}\) be the pushforward of \(q\). Then
 
-$$ \frac{d}{d\epsilon}\,\mathrm{KL}\big(q_{[T]} \,\|\, p\big)\Big|_{\epsilon = 0} = -\,\mathbb{E}_{X\sim q}\big[\mathcal{A}_p \phi(X)\big]. $$
+$$ \frac{d}{d\epsilon}\,\mathrm{KL}\big(q_{[T_\epsilon]} \,\|\, p\big)\Big|_{\epsilon = 0} = -\,\mathbb{E}_{X\sim q}\big[\mathcal{A}_p \phi(X)\big]. $$
 
 Maximizing the rate of decrease over the unit ball \(\lVert \phi\rVert_{\mathcal H^d} \le 1\) therefore yields the maximal value \(\mathrm{KSD}(q,p)\), attained at the normalized Stein witness \(\phi^\star = \xi_{q,p} / \lVert \xi_{q,p}\rVert_{\mathcal H^d}\).
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+This is a derivative at \(\epsilon=0\), not a finite-step descent theorem.
+
+**Assumptions.** Positive \(C^1\) densities, a \(C^1\) perturbation, local diffeomorphism, integrability, and a valid differentiation-under-the-integral interchange.
+**Source.** Liu and Wang (2016), Theorem 3.1 and Lemma 3.2.
 **Proof status.** Proved immediately below.
 ::::
 
@@ -312,7 +375,7 @@ Maximizing the rate of decrease over the unit ball \(\lVert \phi\rVert_{\mathcal
 By the change-of-variables formula the pushforward density is \(q_{[T]}(y) = q(T^{-1}(y))\,\lvert \det \nabla T^{-1}(y)\rvert\). Differentiating \(\mathrm{KL}(q_{[T]}\|p) = \mathbb{E}_{q_{[T]}}[\log q_{[T]} - \log p]\) at \(\epsilon = 0\), where \(T\) is the identity, the entropy term \(\mathbb{E}[\log q_{[T]}]\) contributes \(-\mathbb{E}_q[\nabla \cdot \phi]\) through the log-determinant, and the cross term contributes \(-\mathbb{E}_q[s_p^\top \phi]\) through the shift of \(\log p\). Adding them gives \(-\mathbb{E}_q[s_p^\top \phi + \nabla \cdot \phi] = -\mathbb{E}_q[\mathcal{A}_p \phi]\). The supremum of this linear functional over the RKHS unit ball is, by the same Cauchy-Schwarz argument that defined the KSD, equal to \(\lVert \xi_{q,p}\rVert_{\mathcal H^d} = \mathrm{KSD}(q,p)\), attained at the aligned unit field. [\(\square\)]{.qed}
 :::
 
-The consequence is that the steepest descent direction on the KL divergence is the very witness whose norm is the KSD. So the discrepancy is not just a diagnostic; it is the length of the best move toward \(p\), and following that move is an algorithm. Using the empirical witness, in which the expectation over \(q\) becomes an average over the current particles, the update reads off immediately.
+The consequence is infinitesimal: at the population distribution \(q\), the steepest first-order direction is the Stein witness. Turning that derivative into an algorithm introduces two new approximations, a finite empirical particle average and a nonzero step size.
 
 :::: {.algorithm #algo-34-2}
 [Algorithm (SVGD update, one step)]{.box-title}
@@ -335,7 +398,7 @@ $$ \hat\phi(x_i) = \frac{1}{n}\sum_{j=1}^n \Big[\, \underbrace{k(x_j, x_i)\, s_p
 <figcaption>Eighty particles start in a clump at \(x=-5\) and follow the SVGD update above with the analytic score of the two-mode target \(p=\tfrac12\,\mathcal N(-2,0.6^2)+\tfrac12\,\mathcal N(2,0.8^2)\). Attraction moves particles toward high density while the kernel derivative spreads them; the KSD readout is a diagnostic, not a guaranteed Lyapunov curve for a finite step. Changing bandwidth shows the central trade-off: local repulsion may strand particles in one mode, while global repulsion can move the cloud coherently but blur local structure.</figcaption>
 </figure>
 
-The two terms in the update have a clean mechanical reading. The driving force \(k(x_j, x_i) s_p(x_j)\) is a kernel-weighted average of the score, pushing each particle toward regions where \(\log p\) increases, that is toward the high-density part of the target; a lone particle would follow \(s_p\) and slide to a mode. The repulsion \(\nabla_{x_j} k(x_j, x_i)\) points particles away from one another, and without it every particle would collapse onto the same mode. Their balance is what makes the particles spread out into the shape of \(p\) rather than piling up at its peak. Both terms use only \(s_p\), so SVGD provides deterministic approximate inference for an unnormalized posterior without evaluating its normalizer. Unlike an exact MCMC method, finite-particle SVGD does not automatically deliver asymptotically exact samples or Monte Carlo error bars; its output must be diagnosed as an approximation.
+The two terms in the update have a clean mechanical reading. The driving force \(k(x_j, x_i) s_p(x_j)\) averages the target score, while \(\nabla_{x_j} k(x_j,x_i)\) separates nearby particles. Both use only \(s_p\). What follows from Proposition 34.9 is only population, infinitesimal KL descent. A finite particle system replaces the expectation by a dependent empirical average; a finite step adds truncation error; repeated steps add optimization and discretization error. The cited 2016 derivation does not prove that a fixed finite particle cloud converges to \(p\), that every finite step decreases KL or empirical KSD, or that the resulting points have Monte Carlo error bars. Those require additional mean-field, propagation-of-chaos, smoothness, and step-schedule analyses not supplied by the algorithm box.
 
 ::::: {.example #example-34-2}
 [Example (one SVGD step toward a standard Gaussian)]{.box-title}
@@ -358,7 +421,7 @@ $$ R = (-0.2924,\ 0.0000,\ +0.2924). $$
 
 $$ \hat\phi = (-1.1654,\ -1.4754,\ -1.1571), \qquad x^{\text{new}} = x + 0.1\,\hat\phi = (0.8835,\ 1.8525,\ 2.8843). $$
 
-**Reading.** Every particle moved left toward the target's center: the cloud mean drops from \(2.0000\) to \(1.8734\) in a single step, and repeated steps would settle the three points into a spread that matches \(\mathcal N(0,1)\). The driving term did the transport while the repulsion kept the particles from converging to one point, splitting the outer two apart by equal and opposite amounts. As with the test, the update touched \(p\) only through the score \(s_p(x) = -x\).
+**Reading.** Every particle moved left toward the target's center: the cloud mean drops from \(2.0000\) to \(1.8734\) in a single step. The driving term did the transport while the repulsion split the outer two apart by equal and opposite amounts. This one-step calculation does not prove that repeated finite-particle updates converge to \(\mathcal N(0,1)\). As with the test, the update touched \(p\) only through the score \(s_p(x) = -x\).
 ::::
 
 **Verification artifact.** checks/example-ch-ksd-example-34-2.json records the example source hash and verification scope.
@@ -366,7 +429,57 @@ $$ \hat\phi = (-1.1654,\ -1.4754,\ -1.1571), \qquad x^{\text{new}} = x + 0.1\,\h
 
 ## Choosing the kernel, and a bridge to quadrature {#kernel-choice}
 
-The KSD is only as trustworthy as its base kernel, and here the story diverges from the compact-domain intuition of the MMD. On \(\mathbb{R}^d\) a light-tailed base kernel can be fooled: Gorham and Mackey (2017) showed that with the Gaussian kernel the KSD can tend to zero along a sequence of \(q\) that does not converge to \(p\), because the kernel decays faster than the score grows and stops seeing mass that escapes to infinity. Their fix is to require the KSD to control weak convergence, and they prove that the *inverse multiquadric* kernel \(k(x,x') = (c^2 + \lVert x - x'\rVert^2)^{-\beta}\) with \(\beta \in (0,1)\) does so for a broad class of targets, its heavier tail keeping the discrepancy honest. The practical lesson is that for goodness-of-fit on unbounded domains the inverse multiquadric is the safer default, and a vanishing Gaussian-kernel KSD is not by itself proof of fit.
+Identification of one distribution at KSD zero does not control a sequence. The missing property is tightness: if probability mass can escape every compact set while the discrepancy shrinks, there is no weak convergence to the target.
+
+The first failure is already visible at finite sample size. A rapidly decaying kernel can make widely separated tail particles nearly invisible to one another, so dropping the diagonal leaves almost no cross interaction even as every point moves farther from the target. This estimator witness is distinct from the stronger population non-tightness result stated below.
+
+<figure class="viz" data-figure="ksd-escape-failure" data-alt="For five increasingly separated tail points, the absolute Gaussian-Stein U-statistic falls toward zero while the V-statistic grows and the nearest support point moves away from the target."><figcaption>A diagonal-free Gaussian-Stein statistic can miss isolated tail points: off-diagonal interactions vanish exponentially, so the U-statistic approaches zero, while the diagonal-retaining V-statistic grows with the score magnitude. This is a finite-sample estimator witness. The theorem below addresses the stronger question of population KSD convergence and tightness.</figcaption></figure>
+
+:::: {.theorem #thm-34-convergence}
+[Theorem (IMQ KSD determines weak convergence in the distantly dissipative regime)]{.box-title}
+
+Let \(P\) have a strictly positive \(C^1\) density on \(\mathbb R^d\) with globally Lipschitz score \(b=\nabla\log p\). Assume \(P\) is *distantly dissipative*: with
+
+$$
+\kappa(r)=\inf_{\lVert x-y\rVert=r}
+\left\{-\,2\frac{\langle b(x)-b(y),x-y\rangle}{\lVert x-y\rVert^2}\right\},
+$$
+
+we have \(\liminf_{r\to\infty}\kappa(r)\gt0\). Let
+
+$$
+k(x,y)=\big(c^2+\lVert x-y\rVert^2\big)^\beta,
+\qquad c\gt0,\quad \beta\in(-1,0).
+$$
+
+For any sequence of probability measures \((Q_m)\), if the associated Langevin KSD satisfies \(\mathrm{KSD}(Q_m,P)\to0\), then \(Q_m\Rightarrow P\).
+
+**Scope.** The target assumptions and the slowly decaying IMQ tail do the work. The result does not cover arbitrary targets, arbitrary kernels, or a finite empirical U-statistic.
+
+**Assumptions.** Strictly positive \(C^1\) target density, globally Lipschitz score, distant dissipativity, \(c\gt0\), and IMQ exponent \(\beta\in(-1,0)\).
+**Source.** Gorham and Mackey (2017), Definition 4 and Theorem 8; proof in their Supplement, Section H.
+**Proof status.** Source-backed; not reproved here.
+::::
+
+The contrast is sharp. Gorham and Mackey (2017), Theorem 6, construct non-tight sequences in dimension \(d\ge3\) whose KSD tends to zero for kernels with sufficiently light tails, including the Gaussian kernel, even when \(P=\mathcal N(0,I_d)\). The theorem is existential and asymptotic. The deterministic calculation below isolates the numerical mechanism without pretending to reproduce that full sequence.
+
+::::: {.example #example-34-3}
+[Example (a Gaussian-KSD tail failure witness)]{.box-title}
+
+:::: wex
+::: wex-setup
+Take \(P=\mathcal N(0,1)\), the unit-bandwidth Gaussian base kernel, and the five-point sample \(x=(10,20,30,40,50)\). All points are deep in the target's tails and separated by ten standard deviations. Values are produced by `checks/ch-ksd-ex3.py`.
+:::
+
+1.  [Inspect off-diagonal visibility.]{.wex-op} The largest absolute off-diagonal Stein-kernel entry is below \(4.0\times10^{-19}\). Gaussian kernel decay has effectively disconnected every pair.
+2.  [Compute the diagonal-free statistic.]{.wex-op} The U-statistic has absolute value below \(7.0\times10^{-20}\), numerically indistinguishable from zero despite the catastrophic sample.
+3.  [Restore the diagonal.]{.wex-op} The V-statistic is \(220.2\), because \(u_p(x_i,x_i)=x_i^2+1\). The full empirical KSD has not failed; the diagonal-free finite-sample surrogate has.
+
+**Reading.** This witness separates two hazards. At finite \(n\), dropping the diagonal can hide isolated tail points when a light-tailed kernel kills every cross interaction. Asymptotically in \(d\ge3\), Gorham and Mackey's Theorem 6 shows a stronger population failure: even the KSD itself can miss a carefully constructed non-tight sequence. Neither issue is repaired by zero-identification alone.
+::::
+
+**Verification artifact.** checks/example-ch-ksd-example-34-3.json records the example source hash and verification scope.
+:::::
 
 The same Stein-kernel machinery has a second life beyond testing and sampling. If \(u_p\) is a kernel whose functions integrate to a known value against \(p\), one can build control variates that cancel the variance of a Monte Carlo estimator: the control functionals of Oates, Girolami, and Chopin (2017) fit an RKHS function in the range of the Stein operator to an integrand, subtract it, and are left with an estimator of far lower variance, sometimes converging faster than the Monte Carlo rate. It is the same object read a third way. The Stein operator that annihilates \(p\) in expectation gives, at once, a discrepancy for testing, a transport direction for sampling, and a zero-mean correction for integration.
 
@@ -428,10 +541,11 @@ $$ u_p(x,x') = \Big[ s_p(x) s_p(x') + \tfrac{g}{h^2}\big(s_p(x) - s_p(x')\big) +
     ::: hint-body
     As \(h \to \infty\), \(k \to 1\) and \(\nabla k \to 0\): the repulsion vanishes and every particle follows the same averaged score, so the cloud collapses toward a mode. As \(h \to 0\), \(k(x_j,x_i) \to 0\) for \(i \neq j\): each particle sees only itself, follows its own score to the nearest mode, and the particles no longer coordinate to fill out \(p\).
     :::
-8.  [challenge]{.ex-tag} Two parts on the goodness-of-fit test. (a) Explain why, under \(H_0 : q = p\), the rescaled statistic \(n\,\widehat{\mathrm{KSD}}^2_U\) has the non-Gaussian limit \(\sum_j c_j (Z_j^2 - 1)\) rather than a normal law, and connect this to the degeneracy that makes the first-order term of the U-statistic vanish. (b) Suppose the wild bootstrap of the test is run with \(B = 500\) sign-flip replicates and \(12\) of the bootstrap statistics \(T_b\) exceed the observed \(T\). Compute the approximate \(p\)-value and state the decision at level \(\alpha = 0.05\). Then argue that a target whose score is wrong only on a region the sample never visits could still yield a small statistic, and say what that means for the power of the test.
+8.  [challenge]{.ex-tag} Two parts on the goodness-of-fit test. (a) Explain why, under \(H_0 : q = p\), the rescaled statistic \(n\,\widehat{\mathrm{KSD}}^2_U\) has the non-Gaussian limit \(\sum_j c_j (Z_j^2 - 1)\) rather than a normal law, and connect this to the degeneracy that makes the first-order term of the U-statistic vanish. (b) Suppose the wild bootstrap of the test is run with \(B = 500\) sign-flip replicates and \(12\) of the bootstrap statistics \(T_b\) exceed the observed \(T\). Compute the finite-\(B\) corrected \(p\)-value and state the decision at level \(\alpha = 0.05\). Then argue that a target whose score is wrong only on a region the sample never visits could still yield a small statistic, and say what that means for the power of the test.
     Hint
 
     ::: hint-body
-    For (a), under the null the leading linear part of the U-statistic has mean zero and vanishes, leaving a quadratic form in the Gaussian fluctuations of the sample, whose law is a weighted sum of centered \(\chi^2_1\) variables with the eigenvalues of \(u_p\) under \(p\) as weights. For (b), \(\hat p \approx 12/500 = 0.024 \le 0.05\), so reject \(H_0\); the test only senses the score difference \(s_p - s_q\) where \(q\) places mass, so a mismatch confined to an unvisited region contributes little and the test loses power there.
+    For (a), under the null the leading linear part of the U-statistic has mean zero and vanishes, leaving a quadratic form in the Gaussian fluctuations of the sample, whose law is a weighted sum of centered \(\chi^2_1\) variables with the eigenvalues of \(u_p\) under \(p\) as weights. For (b), \(\hat p=(12+1)/(500+1)=13/501\approx0.02595\le0.05\), so reject \(H_0\); the test only senses the score difference \(s_p-s_q\) where \(q\) places mass, so a mismatch confined to an unvisited region contributes little and the test loses power there.
     :::
+9.  [synthesis]{.ex-tag} Separate the logical content of the following four statements: (i) \(\mathrm{KSD}(q,p)=0\Rightarrow q=p\); (ii) \(\mathrm{KSD}(q_m,p)\to0\Rightarrow q_m\Rightarrow p\); (iii) a wild-bootstrap KSD test has asymptotically valid null level; and (iv) one empirical SVGD update decreases the KL divergence. For each, name the additional assumptions required or explain why the chapter does not claim it.
 :::

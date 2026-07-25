@@ -10,34 +10,55 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Explain the sign and definiteness difference between a covariance function and a semivariogram.
+      Prove the conditional negative-definiteness statement for \(\gamma(h)=C(0)-C(h)\), and explain why the coefficient constraint is essential.
     answer: >-
-      A covariance is large when two locations move together and must generate positive-semidefinite Gram matrices. A semivariogram is half the variance of an increment, is small for similar locations, and is conditionally negative definite on coefficients summing to zero. Under stationarity they satisfy \(\gamma(h)=C(0)-C(h)\), but they are not interchangeable kernel matrices.
+      For coefficients satisfying \(\sum_i a_i=0\), \(\sum_{ij}a_i a_j\gamma(s_i-s_j)=C(0)(\sum_i a_i)^2-\sum_{ij}a_i a_jC(s_i-s_j)=-a^\top Ka\le0\), since the covariance Gram matrix \(K\) is positive semidefinite. Without the zero-sum condition, the constant term need not vanish, so the sign is not controlled. Variograms therefore act as conditionally negative-definite objects on the contrast subspace, not as negative covariance matrices on all coefficients.
   - number: 2
-    kind: computation
-    status: draft
-    prompt: >-
-      Solve an ordinary-kriging saddle system for a supplied covariance matrix and target covariance vector, then compute the prediction variance.
-    answer: >-
-      Solve \(\begin{psmallmatrix}K&1\\1^\top&0\end{psmallmatrix}(w,\eta)^\top=(k_0,1)^\top\) and verify \(1^\top w=1\). The prediction is \(w^\top y\); with the chapter's multiplier convention its error variance is \(C(s_0,s_0)-w^\top k_0-\eta\). The result should be nonnegative up to roundoff and should increase when the target is moved away from observed sites.
-  - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Prove that an anisotropic covariance obtained by applying a fixed linear map to spatial differences remains positive definite.
+      Derive equations (52.2)-(52.5) for universal kriging, including the invertibility argument for \(P^\top K^{-1}P\).
     answer: >-
-      Let \(c(u-v)\) be a positive-definite stationary covariance and define \(C_A(s,t)=c\{A(s-t)\}\). For any sites set \(u_i=As_i\). Then \(\sum_{ij}a_i a_j C_A(s_i,s_j)=\sum_{ij}a_i a_j c(u_i-u_j)\ge0\) by positive definiteness of \(c\). The map may be singular; validity remains, although distinct spatial directions can then become indistinguishable.
-  - number: 4
-    kind: challenge
+      Unbiasedness for every trend coefficient requires \(P^\top w=p_0\). Minimize \(C_{00}-2w^\top k_0+w^\top Kw\) under this constraint. The Lagrangian first-order equations are \(Kw+P\eta=k_0\) and \(P^\top w=p_0\), giving (52.2). Since \(w^\top Kw=w^\top k_0-p_0^\top\eta\), substitution gives (52.3). Solving \(w=K^{-1}(k_0-P\eta)\) and imposing the constraint yields \(\eta=(P^\top K^{-1}P)^{-1}(P^\top K^{-1}k_0-p_0)\), hence (52.4) and (52.5). For nonzero \(v\), \(v^\top P^\top K^{-1}Pv=(Pv)^\top K^{-1}(Pv)>0\) because \(P\) has full column rank and \(K^{-1}\) is positive definite. Thus the middle matrix is invertible.
+  - number: 3
+    kind: computation
     status: draft
     prompt: >-
-      Derive the covariance between two region-average observations from a point-level covariance and state a numerical quadrature strategy.
+      Reproduce the two-site worked example, then add independent measurement noise variance \(0.1\) and recompute simple and ordinary kriging weights and variances.
     answer: >-
-      For averages \(Z_A=|A|^{-1}\int_A Z(s)\,ds\) and \(Z_B=|B|^{-1}\int_B Z(t)\,dt\), covariance is \((|A||B|)^{-1}\int_A\int_B C(s,t)\,ds\,dt\). Approximate each region with area-weighted quadrature nodes and form the double weighted sum of point covariances. Refine the nodes until the covariance and resulting kriging predictions stabilize, especially near short-range or singular covariance behavior.
+      Without noise, ordinary kriging has weights \((1/2,1/2)\), multiplier \(e^{-1}-(1+e^{-2})/2=-0.199789\), and variance \(1-e^{-1}-\eta=0.831909\). Simple kriging has equal weights \(e^{-1}/(1+e^{-2})=0.324027\) and variance \((1-e^{-2})/(1+e^{-2})=0.761594\). With noise, replace each diagonal of \(K\) by \(1.1\). Symmetry still forces ordinary weights \((1/2,1/2)\); now \(\eta=e^{-1}-(1.1+e^{-2})/2=-0.249789\), so the latent-target variance is \(1-e^{-1}-\eta=0.881909\). Simple weights become \(e^{-1}/(1.1+e^{-2})=0.297797\), and variance is \(1-2e^{-2}/(1.1+e^{-2})=0.780893\). Measurement noise lowers each observation's simple-kriging weight and increases both prediction variances.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove that a fixed linear anisotropy map preserves positive definiteness, including the singular-map case, and state what becomes unidentifiable.
+    answer: >-
+      Let \(c(u,v)\) be positive definite on the image space and define \(C_A(s,t)=c(As,At)\). For arbitrary sites and coefficients, set \(u_i=As_i\). Then \(\sum_{ij}a_i a_jC_A(s_i,s_j)=\sum_{ij}a_i a_jc(u_i,u_j)\ge0\). Injectivity of \(A\) was never used, so singular maps remain valid. If \(v\) lies in the null space of \(A\), then \(A(s+v)=As\), so the covariance cannot distinguish displacement along \(v\). Range or directional behavior in those collapsed directions is unidentifiable.
   - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Starting from the weak SPDE equations, derive \(Q=K_\kappa^\top C^{-1}K_\kappa\). Explain precisely why sparse \(C\) does not imply sparse \(C^{-1}\), and what mass lumping changes.
+    answer: >-
+      With \(x_h=\sum_j\psi_jw_j\), testing \((\kappa^2-\Delta)x_h=\mathcal W\) against \(\psi_i\) and using Green's identity gives \(K_\kappa w=\xi\), where \(K_\kappa=\kappa^2C+G\). White noise satisfies \(\operatorname{Cov}(\xi_i,\xi_j)=\langle\psi_i,\psi_j\rangle=C_{ij}\). Thus \(\operatorname{Cov}(w)=K_\kappa^{-1}CK_\kappa^{-\top}\), so its inverse is \(Q=K_\kappa^\top C^{-1}K_\kappa\). A sparse positive-definite matrix usually has a dense inverse because marginal dependence propagates through paths in its graph. Replacing \(C\) by the diagonal lumped matrix \(\widetilde C\) makes \(\widetilde C^{-1}\) diagonal and preserves locality in \(\widetilde Q\), but changes the finite-element covariance and introduces an additional approximation.
+  - number: 6
     kind: synthesis
     status: draft
     prompt: >-
-      Design a blocked evaluation for a space-time environmental monitoring problem, including trend selection, covariance alternatives, support geometry, uncertainty scores, and scaling choices.
+      Verify the nonseparability calculation following (52.14), then design a covariance witness that distinguishes a fully symmetric Gneiting model from directional advection.
     answer: >-
-      Hold out complete spatial regions and future time windows that match deployment. Fit trends using training blocks only, then compare separable, nonseparable, anisotropic, and SPDE-based covariance models with the same measurement-error treatment. Score RMSE, log density, interval coverage, residual variograms, and calibration by region; document region supports, coordinate projection, mesh or inducing resolution, factorization residuals, and sensitivity to covariance range bounds.
+      For the displayed specialization, \(C(1,0)=e^{-1}=0.367879\), \(C(0,1)=1/2\), and \(C(1,1)=e^{-1/2}/2=0.303265\). A normalized separable covariance would satisfy \(C(1,1)=C(1,0)C(0,1)=0.183940\), so the inequality witnesses interaction. To test directional advection, choose an oriented spatial lag \(h\) along the prevailing flow and compare empirical covariance at \((h,u)\) and \((-h,u)\), or equivalently \((h,u)\) and \((h,-u)\). Every fully symmetric Gneiting model predicts equality. An advected field \(Z(s,t)=Y(s-vt)\) instead has covariance \(C_Y(h-vu)\), whose peak shifts with the sign of \(u\). A reproducible test should use paired lag bins, uncertainty for empirical covariance, and held-out directional forecasts.
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: >-
+      Derive (52.15) for two region averages, propose a convergent quadrature calculation, and describe a counterexample where centroid substitution is badly biased.
+    answer: >-
+      By bilinearity of covariance and Fubini's theorem, assuming the covariance-weight integrals are absolutely integrable, \(\operatorname{Cov}(Z_A,Z_B)=\int_A\int_Bw_A(s)C(s,t)w_B(t)\,ds\,dt\). Approximate each integral with normalized positive quadrature weights, giving \(\sum_{r,q}a_rb_qC(s_r,t_q)\). Refine nodes until the integrated covariance and downstream kriging prediction change below declared tolerances. Centroid substitution fails when \(A\) and \(B\) are large relative to a short covariance range: most point pairs are weakly correlated even if the centroids coincide or are close, so \(C(\bar s_A,\bar s_B)\) can greatly exceed the average covariance. It also fails near sharp nonstationary boundaries.
+  - number: 8
+    kind: exploration
+    status: draft
+    prompt: >-
+      Design a blocked evaluation comparing dense Matérn kriging, a Matérn SPDE approximation, and a Gneiting space-time model. Specify trend treatment, deployment blocks, mesh or solver budgets, uncertainty scores, residual diagnostics, and failure criteria.
+    answer: >-
+      Reserve complete spatial regions and future time windows matching the intended deployment distance and horizon. Fit the same training-only trend basis in all models, using REML or a common nested protocol for covariance parameters. Give dense Matérn a declared factorization or iterative tolerance, refine the SPDE mesh and outer boundary under a fixed memory budget, and fit the Gneiting interaction parameters within valid bounds. Report RMSE, bias, log predictive density, interval coverage and width by region and horizon, residual directional variograms, peak memory, wall time, and numerical residuals. The SPDE fails if predictions or uncertainty remain sensitive to mesh or boundary refinement; the Gneiting model fails if signed-lag residuals expose advection or if interaction parameters sit at bounds; dense Matérn fails operationally if its solver budget cannot meet the declared tolerance. Random-split scores are supplementary, not decisive.

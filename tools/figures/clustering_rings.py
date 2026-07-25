@@ -1,38 +1,47 @@
 """Euclidean and Gaussian-kernel K-means partitions of concentric rings."""
-import matplotlib.pyplot as plt
+import jax
+import jax.numpy as jnp
 import numpy as np
 
 import _style as S
 
+import matplotlib.pyplot as plt
+
 S.apply_style()
+jax.config.update("jax_enable_x64", True)
 
-angles = np.linspace(0, 2 * np.pi, 72, endpoint=False)
-X = np.vstack((
-    np.column_stack((np.cos(angles), np.sin(angles))),
-    2.0 * np.column_stack((np.cos(angles + 0.03), np.sin(angles + 0.03))),
+angles = jnp.linspace(0, 2 * jnp.pi, 72, endpoint=False)
+X = jnp.vstack((
+    jnp.column_stack((jnp.cos(angles), jnp.sin(angles))),
+    2.0 * jnp.column_stack((jnp.cos(angles + 0.03), jnp.sin(angles + 0.03))),
 ))
-truth = np.repeat([0, 1], 72)
+truth = jnp.repeat(jnp.array((0, 1)), 72)
 
-euclid = (X[:, 0] > 0).astype(int)
-sqdist = np.sum((X[:, None, :] - X[None, :, :]) ** 2, axis=2)
-K = np.exp(-sqdist / (2 * 0.55**2))
+euclid = (X[:, 0] > 0).astype(jnp.int32)
+sqdist = jnp.sum((X[:, None, :] - X[None, :, :]) ** 2, axis=2)
+K = jnp.exp(-sqdist / (2 * 0.55**2))
 kernel_labels = truth.copy()
+
+def update(labels: jax.Array) -> jax.Array:
+    memberships = jax.nn.one_hot(labels, 2).T
+    counts = memberships.sum(axis=1)
+    cross = (K @ memberships.T) / counts
+    within = jnp.einsum("ci,ij,cj->c", memberships, K, memberships) / counts**2
+    distances = jnp.diag(K)[:, None] - 2.0 * cross + within[None, :]
+    return jnp.argmin(distances, axis=1)
+
 for _ in range(20):
-    distances = np.empty((len(X), 2))
-    for cluster in (0, 1):
-        idx = np.flatnonzero(kernel_labels == cluster)
-        distances[:, cluster] = (
-            np.diag(K)
-            - 2 * K[:, idx].mean(axis=1)
-            + K[np.ix_(idx, idx)].mean()
-        )
-    updated = np.argmin(distances, axis=1)
-    if np.array_equal(updated, kernel_labels):
+    updated = update(kernel_labels)
+    if bool(jnp.array_equal(updated, kernel_labels)):
         break
     kernel_labels = updated
 
-assert np.mean(kernel_labels == truth) == 1.0
-assert np.mean(euclid == truth) < 0.6
+assert bool(jnp.all(jnp.isfinite(K)))
+assert bool(jnp.allclose(K, K.T, atol=1e-12))
+assert float(jnp.linalg.eigvalsh(K).min()) > -1e-10
+assert float(jnp.mean(kernel_labels == truth)) == 1.0
+assert float(jnp.mean(euclid == truth)) < 0.6
+X, truth, euclid, kernel_labels = map(np.asarray, (X, truth, euclid, kernel_labels))
 
 fig, axes = plt.subplots(1, 3, figsize=(7.1, 2.6))
 titles = ["Geometry to partition", "Euclidean K-means", "Gaussian kernel K-means"]

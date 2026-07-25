@@ -8,100 +8,41 @@ prepared_for:
 exercises:
   - number: 1
     kind: warm-up
-    status: draft
-    prompt: Verify that the empirical NTK \(\Theta_\theta(x,x')=\nabla_\theta f(x)^\top\nabla_\theta
-      f(x')\) is a positive definite kernel for every fixed \(\theta\). Which property of the
-      definition can fail if two distinct inputs produce identical Jacobian rows, and what does that
-      mean for invertibility of \(\Theta(X,X)\)?
-    answer: For any coefficients $c_i$, $\sum_{ij}c_ic_j\Theta(x_i,x_j)=\|\sum_i c_i\nabla_\theta
-      f(x_i)\|^2\ge0$, so the empirical NTK is PSD (often called positive definite in the non-strict
-      convention). If two inputs have identical Jacobian rows, the feature map is not injective and
-      their Gram rows coincide. The training Gram is then singular, so the inverse in the ridgeless
-      formula must be replaced by a pseudoinverse or regularization unless the redundancy is
-      removed.
+    status: complete
+    prompt: Prove that the empirical NTK is PSD. Give a condition under which its training Gram is singular.
+    answer: For coefficients \(c_i\), \(\sum_{ij}c_ic_j\Theta(x_i,x_j)=\|\sum_i c_i\nabla_\theta f(x_i)\|^2\ge0\). It is singular exactly when the training Jacobian rows are linearly dependent; identical Jacobian rows are one sufficient condition.
   - number: 2
-    kind: computation
-    status: draft
-    prompt: For the linear model \(f(x;\theta)=\theta^\top x\), compute the empirical NTK and show it
-      equals the linear kernel \(x^\top x'\) for all \(\theta\). Conclude that a linear model is
-      exactly (not just approximately) in the lazy regime, and identify its \"learned function\"
-      from the Proposition on output dynamics.
-    answer: For $f(x;\theta)=\theta^\top x$, $\nabla_\theta f=x$, so $\Theta_\theta(x,x')=x^\top x'$
-      independently of $\theta$. The model equals its first-order Taylor expansion globally, hence
-      its tangent kernel never changes. Under gradient flow it converges, when the Gram is
-      invertible, to $f_0(x)+x^\top X^\top(XX^\top)^{-1}(y-X\theta_0)$, the minimum-change linear
-      interpolant; with a pseudoinverse this remains the corresponding projection for singular data.
+    kind: proof
+    status: complete
+    prompt: Derive the frozen-kernel gradient-flow solution in Proposition 43.1 when \(\Theta_0\succeq0\) is singular. State the limiting fitted values using the Moore–Penrose pseudoinverse.
+    answer: Diagonalize \(\Theta_0=Q\operatorname{diag}(\lambda_j)Q^\top\). Then \(r(t)=Q\operatorname{diag}(e^{-t\lambda_j})Q^\top r(0)\). Components in \(\operatorname{range}(\Theta_0)\) vanish and components in \(\ker\Theta_0\) persist, so \(u(\infty)=y+P_{\ker\Theta_0}(u(0)-y)=u(0)+\Theta_0\Theta_0^\dagger(y-u(0))\). At a point whose cross-kernel lies in the row space, \(f_\infty(x)=f_0(x)+\Theta_0(x,X)\Theta_0^\dagger(y-u(0))\).
   - number: 3
-    kind: computation
-    status: draft
-    prompt: "Reproduce the tiny-NTK worked example with the alternative test point \\(x_\\ast=-0.1\\).
-      Recompute the Jacobian row at \\(x_\\ast\\) (mind which ReLUs are active), the test column
-      \\(\\Theta(x_\\ast,X)\\), and the prediction \\(f_\\infty(x_\\ast)\\). Confirm it again
-      matches the linearized-network value. [Hint: at \\(x_\\ast=-0.1\\) the second unit
-      \\(2x+b_2\\) is inactive; its three Jacobian entries vanish.]{.ex-hint}"
-    answer: At $x_*=-0.1$, only unit 1 is active, so $J_*=(0.4,0,-0.1,0,1,0)$ and $f_0(x_*)=0.4$.
-      Dotting with the three training Jacobians gives $\Theta(x_*,X)=(1.14,1.38,1.56)$. Using the
-      worked-example coefficients $(1.4545,-2.9017,1.5492)$ gives
-      $f_\infty(x_*)=0.4+\Theta(x_*,X)\alpha=0.47051$. The minimum-norm linearized parameter update
-      gives the same value to machine precision.
+    kind: synthesis
+    status: complete
+    prompt: Compare the state variables and orders of limits in the NTK and mean-field regimes. Explain why neither theorem automatically describes a finite network trained for an increasing time horizon.
+    answer: NTK theory linearizes around the initial parameter and its limiting state is a function evolving under a fixed tangent operator. Mean-field theory uses the empirical neuron measure, which converges to a time-dependent measure transported by a nonlinear flow. Both normally fix the data and a finite horizon before taking width to infinity. A finite network has approximation error, and a horizon growing with width can accumulate kernel drift or particle-discretization error outside the theorem's quantifiers.
   - number: 4
     kind: computation
-    status: draft
-    prompt: "Prove that the softmax kernel \\(\\kappa(q,k)=\\exp(q^\\top k/\\tau)\\) is positive
-      definite on any bounded set of vectors. [Hint: use the Gaussian-rescaling Proposition together
-      with the fact that the Gaussian kernel is positive definite and that multiplying a kernel by
-      \\(c(q)c(k)\\) for a fixed function \\(c\\) preserves positive definiteness (a rank-one
-      rescaling).]{.ex-hint}"
-    answer: The identity $e^{q^\top k/\tau}=c(q)c(k)e^{-\|q-k\|^2/(2\tau)}$, with
-      $c(x)=e^{\|x\|^2/(2\tau)}$, expresses the softmax kernel as a Gaussian kernel multiplied by a
-      rank-one rescaling. For any sample its Gram is $DGD$ with $D_{ii}=c(q_i)>0$ and Gaussian Gram
-      $G\succeq0$, hence it is PSD. Boundedness is not needed for finite Gram positive definiteness;
-      it is useful only for uniform approximation or operator bounds.
+    status: complete
+    prompt: Reproduce the quantum shot-noise example. Verify the minimum eigenvalue and the Frobenius distance to the PSD projection.
+    answer: The symmetric matrix has eigenvalues approximately \(-0.223774,0.900000,2.323774\). For a symmetric matrix, projection onto the PSD cone clips negative eigenvalues. The squared Frobenius distance is the sum of squares of clipped eigenvalues, hence the distance is \(0.223774\).
   - number: 5
-    kind: challenge
-    status: draft
-    prompt: "The Performer estimator averages \\(D\\) independent copies of
-      \\(\\varphi_\\omega(q)\\varphi_\\omega(k)\\). Using the Gaussian moment generating function,
-      compute \\(\\mathrm{Var}_\\omega[\\varphi_\\omega(q)\\varphi_\\omega(k)]\\) in closed form and
-      show it grows with \\(\\|q+k\\|\\). Explain why softmax attention with large scores is the
-      hard case for random-feature approximation. [Hint: \\(\\mathbb
-      E[\\varphi_\\omega(q)^2\\varphi_\\omega(k)^2]=\\mathbb
-      E[e^{2\\omega^\\top(q+k)}]e^{-\\|q\\|^2-\\|k\\|^2}\\); apply the MGF with
-      \\(a=2(q+k)\\).]{.ex-hint}"
-    answer: Let $Z=\varphi_\omega(q)\varphi_\omega(k)$. Its mean is $e^{q^\top k}$. The Gaussian MGF
-      gives $E[Z^2]=e^{-\|q\|^2-\|k\|^2}e^{2\|q+k\|^2}$. Hence
-      $Var(Z)=e^{-\|q\|^2-\|k\|^2+2\|q+k\|^2}-e^{2q^\top k}$. The variance of the average is this
-      quantity divided by $D$. The first exponent grows quadratically with $\|q+k\|$, so aligned,
-      large-norm queries and keys—exactly those producing large softmax scores—create heavy-tailed
-      estimates and require many features.
+    kind: proof
+    status: complete
+    prompt: Prove that the fidelity kernel is PSD by embedding pure-state density matrices in the Hilbert–Schmidt space.
+    answer: Put \(\rho_x=|\phi(x)\rangle\langle\phi(x)|\). Then \(\langle\rho_x,\rho_{x'}\rangle_{\mathrm{HS}}=\operatorname{tr}(\rho_x\rho_{x'})=|\langle\phi(x)|\phi(x')\rangle|^2\). Therefore \(\sum_{ij}c_ic_jk(x_i,x_j)=\|\sum_i c_i\rho_{x_i}\|_{\mathrm{HS}}^2\ge0\).
   - number: 6
-    kind: challenge
-    status: draft
-    prompt: "On the graph Matern kernel \\(K_\\nu=(2\\nu/\\kappa^2\\,I+L)^{-\\nu}\\), diagonalize with
-      \\(L=\\sum_i\\lambda_i u_iu_i^\\top\\) and write \\(K_\\nu\\) in the eigenbasis. Take
-      \\(\\nu\\to\\infty\\) with \\(\\kappa\\) fixed and show each eigenvalue tends to
-      \\(e^{-\\kappa^2\\lambda_i/2}\\), recovering the diffusion kernel. [Hint:
-      \\((1+\\tfrac{\\kappa^2\\lambda_i}{2\\nu})^{-\\nu}\\to e^{-\\kappa^2\\lambda_i/2}\\); handle
-      the normalizing constant so that the \\(\\lambda_i=0\\) mode is fixed.]{.ex-hint}"
-    answer: With $L=\sum_i\lambda_i u_iu_i^\top$,
-      $K_\nu=\sum_i(2\nu/\kappa^2+\lambda_i)^{-\nu}u_iu_i^\top$. Normalize by multiplying by
-      $(2\nu/\kappa^2)^\nu$ so the zero-frequency eigenvalue is one. The normalized eigenvalue is
-      $(1+\kappa^2\lambda_i/(2\nu))^{-\nu}\to e^{-\kappa^2\lambda_i/2}$. Therefore the normalized
-      matrices converge spectrally to $\sum_i e^{-\kappa^2\lambda_i/2}u_iu_i^\top=e^{-\kappa^2L/2}$.
-      Without this normalization every mode, including the constant one, carries a divergent or
-      vanishing common scale.
+    kind: synthesis
+    status: complete
+    prompt: A quantum-kernel paper reports higher accuracy than an RBF SVM but omits shot counts, circuit-evaluation cost, kernel-selection folds, and pre-repair eigenvalues. Classify which claims remain supported.
+    answer: The reported accuracy difference is a descriptive result for the released matrix if reproducible, and the ideal circuit kernel remains PSD by construction. Claims of computational advantage, fair model comparison, finite-shot reliability, and validity of any PSD repair are unsupported. Generalization is also uncertain because kernel selection may have reused validation or test information.
   - number: 7
     kind: synthesis
-    status: draft
-    prompt: Argue, using the single-index sample barrier, why increasing the width of a network in the
-      NTK regime does not help it learn \(f^\star(x)=g(\langle w^\star,x\rangle)\) faster, whereas
-      the mean-field parametrization does. Which quantity in the two limits differs, and what does
-      the difference say about the role of the read-out layer versus the hidden layer?
-    answer: "In the NTK limit, width only concentrates a fixed random feature geometry; the tangent
-      features remain at initialization, so discovering the unknown direction $w^*$ still faces the
-      fixed-kernel single-index sample barrier. In the mean-field limit, the empirical distribution
-      of hidden weights moves by a Wasserstein gradient flow, allowing neurons to align with $w^*$
-      and reduce the effective dimension. The differing quantity is the hidden feature distribution
-      (equivalently the time-varying tangent representation): frozen in NTK, evolving in mean field.
-      The readout can recombine fixed features, but only hidden-layer motion can learn the direction
-      on which $g(\\langle w^*,x\\rangle)$ depends."
+    status: complete
+    prompt: Design a nested frozen-feature evaluation protocol when choosing among four encoder layers, three pooling rules, and five ridge parameters.
+    answer: Split raw entities into outer training and test sets before embedding and deduplicate across the boundary. Inside each outer-training fold, evaluate the \(4\cdot3\cdot5=60\) choices using inner validation folds, fitting centering and every transform within each inner training fold. Select one pipeline, refit it on all outer-training data, and evaluate once on the untouched outer test set. Repeat outer folds if uncertainty is needed, and record encoder checksum, preprocessing, seeds, and overlap audits.
+  - number: 8
+    kind: challenge
+    status: complete
+    prompt: A team selects a projection using all labels and then freezes it before fitting ridge regression. Prove that the resulting Gram is PSD, then explain why its held-out risk estimate is still invalid.
+    answer: For the realized label-dependent map \(T_yE(x)\), the Gram is \(ZZ^\top\succeq0\), where row \(i\) of \(Z\) is \(T_yE(x_i)\). PSD is therefore intact. The risk estimate is invalid because held-out labels affected \(T_y\), so the predictor-selection procedure was not independent of the test outcomes. Freezing after leakage does not undo the dependence.

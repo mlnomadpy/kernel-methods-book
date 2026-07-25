@@ -1,0 +1,201 @@
+chapter: ch-lower
+slug: limits-and-lower-bounds-for-kernel-learning
+title: Limits and Lower Bounds for Kernel Learning
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - tsybakov2009
+  - caponnetto2007
+  - dicker2015
+  - bach2017quadrature
+  - avron2017rff
+  - yang2017sketch
+  - nesterov2004
+sections:
+  - id: lower-upper-incomplete
+    title: What an upper bound leaves unanswered
+    contribution: original synthesis
+    permission: original prose and definitions
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+  - id: lower-le-cam
+    title: Two-point testing and Le Cam's method
+    contribution: original proof from standard testing identities
+    permission: original prose and proof
+    sources:
+      - tsybakov2009
+    locators:
+      - source: tsybakov2009
+        manuscript_locator: ch-lower.md#lower-le-cam
+        source_locator: Sections 2.2 and 2.4
+        status: author-checked-against-cited-monograph
+    verified_by: null
+    verified_on: null
+  - id: lower-gaussian-reduction
+    title: A Gaussian regression reduction
+    contribution: original derivation
+    permission: original prose and algebra
+    sources:
+      - tsybakov2009
+    locators:
+      - source: tsybakov2009
+        manuscript_locator: ch-lower.md#lower-gaussian-reduction
+        source_locator: Chapter 2 Gaussian-experiment examples
+        status: author-checked-at-chapter-level
+    verified_by: null
+    verified_on: null
+  - id: lower-fano-assouad
+    title: From two points to many
+    contribution: original reconstruction of standard reductions
+    permission: original prose, proof, and proof sketch
+    sources:
+      - tsybakov2009
+    locators:
+      - source: tsybakov2009
+        manuscript_locator: ch-lower.md#lower-fano-assouad
+        source_locator: Sections 2.5 and 2.7
+        status: author-checked-against-cited-monograph
+    verified_by: null
+    verified_on: null
+  - id: lower-krr-minimax
+    title: Minimax lower bounds for source and capacity classes
+    contribution: exponent derivation reconstructed with sourced theorem scope
+    permission: original prose and derivation; theorem attributed to sources
+    sources:
+      - caponnetto2007
+      - dicker2015
+    locators:
+      - source: caponnetto2007
+        manuscript_locator: ch-lower.md#lower-krr-minimax
+        source_locator: Theorems 1 and 2 and the minimax discussion
+        status: exact-constants-and-endpoints-pending-independent-verification
+      - source: dicker2015
+        manuscript_locator: ch-lower.md#lower-krr-minimax
+        source_locator: minimax and qualification results
+        status: exact-theorem-number-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: lower-krr-match
+    title: What exactly is matched
+    contribution: original synthesis
+    permission: original prose
+    sources:
+      - caponnetto2007
+      - dicker2015
+    locators: []
+    verified_by: null
+    verified_on: null
+  - id: lower-finite-rank-example
+    title: A finite-rank Gaussian example
+    contribution: original hand-checkable example
+    permission: original prose and calculation
+    sources: []
+    locators: []
+    verified_by: checks/ch-lower-example.py
+    verified_on: null
+  - id: lower-randomized
+    title: Random features, Nyström methods, and sketches
+    contribution: original rank proof and sourced comparison
+    permission: original prose and proof; specialized bounds attributed to sources
+    sources:
+      - bach2017quadrature
+      - avron2017rff
+      - yang2017sketch
+    locators:
+      - source: bach2017quadrature
+        manuscript_locator: ch-lower.md#lower-randomized
+        source_locator: Propositions 2--3
+        status: author-checked-against-primary-source
+      - source: avron2017rff
+        manuscript_locator: ch-lower.md#lower-randomized
+        source_locator: Theorem 8
+        status: author-checked-against-primary-source
+      - source: yang2017sketch
+        manuscript_locator: ch-lower.md#lower-randomized
+        source_locator: Theorem 2
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: lower-frobenius-witness
+    title: Failure witness
+    contribution: original counterexample
+    permission: original prose and calculation
+    sources: []
+    locators: []
+    verified_by: checks/ch-lower-example.py
+    verified_on: null
+  - id: lower-optimization
+    title: Optimization-oracle limits for kernel solves
+    contribution: original kernel interpretation of sourced oracle theorem
+    permission: original prose; theorem attributed to source
+    sources:
+      - nesterov2004
+    locators:
+      - source: nesterov2004
+        manuscript_locator: ch-lower.md#lower-optimization
+        source_locator: Sections 2.1--2.2
+        status: author-checked-at-section-level
+    verified_by: null
+    verified_on: null
+  - id: lower-opt-currencies
+    title: Residual, solution error, and statistical risk
+    contribution: original synthesis
+    permission: original prose and identity
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+  - id: lower-adaptation
+    title: Adaptation and no-free-lunch limits
+    contribution: original synthesis and proposition
+    permission: original prose and proof
+    sources:
+      - tsybakov2009
+    locators:
+      - source: tsybakov2009
+        manuscript_locator: ch-lower.md#lower-adaptation
+        source_locator: Chapter 2
+        status: author-checked-at-chapter-level
+    verified_by: null
+    verified_on: null
+  - id: lower-failures
+    title: Failure witnesses and diagnostic protocol
+    contribution: original synthesis
+    permission: original prose and diagnostics
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+  - id: lower-practice
+    title: Practice
+    contribution: original synthesis
+    permission: original prose
+    sources: []
+    locators: []
+    verified_by: null
+    verified_on: null
+  - id: lower-summary
+    title: Summary and further reading
+    contribution: original synthesis
+    permission: original prose
+    sources:
+      - tsybakov2009
+      - caponnetto2007
+      - dicker2015
+      - bach2017quadrature
+      - avron2017rff
+      - yang2017sketch
+      - nesterov2004
+    locators: []
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: original exercises
+    permission: original prose
+    sources: []
+    locators: []
+    verified_by: solutions/ch-lower.yml
+    verified_on: null

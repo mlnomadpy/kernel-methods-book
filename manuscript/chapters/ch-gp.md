@@ -2,8 +2,8 @@
 id: ch-gp
 slug: gaussian-processes-and-rvm
 title: Gaussian Processes and the RVM
-part: XI · The Bayesian View
-order: 42
+part: IX · Gaussian Processes and Sequential Decisions
+order: 49
 tier: core
 prerequisites:
   - kernels-and-deep-learning
@@ -355,6 +355,10 @@ The price of this elegance is that the marginal likelihood over the \(s_i\) is h
 $$\bar y(x_*)=k_*^\top\mu,\qquad v(x_*)=\sigma^2+k_*^\top\Sigma k_*,$$
 
 mirror the Gaussian process formulas of the regression section, now built on only the relevance vectors.
+
+<figure class="viz" data-figure="gp-rvm-sparsity-comparison" data-alt="The left panel overlays a dense Gaussian-process fit and a close sparse kernel fit, marking seven retained relevance sites among forty-one observations. The right panel compares forty-one active GP centres with seven sparse centres.">
+<figcaption>Sparsity concerns the predictive representation, not merely visual smoothness. Here a seven-centre expansion tracks the dense posterior mean closely, but that economy comes from a different prior and optimization problem, not from the ordinary GP posterior spontaneously becoming sparse.</figcaption>
+</figure>
 
 ## Sparse and variational Gaussian processes {#sparse-variational-gp}
 

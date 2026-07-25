@@ -1,0 +1,254 @@
+chapter: ch-structured
+slug: structured-prediction-with-kernels
+title: Structured Prediction with Kernels
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - taskar2003m3n
+  - tsochantaridis2005structured
+  - joachims2009struct
+  - finley2008approx
+  - osokin2017structured
+  - cortes1995
+  - crammer2001
+  - joachims1999
+  - scholkopf2002
+  - shawe2004
+  - steinwart2008
+  - bartlett2006
+  - zhang2004
+  - boyd2004
+  - micchelli2005vv
+sections:
+  - id: structured-setting
+    title: The prediction object and its two geometries
+    contribution: original-synthesis
+    sources: [taskar2003m3n, tsochantaridis2005structured, scholkopf2002, shawe2004]
+    locators:
+      - source: taskar2003m3n
+        manuscript_locator: ch-structured.md#structured-setting
+        source_locator: Sections 2-3
+        status: author-checked-primary-source
+      - source: tsochantaridis2005structured
+        manuscript_locator: ch-structured.md#structured-setting
+        source_locator: Sections 2-3
+        status: author-checked-primary-source
+      - source: scholkopf2002
+        manuscript_locator: ch-structured.md#structured-setting
+        source_locator: Chapters 2 and 4, feature maps and kernel machines
+        status: framework-source
+      - source: shawe2004
+        manuscript_locator: ch-structured.md#structured-setting
+        source_locator: Chapters 2 and 7, kernel feature spaces and large-margin learning
+        status: framework-source
+    verified_by: Codex derivation audit
+    verified_on: 2026-07-24
+    permission: original exposition with general framework citations
+  - id: structured-operator-view
+    title: The operator-valued view
+    contribution: author-derived-equivalence
+    sources: [micchelli2005vv]
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-structured.md#structured-operator-view
+        source_locator: Sections 2-3, operator-valued kernels and vector-valued RKHS construction
+        status: checked-against-existing-book-source-map
+    verified_by: Codex algebraic proof
+    verified_on: 2026-07-24
+    permission: original specialization with attribution
+  - id: structured-loss-decoding
+    title: Loss, decoding, and loss-augmented decoding
+    contribution: original-synthesis
+    sources: [crammer2001]
+    locators:
+      - source: crammer2001
+        manuscript_locator: ch-structured.md#structured-loss-decoding
+        source_locator: Sections 2-3, multiclass score decoding and margin losses
+        status: conceptual-predecessor-only; structured loss augmentation citation pending
+    verified_by: Codex definition audit
+    verified_on: 2026-07-24
+    permission: original prose and definitions; primary structured-prediction citation pending
+  - id: structured-hinge
+    title: The structured hinge
+    contribution: author-derived
+    sources: [tsochantaridis2005structured, cortes1995, crammer2001]
+    locators:
+      - source: tsochantaridis2005structured
+        manuscript_locator: ch-structured.md#structured-hinge
+        source_locator: Sections 2-3
+        status: author-checked-primary-source
+      - source: cortes1995
+        manuscript_locator: ch-structured.md#structured-hinge
+        source_locator: Sections 2-3, maximum-margin classification
+        status: conceptual-predecessor-only
+      - source: crammer2001
+        manuscript_locator: ch-structured.md#structured-hinge
+        source_locator: Sections 2-3, multiclass margin formulation
+        status: conceptual-predecessor-only
+    verified_by: Codex convex-analysis proof
+    verified_on: 2026-07-24
+    permission: original derivation; canonical structured-SVM citation pending
+  - id: structured-representer
+    title: Representer reduction and finite coefficients
+    contribution: complete-original-proof
+    sources: [scholkopf2002, micchelli2005vv]
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-structured.md#structured-representer
+        source_locator: Chapter 4, regularized kernel methods and representer arguments
+        status: general-framework-source
+      - source: micchelli2005vv
+        manuscript_locator: ch-structured.md#structured-representer
+        source_locator: Section 4, regularization and vector-valued representer results
+        status: general-framework-source
+    verified_by: Codex line-by-line proof audit
+    verified_on: 2026-07-24
+    permission: original proof
+  - id: structured-margin-program
+    title: The margin program and its restricted form
+    contribution: author-derived
+    sources: [boyd2004]
+    locators:
+      - source: boyd2004
+        manuscript_locator: ch-structured.md#structured-margin-program
+        source_locator: Sections 4.2 and 5, convex programs and duality
+        status: general-convex-analysis-source
+    verified_by: Codex algebraic equivalence audit
+    verified_on: 2026-07-24
+    permission: original derivation; canonical structured-SVM citation pending
+  - id: structured-cutting-plane
+    title: Exact cutting planes, correctness and termination
+    contribution: complete-original-proof
+    sources: [joachims2009struct, boyd2004, joachims1999]
+    locators:
+      - source: joachims2009struct
+        manuscript_locator: ch-structured.md#structured-cutting-plane
+        source_locator: Sections 3-4
+        status: author-checked-primary-source
+      - source: boyd2004
+        manuscript_locator: ch-structured.md#structured-cutting-plane
+        source_locator: Sections 4-5, constrained convex optimization
+        status: general-framework-source
+      - source: joachims1999
+        manuscript_locator: ch-structured.md#structured-cutting-plane
+        source_locator: decomposition methods for large-scale SVM optimization
+        status: conceptual-predecessor-only
+    verified_by: Codex proof and finite-state audit
+    verified_on: 2026-07-24
+    permission: original finite-termination proof; primary structured cutting-plane citation pending
+  - id: structured-approximate-inference
+    title: Approximate inference changes the contract
+    contribution: complete-original-error-propagation-proof
+    sources: [finley2008approx, boyd2004]
+    locators:
+      - source: finley2008approx
+        manuscript_locator: ch-structured.md#structured-approximate-inference
+        source_locator: Sections 3-4
+        status: author-checked-primary-source
+      - source: boyd2004
+        manuscript_locator: ch-structured.md#structured-approximate-inference
+        source_locator: Sections 5.5 and 11, residuals and approximate optimization
+        status: general-framework-source
+    verified_by: Codex inequality audit
+    verified_on: 2026-07-24
+    permission: original derivation
+  - id: structured-calibration
+    title: Calibration and Fisher-consistency boundaries
+    contribution: original-synthesis-with-complete-special-case-proof
+    sources: [osokin2017structured, bartlett2006, zhang2004]
+    locators:
+      - source: osokin2017structured
+        manuscript_locator: ch-structured.md#structured-calibration
+        source_locator: Sections 3-4
+        status: author-checked-primary-source
+      - source: bartlett2006
+        manuscript_locator: ch-structured.md#structured-calibration
+        source_locator: Sections 2-3, classification calibration and excess-risk transforms
+        status: boundary-source-not-structured-generalization
+      - source: zhang2004
+        manuscript_locator: ch-structured.md#structured-calibration
+        source_locator: Sections 2-3, convex-risk consistency
+        status: boundary-source-not-structured-generalization
+    verified_by: Codex scope and proof audit
+    verified_on: 2026-07-24
+    permission: original boundary analysis; structured-surrogate primary citations pending
+  - id: structured-failure-witness
+    title: A failure witness, marginally best and jointly impossible
+    contribution: original-counterexample
+    sources: [bartlett2006]
+    locators:
+      - source: bartlett2006
+        manuscript_locator: ch-structured.md#structured-failure-witness
+        source_locator: Sections 2-3, dependence of calibration on loss and decoding
+        status: boundary-context-only; counterexample is original
+    verified_by: checks/ch-structured-ex2.py
+    verified_on: 2026-07-24
+    permission: original construction
+  - id: structured-sequence-example
+    title: Worked sequence-labeling example
+    contribution: original-executable-example
+    sources: [shawe2004]
+    locators:
+      - source: shawe2004
+        manuscript_locator: ch-structured.md#structured-sequence-example
+        source_locator: Chapters 9 and 11, sequence representations and dynamic-programming kernel computations
+        status: general-sequence-kernel-context-only; example is original
+    verified_by: checks/ch-structured-ex1.py
+    verified_on: 2026-07-24
+    permission: original construction
+  - id: structured-decoding-gap
+    title: The computational-statistical decoding gap
+    contribution: original-synthesis
+    sources: [steinwart2008]
+    locators:
+      - source: steinwart2008
+        manuscript_locator: ch-structured.md#structured-decoding-gap
+        source_locator: Chapters 3, 5, and 7, regularized-risk and consistency distinctions
+        status: general-statistical-framework-source
+    verified_by: Codex claim-scope audit
+    verified_on: 2026-07-24
+    permission: original decomposition and diagnostics
+  - id: structured-matching
+    title: Matching as a second structured domain
+    contribution: original-synthesis
+    sources: [boyd2004]
+    locators:
+      - source: boyd2004
+        manuscript_locator: ch-structured.md#structured-matching
+        source_locator: Chapters 4-5, convex programs and relaxations
+        status: general-optimization-source
+    verified_by: Codex scope audit
+    verified_on: 2026-07-24
+    permission: original exposition; matching-specific primary citation pending
+  - id: structured-practice
+    title: Practical workflow and common mistakes
+    contribution: original-synthesis
+    sources: [steinwart2008, boyd2004]
+    locators:
+      - source: steinwart2008
+        manuscript_locator: ch-structured.md#structured-practice
+        source_locator: Chapters 5-7, optimization, risk, and consistency distinctions
+        status: general-SVM-framework-source
+      - source: boyd2004
+        manuscript_locator: ch-structured.md#structured-practice
+        source_locator: Chapters 5 and 11, residual and stopping diagnostics
+        status: general-optimization-framework-source
+    verified_by: Codex editorial audit
+    verified_on: 2026-07-24
+    permission: original prose
+  - id: structured-summary
+    title: Summary and further reading
+    contribution: original-synthesis
+    sources: [scholkopf2002, shawe2004, steinwart2008, bartlett2006, zhang2004, boyd2004, micchelli2005vv]
+    locators:
+      - source: scholkopf2002
+        manuscript_locator: ch-structured.md#structured-summary
+        source_locator: Chapters 2-4
+        status: general-kernel-source
+      - source: steinwart2008
+        manuscript_locator: ch-structured.md#structured-summary
+        source_locator: Chapters 3, 5, and 7
+        status: general-SVM-source
+    verified_by: Codex synthesis audit
+    verified_on: 2026-07-24
+    permission: original summary

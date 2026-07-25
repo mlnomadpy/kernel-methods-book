@@ -61,7 +61,9 @@ def gaussian(a: jnp.ndarray, b: jnp.ndarray, ell: float) -> jnp.ndarray:
 def fit(xs, ys):
     """Kernel ridge solve exactly as the widget forms it (G = (K+lambda I)^-1)."""
     K = gaussian(xs, xs, ELL)
-    G = jnp.linalg.inv(K + RIDGE * jnp.eye(N))      # widget: cholSolve on I columns
+    # Solve against the identity because the full inverse action is required by
+    # the exact leave-one-out diagonal; never form it through ``inv``.
+    G = jnp.linalg.solve(K + RIDGE * jnp.eye(N), jnp.eye(N))
     alpha = G @ ys                                  # representer weights
     yhat = K @ alpha                                # smoothed fit  = H y
     H = K @ G                                        # hat matrix

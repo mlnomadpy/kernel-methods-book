@@ -10,223 +10,265 @@ references:
   - song2013cme
 sections:
   - id: dynamics-setting
-    title: Sequential data and four sources of error
-    contribution: adapted-and-expanded
-    sources: &a1
-      - rowley2009koopman
+    title: Sequential objects and error decomposition
+    contribution: original-synthesis
+    sources:
       - eleftheriadis2017gpssm
       - farahmand2016policy
-      - song2013cme
     locators:
-      - source: rowley2009koopman
-        manuscript_locator: ch-dynamics.md#dynamics-setting
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: eleftheriadis2017gpssm
         manuscript_locator: ch-dynamics.md#dynamics-setting
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Section 2, equation (1), pp. 2-3"
+        status: source-locator-checked-against-primary-paper
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#dynamics-setting
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-dynamics.md#dynamics-setting
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2.1-2.3, pp. 3-7"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: gp-dynamics
-    title: Gaussian-process transition models
-    contribution: adapted-and-expanded
+  - id: gpssm-paper-module
+    title: "Paper module: structured GP state-space identification"
+    contribution: primary-paper-reconstruction
     sources:
       - eleftheriadis2017gpssm
     locators:
       - source: eleftheriadis2017gpssm
-        manuscript_locator: ch-dynamics.md#gp-dynamics
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-dynamics.md#gpssm-paper-module
+        source_locator: "Sections 2-3.3, equations (1), (7)-(15), pp. 2-5"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: koopman-transfer
-    title: Koopman and transfer operators
-    contribution: adapted-and-expanded
+  - id: koopman-paper-module
+    title: "Paper module: Koopman modes and DMD"
+    contribution: primary-paper-reconstruction
     sources:
       - rowley2009koopman
-      - song2013cme
     locators:
       - source: rowley2009koopman
-        manuscript_locator: ch-dynamics.md#koopman-transfer
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-dynamics.md#koopman-transfer
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-dynamics.md#koopman-paper-module
+        source_locator: "Sections 2-3.2, equations (2.1)-(3.12), pp. 2-7"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-edmd
-    title: Kernel EDMD
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: Kernel EDMD as regularized Galerkin regression
+    contribution: original-kernelized-derivation
+    sources:
+      - rowley2009koopman
+      - song2013cme
     locators:
       - source: rowley2009koopman
         manuscript_locator: ch-dynamics.md#kernel-edmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: eleftheriadis2017gpssm
-        manuscript_locator: ch-dynamics.md#kernel-edmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: farahmand2016policy
-        manuscript_locator: ch-dynamics.md#kernel-edmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Section 3, snapshot Arnoldi and Ritz residuals, pp. 5-7"
+        status: source-locator-checked-against-primary-paper
       - source: song2013cme
         manuscript_locator: ch-dynamics.md#kernel-edmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections IV-V, regularized empirical conditional operators"
+        status: bibliographic-locator-checked
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: conditional-transfer
+    title: Stochastic transfer through conditional embeddings
+    contribution: adapted-operator-derivation
+    sources:
+      - song2013cme
+    locators:
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#conditional-transfer
+        source_locator: "Sections III-V, conditional covariance operators and regularized embeddings"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-bellman
-    title: Value functions and Bellman operators
-    contribution: adapted-and-expanded
+    title: Bellman equations and the double-sampling problem
+    contribution: original-proof-and-derivation
     sources:
       - farahmand2016policy
     locators:
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#kernel-bellman
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2.1-2.3 and 4, Definitions 4-6, pp. 4-17"
+        status: source-locator-checked-against-primary-paper
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: policy-iteration-paper-module
+    title: "Paper module: regularized nonparametric policy iteration"
+    contribution: primary-paper-reconstruction
+    sources:
+      - farahmand2016policy
+    locators:
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#policy-iteration-paper-module
+        source_locator: "Sections 4.1-5.3; Assumptions A1-A7; Proposition 9; Theorems 11, 13, and 14, pp. 13-28"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: off-policy
-    title: Off-policy evaluation and coverage
+    title: Off-policy coverage and concentrability
     contribution: adapted-and-expanded
-    sources: *a1
+    sources:
+      - farahmand2016policy
     locators:
-      - source: rowley2009koopman
-        manuscript_locator: ch-dynamics.md#off-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: eleftheriadis2017gpssm
-        manuscript_locator: ch-dynamics.md#off-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#off-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-dynamics.md#off-policy
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Section 5.2, Definition 12 and Theorem 13, pp. 24-26"
+        status: source-locator-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-control
-    title: Control with learned kernel models
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: Rollout error and learned control
+    contribution: original-derivation-and-synthesis
+    sources:
+      - eleftheriadis2017gpssm
+      - farahmand2016policy
     locators:
-      - source: rowley2009koopman
-        manuscript_locator: ch-dynamics.md#kernel-control
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: eleftheriadis2017gpssm
         manuscript_locator: ch-dynamics.md#kernel-control
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 3-4, posterior trajectory sampling and experiments, pp. 4-9"
+        status: conceptual-source-checked
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#kernel-control
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 5.2-5.3, error propagation and performance loss, pp. 24-28"
+        status: conceptual-source-checked
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dynamics-worked-example
+    title: A worked two-state failure witness
+    contribution: original-worked-example
+    sources:
+      - farahmand2016policy
+    locators:
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#dynamics-worked-example
+        source_locator: "Sections 2.3 and 5.2, sampling distribution and concentrability"
+        status: conceptual-source-checked
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: dynamics-pipeline
+    title: An auditable sequential workflow
+    contribution: original-synthesis
+    sources:
+      - rowley2009koopman
+      - eleftheriadis2017gpssm
+      - farahmand2016policy
+      - song2013cme
+    locators:
+      - source: rowley2009koopman
+        manuscript_locator: ch-dynamics.md#dynamics-pipeline
+        source_locator: "Sections 3-4, snapshot algorithm and empirical flow analysis"
+        status: conceptual-source-checked
+      - source: eleftheriadis2017gpssm
+        manuscript_locator: ch-dynamics.md#dynamics-pipeline
+        source_locator: "Sections 3-4, variational computation and evaluation"
+        status: conceptual-source-checked
+      - source: farahmand2016policy
+        manuscript_locator: ch-dynamics.md#dynamics-pipeline
+        source_locator: "Sections 4-5, regularized algorithms and guarantees"
+        status: conceptual-source-checked
       - source: song2013cme
-        manuscript_locator: ch-dynamics.md#kernel-control
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-dynamics.md#dynamics-pipeline
+        source_locator: "Sections IV-V, empirical conditional operators"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: dynamics-practice
     title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-synthesis
+    sources:
+      - rowley2009koopman
+      - eleftheriadis2017gpssm
+      - farahmand2016policy
+      - song2013cme
     locators:
       - source: rowley2009koopman
         manuscript_locator: ch-dynamics.md#dynamics-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3"
+        status: conceptual-source-checked
       - source: eleftheriadis2017gpssm
         manuscript_locator: ch-dynamics.md#dynamics-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3"
+        status: conceptual-source-checked
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#dynamics-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 4-5"
+        status: conceptual-source-checked
       - source: song2013cme
         manuscript_locator: ch-dynamics.md#dynamics-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections III-V"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: dynamics-summary
     title: Summary and further reading
-    contribution: adapted-and-expanded
+    contribution: original-synthesis
     sources:
       - rowley2009koopman
       - eleftheriadis2017gpssm
       - farahmand2016policy
+      - song2013cme
     locators:
       - source: rowley2009koopman
         manuscript_locator: ch-dynamics.md#dynamics-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-5"
+        status: conceptual-source-checked
       - source: eleftheriadis2017gpssm
         manuscript_locator: ch-dynamics.md#dynamics-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-4"
+        status: conceptual-source-checked
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#dynamics-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 4-5"
+        status: conceptual-source-checked
+      - source: song2013cme
+        manuscript_locator: ch-dynamics.md#dynamics-summary
+        source_locator: "Sections III-V"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-exercises
+    sources:
+      - rowley2009koopman
+      - eleftheriadis2017gpssm
+      - farahmand2016policy
+      - song2013cme
     locators:
       - source: rowley2009koopman
         manuscript_locator: ch-dynamics.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3"
+        status: conceptual-source-checked
       - source: eleftheriadis2017gpssm
         manuscript_locator: ch-dynamics.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3"
+        status: conceptual-source-checked
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 4-5"
+        status: conceptual-source-checked
       - source: song2013cme
         manuscript_locator: ch-dynamics.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections III-V"
+        status: bibliographic-locator-checked
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_method: direct primary-source locator mapping for paper modules and claim-level conceptual mapping elsewhere
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24

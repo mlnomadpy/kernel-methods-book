@@ -2,8 +2,8 @@
 id: ch-invariance
 slug: invariances-and-pre-images
 title: Invariances and the Pre-Image Problem
-part: VII · Designing Kernels for Data
-order: 22
+part: VI · Designing Kernels
+order: 29
 tier: advanced
 prerequisites:
   - kernel-families

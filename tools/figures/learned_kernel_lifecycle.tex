@@ -1,0 +1,19 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{tools/figures/tikz-style.tex}
+\begin{document}
+\begin{tikzpicture}[node distance=8mm]
+  \node[book/node] (raw) {\textbf{Raw object}\\[-1pt]\scriptsize structure + nuisance};
+  \node[book/primary,right=of raw] (prior) {\textbf{Prior geometry}\\[-1pt]\scriptsize architecture + invariance};
+  \node[book/decision,right=of prior] (learn) {\textbf{Feature learning}\\[-1pt]\scriptsize labels move geometry};
+  \node[book/verified,right=of learn] (kernel) {\textbf{Trained kernel}\\[-1pt]\scriptsize learned similarity};
+  \node[book/decision,right=of kernel] (audit) {\textbf{Shift audit}\\[-1pt]\scriptsize calibration + failure};
+  \draw[book/quietarrow] (raw.east)--(prior.west);
+  \draw[book/quietarrow] (prior.east)--(learn.west);
+  \draw[book/arrow,draw=BookRed] (learn.east)--(kernel.west);
+  \draw[book/quietarrow] (kernel.east)--(audit.west);
+  \draw[decorate,decoration={brace,amplitude=4pt,mirror},BookRed]
+    (learn.south west) -- (learn.south east)
+    node[midway,below=6pt,book/note,text=BookRed]
+      {little movement $\Rightarrow$ NTK regime};
+\end{tikzpicture}
+\end{document}

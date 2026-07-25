@@ -2,8 +2,8 @@
 id: ch-cluster
 slug: kernel-clustering
 title: Kernel Clustering and Spectral Methods
-part: V · Structure and Subspaces
-order: 14
+part: V · Spectral Geometry and Unlabeled Structure
+order: 23
 tier: practitioner
 prerequisites:
   - kernel-pca
@@ -194,6 +194,10 @@ $$
 The objective is now transparent: reward partitions whose clusters have high total internal similarity, normalized by cluster size. This is a hard combinatorial optimization problem, since it ranges over all assignments of \(n\) points to \(k\) clusters. There are two standard ways to attack it. The first is the greedy alternating descent we just derived, kernel K-means itself. The second is to relax the combinatorial constraint into a continuous one that can be solved exactly, which leads to spectral clustering. That these are not two unrelated algorithms but two attacks on one objective, and that this same trace maximization underlies the classical graph-cut criteria as well, was made explicit by Dhillon, Guan, and Kulis (2004).
 
 ## Spectral clustering {#spectral-clustering}
+
+Spectral clustering depends on a scale at which within-cluster paths are strong and between-cluster connections remain weak. The useful range can be read from the low Laplacian spectrum: a partition becomes stable when the target eigenspace separates from the next mode.
+
+<figure class="viz" data-figure="spectral-clustering-eigengap" data-alt="Across graph bandwidths, the Laplacian eigengap and partition accuracy rise at an intermediate scale and deteriorate when the graph is too local or too smooth."><figcaption>Bandwidth chooses the graph before the eigenvectors choose the partition. At an intermediate scale the third and second normalized-Laplacian eigenvalues separate and the Fiedler sign recovers the rings; too little connectivity destabilizes the eigenspace, while excessive bandwidth washes out the cut.</figcaption></figure>
 
 Rather than descend greedily and risk poor local minima, spectral clustering relaxes the assignment problem into an eigenvalue problem, solves that exactly, and then rounds the continuous solution back to a partition. The starting point is the maximization we just obtained,
 

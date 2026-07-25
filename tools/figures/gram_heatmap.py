@@ -34,8 +34,8 @@ def main() -> str:
     K = np.asarray(K)
     K = K / np.max(np.abs(K))
 
-    fig = plt.figure(figsize=(4.2, 4.4))
-    gs = GridSpec(2, 1, height_ratios=[1, 9], hspace=0.12, figure=fig)
+    fig = plt.figure(figsize=(4.05, 4.15))
+    gs = GridSpec(2, 1, height_ratios=[0.75, 9], hspace=0.08, figure=fig)
 
     ax_line = fig.add_subplot(gs[0])
     ax_line.axhline(0.0, color=S.RULE, lw=0.8, zorder=1)
@@ -46,13 +46,16 @@ def main() -> str:
     ax_line.axis("off")
 
     ax = fig.add_subplot(gs[1])
-    ax.imshow(K, cmap=S.HEAT, vmin=0, vmax=1, interpolation="nearest")
-    ax.set_xticks([]); ax.set_yticks([])
+    S.matrix_image(ax, K)
+    ticks = np.arange(12)
+    tick_labels = [str(v + 1) if v in (0, 3, 7, 11) else "" for v in ticks]
+    ax.set_xticks(ticks, tick_labels)
+    ax.set_yticks(ticks, tick_labels)
+    ax.set_xlabel(r"column $j$")
+    ax.set_ylabel(r"row $i$")
     for spine in ax.spines.values():
-        spine.set_color(S.RULE)
-    ax.set_title(r"$K_{ij}=k(x_i,x_j)$, Gaussian kernel, bandwidth $1$",
-                 color=S.INK, pad=6)
-
+        spine.set_color(S.INK)
+        spine.set_linewidth(0.5)
     return S.save(fig, "gram-heatmap")
 
 

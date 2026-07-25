@@ -1,22 +1,35 @@
 """online-budget: unbudgeted support grows; maintenance caps prediction cost."""
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
+from jax import config, lax
+import jax.numpy as jnp
+import numpy as np
 
 import _style as S
 
+config.update("jax_enable_x64", True)
 S.apply_style()
 
 
 def main() -> str:
-    rounds = np.arange(1, 121)
-    mistakes = ((rounds % 3 == 0) | (rounds % 11 == 0)).astype(int)
-    unbounded = np.cumsum(mistakes)
+    rounds = jnp.arange(1, 121, dtype=jnp.int32)
+    mistakes = jnp.logical_or(rounds % 3 == 0, rounds % 11 == 0).astype(jnp.int32)
+
+    def update_support(total: jnp.ndarray, mistake: jnp.ndarray) -> tuple[jnp.ndarray, jnp.ndarray]:
+        updated = total + mistake
+        return updated, updated
+
+    _, unbounded = lax.scan(update_support, jnp.array(0, dtype=jnp.int32), mistakes)
     budget = 12
-    bounded = np.minimum(unbounded, budget)
-    coefficients = np.array([0.08, 0.72, -0.12, 0.34, -0.58, 0.05, 0.44, -0.27])
-    keep = np.abs(coefficients) >= 0.15
+    bounded = jnp.minimum(unbounded, budget)
+    coefficients = jnp.array([0.08, 0.72, -0.12, 0.34, -0.58, 0.05, 0.44, -0.27], dtype=jnp.float64)
+    keep = jnp.abs(coefficients) >= 0.15
+    assert bool(jnp.all(jnp.isfinite(coefficients)))
+    assert int(jnp.max(bounded)) == budget
+    assert int(unbounded[-1]) > budget
+    assert bool(jnp.all(jnp.diff(unbounded) >= 0))
+    rounds, unbounded, bounded, coefficients, keep = map(np.asarray, (rounds, unbounded, bounded, coefficients, keep))
 
     fig, axes = plt.subplots(1, 2, figsize=(5.2, 2.65))
     ax = axes[0]
@@ -48,8 +61,6 @@ def main() -> str:
     bx.legend(frameon=False, loc="lower right", fontsize=7)
     S.finish(bx)
     fig.subplots_adjust(wspace=0.32)
-    assert bounded.max() == budget
-    assert unbounded[-1] > budget
     return S.save(fig, "online-budget")
 
 

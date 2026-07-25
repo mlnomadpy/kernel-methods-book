@@ -228,11 +228,17 @@ function publicationMarkdown(chapter) {
     const target = chapterMap.get(slug);
     return custom || (target ? `${target.label}, ${target.title}` : slug);
   });
+  // A few proof exercises use raw LaTeX \ref commands inside inline math.
+  // Prefix those labels just like Markdown fragment links and heading ids.
+  source = source.replace(/\\ref\{([a-z][a-z0-9-]*)\}/g,
+    (_, id) => `\\ref{${chapter.slug}-${id}}`);
   source = convertInlineMath(source);
   source = source.replace(/\\lt(?![A-Za-z])/g, "<").replace(/\\gt(?![A-Za-z])/g, ">");
   // Chapter-local web anchors are intentionally preserved there. Prefix them
   // only in the single-file formats, where repeated ids such as `summary` and
   // `exercises` would otherwise collide.
+  source = source.replace(/\]\(#([a-z][a-z0-9-]*)\)/g,
+    (_, id) => `](#${chapter.slug}-${id})`);
   source = source.replace(/\{([^}\n]*?)#([a-z][a-z0-9-]*)([^}\n]*)\}/g,
     (_, before, id, after) => `{${before}#${chapter.slug}-${id}${after}}`);
   source = source.replace(/\(([^)]+)\.html(?:#[^)]+)?\)/g, "($1.html)");
@@ -263,6 +269,8 @@ function texEscape(s) {
 function partOpener(part) {
   const [numeral, ...rest] = part.part.split("·").map((s) => s.trim());
   const title = rest.join(" · ") || numeral;
+  if (part.chapters[0]?.src === "ch-prelim")
+    return `\\kbpartreference{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
   return `\\kbpart{${texEscape(numeral)}}{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
 }
 
@@ -281,21 +289,27 @@ const bibliographySection = format === "pdf"
   // reset them so the bibliography pages carry their own header.
   ? "# Bibliography {.unnumbered}\n\n\\markboth{Bibliography}{Bibliography}\n\n::: {#refs}\n:::"
   : "# Bibliography {.unnumbered}\n\n::: {#refs}\n:::";
-// Mainmatter for the PDF: every part opens on its own page with the intro from
-// book.yml, and the chapter counter starts at -1 so the Preliminaries chapter
-// is Chapter 0 — matching the web edition's labels and this build's own
-// cross-reference text ("Chapter 1" = the Introduction).
-const pdfMainmatter = book.parts.flatMap((part) => [
-  partOpener(part),
-  ...part.chapters.map(publicationMarkdown),
-]);
+// The preliminary reference chapter has its own P namespace. It is neither
+// Chapter 0 nor Chapter 1: sections and statements read P.1, P.2, ... while
+// the numbered narrative begins cleanly with Chapter 1.
+const pdfMainmatter = book.parts.flatMap((part) => {
+  const isReference = part.chapters[0]?.src === "ch-prelim";
+  return [
+    partOpener(part),
+    ...(isReference ? ["\\kbpreliminariesmode"] : []),
+    ...part.chapters.map(publicationMarkdown),
+    ...(isReference ? ["\\kbmainmattermode"] : []),
+  ];
+});
 const publicationSections = format === "pdf"
   ? [
-      header,
-      "\\frontmatter",
+      // Keep the metadata block and \frontmatter in one segment. The generic
+      // segment join inserts \cleardoublepage; separating these two commands
+      // created two spurious blank leaves between the colophon and dedication.
+      `${header}\n\n\\frontmatter`,
       ...openingMatter,
       "\\tableofcontents",
-      "\\mainmatter\n\\setcounter{chapter}{-1}",
+      "\\mainmatter\n\\setcounter{chapter}{0}",
       ...pdfMainmatter,
       "\\backmatter",
       bibliographySection,
@@ -309,6 +323,11 @@ fs.mkdirSync(releaseDir, { recursive: true });
 const sourcePath = path.join(buildDir, "book.md");
 const outputPath = path.join(releaseDir, `kernels-the-geometry-of-learning.${format}`);
 fs.writeFileSync(sourcePath, combined);
+// PDF compilation is deliberately two-stage. The generated TeX is a stable,
+// inspectable compiler artifact: manuscript conversion can be audited without
+// conflating it with LuaLaTeX styling or pagination.
+const texPath = path.join(buildDir, "book.tex");
+const pandocOutputPath = format === "pdf" ? texPath : outputPath;
 
 const common = [
   sourcePath,
@@ -321,10 +340,10 @@ const common = [
   "--from=markdown+fenced_divs+bracketed_spans+raw_html-simple_tables-multiline_tables-grid_tables+pipe_tables",
   "--bibliography", path.join(root, "bibliography.bib"),
   "--citeproc", "--number-sections", "--top-level-division=chapter",
-  "--quiet",
   "--resource-path", root,
-  "--output", outputPath,
+  "--output", pandocOutputPath,
 ];
+common.push(process.env.PDF_DEBUG ? "--verbose" : "--quiet");
 if (publicationAuthors.length) {
   common.push("--metadata", "author=" + publicationAuthors.join("; "));
 }
@@ -338,15 +357,16 @@ if (format === "pdf") {
     "",
   ].join("\n"));
   common.push(
-    "--pdf-engine=lualatex",
-    // Map the semantic fenced divs to styled LaTeX boxes (PDF only; the RawBlocks
-    // it emits are LaTeX, so it must not run for the HTML-based EPUB).
+    "--to=latex",
+    "--standalone",
+    // Map semantic fenced divs to the plain statement environments defined by
+    // the print style. The generated book.tex remains available for inspection.
     "--lua-filter", path.join(root, "publication", "filter.lua"),
     "--variable", "documentclass=scrbook",
     "--variable", "papersize=letter",
     "--variable", "fontsize=10pt",
     "--variable", "mainfont=STIX Two Text",
-    "--variable", "mathfont=STIX Two Math",
+    "--variable", "mathfont=Libertinus Math",
     "--variable", "colorlinks=true",
     "--include-in-header", metaTex,
     "--include-in-header", path.join(root, "publication", "preamble.tex"),
@@ -356,5 +376,40 @@ if (format === "epub") common.push(
   "--toc",
   "--epub-cover-image", path.join(root, "publication", "cover.svg"),
 );
-execFileSync("pandoc", common, { cwd: root, stdio: "inherit", maxBuffer: 64 * 1024 * 1024 });
+// LuaLaTeX needs a writable font cache. CI and sandboxed agent environments do
+// not expose the user-level TeX cache, so keep the cache project-local and
+// ignored. This also makes repeated full-book builds substantially faster.
+const texCache = path.join(root, ".context", "texlive");
+fs.mkdirSync(texCache, { recursive: true });
+execFileSync("pandoc", common, {
+  cwd: root,
+  stdio: "inherit",
+  maxBuffer: 64 * 1024 * 1024,
+  env: {
+    ...process.env,
+    TEXMFVAR: texCache,
+    TEXMFCACHE: texCache,
+  },
+});
+if (format === "pdf") {
+  execFileSync("latexmk", [
+    "-lualatex",
+    ...(process.env.PDF_DEBUG ? [] : ["-silent"]),
+    "-interaction=nonstopmode",
+    "-halt-on-error",
+    "-file-line-error",
+    `-outdir=${buildDir}`,
+    texPath,
+  ], {
+    cwd: root,
+    stdio: "inherit",
+    maxBuffer: 64 * 1024 * 1024,
+    env: {
+      ...process.env,
+      TEXMFVAR: texCache,
+      TEXMFCACHE: texCache,
+    },
+  });
+  fs.copyFileSync(path.join(buildDir, "book.pdf"), outputPath);
+}
 console.log(`Built ${path.relative(root, outputPath)}.`);

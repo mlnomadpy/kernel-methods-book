@@ -10,35 +10,135 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Prove that \(k(h_\theta(x),h_\theta(z))\) is positive definite for fixed \(\theta\).
-    answer: For coefficients (a_i), set (z_i=h_\theta(x_i)). Then
-      (sum_{ij}a_ia_jk(h_\theta(x_i),h_\theta(x_j))=sum_{ij}a_ia_jk(z_i,z_j) \ge0) by positive
-      definiteness of the base kernel.
+      Prove the composition proposition and construct a two-input example in which a strictly positive-definite RBF base kernel becomes only semidefinite after a feature collision.
+    answer: >-
+      For points \(x_i\), coefficients \(a_i\), and \(z_i=h_\theta(x_i)\),
+      \(\sum_{ij}a_i a_j k(h_\theta(x_i),h_\theta(x_j))
+      =\sum_{ij}a_i a_j k(z_i,z_j)\geq0\) by positive definiteness of the base
+      kernel. For the counterexample, take distinct inputs \(x_1,x_2\) but set
+      \(h_\theta(x_1)=h_\theta(x_2)=0\). An RBF kernel with unit signal variance gives
+      \(K=\begin{pmatrix}1&1\\1&1\end{pmatrix}\), whose eigenvalues are \(2\) and
+      \(0\). It is PSD but not strictly PD. The coefficient vector \((1,-1)\) has zero
+      quadratic form.
   - number: 2
-    kind: computation
+    kind: proof
     status: draft
     prompt: >-
-      For a \(2\times2\) covariance matrix, compute both marginal-likelihood terms and their change when observation noise doubles.
-    answer: For (C=\begin{psmallmatrix}a&c\\c&b\end{psmallmatrix}), use
-      (C^{-1}=(ab-c^2)^{-1}\begin{psmallmatrix}b&-c\\-c&a\end{psmallmatrix}) and (log\det
-      C=\log(ab-c^2)). Doubling noise adds the original noise variance to both (a) and (b);
-      recompute these two expressions. A full numerical answer must state the chosen covariance
-      entries and response.
+      Derive the exact covariance-parameter gradient and then specialize it to an RBF length scale by computing \(\partial K_{ij}/\partial\ell\).
+    answer: >-
+      Use \(dC^{-1}=-C^{-1}(dC)C^{-1}\) and
+      \(d\log\det C=\operatorname{tr}(C^{-1}dC)\). With
+      \(\alpha=C^{-1}y\),
+      \(d\mathcal L=\frac12\operatorname{tr}\{(C^{-1}-\alpha\alpha^\top)dC\}\).
+      Replacing \(dC\) by \((\partial C/\partial\psi)d\psi\) yields the chapter's
+      gradient. For
+      \(K_{ij}=\sigma_f^2\exp\{-d_{ij}^2/(2\ell^2)\}\), where
+      \(d_{ij}^2=\lVert h_i-h_j\rVert^2\),
+      \[
+      \frac{\partial K_{ij}}{\partial\ell}
+      =K_{ij}\frac{d_{ij}^2}{\ell^3}.
+      \]
+      Substituting this matrix into the trace formula gives the exact length-scale gradient.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Derive the covariance-parameter gradient proposition from matrix differential identities.
-    answer: Differentiate (y^\top C^{-1}y) using (dC^{-1}=-C^{-1}(dC)C^{-1}), obtaining
-      (-\alpha^\top(dC)\alpha=-\operatorname{tr}(\alpha\alpha^\top dC)). Add (d\log\det
-      C=\operatorname{tr}(C^{-1}dC)), multiply by one half, and read off the coefficient of
-      (dC=(\partial C/\partial\psi)d\psi).
+      Prove the stationary signal-scale theorem. Identify four modifications of the model or objective for which its conclusion need not hold.
+    answer: >-
+      Write \(C=sA\). The log marginal likelihood without its constant is
+      \(\ell(s)=-(2s)^{-1}y^\top A^{-1}y-(n/2)\log s-(1/2)\log\det A\).
+      Therefore
+      \(\ell'(s)=(2s^2)^{-1}y^\top A^{-1}y-n/(2s)\). At an interior stationary
+      point, \(y^\top A^{-1}y=ns\), and multiplication by \(s^{-1}\) gives
+      \(y^\top C^{-1}y=n\). The conclusion need not hold with a prior or explicit penalty
+      on \(s\), at a boundary optimum, when the signal variance is fixed, or when covariance
+      components do not share one global scale. It also changes when \(s\) is integrated out
+      rather than point estimated.
   - number: 4
+    kind: computation
+    status: draft
+    prompt: >-
+      Reproduce the compound-symmetry collapse example at \(\rho=0\) and \(\rho=0.99\), including the negative log marginal likelihood without its constant and the shifted-point posterior variance.
+    answer: >-
+      The contrast and constant eigenvalues are
+      \(a=1-\rho+0.01\) and \(b=1+2\rho+0.01\). For \(y=\mathbf1\), the negative log
+      marginal likelihood without \(3\log(2\pi)/2\) is
+      \(3/(2b)+\{2\log a+\log b\}/2\). At \(\rho=0\),
+      \(a=b=1.01\), giving \(3/(2.02)+(3/2)\log(1.01)=1.5000\) to four
+      decimals. At \(\rho=0.99\), \(a=0.02\), \(b=2.99\), giving
+      \(3/(5.98)+\log(0.02)+(1/2)\log(2.99)=-2.8628\). A test point with
+      covariance vector \(\rho\mathbf1\) has variance
+      \(1-\rho^2\mathbf1^\top C^{-1}\mathbf1=1-3\rho^2/b\). At
+      \(\rho=0.99\), this is \(1-2.9403/2.99=0.0166\).
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove that SKI preserves PSD and derive the \(O(cn+m\log m)\) matrix-vector cost when \(W\) has at most \(c\) nonzeros per row and \(K_{UU}\) admits a Toeplitz FFT product.
+    answer: >-
+      For every \(a\),
+      \(a^\top WK_{UU}W^\top a=(W^\top a)^\top K_{UU}(W^\top a)\geq0\), so
+      the SKI matrix is PSD. To multiply \(v\) by it, first compute \(r=W^\top v\)
+      in \(O(cn)\), then \(s=K_{UU}r\) in \(O(m\log m)\) using Toeplitz circulant
+      embedding and FFTs, then \(Ws\) in \(O(cn)\). The total is
+      \(O(cn+m\log m)\), with storage \(O(cn+m)\) apart from FFT workspace.
+      This establishes a product cost, not a fixed iteration count for conjugate gradients.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove both covariance-perturbation bounds. Explain why the conditions become fragile as the learned noise variance approaches zero.
+    answer: >-
+      The resolvent identity gives
+      \(C^{-1}-\widetilde C^{-1}=C^{-1}(\widetilde C-C)\widetilde C^{-1}\).
+      Since both signal matrices are PSD,
+      \(\lVert C^{-1}\rVert,\lVert\widetilde C^{-1}\rVert\leq\sigma_n^{-2}\).
+      Therefore the inverse difference is at most \(\varepsilon/\sigma_n^4\).
+      For log determinants, let
+      \(E=C^{-1/2}(\widetilde C-C)C^{-1/2}\). Then
+      \(\lVert E\rVert\leq\delta=\varepsilon/\sigma_n^2\). If \(\delta\lt1\),
+      every eigenvalue of \(I+E\) lies in \([1-\delta,1+\delta]\), and
+      \[
+      |\log\det\widetilde C-\log\det C|
+      =|\log\det(I+E)|
+      \leq n\{-\log(1-\delta)\}.
+      \]
+      As \(\sigma_n^2\to0\), the inverse bound grows as \(\sigma_n^{-4}\), while
+      the log-determinant condition \(\varepsilon\lt\sigma_n^2\) demands increasingly
+      accurate covariance approximation. Learned near-zero noise can therefore expose errors
+      that were harmless earlier in training.
+  - number: 7
     kind: synthesis
     status: draft
     prompt: >-
-      Design an evaluation comparing DKL, a fixed-kernel GP, an NTK predictor, and a neural ensemble. Specify accuracy, calibration, shift, compute, and seed reporting criteria.
-    answer: "Rubric: use identical train/validation/test splits; tune all baselines comparably; report
-      task error and proper scoring rules; include reliability and interval coverage; test at least
-      one covariate shift; report wall time, memory, seeds, and failed factorizations; explain which
-      methods learn features and which use a fixed tangent kernel. Seven elements are required."
+      A DKL model improves RMSE over an ordinary RBF GP but uses a pretrained network, a larger tuning budget, and an SKI approximation with no error report. Design the minimum ablation set needed to attribute the gain.
+    answer: >-
+      Use identical splits and preprocessing. Add the pretrained deterministic network to measure
+      the value of pretraining alone; a GP on frozen pretrained features to isolate the GP readout;
+      jointly trained DKL to isolate feature adaptation; and an ordinary GP with a tuning budget
+      matched to DKL. On a subset where exact GP algebra is feasible, compare exact DKL with SKI
+      DKL at the selected hyperparameters. Match architecture, pretraining data, optimizer budget,
+      and number of validation evaluations. Report RMSE plus negative log predictive density,
+      coverage and width, feature geometry, SKI Gram and solve residuals, seeds, wall time, and
+      memory. Without the frozen-feature and exact-versus-SKI ablations, the improvement cannot be
+      assigned to joint DKL.
+  - number: 8
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Design an experiment that can distinguish representation collapse, inducing-grid misspecification, and ordinary GP hyperparameter overfitting. Specify the data, shift, logged quantities, baselines, stopping rule, and falsifying outcomes.
+    answer: >-
+      Use one-dimensional regression with separated training clusters, nonconstant labels inside
+      clusters, and a held-out interval plus a support-expansion test region. Fit an exact ordinary
+      GP, exact DKL, frozen-feature GP, and SKI DKL on the same learned features. Log centered
+      feature singular values, pairwise-distance quantiles, noise, length scale, Gram spectrum,
+      train and validation evidence, proper scores, interval coverage and width, inducing-grid
+      boundary violations, spectral-norm Gram error on the tractable problem, and linear-solve
+      residuals. Stop on validation negative log predictive density subject to minimum feature-rank
+      and maximum approximation-residual thresholds. Collapse is supported if feature rank and
+      distances vanish in exact DKL and shifted points acquire low variance. Grid misspecification
+      is supported if exact DKL remains sound while SKI degrades as features leave the grid, with
+      large Gram or solve errors. Ordinary GP hyperparameter overfitting is supported if the fixed
+      GP also shows a train-validation evidence gap without feature collapse or SKI error. Any
+      diagnosis is falsified when its defining signature is absent across seeds and controlled
+      ablations.

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-manifold",
+  "anchor": "example-manifold-bridge",
+  "source_file": "manuscript/chapters/ch-manifold.md",
+  "source_sha256": "c937a709f52d1dcd14e7418f71525b23fe594b8c2a023f7e14526bc459ca60bc",
+  "verification_status": "literal-audit",
+  "executable_checks": [],
+  "numeric_literals": [
+    "1",
+    "-2",
+    "-3",
+    "-4",
+    "2",
+    "3",
+    "4",
+    "-1",
+    "+2",
+    "10",
+    "5",
+    "6",
+    "-5",
+    "21"
+  ],
+  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

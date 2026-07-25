@@ -1,0 +1,37 @@
+chapter: ch-structured
+status: draft
+technical_review:
+  reviewer: null
+  approved_on: null
+  findings_resolved: false
+pedagogical_review:
+  reviewer: null
+  approved_on: null
+  findings_resolved: false
+specialist_review_required: true
+specialist_review:
+  reviewer: null
+  approved_on: null
+copy_edit:
+  editor: null
+  completed_on: null
+waivers: []
+authorial_audit:
+  commissioned_by:
+    name: Taha Bouhsine
+    role: author
+    website: https://www.tahabouhsine.com
+    affiliation: AzettaAI
+  performed_by: OpenAI Codex
+  completed_on: 2026-07-24
+  scope:
+    - joint-feature and operator-valued equivalence
+    - structured-hinge upper-bound proof
+    - representer reduction
+    - cutting-plane correctness and finite termination
+    - approximate-oracle error propagation
+    - calibration boundaries and failure witness
+    - deterministic sequence-labeling checks
+  status: ai-assisted-authorial-audit
+  satisfies_independent_technical_review: false
+  satisfies_independent_pedagogical_review: false

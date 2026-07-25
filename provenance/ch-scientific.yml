@@ -1,243 +1,326 @@
 chapter: ch-scientific
 slug: scientific-computing-and-operator-learning
 title: Kernels for Scientific Computing and Operator Learning
-status: author-mapped-pending-independent-verification
+status: author-reconstructed-from-primary-sources-pending-independent-verification
 private_source_sha256: null
 references:
-  - green1984
   - wendland2005
   - raissi2017gpde
   - cockayne2019probnum
   - li2020fno
 sections:
-  - id: scientific-linear-information
-    title: Linear information about an unknown function
-    contribution: adapted-and-expanded
-    sources: &a1
-      - green1984
+  - id: scientific-continuous-problem
+    title: The continuous problem comes before the matrix
+    contribution: author-derived-synthesis
+    sources:
       - wendland2005
-      - raissi2017gpde
-      - cockayne2019probnum
-      - li2020fno
     locators:
-      - source: green1984
-        manuscript_locator: ch-scientific.md#scientific-linear-information
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-continuous-problem
+        source_locator: Chapters 10 through 12 and Section 16.3, pp. 296-306
+        status: author-checked-against-source-structure-pending-specialist-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-linear-information
+    title: Bounded linear information and its representers
+    contribution: author-derived-proof
+    sources:
+      - wendland2005
+    locators:
       - source: wendland2005
         manuscript_locator: ch-scientific.md#scientific-linear-information
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#scientific-linear-information
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cockayne2019probnum
-        manuscript_locator: ch-scientific.md#scientific-linear-information
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: li2020fno
-        manuscript_locator: ch-scientific.md#scientific-linear-information
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 16.1, pp. 289-292
+        status: author-checked-against-source-structure-pending-specialist-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-collocation
-    title: Symmetric kernel collocation
-    contribution: adapted-and-expanded
+    title: Symmetric collocation and discrete solvability
+    contribution: author-derived-proof-and-synthesis
     sources:
       - wendland2005
     locators:
       - source: wendland2005
         manuscript_locator: ch-scientific.md#kernel-collocation
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 16.1 and 16.3, pp. 289-292 and 296-306
+        status: author-checked-against-source-structure-pending-specialist-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: green-physics-kernels
-    title: Green kernels and physics-informed covariance
-    contribution: adapted-and-expanded
-    sources: *a1
+  - id: scientific-residual-stability
+    title: From sampled residual to solution error
+    contribution: author-derived-synthesis
+    sources:
+      - wendland2005
     locators:
-      - source: green1984
-        manuscript_locator: ch-scientific.md#green-physics-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: wendland2005
-        manuscript_locator: ch-scientific.md#green-physics-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#green-physics-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cockayne2019probnum
-        manuscript_locator: ch-scientific.md#green-physics-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: li2020fno
-        manuscript_locator: ch-scientific.md#green-physics-kernels
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-scientific.md#scientific-residual-stability
+        source_locator: Chapters 11 and 12, and Section 16.3
+        status: author-checked-against-source-structure-pending-specialist-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: gp-differential-observations
-    title: Gaussian processes with differential observations
-    contribution: adapted-and-expanded
+  - id: scientific-worked-poisson
+    title: A complete collocation calculation
+    contribution: original-hand-checkable-example
+    sources:
+      - wendland2005
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-worked-poisson
+        source_locator: Section 16.3, pp. 296-306, conceptual method only
+        status: example-algebra-author-derived-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-module-gpde
+    title: "Paper module I: Gaussian processes for linear differential equations"
+    contribution: primary-paper-reconstruction
     sources:
       - raissi2017gpde
     locators:
       - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#gp-differential-observations
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-scientific.md#scientific-module-gpde
+        source_locator: Sections 2 and 3
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-gpde-setting
+    title: The question and exact setting
+    contribution: primary-paper-reconstruction
+    sources:
+      - raissi2017gpde
+    locators:
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-gpde-setting
+        source_locator: Section 2, linear differential operator construction
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-gpde-derivation
+    title: Covariance derivation and executable object
+    contribution: adapted-derivation
+    sources:
+      - raissi2017gpde
+    locators:
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-gpde-derivation
+        source_locator: Sections 2 and 3, joint covariance and likelihood construction
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-gpde-boundary
+    title: What is proved, what is inherited, and what fails
+    contribution: author-derived-audit
+    sources:
+      - raissi2017gpde
+      - wendland2005
+    locators:
+      - source: raissi2017gpde
+        manuscript_locator: ch-scientific.md#scientific-gpde-boundary
+        source_locator: Sections 2 through 4
+        status: author-checked-against-primary-paper-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-gpde-boundary
+        source_locator: Chapters 10 and 13, and Section 16.1
+        status: comparison-is-author-derived
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: probabilistic-numerics
-    title: Probabilistic numerical methods
-    contribution: adapted-and-expanded
+    title: "Paper module II: Bayesian probabilistic numerical methods"
+    contribution: primary-paper-reconstruction
     sources:
       - cockayne2019probnum
     locators:
       - source: cockayne2019probnum
         manuscript_locator: ch-scientific.md#probabilistic-numerics
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2 and 3
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-pn-setting
+    title: Numerical tasks as inverse problems
+    contribution: primary-paper-reconstruction
+    sources:
+      - cockayne2019probnum
+    locators:
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-pn-setting
+        source_locator: Section 2, numerical tasks and Bayesian probabilistic numerical methods
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-pn-derivation
+    title: Gaussian linear case and Bayes-risk derivation
+    contribution: author-derived-specialization-and-proof
+    sources:
+      - cockayne2019probnum
+    locators:
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-pn-derivation
+        source_locator: Sections 2 and 3, Bayesian update and decision-theoretic interpretation
+        status: gaussian-specialization-and-proof-author-derived-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-pn-boundary
+    title: Failure boundary and afterlife
+    contribution: author-derived-audit
+    sources:
+      - cockayne2019probnum
+    locators:
+      - source: cockayne2019probnum
+        manuscript_locator: ch-scientific.md#scientific-pn-boundary
+        source_locator: Sections 2, 3, and 5
+        status: author-checked-against-primary-paper-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: scientific-inverse-problems
     title: Inverse scientific problems
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: author-derived-synthesis
+    sources:
+      - cockayne2019probnum
+      - raissi2017gpde
     locators:
-      - source: green1984
-        manuscript_locator: ch-scientific.md#scientific-inverse-problems
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wendland2005
-        manuscript_locator: ch-scientific.md#scientific-inverse-problems
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#scientific-inverse-problems
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: cockayne2019probnum
         manuscript_locator: ch-scientific.md#scientific-inverse-problems
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: li2020fno
+        source_locator: Section 5, composition and downstream inference
+        status: author-checked-against-primary-paper-pending-independent-verification
+      - source: raissi2017gpde
         manuscript_locator: ch-scientific.md#scientific-inverse-problems
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Parameter-learning examples
+        status: author-checked-against-primary-paper-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: operator-learning
-    title: Learning operators between function spaces
-    contribution: adapted-and-expanded
+  - id: scientific-kernel-operator-regression
+    title: Kernel operator regression
+    contribution: author-derived-synthesis
     sources:
       - li2020fno
     locators:
       - source: li2020fno
-        manuscript_locator: ch-scientific.md#operator-learning
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-scientific.md#scientific-kernel-operator-regression
+        source_locator: Sections 2 and 3, function-space operator-learning formulation
+        status: kernel-comparison-is-author-derived
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-module-fno
+    title: "Paper module III: Fourier neural operators"
+    contribution: primary-paper-reconstruction
+    sources:
+      - li2020fno
+    locators:
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-module-fno
+        source_locator: Sections 3 through 5
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-fno-derivation
+    title: Architecture and derivation
+    contribution: adapted-derivation
+    sources:
+      - li2020fno
+    locators:
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-fno-derivation
+        source_locator: Sections 3 and 4, integral operator and Fourier layer
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-fno-heat
+    title: A heat-operator calculation
+    contribution: original-hand-checkable-derivation
+    sources:
+      - li2020fno
+    locators:
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-fno-heat
+        source_locator: Section 4, Fourier multiplier architecture
+        status: heat-equation-example-author-derived-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-operator-comparison
+    title: Comparison under one currency
+    contribution: author-derived-comparison-and-audit
+    sources:
+      - li2020fno
+      - wendland2005
+    locators:
+      - source: li2020fno
+        manuscript_locator: ch-scientific.md#scientific-operator-comparison
+        source_locator: Sections 5.1 through 5.5
+        status: author-checked-against-primary-paper-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-scientific.md#scientific-operator-comparison
+        source_locator: Section 16.3, pp. 296-306
+        status: comparison-is-author-derived
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: scientific-workflow
+    title: An auditable scientific-learning workflow
+    contribution: original-protocol
+    sources:
+      - wendland2005
+      - cockayne2019probnum
+      - li2020fno
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: scientific-practice
-    title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: green1984
-        manuscript_locator: ch-scientific.md#scientific-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wendland2005
-        manuscript_locator: ch-scientific.md#scientific-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#scientific-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cockayne2019probnum
-        manuscript_locator: ch-scientific.md#scientific-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: li2020fno
-        manuscript_locator: ch-scientific.md#scientific-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    title: Common mistakes, failure boundaries, and practical implications
+    contribution: author-derived-audit
+    sources:
+      - wendland2005
+      - raissi2017gpde
+      - cockayne2019probnum
+      - li2020fno
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: scientific-summary
     title: Summary and further reading
-    contribution: adapted-and-expanded
+    contribution: author-derived-synthesis
     sources:
       - wendland2005
-      - cockayne2019probnum
       - raissi2017gpde
+      - cockayne2019probnum
       - li2020fno
-    locators:
-      - source: wendland2005
-        manuscript_locator: ch-scientific.md#scientific-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cockayne2019probnum
-        manuscript_locator: ch-scientific.md#scientific-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#scientific-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: li2020fno
-        manuscript_locator: ch-scientific.md#scientific-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: green1984
-        manuscript_locator: ch-scientific.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wendland2005
-        manuscript_locator: ch-scientific.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: raissi2017gpde
-        manuscript_locator: ch-scientific.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cockayne2019probnum
-        manuscript_locator: ch-scientific.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: li2020fno
-        manuscript_locator: ch-scientific.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    contribution: original-exercises
+    sources:
+      - wendland2005
+      - raissi2017gpde
+      - cockayne2019probnum
+      - li2020fno
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_method: claim-site citations plus theorem and section locators for reconstructed paper modules
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24

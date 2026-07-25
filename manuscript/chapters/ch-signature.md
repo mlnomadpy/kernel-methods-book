@@ -2,8 +2,8 @@
 id: ch-signature
 slug: signature-and-time-series-kernels
 title: Signature and Sequence-Path Kernels
-part: VII · Designing Kernels for Data
-order: 28
+part: VI · Designing Kernels
+order: 37
 tier: advanced
 prerequisites:
   - generative-and-marginalization-kernels
@@ -254,6 +254,10 @@ $$k^{\le m}_{\mathrm{sig}}(X,Y)=\big\langle S^{\le m}(X),\,S^{\le m}(Y)\big\rang
 Positive definiteness is immediate and needs no spectral argument: \(S^{\le m}\) is an explicit finite-dimensional feature map into \(\mathbb{R}^{(d^{m+1}-1)/(d-1)}\), and \(k^{\le m}_{\mathrm{sig}}\) is the ordinary dot product of feature vectors, hence positive definite by construction. This is the kernel for sequential data of Kiraly and Oberhauser (2019), who also show how to compute it without ever forming the exponentially long feature vector, by a Horner-type recursion over the sample points that costs \(O(d\,m\,N_XN_Y)\) rather than \(O(d^m)\). One can also raise the base inner product on \(\mathbb{R}^d\) to any positive definite kernel \(\kappa\) before integrating, which replaces the coordinate products \(dX^i\,dY^j\) by \(\kappa\)-inner-products and yields signatures of paths in a feature space, exactly the lift used to handle high-dimensional or structured channels. Toth and Oberhauser (2020) build Gaussian-process priors on sequences from this covariance, learning the depth and the per-level weights as kernel hyperparameters.
 
 Truncation is a modelling knob with a cost. Deeper signatures separate finer differences in path shape, but the feature dimension grows geometrically, and for long paths the highest levels contribute little because the \(1/k!\) in the segment exponential damps them. The natural question is whether the depth can be taken to infinity without paying the geometric price. It can, and the answer is a differential equation.
+
+<figure class="viz" data-figure="signature-truncation-discrimination" data-alt="Two distance matrices compare three paths with the same endpoint. At signature depth one every pairwise distance is zero; at depth two the right-then-up, up-then-right, and diagonal paths separate.">
+<figcaption>Truncation depth determines which path distinctions exist for the learner. Displacement alone collapses all three paths to one feature vector; level two records order through signed area and separates the two bent paths from each other and from the diagonal.</figcaption>
+</figure>
 
 ## The untruncated signature kernel as a Goursat PDE {#signature-kernel-pde}
 

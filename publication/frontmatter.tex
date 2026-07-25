@@ -1,0 +1,77 @@
+% Front matter is independent from the interior style so print, bound, and
+% digital editions can vary without changing the body or generated book.tex.
+\providecommand{\kbeditionline}{Draft edition}
+\setkomafont{title}{\color{KernelInk}\fontsize{36}{41}\selectfont\bfseries}
+\setkomafont{subtitle}{\color{KernelAccent}\fontsize{17}{23}\selectfont\mdseries}
+\setkomafont{author}{\color{KernelInk}\large\bfseries}
+\renewcommand*{\titlepagestyle}{empty}
+
+\makeatletter
+\newcommand{\kbcolophonpage}{%
+  \null\vfill
+  {\parindent0pt\footnotesize\color{KernelMuted}\raggedright
+   \textcolor{KernelInk}{\kbdisplay\bfseries Kernels: The Geometry of Learning}\\
+   Foundations, Algorithms, and the Frontiers of Machine Intelligence\par
+   \vspace{9pt}
+   Copyright \textcopyright{} 2026 Taha Bouhsine.\par
+   Text and figures are licensed under CC BY-NC-SA 4.0; the book's original
+   code is released under the MIT License.\par
+   \vspace{9pt}
+   \kbeditionline{} · \@date.\par
+   Typeset with LuaLaTeX in Source Serif 4 and Libertinus Math, with STIX Two
+   Text for display titles and IBM Plex for structural apparatus. Figures are
+   rendered from executable sources; every numerical example is reproduced by
+   a checked script.\par
+   \vspace{9pt}
+   The web edition, notebooks, errata, and revision history live at
+   \textcolor{KernelSlate}{\texttt{tahabouhsine.com}}.\par}%
+}
+
+\renewcommand{\maketitle}{%
+  \begingroup
+    \pagecolor{KernelIvory}\color{KernelInk}
+    \thispagestyle{empty}
+    \raggedright
+    \vspace*{0.55cm}
+    {\sffamily\scriptsize\color{KernelMuted}\textls[105]{\MakeUppercase{A mathematical monograph on kernel methods}}\par}
+    \vspace{0.38cm}
+    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
+    \vspace{1.55cm}
+    {\kbdisplay\color{KernelInk}\fontsize{49}{52}\selectfont\mdseries Kernels\par}
+    \vspace{0.34cm}
+    {\kbdisplay\color{KernelBlue}\fontsize{28}{33}\selectfont\itshape The Geometry of Learning\par}
+    \vspace{0.85cm}
+    {\kbdisplay\color{KernelMuted}\fontsize{14.5}{20}\selectfont
+      Foundations, algorithms, and the frontiers\\of machine intelligence\par}
+    \vspace{1.45cm}
+    \begin{center}
+      \begin{tikzpicture}[x=.82cm,y=.82cm]
+        \draw[KernelRule,line width=.45pt] (0,0) -- (8.25,0);
+        \foreach \c/\h/\op in {0.5/1.10/35,1.7/1.52/48,3.0/1.95/62,4.3/2.18/78,5.6/1.86/64,6.9/1.40/49,7.8/.95/35}{
+          \draw[KernelBlue!\op,line width=.72pt,samples=52,smooth,domain=0:8.25]
+            plot (\x,{\h*exp(-1.22*(\x-\c)^2)});
+          \fill[KernelRed] (\c,0) circle (1.1pt);
+        }
+        \node[anchor=west,text=KernelMuted,font=\kbmono\scriptsize] at (0,-.38)
+          {kernel sections \(k(\,\cdot\,,x_i)\)};
+      \end{tikzpicture}
+    \end{center}
+    \vspace{0.85cm}
+    {\centering\kbdisplay\color{KernelInk}\fontsize{16.5}{24}\selectfont
+      \(k(x,z)=\langle\Phi(x),\Phi(z)\rangle_{\mathcal H}\)\par}
+    \vspace{0.25cm}
+    {\centering\kbdisplay\color{KernelBlue}\fontsize{15.5}{23}\selectfont
+      \(k(x,z)=\displaystyle\sum_{j\geq1}\lambda_j\phi_j(x)\phi_j(z)\)\par}
+    \vfill
+    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
+    \vspace{0.42cm}
+    {\kbdisplay\color{KernelInk}\fontsize{17}{21}\selectfont \@author\par}
+    \vspace{0.16cm}
+    {\kbdisplay\scriptsize\color{KernelMuted}2026\par}
+    \clearpage
+    \nopagecolor\color{KernelInk}
+    \thispagestyle{empty}%
+    \kbcolophonpage
+  \endgroup
+}
+\makeatother

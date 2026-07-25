@@ -1,27 +1,36 @@
 """Finite-width deviation from an infinite-width kernel limit."""
+import jax
+
+jax.config.update("jax_enable_x64", True)
+import jax.numpy as jnp
 import numpy as np
 
 import _style as S
 
 S.apply_style()
 
-width = np.array([32, 64, 128, 256, 512, 1024, 2048, 4096], dtype=float)
-sampling_error = 0.82 / np.sqrt(width)
-feature_motion = 1.55 / np.sqrt(width)
+width_jax = jnp.array([32, 64, 128, 256, 512, 1024, 2048, 4096], dtype=jnp.float64)
+sampling_error_jax = 0.82 / jnp.sqrt(width_jax)
+feature_motion_jax = 1.55 / jnp.sqrt(width_jax)
 tolerance = 0.04
 
-assert np.all(np.diff(sampling_error) < 0)
-assert np.all(np.diff(feature_motion) < 0)
-assert np.isclose(sampling_error[2] / sampling_error[6], 4.0)
+assert bool(jnp.all(jnp.diff(sampling_error_jax) < 0))
+assert bool(jnp.all(jnp.diff(feature_motion_jax) < 0))
+assert bool(jnp.isclose(sampling_error_jax[2] / sampling_error_jax[6], 4.0))
+assert bool(jnp.all(jnp.isfinite(jnp.concatenate((sampling_error_jax, feature_motion_jax)))))
+cross_index = int(jnp.flatnonzero(feature_motion_jax < tolerance, size=1)[0])
+width, sampling_error, feature_motion = map(
+    np.asarray, (width_jax, sampling_error_jax, feature_motion_jax)
+)
 
 fig, ax = S.new_axes(5.35, 3.05)
 ax.loglog(width, sampling_error, "o-", color=S.POS, lw=2, ms=4.5, label="kernel sampling error")
 ax.loglog(width, feature_motion, "s--", color=S.ACCENT, lw=2, ms=4.2, label="feature movement")
 ax.axhline(tolerance, color=S.INK, lw=1.0, ls=":", label="chosen tolerance")
-cross = width[np.flatnonzero(feature_motion < tolerance)[0]]
+cross = width[cross_index]
 ax.annotate(
     f"kernel-like beyond\nwidth $\\approx$ {int(cross)}",
-    xy=(cross, feature_motion[width == cross][0]),
+    xy=(cross, feature_motion[cross_index]),
     xytext=(740, 0.12),
     color=S.ACCENT,
     fontsize=8,

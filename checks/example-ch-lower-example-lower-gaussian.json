@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-lower",
+  "anchor": "example-lower-gaussian",
+  "source_file": "manuscript/chapters/ch-lower.md",
+  "source_sha256": "b3768081af1bb177ba7ab5fb379407e85b5c46a54ab1553dee6d255bc2d4f174",
+  "verification_status": "literal-audit",
+  "executable_checks": [],
+  "numeric_literals": [
+    "-1",
+    "+1",
+    "0",
+    "1",
+    "8",
+    "4",
+    "2",
+    "32",
+    "009153"
+  ],
+  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}
