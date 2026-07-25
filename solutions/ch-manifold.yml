@@ -10,32 +10,102 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Show that the multiplicity of eigenvalue zero of \(L\) equals the number of connected components.
-    answer: (f^\top Lf=0) exactly when adjacent vertices have equal values. Thus the null space consists
-      of functions constant on each connected component. Component indicator vectors form a basis,
-      so the zero eigenvalue has the number of components as its multiplicity.
+      Prove that the multiplicity of eigenvalue zero of an unnormalized graph Laplacian equals the number of connected components.
+    answer: >-
+      The energy identity shows \(f^\top Lf=0\) exactly when \(f_i=f_j\) on every edge. Thus a
+      null vector is constant on each connected component. Component indicator vectors are
+      linearly independent null vectors and span all such piecewise-constant vectors. Their number
+      is the number of components, so that number is exactly the nullity and hence the multiplicity
+      of eigenvalue zero.
   - number: 2
-    kind: computation
-    status: draft
-    prompt: >-
-      For a path of three vertices with endpoint labels \(+1\) and \(-1\), minimize Laplacian energy over the middle value and interpret the result.
-    answer: With middle value (t), the energy is proportional to ((1-t)^2+(t+1)^2=2t^2+2). Its
-      derivative is (4t), so (t=0). The harmonic label is the average of its two neighbors.
-  - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Derive the representer expansion by decomposing \(f\) into the span of \(k(x_i,\cdot)\) and its orthogonal complement.
-    answer: Decompose (f=f_S+f_\perp) with (S=\operatorname{span}\{k(x_i,\cdot):1\le i\le l+u\}).
-      Reproduction gives (f_\perp(x_i)=0), so both the labeled loss and graph penalty depend only on
-      (f_S). Since the ambient penalty adds (\gamma_A\lVert f_\perp\rVert^2), every minimizer has
-      (f_\perp=0).
+      Derive the generalized eigenproblem \(Lf=\lambda Df\) from the Laplacian-eigenmap constrained optimization, including the elimination of the multiplier for \(f^\top D\mathbf1=0\).
+    answer: >-
+      Use \(\mathcal L=f^\top Lf-\lambda(f^\top Df-1)-\mu f^\top D\mathbf1\).
+      Stationarity gives \(2Lf-2\lambda Df-\mu D\mathbf1=0\). Left multiplication by
+      \(\mathbf1^\top\) uses \(\mathbf1^\top L=0\) and the orthogonality constraint to produce
+      \(\mu\mathbf1^\top D\mathbf1=0\). Positive total degree implies \(\mu=0\), leaving
+      \(Lf=\lambda Df\). The minimum on the constrained subspace is the smallest positive
+      generalized eigenvalue by the Rayleigh principle.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: >-
+      For the four-vertex bridge example, compute \(f_2\) and \(f_3\) at \(\varepsilon=1/4\) and \(\varepsilon=4\), and compare both graph energies.
+    answer: >-
+      The harmonic solution is \(f_2=(1+2\varepsilon)^{-1}\) and \(f_3=-f_2\). At
+      \(\varepsilon=1/4\), the values are \(2/3,-2/3\); at \(\varepsilon=4\), they are
+      \(1/9,-1/9\). Using one copy of each undirected edge, the energy is
+      \((1-f_2)^2+\varepsilon(f_2-f_3)^2+(f_3+1)^2=4\varepsilon/(1+2\varepsilon)\).
+      It equals \(2/3\) and \(16/9\), respectively. Strongening the bridge raises the minimum
+      energy and pulls the interior scores toward zero.
   - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the harmonic-extension uniqueness theorem by padding an unlabeled vector with zeros on labeled vertices.
+    answer: >-
+      For \(v\in\mathbb R^u\), define \(\widetilde v\) to equal \(v\) on unlabeled vertices and
+      zero on labeled ones. Then
+      \(v^\top L_{uu}v=\frac12\sum_{ij}W_{ij}(\widetilde v_i-\widetilde v_j)^2\).
+      A zero value forces \(\widetilde v\) to be constant on every component. Any component
+      containing a label has constant zero. Hence \(L_{uu}\) is positive definite exactly when
+      every unlabeled component meets a label. Positive definiteness gives existence and
+      uniqueness of the linear-system solution.
+  - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the empirical manifold representer theorem and explain precisely why unlabeled kernel sections enter the span.
+    answer: >-
+      Decompose \(f=f_\parallel+f_\perp\) relative to the span of sections at all \(n=l+u\)
+      sample inputs. Reproduction gives \(f_\perp(x_i)=0\) at every one of them. The labeled loss
+      is unchanged, and the graph penalty is unchanged because it uses the full evaluation vector
+      \(f_X\), including unlabeled coordinates. The ambient penalty decreases by
+      \(\gamma_A\|f_\perp\|^2\), which is strict when \(\gamma_A>0\). Unlabeled sections are needed
+      because their evaluations occur in \(f_X^\top Lf_X\), even though they do not occur in the
+      loss.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: >-
+      Starting from the LapRLS coefficient objective, derive both the nonsymmetric coefficient equation and the symmetric equation in \(\beta=K^{1/2}\alpha\). Identify the term that makes the latter strictly positive definite.
+    answer: >-
+      Differentiation gives
+      \(K[l^{-1}J^\top(JK\alpha-y)+\gamma_A\alpha+\gamma_In^{-2}LK\alpha]=0\).
+      Setting the bracket to zero yields
+      \([l^{-1}J^\top JK+\gamma_AI+\gamma_In^{-2}LK]\alpha=l^{-1}J^\top y\).
+      With \(\beta=K^{1/2}\alpha\), the symmetric system has matrix
+      \(l^{-1}K^{1/2}J^\top JK^{1/2}+\gamma_AI+\gamma_In^{-2}K^{1/2}LK^{1/2}\).
+      The first and third terms are positive semidefinite; \(\gamma_AI\), with
+      \(\gamma_A>0\), makes the sum strictly positive definite.
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Compare supervised KRR, harmonic propagation, Laplacian eigenmaps, and LapRLS by estimand, output domain, out-of-sample mechanism, and principal failure boundary.
+    answer: >-
+      Supervised KRR estimates an ambient RKHS function from labels and predicts by kernel
+      evaluation; it ignores unlabeled geometry. Harmonic propagation estimates scores only on
+      current graph vertices and requires graph attachment or rebuilding out of sample. Laplacian
+      eigenmaps estimate low-energy graph coordinates, not labels, and need a separate extension.
+      LapRLS estimates an ambient RKHS predictor regularized by graph energy and evaluates it
+      directly at new inputs. Their main failures are respectively ambient misspecification,
+      unlabeled components or shortcuts, unstable graph spectra, and a false compatibility
+      assumption.
+  - number: 8
     kind: exploration
     status: draft
     prompt: >-
-      Construct a two-moons experiment in which unlabeled data helps, then rotate the labeling rule so the same geometry becomes misleading. State a rubric based on supervised ablation, graph sensitivity, and held-out error.
-    answer: "Rubric: use a held-out labeled set; compare (gamma_I=0); report graph connectivity and
-      sensitivity to neighbors and bandwidth; demonstrate a label rule aligned with the moons and
-      one cutting across them; report mean and variation over fixed seeds. Each of the five checks
-      is worth one point."
+      Design a two-moons study with one geometry-aligned labeling and one labeling that cuts across both moons. Specify graph perturbations, label budgets, validation rules, baselines, and the evidence required to conclude that unlabeled data helped.
+    answer: >-
+      Generate fixed-seed moons and reserve a labeled test set never used for graph selection.
+      Evaluate several small label budgets. Compare supervised KRR, harmonic propagation, and
+      LapRLS. Perturb neighbor count, mutual versus symmetric kNN, heat bandwidth, and a small
+      number of shortcut edges. Tune only on labeled validation points. Run both moon-membership
+      labels and a transverse coordinate threshold. Conclude that unlabeled data helped only if
+      LapRLS improves held-out error over \(\gamma_I=0\) across seeds and plausible graphs for the
+      aligned rule, while the transverse rule exposes the expected degradation rather than being
+      hidden by selective reporting.

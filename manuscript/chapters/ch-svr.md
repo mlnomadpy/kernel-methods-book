@@ -2,17 +2,21 @@
 id: ch-svr
 slug: support-vector-regression
 title: Support Vector Regression
-part: II · Supervised Machines with a Fixed Kernel
+part: II · Learning with a Fixed Kernel
 order: 6
 tier: practitioner
 prerequisites:
   - support-vector-machines
 objectives:
-  - Explain the central definitions and claims in Support Vector Regression.
-  - Apply the chapter's principal methods and interpret their outputs.
+  - 'Derive the \(\varepsilon\)-SVR primal, dual, and prediction function.'
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Identify which observations lie inside, on, or outside the
+    \(\varepsilon\)-tube and how each affects sparsity.
+  - 'Compare least-squares, pinball, expectile, and insensitive losses.'
+  - Build quantile and noncrossing distributional predictions from kernel fits.
+  - >-
+    Interpret the \(\nu\)-property and diagnose when support-vector sparsity
+    disappears.
 review_status: draft
 reviewers:
   technical: null
@@ -54,6 +58,10 @@ Deviations up to \(\varepsilon\) cost nothing; beyond \(\varepsilon\) the loss g
 Support vector regression was introduced by Drucker, Burges, Kaufman, Smola, and Vapnik (1997), who carried the margin construction of the classifier across to real-valued targets; the \(\varepsilon\)-insensitive loss on which it rests is due to Vapnik (1995) and is developed at length in Vapnik (1998). Everything that follows, the primal program, its dual, the tube geometry, and the \(\nu\)-variant, is the account systematized in the monograph of Schölkopf and Smola (2002).
 
 The graph is a trough: a flat floor of zero on the interval \([-\varepsilon,\varepsilon]\), then two straight ramps of unit slope. The flat floor is the regression analogue of the classifier's margin region, and it will do the same work. A point whose prediction already lands within \(\varepsilon\) of its target sits on the floor, contributes zero to the objective, and, as we will prove from the optimality conditions, receives a zero coefficient. The prediction is then reconstructed from the remaining points alone. Setting \(\varepsilon=0\) recovers the ordinary \(\ell_1\) (least absolute deviations) loss, which is robust but not sparse; the sparsity is bought entirely by the width of the insensitive zone.
+
+The same geometry can be read vertically around a fitted function. The shaded band below is not a confidence interval: it is a tolerance region chosen by the modeler. Points inside it have nonzero residuals but exactly zero loss; only the excess beyond either wall is charged.
+
+<figure class="viz" data-figure="epsilon-tube" data-alt="A fitted line is surrounded by a shaded epsilon tube. Five observations lie inside the tube and have zero loss, while three cross the tube walls and have positive epsilon-insensitive losses shown as bars below."><figcaption>The \(\varepsilon\)-insensitive loss discards residuals inside the tolerance tube and charges only the excess outside it. The three crossing points become candidates for support vectors; the comfortable points do not locate the fit.</figcaption></figure>
 
 ## The primal program for SV regression {#the-primal-program}
 
@@ -421,11 +429,11 @@ A tempting idea, storing only the support vectors as a compressed encoding of th
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Support Vector Regression**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+The \(\varepsilon\)-tube encodes application tolerance, not posterior uncertainty, and its nominal width does not imply a coverage probability. A larger \(\varepsilon\) often increases sparsity but can hide systematic bias; report residuals on both sides of the tube and the fraction of support vectors. Quantile curves fitted independently may cross, while expectiles target asymmetric squared-loss functionals rather than quantiles. For \(\nu\)-SVR, treat the fraction bounds as training-sample properties under the proposition's conditions, not as guaranteed future error rates.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Support Vector Regression; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@vapnik1995], [@vapnik1998], [@drucker1997svr].
+Support vector regression makes tolerance part of the objective: observations inside the \(\varepsilon\)-tube pay no loss and normally receive no coefficient, while observations crossing either wall determine the fit. The dual exposes the same box constraints and sparse expansion as classification; pinball and expectile losses change the target functional, and \(\nu\)-SVR learns the tube width subject to a readable error/support budget. Sparsity is therefore conditional, not automatic: narrow tubes and noisy targets can make most observations support vectors. The construction originates in [@vapnik1995; @vapnik1998] and the regression formulation in [@drucker1997svr].
 
 ## Exercises {#exercises}
 

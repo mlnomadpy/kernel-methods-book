@@ -2,8 +2,8 @@
 id: ch-scientific
 slug: scientific-computing-and-operator-learning
 title: Kernels for Scientific Computing and Operator Learning
-part: XVI · Dynamics and Scientific Learning
-order: 53
+part: X · Dynamics and Scientific Learning
+order: 52
 tier: advanced
 prerequisites:
   - mercer-and-rates
@@ -12,20 +12,20 @@ prerequisites:
   - gaussian-processes-and-rvm
 objectives:
   - >-
-    Construct kernel collocation methods for differential equations and boundary
-    constraints.
+    Derive kernel estimators from bounded differential, boundary, integral, and
+    point-evaluation information.
   - >-
-    Derive covariance formulas for derivative and linear-functional
-    observations.
+    Establish when symmetric collocation is positive definite and when a small
+    sampled residual controls solution error.
   - >-
-    Separate discretization, approximation, regularization, and observation
-    errors.
+    Reconstruct Gaussian-process differential-equation learning and Bayesian
+    probabilistic numerics under their exact assumptions.
   - >-
-    Interpret probabilistic numerical solvers without overstating posterior
-    calibration.
+    Separate approximation, discretization, algebraic, observation, and model
+    errors in a scientific computation.
   - >-
-    Compare kernel operator regression with neural operators across resolution
-    and geometry.
+    Compare kernel operator regression and Fourier neural operators in
+    discretization-independent function spaces.
 review_status: draft
 reviewers:
   technical: null
@@ -34,7 +34,6 @@ reviewers:
 provenance: provenance/ch-scientific.yml
 verification_date: null
 bibliography:
-  - green1984
   - wendland2005
   - raissi2017gpde
   - cockayne2019probnum
@@ -42,69 +41,257 @@ bibliography:
 ---
 # Kernels for Scientific Computing and Operator Learning
 
-<p class="lead">A curve that passes through every measurement can still be physically impossible: it can violate the equation that governs the field, contradict the boundary conditions, or fail to conserve what the physics conserves. Scientific learning asks more than prediction at another row of a data table; it may require a function satisfying a differential equation, an inverse coefficient compatible with boundary measurements, or an operator mapping one field to another across discretizations. Ordinary kernel regression, built on point evaluations of a scalar response, does not obviously accommodate derivatives, fluxes, integrals, or equation residuals. It does, and cheaply: every bounded linear functional of an RKHS function has a representer obtained by applying the functional to a kernel argument. From that one fact we build symmetric collocation solvers for boundary-value problems, Gaussian processes conditioned on derivative and residual observations, probabilistic numerical methods with honest interpretations, and kernel operator regression that stands comparison with neural operators, provided numerical error is decomposed rather than hidden.</p>
+<p class="lead">A curve that passes through every measurement can still be physically impossible. It can violate the equation governing the field, contradict a boundary condition, or conserve the wrong quantity. Scientific learning therefore asks more than prediction at another row of a data table. The unknown may be a function constrained by a differential operator, a coefficient visible only through a forward solve, or an operator mapping one field to another on meshes never seen during training. Kernels can address all three, but only after the continuous problem is stated precisely. This chapter develops the shared mechanism, bounded linear information in a function space, and then follows it through collocation, differential-equation Gaussian processes, probabilistic numerics, and operator learning. At every stage we keep five errors separate: approximation, information discretization, linear-algebra error, observation noise, and model discrepancy.</p>
 
-## Linear information about an unknown function {#scientific-linear-information}
+## The continuous problem comes before the matrix {#scientific-continuous-problem}
 
-What do a thermocouple reading, a measured flux, and a PDE residual have in common? Each extracts one number from the unknown function in a linear way, and that shared structure is all the theory needs. Let \(u\in\mathcal H_k\) be an unknown function and suppose the available information consists of bounded linear functionals
-
-$$
-y_i=L_i u+\varepsilon_i.
-$$
-
-Point evaluation, derivatives, integrals, boundary traces, and differential-equation residuals all fit this form when they are bounded on the chosen RKHS. By the Riesz representation theorem, each functional has a representer \(r_i\in\mathcal H_k\) satisfying \(L_i u=\langle u,r_i\rangle_{\mathcal H_k}\).
-
-:::: {.theorem #thm-functional-representer}
-[Theorem (representer theorem for linear scientific information)]{.box-title}
-
-The minimum-norm regularized estimator
+Let \(\Omega\subset\mathbb R^d\) be a bounded domain and let \(X\) and \(Y\) be normed spaces of functions or distributions. A linear boundary-value problem has the abstract form
 
 $$
-\min_{u\in\mathcal H_k}\sum_i\ell_i(y_i,L_i u)+\lambda\lVert u\rVert_{\mathcal H_k}^2
+\mathcal T u=(\mathcal A u,\mathcal B u)=(f,g)\in Y,
 $$
 
-has a solution in the span of the functional representers:
+where \(\mathcal A\) acts in \(\Omega\) and \(\mathcal B\) encodes boundary information. Before choosing sites or a kernel, four questions must have answers.
+
+1. **Existence.** Does at least one \(u^\dagger\in X\) satisfy the equation?
+2. **Uniqueness.** Is \(\ker\mathcal T=\{0\}\), or has a null space been fixed by side conditions?
+3. **Stability.** Is there a constant \(C_{\mathrm{stab}}\) such that
+   $$
+   \lVert v\rVert_X\le C_{\mathrm{stab}}\lVert\mathcal T v\rVert_Y
+   $$
+   for all admissible \(v\)?
+4. **Information.** Are the functionals used by the numerical method bounded on the selected hypothesis space?
+
+These are logically separate. A collocation matrix can be invertible although the continuous problem is unstable in the target norm. Conversely, a well-posed PDE may lead to a singular discrete system because two information functionals agree on the chosen RKHS.
+
+::: {.definition #def-scientific-error-ledger}
+[Definition (five-part scientific error ledger)]{.box-title}
+
+For an estimator \(\widetilde u\), record:
 
 $$
-\widehat u=\sum_i c_i r_i.
+\begin{aligned}
+e_{\mathrm{app}}&=\text{error from restricting the target to the hypothesis space},\\
+e_{\mathrm{disc}}&=\text{error from replacing continuous information by finitely many functionals},\\
+e_{\mathrm{alg}}&=\text{error from terminating or perturbing the numerical solve},\\
+e_{\mathrm{obs}}&=\text{propagated measurement noise},\\
+e_{\mathrm{model}}&=\text{error from a wrong operator, boundary condition, or constitutive law}.
+\end{aligned}
 $$
 
-For a sufficiently smooth scalar kernel, \(r_i(x)=L_i^{(z)}k(x,z)\), with the functional applied to the indicated kernel argument.
-
-**Assumptions.** Each \(L_i\) is bounded on \(\mathcal H_k\); the regularized problem has a minimizer; the penalty is strictly increasing in the norm. **Proof status.** Proved by orthogonally decomposing \(u\) into the representer span and its complement.
-::::
-
-The Gram matrix becomes
-
-$$
-G_{ij}=L_i^{(x)}L_j^{(z)}k(x,z).
-$$
-
-Positive semidefiniteness follows because \(G\) is the Gram matrix of the Riesz representers. Differentiating a kernel formula is legitimate only when the required derivatives exist and evaluation remains bounded.
-
-## Symmetric kernel collocation {#kernel-collocation}
-
-The most direct use of functional representers is to solve a differential equation by regression: make the equation and its boundary conditions the observations. Consider a linear boundary-value problem
-
-$$
-\mathcal A u=f\quad\text{in }\Omega,
-\qquad
-\mathcal B u=g\quad\text{on }\partial\Omega.
-$$
-
-Choose interior points and boundary points, then create functionals from \(\mathcal A\) and \(\mathcal B\) evaluated at those locations. Solving the functional Gram system produces a function that matches the equation and boundary information at the collocation sites.
-
-::: {.proposition #prop-collocation-psd}
-[Proposition (validity of the symmetric collocation matrix)]{.box-title}
-
-If all collocation functionals are bounded on \(\mathcal H_k\), the matrix obtained by applying each pair of functionals to the two kernel arguments is positive semidefinite.
-
-**Assumptions.** The kernel is differentiable to the order required by the differential and boundary operators; the functionals are bounded. **Proof status.** Proved by identifying the matrix with the Gram matrix of functional representers.
+A posterior standard deviation or collocation residual usually addresses only part of this ledger.
 :::
 
-Unsymmetric collocation applies the operator to only one argument and can be cheaper, but it loses this direct symmetric positive-definite structure. Least-squares collocation uses more residual points than basis centers and can improve robustness to noise and inconsistent information.
+## Bounded linear information and its representers {#scientific-linear-information}
 
-Native-space error estimates relate fill distance, kernel smoothness, and target regularity. A very smooth kernel is not automatically better: it can be badly conditioned and can impose regularity the true solution does not possess [@wendland2005]. Shape-parameter selection must balance approximation and numerical stability.
+A thermocouple reading, a measured flux, a cell average, and a linear PDE residual all extract one scalar from \(u\). Write the observations as
+
+$$
+y_i=L_i u+\varepsilon_i,\qquad L_i\in\mathcal H_k^\ast.
+$$
+
+Point evaluation belongs to this class by the definition of an RKHS. Derivative evaluation does not follow automatically. If \(L_i u=D^\alpha u(x_i)\), the map \(L_i:\mathcal H_k\to\mathbb R\) must be bounded. For a sufficiently regular kernel its Riesz representer is
+
+$$
+r_i(\cdot)=L_i^{(z)}k(\cdot,z),
+$$
+
+and the functional Gram matrix is
+
+$$
+G_{ij}=\langle r_j,r_i\rangle_{\mathcal H_k}
+      =L_i^{(x)}L_j^{(z)}k(x,z).
+$$
+
+The order of differentiation matters. Two second-order PDE functionals require mixed derivatives of total order four across the two kernel arguments.
+
+:::: {.theorem #thm-scientific-functional-representer}
+[Theorem (representer theorem for linear scientific information)]{.box-title}
+
+Let \(\mathcal H_k\) be a real RKHS, let \(L_1,\ldots,L_m\in\mathcal H_k^\ast\), and let
+
+$$
+J(u)=\Phi(L_1u,\ldots,L_mu)+\Omega(\lVert u\rVert_{\mathcal H_k}),
+$$
+
+where \(\Phi:\mathbb R^m\to(-\infty,\infty]\) is arbitrary and \(\Omega:[0,\infty)\to\mathbb R\) is strictly increasing. If \(J\) has a minimizer, every minimizer has the form
+
+$$
+\widehat u=\sum_{i=1}^m c_i r_i.
+$$
+
+If \(\Omega\) is merely nondecreasing, at least one minimizer has this form, but other minimizers may contain an invisible orthogonal component.
+
+**Assumptions.** Fixed real RKHS, bounded linear information, existence of a minimizer, and the stated monotonicity of the radial penalty.
+
+**Proof status.** Proved below by orthogonal decomposition.
+::::
+
+:::: {.proof}
+Let \(S=\operatorname{span}\{r_1,\ldots,r_m\}\), a closed finite-dimensional subspace. Decompose any \(u\in\mathcal H_k\) as \(u=u_S+u_\perp\), where \(u_\perp\perp S\). Since
+
+$$
+L_i u_\perp=\langle u_\perp,r_i\rangle_{\mathcal H_k}=0,
+$$
+
+the data term is identical for \(u\) and \(u_S\). Pythagoras gives
+
+$$
+\lVert u\rVert_{\mathcal H_k}^2
+=\lVert u_S\rVert_{\mathcal H_k}^2+\lVert u_\perp\rVert_{\mathcal H_k}^2.
+$$
+
+If \(u_\perp\ne0\), strict increase of \(\Omega\) makes \(J(u_S)\lt J(u)\). Thus every minimizer lies in \(S\). Under nondecrease, deleting \(u_\perp\) cannot increase the objective, which proves existence of a span-valued minimizer but not uniqueness. \(\square\)
+::::
+
+The proof identifies the exact boundary of the result. A nonlinear residual \(u\mapsto\mathcal N(u)(x)\) is not a bounded linear functional, and a kernel family whose parameters are optimized jointly with \(u\) is not one fixed RKHS. Both require a different argument.
+
+## Symmetric collocation and discrete solvability {#kernel-collocation}
+
+For interior sites \(X_A=\{x_i\}_{i=1}^{m_A}\) and boundary sites \(X_B=\{z_j\}_{j=1}^{m_B}\), define
+
+$$
+L_i^A u=(\mathcal A u)(x_i),\qquad
+L_j^B u=(\mathcal B u)(z_j).
+$$
+
+Stack these as \(L_1,\ldots,L_m\) and solve the minimum-norm interpolation problem
+
+$$
+\min_{u\in\mathcal H_k}\lVert u\rVert_{\mathcal H_k}
+\quad\text{subject to}\quad
+L_i u=y_i.
+$$
+
+The representer theorem gives \(\widehat u=\sum_jc_jr_j\) and
+
+$$
+Gc=y,\qquad G_{ij}=L_i^{(x)}L_j^{(z)}k(x,z).
+$$
+
+This is called symmetric collocation because every row and every basis function is generated by the same information family. It differs from unsymmetric Kansa-type collocation, which applies the operator only in the testing argument.
+
+::: {.proposition #prop-scientific-collocation}
+[Proposition (positive definiteness and uniqueness)]{.box-title}
+
+Assume \(L_1,\ldots,L_m\) are bounded on \(\mathcal H_k\). Then \(G\) is positive semidefinite. It is positive definite if and only if the functionals are linearly independent as elements of \(\mathcal H_k^\ast\). In that case the minimum-norm interpolant exists and is unique for every \(y\in\mathbb R^m\).
+
+**Assumptions.** Fixed RKHS, bounded linear functionals, and exact functional evaluation.
+
+**Proof status.** Proved below by the Gram representation.
+:::
+
+:::: {.proof}
+For \(a\in\mathbb R^m\),
+
+$$
+a^\top Ga
+=\sum_{i,j}a_i a_j\langle r_j,r_i\rangle_{\mathcal H_k}
+=\left\lVert\sum_i a_i r_i\right\rVert_{\mathcal H_k}^2\ge0.
+$$
+
+Equality holds exactly when \(\sum_i a_i r_i=0\), equivalently when
+\(\sum_i a_iL_i=0\) on \(\mathcal H_k\). Thus \(G\) is positive definite precisely when the functionals are independent. The linear system then has one coefficient vector, and the representer theorem gives the unique minimum-norm interpolant. \(\square\)
+::::
+
+Regularized least-squares collocation replaces exact constraints by
+
+$$
+\sum_i w_i\{L_i u-y_i\}^2+\lambda\lVert u\rVert_{\mathcal H_k}^2.
+$$
+
+Weights are not cosmetic. Interior residuals, boundary values, and physical measurements have different units and counts. A factor that changes when the mesh is refined can silently change the continuous objective.
+
+### From sampled residual to solution error {#scientific-residual-stability}
+
+Suppose \(\mathcal T:X\to Y\) is injective and stable:
+
+$$
+\lVert v\rVert_X\le C_{\mathrm{stab}}\lVert\mathcal T v\rVert_Y.
+$$
+
+If \(u^\dagger\) and \(\widehat u\) satisfy the same exact boundary conditions, then
+
+$$
+\lVert u^\dagger-\widehat u\rVert_X
+\le C_{\mathrm{stab}}
+\lVert\mathcal A u^\dagger-\mathcal A\widehat u\rVert_Y.
+$$
+
+This simple inequality is the bridge from residual to state error. Collocation provides only residual values at finitely many sites. To control the \(Y\)-norm between sites, one additionally needs a sampling inequality involving fill distance, target smoothness, and a norm bound. Native-space analysis supplies such inequalities for appropriate kernels and domains [@wendland2005]. No theorem permits the replacement
+
+$$
+\lVert r\rVert_Y\quad\text{by}\quad\max_{x_i\in X_A}|r(x_i)|
+$$
+
+without assumptions on \(r\) and the site geometry.
+
+::: {.remark}
+Flat or extremely smooth radial kernels can make \(e_{\mathrm{app}}\) small while making \(e_{\mathrm{alg}}\) enormous through ill-conditioning. Approximation order and floating-point stability must be reported separately.
+:::
+
+## A complete collocation calculation {#scientific-worked-poisson}
+
+Consider
+
+$$
+-u''(x)=2,\quad 0\lt x\lt1,\qquad u(0)=u(1)=0,
+$$
+
+whose solution is \(u^\dagger(x)=x(1-x)\). Use the degree-two polynomial kernel
+
+$$
+k(x,z)=(1+xz)^2=1+2xz+x^2z^2.
+$$
+
+Its RKHS is the three-dimensional polynomial space generated by
+\((1,\sqrt2x,x^2)\). Take the information functionals
+
+$$
+L_0u=u(0),\qquad L_1u=u(1),\qquad L_2u=-u''(1/2),
+$$
+
+with target vector \(y=(0,0,2)^\top\). Their representers are
+
+$$
+r_0(x)=1,\qquad
+r_1(x)=(1+x)^2,\qquad
+r_2(x)=-2x^2.
+$$
+
+Therefore
+
+$$
+G=
+\begin{bmatrix}
+1&1&0\\
+1&4&-2\\
+0&-2&4
+\end{bmatrix},
+\qquad
+Gc=
+\begin{bmatrix}0\\0\\2\end{bmatrix}.
+$$
+
+Solving gives
+
+$$
+c=\left(-\frac12,\frac12,\frac34\right)^\top,
+$$
+
+and hence
+
+$$
+\widehat u(x)
+=-\frac12+\frac12(1+2x+x^2)-\frac32x^2
+=x-x^2.
+$$
+
+The exact solution is recovered because it lies in the RKHS and the three independent functionals identify all three polynomial coefficients. The same calculation also exposes three failure boundaries.
+
+- Removing either boundary functional leaves a nontrivial null direction.
+- Replacing \(k\) by a degree-one polynomial kernel makes second-derivative information identically zero.
+- Perturbing the forcing to a nonconstant function leaves the discrete equation satisfied at \(x=1/2\) but does not make the global residual vanish.
 
 ::: {.example #example-scientific-boundary}
 [Example (boundary constraints change the admissible space)]{.box-title}
@@ -114,108 +301,380 @@ Two kernel solvers may use the same interior differential residuals but differen
 **Verification artifact.** checks/example-ch-scientific-example-scientific-boundary.json records the example source hash and verification scope.
 :::
 
-## Green kernels and physics-informed covariance {#green-physics-kernels}
+<figure class="viz" data-figure="collocation-residual" data-alt="The left panel compares the exact sine solution with a values-only RBF fit and a fit constrained by values, differential-equation residuals, and zero boundary conditions. The right panel compares equation residuals at independent locations."><figcaption>Different information functionals produce different representers. A smaller independent residual supports the discretized solver, but a continuous error claim still needs stability and a sampling inequality.</figcaption></figure>
 
-When a Green function for \(\mathcal A\) and the boundary conditions is available, it can define a kernel whose sections already respect the operator geometry. This mirrors the spline construction in [[ch:smoothing-splines-and-additive-rkhs]]. Physics can also be encoded by applying projection operators to a base kernel, yielding divergence-free, curl-free, or conservation-compatible vector fields.
+<figure class="viz" data-figure="scientific-collocation-convergence" data-alt="A log-log plot shows both independent differential-equation residual and solution L2 error decreasing as the number of collocation sites increases, on distinct scales.">
+<figcaption>Refining the information set improves both the discrete equation certificate and the recovered function in this Poisson example, but the curves are not interchangeable. Turning residual decay into solution-error decay still requires the stability argument developed above.</figcaption>
+</figure>
 
-A hard constraint restricts the hypothesis space. A soft residual penalty allows model discrepancy:
+## Paper module I: Gaussian processes for linear differential equations {#scientific-module-gpde}
 
-$$
-\sum_i\{y_i-u(x_i)\}^2
-+\rho\sum_j\{\mathcal A u(z_j)-f(z_j)\}^2
-+\lambda\lVert u\rVert_{\mathcal H_k}^2.
-$$
+### The question and exact setting {#scientific-gpde-setting}
 
-The parameter \(\rho\) expresses trust in the equation relative to observations. Sending it to infinity is justified only when the numerical operator and physical model are exact at the required scale.
-
-## Gaussian processes with differential observations {#gp-differential-observations}
-
-Collocation returns a single function; it does not say how much to trust it between the collocation sites. A probabilistic reading of the same construction does. If \(u\sim\mathcal{GP}(m,k)\), bounded linear transformations remain jointly Gaussian. For linear functionals \(L_i\) and \(M_j\),
+Raissi, Perdikaris, and Karniadakis asked whether the unknown coefficients of a linear differential equation could be learned jointly with a latent solution from scarce, noisy observations [@raissi2017gpde]. Let
 
 $$
-\operatorname{Cov}(L_i u,M_j u)
-=L_i^{(x)}M_j^{(z)}k(x,z).
+f=\mathcal L^\phi u,
 $$
 
-This permits conditioning on values, derivatives, fluxes, integrals, and linear PDE residuals in one Gaussian system. Unknown forcing or coefficients make the problem nonlinear and may require approximation, hierarchical priors, or alternating inference [@raissi2017gpde].
+where \(\mathcal L^\phi\) is linear in \(u\) but may depend on a finite-dimensional parameter \(\phi\). Place
 
-The posterior covariance measures uncertainty under the GP prior, observation model, and exact functional evaluations. Numerical differentiation, operator discretization, boundary approximation, and kernel selection are additional sources of uncertainty. A narrow posterior obtained with a misspecified operator is not a calibrated numerical guarantee.
+$$
+u\sim\mathcal{GP}(m,k_\theta).
+$$
 
-## Probabilistic numerical methods {#probabilistic-numerics}
+Assume every functional needed to evaluate \(u\) and \(\mathcal L^\phi u\) is mean-square bounded. A sufficient condition for a differential operator of order \(r\) is that the required mixed derivatives of \(k_\theta\) exist and are continuous.
 
-The GP treatment of a differential equation is one instance of a broader stance: treat numerical error itself as something to be modeled, not merely bounded. A probabilistic numerical method places a probability model on an unknown mathematical object and conditions on information produced by a numerical procedure. Bayesian quadrature in [[ch:kernel-quadrature-and-herding]] is one example; differential-equation solvers are another [@cockayne2019probnum].
+Observe noisy values at two site sets:
 
-Three questions keep the interpretation honest:
+$$
+y_u=u(X_u)+\varepsilon_u,\qquad
+y_f=f(X_f)+\varepsilon_f,
+$$
 
-1. What is random: epistemic uncertainty about a fixed function, a genuinely random physical field, or a device for numerical error representation?
-2. Which information operator was observed, and was it evaluated exactly?
-3. Is posterior contraction calibrated to actual numerical error under a stated class of problems?
+with independent Gaussian noises of variances \(\sigma_u^2\) and \(\sigma_f^2\). The paper's new move is not merely differentiating a kernel. It treats the differential equation as a map between jointly Gaussian latent fields and learns \((\theta,\phi,\sigma_u,\sigma_f)\) through their joint marginal likelihood.
 
-Posterior variance can guide adaptive mesh refinement by selecting information where uncertainty or an error indicator is large. The selection policy then becomes part of the method and must be tested against deterministic residual-based refinement.
+### Covariance derivation and executable object {#scientific-gpde-derivation}
+
+Linearity gives
+
+$$
+\begin{aligned}
+k_{uu}(x,z)&=k_\theta(x,z),\\
+k_{uf}(x,z)&=\mathcal L_z^\phi k_\theta(x,z),\\
+k_{fu}(x,z)&=\mathcal L_x^\phi k_\theta(x,z),\\
+k_{ff}(x,z)&=\mathcal L_x^\phi\mathcal L_z^\phi k_\theta(x,z).
+\end{aligned}
+$$
+
+Thus the observation covariance is
+
+$$
+K_y=
+\begin{bmatrix}
+K_{uu}(X_u,X_u)+\sigma_u^2I & K_{uf}(X_u,X_f)\\
+K_{fu}(X_f,X_u) & K_{ff}(X_f,X_f)+\sigma_f^2I
+\end{bmatrix}.
+$$
+
+For a test functional \(M\), define
+
+$$
+k_{My}=
+\begin{bmatrix}
+M_xk_\theta(x,X_u)&
+M_x\mathcal L_z^\phi k_\theta(x,X_f)
+\end{bmatrix}.
+$$
+
+The posterior mean and variance are
+
+$$
+\begin{aligned}
+\mathbb E[Mu\mid y]&=Mm+k_{My}K_y^{-1}(y-m_y),\\
+\operatorname{Var}(Mu\mid y)&=
+M_xM_zk_\theta(x,z)-k_{My}K_y^{-1}k_{yM}.
+\end{aligned}
+$$
+
+In implementation these expressions use a Cholesky factorization, never an explicit inverse. Parameters are commonly estimated by minimizing
+
+$$
+\frac12(y-m_y)^\top K_y^{-1}(y-m_y)
++\frac12\log\det K_y+\frac{n}{2}\log(2\pi).
+$$
+
+The first term rewards fit; the second penalizes covariance volume. When \(\phi\) enters only through \(\mathcal L^\phi\), both terms carry information about the differential equation.
+
+### What is proved, what is inherited, and what fails {#scientific-gpde-boundary}
+
+The joint Gaussian formulas are exact under the stated prior and linear information model. They do not prove that marginal-likelihood optimization identifies \(\phi\). Identification fails if two parameter values induce the same covariance on the observed sites, if the latent field has insufficient excitation, or if \(\phi\) can be traded against a kernel length scale. The construction also changes qualitatively for a nonlinear operator because \(\mathcal N(u)\) is generally not Gaussian.
+
+In the zero-noise, fixed-parameter case, the posterior mean equals the minimum-RKHS-norm functional interpolant and the posterior variance equals the squared functional power function. This connects the paper to collocation. The interpretations differ:
+
+| Object | Deterministic reading | GP reading |
+|---|---|---|
+| Posterior mean | Minimum-norm functional interpolant | Conditional mean under the prior |
+| Posterior variance | Worst-case squared residual representer norm | Conditional prior variance |
+| Hyperparameter fit | Kernel and scale selection | Empirical Bayes |
+| Failure diagnostic | Residual, stability, fill distance | Prior predictive and coverage checks |
+
+Neither reading automatically includes operator misspecification or numerical differentiation error.
+
+## Paper module II: Bayesian probabilistic numerical methods {#probabilistic-numerics}
+
+### Numerical tasks as inverse problems {#scientific-pn-setting}
+
+Cockayne, Oates, Sullivan, and Girolami separate three maps [@cockayne2019probnum]:
+
+$$
+u\in\mathcal U,\qquad
+A:\mathcal U\to\mathcal A,\qquad
+Q:\mathcal U\to\mathcal Q.
+$$
+
+The latent object is \(u\), the numerical procedure obtains information \(a=A(u)\), and the desired answer is \(Q(u)\). Assume \(\mathcal U,\mathcal A,\mathcal Q\) are standard Borel spaces, \(\mu\) is a probability measure on \(\mathcal U\), and a regular conditional distribution \(\mu^a\) of \(u\) given \(A(u)=a\) exists. A probabilistic numerical method returns a probability distribution on \(\mathcal Q\). It is Bayesian for \(\mu\) when that output is
+
+$$
+Q_\#\mu^a,
+$$
+
+the pushforward of the conditional distribution through \(Q\).
+
+This definition is the paper's central contribution. It prevents a distribution attached to a deterministic answer from being called Bayesian unless it is generated by conditioning a coherent prior through the actual information operator.
+
+### Gaussian linear case and Bayes-risk derivation {#scientific-pn-derivation}
+
+Let \(\mathcal U\) be a separable Hilbert space, \(u\sim\mathcal N(m,C)\), and let \(A:\mathcal U\to\mathbb R^m\) and \(Q:\mathcal U\to\mathbb R^q\) be bounded linear maps. With additive Gaussian information noise \(\eta\sim\mathcal N(0,\Gamma)\),
+
+$$
+a=Au+\eta.
+$$
+
+Then \(Q(u)\mid a\) is Gaussian with
+
+$$
+\begin{aligned}
+m_{Q\mid a}
+&=Qm+QCA^\ast(ACA^\ast+\Gamma)^{-1}(a-Am),\\
+C_{Q\mid a}
+&=QCQ^\ast-QCA^\ast(ACA^\ast+\Gamma)^{-1}ACQ^\ast.
+\end{aligned}
+$$
+
+These are the same equations as functional GP conditioning, written without coordinates. The probabilistic-numerical object is the whole conditional law, not just \(m_{Q\mid a}\).
+
+::: {.proposition #prop-scientific-bayes-risk}
+[Proposition (what posterior variance calibrates on average)]{.box-title}
+
+Assume \(Q(u)\in L^2(\mu;\mathbb R^q)\), with expectation also taken over the information noise when it is present. Among all measurable estimators \(\delta(a)\), the posterior mean \(\delta^\ast(a)=\mathbb E[Q(u)\mid a]\) minimizes integrated squared error, and
+
+$$
+\mathbb E\lVert Q(u)-\delta^\ast(a)\rVert_2^2
+=\mathbb E\,\operatorname{tr}\operatorname{Cov}(Q(u)\mid a).
+$$
+
+**Assumptions.** Square-integrable quantity of interest, measurable information and decision rules, and a regular conditional distribution.
+
+**Proof status.** Proved below by conditional orthogonal decomposition in \(L^2\).
+:::
+
+:::: {.proof}
+For any \(\delta(a)\), condition on \(a\) and write
+
+$$
+Q(u)-\delta
+=\{Q(u)-\mathbb E(Q(u)\mid a)\}
++\{\mathbb E(Q(u)\mid a)-\delta\}.
+$$
+
+The conditional cross term is zero because the first bracket has conditional mean zero. Therefore
+
+$$
+\mathbb E[\lVert Q(u)-\delta\rVert^2\mid a]
+=\operatorname{tr}\operatorname{Cov}(Q(u)\mid a)
++\lVert\mathbb E(Q(u)\mid a)-\delta\rVert^2.
+$$
+
+The second term is minimized by the posterior mean. Taking expectation proves the identity. \(\square\)
+::::
+
+### Failure boundary and afterlife {#scientific-pn-boundary}
+
+The proposition is an average statement under \(\mu\). It is not pointwise frequentist calibration for a fixed \(u^\dagger\), and it can be badly misleading when \(\mu\) assigns too little mass near the true solution or when \(A\) is implemented approximately but treated as exact. A narrow conditional distribution can coexist with a large \(e_{\mathrm{model}}\) or \(e_{\mathrm{alg}}\).
+
+Probabilistic mesh refinement can choose the next functional by expected reduction in posterior loss. Deterministic residual refinement chooses it by an error indicator. The two policies should be compared on actual target error, not on their own internal uncertainty criteria.
 
 ## Inverse scientific problems {#scientific-inverse-problems}
 
-So far the unknown was the solution field itself. Often the real target sits one level deeper: the conductivity, source, or material coefficient that produced the field we can measure. In an inverse problem, observations depend on an unknown coefficient through a forward solution operator:
+In an inverse problem the coefficient \(a\) is unknown and the measured field is generated through a forward solution operator:
 
 $$
-y=\mathcal G(a)+\varepsilon.
+y=\mathcal O\mathcal G(a)+\varepsilon.
 $$
 
-Kernel regularization may act on \(a\), on the state \(u\), or on both. Linear inverse problems connect directly to [[ch:inverse-learning-and-spectral-regularization]]. Nonlinear forward maps require local linearization, adjoints, sampling, or surrogate models.
-
-Identifiability precedes optimization. If distinct coefficients produce indistinguishable observations, a smooth kernel selects one representative but does not recover information absent from the experiment. Report the observation operator, sensitivity spectrum, prior or RKHS penalty, and uncertainty conditional on nonidentifiable directions.
-
-## Learning operators between function spaces {#operator-learning}
-
-Solving one boundary-value problem per parameter setting is wasteful when the same equation must be solved thousands of times. The alternative is to learn the solution map itself. Many scientific tasks observe pairs of functions \((a_i,u_i)\) and seek an operator \(\mathcal G:a\mapsto u\). A scalar kernel on input functions combined with an operator-valued output kernel yields
+Kernel regularization may be placed on \(a\), on the state \(u=\mathcal G(a)\), or on a discrepancy term. The decomposition
 
 $$
-\widehat{\mathcal G}(a)=\sum_i K(a,a_i)c_i,
+y-\mathcal O\widetilde{\mathcal G}(a)
+=\varepsilon
++\mathcal O\{\mathcal G(a)-\widetilde{\mathcal G}(a)\}
 $$
 
-where each coefficient may itself be a function. Basis discretization reduces the problem to the vector-valued framework of [[ch:vector-and-operator-valued-kernels]].
+shows why surrogate error belongs in the likelihood. Treating \(\widetilde{\mathcal G}\) as exact makes the inverse posterior overconfident.
 
-Resolution transfer requires more than evaluating a matrix on a finer grid. The input and output spaces, sampling operators, and norms must be defined independently of discretization. Training and testing on different meshes is a necessary diagnostic.
+Identifiability comes before regularization. If
 
-Neural operators learn nonlinear maps between function spaces. Fourier neural operators parameterize an integral kernel in spectral coordinates and have become an important comparator for parametric PDE families [@li2020fno]. Kernel operator regression offers convex fitting for fixed representations and transparent regularization; neural operators offer learned representations and often greater expressivity. Comparisons should match training trajectories, meshes, parameter counts, error norms, and rollout horizons.
+$$
+\mathcal O\mathcal G(a_1)=\mathcal O\mathcal G(a_2)
+$$
+
+for \(a_1\ne a_2\), a kernel penalty can select one representative but cannot recover the missing information. Local diagnostics examine the singular values of the Fréchet derivative \(D(\mathcal O\mathcal G)(a)\); global nonidentifiability may remain even when the derivative is injective locally.
+
+## Kernel operator regression {#scientific-kernel-operator-regression}
+
+Let \(\mathcal A\) be an input function space and \(\mathcal U\) a separable Hilbert output space. An operator-valued positive kernel
+
+$$
+K:\mathcal A\times\mathcal A\to\mathcal L(\mathcal U)
+$$
+
+defines an RKHS of maps \(F:\mathcal A\to\mathcal U\). Given pairs \((a_i,u_i)\), vector-valued ridge regression solves
+
+$$
+\min_F\frac1n\sum_{i=1}^n\lVert F(a_i)-u_i\rVert_{\mathcal U}^2
++\lambda\lVert F\rVert_{\mathcal H_K}^2.
+$$
+
+The representer theorem yields
+
+$$
+\widehat F(a)=\sum_{i=1}^nK(a,a_i)c_i,\qquad c_i\in\mathcal U.
+$$
+
+For \(K(a,b)=k(a,b)I_{\mathcal U}\), expansion in any orthonormal output basis decouples the output coordinates while sharing the same input Gram matrix. A finite grid is only a coordinate system if the norms, sampling maps, and reconstruction maps are defined at the function-space level.
+
+Generalization error and discretization error are different:
+
+$$
+\lVert \widehat F_h(a_h)-\mathcal G(a)\rVert_{\mathcal U}
+\le
+\underbrace{\lVert \widehat F_h(a_h)-P_h\widehat F(a)\rVert}_{\text{implementation and discretization}}
++
+\underbrace{\lVert P_h\{\widehat F(a)-\mathcal G(a)\}\rVert}_{\text{operator learning}}
++
+\underbrace{\lVert P_h\mathcal G(a)-\mathcal G(a)\rVert}_{\text{output projection}}.
+$$
+
+Testing on a finer grid addresses only part of this inequality.
+
+## Paper module III: Fourier neural operators {#scientific-module-fno}
+
+### Architecture and derivation {#scientific-fno-derivation}
+
+Li and collaborators target repeated solution of a parametric PDE by learning the operator \(a\mapsto u\), rather than one discretized vector-to-vector map [@li2020fno]. On a periodic domain, a neural-operator layer has the form
+
+$$
+v_{t+1}(x)=\sigma\left(
+W_tv_t(x)+
+\int_\Omega\kappa_t(x-y)v_t(y)\,dy
+\right).
+$$
+
+Translation invariance makes the integral a convolution. The Fourier convolution theorem gives
+
+$$
+\mathcal F(\kappa_t\ast v_t)(\xi)
+=\widehat\kappa_t(\xi)\widehat v_t(\xi).
+$$
+
+The FNO keeps modes \(\xi\in\Lambda_M\), learns complex matrices \(R_t(\xi)\), and computes
+
+$$
+v_{t+1}
+=\sigma\left(
+W_tv_t+
+\mathcal F^{-1}\{R_t(\xi)\widehat v_t(\xi)\mathbf1_{\xi\in\Lambda_M}\}
+\right).
+$$
+
+On \(N\) grid points, FFTs cost \(O(N\log N)\) per channel, while the learned spectral multiplication costs \(O(|\Lambda_M|c^2)\) for channel width \(c\). The same spectral parameters can be evaluated on another uniform grid if that grid resolves the retained modes.
+
+### A heat-operator calculation {#scientific-fno-heat}
+
+On the one-dimensional torus, the heat equation
+
+$$
+\partial_tu=\nu\partial_{xx}u,\qquad u(\cdot,0)=a
+$$
+
+has solution operator
+
+$$
+\widehat{\mathcal G_ta}(m)
+=e^{-4\pi^2\nu m^2t}\widehat a(m).
+$$
+
+A linear Fourier layer can represent the projection onto modes \(|m|\le M\) exactly by setting
+
+$$
+R(m)=e^{-4\pi^2\nu m^2t}.
+$$
+
+If \(a\in H^s(\mathbb T)\), Parseval gives
+
+$$
+\begin{aligned}
+\lVert\mathcal G_ta-P_M\mathcal G_ta\rVert_{L^2}^2
+&=\sum_{|m|\gt M}e^{-8\pi^2\nu m^2t}|\widehat a(m)|^2\\
+&\le \{1+(2\pi M)^2\}^{-s}\lVert a\rVert_{H^s}^2.
+\end{aligned}
+$$
+
+This is a truncation bound, not a learned-operator generalization bound. It explains why resolution transfer is plausible when the relevant spectrum is resolved, and why discontinuities or unresolved turbulence are a failure boundary.
+
+### Comparison under one currency {#scientific-operator-comparison}
+
+The FNO paper contributes a mesh-independent parameterization and experiments on Burgers, Darcy, and Navier-Stokes problems, including evaluation at higher resolution than training. It does not establish that arbitrary grid refinement reduces the error of a trained model. Grid transfer can expose the same learned low-mode operator more finely without reducing its approximation or statistical error.
+
+<figure class="viz" data-figure="operator-resolution-transfer" data-alt="Output error is plotted against evaluation-grid resolution. A fixed low-mode operator reaches a nonzero error plateau even as the grid becomes finer, whereas an operator containing the missing Fourier mode has negligible error.">
+<figcaption>A mesh-independent parameterization can be evaluated on a finer grid without learning any missing frequencies. Once the grid resolves the target, the red plateau is approximation error in the operator, not discretization error in the evaluation.</figcaption>
+</figure>
+
+| Method | Optimization | Main inductive bias | Natural certificate | Typical failure |
+|---|---|---|---|---|
+| Kernel operator ridge | Convex for fixed \(K\) | Similar input functions have similar outputs | Objective residual and RKHS norm | Kernel misspecification and \(n\times n\) scaling |
+| FNO | Nonconvex | Translation-compatible spectral mixing | Validation error and spectral diagnostics | Aliasing, geometry mismatch, unresolved modes |
+| Classical solver | Usually no training | Governing equation and discretization | A posteriori numerical estimator | Per-instance cost and model error |
+
+An honest benchmark uses the same training trajectories, boundary treatment, physical units, target norms, test parameter distribution, and compute accounting. It includes an established numerical solver because a surrogate is useful only relative to the cost and accuracy of the solver it replaces.
+
+## An auditable scientific-learning workflow {#scientific-workflow}
 
 :::: {.algorithm #algo-scientific-kernel-workflow}
-[Algorithm (auditable scientific kernel solver)]{.box-title}
+[Algorithm (continuous-to-discrete scientific audit)]{.box-title}
 
-**Input.** A domain, operators and boundary conditions, observations or simulation pairs, a kernel family, and target error norms.
+**Input.** A continuous problem, information or simulation pairs, a kernel or operator architecture, and an operational target norm.
 
-**Output.** A continuous estimator or learned operator with decomposed error diagnostics.
+**Output.** An estimator with a five-part error ledger.
 
-1. State the continuous problem, units, boundary conditions, and observation functionals before discretization.
-2. Choose a kernel whose native space supports every required functional and plausible solution regularity.
-3. Separate training sites, validation functions or parameter settings, and test meshes.
-4. Solve the regularized functional Gram system with scaling, preconditioning, and residual monitoring.
-5. Measure data error, equation residual, boundary residual, discretization sensitivity, and conditioning separately.
-6. Compare against an established numerical method and, for operator learning, a resolution-independent neural baseline.
+1. State the domain, function spaces, units, operator, null space, and boundary conditions.
+2. Establish well-posedness or state precisely which part is assumed.
+3. Verify boundedness of every point, derivative, trace, flux, and integral functional.
+4. Choose the discretization and record fill distance, mesh geometry, quadrature, and reconstruction maps.
+5. Solve with scaling, stable factorizations or preconditioning, and algebraic residual monitoring.
+6. Evaluate data error, independent equation residual, boundary residual, target-norm error, and conditioning separately.
+7. For probabilistic output, run prior-predictive, coverage, and misspecification checks.
+8. For operator learning, test unseen parameters, finer and irregular meshes, shifted forcing, and unresolved-frequency cases.
+9. Compare with a trusted numerical method under matched accuracy and hardware budgets.
 
-Stop adaptive refinement when the target norm and independent residual indicator stabilize, not merely when posterior variance becomes small.
+Stop refinement when the operational error and an independent diagnostic stabilize, not merely when a training residual or posterior variance becomes small.
 ::::
 
-## Common mistakes and practical implications {#scientific-practice}
+## Common mistakes, failure boundaries, and practical implications {#scientific-practice}
 
-- Differentiating a nonsmooth kernel beyond its supported order invalidates the functional Gram matrix.
-- Small collocation residual at training sites does not guarantee small solution error between sites.
-- A physics penalty does not compensate for wrong boundary conditions.
-- Treating discretized vectors as functions without specifying sampling and norms makes resolution claims meaningless.
-- Posterior numerical uncertainty can omit model and discretization error.
-- Comparing a kernel solver with a neural operator on different meshes or training budgets is inconclusive.
-- Ill-conditioning can dominate approximation error for flat or excessively smooth kernels.
-
-Scientific kernel models are most compelling when the continuous information operators are explicit and when numerical error is decomposed rather than hidden inside a single test metric.
+- A kernel that is smooth in its displayed formula may still lack the mixed derivatives required by the information functionals.
+- Positive semidefiniteness of the collocation matrix does not imply invertibility.
+- A small sampled residual does not imply small solution error without continuous stability and a sampling inequality.
+- A physics penalty with the wrong boundary condition can confidently solve the wrong problem.
+- GP variance conditions on the prior, kernel, operator, and exact information model. It is not automatic frequentist coverage.
+- A Bayesian probabilistic numerical method is calibrated on average under its prior, not uniformly over all admissible functions.
+- A surrogate in an inverse problem must propagate approximation error into the likelihood.
+- Resolution transfer is not convergence to the continuum.
+- FNO spectral truncation can hide high-frequency error even when the output grid is fine.
+- A faster surrogate comparison is incomplete if data generation and retraining costs are omitted.
 
 ## Summary and further reading {#scientific-summary}
 
-Bounded linear scientific information has RKHS representers obtained by applying functionals to kernel arguments. This yields symmetric collocation, derivative-observation GPs, and constrained vector fields. Probabilistic numerical methods attach uncertainty to numerical information under an explicit model. Operator regression extends the same ideas to maps between functions and provides a principled comparator to neural operators. See [@wendland2005], [@cockayne2019probnum], [@raissi2017gpde], and [@li2020fno].
+Bounded linear information turns differential equations and boundary conditions into RKHS representers. Symmetric collocation inherits positive semidefiniteness from their Gram geometry, while continuous error control additionally requires PDE stability and a sampling inequality [@wendland2005]. Linear differential-equation GPs construct exact covariance blocks by applying operators to kernel arguments and can learn equation parameters only when those parameters are identifiable [@raissi2017gpde]. Bayesian probabilistic numerics defines uncertainty through conditioning and pushforward, with calibration interpreted relative to the prior and information model [@cockayne2019probnum]. Kernel operator regression and FNOs learn maps between functions through different geometries; neither mesh transfer nor low training loss removes discretization, model, or distribution-shift error [@li2020fno].
 
 ## Exercises {#exercises}
 
-1. [warm-up]{.ex-tag} State the smoothness needed to use point, first-derivative, and second-derivative observations with an RKHS kernel.
-2. [computation]{.ex-tag} Form the functional Gram matrix for value and derivative observations of a one-dimensional RBF kernel and verify its symmetry.
-3. [proof]{.ex-tag} Prove positive semidefiniteness of the symmetric collocation matrix using Riesz representers.
-4. [challenge]{.ex-tag} Derive a kernel formulation that enforces a linear boundary condition exactly while penalizing an interior differential residual softly.
-5. [synthesis]{.ex-tag} Design a resolution-transfer benchmark comparing kernel operator regression and a Fourier neural operator on a parametric PDE family. Specify meshes, norms, boundary handling, compute, uncertainty, and failure diagnostics.
+1. [warm-up]{.ex-tag} For \(k\in C^{2r}(\Omega\times\Omega)\), state a sufficient condition for derivative evaluations \(u\mapsto D^\alpha u(x)\), \(|\alpha|\le r\), to be bounded on \(\mathcal H_k\). Explain why differentiability in only one kernel argument is insufficient for the functional Gram matrix.
+2. [computation]{.ex-tag} Reproduce the polynomial-kernel Poisson calculation in Section [A complete collocation calculation](#scientific-worked-poisson). Verify \(G\), solve for \(c\), and show which matrix row becomes zero if \(k(x,z)=1+xz\).
+3. [proof]{.ex-tag} Prove the functional representer theorem for a nondecreasing norm penalty and construct a case where a minimizer outside the representer span exists.
+4. [proof]{.ex-tag} Assume \(\mathcal T:X\to Y\) is injective and \(\lVert v\rVert_X\le C_{\mathrm{stab}}\lVert\mathcal Tv\rVert_Y\). Derive a state-error bound for an approximate solution with nonzero boundary residual. Identify the additional inequality needed to replace a continuous residual norm by sampled residuals.
+5. [computation]{.ex-tag} For \(u\sim\mathcal{GP}(0,k)\) and \(f=u'+\phi u\), derive \(k_{uf}\) and \(k_{ff}\). Add independent value and equation noise, then write the log marginal likelihood used to estimate \(\phi\).
+6. [synthesis]{.ex-tag} Show that zero-noise GP conditioning on linearly independent bounded functionals has the same mean as minimum-norm functional interpolation. Explain why equality of the mean does not make the deterministic power function a frequentist coverage guarantee.
+7. [proof]{.ex-tag} Prove the posterior-mean Bayes-risk identity in Proposition [what posterior variance calibrates on average](#prop-scientific-bayes-risk), then give a two-point prior example showing that small average Bayes risk need not bound error at a fixed point outside the prior support.
+8. [challenge]{.ex-tag} Design a matched benchmark for kernel operator ridge regression, an FNO, and a classical solver on a parametric heat or Darcy problem. Specify input and output spaces, train and test measures, meshes, norms, compute accounting, uncertainty diagnostics, and at least two failure shifts.

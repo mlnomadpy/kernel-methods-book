@@ -35,17 +35,21 @@ exercises:
   - number: 3
     kind: computation
     status: draft
-    prompt: A complete trie of depth \(p\) over an alphabet of size \(|\Sigma|\) is used for the
-      \(p\)-spectrum kernel. Explain why at most \(p\,|\Sigma|\) nodes need be held in memory at any
-      moment, and why the leaf products \(|L_s(v)|\cdot|L_t(v)|\) sum to the correct spectrum inner
-      product. How does the cost of evaluating one string against \(\ell\) database strings compare
-      with \(\ell\) independent dynamic-programming evaluations?
-    answer: A depth-first traversal retains only the active root-to-leaf path and the not-yet-visited
-      sibling counters, at most $p|\Sigma|$ trie nodes. A leaf $v$ represents one $p$-gram $u$;
-      $|L_s(v)|$ and $|L_t(v)|$ are its occurrence counts, so summing their products is $\sum_u
-      c_u(s)c_u(t)=\langle\phi_p(s),\phi_p(t)\rangle$. Against $\ell$ database strings, the query
-      traversal and its occurrence lists are shared once; independent dynamic programs repeat that
-      work $\ell$ times and do not exploit the common trie prefixes.
+    prompt: A depth-first trie of depth \(p\) over an alphabet of size \(|\Sigma|\) is used for the
+      \(p\)-spectrum kernel. Explain why at most \(O(p|\Sigma|)\) active node records are needed but
+      the occurrence lists still require \(O(N_s+N_t)\) words for a pair. Prove that the leaf
+      products \(|L_s(v)|\cdot|L_t(v)|\) sum to the spectrum inner product. Under the implementation
+      assumptions in the text, how does the cost of evaluating one string against \(\ell\) database
+      strings compare with \(\ell\) independent \(O(|s||t|)\) dynamic-programming evaluations?
+    answer: A depth-first traversal retains the active root-to-leaf path and its not-yet-visited
+      siblings, so the node-record contribution is $O(p|\Sigma|)$. The entries routed through those
+      nodes still identify all active substring occurrences, however, and require $O(N_s+N_t)$
+      words for a pair; omitting them would understate memory. A leaf $v$ represents one $p$-gram
+      $u$, and its two list lengths are $c_u(s)$ and $c_u(t)$, so the leaf sum is $\sum_u
+      c_u(s)c_u(t)=\langle\phi_p(s),\phi_p(t)\rangle$. With populated-child traversal and constant
+      amortized child lookup, a row against $\ell$ strings costs
+      $O(p\ell N_s+p\sum_iN_{t^{(i)}})$, instead of
+      $O(\sum_i|s||t^{(i)}|)$ for independent dynamic programs.
   - number: 4
     kind: proof
     status: draft

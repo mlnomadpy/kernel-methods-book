@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-frontier",
+  "anchor": "example-frontier-shot-noise",
+  "source_file": "manuscript/chapters/ch-frontier.md",
+  "source_sha256": "419fd697aad71512df2d42893bb742d095dd2d88bbd875a85664ac9bb77afbe3",
+  "verification_status": "literal-audit",
+  "executable_checks": [],
+  "numeric_literals": [
+    "1",
+    "0.9",
+    "0.1",
+    "-0.2238",
+    "0.9000",
+    "2.3238",
+    "0.2238"
+  ],
+  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

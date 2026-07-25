@@ -1,5 +1,4 @@
 # Figure generation for the print edition (tools/figures/*.py).
-jax>=0.4
-jaxlib>=0.4
-matplotlib>=3.7
-numpy>=1.24
+jax[cpu]>=0.4.38,<1
+matplotlib>=3.8,<4
+numpy>=1.26,<3

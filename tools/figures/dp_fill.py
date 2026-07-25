@@ -24,11 +24,14 @@ rows = s / cols = t layout, then report
 """
 from __future__ import annotations
 
+import _style as S
+import jax
+
+jax.config.update("jax_enable_x64", True)
+import jax.numpy as jnp
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-
-import _style as S
 
 S.apply_style()
 
@@ -45,19 +48,27 @@ def compute_all(s: str, t: str, p: int, lam: float):
     ``DP_l`` and ``Ks[l-1] = sum_{ij} DPS_l[i][j]`` is the level-l kernel.
     """
     n, m = len(s), len(t)
+    matches = jnp.asarray(
+        [[left == right for right in t] for left in s], dtype=jnp.float64
+    )
     levels, Ks = [], []
-    dp_prev = None
+    dp_prev = jnp.zeros((n + 1, m + 1), dtype=jnp.float64)
     for l in range(1, p + 1):
-        dps = np.zeros((n + 1, m + 1))
-        dp = np.zeros((n + 1, m + 1))
-        kl = 0.0
+        predecessor = jnp.ones((n, m)) if l == 1 else dp_prev[:-1, :-1]
+        dps = jnp.zeros((n + 1, m + 1), dtype=jnp.float64)
+        dps = dps.at[1:, 1:].set(matches * lam**2 * predecessor)
+        dp = jnp.zeros((n + 1, m + 1), dtype=jnp.float64)
         for i in range(1, n + 1):
             for j in range(1, m + 1):
-                if s[i - 1] == t[j - 1]:
-                    dps[i, j] = lam * lam * (1.0 if l == 1 else dp_prev[i - 1, j - 1])
-                kl += dps[i, j]
-                dp[i, j] = (dps[i, j] + lam * dp[i - 1, j]
-                            + lam * dp[i, j - 1] - lam * lam * dp[i - 1, j - 1])
+                value = (
+                    dps[i, j]
+                    + lam * dp[i - 1, j]
+                    + lam * dp[i, j - 1]
+                    - lam**2 * dp[i - 1, j - 1]
+                )
+                dp = dp.at[i, j].set(value)
+        kl = jnp.sum(dps)
+        assert bool(jnp.all(jnp.isfinite(dp))) and bool(jnp.all(dp >= -1e-14))
         levels.append(dp)
         Ks.append(kl)
         dp_prev = dp
@@ -109,11 +120,14 @@ def draw_table(ax, dp: np.ndarray, s: str, t: str, title: str) -> None:
 
 
 def main() -> str:
-    levels, Ks = compute_all(S_STR, T_STR, P, LAM)
+    levels_jax, Ks = compute_all(S_STR, T_STR, P, LAM)
     K = Ks[P - 1]
     self_s = kernel_only(S_STR, S_STR, P, LAM)
     self_t = kernel_only(T_STR, T_STR, P, LAM)
-    norm = K / np.sqrt(self_s * self_t)
+    norm = K / jnp.sqrt(self_s * self_t)
+    assert bool(jnp.isclose(K, LAM**4))
+    assert bool(jnp.isclose(norm, 1.0 / (2.0 + LAM**2)))
+    levels = [np.asarray(level) for level in levels_jax]
 
     fig, axes = plt.subplots(1, 2, figsize=(6.0, 3.1))
     draw_table(axes[0], levels[0], S_STR, T_STR, r"$\mathrm{DP}_1$")
@@ -122,8 +136,8 @@ def main() -> str:
     fig.suptitle(r"Gap-weighted subsequence DP: $s=$cat, $t=$car "
                  r"($\lambda=0.5$, $p=2$)", color=S.INK, y=1.02)
     fig.text(0.5, -0.06,
-             rf"$K_2(\mathrm{{cat}},\mathrm{{car}})=\lambda^4={K:.4g}$"
-             rf"$\quad$normalized $=K_2/\sqrt{{K_2(s,s)\,K_2(t,t)}}={norm:.4f}$",
+             rf"$K_2(\mathrm{{cat}},\mathrm{{car}})=\lambda^4={float(K):.4g}$"
+             rf"$\quad$normalized $=K_2/\sqrt{{K_2(s,s)\,K_2(t,t)}}={float(norm):.4f}$",
              ha="center", color=S.INK, fontsize=9)
 
     fig.subplots_adjust(wspace=0.35)

@@ -2,17 +2,30 @@
 id: ch-causal
 slug: causal-inference-with-kernels
 title: Causal Inference with Kernels
-part: IX · Kernel Probabilistic Inference
-order: 35
+part: 'VIII · Conditional, Stein, and Causal Inference'
+order: 47
 tier: advanced
 prerequisites:
   - kernel-stein-discrepancy
 objectives:
-  - Explain the central definitions and claims in Causal Inference with Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Explain why dependence does not identify intervention and separate
+    statistical from causal assumptions.
+  - >-
+    Construct HSIC and KCIT statistics while stating when their null
+    calibrations are valid.
+  - >-
+    Derive adjustment and RKHS balancing estimators under consistency,
+    exchangeability, and positivity.
+  - >-
+    Derive kernel instrumental-variable regression and diagnose weak
+    instruments, invalid exclusion, regularization, and ill-posedness.
+  - >-
+    Distinguish pointwise effects, interventional mean embeddings, and nonlinear
+    distributional summaries.
+  - >-
+    State proximal bridge completeness conditions and perform sensitivity and
+    nonidentification analyses.
 review_status: draft
 reviewers:
   technical: null
@@ -55,10 +68,12 @@ The second ingredient is intervention, which we must define before we can estima
 ::: {.definition #def-35-1}
 [Definition (intervention and structural function)]{.box-title}
 
-In a structural causal model each variable is produced by a deterministic mechanism from its direct causes and an independent noise term. The intervention \(\operatorname{do}(X=x)\) replaces the mechanism for \(X\) by the constant \(x\), leaving every other mechanism intact, and induces the interventional distribution \(P(Y \mid \operatorname{do}(X=x))\). When \(Y = f(X) + e\) with \(e\) the aggregate noise, the *structural function* \(f(x) = \mathbb{E}[Y \mid \operatorname{do}(X=x)]\) is the object of interest, and it need not equal the observational regression \(\mathbb{E}[Y \mid X=x]\).
+In a structural causal model each variable is produced by a deterministic mechanism from its direct causes and an independent noise term. The intervention \(\operatorname{do}(X=x)\) replaces the mechanism for \(X\) by the constant \(x\), leaving every other mechanism intact, and induces the interventional distribution \(P(Y \mid \operatorname{do}(X=x))\). When \(Y = f(X) + e\) with centered aggregate noise \(\mathbb E[e]=0\), the *structural function* \(f(x) = \mathbb{E}[Y \mid \operatorname{do}(X=x)]\) is the object of interest, and it need not equal the observational regression \(\mathbb{E}[Y \mid X=x]\).
 :::
 
-The inequality \(f(x) \ne \mathbb{E}[Y\mid X=x]\) is the entire difficulty of effect estimation. It fails exactly when a confounder makes \(X\) and the noise \(e\) dependent, so that the regression reads off a mixture of the causal response and the confounder's shadow. Sections on treatment effects below recover \(f\) despite this, first through instruments and then through proxies.
+The possible inequality \(f(x) \ne \mathbb{E}[Y\mid X=x]\) is the entire difficulty of effect estimation. The equality fails when a confounder makes \(X\) and the noise \(e\) dependent, so that the regression reads off a mixture of the causal response and the confounder's shadow. Sections on treatment effects below recover \(f\) despite this, first through instruments and then through proxies.
+
+<figure class="viz" data-figure="confounding-intervention" data-alt="A confounded observational sample has an upward fitted regression line even though the structural intervention response slopes downward. The comparison shows that association and causal effect can have opposite signs."><figcaption>Hidden confounding can reverse the sign: the observational regression rises because \(U\) drives both treatment and outcome, while the intervention curve falls because setting \(X\) breaks the arrow from \(U\) into \(X\). A more flexible kernel can fit either curve, but only the causal assumptions determine which curve is the estimand.</figcaption></figure>
 
 ## Dependence as a distance between embeddings {#hsic}
 
@@ -95,12 +110,13 @@ The hope is that \(\Sigma_{XY\mid Z}=0\) captures conditional independence. It v
 :::: {.theorem #thm-35-4}
 [Theorem (kernel characterization of conditional independence; Fukumizu et al., 2008)]{.box-title}
 
-Write \(\ddot X = (X, Z)\) for \(X\) augmented by the conditioning variable, with feature map \(\ddot\phi\). Under characteristic kernels and the regularity needed for the operators to be well defined,
+Let \(\mathcal X,\mathcal Y,\mathcal Z\) be standard Borel spaces and let \(P_{XYZ}\) be a Borel probability law. Write \(\ddot X=(X,Z)\). Assume the kernels on \(\mathcal X\times\mathcal Z\), \(\mathcal Y\), and \(\mathcal Z\) are measurable and bounded, the product kernel on \((\mathcal X\times\mathcal Z)\times\mathcal Y\) is characteristic to the signed measures used in the proof, and the conditional covariance operator is defined through the Moore-Penrose inverse on \(\overline{\operatorname{ran}\Sigma_{ZZ}}\). Equivalently, require the relevant covariance functions to lie in that range. Then
 
 $$ \Sigma_{\ddot X\, Y \mid Z} = 0 \quad\Longleftrightarrow\quad X \perp Y \mid Z. $$
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
-**Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
+**Assumptions.** The boundedness assumption ensures all feature maps are Bochner square-integrable. Characteristicness is required for the relevant product-domain measure class, not merely for each marginal kernel in isolation. The inverse is not assumed bounded on the whole RKHS.
+
+**Proof status.** The equivalence is imported from Fukumizu et al. (2008), Theorem 4. The chapter explains the augmentation but does not reproduce the operator-theoretic proof.
 ::::
 
 The augmentation \(\ddot X = (X,Z)\) is not cosmetic. Without it the operator equation \(\Sigma_{XY\mid Z}=0\) states only that the *expected* conditional covariance \(\mathbb{E}_Z\!\big[\operatorname{Cov}(g(X),h(Y)\mid Z)\big]\) vanishes, a strictly weaker condition than conditional independence, since positive and negative conditional dependence at different values of \(Z\) can cancel in the average. Building \(Z\) into the first argument removes that loophole and upgrades the characterization to the full statement (Fukumizu et al. 2008).
@@ -114,6 +130,8 @@ the second equality because \((\tilde K_Z+\varepsilon I) - \tilde K_Z = \varepsi
 $$ T_{\mathrm{CI}} = \frac{1}{n}\operatorname{Tr}\!\big(\tilde K_{\ddot X\mid Z}\,\tilde K_{Y\mid Z}\big). $$
 
 Under \(H_0\colon X\perp Y\mid Z\) the statistic \(T_{\mathrm{CI}}\) has no fixed null law: it converges to a weighted sum of independent \(\chi^2_1\) variables whose weights are the products \(\lambda_i \mu_j\) of the eigenvalues of the two residual operators (Zhang et al. 2011), the same spectral shape that governs the two-sample MMD null (Gretton et al. 2012). In practice one either matches a two-parameter Gamma distribution to the first two moments of that mixture or samples it directly from the empirical eigenvalues. A permutation test, the standard calibration for marginal HSIC, is *not* valid here: shuffling the pairing destroys the dependence on \(Z\) along with any conditional dependence, so it does not draw from the conditional null. That conditional independence admits no simple resampling scheme is one honest reason nonparametric CI testing is genuinely hard.
+
+The asymptotic statement requires more than the population equivalence. The observations must be i.i.d.; kernels must be bounded and measurable; the empirical residual operators must converge to their population counterparts; the ridge sequence must tend to zero slowly enough to control inverse amplification; and the empirical spectral mixture must consistently approximate the null law. Zhang et al. (2011), Sections 2.2 and 2.3 and Theorems 1 and 2, give the construction and null approximation. A Gamma fit is a computational approximation, not an exact finite-sample calibration. Rejecting \(H_0\) establishes residual statistical dependence under the tested conditioning set. It does not estimate an intervention, establish an edge direction, or quantify a treatment effect.
 
 :::: {.algorithm #algo-35-1}
 [Algorithm (kernel conditional-independence test, KCIT)]{.box-title}
@@ -160,7 +178,58 @@ Gaussian kernels with bandwidth set by the median heuristic, which equals \(1\) 
 
 ## Estimating effects under confounding {#treatment-effects}
 
-Turn now from discovery to estimation. When every confounder of \(X\) and \(Y\) is observed, the back-door adjustment reduces the causal effect to a regression, and the [[ch:conditional-mean-embeddings|conditional mean embedding]] estimates it directly. The interesting and common case is a confounder we cannot observe, where regression is biased and we need extra leverage from the data. Two kinds of leverage admit clean kernel treatments: an instrument that perturbs the treatment, and a pair of proxies that shadow the hidden confounder.
+Turn now from discovery to estimation. A test asks whether a conditional independence is compatible with the observed law. An effect estimator targets a functional of an interventional law and is valid only after identification assumptions connect that law to observations. A small KCIT \(p\)-value cannot be converted into an average treatment effect, and failure to reject cannot certify ignorability.
+
+When every confounder is observed, adjustment and balancing identify effects. When a confounder is hidden, extra variables must carry identifying information: an instrument can perturb treatment without entering the outcome mechanism, or a pair of proxies can shadow the hidden confounder. These are different models and should never be pooled into one vague claim that kernels "handle confounding."
+
+### Adjustment and kernel balancing {#kernel-balancing}
+
+Kernel balancing can drive a rich RKHS discrepancy toward zero, but overlap determines the price. When the treated and comparison covariates barely overlap, exact balance concentrates the weights and destroys effective sample size.
+
+<figure class="viz" data-figure="kernel-balance-variance-frontier" data-alt="A frontier plots RKHS covariate imbalance against effective sample size as the weight penalty changes. A second panel shows maximum weight and inverse effective sample size."><figcaption>Balance and variance are competing objectives, not separate diagnostics. Moving toward exact RKHS balance reduces discrepancy but concentrates the weights and lowers effective sample size; regularization retreats along this frontier. A small imbalance alone is not evidence of a reliable causal estimate.</figcaption></figure>
+
+Let \(A\in\{0,1\}\) be treatment, \(C\) observed pretreatment covariates, and \(Y(a)\) the potential outcome under \(A=a\). Assume i.i.d. sampling, consistency \(Y=Y(A)\), conditional exchangeability \((Y(0),Y(1))\perp A\mid C\), and positivity \(0\lt P(A=a\mid C=c)\lt1\) almost surely on the target population. For finite-variance estimation one usually strengthens positivity to \(P(A=a\mid C)\ge\eta\gt0\). Then
+
+$$
+\theta_a=\mathbb E[Y(a)]
+ =\mathbb E_C\!\left[\mathbb E(Y\mid A=a,C)\right]
+ =\mathbb E\!\left[\frac{\mathbf 1\{A=a\}Y}{P(A=a\mid C)}\right].
+$$
+
+The regression and weighting expressions are two representations of the same identified mean. Kernels enter either by estimating \(c\mapsto\mathbb E[Y\mid A=a,C=c]\), or by choosing weights that balance rich functions of \(C\).
+
+:::: {.proposition #prop-causal-balance}
+[Proposition (RKHS balance controls confounding bias)]{.box-title}
+
+Let \(k_C\) be measurable and bounded by \(k_C(c,c)\le\kappa^2\), with RKHS \(\mathcal H_C\). For nonnegative treated weights \(w_i\) summing to one and target weights \(q_j\) summing to one, define
+
+$$
+\Delta_{\mathcal H}
+=\left\|\sum_{i:A_i=1}w_i k_C(C_i,\cdot)
+-\sum_j q_j k_C(C_j,\cdot)\right\|_{\mathcal H_C}.
+$$
+
+If the treated conditional outcome regression \(m_1(c)=\mathbb E[Y(1)\mid C=c]\) belongs to \(\mathcal H_C\) with \(\|m_1\|_{\mathcal H_C}\le B\), then the conditional design bias of the weighted treated mean relative to the target covariate distribution is at most \(B\Delta_{\mathcal H}\).
+
+**Assumptions.** This bound concerns balance bias only. Identification additionally requires consistency, exchangeability, and overlap; sampling error and outcome noise require separate control.
+
+**Proof status.** Proved immediately below.
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+By the reproducing property, the imbalance in expected conditional outcomes equals
+
+$$
+\sum_{i:A_i=1}w_i m_1(C_i)-\sum_jq_jm_1(C_j)
+=\left\langle m_1,\sum_{i:A_i=1}w_i k_C(C_i,\cdot)-\sum_jq_jk_C(C_j,\cdot)\right\rangle_{\mathcal H_C}.
+$$
+
+Cauchy-Schwarz bounds its absolute value by \(B\Delta_{\mathcal H}\). [\(\square\)]{.qed}
+::::
+
+Exact balance on a non-characteristic or poorly tuned kernel may miss important confounding directions. Conversely, driving empirical MMD to zero with extreme weights can explode variance. A defensible analysis reports balance on held-out or prespecified features, effective sample size \((\sum_iw_i^2)^{-1}\), maximum weights, overlap diagnostics, and estimates across a ridge or weight-cap path. Balance is a design diagnostic under the causal model, not a test of exchangeability.
 
 ### Kernel instrumental variables {#kernel-iv}
 
@@ -169,7 +238,7 @@ Write the structural model \(Y = f(X) + e\), where the noise \(e\) absorbs the u
 ::: {.definition #def-35-5}
 [Definition (instrument)]{.box-title}
 
-A variable \(Z\) is an *instrument* for the effect of treatment \(X\) on outcome \(Y\) in the model \(Y=f(X)+e\) if it is (i) *relevant*, meaning \(Z\) is dependent on \(X\); (ii) *exogenous*, meaning \(\mathbb{E}[e\mid Z]=0\), so \(Z\) is unconfounded with the outcome noise; and (iii) subject to the *exclusion* restriction, meaning \(Z\) influences \(Y\) only through \(X\).
+A variable \(Z\) is an *instrument* for the structural equation \(Y=f(X)+e\) if it is (i) *relevant* for the function class, meaning the conditional-expectation operator \(T f=\mathbb E[f(X)\mid Z=\cdot]\) does not erase the causal directions of interest; (ii) *exogenous*, \(\mathbb E[e\mid Z]=0\); and (iii) subject to *exclusion*, so \(Z\) affects \(Y\) only through \(X\). Point identification of \(f\) additionally requires *completeness*: \(Tf=0\) almost surely implies \(f=0\) in the chosen function class. Mere dependence of \(Z\) and \(X\) is relevance for a scalar linear model, but is not enough for nonlinear identification.
 :::
 
 Exogeneity converts the unobservable structural equation into an observable one. Taking the conditional expectation of \(Y=f(X)+e\) given \(Z=z\) and using \(\mathbb{E}[e\mid Z]=0\) lands on the crux identity of the whole method.
@@ -177,11 +246,11 @@ Exogeneity converts the unobservable structural equation into an observable one.
 :::: {.proposition #prop-35-6}
 [Proposition (the two-stage target)]{.box-title}
 
-If \(Y = f(X) + e\) with \(f\in\mathcal H_X\) and \(\mathbb{E}[e\mid Z]=0\), then for every \(z\),
+Let \(k_X\) be measurable with \(\mathbb E\,k_X(X,X)\lt\infty\). If \(Y=f(X)+e\), \(f\in\mathcal H_X\), \(\mathbb E|Y|\lt\infty\), and \(\mathbb E[e\mid Z]=0\) almost surely, then for \(P_Z\)-almost every \(z\),
 
 $$ \mathbb{E}[Y\mid Z=z] = \langle f,\ \mu_{X\mid Z=z}\rangle_{\mathcal H_X}, \qquad \mu_{X\mid Z=z} = \mathbb{E}[\phi(X)\mid Z=z]. $$
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+**Assumptions.** The conditional mean embedding must exist as a Bochner conditional expectation. This proposition gives a moment equation, not uniqueness. Identification requires injectivity of \(T\) on the candidate class; stable estimation further requires source, capacity, and regularization conditions.
 **Proof status.** Proved immediately below.
 ::::
 
@@ -195,11 +264,13 @@ $$ \mathbb{E}[f(X)\mid Z=z] = \big\langle f,\ \mathbb{E}[\phi(X)\mid Z=z]\big\ra
 Adding \(\mathbb{E}[e\mid Z=z]=0\) gives the claim. [\(\square\)]{.qed}
 ::::
 
-The unknown \(f\) is thus pinned down by an equation relating two observable objects, the outcome regression on the left and the conditional mean embedding of the treatment on the right. Solving it for \(f\) is a Fredholm integral equation of the first kind, and it is ill-posed: the conditional-expectation operator \(z \mapsto \mu_{X\mid Z=z}\) is compact, so its inverse is unbounded and amplifies sampling noise without limit (Newey and Powell 2003; Darolles et al. 2011). Regularization is not a convenience here, it is a necessity.
+The equation relates two observable objects, but it pins down \(f\) only when \(T\) is injective. Newey and Powell (2003), Theorem 2.1, use bounded completeness to obtain uniqueness in nonparametric IV regression; Darolles et al. (2011), Sections 2 and 3, formulate the inverse problem and its regularization. When \(T\) is compact with singular values approaching zero, inversion amplifies sampling noise. Completeness rules out an exact null direction; it does not prevent near-null directions, so regularization remains necessary.
 
 Singh, Sahani, and Gretton (2019) solve the equation in two ridge-regularized stages, the RKHS lift of classical two-stage least squares. Stage one estimates the conditional mean embedding \(\mu_{X\mid Z=z}\) from a first sample \(\{(x_i,z_i)\}_{i=1}^n\) by kernel ridge regression, giving \(\hat\mu(z)=\sum_i \beta_i(z)\,\phi(x_i)\) with weights \(\beta(z)=(K_Z+n\lambda I)^{-1} k_Z(\cdot,z)\). Stage two regresses the outcome on those embeddings, using a second sample \(\{(y_j,\tilde z_j)\}_{j=1}^m\) to fit
 
 $$ \hat f = \arg\min_{f\in\mathcal H_X}\ \frac1m\sum_{j=1}^m \big(y_j - \langle f, \hat\mu(\tilde z_j)\rangle\big)^2 + \xi\|f\|_{\mathcal H_X}^2. $$
+
+The consistency analysis in Singh, Sahani, and Gretton (2019), Section 4 and Appendices B and C, assumes two independent samples for the two stages, bounded measurable kernels, existence of the relevant conditional embedding operator, a well-specified structural function, source conditions controlling how the first- and second-stage targets align with covariance-operator ranges, effective-dimension or eigenvalue control, and regularization sequences coupled to both sample sizes. These assumptions are part of the statistical theorem, not consequences of the matrix formula. Cross-fitting can reuse observations while preserving out-of-fold nuisance predictions, but a same-sample two-stage fit without analysis changes the dependence structure of the errors.
 
 By the representer theorem \(\hat f = \sum_i \alpha_i \phi(x_i)\), and collecting the stage-one weights into a matrix \(B\in\mathbb{R}^{n\times m}\) with \(B_{ij}=\beta_i(\tilde z_j)\), the prediction at \(\tilde z_j\) is \(\langle \hat f,\hat\mu(\tilde z_j)\rangle = (B^\top K_X \alpha)_j\). The stage-two problem is then a ridge regression whose inputs are the estimated embeddings, with Gram matrix \(G = B^\top K_X B\), solved in closed form by \(c=(G+m\xi I)^{-1} y\) and \(\alpha = Bc\).
 
@@ -217,6 +288,8 @@ By the representer theorem \(\hat f = \sum_i \alpha_i \phi(x_i)\), and collectin
 3.  Stage 2: solve \(c = (G + m\xi I)^{-1} y\) and set \(\alpha = B c\).
 4.  Return \(\hat f(\cdot) = \sum_i \alpha_i\, k_X(x_i,\cdot)\); the effect of moving \(X\) from \(x\) to \(x'\) is \(\hat f(x')-\hat f(x)\).
 ::::
+
+The two ridge systems solve different inverse problems, so tune and diagnose them separately. Reuse Cholesky factorizations instead of explicit inverses, report the spectra of \(K_Z+n\lambda I\) and \(G+m\xi I\), and compare first-stage predictive strength with a weak-instrument baseline. A numerically stable second stage cannot recover directions the instrument barely excites; that is an identification-strength failure, not an optimizer failure.
 
 ::::: {.example #example-35-2}
 [Example (recovering a structural slope with an instrument)]{.box-title}
@@ -237,19 +310,102 @@ A confounded linear model, all variables centered, \(n=6\). Instrument \(z=(-1,-
 **Verification artifact.** checks/example-ch-causal-example-35-2.json records the example source hash and verification scope.
 :::::
 
-The two-sample split, stage one on one half and stage two on the other, is what keeps the estimator honest, preventing the stage-two fit from chasing the stage-one estimation error. An alternative avoids the split entirely: Muandet, Mehrjou, Lee, and Raj (2020) rewrite instrumental-variable regression as a single convex-concave saddle-point problem (DualIV), replacing the nested regression by a minimax objective that is often easier to optimize and to analyze.
+The two independent samples simplify propagation of stage-one error into stage two; they do not validate the instrument. An alternative avoids the nested regression: Muandet, Mehrjou, Lee, and Raj (2020), Sections 3 and 4, rewrite IV regression as a convex-concave saddle-point problem. Its identification still rests on the same moment restrictions and injectivity boundary.
 
 ### Proximal causal learning {#proximal}
 
-Instruments are not always available. Proximal causal learning asks a different favor of the data: instead of a variable that pokes the treatment, it uses two *proxies* of the unmeasured confounder \(U\), a treatment-side proxy \(W\) and an outcome-side proxy \(Z\), which are noisy views of \(U\) satisfying conditional-independence restrictions (Miao, Geng, and Tchetgen Tchetgen 2018). Identification runs through a *bridge function* \(h\) that solves the conditional moment equation
+Instruments are not always available. Proximal causal learning instead uses two noisy views of an unmeasured confounder \(U\): an outcome-inducing proxy \(W\) and a treatment-inducing proxy \(Z\). Let \(A\) denote treatment and \(X\) observed baseline covariates. The negative-control restrictions are
 
-$$ \mathbb{E}\big[\, Y - h(W, X) \mid Z, X \,\big] = 0, $$
+$$
+Y\perp Z\mid(A,U,X),\qquad W\perp(A,Z)\mid(U,X).
+$$
 
-after which the interventional mean is recovered by averaging out the proxy, \(\mathbb{E}[Y\mid \operatorname{do}(X=x)] = \mathbb{E}_W[h(W,x)]\). This moment equation has the same first-kind, ill-posed structure as the IV equation, and Mastouri et al. (2021) solve it with the same kernel two-stage regression and maximum-moment-restriction machinery, producing a proximal estimator that inherits the RKHS consistency theory. Proximal learning thus extends kernel causal estimation to settings where the confounder is entirely hidden and only its shadows are observed.
+They say that \(Z\) carries information about \(U\) but has no direct outcome information after \((A,U,X)\), while \(W\) is not caused by treatment and has no extra dependence on \(Z\) after \((U,X)\). Consistency, positivity for \(A\) conditional on \((U,X)\), and well-defined regular conditional distributions are also required. Identification runs through an outcome bridge \(h\) satisfying
+
+$$ \mathbb{E}\big[\, Y - h(W,A,X) \mid Z,A,X \,\big] = 0. $$
+
+Existence of a bridge is not automatic. Uniqueness requires completeness of the conditional law of \(W\) given \((Z,A,X)\): for the bridge class \(\mathcal G\), \(\mathbb E[g(W)\mid Z,A,X]=0\) almost surely must imply \(g(W)=0\) almost surely. To transport the observed bridge to the latent-confounder equation, proximal identification also uses completeness of \(Z\) relative to \(U\), for example \(\mathbb E[q(U)\mid Z,A,X]=0\Rightarrow q(U)=0\). These are injectivity statements about two conditional-expectation operators. Proxy association alone is not completeness.
+
+:::: {.theorem #thm-causal-proximal}
+[Theorem (proximal identification by an outcome bridge)]{.box-title}
+
+Assume the proxy restrictions above, consistency, positivity, integrability, existence of a measurable bridge \(h\), and the stated completeness condition that transfers the observed bridge equation to \(U\). Then, for every treatment \(a\) in the positivity region,
+
+$$
+\mathbb E[Y(a)]=\mathbb E\!\left[h(W,a,X)\right].
+$$
+
+If the \(W\)-given-\((Z,A,X)\) operator is complete on the bridge class, the bridge is unique up to null sets.
+
+**Proof status.** The identification argument follows Miao, Geng, and Tchetgen Tchetgen (2018), identification results in Sections 2 and 3. The kernel estimator follows Mastouri et al. (2021), Section 3 and Theorems 1 and 2; their consistency conditions include bounded kernels, RKHS well-specification or approximation control, operator-range/source assumptions, and vanishing regularization.
+::::
+
+The proof idea is a chain of conditional expectations. The observed bridge equation and completeness imply \(\mathbb E[Y-h(W,A,X)\mid U,A,X]=0\). Under intervention \(A=a\), proxy stability gives \(\mathbb E[Y(a)\mid U,X]=\mathbb E[h(W,a,X)\mid U,X]\); averaging over \((U,X)\) yields the formula. Every arrow uses a causal or completeness assumption. The RKHS only regularizes the inverse problem.
 
 ## Beyond the mean: distributional and counterfactual effects {#distributional-effects}
 
-A structural function returns the mean outcome under intervention, but a mean can hide the story: a treatment that helps half the population and harms the other half has zero average effect. Because the entire apparatus is built on embeddings, nothing forces us to stop at the mean. Replacing the scalar outcome \(Y\) by its feature map \(\phi_Y(Y)\) and running the same estimators embeds the whole interventional distribution as a mean embedding \(\mu_{Y\mid \operatorname{do}(x)} = \mathbb{E}[\phi_Y(Y)\mid \operatorname{do}(X=x)]\), the counterfactual mean embedding of Muandet, Kanagawa, Saengkyongam, and Marukatat (2021). From it one reads any smooth functional of the interventional law, its variance, its quantiles, or the probability of exceeding a threshold, by the ordinary embedding calculus of [[ch:kernel-mean-embeddings|the mean-embedding chapter]]. When the treatment itself is a distribution or a function rather than a point, the same lift connects to [[ch:distribution-regression|distribution regression]] (Szabó et al. 2016), closing the loop with the rest of this part of the book.
+A structural function returns a mean, but a mean can hide offsetting benefit and harm. Let \(\ell\) be a bounded characteristic kernel on outcomes with feature map \(\psi\). Under observed-confounder consistency, exchangeability, and positivity, the interventional mean embedding is identified by the embedding-valued g-formula
+
+$$
+\mu_a
+=\mathbb E[\psi(Y(a))]
+=\mathbb E_C\!\left[\mu_{Y\mid A=a,C}\right].
+$$
+
+Given a training sample, fit the regularized conditional embedding
+
+$$
+\widehat\mu_{Y\mid a,c}
+=\Psi^\top(K_{AC}+n\lambda I)^{-1}k_{AC}((a,c),\cdot),
+$$
+
+where \(\Psi^\top b=\sum_i b_i\psi(Y_i)\). On an independent evaluation fold \(c_1^\star,\ldots,c_m^\star\), estimate
+
+$$
+\widehat\mu_a=\frac1m\sum_{j=1}^m\widehat\mu_{Y\mid a,c_j^\star}.
+$$
+
+The distributional effect between \(a\) and \(a'\) can then be summarized by
+
+$$
+D_\ell(a,a')=\|\mu_a-\mu_{a'}\|_{\mathcal H_\ell},
+$$
+
+with the empirical squared norm computed entirely from outcome Gram matrices and the two coefficient vectors. If \(\ell\) is characteristic on the outcome measure class, \(D_\ell=0\) exactly when the two interventional outcome laws agree. For any \(g\in\mathcal H_\ell\), \(\mathbb E[g(Y(a))]=\langle g,\mu_a\rangle\). Quantiles and threshold probabilities need approximation or distribution reconstruction when their indicator functions are not in the RKHS. This is an estimator of marginal interventional distributions, not of individual counterfactual pairs \((Y(0),Y(1))\), whose joint law is generally unidentified. Muandet et al. (2021), Sections 3 and 4, develop the counterfactual mean-embedding construction and empirical estimator.
+
+### Sensitivity and nonidentification {#causal-sensitivity}
+
+Identification assumptions deserve a perturbation path, not a binary footnote. For IV, replace exact exogeneity by \(\mathbb E[e\mid Z]=r(Z)\) and bound \(\|r\|_{L^2(P_Z)}\le\rho\). The observed equation becomes
+
+$$
+g=Tf+r.
+$$
+
+For any regularized inverse \(R_\xi\), the change attributable to exclusion or exogeneity violation is \(R_\xi r\), bounded by \(\rho\|R_\xi\|_{\mathrm{op}}\). Small singular values make that bound large. A practical sensitivity plot varies \(\rho\), the first-stage ridge, and the second-stage ridge, then reports the range of target contrasts. Analogously, balancing analyses vary weight caps and overlap truncation; proximal analyses vary bridge penalties and report near-null singular directions. No one-dimensional sensitivity parameter proves validity, but it shows how much hidden violation the substantive conclusion can tolerate.
+
+::::: {.example #example-causal-nonidentification}
+[Example (identical observations, different causal slopes)]{.box-title}
+
+:::: wex
+::: wex-setup
+Let \(Z,U\) be independent Rademacher variables, \(X=Z+U\), and observe \(Y=2Z+5U\). Two structural decompositions generate exactly this same observed quadruple \((Z,U,X,Y)\):
+
+$$
+\mathcal M_1:\quad Y=2X+3U,
+\qquad
+\mathcal M_2:\quad Y=3X-Z+2U.
+$$
+:::
+
+1.  [Check observational equivalence.]{.wex-op} Substitution gives \(2(Z+U)+3U=2Z+5U\) and \(3(Z+U)-Z+2U=2Z+5U\). Every observed sample is identical under the two decompositions.
+2.  [Compare interventions.]{.wex-op} Under \(\mathcal M_1\), setting \(X=x\) gives \(\mathbb E[Y\mid\operatorname{do}(X=x)]=2x\). Under \(\mathcal M_2\), it gives \(3x\), because \(Z\) and \(U\) retain mean zero.
+3.  [Read the failure.]{.wex-op} Model \(\mathcal M_1\) satisfies exclusion; \(\mathcal M_2\) has the direct term \(-Z\). The observed law cannot choose between causal slopes \(2\) and \(3\). A universal kernel and infinite data still cannot repair the missing exclusion restriction.
+
+**Sensitivity calculation.** In \(Y=\beta X+\delta Z+\gamma U\) with first-stage coefficient \(a=1\), the IV estimand is \(\beta+\delta\). Bounding \(|\delta|\le\rho\) gives the identified sensitivity interval \([\widehat\beta_{\mathrm{IV}}-\rho,\widehat\beta_{\mathrm{IV}}+\rho]\).
+::::
+
+**Verification artifact.** checks/example-ch-causal-example-causal-nonidentification.json records the example source hash and verification scope.
+:::::
 
 ## What kernels buy, and what they do not {#assumptions}
 
@@ -260,21 +416,21 @@ Identification, however, is a separate layer, and the kernel is silent there.
 ::: {.remark}
 [The assumptions the data cannot check]{.box-title}
 
-Constraint-based discovery reads structure from conditional independences only under *faithfulness*, the assumption that the sole independences present are those the graph forces; and even then it returns a Markov equivalence class, not a unique graph, so the chain \(X\to Y\to Z\) and the fork \(X\leftarrow Y\to Z\) stay indistinguishable by conditional-independence tests alone (Spirtes et al. 2000; Pearl 2009). Instrumental-variable estimation is consistent only if the instrument is valid, yet exogeneity and exclusion are statements about the unobserved noise that no amount of data can verify (Angrist, Imbens, and Rubin 1996). Proximal learning trades those for completeness conditions on the proxies, equally uncheckable. A perfect kernel fit to a misidentified estimand is a precise answer to the wrong question. The honest summary is that kernels supply consistent, assumption-lean estimators of causal quantities *once those quantities are identified*, and identification always rests on domain assumptions imported from outside the sample.
+Constraint-based discovery reads structure from conditional independences only under *faithfulness*, and even then returns a Markov equivalence class rather than a unique graph (Spirtes et al. 2000; Pearl 2009). Balancing requires consistency, conditional exchangeability, and positivity. Instrumental-variable estimation requires relevance, exogeneity, exclusion, and completeness; exogeneity and exclusion concern unobserved errors and are not generally testable from one just-identified observational law (Angrist, Imbens, and Rubin 1996). Proximal learning requires valid proxy restrictions, bridge existence, positivity, and completeness. Distributional embeddings identify marginal interventional laws but not individual-level counterfactual coupling. A perfect kernel fit to a misidentified estimand is a precise answer to the wrong question.
 :::
 
 ## Summary {#summary}
 
-Causal inference splits into two problems, and embeddings answer a piece of each. For discovery, independence is a distance between a joint embedding and a product of marginals (HSIC), and conditional independence is the vanishing of a conditional cross-covariance operator, estimated by the residual-trace statistic of KCIT; this is the nonparametric engine of constraint-based structure learning. For effect estimation under hidden confounding, exogeneity turns the structural equation into an ill-posed integral equation whose solution is the two-stage kernel instrumental-variable regression, with proximal learning covering the case where only proxies of the confounder are seen, and counterfactual mean embeddings lifting the answer from the mean effect to the whole interventional distribution. In every case the kernel removes assumptions about functional form but not the identifying assumptions, faithfulness, instrument validity, proxy completeness, that make the causal question answerable at all. The next chapter turns from these inferential uses of embeddings to [[ch:distribution-regression|learning when the training example is itself a distribution]].
+Causal inference splits statistical evidence from causal identification. KCIT tests a conditional-independence null under an asymptotic spectral calibration, but does not estimate an effect. Under observed confounding, adjustment and kernel balancing identify mean or distributional effects only with consistency, exchangeability, and overlap. Under hidden confounding, KIV solves an ill-posed moment equation only when instrument validity and completeness identify the structural function; proximal kernels replace the instrument by proxy restrictions, bridge existence, and two completeness requirements. Counterfactual mean embeddings lift estimation from means to marginal interventional distributions. Sensitivity paths and explicit observationally equivalent models show where no kernel can recover information absent from the observed law.
 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Causal Inference with Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Causal Inference with Kernels**, name the task first: testing, mean-effect estimation, or distributional-effect estimation. KCIT needs conditional-null calibration rather than ordinary row permutation. Balancing needs exchangeability and overlap, with weight diagnostics. KIV needs relevance, exogeneity, exclusion, completeness, and regularized inversion. Proximal methods need negative-control proxy restrictions, bridge existence, positivity, and completeness. Report ridge values, spectra, effective sample size, support limits, and sensitivity to plausible violations.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Causal Inference with Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@gretton2005hsic], [@fukumizu2008], [@sriperumbudur2010].
+Gretton et al. [@gretton2005hsic] provide the embedding view of dependence, Fukumizu et al. [@fukumizu2008] the conditional operator, and Zhang et al. [@zhang2011kcit] the conditional-null test. Newey and Powell [@newey2003] establish the nonparametric-IV completeness boundary, Singh et al. [@singh2019kiv] develop KIV, Miao et al. [@miao2018] give proximal identification, Mastouri et al. [@mastouri2021] construct kernel bridge estimators, and Muandet et al. [@muandet2021cme] develop counterfactual mean embeddings.
 
 ## Exercises {#exercises}
 
@@ -300,4 +456,8 @@ This chapter established explain the central definitions and claims in Causal In
     ::: hint-body
     Project \(Y\) on the fitted \(\hat X = aZ\): the stage-2 slope is \(\operatorname{Cov}(aZ,\ \beta X + \delta Z + \gamma U)/\operatorname{Var}(aZ)\). Use \(\operatorname{Cov}(Z,U)=0\) and \(\operatorname{Cov}(Z,X)=a\operatorname{Var}(Z)\) to get \((a\beta+\delta)/a\). The extra term involves only the instrument's observed relations to \(X\) and \(Y\), which are equally consistent with a valid but stronger or weaker instrument.
     :::
+8.  [proof]{.ex-tag} Prove the RKHS balancing bound in Proposition \(\ref{prop-causal-balance}\). Then construct a two-dimensional covariate example in which a linear kernel on the first coordinate exactly balances that coordinate but misses confounding through the second coordinate. Explain why zero empirical kernel imbalance is only as meaningful as the chosen RKHS.
+9.  [synthesis]{.ex-tag} State the assumptions needed to identify \(\mathbb E[Y(a)]\) using an outcome bridge \(h(W,a,X)\). Separate proxy restrictions, bridge existence, positivity, and both completeness roles. For each assumption, state whether it is an observed-law restriction, a causal restriction, or an operator injectivity condition.
+10. [computation]{.ex-tag} For the nonidentification example, verify algebraically that \(\mathcal M_1\) and \(\mathcal M_2\) generate the same \(Y\), but intervention slopes \(2\) and \(3\). If \(\widehat\beta_{\mathrm{IV}}=2\) and the direct effect is bounded by \(|\delta|\le0.4\) with first-stage coefficient \(a=1\), report the sensitivity interval.
+11. [synthesis]{.ex-tag} Derive the empirical squared distance \(\|\widehat\mu_1-\widehat\mu_0\|_{\mathcal H_\ell}^2\) when \(\widehat\mu_a=\sum_i q_i^{(a)}\psi(Y_i)\). State what characteristicness identifies, and explain why the result does not identify the joint counterfactual law of \((Y(0),Y(1))\).
 :::

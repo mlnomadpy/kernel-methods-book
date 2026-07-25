@@ -10,34 +10,138 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      State the smoothness needed to use point, first-derivative, and second-derivative observations with an RKHS kernel.
+      For \(k\in C^{2r}(\Omega\times\Omega)\), state a sufficient condition for derivative evaluations \(u\mapsto D^\alpha u(x)\), \(|\alpha|\le r\), to be bounded on \(\mathcal H_k\). Explain why differentiability in only one kernel argument is insufficient for the functional Gram matrix.
     answer: >-
-      The relevant evaluation functionals must be bounded on the RKHS. Point observations require bounded point evaluation, first derivatives require the mixed kernel derivatives that represent first-derivative evaluation, and second derivatives require correspondingly higher mixed derivatives. A safe statement checks existence and continuity of every derivative \(L_xL_zk(x,z)\), rather than assuming that visual smoothness of the kernel formula is enough.
+      A standard sufficient condition is that all mixed derivatives
+      \(D_x^\alpha D_z^\beta k(x,z)\) with \(|\alpha|,|\beta|\le r\) exist
+      and are continuous on the relevant domain, with finite diagonal values
+      \(D_x^\alpha D_z^\alpha k(x,z)|_{z=x}\). Then
+      \(D^\alpha u(x)=\langle u,D_z^\alpha k(\cdot,z)|_{z=x}\rangle\), so
+      derivative evaluation is bounded with squared functional norm equal to
+      the corresponding mixed diagonal derivative. A functional Gram entry
+      pairs two derivative representers and therefore differentiates both
+      kernel arguments. One-sided differentiability does not define all
+      entries and cannot certify their Gram structure.
   - number: 2
     kind: computation
     status: draft
     prompt: >-
-      Form the functional Gram matrix for value and derivative observations of a one-dimensional RBF kernel and verify its symmetry.
+      Reproduce the polynomial-kernel Poisson calculation in Section [A complete collocation calculation](#scientific-worked-poisson). Verify \(G\), solve for \(c\), and show which matrix row becomes zero if \(k(x,z)=1+xz\).
     answer: >-
-      For \(k(x,z)=\exp\{-(x-z)^2/(2\ell^2)\}\), use blocks \(k(x_i,x_j)\), \(\partial_{z}k(x_i,z_j)\), \(\partial_x k(x_i,z_j)\), and \(\partial_x\partial_z k(x_i,z_j)\). The first derivatives are opposite under argument exchange and the mixed derivative is symmetric, so the assembled block matrix is symmetric. Numerical eigenvalues should be nonnegative up to roundoff when duplicate or conflicting functionals are handled consistently.
+      The representers are \(r_0=1\), \(r_1=(1+x)^2\), and
+      \(r_2=-2x^2\), giving
+      \(G=[[1,1,0],[1,4,-2],[0,-2,4]]\). The equations give
+      \(c_0=-c_1\), \(3c_1-2c_2=0\), and
+      \(-2c_1+4c_2=2\), so
+      \(c=(-1/2,1/2,3/4)\). Therefore
+      \(\sum_i c_ir_i=x-x^2\). For \(k(x,z)=1+xz\), every second
+      derivative is zero, so \(r_2=0\) and the third row and column of the
+      functional Gram matrix vanish. The PDE information is invisible to
+      that RKHS.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Prove positive semidefiniteness of the symmetric collocation matrix using Riesz representers.
+      Prove the functional representer theorem for a nondecreasing norm penalty and construct a case where a minimizer outside the representer span exists.
     answer: >-
-      Let \(r_i\) represent the bounded functional \(L_i\), so \(G_{ij}=\langle r_i,r_j\rangle_{\mathcal H}\). For arbitrary coefficients \(a\), \(a^\top Ga=\lVert\sum_i a_i r_i\rVert_{\mathcal H}^2\ge0\). This also shows when singularity occurs: a nonzero coefficient vector describes a linearly dependent combination of functionals on the RKHS.
+      Decompose \(u=u_S+u_\perp\) with
+      \(S=\operatorname{span}\{r_i\}\). Every observation is unchanged
+      because \(L_i u_\perp=0\), while
+      \(\lVert u_S\rVert\le\lVert u\rVert\). A nondecreasing penalty
+      therefore allows replacement of any minimizer by \(u_S\), proving that
+      at least one span-valued minimizer exists. For nonuniqueness, take
+      \(\mathcal H=\mathbb R^2\), observe only the first coordinate, fit it
+      exactly, and use a penalty \(\Omega(t)=0\) for \(t\le2\). Every
+      \((1,s)\) with \(1+s^2\le4\) is a minimizer, including points outside
+      the span of the first-coordinate representer.
   - number: 4
-    kind: challenge
+    kind: proof
     status: draft
     prompt: >-
-      Derive a kernel formulation that enforces a linear boundary condition exactly while penalizing an interior differential residual softly.
+      Assume \(\mathcal T:X\to Y\) is injective and \(\lVert v\rVert_X\le C_{\mathrm{stab}}\lVert\mathcal Tv\rVert_Y\). Derive a state-error bound for an approximate solution with nonzero boundary residual. Identify the additional inequality needed to replace a continuous residual norm by sampled residuals.
     answer: >-
-      Choose a null-space or projected kernel whose sections satisfy \(\mathcal B u=0\), add any known nonhomogeneous lifting, and represent the remaining function in that constrained RKHS. Minimize observed-data loss plus \(\rho\sum_j\{\mathcal A u(z_j)-f(z_j)\}^2+\lambda\lVert u\rVert^2\). The representer contains data-evaluation and interior-residual functionals after projection; exact boundary satisfaction follows from the hypothesis space, while the PDE is enforced only at finite residual sites.
+      With \(e=u^\dagger-\widehat u\),
+      \(\mathcal Te=(f-\mathcal A\widehat u,g-\mathcal B\widehat u)\).
+      Hence
+      \(\lVert e\rVert_X\le C_{\mathrm{stab}}
+      \lVert(f-\mathcal A\widehat u,g-\mathcal B\widehat u)\rVert_Y\).
+      For a product norm this can be bounded by the sum of the interior and
+      boundary residual norms. Replacing either continuous norm by values at
+      sites requires a sampling inequality, typically bounding the
+      continuous residual norm by a discrete residual term plus a power of
+      fill distance times a stronger smoothness norm. Stability alone says
+      nothing about behavior between sites.
   - number: 5
+    kind: computation
+    status: draft
+    prompt: >-
+      For \(u\sim\mathcal{GP}(0,k)\) and \(f=u'+\phi u\), derive \(k_{uf}\) and \(k_{ff}\). Add independent value and equation noise, then write the log marginal likelihood used to estimate \(\phi\).
+    answer: >-
+      With \(\mathcal L^\phi=\partial_x+\phi\),
+      \(k_{uf}(x,z)=(\partial_z+\phi)k(x,z)\) and
+      \(k_{ff}(x,z)=(\partial_x+\phi)(\partial_z+\phi)k(x,z)\).
+      The observation covariance has blocks
+      \(K_{uu}+\sigma_u^2I\), \(K_{uf}\), \(K_{fu}\), and
+      \(K_{ff}+\sigma_f^2I\). For stacked observations \(y\), the negative
+      log marginal likelihood is
+      \(\tfrac12y^\top K_y(\phi)^{-1}y+
+      \tfrac12\log\det K_y(\phi)+\tfrac n2\log(2\pi)\).
+      A Cholesky solve evaluates the quadratic and log determinant. If
+      different \(\phi\) values produce nearly identical covariance blocks,
+      the likelihood cannot identify \(\phi\) reliably.
+  - number: 6
     kind: synthesis
     status: draft
     prompt: >-
-      Design a resolution-transfer benchmark comparing kernel operator regression and a Fourier neural operator on a parametric PDE family. Specify meshes, norms, boundary handling, compute, uncertainty, and failure diagnostics.
+      Show that zero-noise GP conditioning on linearly independent bounded functionals has the same mean as minimum-norm functional interpolation. Explain why equality of the mean does not make the deterministic power function a frequentist coverage guarantee.
     answer: >-
-      Define the continuous input and solution spaces, train on several coarse meshes, and test on unseen parameters and both finer and irregular meshes. Enforce identical boundary data and compare relative energy and \(L^2\) errors, residual and boundary norms, rollout or operator-composition error, memory, wall time, and mesh sensitivity. For the kernel model report conditioning and posterior or conformal uncertainty; for both models report failed cases and verify that normalization and interpolation never use test solutions.
+      For a zero-mean GP, the conditional mean is
+      \(m(x)=r(x)^\top G^{-1}y\), where
+      \(r(x)=(L_ik(x,\cdot))_i\). The minimum-norm interpolant has
+      coefficients \(c=G^{-1}y\) in the same representers, so the functions
+      coincide. The posterior variance is the squared norm of the residual
+      evaluation representer, hence the squared power function. This is a
+      sharp deterministic error over the RKHS unit ball and a conditional
+      variance under the GP prior. Frequentist coverage additionally
+      requires a relationship between the fixed truth, the prior scale,
+      hyperparameter selection, observation model, and any model or
+      discretization error.
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the posterior-mean Bayes-risk identity in Proposition [what posterior variance calibrates on average](#prop-scientific-bayes-risk), then give a two-point prior example showing that small average Bayes risk need not bound error at a fixed point outside the prior support.
+    answer: >-
+      Conditional on the information, decompose the estimation error into
+      the centered posterior fluctuation plus the difference between the
+      posterior mean and an arbitrary decision. The cross term has
+      conditional expectation zero, leaving posterior variance plus a
+      nonnegative squared bias term. Integrating proves optimality and the
+      identity. For the boundary, let the information map be constant and
+      put prior mass \(1-\epsilon\) at \(u=0\) and \(\epsilon\) at
+      \(u=1\), with \(Q(u)=u\). The posterior mean is \(\epsilon\) and
+      the Bayes risk is \(\epsilon(1-\epsilon)\), which can be arbitrarily
+      small. At the fixed truth \(u^\dagger=M\) outside the prior support,
+      the squared error is \((M-\epsilon)^2\), which can be arbitrarily
+      large. Small average risk under the prior therefore gives no uniform
+      guarantee outside its support.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: >-
+      Design a matched benchmark for kernel operator ridge regression, an FNO, and a classical solver on a parametric heat or Darcy problem. Specify input and output spaces, train and test measures, meshes, norms, compute accounting, uncertainty diagnostics, and at least two failure shifts.
+    answer: >-
+      Define continuous coefficient and solution spaces, such as bounded
+      uniformly elliptic coefficients in \(L^\infty\) and solutions in
+      \(H_0^1\). Draw training and in-distribution test coefficients from one
+      declared measure, reserve shifted smoothness and contrast families for
+      stress tests, and generate reference solutions with a tolerance much
+      smaller than surrogate error. Train on one or more coarse meshes and
+      test on the training mesh, a finer mesh, and an irregular mesh using
+      reconstruction maps fixed without test solutions. Report relative
+      \(L^2\), energy, boundary, and independent residual errors, wall time,
+      peak memory, training and data-generation cost, conditioning or
+      optimization diagnostics, and empirical coverage where uncertainty is
+      reported. Useful failure shifts include coefficients with unresolved
+      high frequencies and geometries or boundary conditions absent from
+      training.

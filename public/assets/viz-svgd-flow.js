@@ -236,7 +236,7 @@
     // mode plays out within seconds while the initial march stays visible.
     const sim = VIZ.makeSim(fig, { step: svgdStep, draw: draw, stepMs: 8, budgetMs: 8 });
     init();
-    sim.start();
+    sim.start(false);
     syncBtn();
     return draw;
   });

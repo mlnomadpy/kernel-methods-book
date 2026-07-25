@@ -10,34 +10,55 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      For the integrated squared second-derivative penalty, identify the null space and explain why its basis must appear outside the penalized kernel expansion.
+      For \(J_m(f)=\int_0^1\{f^{(m)}(t)\}^2dt\), identify the null space and explain both the large-\(\lambda\) limit and the rank condition required of its design matrix.
     answer: >-
-      The null space consists of affine functions because a function has zero second derivative exactly when it is \(a+bx\). The roughness penalty cannot identify or shrink these directions, so they must be represented by a separate polynomial basis. The side constraint \(P^\top c=0\) prevents the penalized kernel component from duplicating them.
+      The null space is \(\mathcal N_m=\operatorname{span}\{1,x,\ldots,x^{m-1}\}\), because an \(m\)-times weakly differentiable function has zero \(m\)-th derivative exactly when it is a polynomial of degree below \(m\). As \(\lambda\to\infty\), every component with positive roughness is suppressed, so the estimator converges to least squares over \(\mathcal N_m\), not to zero. If \(P_{ia}=p_a(x_i)\), identification requires \(\operatorname{rank}(P)=m\). Otherwise a nonzero null-space function can vanish on all observed sites, costs no penalty, and leaves its coefficient undetermined.
   - number: 2
-    kind: computation
+    kind: proof
     status: draft
     prompt: >-
-      Given a symmetric smoother matrix and a residual vector, compute the leave-one-out residuals, effective degrees of freedom, and generalized cross-validation score.
+      Starting from repeated integration, verify that (51.2) reproduces evaluation on the anchored space \(\mathcal H_m\).
     answer: >-
-      For each observation compute \(e_i^{(-i)}=e_i/(1-S_{ii})\). The effective degrees of freedom are \(\operatorname{tr}(S)\), and the GCV score is \(n^{-1}\lVert e\rVert^2/\{1-\operatorname{tr}(S)/n\}^2\). A valid calculation checks that no leverage denominator is zero and that the trace lies between zero and \(n\) for an ordinary contraction smoother.
+      For \(g\in\mathcal H_m\), the conditions \(g^{(r)}(0)=0\) for \(0\le r\le m-1\) and repeated integration give \(g(s)=\int_0^1 (s-u)_+^{m-1}g^{(m)}(u)/(m-1)!\,du\). Differentiate \(R_m(s,t)\) from (51.2) \(m\) times with respect to its second argument. The result is \(\partial_t^mR_m(s,t)=(s-t)_+^{m-1}/(m-1)!\) almost everywhere. Therefore \(\langle g,R_m(s,\cdot)\rangle_{\mathcal H_m}=\int_0^1g^{(m)}(t)(s-t)_+^{m-1}/(m-1)!\,dt=g(s)\). The same integral and Cauchy-Schwarz show bounded evaluation.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Prove the smoothing-spline representer theorem by decomposing the penalized component into observed kernel sections and their orthogonal complement.
+      Extend the proof of Theorem 51.1 to bounded derivative or integral observations \(\ell_i\), and state exactly what fails if one \(\ell_i\) is unbounded.
     answer: >-
-      Write \(f=p+g_\parallel+g_\perp\), where \(p\in\mathcal N_J\), \(g_\parallel\) lies in the span of \(R(x_i,\cdot)\), and \(g_\perp\) is orthogonal to that span. Reproduction gives \(g_\perp(x_i)=0\), so removing \(g_\perp\) leaves every loss term unchanged and weakly decreases the squared norm. A minimum-norm minimizer therefore has \(g_\perp=0\), yielding the stated finite form.
+      Boundedness gives a representer \(r_i\in\mathcal H\) satisfying \(\ell_i(g)=\langle g,r_i\rangle_{\mathcal H}\). Decompose the penalized component as \(g=g_\parallel+g_\perp\), where \(g_\parallel\) lies in the span of the \(r_i\). Orthogonality implies every \(\ell_i(g_\perp)=0\), while \(\lVert g\rVert^2=\lVert g_\parallel\rVert^2+\lVert g_\perp\rVert^2\). Removing \(g_\perp\) preserves every observation and decreases the objective, so the minimizer is a null-space term plus a combination of observation representers. If an \(\ell_i\) is unbounded, Riesz representation supplies no \(r_i\), the observation need not be continuous under the penalty topology, and the orthogonal-decomposition argument can fail. One must strengthen the function space or weaken the observation.
   - number: 4
-    kind: challenge
+    kind: computation
     status: draft
     prompt: >-
-      Derive the identifiable kernel decomposition for a two-variable smoothing-spline ANOVA model containing both main effects and one interaction.
+      Reproduce every quantity in the three-point worked example, including \(J_2(s)=48\), the shrinkage factor in (51.6), the fitted values at \(\lambda=0.01\), and the effective degrees of freedom.
     answer: >-
-      Center each univariate RKHS so its functions integrate or average to zero, then use \(f=\mu+f_1+f_2+f_{12}\) with kernels \(1\), \(k_1\), \(k_2\), and \(k_1k_2\). Require each main effect to have zero marginal mean and require the interaction to have zero marginal mean in either argument. These constraints make the four subspaces orthogonal under the reference product measure and prevent lower-order effects from being hidden inside \(f_{12}\).
+      On \([0,1/2]\), \(s(x)=3x-4x^3\), so \(s''(x)=-24x\); symmetry gives the other half. Hence \(J_2(s)=2\int_0^{1/2}576x^2dx=48\). Since \(z=3s-1\), \(J_2(z)=9J_2(s)=432\), and the objective in the sole penalized coordinate is \(2(\theta-1/3)^2+432\lambda\theta^2\). Differentiation yields \(\theta=(1/3)/(1+216\lambda)\). At \(\lambda=0.01\), the shrinkage factor is \(r=1/3.16=0.3164557\), \(\theta=0.1054852\), and \(\widehat y=\mathbf1/3+\theta(-1,2,-1)^\top=(0.227848,0.544304,0.227848)^\top\). The two affine directions have eigenvalue one and the curvature direction has eigenvalue \(r\), so \(\operatorname{df}=2+r=2.316456\).
   - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the exact leave-one-out identity (51.7) directly from the normal equations or a rank-one update, and identify the instability as \(A_{ii}\to1\).
+    answer: >-
+      Give observation \(i\) a provisional response \(z=\widehat y_i^{(-i)}\). Its residual is zero, so retaining it with response \(z\) has the same normal equations as deletion. Linearity gives \(z=\widehat y_i+A_{ii}(z-y_i)\). Thus \((1-A_{ii})z=\widehat y_i-A_{ii}y_i\), and \(y_i-z=(y_i-\widehat y_i)/(1-A_{ii})\). As \(A_{ii}\to1\), the denominator approaches zero: the fit at \(i\) has nearly unit self-leverage, so the full-data residual can be tiny while the deleted prediction changes drastically.
+  - number: 6
     kind: synthesis
     status: draft
     prompt: >-
-      Design a comparison among a natural spline, an RBF KRR model, and a Matérn GP for data requiring extrapolation. Specify the null-space assumptions, selection protocol, uncertainty metrics, and conditioning diagnostics.
+      Explain why GCV is constant in the three-point example. Construct a four-point contrast with two penalized eigenvalues and write its GCV score in the smoother eigenbasis.
     answer: >-
-      Use a contiguous boundary region as the final test set and nested validation inside the observed range. Declare the natural spline's affine null space, the RBF model's mean and bandwidth, and the Matérn mean, smoothness, and noise assumptions. Compare extrapolation error, log predictive density, interval coverage and width, effective degrees of freedom, Gram condition estimates, and sensitivity to input scaling; report that only the GP intervals have a direct model-based probabilistic interpretation.
+      In the example, \(y=\mathbf1/3+q/3\), and only the curvature direction \(q\) is penalized. If its shrinkage is \(r\), the residual norm is proportional to \((1-r)^2\), while \(\operatorname{tr}(I-A)=1-r\). The same factor cancels between the numerator and squared denominator of GCV, leaving a constant. For four points with a two-dimensional affine null space, choose orthonormal penalized contrasts \(q_1,q_2\) with roughness eigenvalues \(\rho_1,\rho_2\), write \(y=P\beta+b_1q_1+b_2q_2\), and let \(r_j=(1+n\lambda\rho_j)^{-1}\). Then \(\operatorname{GCV}(\lambda)=\{n^{-1}\sum_{j=1}^2(1-r_j)^2b_j^2\}/\{n^{-1}\sum_{j=1}^2(1-r_j)\}^2\). Unlike the one-direction case, the factors generally do not cancel because \(r_1\ne r_2\).
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: >-
+      Derive the two-factor centered ANOVA kernel from (51.14), prove the marginal constraints, and explain how dependent covariates alter the interpretation.
+    answer: >-
+      Let \(\mathcal C_j\) center functions in coordinate \(j\). Applying \(\mathcal C_j\) to both arguments of \(k_j\) gives exactly (51.14), and integration with respect to either kernel argument is zero because the four terms cancel. The centered main-effect kernels are \(k_1^\circ\) and \(k_2^\circ\); the interaction tensor product has kernel \(k_{12}=k_1^\circ k_2^\circ\). Integrating an interaction section over \(x_1\) or \(x_2\) gives zero, so every function in the closed interaction span has the required zero marginal. Under a product reference measure the constant, main effects, and interaction are orthogonal and uniquely recoverable. With dependent covariates, empirical support is not a product set and components can be highly collinear; the formal decomposition remains tied to the declared reference measure but may no longer describe variation identifiable from the observed joint distribution.
+  - number: 8
+    kind: exploration
+    status: draft
+    prompt: >-
+      Design a comparison among a natural cubic spline, RBF KRR, and a Matérn GP for boundary extrapolation. Specify null-space or mean assumptions, tuning protocol, uncertainty scores, conditioning diagnostics, and one failure test.
+    answer: >-
+      Reserve a contiguous interval beyond the largest training input as the final test region, with nested contiguous validation blocks inside the observed range. Declare the natural spline's affine null space, the RBF KRR mean convention and bandwidth, and the Matérn GP mean, smoothness, range, and noise model. Select all hyperparameters without using the boundary test region. Report boundary RMSE and bias, log predictive density where available, empirical interval coverage and width, effective degrees of freedom, matrix condition estimates, and solve residuals. A useful failure test adds an unmodeled linear trend outside the dense region: the natural spline extrapolates through its affine component, while zero-mean stationary kernels tend toward their prior mean. Repeat after rescaling the input to expose penalty and bandwidth sensitivity. GP intervals should be labeled model-based and externally checked for coverage.

@@ -2,19 +2,27 @@
 id: ch-cca
 slug: kernel-cca-and-correlation
 title: Kernel CCA and Correlation Analysis
-part: V · Structure and Subspaces
-order: 15
+part: V · Spectral Geometry and Unlabeled Structure
+order: 24
 tier: advanced
 prerequisites:
   - kernel-clustering
 objectives:
   - >-
-    Explain the central definitions and claims in Kernel CCA and Correlation
-    Analysis.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Derive classical CCA as a generalized eigenproblem and interpret canonical
+    scores as paired, variance-normalized projections.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Kernelize both views through representer expansions and prove why the
+    unregularized empirical problem saturates at correlation one.
+  - >-
+    Form the regularized kernel CCA eigenproblem and explain how its shrinkage
+    parameter trades correlation against covariance.
+  - >-
+    Compute canonical scores for new paired observations and distinguish sample
+    correlation from population dependence.
+  - >-
+    Compare linear CCA, kernel CCA, and deep CCA by representation, capacity,
+    regularization, and computational cost.
 review_status: draft
 reviewers:
   technical: null
@@ -124,6 +132,55 @@ $$
 
 which, by the same Lagrangian argument as in the linear case, leads to a generalized eigenvalue problem. Subsequent canonical directions come from the same problem with added orthogonality constraints.
 
+### The population operator and its domains {#cca-population-operator}
+
+The finite Gram problem hides the analytic difficulty: population CCA whitens two covariance operators, and covariance operators in an infinite-dimensional RKHS normally have eigenvalues tending to zero. Let \((X,Y)\sim P_{XY}\) on measurable spaces \(\mathcal X\times\mathcal Y\). Let \(\mathcal H_X,\mathcal H_Y\) be separable RKHSs with measurable kernels satisfying
+
+$$
+\mathbb E k_X(X,X) \lt \infty,\qquad \mathbb E k_Y(Y,Y) \lt \infty.
+$$
+
+The mean elements exist, and the centered covariance and cross-covariance operators are defined by
+
+$$
+\langle f,C_{XX}h\rangle_{\mathcal H_X}
+  =\operatorname{Cov}(f(X),h(X)),\qquad
+\langle g,C_{YX}f\rangle_{\mathcal H_Y}
+  =\operatorname{Cov}(f(X),g(Y)).
+$$
+
+These operators are bounded; \(C_{XX}\) and \(C_{YY}\) are positive and self-adjoint, while \(C_{XY}=C_{YX}^\ast\). Moreover,
+
+$$
+\mathcal N(C_{XX})=\{f\in\mathcal H_X:\operatorname{Var}f(X)=0\}.
+$$
+
+Thus injectivity means that no nonzero RKHS function is almost surely constant after centering. Injectivity is stronger than finite-sample Gram invertibility and does not make \(C_{XX}^{-1/2}\) bounded. If \(C_{XX}\) is compact with eigenpairs \((\mu_j,e_j)\) and \(\mu_j\downarrow0\), its inverse square root is defined only on
+
+$$
+\mathcal D(C_{XX}^{-1/2})
+=\left\{u:\sum_{j:\mu_j\gt0}\frac{|\langle u,e_j\rangle|^2}{\mu_j}\lt\infty\right\}.
+$$
+
+The safe population object comes from the factorization
+
+$$
+C_{YX}=C_{YY}^{1/2}V_{YX}C_{XX}^{1/2},
+$$
+
+where \(V_{YX}\) is the unique contraction satisfying \(V_{YX}=Q_YV_{YX}Q_X\), with \(Q_X,Q_Y\) the projections onto the closures of the covariance ranges. The notation \(C_{YY}^{-1/2}C_{YX}C_{XX}^{-1/2}\) is shorthand for this bounded extension, not permission to multiply three everywhere-defined bounded operators. Section 2.2, Equation (5), of [@fukumizu2007cca] makes this warning explicit.
+
+::: {.theorem #thm-cca-population}
+[Theorem (population canonical correlation and attainment)]{.box-title}
+
+Under the moment and separability assumptions above, the supremal RKHS correlation equals \(\lVert V_{YX}\rVert\). If \(V_{YX}\) is compact, its largest singular value is attained by singular vectors \((\phi,\psi)\). Canonical functions \(f=C_{XX}^{-1/2}\phi\) and \(g=C_{YY}^{-1/2}\psi\) exist in the RKHS only when \(\phi\in\mathcal R(C_{XX}^{1/2})\) and \(\psi\in\mathcal R(C_{YY}^{1/2})\).
+
+**Assumptions.** The kernels are measurable, the RKHSs separable, diagonal kernel moments finite, and \(V_{YX}\) compact for attainment. Null-variance functions are quotiented out. The stated range conditions are required before applying inverse square roots.
+**Proof status.** The factorization and population formulation are given in [@fukumizu2007cca, Section 2.2, Equation (5), and Section 2.3, Equations (6) and (8)]. The attainment step is the compact-operator singular-value theorem.
+:::
+
+If compactness fails, the supremum need not identify a stable finite-dimensional direction. The extreme witness is \(Y=X\) in an infinite-dimensional RKHS: then \(V_{YX}=I\), every unit direction has correlation one, and no leading direction is distinguished. This is a population ambiguity, not finite-sample overfitting.
+
 ### What goes wrong, and why we must regularize {#kernel-cca-overfitting}
 
 There is a serious flaw hiding in the kernelized problem. Suppose \(K_a\) and \(K_b\) are invertible, and change variables to \(\boldsymbol{\alpha}' = K_a \boldsymbol{\alpha}\) and \(\boldsymbol{\beta}' = K_b \boldsymbol{\beta}\). The objective and constraints turn into
@@ -142,9 +199,13 @@ $$
 (1 - \tau)\, \boldsymbol{\alpha}^\top K_a^2 \boldsymbol{\alpha} + \tau \, \underbrace{\boldsymbol{\alpha}^\top K_a \boldsymbol{\alpha}}_{\lVert f_a \rVert_{\mathcal{H}_a}^2} = 1,
 $$
 
-and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau \in [0, 1]\) interpolates between the raw, degenerate problem at \(\tau = 0\) and a pure norm penalty at \(\tau = 1\). The added term makes the constraint matrices strictly positive definite, curing the numerical instability, and it forbids the wild, wiggly directions responsible for spurious correlations, curing the overfitting. Reading the penalty this way, as a preference for directions of small RKHS norm and therefore for smooth, slowly varying functions, is what ties the fix back to the regularization that ran through the supervised chapters: there we penalized \(\lVert f \rVert_{\mathcal{H}}\) to keep a fitted function from chasing noise, and here we do the same to keep a canonical direction from manufacturing correlation. The regularized problem is again a generalized eigenvalue problem, now well posed; this form of kernel CCA, together with its use as a kernel measure of dependence, is due to Bach and Jordan (2002).
+and symmetrically for \(\boldsymbol{\beta}\) with \(K_b\). The parameter \(\tau \in [0, 1]\) interpolates between the raw, degenerate problem at \(\tau = 0\) and a pure norm penalty at \(\tau = 1\). The added term charges for wild directions, but \(K^2+\tau K\) remains singular whenever \(K\) has a null space. A strict ridge such as \((K+\kappa I)^2\), or the population constraint \(C_{XX}+\varepsilon I\), is the safe formulation when injectivity is unavailable. Reading the penalty as a preference for directions of small RKHS norm ties the fix back to the supervised chapters: there we penalized \(\lVert f \rVert_{\mathcal{H}}\) to keep a fitted function from chasing noise, and here we do the same to keep a canonical direction from manufacturing correlation. The regularized problem is again a generalized eigenvalue problem; this form of kernel CCA is developed in [@bach2002, Section 3] and [@fukumizu2007cca, Section 2.1, Equation (3)].
 
 Kernel CCA in this regularized form is a practical tool for learning shared representations across modalities. A representative application is finding a joint latent representation of images and their text tags, aligning the visual and textual views of a collection so that the two can be compared or retrieved against each other (Gong and Lazebnik, 2014).
+
+The output is easier to read in score space than in coefficient space. Each paired observation produces two numbers, one from each view; useful canonical directions make those numbers line up without collapsing either view to a constant. The figure contrasts the raw coordinates, where the shared factor is obscured by view-specific variation, with the regularized canonical scores, where paired observations track one another.
+
+<figure class="viz" data-figure="cca-paired-projections" data-alt="Two paired two-dimensional views share a latent variable hidden by nuisance variation. After regularized CCA, their one-dimensional canonical scores lie close to the diagonal, so matching observations receive similar scores."><figcaption>CCA is successful when paired observations agree after projection: regularization suppresses view-specific directions and exposes the shared coordinate rather than manufacturing perfect in-sample correlation.</figcaption></figure>
 
 ### Variance, covariance, and correlation as one family {#cca-covariance-family}
 
@@ -169,7 +230,7 @@ The expressive kernels of the earlier chapters are the universal and characteris
 ::: {.proposition #prop-15-1}
 [Proposition (unregularized kernel CCA saturates)]{.box-title}
 
-Let \(K_a\) and \(K_b\) be strictly positive definite kernels, for instance any universal kernel such as the Gaussian, evaluated at \(n\) distinct points. Then the Gram matrices are invertible, and unregularized kernel CCA attains its maximum canonical correlation \(1\) on every such sample, whatever the pairing between the two views.
+Let \(K_a\) and \(K_b\) be strictly positive definite kernels, for instance Gaussian kernels on Euclidean space, evaluated at \(n\) distinct points in their respective views. Then the Gram matrices are invertible, and unregularized kernel CCA attains its maximum canonical correlation \(1\) on every such sample, whatever the pairing between the two views.
 
 **Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
 **Proof status.** Proved immediately below.
@@ -234,6 +295,66 @@ $$
 **Verification artifact.** checks/example-ch-cca-example-15-1.json records the example source hash and verification scope.
 ::::::
 
+### What consistency actually requires {#cca-consistency}
+
+Regularization has two incompatible jobs. At each finite \(n\), \(\varepsilon_n\gt0\) stabilizes inverse square roots; for consistency toward the unregularized population target, it must eventually vanish. It cannot vanish too quickly because empirical covariance error is amplified by inverse powers of \(\varepsilon_n\).
+
+::: {.theorem #thm-cca-consistency}
+[Theorem (a sufficient kernel-CCA consistency schedule)]{.box-title}
+
+Let \((X_i,Y_i)_{i=1}^n\) be i.i.d. copies of \((X,Y)\). Assume the measurable-kernel moment conditions of the population section, compactness of \(V_{YX}\), a one-dimensional leading left and right singular subspace, and the range conditions \(\phi\in\mathcal R(C_{XX})\), \(\psi\in\mathcal R(C_{YY})\). If
+
+$$
+\varepsilon_n\downarrow0,\qquad n^{1/3}\varepsilon_n\longrightarrow\infty,
+$$
+
+then the regularized empirical canonical functions converge, up to independent signs, to the population canonical functions in \(L^2(P_X)\) and \(L^2(P_Y)\), in probability.
+
+**Assumptions.** I.i.d. paired sampling, separable RKHSs, finite diagonal kernel moments, compact normalized cross-covariance, simple leading canonical correlation, the stated range conditions, and the displayed deterministic schedule.
+**Proof status.** This is [@fukumizu2007cca, Theorem 2], using its Equation (9). Its Lemma 6 gives the operator-estimation term \(O_p(\varepsilon_n^{-3/2}n^{-1/2})\).
+:::
+
+Fixed \(\varepsilon\) converges to a regularized population estimand rather than the raw one. The schedule \(\varepsilon_n=n^{-1/2}\) is too fast for this theorem, whereas \(\varepsilon_n=n^{-1/4}\) satisfies it. Cross-validation may select a better finite-sample value, but that random choice is not automatically covered by this deterministic-schedule theorem.
+
+### Repeated canonical correlations {#cca-repeated-correlations}
+
+A canonical correlation can be identified while its directions are not. If \(\rho_1=\cdots=\rho_m\gt\rho_{m+1}\), any simultaneous orthogonal rotation of the \(m\) left and right singular vectors produces another valid canonical basis.
+
+::: {.proposition #prop-cca-repeated}
+[Proposition (identifiability under multiplicity)]{.box-title}
+
+Suppose \(V_{YX}\) is compact and its leading singular value has multiplicity \(m\). The leading value and corresponding left and right \(m\)-dimensional singular subspaces are intrinsic, but individual canonical directions inside them are not.
+
+**Assumptions.** Compactness and a positive gap \(\rho_m-\rho_{m+1}\).
+**Proof status.** Proved immediately below.
+:::
+
+::: {.proof}
+[Proof]{.box-title}
+
+Let \(V_{YX}\phi_j=\rho\psi_j\) and \(V_{YX}^\ast\psi_j=\rho\phi_j\) for \(j\le m\). For any orthogonal \(R\in\mathbb R^{m\times m}\), set \(\widetilde\phi_j=\sum_\ell R_{\ell j}\phi_\ell\) and \(\widetilde\psi_j=\sum_\ell R_{\ell j}\psi_\ell\). Linearity gives the same singular equations, while orthogonality preserves normalization. Every rotated basis is therefore equally valid, but the spectral projectors onto the two subspaces are unchanged. [\(\square\)]{.qed}
+:::
+
+Compare projection matrices or principal angles between estimated canonical subspaces. Raw coefficient vectors can disagree even when two fits recover exactly the same shared subspace.
+
+### A deterministic multiview regularization study {#cca-regularization-study}
+
+The following controlled experiment makes training saturation and held-out utility disagree. Each view has \(30\) coordinates and only \(36\) training pairs. The first coordinate in each view is a noisy measurement of the same latent Gaussian variable; the other \(29\) coordinates are independent nuisance noise. A separate set of \(400\) paired observations measures generalization.
+
+::: {.example #example-cca-regularization-study}
+[Example (regularization reveals the shared coordinate)]{.box-title}
+
+With deterministic seed \(1502\), nearly unregularized linear CCA reports training correlation \(0.999999\) but only \(0.381473\) held-out correlation. Ridge values \(0.03,0.3,3,30\) produce held-out correlations \(0.387012,0.414535,0.424547,0.395060\). Moderate shrinkage improves the held-out quantity even though it lowers training correlation.
+
+As a negative control, permuting the training pairing destroys the shared relation. Across the same ridge sweep, every absolute held-out correlation is below \(0.027\). A large training canonical correlation without held-out paired alignment is a failure witness, not evidence of dependence.
+
+**Verification.** The deterministic generator, train/test centering, permutation control, and assertions are checked by `checks/ch-cca-ex2.py`.
+
+**Verification artifact.** checks/example-ch-cca-example-cca-regularization-study.json records the example source hash and verification scope.
+:::
+
+This is not a universal tuning recommendation. It demonstrates the protocol: preserve pairs when splitting, fit centering on training data only, select shrinkage by held-out paired performance, and include a pairing permutation as a negative control.
+
 ## Multi-view learning and deep CCA {#multi-view-deep-cca}
 
 Kernel CCA is one point in a wider space of multi-view methods, all of which read shared structure from paired data and differ only in how each view is represented before the correlations are taken. Linear CCA maps each view by a matrix, kernel CCA maps it by a fixed RKHS feature map, and one can instead learn the maps outright.
@@ -257,11 +378,15 @@ For a book-length treatment of the methods in this chapter, Schölkopf and Smola
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel CCA and Correlation Analysis**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+- Never report the unregularized training correlation as evidence of dependence: with invertible Gram matrices it equals one by construction.
+- Center both Gram matrices using the training sample, and reuse those training means for test points. Re-centering a query changes the fitted problem.
+- Tune shrinkage on held-out paired data. A tiny ridge can make the eigenproblem numerically solvable while still leaving a statistically unstable direction.
+- Inspect canonical scores as well as the leading correlation. A high score driven by one or two pairs, or one that disappears under resampling, is not a robust shared representation.
+- Compare against linear CCA. A nonlinear map earns its complexity only when its held-out alignment improves.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel CCA and Correlation Analysis; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@andrew2013dcca], [@bach2002], [@fukumizu2007cca].
+CCA searches for two variance-normalized projections whose scores covary as strongly as possible. Kernelization makes those projections nonlinear but also makes perfect empirical correlation trivial whenever both Gram matrices are invertible. RKHS-norm shrinkage is therefore part of the estimand, not merely a numerical patch: it restricts which score patterns each view may realize and turns the problem back into a meaningful generalized eigenproblem. Covariance analysis, CCA, kernel CCA, and deep CCA differ mainly in the representation and normalization they choose; all must control expressive directions and be judged on held-out paired observations. For primary treatments, see [@bach2002], [@hardoon2004], [@fukumizu2007cca], and [@andrew2013dcca].
 
 ## Exercises {#exercises}
 
@@ -285,4 +410,7 @@ This chapter established explain the central definitions and claims in Kernel CC
     For a positive semidefinite \(K\) and \(\kappa \gt 0\), \((K + \kappa I)^2 - K^2 = 2\kappa K + \kappa^2 I \succeq 0\), so each denominator quadratic form only grows with \(\kappa\) while the numerator is untouched: every feasible ratio is bounded by its value at smaller \(\kappa\).
     :::
 5.  [warm-up]{.ex-tag} Place kernel CCA in the multi-view family. (a) State precisely what deep CCA (Andrew et al., 2013) replaces relative to kernel CCA, and explain why it still needs the covariance shrinkage \((\hat{\Sigma} + r I)\) of this chapter. (b) Describe the cross-lingual paired-corpus application: what are the two views, what does a leading canonical direction represent, and how is it used for retrieval across languages? (c) Relate the objective to kernel PCA of [[ch:kernel-pca]]: which covariance or cross-covariance does each of PCA, CCA, and deep CCA decompose?
+6.  [proof]{.ex-tag} Let \(C\) be a positive compact operator with eigenpairs \((\mu_j,e_j)\), \(\mu_j\downarrow0\). Show that injectivity of \(C\) does not make \(C^{-1/2}\) bounded. State its domain and construct a sequence of unit vectors on which the inverse-square-root norm diverges.
+7.  [synthesis]{.ex-tag} Explain why the schedule \(\varepsilon_n=n^{-1/4}\) satisfies the consistency theorem but \(\varepsilon_n=n^{-1/2}\) does not. Separate the claims “the finite problem is invertible,” “the regularized estimator converges,” and “cross-validation selected a useful finite-sample value.”
+8.  [computation]{.ex-tag} Run the deterministic multiview study. Report the nearly unregularized training and held-out correlations, the ridge with the best held-out correlation, and the permutation-control maximum. Explain why selecting by training correlation chooses the failure mode.
 :::

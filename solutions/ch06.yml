@@ -118,3 +118,20 @@ exercises:
       training KPCA coordinate. A new point was absent from the reference empirical measure: if
       included, all row/column/grand means and the eigenvalues/eigenvectors would change. The frozen
       Nyström-style coordinate therefore agrees exactly only on the fitted sample."
+  - number: 7
+    kind: synthesis
+    status: draft
+    prompt: A population covariance operator has eigenvalues \((4.0,2.0,2.0,0.5,\ldots)\), and an
+      empirical estimate satisfies \(\|\widehat C-C\|_{\mathrm{op}}\leq0.1\). (a) Is the leading
+      one-dimensional subspace stable under the theorem? Give its bound. (b) Can the second and
+      third individual eigenvectors be identified? (c) Is the top-three subspace stable, and what
+      bound follows? (d) Explain why a small reconstruction tail and a stable principal subspace
+      answer different questions.
+    answer: The first boundary gap is 4-2=2, and 0.1 is below half that gap, so the leading
+      projector obeys \(\|\widehat P_1-P_1\|_{\mathrm{op}}\leq2(0.1)/2=0.1\). The eigenvalue 2 is
+      repeated, so its two individual eigenvectors have no population identity; any orthonormal
+      rotation within their joint eigenspace is equally valid. The top-three boundary gap is
+      2-0.5=1.5, and 0.1 is below 0.75, so
+      \(\|\widehat P_3-P_3\|_{\mathrm{op}}\leq0.2/1.5=0.1333\). Reconstruction tail measures how
+      much variance is omitted after projection, whereas projector stability measures how much the
+      retained subspace moves under perturbation. Either can be small while the other is large.

@@ -1,0 +1,719 @@
+{
+  "version": 1,
+  "figures": {
+    "active-variance": {
+      "source": "tools/figures/active_variance.py",
+      "source_sha256": "fab8b5db7ce5e2fa6d23214f72644987c523d4d39ff41eb39bd3bbf8c29b100f",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "475e6c1e3035b3e808ffe337096943952e9b58409cca91c8aaeb8b7f171b98ac",
+      "pdf_sha256": "6aabbbb7adb782737edda20a76c06de5387fa0343f1b82fe541d83fe1edc7e21"
+    },
+    "anisotropic-covariance": {
+      "source": "tools/figures/anisotropic_covariance.py",
+      "source_sha256": "9f16b003c728f3880b151c5fa04479e63c2bddd4b848d99a6c677379aecbca63",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "87b2dea365930723a2af0b337b5cdeaf6160c79d2f4c46f81d6f601fdb303534",
+      "pdf_sha256": "e14cefbee3dc42fb45235d0bc4c45dcd1e438e01e0592914c76ea79d643d3e75"
+    },
+    "approximation-conditioning-frontier": {
+      "source": "tools/figures/approximation_conditioning_frontier.py",
+      "source_sha256": "b0e65cedd8f27ef420677ed89a7886bac647bd171a98b3152f95de793e041a31",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "c181860279bd5aa98c2a112a84e8b7e999a35f25dbcea4ac02363122d8c1c9d0",
+      "pdf_sha256": "ebcfd50f36f82008a3de512641e7f2c8e36795d9b5eb010fdb78aac3808dd64b"
+    },
+    "approximation-decision-map": {
+      "source": "tools/figures/approximation_decision_map.py",
+      "source_sha256": "b521312f2bfd0607c63d93f6932c612de8c305412b246ced612ef77be0211db8",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "c71f76542b61f1e40f361368e9d9c00f80840f01fb3a16f6c694b330893c5a8d",
+      "pdf_sha256": "a12c0129715d64dc2423fdee7db2ce799fc1beccc3d3f9641242108d24a71489"
+    },
+    "bags-to-embeddings": {
+      "source": "tools/figures/bags_to_embeddings.py",
+      "source_sha256": "a49e34c59a50eee7358742d52375ea725b269d7ba718dbaac5c1676d71752f44",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "bd81d405b6c4e15b1593f05fe7b5b4bff44d7215b6da9b9a0dfb8721a8ca224a",
+      "pdf_sha256": "c89838609e6423f67f5a824c6a95a5d6f7aaeb41224984d38327bdab5efc9487"
+    },
+    "bellman-residual-policy-loss": {
+      "source": "tools/figures/bellman_residual_policy_loss.py",
+      "source_sha256": "c0ae0c041fb94fb870b1fcf0c531f7d4fbbe178374f717d857939d0513980b00",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "a1e22a3e42560873bec89e33187a1e499a492382d99d772167396c9842372eaa",
+      "pdf_sha256": "a4f3bbea6d91160f852c599acd7df3e85c2998b4e1226b9510addff4ec5f51e0"
+    },
+    "bo-acquisition-comparison": {
+      "source": "tools/figures/bo_acquisition_comparison.py",
+      "source_sha256": "681d1876b8979c450232f3b68e6812adc2eaa21e496c079136128381cf825310",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "d7329a10e7ad946717011115d0a8f76fd0563c64e5b97ddd1ba2b2d1f6d4e480",
+      "pdf_sha256": "2466309f4bdb9bae2ff77f6f0d9170e3b09f4dfb61660bed56e8277b8a602f28"
+    },
+    "bo-loop": {
+      "source": "tools/figures/bo_loop.py",
+      "source_sha256": "949de2081b20d80d42992507be6546e5d4be3595c8a52e9f4710f1fe93e7dfc4",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "7874fda40abff06e4cebfd40b49cf4041bb39cc59162450d0f59c1eef397f123",
+      "pdf_sha256": "a3764b342a86825068df6ef4871a72fc6d1edaec92db0cd48d4b7aa2e1f9dd36"
+    },
+    "bochner-kernel-spectrum-atlas": {
+      "source": "tools/figures/bochner_kernel_spectrum_atlas.py",
+      "source_sha256": "f750253f45bb1155b03f7366c54c64d93f80b2f1574eae2fcc7a58a706028ec4",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "de559f5fda15c26ed26267c5b0a031c2d08429f74cc60393170bea36bfffc9c3",
+      "pdf_sha256": "6171accedd9baec6793db60794c71f011c08f602bc4e97b6895da9a255ce1a84"
+    },
+    "cca-paired-projections": {
+      "source": "tools/figures/cca_paired_projections.py",
+      "source_sha256": "b09409bc265ab259582a437ce06839cc2e295f018d2070230c0b7b164aef97c4",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "121c44635735a45720f94b7c22dfdf7243d575e74818c68a7a0248508202cae9",
+      "pdf_sha256": "2a9694ce4e0a37ea26583881442a35dd0041f9471b7386cbcc770cb206bed6ce"
+    },
+    "characteristic-kernel-witness": {
+      "source": "tools/figures/characteristic_kernel_witness.py",
+      "source_sha256": "5e80c1319d1efe35ab99838e9bcf68d15f2923d56749c01c81b97bf6c38b8814",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "cfaf8776f28d8a906c8142011831bd04550160fc6549b5e18762e2a01c4d263f",
+      "pdf_sha256": "9aad1614624cce7a148b8371140b5a379f46b3cad346b328310b65bba009009c"
+    },
+    "clustering-rings": {
+      "source": "tools/figures/clustering_rings.py",
+      "source_sha256": "7e1a2617ccf662b6944c96f8ce8f68473b246ee26f4c476d0b535218d2657e98",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "de1f0204cd7fd111916f167a8f2e67a02b1e344158cfd859452c34307fd357a1",
+      "pdf_sha256": "88d041f173fd77be60a94f2b8876bdb4eb7f651e1315acff8aaf8d944c7e6951"
+    },
+    "cme-explore": {
+      "source": "tools/figures/cme_explore.py",
+      "source_sha256": "d39b6bd3e642f5d8acf76950d3632ff037f77e7183d311b0f5cefb00e2fdc2fa",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "99229582344664918f6fce37158ef5bb20af782c071227f359400c545a47155e",
+      "pdf_sha256": "5f1db65c167e96482e677c27d6abef52d559bf7a139c67708adf54ca6bfa7e54"
+    },
+    "cme-regularization-path": {
+      "source": "tools/figures/cme_regularization_path.py",
+      "source_sha256": "17c922983479e3ea6910355dd489edb153cdc78441887c3a7b2805e96c7e2361",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "d827f536a138375738ab4516b28d13a16560923557f34ef05d99257bfaca4bd0",
+      "pdf_sha256": "fa6fe1e036857c094b7b7b4f8c2d9dc65950ae12c9556b64d2c428c8a7bfed46"
+    },
+    "collocation-residual": {
+      "source": "tools/figures/collocation_residual.py",
+      "source_sha256": "8ba67469ef4336b75e07bcf27b7f92d1344667d74201449e3264a68270f527b5",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "37cd03fe76134828b8ee0c28de46f0e7a2926d1accd4628f4448507c628d7c3e",
+      "pdf_sha256": "39c0518527b6800a3f70df0d5aa12165ce8d1393af69d4f87a1bd384f4dab915"
+    },
+    "conditioning-clinic": {
+      "source": "tools/figures/conditioning_clinic.py",
+      "source_sha256": "8f58f78cf6b244f6fe987decb0bc3bd0a2e2bbf8b5ee1db634bde3f733384c53",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "515f47e5e0f11f011423e0c3bf3f34234564b5e5887a5c556d607632ca6fdc8c",
+      "pdf_sha256": "3461273c8d2bc30bcccbe8791c3c019dd193eb02050a9bfb9504a188933774fc"
+    },
+    "conformal-coverage": {
+      "source": "tools/figures/conformal_coverage.py",
+      "source_sha256": "61f9819c516572d456ee1eaaf51bcdb53b89c2b2ef0e90aacaaa96e9866d3b59",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "03dcc9b6aaae9cbda15086559266480614933d19d0bfc2293aed61b69eebe3e4",
+      "pdf_sha256": "64fa376b2dbf08eca1458689369c446236fffdf3f17eacb34258a9ba99c64cd8"
+    },
+    "conformal-coverage-width-shift": {
+      "source": "tools/figures/conformal_coverage_width_shift.py",
+      "source_sha256": "1a416461e8cbf64a6b2a7f847f31d56ee496f4b03ba9403aa5c4f3c70f3f6866",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "7305182866d0f7daf7f8a536d28e3db548d431afec1e7f42565b79160d7c54ec",
+      "pdf_sha256": "0a14092e7e67be931df43190d743b7cd64173b051e301cbbf8a0e00fd744da4b"
+    },
+    "confounding-intervention": {
+      "source": "tools/figures/confounding_intervention.py",
+      "source_sha256": "5a3afc180e66f873ac45cb795604e78618f1dd7286201a5e6e940e8688269365",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "d88f1e925608e38518e68028c5f74957acbb790cb36dfb0d3cc77aad2f19dbf3",
+      "pdf_sha256": "299a811dfcaf8bf8ed261e2be01c0208ff515db924d0535ceefc15c8fa523631"
+    },
+    "distribution-regression-two-stage-curve": {
+      "source": "tools/figures/distribution_regression_two_stage_curve.py",
+      "source_sha256": "b73da76cd61f24ad531fd49efb3ba6c2d9fd38f3317ffb3b34e55686ae40d2f8",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "2f72028c8f28b2a73c40921d0df3ca3f18233945b7935f884b0d2606a9576845",
+      "pdf_sha256": "5c402ad1f3d35bb56731f89dbdee4c6ed6bdc9cfd65ebf27c7d74dafda14e895"
+    },
+    "dkl-collapse": {
+      "source": "tools/figures/dkl_collapse.py",
+      "source_sha256": "b11f7ef6a0e601f7a4e1ed239f83ab1d475858f8907b7a0ab911d63f3ddcb83a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "68ef9ec6ab50ae28bcbb062c26152ebd5628612271ba2bee1c825b048c5b81a3",
+      "pdf_sha256": "3292158e1af641bc0853364755bb86aa8dd554cf0621dcc8c619692d390c5ba8"
+    },
+    "dkl-feature-movement-uncertainty": {
+      "source": "tools/figures/dkl_feature_movement_uncertainty.py",
+      "source_sha256": "eab79b8076d131b4cd63055d31c1d254304a06a9f9c429e65cb25f780aa35d85",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "9d7ed6772fa1d490a2ac582fcf5eaaf6b78818c0604501b2a55808b190f1ea4d",
+      "pdf_sha256": "dbff2f3cd00d4c28da05489daf1543cc51bbfd0f3dd3044d98a53e1875c5152c"
+    },
+    "double-descent": {
+      "source": "tools/figures/double_descent.py",
+      "source_sha256": "203ef92aca700c10119952c10effc5d23e69d056af50a59e4e9dcb5e7b9d44c3",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "27c0303948e7d4fecc734b4c9abfe9513ab803379f5fa8b07b6678042a58721e",
+      "pdf_sha256": "deed2bceaa8355fe0ebc0dc37f3a698f98193da83893e92957951d92bd80770f"
+    },
+    "dp-fill": {
+      "source": "tools/figures/dp_fill.py",
+      "source_sha256": "871d6968e58a1b86eaebcea26d5377ffb54bf608496a77d0a5df777d8f75ac69",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "fda9ebfe170d0593f5c7058b259f70f52e96f2343e4ca43a8535d082cf7e733c",
+      "pdf_sha256": "9fd9c5f47d442323b549b528b905f10612524c6a84b2c55a26b2f666a1bf4e17"
+    },
+    "drift-mmd": {
+      "source": "tools/figures/drift_mmd.py",
+      "source_sha256": "7cc4b1122fe2f045d8809b1856fc3b43a4afe92222622cc1a41480021c8e4a87",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "06e2ffde46bd3a9f594468b12e15bc43cfbb63554080ad42725959717b486e2c",
+      "pdf_sha256": "39e1e17c40f1c77b4a9694cc8eed295f02a7443ce6445e02e8b6d57f8d6ddbb5"
+    },
+    "epsilon-tube": {
+      "source": "tools/figures/epsilon_tube.py",
+      "source_sha256": "bdbd76feae5d3f7534c9964b8d8d28043c1b728ab4a55d97a8cc8153c7c2c98b",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "3fe81226f0e3e7ffd7521b4c2627dad8cd28b668ba21b5b9d8e1bfe6996944c2",
+      "pdf_sha256": "46b96730a573428719083113495eb4e7037a51c901de0d67011e3545509f4259"
+    },
+    "feature-lift": {
+      "source": "tools/figures/feature_lift.py",
+      "source_sha256": "d5c66c939cc06b353ea32d990c5796d56a664a2629bb2772ca8e08f66bfb9f5f",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "b17c6684335ce2ee2ca66a7adc938a1487e786abb97a73442c9d2d5ec2754bd0",
+      "pdf_sha256": "d3d81b69c151f96cdbb4ebbaf7a9e8083bfcdac01f41aa2bb91d15099b20e196"
+    },
+    "fill-distance-power-rate": {
+      "source": "tools/figures/fill_distance_power_rate.py",
+      "source_sha256": "1584415c023832a27d7ac12415ebc765a01d4a1f576390ec791a65f18ee40062",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "3e6edf8c030389cd79c620b7c3aee9c03e9b8f95a12ce4432532a86b2e460174",
+      "pdf_sha256": "69d19fd94c9d3ee3d3f11aafb4ec7cd3b6fcca8bb78938c8c3897cb2b40fac6f"
+    },
+    "finite-vs-infinite-width": {
+      "source": "tools/figures/finite_vs_infinite_width.py",
+      "source_sha256": "7032a46e1a26e274b666b19c28d40fae7cc58a08aecc733b4e2a55bf27fae385",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "5acffb6a4f68cb18157ad3c3072e8fb3b983168d59c7c82f01457b93ee58dbe2",
+      "pdf_sha256": "5a1d6720fb21e906ba597d3e4ec631fea202416aa783c8ab2f894bc58caac857"
+    },
+    "frontier-regime-map": {
+      "source": "tools/figures/frontier_regime_map.py",
+      "source_sha256": "1e55dc4563f6c4721eb4160ab51b436e830507d6cdedce3f4a1c742af0ec0fcc",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "6acedb4eb49c1a153f7609e81a46eabc7ee6df04270a30912dd0548d2dd8b48e",
+      "pdf_sha256": "9c6f01871b7726683cc3e2be31ccd1d21a1df35cf87bdf3996d015edc03075f1"
+    },
+    "gp-posterior-anatomy": {
+      "source": "tools/figures/gp_posterior_anatomy.py",
+      "source_sha256": "47d8e80692f12b4852449f8a57639b4655f489b2686ca2e6f7338cd2e9821b79",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "16eca51f504314644d582e0d7a0f8e490ff71228be4cf983b9ee0ceff874e563",
+      "pdf_sha256": "d53a61f48e3d753ab291a40dad97c0afc20ac41c922ce5f4be472a26a2c87790"
+    },
+    "gp-rvm-sparsity-comparison": {
+      "source": "tools/figures/gp_rvm_sparsity_comparison.py",
+      "source_sha256": "31fc5b01e56a6ea44c33c611d80b2df7c6a088628713714f1f6472530ec3c2d0",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "ba7262061d137537c1f6f37df7e69eff442d7e6f2823d049ddc6dea8b721365a",
+      "pdf_sha256": "703b40aeea790c368842c28805675dd91fa6b15d4d118648dfdfb759396b09b3"
+    },
+    "gram-heatmap": {
+      "source": "tools/figures/gram_heatmap.py",
+      "source_sha256": "8895a0f06d8e2875dfb0f2a7c5d80e4affda7859ca8127ea3869287bd7f4b98b",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "cdfbe1de63eea8eb26868937cf8657eb72beecd69ac29cb1c9d47b5c54d12736",
+      "pdf_sha256": "2ab8a77e48b6585b029268e830c266e31aaf9ddcd6ca606a121aeed411ddfd18"
+    },
+    "gram-validity-witness": {
+      "source": "tools/figures/gram_validity_witness.py",
+      "source_sha256": "c5e36b20e20fcd7771de0a5d3875ecd20a9c74f82f5221e5fe228646ac4fd50a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "a8fae6298f3d5b876891a5b5a65dece6c4d8a39be6670b74d061d439e3518582",
+      "pdf_sha256": "f48e2b8cad20377954929b059e2205f5ff92122bb291813d6c91ec6b0aaaa4f0"
+    },
+    "heat-graph": {
+      "source": "tools/figures/heat_graph.py",
+      "source_sha256": "c1e85221cf7d4f6dc274547ff11e85658afa1a03fccf4dd178eb9e6dca6abdbf",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "03b3c9237e1c7f145942243eb3749fa98b1f881ab928c8a48d51a4273c7497e6",
+      "pdf_sha256": "b11c8da8a86ea2e89c98aa20e0b5401a5524293850fba807d3ee9062c5d6b6d7"
+    },
+    "herding-greedy": {
+      "source": "tools/figures/herding_greedy.py",
+      "source_sha256": "96765d54286c9294f538497a68f96cea737ab3917a9d0625b3a84dd65a062f5d",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "67f2cc39d9a8d9d49f62d5097e7037d7cd10a57e841205b29d1a69b5ed33105d",
+      "pdf_sha256": "f74b1d39f7683c977ec3a86eb1d6a62d6d12af8aa8e8679d61ab20326b7cc52a"
+    },
+    "hilbert-vs-variation": {
+      "source": "tools/figures/hilbert_vs_variation.py",
+      "source_sha256": "dc18562f3fb39f106536f05b7cc08e8d8b98c3b082d9d5866b5f204814b2afbc",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "c8fcce307b5ac041e902837932f3c9e8ce9f1b6d424019428d6e205184e2fcbd",
+      "pdf_sha256": "882c88bb1672eacfc09e01f936d6a87e61e4c2d24f61922ecc23fef7e4cecd9c"
+    },
+    "influence-concentration-curve": {
+      "source": "tools/figures/influence_concentration_curve.py",
+      "source_sha256": "d19ac747c1c042ff7460fad77e237f211c7f352e3ee40c08c31998c158361811",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "680186a66bda1f66e536feb3e0e74f234669d36da67902188cda5364a3232700",
+      "pdf_sha256": "e3b1530d9a7ad822c69e5585f07c8255b8a1771e6223228c694fcc934239f826"
+    },
+    "influence-glow": {
+      "source": "tools/figures/influence_glow.py",
+      "source_sha256": "525829dafa66e0f16ebaf33099c874953a435fa41cad4d8366e9ccb75c388abf",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "9f55b339a93ed61d4705b15452b28fdb8a65a00b28896bb0f989c01914455302",
+      "pdf_sha256": "ecc6af1e7fb77c6f24f714e1247075b0b048b95be324c3bbaed31e59682674ad"
+    },
+    "kernel-balance-variance-frontier": {
+      "source": "tools/figures/kernel_balance_variance_frontier.py",
+      "source_sha256": "1f3c212d5304f972d6105da053d1c421ffbe70237b45132facdf5454576d8207",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "80ab2a902adf0156e1d0d3b86744b45655acc7461913b3d947ef64d731405bf7",
+      "pdf_sha256": "dc5fe5d0f31a54de27c05e636a14301ea94d7a48f13cdad779511621f3c51dbf"
+    },
+    "kernel-bayes-weight-path": {
+      "source": "tools/figures/kernel_bayes_weight_path.py",
+      "source_sha256": "1dea7ee2a3fd430a5e96a211de44dda9b404a2b2c6e0f86aa3a21b85b8ad7050",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "b38b46d62b75785db5be718bf1f0a6ad72b34f1365de01adf4c1b9900dab4f19",
+      "pdf_sha256": "8ffd484bbee6a2ceeaea33bf02a8f22f021472a73e4a79c487b41abab94714b4"
+    },
+    "kernel-lab": {
+      "source": "tools/figures/kernel_lab.py",
+      "source_sha256": "ce007c8198b3189a1297f5634eb5d04e6c5cf9fc313a14cae561673a54ab10d8",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "4c59a81a10ce42e1e37a6976941cebe3934332d7e35879a6c35bb44be9c1184b",
+      "pdf_sha256": "a5e1cffdc24a4a84fdc7b1b95911572d77706b538ef68c17be364e17a46dde15"
+    },
+    "kernel-minimax-phase-diagram": {
+      "source": "tools/figures/kernel_minimax_phase_diagram.py",
+      "source_sha256": "4e596f01dade486fb277019cf9f3e1dec87fb8e46579fb0418fe35fa78bc2f92",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "55a327ac3e32b53813b7b4cc36f3a6dfef218f64eae34945ab660ad6667c079c",
+      "pdf_sha256": "f7b6fb149651dc5a0f9723bea3177eb404e9d96dd97014ccbf46e8058ab9b786"
+    },
+    "kernel-test-power-surface": {
+      "source": "tools/figures/kernel_test_power_surface.py",
+      "source_sha256": "4752961494ed4d7f810fa6203c8d07bc8861c4393c4579dabbc357008d5eea38",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "a6c2526c18079d8c421fd9f118c4c747262a880b809ad2f1b4247c516a5e8669",
+      "pdf_sha256": "0f90fea73d83a404e833d1e9d3926cdceaee6e265dadf98824441f914c41eb84"
+    },
+    "kernel-weight-path": {
+      "source": "tools/figures/kernel_weight_path.py",
+      "source_sha256": "79f6df0ef389bca72e330abaf13ddf68cbb5f28a8f433a3011067556e44708cb",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "64920110da2beee57ac2c2d4da0b89ace23c7044dd17abe8fe343df872ce82c4",
+      "pdf_sha256": "f28d1ea18d47d17d98fd2c6a47a1389cb9be116d6f0376d8edde5f94c3ee6f44"
+    },
+    "kernel-workflow": {
+      "source": "tools/figures/kernel_workflow.py",
+      "source_sha256": "3fdc4edafea2d0bc4ba9ad85e1ea8b6ea0f67ffa0126b5d03e3ab7a7e09da1d1",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "1d24d9ea57c9668ac15652b828685409289932de117f55cec0563e443e994135",
+      "pdf_sha256": "31c608fe32c4da8b1da633eb1ecf960731e37f0dc1821033e6cc087d1690bf42"
+    },
+    "koopman-spectrum-recovery": {
+      "source": "tools/figures/koopman_spectrum_recovery.py",
+      "source_sha256": "902bee059a37063c3dfa0dd9081e3ec1e22ab500dd2bd807c48da730eb46cb2c",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "acf971c837461fb94b397e51bfe4ecff66bbef7a93207853f30068bb45ff91f0",
+      "pdf_sha256": "d8ca5faa77011c56c5d563a23a33bb6231aa0b0237879bf89a82db78b11bf6db"
+    },
+    "kpca-rings": {
+      "source": "tools/figures/kpca_rings.py",
+      "source_sha256": "37ef9a1d9c06155779116991c1687d24a5cee32af57c3f5b76b603172708eff9",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "3cb981062b31a6a1a4deb9fadf83746d7b03e85611c51a445e85b104b3cc726e",
+      "pdf_sha256": "4dc428399cd8ab56b96ae74f2973d96db64ded5f471c1d0c75992dc989745495"
+    },
+    "kpca-spectrum-reconstruction": {
+      "source": "tools/figures/kpca_spectrum_reconstruction.py",
+      "source_sha256": "a87f8a044a7170f94fc7d98231d7f327cf2f99091efe262c623873fdb8a03568",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "e8a088a3abc02dec7666a51d837b09d385528f3d1940b3d6232422b38c0bc3ec",
+      "pdf_sha256": "051cf0b2068101fcde53c6c029a1ba48181ee0d24ec18910fbc251625604bc6b"
+    },
+    "krein-positive-negative-decomposition": {
+      "source": "tools/figures/krein_positive_negative_decomposition.py",
+      "source_sha256": "7c817bc88011fa04b20a7f769a3584111a90b115d2de62c7e73c7b84f185a98c",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "54c4d43a188aa813de1fd5fe787704089675e11678b2d410c040a7e2b585e34c",
+      "pdf_sha256": "37ec9ea5255720eb84ecd118e8f8c49a0b646a80bdbac2efde91e1466e93fd30"
+    },
+    "krr-spectral-shrinkage": {
+      "source": "tools/figures/krr_spectral_shrinkage.py",
+      "source_sha256": "3baf1467a4d3ff62d509fffa9d6408eb18eda5651fc5d568e40dd836cc1546c7",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "7808ff2beb820de83851530a3f4d63453f37b620293265a3bddafd8c17916f5d",
+      "pdf_sha256": "ff880990ca63b91cbe040be91bd37a0ab640b155017ccbdc305bab10ad483743"
+    },
+    "ksd-escape-failure": {
+      "source": "tools/figures/ksd_escape_failure.py",
+      "source_sha256": "d8a41b91d2b9969bfc171ab1895d143f8a1cb6ef2d0d25585132153a9d661099",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "e4c0d96e5085b5622eb4ffb2b542fa966d5ac88b1ebda41eef6704488a9993cd",
+      "pdf_sha256": "4f0f1b593f02413700acebedc0c78185385ddc237306ffea974dc9d9d8b86abe"
+    },
+    "latent-marginalization": {
+      "source": "tools/figures/latent_marginalization.py",
+      "source_sha256": "e29cd28ac99d63720cf6e33e3e05e260cd8a5e5ce6572a22e27f10dbf7a49c8a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "b9f9e0322214d0f69302d3ec879b1d0bacd3459ff7928f89f5347391050cee63",
+      "pdf_sha256": "97bd5a52d9e09e483b7904d5c9433e52fa341dfa2846f8c7b8b7f7d967bba90c"
+    },
+    "learned-kernel-lifecycle": {
+      "source": "tools/figures/learned_kernel_lifecycle.py",
+      "source_sha256": "f5480fd538255128b770ac6bf05ec7ca300383f0bc097ee5315cbb32d8079948",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "2e4f25d5fce079fac4f70c4f22c37ffa3b91eca22be1e376cbebe1f46528a032",
+      "pdf_sha256": "4ec0dd74b46f98dab01a067daa81d2a1ca85115009005d4eb0586acde69e7fbf"
+    },
+    "learning-error-decomposition": {
+      "source": "tools/figures/learning_error_decomposition.py",
+      "source_sha256": "21f1907e585d5464355ca36c59438f6f41b4e05952a67a7d852e988c42d3d324",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "a92497c81e45a7224ac2219a18e1261e4da4bd0a742cdafe7d974a4428d40a1c",
+      "pdf_sha256": "aabcd772e6a1cc8aac562724f61577eb66fa52360387bce0f3c38432127ecb91"
+    },
+    "manifold-bandwidth-oversmoothing": {
+      "source": "tools/figures/manifold_bandwidth_oversmoothing.py",
+      "source_sha256": "c36fb7ea78755b30a7d863060fd07160bf863029f7a093ab4629fa9dc029bcba",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "c10462b48a04c50135e1b7a6d50b648db41beedab00a84b9db71486cb011d4aa",
+      "pdf_sha256": "4ba1773bf0ba9da24aaa375c721beee04c4ad09e573ae541902799ad4368b1b9"
+    },
+    "manifold-graph-energy": {
+      "source": "tools/figures/manifold_graph_energy.py",
+      "source_sha256": "7fbdaff32007c2648021228d6817b7e5f711b50f84cce6e4573ac6bce6e7d0ca",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "5ee2b35455b186efb56291b337fcfa45e52f6a6711eeeeb8a73a0e51aeb7f4fd",
+      "pdf_sha256": "31b497dea9246028f03211a5717cc91831a35b3aeb77b4597195847f1ab4a1d2"
+    },
+    "matched-filter": {
+      "source": "tools/figures/matched_filter.py",
+      "source_sha256": "8b1de69bed90171536ad335800f5a32c3dec4307dbd517be83c65e4edf7ceb3b",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "186cf832621082a80c52315b03de3b502c192906f6545164232c3ff1b4b5c09c",
+      "pdf_sha256": "8c3111d9408054875ea644ea8f7dd2da9bdfe0042df4a31894755ddef98c93db"
+    },
+    "mds-double-centering": {
+      "source": "tools/figures/mds_double_centering.py",
+      "source_sha256": "5b0768b7d48405dfc138c3e0397b0f418ad6ed2138bec40528756cf463712fe6",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "6e38c84ae868756719967ca45680707dc834949972cfce4994ffcf1a6aac3287",
+      "pdf_sha256": "5b4986a12f5b3aed822ddc4449115b785de20341dfbd7dcf0bef95c4f3940a06"
+    },
+    "mercer-spectrum-atlas": {
+      "source": "tools/figures/mercer_spectrum_atlas.py",
+      "source_sha256": "e5c043a56c9ebe70ddb9752120ff470bc70e0445f736490bf44295a35b202d33",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "adc1927e748504bc9e23027039dfa9231e6482f4c0caf1f7bd40ff1b83eb6d83",
+      "pdf_sha256": "f0880d7e14108942b89d04dba0f34de7fb787b0c9e74ee0d93be1f7b0479afe8"
+    },
+    "mmd-estimator-runtime-variance": {
+      "source": "tools/figures/mmd_estimator_runtime_variance.py",
+      "source_sha256": "61a91d009cdee4846e4ea3e086df7c9645760b751d47db8eaabc8258504111c6",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "1d2d2af8950ae3dd54a9f7050f385798c3466014282d73bfe6caa0602fc9cb63",
+      "pdf_sha256": "7ebf66cd85e4c1be470ea2f0c24b8d2f460e2bdac3e5835d2d3acc1336619593"
+    },
+    "mmd-twosample": {
+      "source": "tools/figures/mmd_twosample.py",
+      "source_sha256": "99f63746cbff6a2242d302faf09596f4223f1567c8dba88cd4fbc258d14cdad6",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "f3f6eeca2b6006770a5100bf58ca9ed9c6c46e41010fa22cfd388404168f091e",
+      "pdf_sha256": "cd2165f9a6afad190fc4fc37123ae65255a4a92ed97dcb9fba4be7601fe4d9f4"
+    },
+    "nystrom-sampling-comparison": {
+      "source": "tools/figures/nystrom_sampling_comparison.py",
+      "source_sha256": "a91dd4bf2c62d2f19e2e9903e72606094d2331806af50446b5afadb8b162a33e",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "30c64eebeec98b99c7ab336fa7c51801efd2ee504793bd52b47c900a2d38d2bf",
+      "pdf_sha256": "64e7d4fff2b97f5db0505a8fd75043427a501b4376a95b9e331a4c5da5a2b6bd"
+    },
+    "oneclass-boundary": {
+      "source": "tools/figures/oneclass_boundary.py",
+      "source_sha256": "f83ce06a16795793e734366f8aed5e620477e64cd081ee30798e77e871ff6e37",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "83dfa46164ae4caa44facec840c32697a2cc2d0ee9f36040b86a387b6da55903",
+      "pdf_sha256": "5afbb4a7ef6242460a40906e9b24deae2a78166e4265d6a56537e4bc7887992f"
+    },
+    "online-budget": {
+      "source": "tools/figures/online_budget.py",
+      "source_sha256": "c13dfb4db053a84c7c066d1838541e6cf95f5af7f1dee3ad927219dd4acf2f53",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "772d18fab32c64f2bc0f1e3ae45ca8c49053d6d1c1ac29fb5335eceafce13411",
+      "pdf_sha256": "b9c89a2ed92cb80e90a24cab859b3efb5575241526f8753f9675ba31cb785b86"
+    },
+    "onthefly-mlip": {
+      "source": "tools/figures/onthefly_mlip.py",
+      "source_sha256": "99d236abae20bf6b3a6d970baa5045bfd4aa1fc4c4cb7c7b871962b8cd520b7a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "f42123aa0e9010b2d64aa7fd4910d0b66766ebb73ef4723c3ac6e0cfb9beea37",
+      "pdf_sha256": "d1a4252df2d4518a88895905142f287148142bc72eb4fdfdc83475db4c90ff12"
+    },
+    "operator-kernel-coupling-transfer": {
+      "source": "tools/figures/operator_kernel_coupling_transfer.py",
+      "source_sha256": "c905dd444f50b4ccfb0a9a1f4b8ceba18c17f19ea1331f86a9882bae64ac0018",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "8aa20d7aec99eda1d36d8795d99c4bd3ffc0e9b530143c114100669d93b2d653",
+      "pdf_sha256": "b6b80ac81f11ae675810edeb90d8415d28d1d3bd7f2aad59b31efdadd10003a0"
+    },
+    "operator-resolution-transfer": {
+      "source": "tools/figures/operator_resolution_transfer.py",
+      "source_sha256": "9baf2ec681cf64a73dfe6f61da2e5ac24c364ab142b2f048b3b48a90d1d7e40a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "ee9dcb08fa5f2f8ad77fe14bf2a71ca09a33fec5c124061404fdfdcaa4bde9e1",
+      "pdf_sha256": "19faf7be11c1c3dd53e8c1adefcb961ec26fa3d9f483f72103f7254820ececeb"
+    },
+    "operator-valued-field": {
+      "source": "tools/figures/operator_valued_field.py",
+      "source_sha256": "69db1fb21150d5cf5ddfacff592d60cd73fd993eb3f887359d4e42b58ccad723",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "e3c31780a8fc8253c3a88af3a54a3adb3c5f31ef68a92961191759a20e5b38ec",
+      "pdf_sha256": "f20d3d01a59f2545191923a4efc91684ea72b672c07689870fb242e320a32148"
+    },
+    "orbit-averaging": {
+      "source": "tools/figures/orbit_averaging.py",
+      "source_sha256": "5964e8a417241ba306ea098bdba439cf407f872efeeef0a1687e3efbac579826",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "adec1da8a54cbc8ebef2a60d1ac5cd0e1d9d8fd5165def8b5514081ac8b674b4",
+      "pdf_sha256": "9b9ec55d01f0cbca62147dd20862c970e6845e5e9053ed987001cc185fd13242"
+    },
+    "permutation-null": {
+      "source": "tools/figures/permutation_null.py",
+      "source_sha256": "0f023dfd19261edfe7b843368a6babfb58a84635def4377889ef58b12142b803",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "fa79cedbc533367de6d7f376d4599118b12c9f65b0cd5d6690f765d3731a3f1c",
+      "pdf_sha256": "88d4561239fec466d8e7eceb224db63335edda2cc35b7b0bb03396ea78d89d13"
+    },
+    "pivoted-cholesky-residual": {
+      "source": "tools/figures/pivoted_cholesky_residual.py",
+      "source_sha256": "8aceb127ac899cc5bfc2510885606599ec5fb97d3ec8a014a517ee11e5f35c89",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "7d43807cbd6a53665bd8cad3b4bc6775c9ad8f2767b5ce0302bd348303ebf0d0",
+      "pdf_sha256": "8be9a2d9c03fa6519aba09f3658ad215582c28eaee5c10456ff3d9e53a33c0c0"
+    },
+    "power-function": {
+      "source": "tools/figures/power_function.py",
+      "source_sha256": "afa40464e68263eee67706183acd7b13ab5578039e5c1e16a62b066aaf0b95c5",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "737aaa68cda465dbaaab9fa4ebe67c95d8eb58dce2cfdf73de8ee1c63240bb72",
+      "pdf_sha256": "a496a24627a593794006b1d0078b5ed9747690c02a2f24df456588426bf39000"
+    },
+    "preconditioned-cg-convergence": {
+      "source": "tools/figures/preconditioned_cg_convergence.py",
+      "source_sha256": "68ac9217d04169875c50dadc415d47e201e88c23959d72b21022acb9a392f7f0",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "ab904cad3775d3a4b336e2642646e8ab316cc44e64d8b8800f520c09c4d8ec3b",
+      "pdf_sha256": "d1b4afbc7208638aa4f4419ce84595cf35505ec0a2d59f445c5973cb568a8ed1"
+    },
+    "quasiperiodic-gp": {
+      "source": "tools/figures/quasiperiodic_gp.py",
+      "source_sha256": "2091f9dfa74d5290e99b5614f11b439ce0d1625398547a73babd5b896e4b7f3a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "5a1ca3922e68c5ba7ffc5519b9aae367e2e5abd4fad50389a9de605e8dc32565",
+      "pdf_sha256": "c753d6bbcfd1486c5e9e8a4ac80bcc39a147cd432f5a5c0d3c85640a792d060c"
+    },
+    "ranking-differences": {
+      "source": "tools/figures/ranking_differences.py",
+      "source_sha256": "9f19c2df57194769bc930ed57a6f3ffae1cfb541be5e32a202b62a523b2b1834",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "1ea4c77c011ea435c63bf4074ba7941c4aaedd6345bfec0646a83fc96fbd5343",
+      "pdf_sha256": "6ee66739bcc87d360c63a2eed9fc3a16a18447a42b95473bba740676051aacc9"
+    },
+    "representer-orthogonal-decomposition": {
+      "source": "tools/figures/representer_orthogonal_decomposition.py",
+      "source_sha256": "65088b45da1b50b4278a0ba6b35c9abe7b69256f743a57bd05596ad7f8852738",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "1cf37dcf3189b4086f1d1f085557f3b4c9f0f66d7292a9dab60aae47f510913a",
+      "pdf_sha256": "3548a9714f74e1c79bac9d4f5ab59153008621c22c03f7ba28abef627c89bb0b"
+    },
+    "rkbs-sparsity-path": {
+      "source": "tools/figures/rkbs_sparsity_path.py",
+      "source_sha256": "1108317a1556e2aa5324f44303aab8c6c3ffbbea86e0b70e56bdb30a65ee6439",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "fa6d4776253d86c637cf2b31c12375e87718dc643c7e2cb5dba4097a8f575e6b",
+      "pdf_sha256": "f4daaa5f12a2ce4668afa2136afc6eb2967ef78d3d522e85f009a100de5b31a7"
+    },
+    "rollout-error": {
+      "source": "tools/figures/rollout_error.py",
+      "source_sha256": "a5a9f0784ae998ed583fab17df3b589e56018a949b9e51ef0d13de80bc238a4e",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "10a95bc7aaad8acfaf3a61dd28d37b883205ef7f0670c35c980092848ef15b3f",
+      "pdf_sha256": "eb12f5608de06c316e56c0943517ef62231b05d8a9c1eab9e00dec74ab0dc4d5"
+    },
+    "scaling-cost-frontier": {
+      "source": "tools/figures/scaling_cost_frontier.py",
+      "source_sha256": "94dd37e7826506484be2867b86329ed74949faa83f437defebab084d6e27493f",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "6562258529187093791fd59980a9df9d8a87707331ec73eb44a2f95cf877b5c6",
+      "pdf_sha256": "8dfba53f19446ef0f7dbe0e5b53adc12dbf5137cb5c1ec2a888d99dfd0260d5d"
+    },
+    "scientific-collocation-convergence": {
+      "source": "tools/figures/scientific_collocation_convergence.py",
+      "source_sha256": "6c5f12f274341d2d704d0037de1f118feccdeed0f7642420093dbb6e80d9040a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "ba3353f3e18476092ead8bf52274fc063c75ee00f8f5af4b2a33edd26a82b480",
+      "pdf_sha256": "25f91586a14e03a2f85c8b3e6c82fba66d13c0e53f0b744bb492f0748e6bea85"
+    },
+    "sequence-decay-sensitivity": {
+      "source": "tools/figures/sequence_decay_sensitivity.py",
+      "source_sha256": "24da62c5059a6f2e206841f1f372d45da2bf7a47a495226d1d6e63eded79f987",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "ae2df374720a0d02c68414cd0697ef2bd4e44fb0b9047a99919b1930c78ab9da",
+      "pdf_sha256": "8b63e5658c906145189dff62853079b88595dedaf9d8d1736370558e994e8511"
+    },
+    "sequence-feature-map": {
+      "source": "tools/figures/sequence_feature_map.py",
+      "source_sha256": "97f638bc7b0a08a5579f7ad16f6b0ef03fc007822a18e1afe81acc310167a8a0",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "413758a26bce1fc99195fc9d7362fbe3fc65d310dece03b611ebeba72ca8c2ac",
+      "pdf_sha256": "01a9dd2df48ec0956aa56bb7cc87ad0de03ca0efbe710bf250e057a4a27df4a6"
+    },
+    "shift-detection-delay": {
+      "source": "tools/figures/shift_detection_delay.py",
+      "source_sha256": "3dd20ffca40c9490af7f875a23a614795be5634e75a196b0815279db345a9a7f",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "3431609bc64d5cf93e7bfcb830d254e9eaf6e05e5a9b6404d789348c4cd621be",
+      "pdf_sha256": "53cdf5738e97c1f8dde626f0ea2bdd5f71408254c8141fcf09c2bb7540859b0b"
+    },
+    "sig-draw": {
+      "source": "tools/figures/sig_draw.py",
+      "source_sha256": "80c80853568c649d33636ff055c7639af3bb05de8be99d8a6e278a797c03ca7b",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "36b0caa6d0a55bff77f973e3fad719daa84eed3a8a60c57927643fb386594638",
+      "pdf_sha256": "b17dcbe9d70bfc538eff467ea5c5af8379f77119977440c2e814baf4e0d7b5fa"
+    },
+    "signature-truncation-discrimination": {
+      "source": "tools/figures/signature_truncation_discrimination.py",
+      "source_sha256": "0d453b69a82bbcd6c1b95e53e45dfbd189079f7c8b9bde78726cc9fb22fa2111",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "bf9011454360f1a04dcf897d9a5e9d069dc63d07338b7a725cdacc8337713eda",
+      "pdf_sha256": "c263d22348ed87d5349d6548b592ac71e538c7decf1f05b43d1f1c9f60f9578e"
+    },
+    "sinkhorn-plan": {
+      "source": "tools/figures/sinkhorn_plan.py",
+      "source_sha256": "e9f5d532badce9bda27f1c3cfc56844e4e6bb0e2a893f1db631acfd9dfb66b71",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "bf88766906b67e6fa935a839e34cbd92bc6206de1a8a730ecdf6f56c2ead721b",
+      "pdf_sha256": "a2d75506767fe4f351316fc4a8833d3924feae863380b0503518445d76f6cd2e"
+    },
+    "smo-working-set": {
+      "source": "tools/figures/smo_working_set.py",
+      "source_sha256": "6c53cb2f7ca999a0a13fe0f794c870f00dc0ec186c6d53726f688c2859b8ff37",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "c68e755fd632e64bd4864997ba84298c4d4862bd2e84de4878abb5e57dee05cb",
+      "pdf_sha256": "9603205fda63e79f3c903aaf639be3f9ef60bbd491627befe1bcafd427ce571e"
+    },
+    "spectral-clustering-eigengap": {
+      "source": "tools/figures/spectral_clustering_eigengap.py",
+      "source_sha256": "0a11c43169a4bf7293542e7c058b6d1f7793ff43209d7cfcbe1d97b406873ea5",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "1662f23d3fc1928b00294d60baa21ee4db4079b6615bb9c49f5b3042725f4e6d",
+      "pdf_sha256": "32bdd98f7900e17314846f7a7b0924c2a87d29d05d3d253bfdbc608a7880a5d7"
+    },
+    "spectral-qualification-saturation": {
+      "source": "tools/figures/spectral_qualification_saturation.py",
+      "source_sha256": "6067873cf5bc9e4f55c0891a3c2b441fe9a0098c97677349ea18386540b92961",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "a550d8f775e4bfc1f5696c7423c0c5725606c4dcd356aee939acccdb0f6a212d",
+      "pdf_sha256": "46442910e6aca7dc619ca429084e09b66ffdda4e0067264f907dc5e40de7201a"
+    },
+    "spectrum-surgery": {
+      "source": "tools/figures/spectrum_surgery.py",
+      "source_sha256": "afdaf2d8f9f483aca89c20a0f36532377714667e9365d631e41ef7e40661a35a",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "db6ca99ec7075461b5155d0ceb2d78a5f5c1b1c0a817e0272feac44015642344",
+      "pdf_sha256": "8ae8ce57f2c39702668bc7b56b9ac0b161ef23f447133a53c2d5e268587e67df"
+    },
+    "spline-decomposition": {
+      "source": "tools/figures/spline_decomposition.py",
+      "source_sha256": "8ddef8c441d6567205915ec457a064ea92af6135a053129d2d3bca0eb1eca983",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "b11d687aa878129054d3bc601c52c0ce3ef292c4367654f97306b7311cc6a3c5",
+      "pdf_sha256": "c7864e3db7dfa1f272ecb98eee564abe3a1ea9a7e289314a0aa96e18d1f860ce"
+    },
+    "structured-decoding-gap": {
+      "source": "tools/figures/structured_decoding_gap.py",
+      "source_sha256": "0ce17747d14599df7ae02b70a0465f2ae44ef1463202d49cd4a186d7aad49005",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "546e3647bf78821f2ace8e629ada5540016142ff5e7a11b8aaa8ccf542f52fef",
+      "pdf_sha256": "335e7514a4ff3618a9e9dbc362887daf51aa509def83ce49ea37cf7e63b9202c"
+    },
+    "svgd-flow": {
+      "source": "tools/figures/svgd_flow.py",
+      "source_sha256": "744fb9f0cf5437c1d1ffeaa15a91d2afc21f52ce8d8a369f57385af0a90070cf",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "cca6fe3acbade2551f4dcf36fc66e1f3416004fd14e9f0be177c7f8b07d55126",
+      "pdf_sha256": "9749cf006b39be0229bccf94869aec82b05d680b9ba97c006c87f256068628aa"
+    },
+    "svm-kkt-convergence": {
+      "source": "tools/figures/svm_kkt_convergence.py",
+      "source_sha256": "5a4a0b1cd88f8f7f7b2f40e16b3fbafda5b5aece75d558b1c77ab3c409e47427",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "b427fa676ff0626d516b097b24d781df1f0695b302d4e97fe5da97a3a22450b4",
+      "pdf_sha256": "dd0218ba8eb36dedef820c5570dca7860d8c4af8c1bc3d9d372bb1283fc1cef2"
+    },
+    "svm-margin": {
+      "source": "tools/figures/svm_margin.py",
+      "source_sha256": "39faf2b29c6c11328b2607f699201c3e83ae1cb0d5961cd7227d69a2e14d14b6",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "2859119fb99e1511207b25107666282a1a0950b00abe916a4a896c0f9705a39d",
+      "pdf_sha256": "78937be6fe6ca21373170cd97abec649b43ce1a4047e836c7a4e81c869aa5862"
+    },
+    "tfidf-geometry": {
+      "source": "tools/figures/tfidf_geometry.py",
+      "source_sha256": "291212ee6f64989dc20e14e7fa1e85c16c44600f9db9da8e35ed72c2442fbd81",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "0aac9779652054e09adcd01a3f25df792366461125787b0e646bf33ca044d1c9",
+      "pdf_sha256": "652e9e1909259671758807c285b605a4224d77ef543ffed17d820222694889ec"
+    },
+    "uncertainty-decomposition-highstakes": {
+      "source": "tools/figures/uncertainty_decomposition_highstakes.py",
+      "source_sha256": "4a09edeabe09fcc81d9b218651f825ffeb7f9f3fc4ace9cf1afda66f99a6a28f",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "ce68f5c9a640ba0bbdb131e043c20c947cfa1eea08435243ffd9a86f396171e0",
+      "pdf_sha256": "b36bf5d3a9f69ef6bca2c7942a858ae0fd7f83f3955aa3ce5733eb8b8f4b7afe"
+    },
+    "universality-capacity-frontier": {
+      "source": "tools/figures/universality_capacity_frontier.py",
+      "source_sha256": "62976a01b5af0028958a99d9f597ac250aa8614158038ec759035538d17ef8ba",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "9cfa2ab9752fc928cb68c0e5a8e10bbbd51cfd0e01632db551a3f5c9ca7dfe8b",
+      "pdf_sha256": "6014d3710982e9139c2a000795d2bd99ecb055b72e9564740977245fb9be90b4"
+    },
+    "variance-vs-relevance": {
+      "source": "tools/figures/variance_vs_relevance.py",
+      "source_sha256": "119cd8b030b7ce043ea13db11173d988d66b9c5a13f5a0af51b2f3ff83fa79a0",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "f22c32e52004c5285c0061eb6c21c349f166d1fe02c16a112a98117694d67277",
+      "pdf_sha256": "c8a70fbb15fc720b4e9100a05cb6768b00ccf018161efc77fcafa8e2bd2c7cf9"
+    },
+    "vc-shattering": {
+      "source": "tools/figures/vc_shattering.py",
+      "source_sha256": "7f1cc1641d78c122ff5852eac20d5c55193aa69d6bd2def7c20831e9bc7161e0",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "f9f4dafe41b704bf105443b128c5cee5b0957c09341fc665799e450593fa8461",
+      "pdf_sha256": "e6ed791053bc54c43a0c74d89cf7f2b33ec019980419119710521a9c69bbb1ae"
+    },
+    "wl-expressivity-collision": {
+      "source": "tools/figures/wl_expressivity_collision.py",
+      "source_sha256": "d0fb92e73ae9e9464bd70e9d1c5428ac908467c5e374763ecab0e87208a635a3",
+      "style_sha256": "e274e10189a1c5208c1c74d970afe25885bf322d9cac95b0de82bc11992c396e",
+      "svg_sha256": "b0ebf06c234f4171a7bd3b998abaa893ba027410385e495d091c3725951ca11a",
+      "pdf_sha256": "0ac39b653968e610f68827b61387f2da6dedb5a5280c3e3b3f20fb9e6454b74b"
+    }
+  }
+}

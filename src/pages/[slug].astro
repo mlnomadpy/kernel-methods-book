@@ -17,6 +17,7 @@ const { ch } = Astro.props;
   onpage={ch.onpage}
   prevHref={ch.prevHref}
   nextHref={ch.nextHref}
+  widgets={ch.widgets}
 >
   <Fragment set:html={ch.body} />
 </Book>

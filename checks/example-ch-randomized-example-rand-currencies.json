@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-randomized",
+  "anchor": "example-rand-currencies",
+  "source_file": "manuscript/chapters/ch-randomized.md",
+  "source_sha256": "92f0c4a7a024944d1608475feba8abebe52e47c792bd69080f2af6f555494903",
+  "verification_status": "literal-audit",
+  "executable_checks": [],
+  "numeric_literals": [
+    "9",
+    "1",
+    "0.04",
+    "0",
+    "2",
+    "+1",
+    "0.5",
+    "0.9615",
+    "0.5858",
+    "-0.5"
+  ],
+  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-randomized",
+  "anchor": "example-rand-slq",
+  "source_file": "manuscript/chapters/ch-randomized.md",
+  "source_sha256": "de769f06acc085ad503661748b779f05001c31cad49d2fec671b7a32c2564a20",
+  "verification_status": "literal-audit",
+  "executable_checks": [],
+  "numeric_literals": [
+    "2",
+    "0.5",
+    "1",
+    "1.75",
+    "0.5596",
+    "-1",
+    "1.3863",
+    "0",
+    "0.6931"
+  ],
+  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

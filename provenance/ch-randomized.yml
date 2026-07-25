@@ -1,0 +1,415 @@
+chapter: ch-randomized
+slug: random-features-sketches-and-randomized-kernel-linear-algebra
+title: Random Features, Sketches, and Randomized Kernel Linear Algebra
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - rahimi2007
+  - rudi2017
+  - bach2017quadrature
+  - le2013fastfood
+  - yu2016orf
+  - avron2016
+  - alaoui2015
+  - kar2012random
+  - pham2013tensor
+  - avron2017rff
+  - li2021rff
+  - musco2017nystrom
+  - harbrecht2012cholesky
+  - li2016dpp
+  - yang2017sketch
+  - hutchinson1989
+  - ubaru2017slq
+  - zhang2019incremental
+  - song2021tensor
+  - han2015logdet
+  - wenger2022preconditioning
+sections:
+  - id: rand-four-currencies
+    title: Four error currencies
+    contribution: newly synthesized
+    permission: original prose and derivations; cited implications remain attributed to primary sources
+    sources:
+      - avron2017rff
+      - yang2017sketch
+    locators:
+      - source: avron2017rff
+        manuscript_locator: ch-randomized.md#rand-four-currencies
+        source_locator: Sections 2--4, especially Equation (2)
+        status: author-checked-against-primary-source
+      - source: yang2017sketch
+        manuscript_locator: ch-randomized.md#rand-four-currencies
+        source_locator: Sections 2--3
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-maclaurin
+    title: Random Maclaurin features
+    contribution: newly synthesized with complete unbiasedness and variance derivation
+    permission: original prose and derivation; construction attributed to the primary paper
+    sources:
+      - kar2012random
+    locators:
+      - source: kar2012random
+        manuscript_locator: ch-randomized.md#rand-maclaurin
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-tensorsketch
+    title: TensorSketch and CountSketch polynomial features
+    contribution: newly synthesized with complete unbiasedness derivation
+    permission: original prose and derivation; algorithm and stronger bounds attributed to primary sources
+    sources:
+      - pham2013tensor
+      - song2021tensor
+    locators:
+      - source: pham2013tensor
+        manuscript_locator: ch-randomized.md#rand-tensorsketch
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+      - source: song2021tensor
+        manuscript_locator: ch-randomized.md#rand-tensorsketch
+        source_locator: Theorems 1--3
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-rff-guarantees
+    title: Random Fourier features, four different guarantees
+    contribution: newly synthesized with complete pointwise concentration proof
+    permission: original prose and proof; hierarchy and literature results attributed to primary sources
+    sources:
+      - rahimi2007
+      - avron2017rff
+      - rudi2017
+      - li2021rff
+    locators:
+      - source: rahimi2007
+        manuscript_locator: ch-randomized.md#rand-rff-guarantees
+        source_locator: Section 3 and Claim 1
+        status: author-checked-against-primary-source
+      - source: avron2017rff
+        manuscript_locator: ch-randomized.md#rand-rff-guarantees
+        source_locator: Sections 2--4 and Theorems 7--10
+        status: author-checked-against-primary-source
+      - source: rudi2017
+        manuscript_locator: ch-randomized.md#rand-rff-guarantees
+        source_locator: main theorem and learning-rate corollaries
+        status: exact-theorem-number-pending-independent-verification
+      - source: li2021rff
+        manuscript_locator: ch-randomized.md#rand-rff-guarantees
+        source_locator: Theorems 9--12
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-rff-pointwise-uniform
+    title: Pointwise and uniform function approximation
+    contribution: newly synthesized
+    permission: original prose; cited bounds remain attributed
+    sources:
+      - rahimi2007
+    locators:
+      - source: rahimi2007
+        manuscript_locator: ch-randomized.md#rand-rff-pointwise-uniform
+        source_locator: Section 3
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-rff-spectral
+    title: Spectral approximation
+    contribution: newly synthesized
+    permission: original prose; spectral results attributed to the primary paper
+    sources:
+      - avron2017rff
+    locators:
+      - source: avron2017rff
+        manuscript_locator: ch-randomized.md#rand-rff-spectral
+        source_locator: Equation (2), Theorems 7--10
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-rff-risk
+    title: Optimization and risk
+    contribution: newly synthesized
+    permission: original decomposition; rate statements attributed to primary sources
+    sources:
+      - rudi2017
+      - li2021rff
+    locators:
+      - source: rudi2017
+        manuscript_locator: ch-randomized.md#rand-rff-risk
+        source_locator: main theorem and corollaries
+        status: exact-theorem-number-pending-independent-verification
+      - source: li2021rff
+        manuscript_locator: ch-randomized.md#rand-rff-risk
+        source_locator: Theorems 9--12
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-adaptive-features
+    title: Ridge-leverage and data-adaptive features
+    contribution: newly synthesized with a matrix-concentration proof sketch
+    permission: original prose and proof sketch; algorithms and rates attributed to primary sources
+    sources:
+      - bach2017quadrature
+      - avron2017rff
+      - li2021rff
+    locators:
+      - source: bach2017quadrature
+        manuscript_locator: ch-randomized.md#rand-adaptive-features
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+      - source: avron2017rff
+        manuscript_locator: ch-randomized.md#rand-adaptive-features
+        source_locator: Section 4 and Theorem 10
+        status: author-checked-against-primary-source
+      - source: li2021rff
+        manuscript_locator: ch-randomized.md#rand-adaptive-features
+        source_locator: Sections 5--6
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-structured-features
+    title: Structured, orthogonal, and quasi-Monte Carlo features
+    contribution: newly synthesized comparison
+    permission: original prose and comparison; constructions attributed to primary sources
+    sources:
+      - le2013fastfood
+      - yu2016orf
+      - avron2016
+    locators:
+      - source: le2013fastfood
+        manuscript_locator: ch-randomized.md#rand-structured-features
+        source_locator: Section 3
+        status: author-checked-against-primary-source
+      - source: yu2016orf
+        manuscript_locator: ch-randomized.md#rand-structured-features
+        source_locator: Theorems 1--2
+        status: author-checked-against-primary-source
+      - source: avron2016
+        manuscript_locator: ch-randomized.md#rand-structured-features
+        source_locator: Sections 3--5
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-fastfood
+    title: Fastfood
+    contribution: newly synthesized
+    permission: original prose; construction attributed to primary source
+    sources:
+      - le2013fastfood
+    locators:
+      - source: le2013fastfood
+        manuscript_locator: ch-randomized.md#rand-fastfood
+        source_locator: Section 3
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-orf
+    title: Orthogonal random features
+    contribution: newly synthesized
+    permission: original prose; variance claims attributed to primary source
+    sources:
+      - yu2016orf
+    locators:
+      - source: yu2016orf
+        manuscript_locator: ch-randomized.md#rand-orf
+        source_locator: Theorems 1--2
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-qmc
+    title: Quasi-Monte Carlo features
+    contribution: newly synthesized
+    permission: original prose; construction and bounds attributed to primary source
+    sources:
+      - avron2016
+    locators:
+      - source: avron2016
+        manuscript_locator: ch-randomized.md#rand-qmc
+        source_locator: Sections 3--5
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-column-selection
+    title: Pivoted Cholesky, greedy Nyström, and DPP landmarks
+    contribution: newly synthesized with complete residual and power-function proof
+    permission: original prose and proof; convergence and sampling results attributed to primary sources
+    sources:
+      - harbrecht2012cholesky
+      - musco2017nystrom
+      - li2016dpp
+      - alaoui2015
+    locators:
+      - source: harbrecht2012cholesky
+        manuscript_locator: ch-randomized.md#rand-column-selection
+        source_locator: main trace-norm error theorems
+        status: exact-theorem-number-pending-independent-verification
+      - source: musco2017nystrom
+        manuscript_locator: ch-randomized.md#rand-column-selection
+        source_locator: Theorem 3 and Algorithm 2
+        status: author-checked-against-primary-source
+      - source: li2016dpp
+        manuscript_locator: ch-randomized.md#rand-column-selection
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+      - source: alaoui2015
+        manuscript_locator: ch-randomized.md#rand-column-selection
+        source_locator: ridge-leverage Nyström results
+        status: exact-theorem-number-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: rand-oblivious-krr
+    title: Oblivious sketches and sketched KRR
+    contribution: newly synthesized
+    permission: original prose and algorithm; statistical sketch results attributed to primary source
+    sources:
+      - yang2017sketch
+    locators:
+      - source: yang2017sketch
+        manuscript_locator: ch-randomized.md#rand-oblivious-krr
+        source_locator: Sections 2--4 and Theorems 1--2
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-trace-logdet
+    title: Stochastic traces and Lanczos log determinants
+    contribution: newly synthesized with complete Hutchinson proof and Lanczos proof sketch
+    permission: original prose and derivations; algorithms and bounds attributed to primary sources
+    sources:
+      - hutchinson1989
+      - ubaru2017slq
+      - han2015logdet
+      - wenger2022preconditioning
+    locators:
+      - source: hutchinson1989
+        manuscript_locator: ch-randomized.md#rand-trace-logdet
+        source_locator: complete article
+        status: author-checked-against-primary-source
+      - source: ubaru2017slq
+        manuscript_locator: ch-randomized.md#rand-trace-logdet
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+      - source: han2015logdet
+        manuscript_locator: ch-randomized.md#rand-trace-logdet
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+      - source: wenger2022preconditioning
+        manuscript_locator: ch-randomized.md#rand-trace-logdet
+        source_locator: Theorems 1--3
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-streaming
+    title: Streaming and mergeable sketches
+    contribution: newly synthesized
+    permission: original prose and algorithm; incremental-sketch claims attributed to primary source
+    sources:
+      - zhang2019incremental
+    locators:
+      - source: zhang2019incremental
+        manuscript_locator: ch-randomized.md#rand-streaming
+        source_locator: Theorems 1--3
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-lower-bounds
+    title: Lower bounds and no-free-lunch boundaries
+    contribution: newly synthesized with complete rank lower-bound proof
+    permission: original prose and proof; specialized lower bounds attributed to primary sources
+    sources:
+      - avron2017rff
+      - bach2017quadrature
+      - yang2017sketch
+    locators:
+      - source: avron2017rff
+        manuscript_locator: ch-randomized.md#rand-lower-bounds
+        source_locator: Theorem 8
+        status: author-checked-against-primary-source
+      - source: bach2017quadrature
+        manuscript_locator: ch-randomized.md#rand-lower-bounds
+        source_locator: Propositions 2--3
+        status: author-checked-against-primary-source
+      - source: yang2017sketch
+        manuscript_locator: ch-randomized.md#rand-lower-bounds
+        source_locator: Theorem 2
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-decision-table
+    title: A decision table for randomized kernel approximation
+    contribution: newly synthesized
+    permission: original prose and comparison
+    sources:
+      - kar2012random
+      - pham2013tensor
+      - avron2017rff
+      - musco2017nystrom
+      - yang2017sketch
+      - ubaru2017slq
+    locators:
+      - source: avron2017rff
+        manuscript_locator: ch-randomized.md#rand-decision-table
+        source_locator: Sections 2--4
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-practice
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose
+    sources:
+      - avron2017rff
+      - li2021rff
+      - wenger2022preconditioning
+    locators:
+      - source: li2021rff
+        manuscript_locator: ch-randomized.md#rand-practice
+        source_locator: Sections 5--7
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: rand-summary
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed
+    sources:
+      - kar2012random
+      - pham2013tensor
+      - rahimi2007
+      - avron2017rff
+      - alaoui2015
+      - yang2017sketch
+      - hutchinson1989
+      - zhang2019incremental
+    locators:
+      - source: kar2012random
+        manuscript_locator: ch-randomized.md#rand-summary
+        source_locator: Sections 3--4
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: newly synthesized
+    permission: original exercises
+    sources:
+      - kar2012random
+      - pham2013tensor
+      - avron2017rff
+      - hutchinson1989
+      - ubaru2017slq
+    locators:
+      - source: ubaru2017slq
+        manuscript_locator: ch-randomized.md#exercises
+        source_locator: Sections 2--4
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+mapping_method: exact section citations with theorem or section locators where verified
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-24

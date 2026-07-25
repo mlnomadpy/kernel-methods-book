@@ -2,17 +2,25 @@
 id: ch-modern
 slug: kernels-now
 title: Modern Generalization Theory
-part: XII · Kernels Now
-order: 42
+part: 'IV · Generalization, Approximation, and Limits'
+order: 21
 tier: advanced
 prerequisites:
   - bayesian-optimization-and-bandits
 objectives:
-  - Explain the central definitions and claims in Modern Generalization Theory.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Derive why ridgeless risk can peak at interpolation and fall again in the
+    overparameterized regime.
+  - State the spectral conditions that separate benign from harmful overfitting.
+  - >-
+    Read kernel learning curves mode by mode from eigenvalues and target
+    coefficients.
+  - >-
+    Use PAC-Bayes, compression, and algorithm-dependent diagnostics without
+    treating them as interchangeable certificates.
+  - >-
+    Keep proportional random-matrix predictions distinct from finite-sample,
+    distribution-free guarantees.
 review_status: draft
 reviewers:
   technical: null
@@ -34,6 +42,8 @@ bibliography:
   - spigler2020
   - cui2021
   - neyshabur2018
+  - elkaroui2010
+  - cheng2013
 ---
 # Modern Generalization Theory
 
@@ -134,6 +144,12 @@ Isotropic model with \(n=40\), noise \(\sigma^2=0.25\), signal \(\|\beta\|^2=r^2
 
 **Verification artifact.** checks/example-ch-modern-example-42-1.json records the example source hash and verification scope.
 :::::
+
+The geometry of the curve is easier to retain than its case-specific constants. Just below interpolation, the fit has almost no slack and noise is amplified; just above it, the minimum-norm rule can spread the interpolating solution over additional directions. Whether the right-hand branch keeps falling is then a spectral question, not a universal law.
+
+<figure class="viz" data-figure="double-descent" data-alt="A ridgeless test-risk curve rises sharply at the interpolation threshold where parameters equal samples, then falls in the overparameterized regime as a minimum-norm solution spreads across extra directions.">
+<figcaption>The interpolation peak is a variance singularity, while the second descent comes from the geometry of the selected minimum-norm solution. A falling right branch requires suitable signal and covariance assumptions; interpolation alone does not guarantee it.</figcaption>
+</figure>
 
 ## Benign overfitting {#benign-overfitting}
 
@@ -297,6 +313,8 @@ $$m_n(-\lambda)=\frac1n\operatorname{tr}(K+n\lambda I)^{-1},$$
 
 and derivatives of this resolvent trace control variance and effective degrees of freedom. When \(n\) and feature dimension grow together under a specified random-design model, \(m_n\) can converge to the solution of a fixed-point equation. The resulting formulas predict test risk, but they are not distribution-free finite-sample guarantees. Their validity depends on the design ensemble, aspect ratio, spectral convergence, noise model, and whether the target is deterministic or random.
 
+Where do such deterministic equivalents come from for a kernel matrix, whose entries are nonlinear functions of the data? The founding result is El Karoui's: when \(n\) and \(d\) grow proportionally and the entries of \(K\) are a smooth function of inner products \(x_i^\top x_j / d\) or of scaled distances, the kernel matrix is asymptotically indistinguishable in operator norm from a linear surrogate, a weighted sum of the all-ones matrix, the sample Gram matrix \(XX^\top/d\), and the identity, with weights given by the first Taylor coefficients of the kernel profile at its concentration point [@elkaroui2010]. In this regime the nonlinearity survives only through a handful of scalars: the bulk spectrum is a shifted and scaled Marchenko-Pastur law, and the identity term acts as an implicit ridge that the kernel adds on its own, before any explicit regularization. This is a sharp warning and a useful tool at once. The warning: with high-dimensional near-orthogonal inputs, a Gaussian kernel machine behaves like linear ridge regression, and no bandwidth tuning will recover the low-dimensional intuition. The tool: that same self-induced ridge is one mechanism behind the benign bulk behavior met in the interpolation sections, and the Taylor weights predict exactly how strong it is. Beyond the linear surrogate, the spectrum of inner-product kernel matrices admits finer descriptions that track the nonlinearity's higher moments and separate bulk from outlier eigenvalues [@cheng2013]; those refinements matter when the kernel profile is not smooth at the origin or the data carry spiked structure.
+
 The practical use is a three-way diagnostic. Compare the observed learning curve with the deterministic-equivalent prediction, a nonparametric bootstrap over examples, and held-out risk. If the first fails while the latter two agree, the asymptotic model is misspecified. If the bootstrap is erratic, influential observations or dependence may invalidate iid reasoning. If all three disagree, first audit leakage, preprocessing, and numerical conditioning before telling a new generalization story.
 
 ## Limits, lower bounds, and what cannot be universal {#limits-and-lower-bounds}
@@ -317,11 +335,13 @@ The three phenomena are one story told from three angles: interpolation is safe 
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Modern Generalization Theory**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Interpolation is a property of the training fit, not a guarantee of benign overfitting. State the noise model, covariance spectrum, target alignment, aspect ratio, and minimum-norm rule before transferring a double-descent or benign-overfitting result. A proportional random-matrix equivalent predicts a specified ensemble as \(n,d\to\infty\); it is not a distribution-free finite-sample bound.
+
+Do not diagnose a spectral tail from eigenvalues alone. Compare target coefficients with those eigenfunctions, report finite-sample uncertainty in the empirical spectrum, and test whether ridge changes the apparent peak. PAC-Bayes, compression, stability, and spectral formulas answer different questions; presenting several does not make them mutually validating certificates.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Modern Generalization Theory; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@belkin2019dd], [@belkin2018understand], [@hastie2019].
+Modern generalization theory replaces the slogan “capacity causes overfitting” with a more precise question: which solution does the algorithm select inside an interpolating class? At the interpolation threshold noise amplification creates a peak; beyond it, minimum norm can distribute the fit across additional directions. Benign overfitting requires a spectrum with enough tail dimension to absorb noise without corrupting signal, and learning curves require target alignment as well as eigenvalue decay. Double descent was crystallized by [@belkin2019dd] and [@belkin2018understand], with detailed linear-model analysis in [@hastie2019]. The spectrum unifies the phenomena, but it does not make their assumptions universal.
 
 ## Exercises {#exercises}
 

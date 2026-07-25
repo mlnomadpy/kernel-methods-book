@@ -1,0 +1,234 @@
+chapter: ch-randomized
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      For each statement, identify the strongest error currency it establishes: (a)
+      \(\lVert K-\widetilde K\rVert_F/\lVert K\rVert_F\leq0.01\); (b)
+      \((1-\varepsilon)(K+\gamma I)\preceq\widetilde K+\gamma
+      I\preceq(1+\varepsilon)(K+\gamma I)\); (c) the approximate linear system has relative
+      residual \(10^{-8}\); (d) the approximate predictor's test risk is within \(0.002\) of exact
+      KRR on an independent test set. For each, name one conclusion that does not follow without
+      extra assumptions.
+    answer: >-
+      (a) is a matrix-error statement, specifically relative Frobenius error. It does not imply
+      small regularized spectral error when the discrepancy is concentrated in a direction that
+      ridge still uses. (b) is a regularized-spectral statement and, with epsilon below one,
+      controls every ridge solution in the corresponding energy norm. It does not by itself imply
+      a population-risk bound because no sampling, noise, target, or loss assumptions have been
+      stated. (c) is computational or optimization accuracy for the approximate system. It does
+      not imply closeness to the exact-kernel solution because the approximate system itself may
+      be wrong. (d) is empirical statistical evidence on one independent test sample. It does not
+      establish a distribution-free or high-probability population guarantee without a sampling
+      analysis, and it does not imply a small Gram-matrix error.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Reproduce the Random Maclaurin example for \(k(x,y)=\langle x,y\rangle^2\), \(x=(1,2)\), and
+      \(y=(3,-1)\). Compute the exact kernel, \(M(x,y)\), the one-feature variance, and the variance
+      after \(m=2700\) independent features. Use Chebyshev's inequality to upper-bound the
+      probability that the absolute kernel error exceeds \(1\). Explain why the bound is
+      conservative but still diagnostically useful.
+    answer: >-
+      The dot product is \(1\), so the exact degree-two kernel is \(1\). The norms satisfy
+      \(\lVert x\rVert^2=5\), \(\lVert y\rVert^2=10\), and
+      \(\sum_jx_j^2y_j^2=9+4=13\). Therefore
+      \(M=5(10)+2(1)^2-2(13)=26\). With deterministic degree two, the one-feature second moment is
+      \(M^2=676\), so its variance is \(676-1^2=675\). Averaging \(2700\) independent features
+      gives variance \(675/2700=0.25\). Chebyshev yields
+      \(\mathbb P(|\widehat k-k|\geq1)\leq0.25/1^2=0.25\). The inequality uses only variance and
+      ignores the detailed distribution, so it can be loose. It is still useful because it exposes
+      that thousands of features may be needed even for an absolute error comparable to a kernel
+      value of one.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Let \(C\) be an ordinary CountSketch with a uniform pairwise-independent hash and independent
+      four-wise-independent Rademacher signs. For fixed \(u,v\in\mathbb R^D\), prove
+      \(\mathbb E\langle Cu,Cv\rangle=\langle u,v\rangle\). Then show that the variance is controlled
+      by off-diagonal collision terms and derive the safe bound
+      \(\operatorname{Var}(\langle Cu,Cv\rangle)\leq 2\lVert u\rVert^2\lVert v\rVert^2/m\).
+      Finally explain why this ordinary CountSketch bound cannot simply be asserted for TensorSketch
+      without checking the dependencies induced by the tensor hash.
+    answer: >-
+      Expand the sketched inner product as
+      \(\sum_{i,j}1_{\{h(i)=h(j)\}}s_i s_j u_i v_j\). The diagonal terms equal
+      \(\sum_i u_i v_i\). For \(i\ne j\), sign symmetry gives
+      \(\mathbb E[s_i s_j]=0\), so the estimator is unbiased. Its centered error is the sum over
+      \(i\ne j\). After squaring, four-wise sign independence kills every term except equal ordered
+      pairs and reversed ordered pairs. Since a distinct pair collides with probability \(1/m\),
+      the variance is
+      \[
+      \frac1m\sum_{i\ne j}\left(u_i^2v_j^2+u_i v_j u_j v_i\right).
+      \]
+      Taking absolute values in the cross term and applying
+      \(2|u_i v_j u_j v_i|\leq u_i^2v_j^2+u_j^2v_i^2\) bounds the expression by
+      \(2\lVert u\rVert^2\lVert v\rVert^2/m\). TensorSketch forms its hash and sign as sums and
+      products of factor-level random functions. Different tensor indices can share factor
+      coordinates, creating dependencies absent from an ordinary independent hash on all \(D=d^p\)
+      coordinates. Its variance therefore needs the TensorSketch-specific collision analysis.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the [regularized spectral approximation proposition](#prop-rand-reg-to-solve) again by using the resolvent identity
+      \(\widetilde A_\gamma^{-1}-A_\gamma^{-1}=-\widetilde
+      A_\gamma^{-1}(\widetilde K-K)A_\gamma^{-1}\). Your final bound should be in the
+      \(A_\gamma\)-energy norm. Identify exactly where \(\varepsilon\lt1\) is needed.
+    answer: >-
+      Let \(E=A_\gamma^{-1/2}(\widetilde K-K)A_\gamma^{-1/2}\), so
+      \(\widetilde A_\gamma=A_\gamma^{1/2}(I+E)A_\gamma^{1/2}\). The resolvent identity gives
+      \[
+      A_\gamma^{1/2}(\widetilde\alpha-\widehat\alpha)
+      =-(I+E)^{-1}E A_\gamma^{-1/2}y.
+      \]
+      Since \(\lVert E\rVert\leq\varepsilon\), the smallest eigenvalue of \(I+E\) is at least
+      \(1-\varepsilon\). This is the precise point where \(\varepsilon<1\) is needed: it makes
+      \(I+E\) invertible and gives \(\lVert(I+E)^{-1}\rVert\leq1/(1-\varepsilon)\). Hence
+      \[
+      \lVert\widetilde\alpha-\widehat\alpha\rVert_{A_\gamma}
+      \leq\frac{\varepsilon}{1-\varepsilon}
+      \lVert A_\gamma^{-1/2}y\rVert
+      =\frac{\varepsilon}{1-\varepsilon}\lVert\widehat\alpha\rVert_{A_\gamma}.
+      \]
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: >-
+      For the matrix in the [pivoted Cholesky example](#example-rand-pchol), carry out the second
+      pivoted-Cholesky step after selecting points \(1\) and \(3\). Compute the new residual matrix,
+      its remaining diagonal entry, and the rank-two Nyström approximation. Verify that the
+      residual is PSD and that its trace equals its only nonzero eigenvalue.
+    answer: >-
+      With \(S=\{1,3\}\),
+      \[
+      K_{SS}=\begin{pmatrix}1&0.2\\0.2&1\end{pmatrix},\qquad
+      K_{SS}^{-1}=\frac1{0.96}\begin{pmatrix}1&-0.2\\-0.2&1\end{pmatrix}.
+      \]
+      For point \(2\), \(K_{2S}=(0.8,0.3)\), so
+      \(K_{2S}K_{SS}^{-1}K_{S2}=0.6604167\). The remaining residual diagonal is
+      \(1-0.6604167=0.3395833=163/480\). Because selected rows and columns have zero residual, the
+      full residual and approximation are
+      \[
+      R_S=\begin{pmatrix}0&0&0\\0&0.3395833&0\\0&0&0\end{pmatrix},
+      \quad
+      \widetilde K_S=
+      \begin{pmatrix}1&0.8&0.2\\0.8&0.6604167&0.3\\0.2&0.3&1\end{pmatrix}.
+      \]
+      The residual is diagonal with one nonnegative entry, hence PSD. Its trace and only nonzero
+      eigenvalue are both \(0.3395833\).
+  - number: 6
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Suppose ordinary RFF needs a feature bound governed by a worst-case whitened feature norm
+      \(L\), while ideal leverage sampling makes that norm \(d_{\mathrm{eff}}(\gamma)\). Explain why
+      the leverage proposal is optimal for equalizing the whitened rank-one sample norms. Then give
+      two reasons an approximate leverage implementation may fail to realize the theoretical
+      saving, one computational and one statistical.
+    answer: >-
+      Under a proposal \(q\), a reweighted whitened feature has squared norm
+      \(p(\omega)\varphi_\omega^*A_\gamma^{-1}\varphi_\omega/q(\omega)
+      =\tau_\gamma(\omega)/q(\omega)\). The smallest possible essential supremum of this ratio is
+      its average, \(\int\tau_\gamma=d_{\mathrm{eff}}(\gamma)\), and equality is achieved by
+      \(q=\tau_\gamma/d_{\mathrm{eff}}\). Thus ideal leverage sampling equalizes every sampled
+      whitened norm and minimizes the worst rank-one bound. Computationally, estimating
+      \(\tau_\gamma\) may require a pilot factorization, solves, or a large pilot feature matrix
+      whose cost erases the saving. Statistically, an estimated proposal may underweight an
+      important region, may be tuned to the wrong ridge, or may become stale under input shift; then
+      the domination needed for concentration and the effective-dimension budget no longer hold.
+  - number: 7
+    kind: computation
+    status: draft
+    prompt: >-
+      For \(A=\begin{pmatrix}2&0.5\\0.5&1\end{pmatrix}\), enumerate the four Rademacher probes,
+      compute the exact Hutchinson estimate \(z^\top\log(A)z\) for the two distinct directions up to
+      sign, and verify that their average is \(\log\det A=\log1.75\). Compare this exact two-step
+      Lanczos result with the one-step values \(2\log2\) and \(0\). State which discrepancy is probe
+      error and which is quadrature error.
+    answer: >-
+      The probes are \((1,1),(-1,-1),(1,-1),(-1,1)\); signs do not change a quadratic form, so there
+      are two distinct values. Diagonalizing \(A\) gives
+      \[
+      \log A\approx
+      \begin{pmatrix}0.6417579&0.3619500\\0.3619500&-0.0821421\end{pmatrix}.
+      \]
+      Hence \(z_+^\top\log(A)z_+=1.2835158\) and
+      \(z_-^\top\log(A)z_-=-0.1642842\). Their average is \(0.5596158\), equal to
+      \(\operatorname{tr}\log A=\log\det A=\log1.75\). Two Lanczos steps are exact in dimension two,
+      so these are exact quadratic forms. With one step they are approximated by \(2\log2=1.3862944\)
+      and \(0\), whose average \(0.6931472\) differs from the target by quadrature error. If only one
+      exact two-step probe were used, its difference from the trace would be probe error.
+  - number: 8
+    kind: proof
+    status: draft
+    prompt: >-
+      Let \(A\succ0\) have only \(r\) distinct eigenvalues that receive nonzero weight from the
+      starting vector \(z\). Show that Lanczos terminates after at most \(r\) steps and that
+      \(z^\top f(A)z=\lVert z\rVert^2e_1^\top f(T_r)e_1\) for every function \(f\) defined on those
+      eigenvalues. Relate this finite-support argument to the polynomial exactness proposition.
+    answer: >-
+      Decompose \(z=\sum_{j=1}^r c_j u_j\), where the \(u_j\) belong to the distinct active
+      eigenspaces and every \(c_j\) is nonzero. The Krylov vectors are
+      \(A^\ell z=\sum_j c_j\lambda_j^\ell u_j\). The Vandermonde matrix on the distinct
+      \(\lambda_j\) has rank \(r\), so the Krylov space reaches exactly the active spectral
+      subspace in at most \(r\) steps and then becomes invariant, causing Lanczos breakdown.
+      On this invariant subspace, \(A=Q_rT_rQ_r^\top\) and
+      \(z=\lVert z\rVert Q_re_1\). Functional calculus therefore gives
+      \(z^\top f(A)z=\lVert z\rVert^2e_1^\top f(T_r)e_1\) for every function defined on the active
+      eigenvalues. Equivalently, any such function has an interpolating polynomial of degree at
+      most \(r-1\) on the \(r\) active eigenvalues, and polynomial exactness applies to that
+      interpolant.
+  - number: 9
+    kind: exploration
+    status: draft
+    prompt: >-
+      Design a streaming kernel-ridge system under a strict memory budget. Compare (a) fixed-seed
+      RFF with sufficient statistics \(G_t,b_t\), (b) first-order online updates in the same
+      features, and (c) an incremental Nyström dictionary. For each, report asymptotic memory,
+      update cost, what can be merged across shards, how drift is detected, and what guarantee is
+      lost if the feature basis changes without replay.
+    answer: >-
+      Fixed-seed RFF sufficient statistics use \(O(m^2)\) memory for \(G_t\) and \(O(m)\) for
+      \(b_t\), with \(O(m^2)\) rank-one updates and periodic \(O(m^3)\) direct solves, or cheaper
+      iterative maintenance. The statistics add across shards exactly when every shard uses the
+      same feature seed. First-order RFF stores only \(O(m)\) parameters and updates in \(O(m)\), but
+      adds step-size, regret, and optimization error; parameter averages can be merged only under a
+      specified distributed optimization protocol, not by simple addition. Incremental Nyström
+      stores \(B\) dictionary points plus an \(O(B^2)\) core and typically spends \(O(B)\) to
+      \(O(B^2)\) per update; merging two independently chosen dictionaries requires a new
+      compression step. All three should record prequential loss, residual or leverage novelty, and
+      recovery after detected change. If the feature basis changes without replay or an exact
+      transport of old sufficient statistics, old \(G_t,b_t\), coefficients, and regret analyses
+      refer to a different coordinate system, so neither the batch ridge identity nor the original
+      online guarantee survives.
+  - number: 10
+    kind: challenge
+    status: draft
+    prompt: >-
+      Let \(K\) have eigenvalues \(\lambda_j=j^{-2}\), let \(\gamma=10^{-3}\), and require
+      regularized tail error \(\lambda_{m+1}/(\lambda_{m+1}+\gamma)\leq0.1\). Find the smallest
+      admissible \(m\). Compare it with the rank required for unregularized spectral error
+      \(\lambda_{m+1}\leq10^{-3}\). Then explain why neither calculation alone determines the
+      feature count needed for a population-risk guarantee.
+    answer: >-
+      The regularized condition is
+      \(\lambda_{m+1}\leq\gamma/9=1/9000\). Since
+      \(\lambda_{m+1}=1/(m+1)^2\), this requires \((m+1)^2\geq9000\), so the smallest integer choice
+      is \(m+1=95\), or \(m=94\). The unregularized condition requires
+      \((m+1)^2\geq1000\), so \(m+1=32\) and \(m=31\). The numerical ranks differ because the two
+      tolerances are in different currencies; the regularized requirement asks the first omitted
+      direction to contribute at most ten percent after ridge. Population risk additionally
+      depends on the target's source coefficients, observation noise, sample size, loss, input
+      distribution, and probability level. A rank tail does not specify those quantities, and a
+      random feature construction may need extra logarithmic or leverage factors to realize a
+      given rank-level approximation.

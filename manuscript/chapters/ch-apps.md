@@ -2,17 +2,27 @@
 id: ch-apps
 slug: applications-and-practice
 title: Applications and Practice
-part: XIII · Practice
-order: 44
+part: XII · Reliable Practice
+order: 59
 tier: core
 prerequisites:
   - the-frontier
 objectives:
-  - Explain the central definitions and claims in Applications and Practice.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Translate vector, sequence, graph, distributional, spatial, and scientific
+    data into an explicit kernel-design choice.
+  - >-
+    Run a leakage-safe model-selection loop with normalization, nested
+    validation, and non-kernel baselines.
+  - >-
+    Diagnose capacity and conditioning from the Gram spectrum before changing
+    bandwidth or regularization.
+  - >-
+    Choose exact, Nyström, random-feature, or matrix-free computation from the
+    deployment budget.
+  - >-
+    Produce a reproducibility packet and model card that expose uncertainty,
+    shift, influence, and failure conditions.
 review_status: draft
 reviewers:
   technical: null
@@ -63,6 +73,12 @@ bibliography:
 A kernel method has a rigid skeleton, and seeing it once makes every application below a variation on one theme. You choose a kernel \(k\) that encodes similarity for your data, form or implicitly access the Gram matrix \(K_{ij}=k(x_i,x_j)\), feed it to a convex learner (a support vector machine, kernel ridge regression, a Gaussian process), and tune a few hyperparameters by cross-validation. The kernel is where domain knowledge enters, the learner is off the shelf, and the tuning is where honesty enters. Almost everything separating a method that works from one that does not lives in three decisions: whether the kernel matches the structure of the data, whether the data and kernel are normalized so the similarity means what you think, and whether the model's capacity is matched to the data, which is what the spectrum of \(K\) measures.
 
 Two facts frame the enterprise. There is no universally best kernel: the representer theorem and the RKHS geometry hold for any positive definite \(k\), so choosing \(k\) is choosing what \"similar\" means, a modeling decision no theorem makes for you. And once \(k\) is fixed the problem is convex, so the only real freedom left is the handful of hyperparameters. The art is front-loaded into kernel design and back-loaded into model selection, with a mechanical optimization between: the applications show the former, the recipe the latter.
+
+A defensible project is therefore a loop rather than a one-way training script. Geometry and normalization are checked before optimization; spectrum and conditioning determine the compute route; nested validation chooses the model; and deployment evidence can send the project back to the kernel itself.
+
+<figure class="viz" data-figure="kernel-workflow" data-alt="A six-step kernel workflow moves from encoding structure through normalization, geometry diagnostics, compute choice, nested validation, and deployment audit, with feedback arrows returning failures to earlier design decisions.">
+<figcaption>A kernel result is defensible only when modeling, computation, selection, and auditing form one evidence loop. Validation failure revisits capacity and compute; shift or calibration failure revisits the geometry itself.</figcaption>
+</figure>
 
 ## Three applications, three kernels {#three-applications}
 
@@ -289,11 +305,13 @@ A kernel method is a pipeline with a rigid shape and a few load-bearing choices.
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Applications and Practice**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+The most expensive practical errors happen before the solver starts: choosing a similarity that erases the relevant structure, normalizing outside the training split, or selecting hyperparameters on the reported test set. Fit every data-dependent transform inside the resampling loop, compare against a simple linear or tree baseline, and inspect group, time, or site splits whenever random folds would leak related examples.
+
+At deployment, a good validation score is incomplete evidence. Record the spectrum and condition diagnostics, uncertainty calibration, influential training points, shift monitors, compute budget, and a retraining trigger. Approximation choice is part of the model card because Nyström landmarks, random-feature seeds, and dictionary eviction rules decide which geometry survives.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Applications and Practice; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@leslie2002], [@leslie2004], [@jaakkola2000].
+The reusable lesson of the applications is a workflow, not a favorite kernel. Encode the object's structure, normalize the induced geometry, diagnose spectrum and conditioning, choose a compute route, select the full pipeline by nested validation, and audit the deployed decision. Sequence applications such as [@leslie2002] and [@leslie2004] and the Fisher-kernel route of [@jaakkola2000] differ in representation but share that evidence chain. A kernel method becomes a strong practical result only when its similarity, optimization, approximation, validation, uncertainty, and failure conditions are reported as one system.
 
 ## Exercises {#exercises}
 

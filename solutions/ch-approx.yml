@@ -1,0 +1,151 @@
+chapter: ch-approx
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: Show directly from the closed form \(P_X(x)^2 = k(x,x) - k_X(x)^\top K^{-1} k_X(x)\) that
+      \(P_X(x_i) = 0\) at every site \(x_i \in X\) and that \(0 \le P_X(x)^2 \le k(x,x)\)
+      everywhere. Interpret both facts in the Gaussian-process reading of the power function.
+    answer: "At a site x_i the vector k_X(x_i) is the i-th column of K, so K^{-1}k_X(x_i)=e_i and the
+      quadratic form equals e_i-transpose times the i-th column, which is k(x_i,x_i); hence
+      P_X(x_i)^2=k(x_i,x_i)-k(x_i,x_i)=0. For the bounds, P_X(x)^2 is the squared norm of the error
+      representer, so it is nonnegative, and k_X(x)^T K^{-1} k_X(x) is a quadratic form of the
+      positive definite matrix K^{-1}, so it is nonnegative and P_X(x)^2 is at most k(x,x). GP
+      reading: the posterior variance vanishes exactly at observed sites (noise-free conditioning
+      pins the process there), and conditioning on data can only reduce variance below the prior
+      variance k(x,x), never increase it."
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: In the setting of the worked example (min kernel, sites \(\{0.25, 0.5, 1\}\), target \(f(x)
+      = x^2\)), take the test point \(x_* = 0.375\). Compute \(k_X(x_*)\), solve \(Kw = k_X(x_*)\),
+      and evaluate \(P_X(0.375)^2\) and \(P_X(0.375)\). Then compute \(s(0.375)\), the true value
+      \(f(0.375)\), and verify that the error respects the bound \(P_X(0.375)\, \lVert f \rVert\)
+      with \(\lVert f \rVert = 1.1547\).
+    answer: k_X(0.375)=(min(0.375,0.25),min(0.375,0.5),min(0.375,1))=(0.25,0.375,0.375). These are the
+      values of min(.,0.375) at the sites, whose piecewise-linear interpolant has slopes 1, 0.5, 0
+      on the three subintervals, so the slope drops give w=(0.5,0.5,0). Then k_X(x_*)^T
+      w=0.25(0.5)+0.375(0.5)+0.375(0)=0.3125 and P_X(0.375)^2=0.375-0.3125=0.0625, so
+      P_X(0.375)=0.25. The interpolant is piecewise linear with slope 0.75 on [0.25,0.5], so
+      s(0.375)=0.0625+0.75(0.125)=0.15625, while f(0.375)=0.140625; the error is 0.015625, well
+      inside the bound 0.25 x 1.1547 = 0.2887.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: Derive the power-function formula. Starting from the cardinal form \(s_f(x) = \sum_j w_j(x)
+      f(x_j)\) with \(w(x) = K^{-1} k_X(x)\), show that the error functional \(f \mapsto f(x) -
+      s_f(x)\) is represented by \(r_x = k(\cdot, x) - \sum_j w_j(x) k(\cdot, x_j)\), expand
+      \(\lVert r_x \rVert_{\mathcal H_k}^2\), and simplify to \(k(x,x) - k_X(x)^\top K^{-1}
+      k_X(x)\). Conclude the sharp bound \(\lvert f(x) - s_f(x) \rvert \le P_X(x) \lVert f
+      \rVert_{\mathcal H_k}\).
+    answer: By the reproducing property, f(x)-s_f(x)=<f,k(.,x)>-sum_j w_j(x)<f,k(.,x_j)>=<f,r_x> with
+      r_x=k(.,x)-sum_j w_j(x)k(.,x_j), so r_x represents the error functional. Expanding with the
+      reproducing property again, ||r_x||^2=k(x,x)-2w^T k_X(x)+w^T K w. Substituting w=K^{-1}k_X(x)
+      gives w^T K w=k_X(x)^T K^{-1} k_X(x)=w^T k_X(x), so the last two terms combine and
+      ||r_x||^2=k(x,x)-k_X(x)^T K^{-1} k_X(x)=P_X(x)^2. Cauchy-Schwarz then gives
+      |f(x)-s_f(x)|=|<f,r_x>| bounded by ||r_x|| ||f||=P_X(x)||f||, with equality for f=r_x/||r_x||
+      whenever P_X(x) is positive, so the bound is sharp.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: Let \(c_\lambda = (K + \lambda I)^{-1} y\) be the kernel ridge coefficients and \(c_0 =
+      K^{-1} y\) the interpolation coefficients. Using the eigendecomposition of \(K\), show that
+      \(\lVert c_\lambda - c_0 \rVert \le \dfrac{\lambda}{\lambda_{\min}(K)} \lVert c_0 \rVert\), so
+      the ridge solution converges to the interpolant as \(\lambda \to 0^+\), and explain why the
+      convergence is slow exactly when the uncertainty relation says the site set is accurate.
+    answer: Write c_lambda-c_0=[(K+lambda I)^{-1}-K^{-1}]y=-(K+lambda I)^{-1}(lambda
+      I)K^{-1}y=-lambda(K+lambda I)^{-1}c_0, using A^{-1}-B^{-1}=A^{-1}(B-A)B^{-1}. In the
+      orthonormal eigenbasis of K with eigenvalues lambda_i, the operator lambda(K+lambda I)^{-1}
+      acts by multiplication with lambda/(lambda_i+lambda), which is at most
+      lambda/(lambda_min+lambda) and hence at most lambda/lambda_min. Therefore ||c_lambda-c_0|| is
+      at most (lambda/lambda_min)||c_0|| and tends to zero as lambda tends to 0+. The convergence is
+      slow when lambda_min is small; by the uncertainty relation, site sets with a small power
+      function force small lambda_min, so exactly the designs that interpolate accurately make the
+      ridge path approach interpolation slowly and the linear algebra fragile.
+  - number: 5
+    kind: synthesis
+    status: draft
+    prompt: Write down the posterior mean and posterior variance at a point \(x\) of a Gaussian process
+      with covariance \(k\) conditioned on noise-free observations \(y_i = f(x_i)\). Verify that the
+      mean is the kernel interpolant and the variance is \(P_X(x)^2\). Then explain carefully what
+      each framework must assume for its error statement to be valid, and give one scenario in which
+      the worst-case statement holds while the Bayesian one is misleading, or conversely.
+    answer: "The noise-free GP posterior at x is Gaussian with mean k_X(x)^T K^{-1} y and variance
+      k(x,x)-k_X(x)^T K^{-1} k_X(x); the mean is the kernel interpolant in cardinal form and the
+      variance is exactly P_X(x)^2. The worst-case statement |f(x)-s(x)| <= P_X(x)||f|| requires f
+      to lie in the native space and requires a bound on ||f||; it then holds for every such f,
+      adversarial or not. The Bayesian credible interval requires the prior to be a defensible model
+      of the target; it is an average-case statement and GP sample paths themselves lie outside the
+      native space almost surely, so the two guarantees do not imply each other. Scenario one: f is
+      an adversarial unit-norm native-space element close to the error representer; the worst-case
+      bound is tight and valid, while the target is highly atypical for the prior and a 95 percent
+      credible band can be badly violated. Scenario two: data are genuinely drawn from the GP model;
+      credible intervals are calibrated on average, while no finite ||f|| bound exists for the
+      sampled path and the worst-case bound is unusable."
+  - number: 6
+    kind: exploration
+    status: draft
+    prompt: "Take the min kernel and the two-point clustered site set \\(\\{0.5, 0.5 + \\delta\\}\\)
+      with \\(\\delta = 0.01\\), so \\(K = \\begin{pmatrix} 0.5 & 0.5 \\\\ 0.5 & 0.51
+      \\end{pmatrix}\\). Compute the trace, the determinant, both eigenvalues to four decimals, and
+      the condition number. Repeat symbolically for general small \\(\\delta\\) and describe how
+      \\(\\lambda_{\\min}\\) and the condition number scale with the separation radius. Relate the
+      finding to the uncertainty relation: what does the near-singularity of \\(K\\) say about the
+      power function of the first point relative to the second?"
+    answer: "Trace 0.5+0.51=1.01 and determinant 0.5(0.51)-0.25=0.005. The eigenvalues solve
+      t^2-1.01t+0.005=0, giving (1.01 +/- sqrt(1.0201-0.02))/2=(1.01 +/- 1.00005)/2, i.e.
+      lambda_max=1.0050 and lambda_min=0.0050 (more precisely 1.005025 and 0.004975), so the
+      condition number is about 202.0151. For general small delta, det=0.5 delta and trace=1+delta,
+      so lambda_min is approximately det/trace, about 0.5 delta, and the condition number grows like
+      2/delta: linearly in the inverse separation radius q_X=delta/2. Uncertainty reading: with only
+      the first site retained, the power function of X={0.5} at 0.5+delta is
+      P^2=(0.5+delta)-0.25/0.5=delta=0.01, and the relation P^2 >= lambda_min(K) is confirmed since
+      0.01 >= 0.004975; the second site is almost predictable from the first, so it adds almost no
+      information and drives K toward singularity."
+  - number: 7
+    kind: challenge
+    status: draft
+    prompt: Prove that for the min kernel on \([0,1]\), between two adjacent sites \(a \lt x \lt b\) the
+      power function satisfies \(P_X(x)^2 = \dfrac{(x - a)(b - x)}{b - a}\), depending only on the
+      two neighbors. Locate the point of maximal uncertainty on each subinterval, verify that the
+      formula reproduces \(P_X(0.75)^2 = 0.125\) and \(P_X(0.375)^2 = 0.0625\) from the example and
+      exercise 2, and explain the Markov-property reason the other sites drop out.
+    answer: "The power function is the supremum of |f(x)| over unit-norm functions vanishing at all
+      sites, i.e. the reciprocal square root of the minimal Dirichlet energy of a function with
+      f(a)=f(b)=0 and f(x)=1 (for the min kernel the norm is the integral of the squared derivative,
+      sites outside [a,b] impose no additional active constraint by the argument below). The
+      minimizer is the tent that is affine on [a,x] and [x,b] with slopes 1/(x-a) and -1/(b-x), zero
+      elsewhere, whose energy is 1/(x-a)+1/(b-x)=(b-a)/((x-a)(b-x)). Hence
+      P_X(x)^2=(x-a)(b-x)/(b-a), maximal at the midpoint with value (b-a)/4. Checks: on [0.5,1] at
+      0.75, (0.25)(0.25)/0.5=0.125; on [0.25,0.5] at 0.375, (0.125)(0.125)/0.25=0.0625, matching the
+      example and exercise 2. The min kernel is the covariance of Brownian motion, a Markov process:
+      conditioned on its values at a and b, the path on [a,b] is a Brownian bridge independent of
+      everything outside, with variance (x-a)(b-x)/(b-a); the neighbors screen off all other sites,
+      which is why they drop out. Equivalently the error representer is supported on [a,b]."
+  - number: 8
+    kind: exploration
+    status: draft
+    prompt: With the Gaussian kernel \(k(x, y) = e^{-\epsilon^2 (x - y)^2}\) on the two sites \(\{0,
+      1\}\), the Gram matrix is \(\begin{pmatrix} 1 & e^{-\epsilon^2} \\ e^{-\epsilon^2} & 1
+      \end{pmatrix}\) with eigenvalues \(1 \pm e^{-\epsilon^2}\). Compute the condition number for
+      \(\epsilon = 3\) and for \(\epsilon = 0.1\) to four decimals. Which regime is better
+      conditioned, which regime uses the data more efficiently for a smooth target, and how does the
+      pair illustrate the shape-parameter trade-off of the uncertainty principle?
+    answer: "For epsilon=3 the off-diagonal entry is e^{-9}=0.0001, so the eigenvalues are 1.0001 and
+      0.9999 and the condition number is 1.0001234/0.9998766=1.0002. For epsilon=0.1 the
+      off-diagonal entry is e^{-0.01}=0.9900, the eigenvalues are 1.9900 and 0.0100 (more precisely
+      1.990050 and 0.009950), and the condition number is 200.0017. The peaked kernel (epsilon=3) is
+      nearly perfectly conditioned, but its two basis functions barely overlap: away from the sites
+      the interpolant collapses toward zero and each observation says almost nothing about the other
+      site, so the data are used inefficiently for a smooth target. The flat kernel (epsilon=0.1)
+      couples the sites strongly, yields a much smaller power function between them for smooth
+      targets, and is correspondingly ill-conditioned. This is the uncertainty principle as a dial:
+      lowering epsilon buys exact-arithmetic accuracy at an exponential price in lambda_min, so in
+      floating point one chooses epsilon to balance the two, or evaluates the flat regime through a
+      stable change of basis rather than by solving Kc=y directly."

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import json
 import numpy as np
 
 MODE = os.environ.get("KERNEL_BOOK_MODE", "fast").lower()
@@ -15,14 +16,23 @@ def rng(offset: int = 0):
 def rbf_gram(x, z=None, gamma=1.0):
     x = np.asarray(x, dtype=float)
     z = x if z is None else np.asarray(z, dtype=float)
-    d2 = ((x[:, None, :] - z[None, :, :]) ** 2).sum(axis=2)
+    if x.ndim == 1:
+        x = x[:, None]
+    if z.ndim == 1:
+        z = z[:, None]
+    # The norm identity avoids the n × m × d temporary created by explicit
+    # broadcasting, which is the difference between a useful full-mode lab and
+    # an out-of-memory failure on moderately high-dimensional data.
+    d2 = np.sum(x * x, axis=1)[:, None] + np.sum(z * z, axis=1)[None, :] - 2 * x @ z.T
+    np.maximum(d2, 0.0, out=d2)
     return np.exp(-gamma * d2)
 
 
 def centered(k):
-    n = len(k)
-    h = np.eye(n) - np.ones((n, n)) / n
-    return h @ k @ h
+    k = np.asarray(k, dtype=float)
+    if k.ndim != 2:
+        raise ValueError("centered expects a matrix")
+    return k - k.mean(axis=0, keepdims=True) - k.mean(axis=1, keepdims=True) + k.mean()
 
 
 def krr(k, y, ridge=1e-3):
@@ -42,7 +52,16 @@ def mmd2_unbiased(kxx, kyy, kxy):
 
 
 def report(name: str, **metrics):
-    for value in metrics.values():
-        if isinstance(value, (float, np.floating)):
-            assert np.isfinite(value)
-    print({"lab": name, "mode": MODE, "seed": SEED, **metrics})
+    def plain(value):
+        if isinstance(value, np.ndarray):
+            if not np.all(np.isfinite(value)):
+                raise ValueError("lab report contains a non-finite array")
+            return value.tolist()
+        if isinstance(value, np.generic):
+            value = value.item()
+        if isinstance(value, float) and not np.isfinite(value):
+            raise ValueError("lab report contains a non-finite value")
+        return value
+
+    payload = {"lab": name, "mode": MODE, "seed": SEED, **{key: plain(value) for key, value in metrics.items()}}
+    print(json.dumps(payload, sort_keys=True, allow_nan=False))

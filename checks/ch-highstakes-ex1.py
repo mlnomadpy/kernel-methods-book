@@ -48,3 +48,9 @@ print(f"  68% credible interval    : [{lo:.2f}, {hi:.2f}] d")
 freqs = 2 * np.pi / grid
 power = np.array([np.abs(np.sum(y * np.exp(-1j * f * t))) ** 2 for f in freqs])
 print(f"  periodogram peak period  : {grid[np.argmax(power)]:.2f} d   (a point, no credible interval)")
+
+assert abs(P_map - 10.10) < 1e-12
+assert abs(mean_P - 10.10) < 0.01
+assert (lo, hi) == (10.0, 10.2)
+assert abs(grid[np.argmax(power)] - 10.725) < 1e-12
+assert np.isfinite(ll).all()

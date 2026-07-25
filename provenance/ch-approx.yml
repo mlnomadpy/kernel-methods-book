@@ -1,0 +1,310 @@
+chapter: ch-approx
+slug: kernel-interpolation-and-approximation
+title: Kernel Interpolation and Approximation Theory
+status: author-mapped-pending-independent-verification
+private_source_sha256: null
+references:
+  - wendland2005
+  - schaback1995
+  - narcowich2005
+  - fasshauer2007
+  - schoenberg1938
+  - micchelli1986
+  - aronszajn1950
+  - rasmussen2006
+  - wahba1990
+  - caponnetto2007
+  - steinwart2008
+sections:
+  - id: approx-minimum-norm
+    title: Kernel interpolation as minimum-norm recovery
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - fasshauer2007
+      - wahba1990
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-minimum-norm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fasshauer2007
+        manuscript_locator: ch-approx.md#approx-minimum-norm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-approx.md#approx-minimum-norm
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-native-space
+    title: The native space
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - aronszajn1950
+      - steinwart2008
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-native-space
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch-approx.md#approx-native-space
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-approx.md#approx-native-space
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-power-function
+    title: The power function
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - rasmussen2006
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-power-function
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-approx.md#approx-power-function
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-fill-distance
+    title: Fill distance, separation radius, and convergence rates
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - caponnetto2007
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-fill-distance
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-approx.md#approx-fill-distance
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-stability
+    title: Stability and the uncertainty principle
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - schaback1995
+      - wendland2005
+      - fasshauer2007
+    locators:
+      - source: schaback1995
+        manuscript_locator: ch-approx.md#approx-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fasshauer2007
+        manuscript_locator: ch-approx.md#approx-stability
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-escape
+    title: Escaping the native space
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - narcowich2005
+    locators:
+      - source: narcowich2005
+        manuscript_locator: ch-approx.md#approx-escape
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-schoenberg
+    title: Schoenberg theory and conditional positive definiteness
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - schoenberg1938
+      - micchelli1986
+    locators:
+      - source: schoenberg1938
+        manuscript_locator: ch-approx.md#approx-schoenberg
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli1986
+        manuscript_locator: ch-approx.md#approx-schoenberg
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-worst-average
+    title: Worst case meets average case
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - rasmussen2006
+      - wahba1990
+      - wendland2005
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-approx.md#approx-worst-average
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-approx.md#approx-worst-average
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-worst-average
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-example
+    title: A three-point interpolant by hand
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - rasmussen2006
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-example
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-approx.md#approx-example
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-practice
+    title: Common mistakes and practical implications
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - fasshauer2007
+      - schaback1995
+      - steinwart2008
+    locators:
+      - source: fasshauer2007
+        manuscript_locator: ch-approx.md#approx-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schaback1995
+        manuscript_locator: ch-approx.md#approx-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-approx.md#approx-practice
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: approx-summary
+    title: Summary and further reading
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - schaback1995
+      - narcowich2005
+      - fasshauer2007
+      - schoenberg1938
+      - micchelli1986
+      - aronszajn1950
+      - rasmussen2006
+      - wahba1990
+      - caponnetto2007
+      - steinwart2008
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schaback1995
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: narcowich2005
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: fasshauer2007
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schoenberg1938
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: micchelli1986
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: aronszajn1950
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-approx.md#approx-summary
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+  - id: exercises
+    title: Exercises
+    contribution: newly synthesized
+    permission: original prose; cited ideas remain attributed to their primary sources
+    sources:
+      - wendland2005
+      - rasmussen2006
+      - schaback1995
+    locators:
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-approx.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: schaback1995
+        manuscript_locator: ch-approx.md#exercises
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_author:
+  name: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+mapping_date: 2026-07-23

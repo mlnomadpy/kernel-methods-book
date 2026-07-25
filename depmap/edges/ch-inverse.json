@@ -5,13 +5,13 @@
     "note": "Defines filters through functional calculus on a compact positive operator."
   },
   {
-    "from": "inverse-learning-and-spectral-regularization#prop-landweber-stability",
+    "from": "inverse-learning-and-spectral-regularization#thm-raskutti-stopping",
     "to": "inverse-learning-and-spectral-regularization#def-spectral-filter",
     "note": "Identifies the iteration as a residual polynomial filter."
   },
   {
-    "from": "inverse-learning-and-spectral-regularization#algo-spectral-regularization",
-    "to": "inverse-learning-and-spectral-regularization#prop-landweber-stability",
+    "from": "inverse-learning-and-spectral-regularization#algo-inverse-comparison",
+    "to": "inverse-learning-and-spectral-regularization#thm-raskutti-stopping",
     "note": "Uses the stable step-size range for matrix-free early stopping."
   }
 ]

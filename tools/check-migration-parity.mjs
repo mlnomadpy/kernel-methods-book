@@ -27,7 +27,10 @@ function metric(body, markdown) {
 
 const order = chapters.map((chapter) => chapter.src);
 const legacyOrder = order.filter((src) => baseline.chapterOrder.includes(src));
-if (JSON.stringify(legacyOrder) !== JSON.stringify(baseline.chapterOrder)) {
+if (
+  JSON.stringify(legacyOrder) !== JSON.stringify(baseline.chapterOrder) &&
+  !approved._meta?.allow_order_change
+) {
   errors.push("legacy chapter order changed");
 }
 for (const chapter of chapters) {

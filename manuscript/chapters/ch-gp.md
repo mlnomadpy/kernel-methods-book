@@ -2,19 +2,27 @@
 id: ch-gp
 slug: gaussian-processes-and-rvm
 title: Gaussian Processes and the RVM
-part: XI · The Bayesian View
-order: 40
+part: IX · Gaussian Processes and Sequential Decisions
+order: 49
 tier: core
 prerequisites:
   - kernels-and-deep-learning
 objectives:
   - >-
-    Explain the central definitions and claims in Gaussian Processes and the
-    RVM.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Read a positive definite kernel as a covariance law over functions and
+    compute a GP posterior.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Derive the identity between the GP posterior mean and kernel ridge
+    regression.
+  - >-
+    Separate latent-function uncertainty, observation noise, and model
+    misspecification in a prediction.
+  - >-
+    Optimize marginal likelihood while detecting weak identifiability and
+    numerically unstable covariance matrices.
+  - >-
+    Compare Laplace classification, RVM sparsity, and inducing-point
+    approximations by the model each one changes.
 review_status: draft
 reviewers:
   technical: null
@@ -159,6 +167,12 @@ $$K=\begin{pmatrix}1&0.6065&0.1353\\0.6065&1&0.6065\\0.1353&0.6065&1\end{pmatrix
 
 **Verification artifact.** checks/example-ch-gp-example-40-1.json records the example source hash and verification scope.
 :::::
+
+That local calculation scales into the full posterior picture. The mean is pulled toward the observations, while the covariance shrinks wherever the kernel regards a test point as well covered. Far from data the mean returns toward its prior value and the uncertainty returns toward its prior scale.
+
+<figure class="viz" data-figure="gp-posterior-anatomy" data-alt="A one-dimensional Gaussian process shows observations, posterior mean, posterior uncertainty, and the wider prior uncertainty. The posterior band narrows around observations and widens away from them.">
+<figcaption>Covariance, observation noise, and input geometry determine where the posterior can be confident. The labels move the posterior mean, but posterior variance depends on where observations were made, not on their observed values.</figcaption>
+</figure>
 
 ## Kernel ridge regression is the GP posterior mean {#krr-gp}
 
@@ -342,6 +356,10 @@ $$\bar y(x_*)=k_*^\top\mu,\qquad v(x_*)=\sigma^2+k_*^\top\Sigma k_*,$$
 
 mirror the Gaussian process formulas of the regression section, now built on only the relevance vectors.
 
+<figure class="viz" data-figure="gp-rvm-sparsity-comparison" data-alt="The left panel overlays a dense Gaussian-process fit and a close sparse kernel fit, marking seven retained relevance sites among forty-one observations. The right panel compares forty-one active GP centres with seven sparse centres.">
+<figcaption>Sparsity concerns the predictive representation, not merely visual smoothness. Here a seven-centre expansion tracks the dense posterior mean closely, but that economy comes from a different prior and optimization problem, not from the ordinary GP posterior spontaneously becoming sparse.</figcaption>
+</figure>
+
 ## Sparse and variational Gaussian processes {#sparse-variational-gp}
 
 The Relevance Vector Machine made its predictor sparse because the prior wanted few active basis functions. A second, blunter pressure pushes in the same direction: cost. Every exact GP quantity in this chapter, the posterior mean, the variance, the evidence and its gradient, passes through a factorization of the \(n\times n\) matrix \(K+\sigma^2 I\), at \(O(n^3)\) time and \(O(n^2)\) memory, repeated at every step of hyperparameter learning. Beyond a few tens of thousands of points the exact equations stop being computable. [[ch:large-scale-kernels|The large-scale chapter]] develops the generic remedies, random features and Nyström-type low-rank factorizations, which approximate the *matrix*. The Gaussian process literature developed a complementary line that approximates the *model*: replace the full process by one whose information about the data is carried by \(m\ll n\) well-placed points. The prize for staying inside the probabilistic frame is that variances and evidences survive with their meaning intact, and the quality of the approximation itself becomes a measurable quantity. Throughout this section \(n\) counts training points and \(m\) counts inducing points.
@@ -476,11 +494,13 @@ Stationarity is a strong commitment: one length scale for the whole input space.
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Gaussian Processes and the RVM**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+The posterior interval is conditional on the kernel, likelihood, noise model, and fitted hyperparameters; it is not an unconditional promise of coverage. Keep latent-function variance separate from observation variance, and check calibration on held-out or time-ordered data. Marginal likelihood can prefer pathological length scales or noise levels when parameters are weakly identified, so inspect profiles or multiple starts rather than reporting one optimizer result.
+
+Never invert a covariance matrix explicitly. Use a Cholesky factor, report jitter relative to the diagonal scale, and treat failure of the factorization as a modeling diagnostic. Sparse approximations require an additional declaration: subset-of-regressors changes the prior, while variational inducing methods approximate inference in the original model. Their error bars are not interchangeable.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Gaussian Processes and the RVM; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@rasmussen2006], [@williams1996], [@neal1996].
+A Gaussian process turns a kernel into a covariance law and Bayes' rule into two coupled predictions: a posterior mean and a posterior covariance. The mean is kernel ridge regression with noise variance in the role of regularization; the covariance adds geometry-dependent uncertainty. Marginal likelihood learns kernel parameters by balancing fit against volume, Laplace approximation handles non-Gaussian classification, and RVM or inducing constructions trade exactness for sparsity in different ways. The durable reference is [@rasmussen2006]; the network-to-process connection begins with [@neal1996], and early classification developments include [@williams1996].
 
 ## Exercises {#exercises}
 

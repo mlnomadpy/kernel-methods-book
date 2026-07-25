@@ -2,19 +2,27 @@
 id: ch-mds
 slug: data-visualization-and-mds
 title: Data Visualization and Kernel MDS
-part: V · Structure and Subspaces
-order: 17
+part: V · Spectral Geometry and Unlabeled Structure
+order: 26
 tier: advanced
 prerequisites:
   - kernel-discriminants-and-projections
 objectives:
   - >-
-    Explain the central definitions and claims in Data Visualization and Kernel
-    MDS.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Derive the double-centering identity that recovers a centered Gram matrix
+    from squared pairwise distances.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Construct a classical MDS embedding from the positive eigenpairs of that
+    Gram matrix and quantify the distortion from truncation.
+  - >-
+    Prove the equivalence of Euclidean MDS with PCA and of kernel MDS with
+    centered kernel PCA.
+  - >-
+    Interpret negative eigenvalues as evidence that the supplied dissimilarities
+    are not Euclidean.
+  - >-
+    Compare MDS, Isomap, LLE, Laplacian eigenmaps, t-SNE, and UMAP by the
+    geometry each preserves and the claims its plot can support.
 review_status: draft
 reviewers:
   technical: null
@@ -99,6 +107,10 @@ For the matrix form, note that left-multiplying by \(J\) subtracts from each col
 ::::::
 
 The name double-centering is now transparent: the operator \(J\) sweeps out the row means on one side and the column means on the other, and the two sweeps together erase all dependence on the unknown origin, leaving precisely the centered Gram matrix. Because \(B=X_cX_c^\top\) for the centered coordinate matrix \(X_c\) (rows \(x_i-\bar x\)), it is symmetric and positive semidefinite, and its rank equals the dimension the points genuinely occupy.
+
+The identity is easier to remember as a sequence of representations. Squared distances contain two nuisance norm terms and one inner-product term; centering on both sides annihilates the nuisance terms; the factor \(-\tfrac12\) restores the Gram matrix; and its positive eigenpairs restore coordinates up to rigid motion.
+
+<figure class="viz" data-figure="mds-double-centering" data-alt="A four-stage diagram shows a squared-distance matrix, row and column centering, the recovered centered Gram matrix, and a two-dimensional point configuration reconstructed from its positive eigenpairs."><figcaption>Classical MDS is a reversible pipeline for Euclidean distances: double-centering removes the unknown origin and turns distances into a Gram matrix whose positive eigenpairs are coordinates.</figcaption></figure>
 
 ### The eigendecomposition and the embedding {#eigendecomposition-embedding}
 
@@ -343,11 +355,15 @@ The two most popular visualizers today, t-SNE (van der Maaten and Hinton 2008) a
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Data Visualization and Kernel MDS**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+- Square distances before double-centering. Applying the formula to unsquared distances changes the geometry.
+- Inspect the full spectrum of \(B\). Large negative eigenvalues are evidence of non-Euclidean dissimilarities, not harmless numerical noise.
+- Report the fraction of positive spectral mass retained by the plot and the stress or reconstruction error. A visually clean two-dimensional map may discard most of the geometry.
+- Fit graph construction, centering, and kernel parameters on training data before extending new points.
+- Do not read global distances from t-SNE or UMAP as though they were MDS distances. Neighbor embeddings optimize a different objective.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Data Visualization and Kernel MDS; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@shawe2004], [@young1938], [@torgerson1952].
+Classical MDS recovers centered inner products from squared distances through \(B=-\tfrac12 JD^{(2)}J\), then reads coordinates from the positive eigenpairs of \(B\). On Euclidean data this is PCA written in distance language; on feature-space distances it is kernel PCA. Isomap and related spectral methods retain the eigenproblem but change the geometry supplied to it, while t-SNE and UMAP abandon global metric reconstruction for neighborhood objectives. A responsible visualization therefore names its geometry, reports discarded or negative spectrum, and limits interpretation to what its objective preserves. See [@young1938], [@torgerson1952], [@coxcox2000], and [@williams2002].
 
 ## Exercises {#exercises}
 

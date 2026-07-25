@@ -1,0 +1,23 @@
+\documentclass[tikz,border=2pt]{standalone}
+\input{tools/figures/tikz-style.tex}
+\begin{document}
+\begin{tikzpicture}[node distance=9mm and 8mm]
+  \node[book/decision] (encode) {\textbf{1 Encode structure}\\[-1pt]\scriptsize kernel + invariance};
+  \node[book/node,right=of encode] (normal) {\textbf{2 Normalize}\\[-1pt]\scriptsize inputs + centering};
+  \node[book/node,right=of normal] (probe) {\textbf{3 Probe geometry}\\[-1pt]\scriptsize spectrum + conditioning};
+  \node[book/decision,below=of probe] (compute) {\textbf{4 Choose compute}\\[-1pt]\scriptsize exact / columns / features};
+  \node[book/node,left=of compute] (select) {\textbf{5 Select honestly}\\[-1pt]\scriptsize nested validation};
+  \node[book/verified,left=of select] (audit) {\textbf{6 Audit decision}\\[-1pt]\scriptsize shift + calibration};
+  \draw[book/quietarrow] (encode.east)--(normal.west);
+  \draw[book/quietarrow] (normal.east)--(probe.west);
+  \draw[book/quietarrow] (probe.south)--(compute.north);
+  \draw[book/quietarrow] (compute.west)--(select.east);
+  \draw[book/quietarrow] (select.west)--(audit.east);
+  \draw[book/feedback] (select.north west) to[bend left=28] (normal.south);
+  \node[book/note,text=BookRed,fill=white,inner sep=1pt]
+    at ($(normal.south)+(0,-.30)$) {validation fails};
+  \draw[book/feedback] (audit.north) to[bend left=42] (encode.south);
+  \node[book/note,text=BookRed,fill=white,inner sep=1pt]
+    at ($(audit.north west)+(-.20,.20)$) {audit fails};
+\end{tikzpicture}
+\end{document}

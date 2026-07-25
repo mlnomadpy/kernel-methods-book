@@ -10,34 +10,55 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Distinguish observation noise, process noise, projection error, and off-policy distribution mismatch in one controlled Markov example.
+      In one controlled Markov example, distinguish observation noise, process noise, sampling error, projection error, regularization bias, and off-policy mismatch. Give one diagnostic for each.
     answer: >-
-      In robot navigation, observation noise corrupts the measured position, while process noise represents unpredictable motion after an action. Projection error arises when the RKHS cannot represent the true value or transition function. Off-policy mismatch arises when logged actions from a cautious controller do not cover actions proposed by an aggressive target policy. These errors require different remedies and cannot all be absorbed into a larger GP noise term.
+      In robot navigation, observation noise corrupts camera-derived position and can be diagnosed with repeated measurements or a sensor likelihood check. Process noise is random motion after the same state-action pair and is diagnosed with replicated transitions or conditional residual variance. Sampling error comes from finitely many dependent trajectories and is diagnosed with trajectory bootstrap variability, mixing analysis, and coverage counts. Projection error arises when the RKHS or retained empirical span cannot represent the transition or value; compare richer kernels or dictionaries and held-out residual structure. Regularization bias is the systematic shrinkage caused by \(\lambda\); inspect a regularization path and separate optimization residual from prediction error. Off-policy mismatch occurs when a target controller selects actions absent or rare under the behavior controller; inspect state-action density ratios, support, and concentrability proxies. Increasing one GP noise variance does not repair all six errors.
   - number: 2
-    kind: computation
+    kind: proof
     status: draft
     prompt: >-
-      Given paired-state Gram matrices, solve a regularized kernel-EDMD generalized eigenproblem and evaluate one empirical eigenfunction at a new state.
+      Starting from Jensen's inequality, derive the structured GPSSM ELBO for \(q(X,U,F)=q(X)q(U)p(F\mid X,U)\). Identify the canceled term and state when the bound is exact.
     answer: >-
-      Solve \(Av=\xi(G+n\lambda I)v\), normalize \(v\) in the regularized Gram metric, and compute \(\widehat\varphi(x)=v^\top k_X(x)\). Verify the generalized residual \(\lVert Av-\xi(G+n\lambda I)v\rVert\) and compare \(\widehat\varphi(x_i')\) with \(\xi\widehat\varphi(x_i)\) on held-out paired states. A small training eigen-residual alone is insufficient.
+      Insert the variational density into the marginal likelihood: \(\log p(Y)=\log\int q(X,U,F)\,p(Y,X,U,F)/q(X,U,F)\). Jensen gives \(\mathcal L=\mathbb E_q[\log p(Y,X,U,F)-\log q(X,U,F)]\). Factor the model as \(p(Y\mid X)p(X\mid F)p(F\mid X,U)p(U)p(x_0)\) and the variational law as \(q(X)q(U)p(F\mid X,U)\). The two occurrences of \(\log p(F\mid X,U)\) cancel. Rearranging gives \(\mathbb E_q\log p(Y\mid X)+\mathbb E_q\log p(X\mid F)+\mathbb E_q\log p(x_0)+H\{q(X)\}-\operatorname{KL}\{q(U)\Vert p(U)\}\). The gap is \(\operatorname{KL}\{q(X,U,F)\Vert p(X,U,F\mid Y)\}\), so equality holds exactly when the variational posterior equals the true posterior almost everywhere.
   - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Prove that the Koopman operator is linear even when the underlying state dynamics are nonlinear.
+      Prove the finite invariant-subspace Koopman proposition. Then show that for \(F(x)=Ax\), left eigenvectors of \(A\) define Koopman eigenfunctions.
     answer: >-
-      For observables \(g,h\) and scalars \(a,b\), \(\mathcal K(ag+bh)(x)=(ag+bh)(F(x))=a g(F(x))+b h(F(x))=a\mathcal Kg(x)+b\mathcal Kh(x)\). No linearity of \(F\) is used. The operator is linear on observables, although representing it may require an infinite-dimensional space.
+      Invariance means \(\psi(F(x))=M\psi(x)\). Inductively, \(\psi(F^t(x))=M^t\psi(x)\). If \(M=W\Lambda W^{-1}\) and \(g=B\psi\), then \(g(F^t(x))=BW\Lambda^tW^{-1}\psi(x)\); the columns of \(BW\) are modes and the coordinates \(W^{-1}\psi\) evolve diagonally. For the linear case, let \(A^\ast w_j=\overline{\lambda_j}w_j\) and define \(\varphi_j(x)=\langle x,w_j\rangle\), using an inner product linear in its first argument. Then \(\mathcal U\varphi_j(x)=\varphi_j(Ax)=\langle Ax,w_j\rangle=\langle x,A^\ast w_j\rangle=\lambda_j\langle x,w_j\rangle=\lambda_j\varphi_j(x)\). If the right eigenvectors form a basis biorthogonal to the \(w_j\), the full-state observable expands in the right eigenvectors.
   - number: 4
-    kind: challenge
+    kind: computation
     status: draft
     prompt: >-
-      Derive the finite representer system for regularized kernel Bellman-residual minimization and identify the source of double-sampling bias.
+      For paired states and a positive-definite Gram matrix, derive the kernel-EDMD normal equation and generalized eigenproblem. State two residuals that should be measured and what each one tests.
     answer: >-
-      Write \(V(\cdot)=\sum_j\alpha_j k(X_j,\cdot)\), so residuals are \(r=K\alpha-R-\gamma K'\alpha\). The squared-residual objective gives \(\{(K-\gamma K')^\top(K-\gamma K')+n\lambda K\}\alpha=(K-\gamma K')^\top R\), with null-space care if \(K\) is singular. In stochastic transitions, squaring an empirical conditional expectation with the same next-state draw correlates target noise with the residual; an unbiased product would require independent next-state draws or an instrumental projected equation.
+      For \(f_\alpha=\sum_j\alpha_jk(x_j,\cdot)\), current and next evaluation vectors are \(G\alpha\) and \(A\alpha\), with \(A_{ij}=k(y_i,x_j)\). The image coefficients minimize \(n^{-1}\lVert G\beta-A\alpha\rVert^2+\lambda\beta^\top G\beta\). Differentiation gives \(G(G\beta-A\alpha)+n\lambda G\beta=0\); since \(G\succ0\), \((G+n\lambda I)\beta=A\alpha\). An eigenfunction satisfies \(\beta=\xi\alpha\), hence \(A\alpha=\xi(G+n\lambda I)\alpha\). The normalized generalized eigen-residual checks algebra and solver convergence on the training matrices. A held-out temporal residual such as \(|f_\alpha(y)-\xi f_\alpha(x)|\) checks whether the learned relation transfers to new transitions. Either can be small while the other is large.
   - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the sup-norm Bellman residual bound and construct a two-state example showing why a zero \(L^2(\nu)\) residual need not control error under an unsupported evaluation distribution.
+    answer: >-
+      Let \(e=Q-T^\pi Q\). Since \(Q^\pi=T^\pi Q^\pi\), \(Q-Q^\pi=e+\gamma P^\pi(Q-Q^\pi)\). Taking supremum norms and using the Markov contraction gives \(\lVert Q-Q^\pi\rVert_\infty\le\lVert e\rVert_\infty+\gamma\lVert Q-Q^\pi\rVert_\infty\), so the bound is \(\lVert e\rVert_\infty/(1-\gamma)\). For the counterexample, use states \(\{0,1\}\), behavior distribution \(\nu=\delta_0\), reward zero and a self-loop at state \(0\). Any \(Q\) with \(Q(0)=0\) has zero \(L^2(\nu)\) residual, regardless of \(Q(1)\). Give state \(1\) reward one and any transition for which its true value is finite, then choose \(Q(1)\) arbitrarily large. Under evaluation distribution \(\delta_1\), the value error is arbitrarily large. Since \(\delta_1\not\ll\delta_0\), the required concentrability coefficient is infinite.
+  - number: 6
+    kind: proof
+    status: draft
+    prompt: >-
+      Show that the expected squared single-sample temporal-difference residual equals squared population Bellman residual plus a conditional variance term. Explain why this creates double-sampling bias.
+    answer: >-
+      Conditional on \(Z=z\), let \(Y_Q=R+\gamma Q(Z')\) and \(m_Q(z)=\mathbb E(Y_Q\mid Z=z)=T^\pi Q(z)\). The bias-variance identity gives \(\mathbb E[(Q(z)-Y_Q)^2\mid z]=(Q(z)-m_Q(z))^2+\mathbb E[(Y_Q-m_Q(z))^2\mid z]\), because the cross term has conditional expectation zero. The second term is \(\operatorname{Var}(R+\gamma Q(Z')\mid z)\) and generally depends on \(Q\). Therefore minimizing squared one-sample temporal differences minimizes population squared Bellman residual plus a \(Q\)-dependent variance penalty. An unbiased product for the squared conditional mean would need two conditionally independent draws of \(Y_Q\) at the same \(z\), which ordinary trajectories do not provide.
+  - number: 7
     kind: synthesis
     status: draft
     prompt: >-
-      Design a safe model-based control study comparing a GP transition model, a random-feature approximation, and a linear baseline. Include trajectory splits, coverage, rollout calibration, constraints, compute, and fallback behavior.
+      Reconstruct the logical chain in the Farahmand et al. result from metric entropy and two regularizers to policy-evaluation rate and then to policy-performance loss. Identify exactly where concentrability enters.
     answer: >-
-      Split complete episodes and reserve perturbed-dynamics episodes for stress testing. Match controllers and horizons, map state-action coverage, evaluate one-step and rollout error, proper predictive scores, constraint violations, and closed-loop reward, and report factorization or feature costs. Define a conservative fallback controller activated by coverage, uncertainty, or constraint thresholds; test the trigger under misspecification and report every intervention rather than discarding failed runs.
+      The metric-entropy bound \(\log N_\infty(u,\mathcal F_R)\le C(R/u)^{2\alpha}\) controls uniform deviations over regularizer balls. The first regularized regression estimates \(T^\pi Q\) without allowing a rich RKHS to interpolate transition noise arbitrarily; the second controls the complexity of the approximate fixed point. Bellman smoothness \(J(T^\pi Q)\le L_R+\gamma L_PJ(Q)\) and realizability \(Q^\pi\in\mathcal F\) keep the comparison functions inside controlled balls. Balancing the two regularizers at order \(\{1/(nJ^2(Q^\pi))\}^{1/(1+\alpha)}\) yields a high-probability squared \(L^2(\nu)\) Bellman-residual rate \(n^{-1/(1+\alpha)}\). Approximate-policy-iteration error propagation then transports residuals measured under \(\nu\) to future distributions generated from the evaluation law. Concentrability enters exactly in this change of measure, through Radon-Nikodym norms of future state-action distributions relative to \(\nu\). It multiplies the accumulated evaluation error, while \(2\gamma/(1-\gamma)^2\) supplies horizon amplification. Infinite concentrability makes the final performance bound vacuous even if policy evaluation is accurate under \(\nu\).
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: >-
+      Design a safe model-based control study comparing a GPSSM, kernel EDMD, a random-feature transition model, and a linear baseline. Include trajectory splits, coverage, rollout calibration, spectral or Bellman diagnostics, computation, constraints, and fallback behavior.
+    answer: >-
+      Split complete episodes by collection period and reserve perturbed-dynamics episodes for stress testing. Record the behavior policy and map state-action support before training. Fit all methods on the same episodes and tune only on held-out trajectories. For the GPSSM, report ELBO, inducing count, posterior predictive scores, latent-state stability across seeds, one-step and rollout calibration. For kernel EDMD, report Gram conditioning, retained rank, generalized eigen-residuals, held-out temporal residuals, and invariant-subspace stability. For the random-feature and linear transition models, report feature count, approximation error, solve residual, and matched rollout metrics. If methods feed model-predictive control, use the same horizon, constraints, action optimizer, and compute budget. Report closed-loop reward, constraint violations, coverage of visited state-actions, uncertainty or residual triggers, and sensitivity to longer horizons and perturbed dynamics. Define a conservative fallback controller before testing, activate it on support, uncertainty, solver, or constraint alarms, and include every fallback event in the final results.

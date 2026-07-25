@@ -1,0 +1,141 @@
+chapter: ch-structured
+review_status: draft
+reviewer: null
+prepared_for:
+  author: Taha Bouhsine
+  website: https://www.tahabouhsine.com
+  affiliation: AzettaAI
+exercises:
+  - number: 1
+    kind: warm-up
+    status: draft
+    prompt: >-
+      For a finite common output set, prove directly that
+      \(K(x,x')_{y,y'}=k_J\{(x,y),(x',y')\}\) is operator-valued positive semidefinite. Explain
+      why this fact says nothing about the cost of decoding.
+    answer: >-
+      For arbitrary inputs \(x_i\) and coefficient vectors \(a_i\), the block quadratic form
+      equals
+      \[
+      \sum_{i,j,y,y'}a_{iy}a_{jy'}
+      \langle\Psi(x_i,y),\Psi(x_j,y')\rangle
+      =
+      \left\|\sum_{i,y}a_{iy}\Psi(x_i,y)\right\|_{\mathcal H}^{2}\geq0.
+      \]
+      Thus \(K\) is operator-valued positive semidefinite. The certificate concerns only Gram
+      geometry. Decoding requires maximizing over \(\mathcal Y(x)\), which can be exponential or
+      NP-hard unless feasibility and score factorization admit a suitable algorithm.
+  - number: 2
+    kind: computation
+    status: draft
+    prompt: >-
+      Enumerate all eight sequences in the worked binary-chain example. Compute the ordinary
+      score, Hamming-augmented score for truth \(010\), ordinary maximizer, augmented maximizer,
+      structured hinge, and decoded task loss.
+    answer: >-
+      In lexicographic order, ordinary and augmented scores are
+      \(000:(2.8,3.8)\), \(001:(1.8,3.8)\), \(010:(2.4,2.4)\),
+      \(011:(2.6,3.6)\), \(100:(1.6,3.6)\), \(101:(0.6,3.6)\),
+      \(110:(2.4,3.4)\), and \(111:(2.6,4.6)\). Ordinary decoding returns
+      \(000\), while loss-augmented decoding returns \(111\). The truth score is \(2.4\), so the
+      hinge is \(4.6-2.4=2.2\). The decoded task loss is
+      \(\Delta(010,000)=1\), below the hinge. `checks/ch-structured-ex1.py` performs the exhaustive
+      calculation.
+  - number: 3
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the structured representer theorem, including existence, uniqueness, and the
+      orthogonal-projection argument. State what changes if an output set is infinite.
+    answer: >-
+      With finite output sets, each hinge is a finite maximum of continuous affine functions.
+      The positive quadratic regularizer makes the objective coercive and strongly convex, giving
+      existence and uniqueness. Let \(\mathcal S\) span all training feature differences and
+      decompose \(w=w_\parallel+w_\perp\). Orthogonality makes every hinge unchanged after removing
+      \(w_\perp\), while the norm decreases strictly unless \(w_\perp=0\). Hence the minimizer lies
+      in \(\mathcal S\). For infinite outputs, use the closed span and require the supremum to be
+      proper and lower semicontinuous, with conditions ensuring existence. A finite coefficient
+      expansion need not follow unless finitely many constraints are active or another reduction
+      theorem applies.
+  - number: 4
+    kind: proof
+    status: draft
+    prompt: >-
+      Starting from the constrained margin program, eliminate the slacks and recover the
+      structured-hinge objective. Then derive a valid subgradient when the loss-augmented maximizer
+      is not unique.
+    answer: >-
+      For fixed \(w\), the smallest feasible slack is
+      \(\xi_i=\max_y[\Delta_i(y)-\langle w,\delta\Psi_i(y)\rangle]=H_i(w)\), because the truth
+      contributes zero. Substitution gives the structured-hinge objective. If \(A_i(w)\) is the
+      active maximizer set, the subdifferential is the convex hull of
+      \(-\delta\Psi_i(y)\) over \(y\in A_i(w)\). Thus any
+      \[
+      \lambda w-\frac1n\sum_i\sum_{y\in A_i(w)}
+      \theta_{iy}\delta\Psi_i(y),
+      \quad\theta_{iy}\geq0,\quad\sum_y\theta_{iy}=1,
+      \]
+      is a valid subgradient.
+  - number: 5
+    kind: computation
+    status: draft
+    prompt: >-
+      Suppose a restricted cutting-plane solution has slacks \((0.4,0.7)\), returned oracle
+      values \((0.45,0.72)\), certified additive oracle errors \((0.03,0.05)\), and \(n=2\). If the
+      algorithm stops at returned violation tolerance \(0.05\), give valid full-program slacks and
+      the resulting additive objective certificate.
+    answer: >-
+      The returned violations are \(0.05\) and \(0.02\), so stopping is allowed. The declared
+      tolerance and oracle errors bound the true violations by \(0.08\) and \(0.10\).
+      Therefore \((0.48,0.80)\) are valid full slacks. Their normalized objective increase is
+      \((0.08+0.10)/2=0.09\), giving objective at most \(P^\star+0.09\). The observed second
+      violation could sharpen the second increase to \(0.07\), but the stated proposition uses the
+      uniform declared stopping tolerance.
+  - number: 6
+    kind: synthesis
+    status: draft
+    prompt: >-
+      Compare joint-feature and operator-valued views of structured scores. Give the map between
+      them, one setting where each notation is preferable, and one assumption needed before an
+      infinite output space can be treated similarly.
+    answer: >-
+      Define \(\Phi(x)a=\sum_y a_y\Psi(x,y)\) and
+      \(K(x,x')=\Phi(x)^*\Phi(x')\); then its \(y,y'\) entry is the joint kernel. Conversely,
+      \(F=\sum_iK(\cdot,x_i)a_i\) corresponds to \(w=\sum_i\Phi(x_i)a_i\).
+      Joint features are preferable when a chain, tree, or matching factorization drives decoding.
+      Operator notation is preferable for output coupling and vector-valued representer results.
+      For infinite outputs one must specify an output Hilbert space and require bounded feature
+      operators; a formal uncountable score vector is not enough.
+  - number: 7
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove the Hamming-loss consistency proposition for an unconstrained product output space.
+      Then use the even-parity distribution in the failure witness to show exactly which step fails
+      under a global feasibility constraint.
+    answer: >-
+      Conditional Hamming risk is
+      \(\sum_t[1-p_t(a_t\mid x)]\). On a product space each coordinate is independently minimized
+      by a marginal mode, and a strictly proper surrogate recovers the needed marginal
+      distributions. In the parity witness every marginal mode is one because its probability is
+      \(0.6\), producing infeasible \(111\). The failed step is independent coordinate
+      minimization: the feasible set is not a Cartesian product. The three feasible nonzero
+      actions have risk \(1.4\), while \(000\) has risk \(1.8\).
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: >-
+      Design a cutting-plane experiment with approximate loss-augmented inference. Specify an
+      oracle diagnostic, an optimization certificate, a deployment-decoder sensitivity analysis,
+      and a condition under which you would refuse to claim that the exact structured hinge was
+      optimized.
+    answer: >-
+      Use small structures with exhaustive inference to measure additive augmented-score gaps
+      across optimization iterates. Record restricted-QP primal feasibility, duality gap, and
+      working-set objective. A full certificate exists only with a valid uniform oracle bound
+      \(\eta\), in which case stopping tolerance \(\varepsilon\) gives the chapter's
+      \(\varepsilon+\eta\) contract. At deployment, sweep beam width or relaxation tolerance and
+      report feasibility, exact score gaps where available, and held-out task risk. Compare the
+      training oracle with the deployed decoder. Refuse the exact-hinge claim if beam search merely
+      fails to find a violation without a gap certificate, candidate sets lack a recall guarantee,
+      or training and deployment use different feasible sets.

@@ -2,17 +2,27 @@
 id: ch-testing
 slug: kernel-hypothesis-testing
 title: Kernel Hypothesis Testing
-part: VIII · Kernels and Distributions
-order: 30
+part: VII · Distributions as Objects
+order: 42
 tier: practitioner
 prerequisites:
   - kernel-mean-embeddings
 objectives:
-  - Explain the central definitions and claims in Kernel Hypothesis Testing.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Separate the biased MMD V-statistic from the unbiased U-statistic and
+    explain why only the latter can be negative.
+  - >-
+    Derive why degeneracy produces a chi-square-mixture null law while fixed
+    alternatives are asymptotically normal.
+  - >-
+    Construct an exact permutation test from exchangeability and compute its
+    finite-sample p-value resolution.
+  - >-
+    Choose bandwidths or learned kernels for power without contaminating the
+    final test.
+  - >-
+    Match quadratic, block, linear-time, or streaming estimators to compute and
+    dependence constraints.
 review_status: draft
 reviewers:
   technical: null
@@ -42,11 +52,11 @@ bibliography:
 ---
 # Kernel Hypothesis Testing
 
-<p class="lead">A clinical trial does not end with the remark that the treatment arm looked different; it ends with a decision, reject or retain, together with a guarantee on how often that decision is wrong when there is no real effect. A test is not a number: it is a decision procedure with controlled errors. The MMD of [[ch:kernel-mean-embeddings|the previous chapter]] supplies the number, a statistic that is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\); but a finite sample makes it positive even when \(P = Q\), and the sketch of a two-sample test given there left the real machinery unbuilt. This chapter builds it. We separate the biased V-statistic from the unbiased U-statistic, explain precisely why the null law degenerates into a chi-square mixture while the alternative is asymptotically normal, and calibrate an exact level-\(\alpha\) test by permutation. Power, the probability of catching a real difference, is then a quantity we can optimize: a signal-to-noise ratio governs it, the median heuristic guesses it and can fail badly, and learned kernels, linear-time estimators, and aggregated tests are the modern answers. The same machinery then tests independence through HSIC and, via the [[ch:kernel-stein-discrepancy|kernel Stein discrepancy]], goodness-of-fit against a fixed model.</p>
+<p class="lead">A clinical trial does not end with the remark that the treatment arm looked different; it ends with a decision, reject or retain, together with a guarantee on how often that decision is wrong when there is no real effect. A test is not a number: it is a decision procedure with controlled errors. The MMD of [[ch:kernel-mean-embeddings|the previous chapter]] supplies the number, a population discrepancy that is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\); but a finite sample makes its estimate fluctuate away from zero even when \(P = Q\), and the sketch of a two-sample test given there left the real machinery unbuilt. This chapter builds it. We separate the biased V-statistic from the unbiased U-statistic, explain precisely why the null law degenerates into a chi-square mixture while the alternative is asymptotically normal, and calibrate an exact level-\(\alpha\) test by permutation. Power, the probability of catching a real difference, is then a quantity we can optimize: a signal-to-noise ratio governs it, the median heuristic guesses it and can fail badly, and learned kernels, linear-time estimators, and aggregated tests are the modern answers. The same machinery then tests independence through HSIC and, via the [[ch:kernel-stein-discrepancy|kernel Stein discrepancy]], goodness-of-fit against a fixed model.</p>
 
 ## From a discrepancy to a decision {#from-discrepancy-to-decision}
 
-We are given samples \(x_1,\dots,x_n \sim P\) and \(y_1,\dots,y_m \sim Q\) and must decide between the null hypothesis \(H_0: P = Q\) and the alternative \(H_1: P \neq Q\). The MMD supplies a statistic that is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\), and positive otherwise, but a positive estimate is not yet a verdict. A finite sample produces a positive \(\widehat{\mathrm{MMD}}^2\) even when \(P = Q\), simply from sampling noise. The whole problem is to decide when the observed value is too large to be noise. The kernel two-sample test that solves it was introduced by Gretton et al. (2006); we build out its testing theory here.
+We are given samples \(x_1,\dots,x_n \sim P\) and \(y_1,\dots,y_m \sim Q\) and must decide between the null hypothesis \(H_0: P = Q\) and the alternative \(H_1: P \neq Q\). The population MMD is zero exactly when a characteristic kernel cannot tell \(P\) from \(Q\), and positive otherwise, but a nonzero estimate is not yet a verdict. A finite sample makes \(\widehat{\mathrm{MMD}}^2\) fluctuate when \(P = Q\): the biased V-statistic stays nonnegative, while the unbiased U-statistic may land on either side of zero. The whole problem is to decide when the observed value is too large to be noise. The kernel two-sample test that solves it was introduced by Gretton et al. (2006); we build out its testing theory here.
 
 A test is a rule that outputs reject or retain. It can be wrong in two ways, and the asymmetry between them is the foundation of the theory.
 
@@ -193,6 +203,10 @@ An alternative to permutation is to bootstrap the chi-square mixture directly, e
 
 ## Test power and the objective for kernel choice {#test-power}
 
+Power depends jointly on sample size and kernel geometry. In the stylized Gaussian-shift calculation below, bandwidths that are too small fragment the signal and bandwidths that are too large wash it out; additional samples increase power but cannot make a badly mismatched bandwidth efficient. The surface holds the nominal level at \(0.05\) and visualizes the alternative, not the null calibration procedure.
+
+<figure class="viz" data-figure="kernel-test-power-surface" data-alt="A heat map of test power over sample size and kernel bandwidth has a high-power ridge at intermediate bandwidth and rising power with sample size."><figcaption>Kernel choice is part of the testing objective. Power grows with sample size along every useful bandwidth, but the strongest gain lies on an intermediate ridge; the contour lines mark 50, 80, and 95 percent power at nominal level \(0.05\).</figcaption></figure>
+
 With the level pinned by permutation, the remaining freedom is the kernel, and it is decisive. Two characteristic kernels both give valid tests, yet one may reject at \(n = 50\) where the other needs \(n = 5000\). To choose well we need to know what power depends on. Combining the two regimes of the null and alternative laws yields a clean asymptotic answer.
 
 ::::: {.proposition #prop-30-4}
@@ -281,6 +295,10 @@ with parameters \(\omega = (w, a, \varepsilon)\). The factor \(q\) and the floor
 The parameters \(\omega\) are trained on a split to maximize the same power proxy \(\hat J(\omega)\), and the other split runs the permutation test with the fitted kernel, so validity is preserved exactly as in the data-splitting algorithm. The deep-kernel test of Liu et al. (2020) substantially outstrips fixed and single-bandwidth kernels on structured data, precisely because \(\phi_w\) can place the kernel's sensitivity where \(P\) and \(Q\) actually diverge. A complementary route keeps the kernel fixed but replaces the full quadratic statistic by the witness evaluated at a few optimized locations: the analytic mean-embedding and smooth-characteristic-function tests (Chwialkowski et al., 2015) and the interpretable features of Jitkrittum et al. (2016) select test locations to maximize power, yielding tests that run in linear time and, as a bonus, report the concrete points in input space where the distributions differ most.
 
 ## Linear-time versus quadratic-time estimators {#linear-time}
+
+Computational order and estimator quality are separate axes. The following scaling plate holds the underlying discrepancy fixed and compares idealized kernel-evaluation work with variance laws for the quadratic, block, and linear-time estimators. Constants are shown deliberately: an \(O(n)\) method can be faster while paying a visibly larger variance constant.
+
+<figure class="viz" data-figure="mmd-estimator-runtime-variance" data-alt="Two log-log panels compare relative work and variance for quadratic, block, and linear-time MMD estimators as sample size grows."><figcaption>Subquadratic MMD estimators exchange pairwise averaging for computational reach. Block and linear-time estimates reduce work, but their variance constants are larger; the appropriate estimator is determined by the runtime budget and the precision required for calibration and power.</figcaption></figure>
 
 The U-statistic sums over all \(O(n^2)\) pairs, and each of the \(B\) permutations repeats that cost, so the quadratic test scales poorly. When data are abundant but the budget is fixed, it is better to spend it on more data through a cheaper estimator. The *linear-time* MMD pairs the samples and averages the core over consecutive, non-overlapping pairs,
 
@@ -383,11 +401,11 @@ A kernel two-sample test is the MMD plus a decision rule with guarantees. The un
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Kernel Hypothesis Testing**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Kernel Hypothesis Testing**, validity comes from the calibration scheme, not from a large MMD value. Verify exchangeability before permuting rows; clustered, temporal, or spatial data need transformations that preserve their null dependence. Freeze preprocessing and kernel selection before the final test, or use a method whose theorem explicitly accounts for selection. Report the effect estimate, attainable p-value resolution, permutation count, randomization correction, and power against a scientifically meaningful alternative. Repeated deployment monitoring also needs an anytime-valid or predeclared-horizon design; repeatedly applying a level-\(\alpha\) batch test is not a level-\(\alpha\) monitor.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Kernel Hypothesis Testing; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@gretton2006], [@gretton2012], [@serfling1980].
+Gretton et al. [@gretton2006; @gretton2012] develop the two-sample statistic, its degenerate null law, and practical calibration; Serfling [@serfling1980] supplies the U-statistic theory underneath it. For a new application, write down the null invariance first, then choose the statistic and kernel, and only then choose a calibration that respects the sampling design. That order prevents the most common failure in kernel testing: optimizing a sensitive statistic while quietly invalidating the decision rule.
 
 ## Exercises {#exercises}
 

@@ -4,6 +4,7 @@ title: "Introduction: Learning by Comparison"
 status: author-mapped-pending-independent-verification
 private_source_sha256: null
 references:
+  - bach2024learning
   - cover1965
   - scholkopf2002
   - shawe2004
@@ -68,6 +69,19 @@ sections:
         manuscript_locator: ch00.md#the-solve
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: five-debts
+    title: The five debts of a learned predictor
+    contribution: newly-synthesized-extension
+    sources:
+      - bach2024learning
+    locators:
+      - source: bach2024learning
+        manuscript_locator: ch00.md#five-debts
+        source_locator: Chapters 2, 4, and 7
+        status: author-checked-against-open-access-edition
     verified_by: null
     verified_on: null
     permission: citation-only

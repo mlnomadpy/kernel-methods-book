@@ -19,7 +19,9 @@ pairwise distance, recomputed every 20 steps).  The default step is
 All maths is in JAX (float64); the only randomness is the one-time init draw,
 made deterministic here with ``S.rng(0)``.  We run the deterministic flow to a
 converged state where both modes are populated, then plot the target density,
-the converged particle histogram / rug, and the KSD^2 decay.
+the converged particle histogram / rug, and the KSD^2 decay.  The entire
+20,000-step flow is one nested ``lax.scan``/``fori_loop`` program, avoiding the
+two host synchronizations that the former Python loop incurred per block.
 """
 from __future__ import annotations
 
@@ -43,6 +45,7 @@ XR = (-6.8, 5.2)             # widget's plot range
 NB = 44                      # widget's histogram bins
 N_STEPS = 20000              # run to the converged (balanced) state
 MEDIAN_EVERY = 20            # widget recomputes h every 20 steps
+N_BLOCKS = N_STEPS // MEDIAN_EVERY
 
 
 def dens(v):
@@ -108,6 +111,25 @@ def ksd2(x, h):
     return jnp.maximum(0.0, jnp.sum(u) / (N * N))
 
 
+@jax.jit
+def run_flow_compiled(x0):
+    """Execute all bandwidth-refresh blocks in one compiled dispatch."""
+    h0 = median_h(x0)
+    k0 = ksd2(x0, h0)
+
+    def block(x, _):
+        h = median_h(x)
+        x = svgd_block(x, h)
+        return x, (h, ksd2(x, h))
+
+    x, (bandwidths, discrepancies) = jax.lax.scan(
+        block, x0, xs=None, length=N_BLOCKS
+    )
+    return x, bandwidths[-1], jnp.concatenate(
+        [k0[None], discrepancies], axis=0
+    )
+
+
 def run_flow():
     """Deterministic SVGD flow from the clump at x=-5 to a converged state.
 
@@ -116,14 +138,29 @@ def run_flow():
     recorded at every block boundary to trace its decay.
     """
     g = S.rng(0)
-    x = jnp.asarray(-5.0 + 0.3 * g.standard_normal(N))   # one-time init draw
-    h = median_h(x)                                      # updateH() at init
-    hist_k = [(0, float(ksd2(x, h)))]
-    for blk in range(N_STEPS // MEDIAN_EVERY):
-        h = median_h(x)                                  # refresh every 20 steps
-        x = svgd_block(x, h)
-        hist_k.append(((blk + 1) * MEDIAN_EVERY, float(ksd2(x, h))))
-    return np.asarray(x), float(h), np.asarray(hist_k)
+    x0 = jnp.asarray(-5.0 + 0.3 * g.standard_normal(N))  # one-time init draw
+    x, h, discrepancies = run_flow_compiled(x0)
+    x, h, discrepancies = (
+        np.asarray(x), float(h), np.asarray(discrepancies)
+    )
+    steps = np.arange(N_BLOCKS + 1, dtype=np.float64) * MEDIAN_EVERY
+    hist_k = np.column_stack([steps, discrepancies])
+
+    if not (np.isfinite(x).all() and np.isfinite(h)
+            and np.isfinite(hist_k).all()):
+        raise FloatingPointError("SVGD flow contains NaN or infinity")
+    if h < 1e-4:
+        raise AssertionError(f"median bandwidth floor violated: h={h:.3e}")
+    if np.max(np.abs(x)) >= 12.0:
+        raise AssertionError("SVGD particles reached the safety clip boundary")
+    if not (np.any(x < 0.0) and np.any(x >= 0.0)):
+        raise AssertionError("converged SVGD particles failed to populate both modes")
+    if hist_k[-1, 1] >= min(1e-3, 1e-4 * hist_k[0, 1]):
+        raise AssertionError(
+            "SVGD discrepancy did not converge sufficiently: "
+            f"{hist_k[0, 1]:.3e} -> {hist_k[-1, 1]:.3e}"
+        )
+    return x, h, hist_k
 
 
 def main() -> str:

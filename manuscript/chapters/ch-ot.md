@@ -2,17 +2,27 @@
 id: ch-ot
 slug: optimal-transport-and-kernels
 title: Optimal Transport and Kernels
-part: VIII · Kernels and Distributions
-order: 31
+part: VII · Distributions as Objects
+order: 43
 tier: advanced
 prerequisites:
   - kernel-hypothesis-testing
 objectives:
-  - Explain the central definitions and claims in Optimal Transport and Kernels.
-  - Apply the chapter's principal methods and interpret their outputs.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Formulate Monge and Kantorovich transport and explain why couplings repair
+    mass splitting.
+  - >-
+    Derive weak duality and read \(W_1\) as an integral probability metric over
+    1-Lipschitz functions.
+  - >-
+    Compute one-dimensional Wasserstein distances by sorting and contrast them
+    with kernel discrepancies.
+  - >-
+    Implement Sinkhorn scaling with an explicit marginal-residual stopping rule
+    and diagnose small-\(\varepsilon\) instability.
+  - >-
+    Choose among MMD, optimal transport, and Sinkhorn divergence by balancing
+    geometry, sample complexity, and computation.
 review_status: draft
 reviewers:
   technical: null
@@ -76,7 +86,7 @@ $$\mathrm{OT}_c(P,Q)=\min_{\pi\in\Pi(P,Q)}\ \int_{\mathcal X\times\mathcal X}c(x
 When \(c(x,y)=\|x-y\|^p\) for \(p\ge 1\), the \(p\)-Wasserstein distance is \(W_p(P,Q)=\mathrm{OT}_c(P,Q)^{1/p}\).
 :::::
 
-Two features make this the right relaxation. First, the feasible set is never empty: the product coupling \(\pi=P\otimes Q\), which ships independently of the source, always has the correct marginals, so \(\Pi(P,Q)\) always contains at least one plan. Second, the objective is *linear* in \(\pi\) and the constraints are linear equalities, so this is a linear program (an infinite-dimensional one in general, a finite one for discrete measures). The minimum is attained because \(\Pi(P,Q)\) is convex and weakly compact and the cost is lower semicontinuous (Villani 2009). The product coupling is almost never optimal, but its existence is what rescues the problem Monge left ill-posed. Where Monge sought a single-valued map, Kantorovich allows a grain at \(x\) to be dispersed across many destinations, and it is a theorem, not an assumption, that under mild conditions the optimum concentrates back onto a map anyway.
+Two features make this the right relaxation. First, the feasible set is never empty: the product coupling \(\pi=P\otimes Q\), which ships independently of the source, always has the correct marginals, so \(\Pi(P,Q)\) always contains at least one plan. Second, the objective is *linear* in \(\pi\) and the constraints are linear equalities, so this is a linear program (an infinite-dimensional one in general, a finite one for discrete measures). When \(\mathcal X\) is Polish and \(P,Q\) are Borel probability measures, \(\Pi(P,Q)\) is tight and weakly closed, hence weakly compact; a nonnegative lower-semicontinuous cost then makes \(\pi\mapsto\int c\,d\pi\) weakly lower semicontinuous, so the infimum is attained whenever it is finite [@villani2009, Theorem 4.1]. The product coupling is almost never optimal, but its existence is what rescues the problem Monge left ill-posed. Concentration of the optimum onto a map needs additional assumptions, such as absolute continuity of the source and a strictly convex displacement cost; it is not a consequence of the relaxation alone.
 
 ## Kantorovich duality and the IPM connection {#duality}
 
@@ -85,28 +95,33 @@ Every linear program has a dual, and the dual of optimal transport is what conne
 ::::: {.theorem #thm-31-2}
 [Theorem (Kantorovich duality)]{.box-title}
 
-For lower semicontinuous cost \(c\ge 0\),
+Let \(\mathcal X\) and \(\mathcal Y\) be Polish spaces, let \(P\in\mathcal P(\mathcal X)\) and \(Q\in\mathcal P(\mathcal Y)\), and let \(c:\mathcal X\times\mathcal Y\to[0,\infty]\) be lower semicontinuous. Assume that at least one \(\pi_0\in\Pi(P,Q)\) has \(\int c\,d\pi_0\lt\infty\). Then
 
 $$\mathrm{OT}_c(P,Q)=\sup_{(f,g)\in\Phi_c}\ \Bigl(\mathbb E_{X\sim P}[f(X)]+\mathbb E_{Y\sim Q}[g(Y)]\Bigr),$$
 
-where the supremum is over the potentials
+where the supremum is over measurable integrable potentials
 
-$$\Phi_c=\bigl\{(f,g):\ f(x)+g(y)\le c(x,y)\ \text{for all }x,y\bigr\}.$$
+$$\Phi_c=\bigl\{(f,g)\in L^1(P)\times L^1(Q):\ f(x)+g(y)\le c(x,y)\ \text{for all }(x,y)\bigr\}.$$
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
-**Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
+The primal infimum is attained. The displayed dual value is a supremum: existence of an integrable maximizing pair requires additional hypotheses and is not asserted here.
+
+**Source locator.** Villani [@villani2009, Theorem 5.10(i)] proves this lower-semicontinuous-cost form, including equality of the primal and dual values.
 :::::
 
 The story behind the dual is a shipping company. You own the sand and the holes; a contractor offers to run the whole move for you, charging \(f(x)\) to load a unit at \(x\) and \(g(y)\) to unload it at \(y\). To keep your business the contractor's prices must never exceed the cost of doing it yourself, \(f(x)+g(y)\le c(x,y)\); subject to that, the contractor maximizes revenue \(\mathbb E_P[f]+\mathbb E_Q[g]\). Duality says the best honest price the contractor can charge equals the least cost you could achieve on your own. The easy half of the equality, weak duality, is a one-line calculation that also fixes the direction of the inequality.
 
 :::: {.proof}
-[Proof (weak duality, \(\sup\le\min\))]{.box-title}
+[Proof skeleton, with weak duality proved locally]{.box-title}
 
 Take any coupling \(\pi\in\Pi(P,Q)\) and any feasible pair \((f,g)\in\Phi_c\). Because \(\pi\) has marginals \(P\) and \(Q\), the potentials integrate against \(\pi\) as against their own marginals,
 
 $$\mathbb E_{P}[f]+\mathbb E_{Q}[g]=\int\bigl(f(x)+g(y)\bigr)\,d\pi(x,y)\le\int c(x,y)\,d\pi(x,y),$$
 
-the inequality being the pointwise constraint \(f(x)+g(y)\le c(x,y)\) integrated against the nonnegative \(\pi\). The left side does not depend on \(\pi\) and the right side does not depend on \((f,g)\), so taking the supremum over \((f,g)\) and the infimum over \(\pi\) keeps the inequality: \(\sup_{\Phi_c}(\mathbb E_P[f]+\mathbb E_Q[g])\le\min_{\Pi(P,Q)}\int c\,d\pi\). That the two are in fact equal, strong duality, holds for lower semicontinuous \(c\) and is proved by a Hahn-Banach or minimax argument (Villani 2009). [\(\square\)]{.qed}
+the inequality being the pointwise constraint \(f(x)+g(y)\le c(x,y)\) integrated against the nonnegative \(\pi\). The left side does not depend on \(\pi\) and the right side does not depend on \((f,g)\), so taking the supremum over \((f,g)\) and the infimum over \(\pi\) proves weak duality:
+
+$$\sup_{\Phi_c}\bigl(\mathbb E_P[f]+\mathbb E_Q[g]\bigr)\le\inf_{\Pi(P,Q)}\int c\,d\pi.$$
+
+The reverse inequality is the genuinely functional-analytic step. Villani's proof [@villani2009, Theorem 5.10(i)] first establishes duality for bounded continuous costs, where separation of the convex marginal constraints gives potentials with no gap. A nonnegative lower-semicontinuous \(c\) is then approximated from below by bounded continuous costs. Tightness of the couplings, lower semicontinuity of the integral, and monotone convergence pass the bounded-cost equality to \(c\); the assumed finite-cost coupling prevents an indeterminate infinite value. These steps yield the missing reverse inequality and therefore strong duality. The one-line calculation above proves only weak duality; the cited approximation-and-separation argument is what upgrades it to equality. [\(\square\)]{.qed}
 ::::
 
 ### Kantorovich-Rubinstein: \(W_1\) as an IPM over 1-Lipschitz functions {#kantorovich-rubinstein}
@@ -116,14 +131,15 @@ When the cost is a metric, \(c(x,y)=\|x-y\|\), the dual collapses onto a single 
 :::: {.theorem #thm-31-3}
 [Theorem (Kantorovich-Rubinstein)]{.box-title}
 
-For the cost \(c(x,y)=\|x-y\|\),
+Let \((\mathcal X,d)\) be a Polish metric space and let \(P,Q\in\mathcal P_1(\mathcal X)\), meaning that both measures have finite first moment. For the cost \(c(x,y)=d(x,y)\),
 
 $$W_1(P,Q)=\sup_{\mathrm{Lip}(f)\le 1}\ \Bigl(\mathbb E_{X\sim P}[f(X)]-\mathbb E_{Y\sim Q}[f(Y)]\Bigr),$$
 
-the supremum running over all 1-Lipschitz functions, \(|f(x)-f(y)|\le\|x-y\|\).
+the supremum running over all 1-Lipschitz functions, \(|f(x)-f(y)|\le d(x,y)\).
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
-**Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
+An additive constant may be fixed by requiring \(f(x_0)=0\) at one base point. The first-moment assumption then makes every such normalized potential integrable.
+
+**Source locator.** This is the metric-cost specialization of Kantorovich duality in Villani [@villani2009, Particular Case 5.4 and Theorem 5.10].
 ::::
 
 The key step is that restricting the dual to the diagonal \(g=-f\) loses nothing and turns the joint constraint into a Lipschitz condition. With \(g=-f\), feasibility \(f(x)+g(y)\le c(x,y)\) reads \(f(x)-f(y)\le\|x-y\|\) for all \(x,y\), which said in both directions is exactly \(\mathrm{Lip}(f)\le 1\). Conversely a 1-Lipschitz \(f\) is its own optimal partner, \(f^c=-f\), so no generality is lost (Villani 2009). The dual objective becomes \(\mathbb E_P[f]-\mathbb E_Q[f]\), and we have landed precisely on the integral probability metric of the last chapter, now with a different courtroom of witnesses.
@@ -173,17 +189,17 @@ ground cost \(c(x,y)=|x-y|\) for \(W_1\) and \(|x-y|^2\) for \(W_2\).
 
 ## Sample complexity: the price of geometry {#sample-complexity}
 
-Geometry-awareness is not free. The cleanest way to see the cost is to ask how fast each distance, estimated from \(n\) samples, converges to its population value, and the answer separates the two IPMs sharply. The MMD is estimated by plugging empirical measures into its closed form; because the estimator is essentially an average of bounded kernel evaluations, its error concentrates at the parametric rate
+Geometry-awareness is not free. The cleanest way to see the cost is to ask how fast each distance, estimated from \(n\) samples, converges to its population value, and the answer separates the two IPMs sharply. For a bounded kernel, the MMD is estimated by plugging empirical measures into its closed form; because the estimator is essentially an average of bounded kernel evaluations, its error concentrates at the parametric rate
 
 $$\bigl|\widehat{\mathrm{MMD}}-\mathrm{MMD}\bigr|=O_P\!\bigl(n^{-1/2}\bigr),$$
 
 with constants that do not grow with the dimension \(d\) (Gretton, Borgwardt, Rasch, Schölkopf, and Smola 2012; Sriperumbudur, Fukumizu, Gretton, Schölkopf, and Lanckriet 2012). The mean embedding lives in a fixed Hilbert space whose ball is small, so empirical fluctuations of the sup over that ball are dimension-free.
 
-The empirical Wasserstein distance behaves very differently. For \(P\) with enough moments on \(\mathbb R^d\),
+The empirical Wasserstein distance behaves very differently. A representative nonasymptotic statement is the following: if \(P\) is supported in a bounded subset of \(\mathbb R^d\), then
 
-$$\mathbb E\,W_1(\hat P_n,P)\ \asymp\ \begin{cases}n^{-1/2}, & d=1,\\ n^{-1/2}\log n, & d=2,\\ n^{-1/d}, & d\ge 3,\end{cases}$$
+$$\mathbb E\,W_1(\hat P_n,P)\ \le C(P,d)\begin{cases}n^{-1/2}, & d=1,\\ n^{-1/2}\log(1+n), & d=2,\\ n^{-1/d}, & d\ge 3.\end{cases}$$
 
-the sharp rates of Fournier and Guillin (2015), foreshadowed by Dudley (1969). In high dimension \(n^{-1/d}\) is punishing: to halve the error in \(d=10\) one needs roughly \(2^{10}\) times as many samples. The mechanism is exactly the IPM contrast of the previous section. The 1-Lipschitz class is vast, with metric entropy growing like \(\varepsilon^{-d}\), so the supremum over it picks up empirical noise that the small RKHS ball never sees. What buys geometric fidelity, a rich enough class of witnesses to feel every direction of the ground space, is precisely what makes the empirical estimate noisy in high dimension.
+This is the \(p=1\) specialization of the moment-dependent upper bounds of Fournier and Guillin [@fournier2015, Theorem 1]; for unbounded \(P\), an additional tail term appears and its decay is controlled by the available moment \(q\gt1\). Matching lower bounds require a nondegenerate \(d\)-dimensional distribution, so the display is not an \(\asymp\) claim for every \(P\): a distribution on a curve inside \(\mathbb R^{100}\) need not pay the ambient \(n^{-1/100}\) rate. In genuinely high intrinsic dimension the \(n^{-1/d}\) term is punishing: to halve the error in \(d=10\) one needs roughly \(2^{10}\) times as many samples. The mechanism is exactly the IPM contrast of the previous section. The 1-Lipschitz class is vast, with metric entropy growing like \(\delta^{-d}\), so the supremum over it picks up empirical noise that the small RKHS ball never sees. What buys geometric fidelity, a rich enough class of witnesses to feel every direction of the ground space, is precisely what makes the empirical estimate noisy.
 
 This is the honest tension of the chapter. Transport respects the geometry of the data and produces meaningful comparisons and gradients even between distributions with disjoint supports, where a localized-kernel MMD has already saturated; but its sample complexity degrades exponentially in the dimension, while the MMD's does not. Neither distance dominates. The entropic regularization we turn to next was introduced for speed, but it also softens this statistical curse, and its debiased form will let us slide continuously between the two regimes.
 
@@ -200,7 +216,7 @@ $$\mathrm{OT}_\varepsilon(a,b)=\min_{\pi\in U(a,b)}\ \langle C,\pi\rangle+\varep
 
 Here \(\mathrm{KL}(\pi\,\|\,ab^\top)=\sum_{i,j}\pi_{ij}\log(\pi_{ij}/a_ib_j)\), with the usual zero-mass convention. This reference-measure convention makes the regularized cost nonnegative and is the convention used by the Sinkhorn divergence below.
 
-The entropy term is strictly convex, so the minimizer is unique; as \(\varepsilon\to 0\) it recovers the linear program, and as \(\varepsilon\to\infty\) it pulls \(\pi\) toward the independent coupling \(ab^\top\).
+If \(a_i,b_j\gt0\) on their retained supports and every \(C_{ij}\) is finite, the KL term is strictly convex on \(U(a,b)\), so the minimizer is unique. In this finite-dimensional setting, compactness of \(U(a,b)\) gives \(\mathrm{OT}_\varepsilon(a,b)\to\mathrm{OT}_0(a,b)\) as \(\varepsilon\downarrow0\), while \(\pi_\varepsilon\to ab^\top\) as \(\varepsilon\to\infty\). These limits concern the optimizer and objective at fixed discrete supports; taking the number of samples to infinity at the same time is a separate statistical limit.
 ::::
 
 ### The scaling form of the solution {#sinkhorn-derivation}
@@ -210,13 +226,12 @@ The entropy penalty forces a specific shape onto the solution: the optimal plan 
 :::: {.proposition #prop-31-5}
 [Proposition (Sinkhorn scaling form)]{.box-title}
 
-The solution of the entropic problem has the form \(\pi^\star=\operatorname{diag}(u)\,K\,\operatorname{diag}(v)\) with the Gibbs kernel \(K=e^{-C/\varepsilon}\) (entrywise) and positive vectors \(u\in\mathbb R^n_{+},v\in\mathbb R^m_{+}\) determined by the marginal fixed point
+Assume \(a_i,b_j\gt0\) and \(C_{ij}\lt\infty\) for all retained indices. The solution of the entropic problem has the form \(\pi^\star=\operatorname{diag}(u)\,K\,\operatorname{diag}(v)\) with the Gibbs kernel \(K=e^{-C/\varepsilon}\) (entrywise) and positive vectors \(u\in\mathbb R^n_{+},v\in\mathbb R^m_{+}\) determined by the marginal fixed point
 
 $$u=a\oslash(Kv),\qquad v=b\oslash(K^\top u),$$
 
 where \(\oslash\) is entrywise division. Such \(u,v\) exist and are unique up to a scalar (Sinkhorn and Knopp 1967).
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
 **Proof status.** Proved immediately below.
 ::::
 
@@ -251,6 +266,8 @@ The fixed-point equations *are* the algorithm: hold \(v\) and set \(u=a\oslash(K
 
 <figcaption>The heatmap is the entropic plan \(\pi=\operatorname{diag}(u)\,K\,\operatorname{diag}(v)\) under the algorithm exactly as stated, one full update \(u\leftarrow a\oslash(Kv)\), \(v\leftarrow b\oslash(K^\top u)\) per tick, transporting a two-bump source \(a\) (bars, left) to a wide bump \(b\) (bars, bottom) on \(28\) grid points with cost \(C_{ij}=(x_i-y_j)^2\). The readout is the exact row-marginal violation \(\|\pi\mathbf 1-a\|_1\), which falls monotonically until it crosses the stopping threshold \(10^{-6}\) and the iteration halts with the converged cost \(\langle C,\pi\rangle\); the dark ticks on the left bars are the current row sums \(\pi\mathbf 1\) closing onto \(a\). Lower \(\varepsilon\) and the plan sharpens toward the monotone optimal map while the iteration count multiplies; raise it and the plan blurs toward the independent coupling \(ab^\top\).</figcaption>
 </figure>
+
+The teaching question in the plate is not merely whether the residual falls. It is what the regularizer buys: increasing \(\varepsilon\) makes the Gibbs matrix easier to scale but spreads each shipment, while decreasing it recovers sharper geometry at the price of slower convergence and eventual underflow in the direct exponential representation. Production solvers therefore use log-domain updates when \(C/\varepsilon\) is large and report both row and column residuals.
 
 :::::: {.example #example-31-2}
 [Example (Sinkhorn iterations on a tiny cost matrix)]{.box-title}
@@ -288,22 +305,27 @@ The Sinkhorn divergence is the debiased entropic cost
 $$S_\varepsilon(a,b)=\mathrm{OT}_\varepsilon(a,b)-\tfrac12\,\mathrm{OT}_\varepsilon(a,a)-\tfrac12\,\mathrm{OT}_\varepsilon(b,b).$$
 ::::
 
-The two correction terms exactly cancel the self-cost, so \(S_\varepsilon(a,a)=0\), and Feydy, Séjourné, Vialard, Amari, Trouvé, and Peyré (2019) prove that for suitable costs \(S_\varepsilon\) is nonnegative, convex in each argument, and metrizes the convergence of measures. What makes the object central to this book is what it does at its two extremes.
+The two correction terms exactly cancel the self-cost, so \(S_\varepsilon(a,a)=0\). This algebra alone does not prove that \(S_\varepsilon(a,b)\ge0\) for \(a\ne b\). On a compact metric space, Feydy et al. [@feydy2019sinkhorn, Theorem 1] obtain positivity, definiteness, separate convexity and metrization of weak convergence when the Gibbs kernel \(e^{-c/\varepsilon}\) is positive universal. Without those cost-and-kernel hypotheses, the debiased expression remains well defined but those divergence properties must not be assumed. What makes the object central to this book is what it does at its two extremes.
 
 :::: {.theorem #thm-31-7}
 [Theorem (interpolation between OT and MMD, Feydy et al. 2019)]{.box-title}
 
-As the regularization vanishes and diverges, the Sinkhorn divergence recovers the two distances of this chapter:
+Let \(a,b\) be probability vectors on finite supports, let \(C\) be a finite symmetric cost matrix with zero diagonal, and assume \(C\) is conditionally negative definite, so \(-C\) is positive semidefinite on zero-sum vectors. Then
 
 $$S_\varepsilon(a,b)\ \xrightarrow{\ \varepsilon\to 0\ }\ \mathrm{OT}_0(a,b)\quad(\text{unregularized transport}),\qquad S_\varepsilon(a,b)\ \xrightarrow{\ \varepsilon\to\infty\ }\ \tfrac12\,\|a-b\|_{-C}^2,$$
 
-where \(\|a-b\|_{-C}^2=2\sum_{i,j}a_ib_jC_{ij}-\sum_{i,j}a_ia_jC_{ij}-\sum_{i,j}b_ib_jC_{ij}\) is the squared MMD with kernel \(k=-C\), an energy distance when \(C\) is a distance matrix.
+where \(\|a-b\|_{-C}^2=2\sum_{i,j}a_ib_jC_{ij}-\sum_{i,j}a_ia_jC_{ij}-\sum_{i,j}b_ib_jC_{ij}\). Conditional negative definiteness makes this nonnegative and identifies it with a squared MMD after centering the kernel \(-C\); it is an energy distance for negative-type distances.
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
-**Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
+**Scope and source locator.** The statement is the finite-support specialization of the endpoint identity in Feydy et al. [@feydy2019sinkhorn, Equation (4)]. For general measures, the small-\(\varepsilon\) limit additionally needs tightness and integrability of the cost, while the large-\(\varepsilon\) identification needs the corresponding negative-type energy to be finite.
 ::::
 
 So the single dial \(\varepsilon\) slides from pure optimal transport, geometry-driven and dimension-cursed, at \(\varepsilon\to 0\), to a kernel MMD, dimension-free and geometry-blind, at \(\varepsilon\to\infty\), with a debiased compromise for every value in between. On the pair from the worked example above the two endpoints are numbers we already have: at \(\varepsilon\to 0\) the divergence tends to \(W_1=1.0\), and at \(\varepsilon\to\infty\) it tends to \(\tfrac12\) of the energy distance \(0.6667\), namely \(0.3333\). Computing \(S_\varepsilon\) is three Sinkhorn runs and a combination.
+
+### Fixed regularization is not a free statistical lunch {#sinkhorn-statistics}
+
+For each fixed \(\varepsilon\gt0\), entropic smoothing restricts and smooths the dual potentials. Under compact support and a sufficiently smooth bounded ground cost, this yields empirical errors of order \(n^{-1/2}\), unlike unregularized transport in high dimension. The constant is not uniform as \(\varepsilon\downarrow0\): it worsens with the dimension and with inverse powers, and in some bounds exponential functions, of \(1/\varepsilon\). Thus the phrase “Sinkhorn has the MMD rate” means fixed regularization under explicit smoothness and support assumptions, not that one may send \(\varepsilon\) to zero for free.
+
+There are three errors to balance. The **regularization bias** \(|S_\varepsilon(P,Q)-\mathrm{OT}_0(P,Q)|\) shrinks as \(\varepsilon\downarrow0\); the **sampling error** \(|S_\varepsilon(\hat P_n,\hat Q_m)-S_\varepsilon(P,Q)|\) is parametric for fixed \(\varepsilon\) but carries an \(\varepsilon\)-dependent constant; and the **optimization error** comes from terminating Sinkhorn iterations at nonzero marginal residual. Choosing \(\varepsilon=\varepsilon_n\downarrow0\) therefore requires an explicit schedule that balances bias against the deteriorating sampling and computational constants. The generative-model experiments of Genevay, Peyré, and Cuturi [@genevay2018] illustrate this compromise, while the endpoint identity of Feydy et al. [@feydy2019sinkhorn, Equation (4)] explains what the regularization path approaches. Neither result licenses a dimension-free guarantee for an arbitrarily small, data-tuned \(\varepsilon\).
 
 :::: {.algorithm #algo-31-2}
 [Algorithm (Sinkhorn divergence)]{.box-title}
@@ -335,11 +357,11 @@ Optimal transport measures the least work to reshape one distribution into anoth
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Optimal Transport and Kernels**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+For **Optimal Transport and Kernels**, specify the ground cost, its units, and the moment assumptions that make the chosen Wasserstein distance finite. Do not compare a regularized transport cost with an unregularized one without naming \(\varepsilon\), and do not treat \(\mathrm{OT}_\varepsilon(P,P)\) as zero; use the debiased Sinkhorn divergence when identity of indiscernibles matters. Numerically, report marginal residuals, iteration cap, precision, and whether updates ran in the log domain. Statistically, remember that an interpretable ground geometry does not remove the high-dimensional empirical curse.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Optimal Transport and Kernels; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@kantorovich1942], [@villani2009], [@sejdinovic2013].
+Kantorovich [@kantorovich1942] introduced the coupling relaxation, and Villani [@villani2009] develops its modern geometry and duality. The comparison with energy distance and MMD is made precise by Sejdinovic et al. [@sejdinovic2013]. The practical decision is now explicit: use transport when movement in the ground space is the estimand, MMD when stable high-dimensional estimation is primary, and Sinkhorn divergence when a controlled compromise is preferable to either endpoint.
 
 ## Exercises {#exercises}
 

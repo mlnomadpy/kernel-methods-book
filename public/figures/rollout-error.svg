@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="350.350687pt" height="183.320594pt" viewBox="0 0 350.350687 183.320594" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Kernels figure pipeline</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 183.320594 
+L 350.350687 183.320594 
+L 350.350687 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 25.270688 154.641063 
+L 168.474227 154.641063 
+L 168.474227 13.269063 
+L 25.270688 13.269063 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m33cb866227" d="M 0 0 
+L 0 2.8 
+" style="stroke: #18232d; stroke-width: 0.48"/>
+      </defs>
+      <g>
+       <use xlink:href="#m33cb866227" x="31.779939" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <!-- $\mathdefault{0}$ -->
+      <g style="fill: #66727a" transform="translate(29.712939 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m33cb866227" x="64.326198" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <!-- $\mathdefault{10}$ -->
+      <g style="fill: #66727a" transform="translate(60.192198 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m33cb866227" x="96.872457" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <!-- $\mathdefault{20}$ -->
+      <g style="fill: #66727a" transform="translate(92.738457 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">2</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m33cb866227" x="129.418716" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <!-- $\mathdefault{30}$ -->
+      <g style="fill: #66727a" transform="translate(125.284716 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">3</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m33cb866227" x="161.964976" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <!-- $\mathdefault{40}$ -->
+      <g style="fill: #66727a" transform="translate(157.830976 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">4</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 9.2px; font-family: 'Source Serif 4'; text-anchor: middle; fill: #18232d" x="96.872457" y="179.745906" transform="rotate(-0 96.872457 179.745906)">rollout step</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_6">
+      <defs>
+       <path id="m898694350a" d="M 0 0 
+L -2.8 0 
+" style="stroke: #18232d; stroke-width: 0.48"/>
+      </defs>
+      <g>
+       <use xlink:href="#m898694350a" x="25.270688" y="148.215062" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <!-- $\mathdefault{1}$ -->
+      <g style="fill: #66727a" transform="translate(15.336688 151.081563)">
+       <text>
+        <tspan x="0" y="-0.921875" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m898694350a" x="25.270688" y="121.531036" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <!-- $\mathdefault{2}$ -->
+      <g style="fill: #66727a" transform="translate(15.336688 124.397536)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">2</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m898694350a" x="25.270688" y="94.847009" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <!-- $\mathdefault{3}$ -->
+      <g style="fill: #66727a" transform="translate(15.336688 97.713509)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">3</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m898694350a" x="25.270688" y="68.162982" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <!-- $\mathdefault{4}$ -->
+      <g style="fill: #66727a" transform="translate(15.336688 71.029482)">
+       <text>
+        <tspan x="0" y="-0.90625" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">4</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m898694350a" x="25.270688" y="41.478956" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <!-- $\mathdefault{5}$ -->
+      <g style="fill: #66727a" transform="translate(15.336688 44.345456)">
+       <text>
+        <tspan x="0" y="-0.953125" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m898694350a" x="25.270688" y="14.794929" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <!-- $\mathdefault{6}$ -->
+      <g style="fill: #66727a" transform="translate(15.336688 17.661429)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">6</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="text_13">
+     <text style="font-size: 9.2px; font-family: 'Source Serif 4'; text-anchor: middle; fill: #18232d" x="8.202" y="83.955063" transform="rotate(-90 8.202 83.955063)">state</text>
+    </g>
+   </g>
+   <g id="line2d_12">
+    <path d="M 31.779939 148.215062 
+L 35.034565 147.014281 
+L 38.289191 145.759465 
+L 41.543817 144.448182 
+L 44.798443 143.077891 
+L 48.053069 141.645937 
+L 51.307695 140.149545 
+L 54.562321 138.585816 
+L 57.816947 136.951718 
+L 61.071572 135.244087 
+L 64.326198 133.459612 
+L 67.580824 131.594835 
+L 70.83545 129.646144 
+L 74.090076 127.609761 
+L 77.344702 125.481741 
+L 80.599328 123.257961 
+L 83.853954 120.93411 
+L 87.10858 118.505686 
+L 90.363206 115.967983 
+L 93.617832 113.316083 
+L 96.872457 110.544848 
+L 100.127083 107.648907 
+L 103.381709 104.622649 
+L 106.636335 101.460209 
+L 109.890961 98.155459 
+L 113.145587 94.701996 
+L 116.400213 91.093127 
+L 119.654839 87.321858 
+L 122.909465 83.380883 
+L 126.164091 79.262564 
+L 129.418716 74.95892 
+L 132.673342 70.461612 
+L 135.927968 65.761926 
+L 139.182594 60.850754 
+L 142.43722 55.718579 
+L 145.691846 50.355456 
+L 148.946472 44.750992 
+L 152.201098 38.894328 
+L 155.455724 32.774113 
+L 158.71035 26.378489 
+L 161.964976 19.695063 
+" clip-path="url(#p9649483a38)" style="fill: none; stroke: #18232d; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_13">
+    <path d="M 31.779939 148.215062 
+L 35.034565 147.281122 
+L 38.289191 146.314493 
+L 41.543817 145.314032 
+L 44.798443 144.278555 
+L 48.053069 143.206836 
+L 51.307695 142.097607 
+L 54.562321 140.949555 
+L 57.816947 139.761322 
+L 61.071572 138.5315 
+L 64.326198 137.258634 
+L 67.580824 135.941218 
+L 70.83545 134.577693 
+L 74.090076 133.166444 
+L 77.344702 131.705801 
+L 80.599328 130.194036 
+L 83.853954 128.629359 
+L 87.10858 127.009919 
+L 90.363206 125.333798 
+L 93.617832 123.599013 
+L 96.872457 121.80351 
+L 100.127083 119.945165 
+L 103.381709 118.021777 
+L 106.636335 116.031071 
+L 109.890961 113.970691 
+L 113.145587 111.838197 
+L 116.400213 109.631066 
+L 119.654839 107.346685 
+L 122.909465 104.982351 
+L 126.164091 102.535265 
+L 129.418716 100.002531 
+L 132.673342 97.381151 
+L 135.927968 94.668024 
+L 139.182594 91.859936 
+L 142.43722 88.953566 
+L 145.691846 85.945473 
+L 148.946472 82.832096 
+L 152.201098 79.609751 
+L 155.455724 76.274625 
+L 158.71035 72.822768 
+L 161.964976 69.250097 
+" clip-path="url(#p9649483a38)" style="fill: none; stroke-dasharray: 6.29,2.72; stroke-dashoffset: 0; stroke: #98452f; stroke-width: 1.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 25.270688 154.641063 
+L 25.270688 13.269063 
+" style="fill: none; stroke: #18232d; stroke-width: 0.48; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 25.270688 154.641063 
+L 168.474227 154.641063 
+" style="fill: none; stroke: #18232d; stroke-width: 0.48; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 600; font-size: 8.6px; font-family: 'Source Serif 4'; text-anchor: start; fill: #18232d" x="25.270688" y="7.769063" transform="rotate(-0 25.270688 7.769063)">Repeated prediction</text>
+   </g>
+   <g id="legend_1">
+    <g id="line2d_14">
+     <path d="M 31.510688 22.512063 
+L 39.700688 22.512063 
+L 47.890687 22.512063 
+" style="fill: none; stroke: #18232d; stroke-width: 1.8; stroke-linecap: round"/>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 7.8px; font-family: 'Source Serif 4'; text-anchor: start; fill: #18232d" x="54.130688" y="25.242063" transform="rotate(-0 54.130688 25.242063)">true dynamics</text>
+    </g>
+    <g id="line2d_15">
+     <path d="M 31.510688 34.040219 
+L 39.700688 34.040219 
+L 47.890687 34.040219 
+" style="fill: none; stroke-dasharray: 6.29,2.72; stroke-dashoffset: 0; stroke: #98452f; stroke-width: 1.7; stroke-linecap: round"/>
+    </g>
+    <g id="text_16">
+     <text style="font-size: 7.8px; font-family: 'Source Serif 4'; text-anchor: start; fill: #18232d" x="54.130688" y="36.770219" transform="rotate(-0 54.130688 36.770219)">learned model</text>
+    </g>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 205.707148 154.641063 
+L 348.910688 154.641063 
+L 348.910688 13.269063 
+L 205.707148 13.269063 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_6">
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#m33cb866227" x="212.216399" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_17">
+      <!-- $\mathdefault{0}$ -->
+      <g style="fill: #66727a" transform="translate(210.149399 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#m33cb866227" x="244.762659" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_18">
+      <!-- $\mathdefault{10}$ -->
+      <g style="fill: #66727a" transform="translate(240.628659 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#m33cb866227" x="277.308918" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_19">
+      <!-- $\mathdefault{20}$ -->
+      <g style="fill: #66727a" transform="translate(273.174918 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">2</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_19">
+      <g>
+       <use xlink:href="#m33cb866227" x="309.855177" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_20">
+      <!-- $\mathdefault{30}$ -->
+      <g style="fill: #66727a" transform="translate(305.721177 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">3</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#m33cb866227" x="342.401436" y="154.641063" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_21">
+      <!-- $\mathdefault{40}$ -->
+      <g style="fill: #66727a" transform="translate(338.267436 166.174062)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">4</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="text_22">
+     <text style="font-size: 9.2px; font-family: 'Source Serif 4'; text-anchor: middle; fill: #18232d" x="277.308918" y="179.745906" transform="rotate(-0 277.308918 179.745906)">rollout step</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_7">
+     <g id="line2d_21">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="148.215062" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_23">
+      <!-- $\mathdefault{0.00}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 151.081563)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_22">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="130.913939" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_24">
+      <!-- $\mathdefault{0.25}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 133.780439)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">2</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_23">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="113.612815" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_25">
+      <!-- $\mathdefault{0.50}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 116.479315)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_24">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="96.311692" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_26">
+      <!-- $\mathdefault{0.75}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 99.178192)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">7</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_25">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="79.010568" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_27">
+      <!-- $\mathdefault{1.00}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 81.877068)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_26">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="61.709444" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_28">
+      <!-- $\mathdefault{1.25}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 64.575944)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">2</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_27">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="44.408321" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_29">
+      <!-- $\mathdefault{1.50}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 47.274821)">
+       <text>
+        <tspan x="0" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+        <tspan x="4.124542" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+        <tspan x="10.603729" y="-0.859375" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_14">
+     <g id="line2d_28">
+      <g>
+       <use xlink:href="#m898694350a" x="205.707148" y="27.107197" style="fill: #18232d; stroke: #18232d; stroke-width: 0.48"/>
+      </g>
+     </g>
+     <g id="text_30">
+      <!-- $\mathdefault{1.75}$ -->
+      <g style="fill: #66727a" transform="translate(185.165148 29.973697)">
+       <text>
+        <tspan x="0" y="-0.921875" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">1</tspan>
+        <tspan x="4.124542" y="-0.921875" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">.</tspan>
+        <tspan x="6.479187" y="-0.921875" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">7</tspan>
+        <tspan x="10.603729" y="-0.921875" style="font-size: 7.8px; font-family: 'Source Serif 4'; fill: #66727a">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="text_31">
+     <text style="font-size: 9.2px; font-family: 'Source Serif 4'; text-anchor: middle; fill: #18232d" x="178.03046" y="83.955063" transform="rotate(-90 178.03046 83.955063)">absolute state error</text>
+    </g>
+   </g>
+   <g id="line2d_29">
+    <path d="M 212.216399 148.215062 
+L 215.471025 147.523018 
+L 218.725651 146.775609 
+L 221.980277 145.969498 
+L 225.234903 145.101165 
+L 228.489529 144.166902 
+L 231.744155 143.162802 
+L 234.998781 142.084751 
+L 238.253407 140.928412 
+L 241.508033 139.689222 
+L 244.762659 138.362373 
+L 248.017284 136.942804 
+L 251.27191 135.425188 
+L 254.526536 133.803916 
+L 257.781162 132.073087 
+L 261.035788 130.226488 
+L 264.290414 128.257586 
+L 267.54504 126.159503 
+L 270.799666 123.925007 
+L 274.054292 121.546488 
+L 277.308918 119.015945 
+L 280.563543 116.324961 
+L 283.818169 113.464688 
+L 287.072795 110.425819 
+L 290.327421 107.198573 
+L 293.582047 103.772665 
+L 296.836673 100.137285 
+L 300.091299 96.281072 
+L 303.345925 92.192084 
+L 306.600551 87.857773 
+L 309.855177 83.264954 
+L 313.109803 78.399771 
+L 316.364428 73.247671 
+L 319.619054 67.793362 
+L 322.87368 62.020781 
+L 326.128306 55.913058 
+L 329.382932 49.452474 
+L 332.637558 42.620418 
+L 335.892184 35.397349 
+L 339.14681 27.762746 
+L 342.401436 19.695062 
+" clip-path="url(#pe0d4cc87db)" style="fill: none; stroke: #98452f; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_30">
+    <path d="M 205.707148 147.523018 
+L 348.910688 147.523018 
+" clip-path="url(#pe0d4cc87db)" style="fill: none; stroke-dasharray: 1,1.65; stroke-dashoffset: 0; stroke: #aeb7bc; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 205.707148 154.641062 
+L 205.707148 13.269062 
+" style="fill: none; stroke: #18232d; stroke-width: 0.48; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 205.707148 154.641063 
+L 348.910688 154.641063 
+" style="fill: none; stroke: #18232d; stroke-width: 0.48; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 286.757787 142.701766 
+Q 285.808296 144.259021 285.138181 145.358073 
+" style="fill: none; stroke: #66727a; stroke-width: 0.48; stroke-linecap: round"/>
+    <path d="M 288.17015 143.458819 
+L 285.138181 145.358073 
+L 285.437959 141.792946 
+" style="fill: none; stroke: #66727a; stroke-width: 0.48; stroke-linecap: round"/>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 8px; font-family: 'Source Serif 4', 'STIXGeneral', 'DejaVu Serif'; text-anchor: start; fill: #18232d" x="264.290414" y="137.142343" transform="rotate(-0 264.290414 137.142343)">one-step error</text>
+   </g>
+   <g id="text_33">
+    <text style="font-weight: 600; font-size: 8.6px; font-family: 'Source Serif 4'; text-anchor: start; fill: #18232d" x="205.707148" y="7.769063" transform="rotate(-0 205.707148 7.769063)">Compounding bias</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9649483a38">
+   <rect x="25.270688" y="13.269063" width="143.20354" height="141.372"/>
+  </clipPath>
+  <clipPath id="pe0d4cc87db">
+   <rect x="205.707148" y="13.269063" width="143.20354" height="141.372"/>
+  </clipPath>
+ </defs>
+</svg>

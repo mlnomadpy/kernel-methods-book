@@ -2,17 +2,19 @@
 id: ch-online
 slug: online-kernel-learning
 title: Online Kernel Learning
-part: III · Optimization and Implementation
-order: 10
+part: III · Optimization and Scaling
+order: 11
 tier: advanced
 prerequisites:
   - solving-the-svm
 objectives:
-  - Explain the central definitions and claims in Online Kernel Learning.
-  - Apply the chapter's principal methods and interpret their outputs.
+  - Derive the kernel perceptron as a mistake-driven dual expansion.
+  - Prove Novikoff's mistake bound and identify every assumption it uses.
+  - Relate the kernel adatron to coordinate ascent on the SVM dual.
+  - Build regularized online updates for regression and margin losses.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Diagnose support-set growth and compare removal, projection, merging, and
+    decay.
 review_status: draft
 reviewers:
   technical: null
@@ -284,22 +286,26 @@ Two implementation details matter. First, normalize the kernel or guard against 
 
 There is a catch that the mistake bound hides. Novikoff's theorem caps the number of updates only when the stream is separable with a positive margin. On a noisy or non-separable stream, or one whose target drifts, the perceptron and the online SVR keep erring, and every error appends a term to the kernel expansion. The support set grows without bound, so the memory footprint and the per-round prediction cost both climb linearly with time. One can show that under nonzero minimal risk the number of support vectors indeed grows linearly with the number of examples seen (Schölkopf and Smola 2002). An online learner that must run indefinitely cannot afford an unbounded model; this is the budget problem, and it is the central practical obstacle to deploying online kernel methods.
 
+The left panel below turns that asymptotic warning into a systems quantity: prediction cost follows the number of retained kernel terms. A hard budget flattens that curve, but the right panel shows the price. Even the cheapest maintenance rule must decide which coefficients are too small to keep, and every deletion perturbs the current hypothesis.
+
+<figure class="viz" data-figure="online-budget" data-alt="The left panel shows an unbudgeted support set growing stepwise to nearly fifty terms while a hard budget keeps twelve. The right panel shows eight signed kernel coefficients, with small-magnitude terms marked for removal and larger terms retained."><figcaption>Budget maintenance converts unbounded support growth into fixed prediction cost, but it is an approximation step: removal is cheap because it drops small coefficients, whereas projection or merging spends more computation to preserve the RKHS function more faithfully.</figcaption></figure>
+
 Two broad families of remedy exist, and the discussion here is deliberately at the level of strategy rather than specific update formulas. The first is forgetting through decay. The regularized update already multiplies every coefficient by \(1-\eta\lambda\) each round, so old coefficients shrink geometrically; once a coefficient falls below a threshold its term contributes negligibly and can be pruned. Truncating the expansion to a fixed time horizon, keeping only the most recent terms whose decayed weight is still material, bounds the memory at the cost of a controlled approximation, and the learning rate trades the size of the model against how far into the past the learner remembers (Kivinen, Smola, and Williamson 2004). This is well suited to non-stationary streams, where forgetting the distant past is a feature.
 
 The second family fixes a hard budget \(B\) on the number of support vectors and maintains it actively. When a new example would push the support set past \(B\), the learner must make room, and three moves are standard. Removal discards the least useful current support vector, for instance the one of smallest coefficient or smallest contribution to the margin. Projection is subtler: rather than deleting the chosen term outright, it redistributes that term's contribution onto the remaining support vectors by projecting it onto their span in feature space, so the hypothesis changes as little as possible in RKHS norm. Merging replaces two nearby support vectors by a single synthetic one that approximates their combined effect. All three keep the model size at \(B\) forever, differing in how much accuracy they sacrifice to do so; projection is the most faithful and the most expensive, removal the cheapest and the crudest. The unifying principle is the one that has organized this whole chapter: because the hypothesis is a kernel expansion, budget maintenance is geometry in feature space, choosing which directions to keep and how to account for the ones we drop, and it connects directly to the low-rank and sparse-approximation techniques used for [[ch:large-scale-kernels|large-scale kernel machines]].
 
-## Summary {#summary}
+## Operational view {#summary}
 
 Online kernel learning trades the single batch optimization for a stream of cheap, local updates, storing the hypothesis as a dual kernel expansion and never forming the full Gram matrix. The kernel perceptron makes this vivid: its update is the one-line increment \(\alpha_t\leftarrow\alpha_t+1\) on a mistake, its prediction is a kernel expansion over the mistaken examples, and Novikoff's two-sided argument bounds its total mistakes by \((R/\gamma)^2\), tying the mistake count to the very margin the [[ch:support-vector-machines|support vector machine]] maximizes and to the [[ch:learning-theory|generalization theory]] of margins. The kernel adatron upgrades the crude mistake increment to projected gradient ascent on the support vector dual, converging to the exact max-margin solution while respecting the box constraint through a clip. The same stochastic-gradient template, with the loss derivative swapped, gives online support vector regression and novelty detection, all sharing the shrink-and-append update whose decay factor performs regularization online. The price of streaming is the budget problem, the unbounded growth of the support set on hard streams, and controlling it, by forgetting through decay or by maintaining a hard budget through removal, projection, or merging, is what turns these compact updates into systems that can run forever. The next chapters put the same dual machinery to work on [[ch:ranking-and-ordinal-regression|ranking]] and on the approximations that make [[ch:large-scale-kernels|large-scale kernels]] tractable.
 
 ::: {.exercises}
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
-For **Online Kernel Learning**, do not apply a displayed formula without checking its domain, statistical assumptions, and numerical conditioning. Avoid selecting kernels or hyperparameters on test data, and do not interpret an optimization residual as a generalization guarantee. When the method is computational, report preprocessing, kernel parameters, regularization, solver tolerance, condition diagnostics, runtime, and a non-kernel baseline. When the result is theoretical, distinguish sufficient conditions from necessary ones and finite-sample claims from asymptotic statements.
+Novikoff's bound vanishes as a guarantee once separability, a positive margin, or bounded feature norm fails; a drifting stream can therefore grow the expansion indefinitely. Every budget rule changes the function, so report not only memory but also the RKHS or prediction perturbation caused by removal, projection, or merging. Evaluate online methods prequentially, before updating on each observation, and log per-round latency, support-set size, drift handling, and kernel normalization. A final batch score conceals both adaptation delay and transient failures.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-This chapter established explain the central definitions and claims in Online Kernel Learning; Apply the chapter's principal methods and interpret their outputs; State the assumptions behind formal results and connect them to earlier chapters. Revisit the assumptions attached to each formal result before transferring it to a new setting. For primary and extended treatments, consult [@rosenblatt1958], [@novikoff1962], [@aizerman1964].
+Online kernel methods replace a global Gram solve with local expansion updates. The perceptron admits a finite mistake guarantee only under bounded feature norm and positive separable margin; the adatron and regularized loss updates broaden the optimization view but do not remove support growth. A deployable learner therefore needs an explicit memory budget, maintenance rule, per-round cost, and drift policy, together with the approximation error those choices introduce. The lineage runs from the perceptron [@rosenblatt1958] and its mistake analysis [@novikoff1962] to the kernelized construction [@aizerman1964].
 
 ## Exercises {#exercises}
 

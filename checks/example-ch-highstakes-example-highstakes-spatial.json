@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-highstakes",
+  "anchor": "example-highstakes-spatial",
+  "source_file": "manuscript/chapters/ch-highstakes.md",
+  "source_sha256": "16d061ee6b4899aae7b5cd09a52876fd56e548b508a11f68bc20916ebe2c2cc7",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-highstakes-ex5.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "2",
+    "3"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

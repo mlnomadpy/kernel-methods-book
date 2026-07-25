@@ -89,6 +89,60 @@ def gap_kernel(s, t, p, lam=0.5):
     return kernel, last_DP, tables
 
 
+def gap_kernel_numeric_full(s, t, p, lam):
+    """Full auxiliary tables in floating-point arithmetic."""
+    n, m = len(s), len(t)
+    suffix = [
+        [lam ** 2 if s[i] == t[j] else 0.0 for j in range(m)]
+        for i in range(n)
+    ]
+    if p == 1:
+        return sum(map(sum, suffix))
+    for _level in range(2, p + 1):
+        dp = [[0.0] * (m + 1) for _ in range(n + 1)]
+        next_suffix = [[0.0] * m for _ in range(n)]
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                dp[i][j] = (
+                    suffix[i - 1][j - 1]
+                    + lam * dp[i - 1][j]
+                    + lam * dp[i][j - 1]
+                    - lam ** 2 * dp[i - 1][j - 1]
+                )
+                if s[i - 1] == t[j - 1]:
+                    next_suffix[i - 1][j - 1] = lam ** 2 * dp[i - 1][j - 1]
+        suffix = next_suffix
+    return sum(map(sum, suffix))
+
+
+def gap_kernel_numeric_rolling(s, t, p, lam):
+    """Two-row auxiliary table while retaining the level suffix table."""
+    n, m = len(s), len(t)
+    suffix = [
+        [lam ** 2 if s[i] == t[j] else 0.0 for j in range(m)]
+        for i in range(n)
+    ]
+    if p == 1:
+        return sum(map(sum, suffix))
+    for _level in range(2, p + 1):
+        previous = [0.0] * (m + 1)
+        next_suffix = [[0.0] * m for _ in range(n)]
+        for i in range(1, n + 1):
+            current = [0.0] * (m + 1)
+            for j in range(1, m + 1):
+                current[j] = (
+                    suffix[i - 1][j - 1]
+                    + lam * previous[j]
+                    + lam * current[j - 1]
+                    - lam ** 2 * previous[j - 1]
+                )
+                if s[i - 1] == t[j - 1]:
+                    next_suffix[i - 1][j - 1] = lam ** 2 * previous[j - 1]
+            previous = current
+        suffix = next_suffix
+    return sum(map(sum, suffix))
+
+
 lam = 0.5
 p = 2
 s, t = "cat", "car"
@@ -116,3 +170,22 @@ print("k_2('car','car')  =", pstr(ktt), " = ", round(peval(ktt, lam), 6))
 norm = peval(kst, lam) / (peval(kss, lam) * peval(ktt, lam)) ** 0.5
 print("normalized k_hat  = k / sqrt(kss*ktt) =", round(norm, 6))
 print("closed form (2+lam^2)^-1 =", round(1.0 / (2 + lam ** 2), 6))
+
+# Verify that rolling the auxiliary table is cell-order equivalent to storing
+# it in full across varied lengths, decay factors, and repeated symbols.
+from itertools import product
+test_strings = [
+    "".join(chars)
+    for length in range(1, 5)
+    for chars in product("ab", repeat=length)
+]
+cases = 0
+for left in test_strings:
+    for right in test_strings:
+        for level in range(1, min(len(left), len(right)) + 1):
+            for decay in (0.2, 0.5, 0.9, 1.0):
+                full = gap_kernel_numeric_full(left, right, level, decay)
+                rolling = gap_kernel_numeric_rolling(left, right, level, decay)
+                assert abs(full - rolling) <= 1e-12 * max(1.0, abs(full))
+                cases += 1
+print("full/rolling gap-DP agreement:", cases, "parameterized cases")

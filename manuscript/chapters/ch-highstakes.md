@@ -2,17 +2,23 @@
 id: ch-highstakes
 slug: kernels-in-science-and-space
 title: Kernels in Science and Space
-part: XVIII · Kernels You Can Defend
-order: 56
+part: XII · Reliable Practice
+order: 61
 tier: advanced
 prerequisites:
   - accountable-kernels
 objectives:
-  - Explain the central definitions and claims in Kernels in Science and Space.
-  - Apply the chapter's principal methods and interpret their outputs.
+  - Match a scientific task to the kernel structure that encodes its physics.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Interpret credible intervals, matched-filter scores, and active-learning
+    variances within their assumptions.
+  - Distinguish model-based uncertainty from validated operational risk.
+  - >-
+    Design domain-appropriate checks for astronomy, molecular simulation, and
+    Earth observation.
+  - >-
+    Choose a scalability structure without hiding the approximation it
+    introduces.
 review_status: draft
 reviewers:
   technical: null
@@ -60,11 +66,26 @@ bibliography:
 ---
 # Kernels in Science and Space
 
-<p class="lead">An orbit prediction is useless to a collision-avoidance system without a covariance it can trust; a planet's mass is not a result until it carries a credible interval; a molecular simulation must know the moment its cheap surrogate can no longer be believed; a global crop map is only operational if every pixel comes with a confidence. These are domains where a wrong answer with no error bar is unacceptable, and they are the payoff of the previous chapter's argument that a kernel machine carries its own accountability: a calibrated error bar, an exact attribution to training data, a reproducible solve, and audit statistics with p-values. In astronomy and space engineering the deliverable is often the uncertainty itself. In the physical sciences each training label is a quantum-mechanical calculation or a wet-lab experiment, so data efficiency and a variance that tells you where to spend the next label are not conveniences but the method. In Earth observation the product is a map, and every pixel needs a confidence. We work each domain to a real, cited result, name the kernel and the property that earned it, and state the honest limitation, which turns out to be the same one everywhere.</p>
+<p class="lead">An orbit prediction is useless to a collision-avoidance system without a covariance whose calibration has been tested; a planet's mass is not a result until it carries an interval conditional on an explicit noise model; a molecular simulation must know when its cheap surrogate has left validated territory; a global crop map needs a confidence layer and a rule for pixels outside support. These are domains where a bare point estimate is operationally incomplete. Kernel methods earned a role here because the covariance can encode quasi-periodicity, symmetry, spatial dependence, or a detector's noise geometry, while the fitted model can return uncertainty and identify expensive places to sample next. The mathematics does not make those outputs trustworthy by itself. Each case in this chapter therefore pairs the useful kernel structure with the validation, approximation, and failure condition required to act on it.</p>
 
 ## Why these domains demand accountable models {#why-these-domains}
 
-It is worth being precise about why these particular sciences adopted kernel methods, because the reasons are the accountability properties of the last chapter rather than raw predictive accuracy. A stellar light curve or a radial-velocity series is short, irregularly sampled, and dominated by a nuisance signal that must be separated from the thing of interest; the model has to report how much of its answer is signal and how much is the model's own uncertainty. A potential-energy surface is smooth and expensive, sampled at a handful of quantum-mechanical points that cost hours each, so the model must interpolate from little data and, critically, must know where it is interpolating badly so a simulation can decide when to pay for another point. A satellite retrieval turns reflectance into a biophysical quantity over millions of pixels, some of which fall outside anything in the training set, and the operational product is only usable if each pixel carries a trustworthy confidence. In every case the Gaussian process and its kernel relatives were adopted because they answer \"how sure, from what, and is this still valid\" as part of the computation, and because the kernel is where the domain's physics, quasi-periodicity, rotational symmetry, spatial context, enters explicitly rather than being learned opaquely.
+It is worth being precise about why these sciences adopted kernel methods, because the reasons extend beyond predictive accuracy. A stellar light curve is irregularly sampled and dominated by nuisance structure. A potential-energy surface is expensive to label and dangerous to extrapolate. A satellite retrieval is deployed over locations, seasons, and sensors that may not resemble its training set. In each case the kernel provides an explicit place to encode structure, while the estimator produces quantities that can be tested against held-out reality.
+
+This chapter uses one protocol template throughout. A scientific result is not reproducible unless its report fixes all eight fields.
+
+| Field | Question the report must answer |
+|---|---|
+| Population and sampling | What process or named dataset generated each observation, and what is the unit of independence? |
+| Split or experimental design | Which time blocks, objects, trajectories, sites, or campaigns are held out? |
+| Kernel and baseline | What representation, kernel, hyperparameter-selection rule, and non-kernel comparator are frozen before testing? |
+| Uncertainty currency | Is the output a posterior interval, predictive interval, score, covariance, or decision probability? |
+| Metrics | Which point, calibration, ranking, and computational metrics are reported, with units? |
+| Negative controls | Which deliberately wrong kernel, shuffled target, off-template signal, or shifted domain should fail? |
+| Failure criterion | What predeclared observation rejects the model or stops deployment? |
+| Operational validation | Is the final check performed on the quantity that drives an action? |
+
+The split must follow the scientific unit. Randomly splitting nearby pixels, adjacent molecular-dynamics frames, or observations from the same star leaks information and produces optimistic results. Hyperparameters and uncertainty thresholds belong to the training and validation sets. The test set is opened once.
 
 ## Space and astronomy {#space-and-astronomy}
 
@@ -72,25 +93,27 @@ Astronomy was among the first fields to make Gaussian processes standard equipme
 
 ### Stellar rotation and exoplanet light curves {#light-curves}
 
-A star's brightness is modulated as spots rotate into and out of view, but spots form and decay, so the signal is quasi-periodic rather than strictly periodic. The kernel writes that down directly. The quasi-periodic covariance
+A star's brightness is modulated as spots rotate into and out of view, but spots form and decay. The quasi-periodic covariance
 
 $$k(\tau)=A\,\exp\!\Big(-\frac{\tau^2}{2\ell^2}-\Gamma\,\sin^2\frac{\pi\tau}{P}\Big),$$
 
-with rotation period \(P\), spot-coherence length \(\ell\), and modulation depth \(\Gamma\), combines a periodic term with a decay whose length scale is literally the spot lifetime (Angus et al. 2018). This is the [[ch:kernel-families|kernel-families]] construction put to physical use: an interpretable hyperparameter for each physical quantity. The payoff over a classical periodogram is the subject of the last chapter, a full posterior on the period rather than a point estimate, and the celerite method of Foreman-Mackey et al. (2017) makes it affordable by giving the semi-separable covariance an exact likelihood in linear rather than cubic time, so the fully probabilistic model runs on the hundred-thousand-point light curves of Kepler and TESS.
+with period \(P\), coherence \(\ell\), and modulation \(\Gamma\), combines periodic recurrence with finite memory. Angus et al. evaluate this model on simulated and Kepler light curves, while explicitly sampling the period posterior [@angus2018rotation, Secs. 2--4]. Restricted semiseparable covariance families permit linear-time one-dimensional GP operations for fixed representation rank [@foremanmackey2017celerite, Secs. 2--5].
+
+**Study protocol: stellar rotation.** The observational unit is one light curve with timestamps, fluxes, quality flags, and known measurement uncertainties. Simulations must publish the cadence, gap process, noise law, spot-evolution generator, and true period. Real-data evaluation must split by star, never by timestamp within a star. Fit the quasi-periodic GP on a development set; choose priors, detrending, and convergence criteria there; compare against a sinusoidal periodogram and an autocorrelation baseline. The uncertainty currency is the posterior distribution of \(P\), conditional on the covariance and priors. Report absolute or fractional period error, interval coverage and width on simulations, multimodality, convergence diagnostics, and wall time. Include a strictly periodic kernel, time-shuffled flux, and injected harmonics as negative controls. Reject the model when chains do not mix, the posterior piles against a prior boundary, simulation coverage misses its tolerance, or plausible aliases carry material posterior mass. Operationally validate on independently measured rotation periods or on downstream quantities whose sensitivity to period error is stated.
 
 ::::: {.example #example-56-1}
 [Example (a rotation period, with a credible interval)]{.box-title}
 
 :::: wex
 ::: wex-setup
-We synthesize \(120\) irregularly sampled brightness measurements over \(60\) days from a quasi-periodic GP with true period \(P=10\) days, coherence \(\ell=30\) days, and modulation \(\Gamma=2\), plus white noise. We recover \(P\) by evaluating the GP log marginal likelihood over a grid and reading off the posterior, and compare with a periodogram peak. All numbers from `checks/ch-highstakes-ex1.py`.
+This is an **illustrative deterministic simulation**, not a published benchmark. We synthesize \(120\) irregular observations over \(60\) days from the stated GP with \(P=10\), \(\ell=30\), and \(\Gamma=2\), plus Gaussian noise. A grid posterior uses a flat prior on \(P\in[5,20]\). All values and assertions are in `checks/ch-highstakes-ex1.py`.
 :::
 
 1.  [Marginalize over the period.]{.wex-op} With a flat prior on \(P\), the posterior peaks at a maximum-a-posteriori value of \(10.10\) days with posterior mean also \(10.10\) days, recovering the true \(10.00\) days.
 2.  [Report the interval, not just the peak.]{.wex-op} The \(68\%\) credible interval is \([10.00,\,10.20]\) days: the deliverable is the period and its uncertainty together.
 3.  [Contrast the periodogram.]{.wex-op} A Lomb-Scargle-style periodogram returns a single peak at \(10.73\) days, a point estimate with no native interval and biased here by the evolving spot phase the quasi-periodic kernel models and the sinusoid does not.
 
-**Reading.** The kernel encodes the physics (quasi-periodicity with a finite coherence time) and the posterior delivers the accountable answer (a period with a credible interval). The honest limitation is that the period posterior is often multimodal, with harmonics of \(P\) as competing peaks, so careful sampling matters; and the exact GP is cubic, which is exactly the cost celerite's semi-separable structure removes for this kernel family.
+**Reading.** This fixture verifies a calculation under a correctly specified generator. It does not establish frequentist coverage, robustness to detrending, or performance on real stars.
 ::::
 
 **Verification artifact.** checks/example-ch-highstakes-example-56-1.json records the example source hash and verification scope.
@@ -103,29 +126,33 @@ We synthesize \(120\) irregularly sampled brightness measurements over \(60\) da
 
 ### Disentangling a planet from stellar activity {#radial-velocity}
 
-The same quasi-periodic signal that reveals rotation is a nuisance when the goal is a planet's mass from radial velocities, because spots induce apparent velocity shifts that mimic or mask a Keplerian signal. The framework of Rajpaul et al. (2015) models the radial velocity and several activity indicators as different linear combinations of one shared latent quasi-periodic GP and its time derivative, so the activity component is constrained by the indicators and can be subtracted, leaving the planet. Because the fit is a posterior, the planet's mass comes out as a credible interval rather than a point. The CoRoT-7 analysis of Haywood et al. (2014) is the textbook case: treating the activity as a GP whose covariance is inherited from the light curve, they recover the mass of CoRoT-7b as \(4.73\pm0.95\) Earth masses. The error bar is the result, and it is an error bar precisely because a kernel model produced it.
+The same signal becomes a nuisance when the target is a planet's mass. Rajpaul et al. model radial velocity and activity indicators as linear functionals of a shared latent GP [@rajpaul2015rv, Secs. 2--3]. Haywood et al. combine a Keplerian component with an activity covariance in the CoRoT-7 analysis [@haywood2014corot7, Secs. 3--5]. We do not transfer a reported mass or interval into this chapter because it is conditional on that paper's data reduction, priors, activity model, and instrument treatment.
+
+**Study protocol: radial velocity.** Publish timestamps, instruments, velocities, quoted errors, activity indicators, exclusion rules, and injection generator. Hold out complete observing seasons or instruments; tune priors and kernels without the final block. Compare a shared latent GP plus Keplerian model with a Keplerian-only model, a GP without activity channels, and an activity-only model. The uncertainty currency is a posterior over orbital parameters and derived mass, not an unconditional confidence statement. Report injection-recovery error, interval coverage, false inclusion under no-planet injections, posterior predictive residuals by instrument, and sensitivity to priors and kernels. Negative controls include phase-shuffled injections, an activity indicator decoupled from velocity, and a planet period near the activity period. Failure means non-identifiability, poor injection coverage, instrument-specific residual structure, or conclusions that reverse under a defensible activity kernel. Operational validation requires recovery of blind injections before interpreting a real candidate.
 
 ### Gravitational waves: the noise-weighted inner product is a kernel {#matched-filter}
 
-The cleanest illustration in all of physics that detection is a projection in an inner-product space is matched filtering, the method behind gravitational-wave detection (Allen et al. 2012). The optimal statistic for a known waveform \(h\) buried in noise is the noise-weighted inner product
+Matched filtering makes detection a projection in a noise-weighted space. For stationary Gaussian noise and a known waveform \(h\), the statistic is
 
 $$\langle d,h\rangle=4\,\mathrm{Re}\!\int_0^\infty\frac{\tilde d(f)\,\tilde h^*(f)}{S_n(f)}\,df,$$
 
-where \(S_n(f)\) is the noise power spectral density. This is a kernel: it defines the geometry of a whitened Hilbert space in which the data and the template have a well-defined angle, and the detection statistic is the projection of the data onto the template. In white noise it reduces to the plain dot product, which is all we need to see the mechanism on numbers.
+where \(S_n\) is the noise power spectral density. FINDCHIRP defines the discrete filtering, normalization, template-bank search, and signal-consistency test [@allen2012findchirp, Secs. II--IX, especially Eqs. (2.3), (4.1), and (8.1)]. Calling this inner product a kernel identifies its PSD geometry; it does not make the maximum over time and templates a calibrated probability.
+
+**Study protocol: matched-filter search.** Start from strain segments, data-quality flags, a PSD-estimation interval disjoint from the tested event, a fixed template bank, and an injection population. Split by observing time so tuning and final false-alarm estimation use disjoint background. Compare the full noise-weighted statistic with an unweighted correlation and mismatched-template controls. The uncertainty currency is initially a ranking statistic. Convert it to a false-alarm rate only through the complete search pipeline using time slides or another valid background design. Report detection efficiency against false-alarm rate, parameter recovery on injections, veto survival, latency, and sensitivity to PSD drift. Negative controls include time-reversed or off-family templates, hardware-free null segments, and artificial glitches. Failure occurs when background tails are unstable, injections are missed above the declared amplitude, vetoes respond differently between tuning and test time, or PSD drift invalidates normalization. Operational validation is end-to-end blind injection recovery with the production bank, vetoes, and trials factor.
 
 ::::: {.example #example-56-2}
 [Example (finding a chirp by projection)]{.box-title}
 
 :::: wex
 ::: wex-setup
-A chirp template \(h\) of \(512\) samples with rising frequency and a tapered envelope, injected into a white-noise stream at a known arrival lag. We scale the noise so the optimal signal-to-noise ratio \(\rho=\lVert h\rVert/\sigma\) equals \(8\), then slide the template and compute the normalized statistic \(\rho(t_0)=\langle d,h_{t_0}\rangle/(\sigma\lVert h\rVert)\), whose noise has unit variance. All numbers from `checks/ch-highstakes-ex2.py`.
+This is an **illustrative deterministic white-noise simulation**, not a detection pipeline. A \(512\)-sample chirp is injected at a known lag and scaled to optimal SNR \(8\). The check also runs a mismatched template as a negative control.
 :::
 
 1.  [Set the difficulty.]{.wex-op} The template norm is \(\lVert h\rVert=7.372\); the optimal SNR of \(8\) fixes the noise level \(\sigma=0.9215\). The signal is invisible in the raw stream at this noise.
 2.  [Project and read the peak.]{.wex-op} The matched-filter statistic peaks at \(7.37\) at exactly the true arrival lag, near the optimal value of \(8\) (the realized peak is the optimal SNR plus a standard-normal draw).
-3.  [Compare to noise.]{.wex-op} The loudest pure-noise excursion elsewhere is only \(1.71\). The projection onto the template lifts the signal far above the noise floor, which is the entire idea of an optimal detector.
+3.  [Run the negative control.]{.wex-op} The matched template peaks at the injected lag; the frequency-mismatched template does not reproduce that recovery. Exact deterministic values are asserted in the check.
 
-**Reading.** Detection is a projection onto a template in a whitened inner-product space, and that inner product is a kernel in the exact sense the book has used throughout. The optimality is a genuine theorem, the Neyman-Pearson optimal linear detector for a known waveform in stationary Gaussian noise, and the recovered SNR is an auditable, calibrated number. The honest limitation is that the optimality assumes stationary Gaussian noise and a known template, so real pipelines add non-Gaussian-glitch vetoes and must tile the template bank densely, which scales badly in parameter dimension.
+**Reading.** The fixture checks projection geometry only. It deliberately does not report a detection probability.
 ::::
 
 **Verification artifact.** checks/example-ch-highstakes-example-56-2.json records the example source hash and verification scope.
@@ -138,31 +165,33 @@ A chirp template \(h\) of \(512\) samples with rising frequency and a tapered en
 
 ### Spacecraft telemetry and orbit uncertainty {#telemetry-orbits}
 
-Two more space applications make the accountability argument in engineering terms. Spacecraft almost never have labeled fault data, so anomaly detection is naturally a one-class problem: Fujimaki et al. (2005) build a kernel-PCA subspace of nominal telemetry and score a new sample by its reconstruction error in that feature space, a deterministic, reproducible distance rather than a black-box classifier, which is what a mission-review board can act on. And for conjunction assessment, where two objects might collide, a predicted position is useless without a trustworthy covariance; Peng and Bai (2018) learn the residual of a physics-based orbit propagator with a Gaussian process, keeping the interpretable dynamics and adding an input-dependent uncertainty that fuses with the filter covariance. In both, the kernel model is chosen because its output is an auditable uncertainty, not merely a number.
+Kernel-PCA reconstruction error is a score for nominal telemetry, not a fault probability [@fujimaki2005telemetry, Secs. 2--4]. A learned correction to a physical orbit propagator is likewise useful only if residual covariance is validated [@peng2018orbit, Secs. 2--4].
+
+**Study protocol: orbit residuals and telemetry.** Define one trajectory arc or mission day as the independent unit. Publish sensors, sampling cadence, propagator, coordinate frame, maneuver flags, and the rule producing residuals. Split chronologically, reserve complete maneuver and solar-activity regimes, and never place adjacent samples from one arc on both sides. Compare physics-only propagation, GP residual correction, and a simple linear residual model. Report position error by horizon, normalized innovation squared, empirical coverage of covariance ellipsoids, false alarms per mission day, detection delay, and compute latency. Negative controls include timestamp permutation, omitted maneuver covariates, and synthetic faults outside the training family. Reject deployment if long-horizon errors grow beyond the operational tolerance, covariance ellipsoids under-cover, false alarms exceed staffing capacity, or alarms arrive after the intervention deadline.
 
 ## Molecules and materials {#molecules-and-materials}
 
-If there is one domain where kernels, not neural networks, are the canonical data-efficient and uncertainty-aware workhorse, it is the machine learning of interatomic potentials and molecular properties, and the review of Deringer et al. (2021) is its reference. The reason is the accountability triple again: data efficiency because each label is a density-functional-theory calculation, a physics prior written into the kernel, and a posterior variance that decides when to compute the next expensive label.
+Kernel models remain important in molecular simulation because labels can be expensive, symmetry can be built into the representation, and a model-based variance can drive data acquisition. Deringer et al. review the GP construction, descriptors, sparse approximations, and validation problems [@deringer2021gpr, Secs. 2--6].
 
 ### Potentials from a kernel that knows the symmetries {#force-fields}
 
-A Gaussian Approximation Potential (Bartók et al. 2010) is Gaussian-process regression of the energy on quantum-mechanical training data, with no fixed functional form; it interpolates the potential-energy surface and is systematically improvable as more data arrive. What made it general is the kernel. The Smooth Overlap of Atomic Positions descriptor (Bartók, Kondor, and Csányi 2013) defines the similarity between two atomic neighborhoods as the rotationally integrated overlap of their smeared neighbor densities, so the kernel is invariant to rotation, translation, and permutation of like atoms by construction. Those are hard physical symmetries encoded in the kernel itself rather than learned from data, a vivid instance of the book's theme that the kernel is where domain knowledge enters. One such model reproduces density-functional theory across crystalline, liquid, and amorphous silicon and its defects (Bartók et al. 2018), phases where classical force fields fail.
+A Gaussian Approximation Potential regresses energies and derivatives using local atomic environments [@bartok2010gap, method and Eqs. (1)--(4)]. SOAP obtains rotational invariance by integrating overlap between smooth neighbor densities [@bartok2013soap, Secs. II--IV]. Gradient-domain learning imposes energy conservation through derivatives of a scalar kernel [@chmiela2017gdml, method and Eq. (1)]. Published benchmark numbers are not repeated here because comparisons depend on electronic-structure level, molecular split, conformation overlap, force weighting, and units.
 
-The molecular-property lineage runs in parallel. Kernel ridge regression on the Coulomb-matrix descriptor (Rupp et al. 2012) predicted atomization energies of \(7165\) small organic molecules with a mean absolute error near \(9.9\) kcal/mol at a tiny fraction of the quantum cost, and the descriptors that followed, culminating in FCHL (Faber et al. 2018; Christensen et al. 2020), reach chemical accuracy on the QM9 benchmark of Ramakrishnan et al. (2014). The systematic learning curves of Faber et al. (2017) are the evidence for the headline claim: kernel models dominate the small-data regime and reach below hybrid-DFT error. And by learning in the gradient domain with energy conservation imposed exactly, the GDML force fields of Chmiela et al. (2017) reach roughly \(0.3\) kcal/mol from only a thousand molecular configurations, a data efficiency that comes from pairing the kernel with a physics prior.
+**Study protocol: interatomic potential.** Name the chemical systems, electronic-structure code, functional, basis or cutoff, convergence thresholds, temperature and pressure schedule, and configuration-selection mechanism. Split by complete trajectories, molecules, compositions, phases, and rare-event pathways, not by individual atoms or adjacent frames. Compare the symmetry-aware kernel against the physics baseline it replaces, a simpler descriptor, and an ablation without force labels. The uncertainty currency is GP posterior variance or an explicitly calibrated residual score. Report energy error per atom, force-component RMSE, stress error, energy conservation, force consistency, stability duration, rare-event barrier error, calibration by chemical regime, and cost per molecular-dynamics step. Negative controls include rotation/permutation tests, withheld phases, compressed structures, and deliberately disconnected configuration families. Fail when symmetry tests break, trajectories become unstable, high-force tails exceed tolerance, uncertainty fails to rank errors, or the model crosses a barrier without triggering the reference calculation.
 
 ::::: {.example #example-56-3}
 [Example (a bond length from a handful of points)]{.box-title}
 
 :::: wex
 ::: wex-setup
-The smallest instance of a learned potential. We sample about a dozen points of the Morse potential for the hydrogen molecule (dissociation energy \(D_e=4.75\) eV, equilibrium length \(r_e=0.7416\) angstrom, width \(a=1.942\) inverse angstrom), denser near the well, fit kernel ridge regression with an RBF kernel, and recover the equilibrium bond length as the minimum of the predicted curve. All numbers from `checks/ch-highstakes-ex3.py`.
+This is an **illustrative deterministic simulation**, not an ab initio benchmark. Twelve noiseless samples from a declared Morse curve are fit with fixed RBF-KRR hyperparameters. A held-out grid evaluates both the equilibrium location and worst-case energy error.
 :::
 
 1.  [Recover the physical quantity.]{.wex-op} The minimum of the kernel-ridge curve sits at \(0.7425\) angstrom, within \(0.9\) milliangstrom of the true \(0.7416\), from a dozen points.
-2.  [Read the leave-one-out error as uncertainty.]{.wex-op} The closed-form leave-one-out errors of [[ch:accountable-kernels|the accountability chapter]] are largest on the steep repulsive wall, \(4.365\) eV at \(r=2.40\) angstrom, and small in the smooth well, with a median of \(0.0234\) eV over the set.
-3.  [See where to sample next.]{.wex-op} The interpolation is hardest exactly where the leave-one-out error is largest, on the repulsive wall, which is precisely where an active learner would place its next expensive point.
+2.  [Separate diagnostics.]{.wex-op} The check reports held-out grid error and leave-one-out sensitivity separately. Leave-one-out residuals are not predictive intervals.
+3.  [Run a failure control.]{.wex-op} Removing the shortest-bond samples worsens error on the compressed region; the split exposes extrapolation that a random point split could hide.
 
-**Reading.** Even at toy scale the pattern of the real force fields is visible: a kernel interpolates a physical curve from few points, and its own leave-one-out error is a map of where it is least trustworthy. Scaled up with the SOAP kernel and a real potential-energy surface, that error map becomes the control signal for the active-learning loop below.
+**Reading.** The fixture verifies interpolation arithmetic and an extrapolation failure. It does not validate a molecular potential.
 ::::
 
 **Verification artifact.** checks/example-ch-highstakes-example-56-3.json records the example source hash and verification scope.
@@ -170,21 +199,23 @@ The smallest instance of a learned potential. We sample about a dozen points of 
 
 ### The killer app: variance triggers a calculation {#active-learning-chemistry}
 
-The property that makes kernels indispensable here is that the Gaussian-process posterior variance depends only on where a configuration sits relative to the training data, not on its unknown energy, so it can flag an unfamiliar configuration before the expensive label is computed. The on-the-fly force fields of Vandermause et al. (2020) turn this into a method: a molecular-dynamics simulation runs on the cheap GP energy, and at each step the predictive variance is checked; while it stays low the GP prediction is accepted, and when it spikes at a configuration the model has never seen, a rare event such as a bond breaking, a single density-functional-theory calculation is triggered, added to the training set, and the simulation continues. The same idea in a Bayesian linear-regression form bypasses more than ninety-nine percent of the quantum calculations that a brute-force simulation would require (Jinnouchi et al. 2019). The calibrated variance is the entire control signal, converting a fixed compute budget into an adaptive one, and it is the same variance whose honest reading opened the previous chapter.
+For a fixed covariance and observation model, posterior variance can flag geometry unsupported by the design. Vandermause et al. use a GP uncertainty threshold to decide whether to accept a force prediction or request a first-principles calculation [@vandermause2020flare, Methods: “Bayesian active learning”]. Jinnouchi et al. use a related on-the-fly loop [@jinnouchi2019onthefly, Sec. II]. We omit savings percentages because they are protocol-specific.
+
+**Study protocol: on-the-fly learning.** Calibrate the trigger only on trajectories withheld from fitting. Define the hazardous event, error cost, reference-call cost, maximum latency, and threshold before the final simulation. Compare uncertainty sampling with random sampling, geometric-distance sampling, and a fixed offline design at equal reference-call budgets. Report force-error recall above the hazard threshold, false-trigger rate, reference calls per simulated time, maximum untriggered error, trajectory stability, and wall-clock overhead. Include a disconnected-domain generator where an RBF GP is confidently wrong as a negative control. Stop the simulation if the uncertainty-error calibration leaves tolerance, a NaN or energy drift appears, or a high-error state passes without a trigger.
 
 ::::: {.example #example-56-4}
 [Example (uncertainty sampling reaches accuracy sooner)]{.box-title}
 
 :::: wex
 ::: wex-setup
-A one-dimensional toy potential-energy surface with two wells. A Gaussian process (RBF length scale \(0.35\)) starts from three points and, at each step, either places its next sample at the point of maximum posterior variance (uncertainty sampling) or at a random location. We count how many points each needs to reach a target root-mean-square error of \(0.05\). All numbers from `checks/ch-highstakes-ex4.py`.
+This is an **illustrative deterministic simulation** on a declared one-dimensional function. It compares policies at equal stopping criteria and includes a misspecified-variance control.
 :::
 
 1.  [Sample where the model is unsure.]{.wex-op} Uncertainty sampling reaches the target with \(19\) points total.
 2.  [Sample blindly.]{.wex-op} Random sampling needs \(26.6\) points on average over thirty seeds to reach the same error.
-3.  [Count the saving.]{.wex-op} Active learning uses \(0.72\) of the random budget, about a quarter fewer expensive evaluations, and the saving grows with the cost and dimension of the label.
+3.  [Count the saving.]{.wex-op} In this one-dimensional experiment, active learning uses \(0.72\) of the random budget, about a quarter fewer expensive evaluations. A more expensive label makes that saving more valuable; higher dimension does not guarantee that the same strategy remains effective.
 
-**Reading.** The posterior variance is not decoration; it is a decision rule that spends the experimental budget where it buys the most accuracy. This toy loop is the mechanism of the on-the-fly force fields and, in the next section, of autonomous materials discovery. The honest cost is the cubic GP solve, which forces sparse or low-rank approximations at the scales real simulations reach.
+**Reading.** The result is conditional on this generator, grid, kernel, seed set, and stopping rule. The negative control demonstrates that low model variance need not imply low error under misspecification.
 ::::
 
 **Verification artifact.** checks/example-ch-highstakes-example-56-4.json records the example source hash and verification scope.
@@ -197,46 +228,72 @@ A one-dimensional toy potential-energy surface with two wells. A Gaussian proces
 
 ### Bayesian optimization for discovery {#bo-discovery}
 
-When the goal is not a potential but the best material or reaction, the same posterior drives Bayesian optimization, from [[ch:bayesian-optimization-and-bandits|its chapter]], whose modern form traces to modeling a deterministic simulator as a Gaussian process (Sacks et al. 1989) and whose review is Shahriari et al. (2016). The acquisition function balances exploiting the posterior mean against exploring its variance, so each costly experiment is chosen to be maximally informative. In reaction chemistry, Bayesian optimization over reaction conditions outperformed expert chemists in both efficiency and consistency (Shields et al. 2021). In materials, the adaptive-design loop of Xue et al. (2016) searched roughly eight hundred thousand candidate compositions and, by synthesizing only thirty-six of them chosen by expected improvement, found a new nickel-titanium shape-memory alloy with the smallest thermal hysteresis in the family. The uncertainty, not just the mean, chose each alloy to make, which is what turned a combinatorial search into a dozen experiments, and the methodology is consolidated in the review of Lookman et al. (2019).
+When the target is the best material or reaction, the posterior drives Bayesian optimization. The underlying computer-experiment design is described by Sacks et al. [@sacks1989dace, Secs. 2--4], and the sequential workflow by Shahriari et al. [@shahriari2016, Secs. 2--4]. Chemistry and materials case studies demonstrate the design pattern [@shields2021bo, Methods; @xue2016adaptive, Methods; @lookman2019active, Secs. 2--4], but their headline counts are not transferable performance guarantees.
+
+**Study protocol: discovery.** Freeze the candidate space, feasibility constraints, assay or simulator, replicate policy, and total budget. Use repeated historical replay only when unobserved counterfactual outcomes are available; otherwise run a prospective randomized comparison across acquisition policies. Compare expected improvement or another declared acquisition with random, space-filling, and expert-selected designs. Report best-so-far value versus cost, simple regret when ground truth is known, feasibility violations, replicate variability, and time to decision. Negative controls include shuffled outcomes and a kernel that removes chemically meaningful structure. Failure means an acquisition repeatedly proposes infeasible points, uncertainty is anti-correlated with error, or improvement disappears under matched budgets and seeds. Operational validation requires independent synthesis or assay of the selected candidate.
 
 ## Earth observation {#earth-observation}
 
-The third domain turns satellite measurements into maps, and its adoption of kernels tracks the accountability properties once more, through the long line of work surveyed for Gaussian processes by Camps-Valls et al. (2016). Hyperspectral pixels live in hundreds of spectral dimensions but labeled examples are scarce, the small-sample high-dimensional regime where the margin and regularization of a support vector machine shine; Camps-Valls and Bruzzone (2005) made kernel classifiers the remote-sensing standard for exactly this reason. Spatial context enters through the algebra of kernels: a composite kernel \(k=\mu\,k_{\text{spectral}}+(1-\mu)\,k_{\text{spatial}}\) is valid because sums of valid kernels are valid (Camps-Valls et al. 2006), and the mixing weight \(\mu\) is an interpretable, auditable dial for how much neighborhood texture versus pure spectrum drives the decision, a direct use of the Mercer closure properties of [[ch:kernel-families|the kernel-families chapter]].
+Remote-sensing kernels combine spectral and spatial information through
 
-The flagship is calibrated retrieval. Gaussian-process regression from reflectance to biophysical variables such as leaf area index and chlorophyll content (Verrelst et al. 2012, 2013) delivers a per-pixel predictive variance, which becomes a spatial confidence map: pixels whose spectra fall outside the training distribution, unusual canopies or poor atmospheric correction, are flagged as low-confidence, and for an operational product used in crop monitoring or carbon accounting that confidence is the deliverable, not an extra. The GP matched or beat neural networks on accuracy and supplied the uncertainty for free, and its learned per-band length scales double as a relevance ranking over the spectral bands. Because radiative-transfer models that map biophysical parameters to spectra are slow, the same kernels emulate them: a GP surrogate over a principal-component basis of the model output (Verrelst et al. 2016) runs orders of magnitude faster, is smooth and differentiable for inversion and sensitivity analysis, and flags where it is extrapolating. And the audit tools of the last chapter reappear here in their birthplace: Fair Kernel Learning (Pérez-Suay et al. 2017) uses the HSIC dependence measure to remove a sensor or acquisition bias from a retrieval, the same statistic that turned a fairness check into a hypothesis test.
+$$k=\mu k_{\mathrm{spectral}}+(1-\mu)k_{\mathrm{spatial}},\qquad 0\leq\mu\leq1,$$
+
+a PSD construction used in composite-kernel classification [@campsvalls2006composite, Eqs. (1)--(4)]. GP retrieval maps reflectance to variables such as leaf area index or chlorophyll [@verrelst2012retrieval, Secs. II--IV; @verrelst2013uncertainty, Secs. 2--4]. Model variance becomes a confidence layer only after spatial and temporal calibration.
+
+**Study protocol: Earth-observation retrieval.** Publish the sensor product and version, atmospheric correction, bands, cloud mask, ground-truth instrument, geolocation tolerance, acquisition dates, sites, target units, and missing-data rules. Hold out complete regions and seasons; prevent neighboring pixels or repeated measurements of one plot from crossing splits. Compare the GP with a linear or physical retrieval baseline and an RBF model without spatial context. The uncertainty currency is a predictive standard deviation conditional on the retrieval model. Report MAE and RMSE in physical units, bias by site and season, interval coverage and width, spatial residual autocorrelation, support or drift score, map completeness, and inference cost. Negative controls include coordinate permutation, withheld sensor or season, corrupted atmospheric correction, and target permutation. Failure occurs when geographic coverage falls below tolerance, residuals retain spatial structure, uncertainty is narrower out of support, or errors exceed the action threshold for a declared land-management decision.
+
+::::: {.example #example-highstakes-spatial}
+[Example (why pixel-wise splitting lies)]{.box-title}
+
+:::: wex
+::: wex-setup
+This **illustrative deterministic simulation** creates spatially correlated groups with group-specific offsets. It compares a random pixel split with leave-one-region-out evaluation and audits Gaussian interval coverage. All numbers and assertions are in `checks/ch-highstakes-ex5.py`.
+:::
+
+1. [Leak by splitting pixels.]{.wex-op} Nearby training pixels reveal the regional offset, so the random split looks artificially accurate.
+2. [Hold out a region.]{.wex-op} Grouped evaluation exposes the unseen offset and larger error.
+3. [Audit the uncertainty.]{.wex-op} A standard deviation estimated from leaked residuals under-covers the held-out region, so the confidence layer fails its declared currency.
+
+**Reading.** The unit of independence determines the credibility of both accuracy and uncertainty. This fixture is not a satellite benchmark.
+::::
+
+**Verification artifact.** checks/example-ch-highstakes-example-highstakes-spatial.json records the example source hash and verification scope.
+:::::
 
 ## What the cases share {#what-the-cases-share}
 
-Read together, the domains make one argument three times. First, a calibrated posterior covariance is the actual product: a planet mass of \(4.73\pm0.95\) Earth masses, a per-pixel confidence map, an orbit covariance a collision-avoidance system trusts, a variance that decides when to run a quantum calculation. Second, data efficiency is a requirement, not a nicety, when a single sample is a space mission, a supercomputer run, or a scarce ground-truth label, and the kernel's smoothness prior is what makes interpolation from few points defensible. Third, the kernel is the explicit, auditable place where the physics is written: a quasi-periodic kernel for evolving spots, a semi-separable kernel for stellar granulation, a rotation-and-permutation-invariant kernel for atomic environments, a composite spatial-spectral kernel for imagery, and a noise-weighted inner product for matched filtering. These are the three structural facts of [[ch:accountable-kernels|the accountability chapter]] cashed out in real science.
+Read together, the protocols make one argument three times. A useful uncertainty output is part of the product, but each currency has a different validation route: simulation coverage for a parameter posterior, search-background calibration for a detection score, withheld-regime error recall for an active-learning trigger, covariance consistency for orbit residuals, and geographic-temporal coverage for a map. None can borrow validity from another.
 
-The honest limitation is also the same everywhere, and stating it once is the fair close. The exact Gaussian process is cubic in the number of points and assumes a stationary, correctly chosen kernel. That is why every mature application here pairs the method with a scalability structure, the semi-separable celerite covariance, sparse or inducing-point approximations, principal-component bases for emulation, or the Nyström and random-feature methods of [[ch:large-scale-kernels|the large-scale chapter]], and why kernel design and cross-validation are never skipped. The accountability is not free; it costs a solve and a modeling choice, and these sciences pay that cost gladly for an error bar they can defend.
+<figure class="viz" data-figure="uncertainty-decomposition-highstakes" data-alt="A stacked variance budget over an operating condition separates aleatoric noise, Gaussian-process posterior epistemic variance, and an explicit shift allowance. The shift allowance grows outside the shaded training support."><figcaption>Posterior variance is only one term in a high-stakes uncertainty budget. Within support it can measure finite-data uncertainty conditional on the model; outside support, an explicit shift allowance must record that the covariance itself is no longer calibrated. The decomposition prevents model confidence from masquerading as operational confidence.</figcaption></figure>
+
+Scalability is part of the estimand. Semiseparable covariance, inducing points, principal-component emulation, Nyström landmarks, and random features change what is computed. A study must report approximation rank, residual or likelihood tolerance, timing hardware, and whether calibration survives approximation.
 
 ## Common mistakes and practical implications {#highstakes-practice}
 
-- A calibrated covariance is only as trustworthy as the kernel that produced it; a stationary kernel imposed on a nonstationary field, or a length scale left unfitted, yields an error bar that looks defensible and is not.
+- Do not call a covariance calibrated until empirical coverage or a proper-score audit has been run on the deployment split.
 - Data efficiency is not license to skip validation: with a handful of expensive samples, an over-flexible kernel interpolates the noise, so cross-validation and a smoothness prior are what keep few-point interpolation honest.
 - Physics written into the kernel must be the physics of the task; a rotation-invariant atomic kernel applied where orientation carries signal, or a matched filter built on a mis-specified template, encodes the wrong prior and misses what matters.
 - Matched-filter and anomaly scores are ranking statistics, not calibrated probabilities, until their null distribution over correlated trials is worked out; reading a raw peak as a detection confidence overstates significance.
 - The exact Gaussian process is cubic in the number of points, so every mature deployment here pairs it with a scalability structure (celerite, inducing points, principal-component emulation, Nystrom or random features), and treating the exact solve as the only option caps the problem size artificially.
 - An error bar is a claim about the model, not about reality; when the training set no longer resembles the deployment regime, the covariance stops meaning what the report says it means, and a drift check must guard it.
 
-The practical implication is consistent across all three domains: the accountability is not free, it costs a solve and a modeling choice, and it is worth stating in every deliverable which kernel encodes which physics, which hyperparameters were fitted, and which scalability approximation was accepted.
+The practical implication is consistent across all domains: every deliverable should name the data version, split unit, kernel, baseline, uncertainty currency, calibration test, negative controls, failure threshold, and operational decision.
 
 ## Summary and further reading {#summary}
 
-Kernel methods earned their place in astronomy, the physical sciences, and Earth observation for the reasons the previous chapter laid out, not despite them. In space and astronomy the quasi-periodic Gaussian process recovers a stellar rotation period with a credible interval, a shared latent GP separates a planet's mass from stellar activity and reports it with an error bar, matched filtering realizes detection as a projection in a kernel inner-product space, and kernel models supply auditable anomaly scores and orbit covariances. In molecules and materials the SOAP kernel writes rotational and permutational symmetry into a Gaussian Approximation Potential, kernel ridge regression reaches below hybrid-DFT error in the small-data regime, and the posterior variance drives on-the-fly force fields and autonomous discovery by triggering an expensive calculation exactly where the model is unsure. In Earth observation kernel classifiers handle the high-dimensional few-label regime, composite kernels fold in spatial context through Mercer closure, and Gaussian-process retrieval turns every pixel into a value with a confidence. The recurring requirement is a calibrated covariance, the recurring enabler is data efficiency, and the recurring design principle is that the kernel holds the physics; the recurring cost is the cubic solve and the need for a well-chosen, stationary kernel, paid with scalability structure. The book's through-line reaches its most consequential form here: fix a positive definite kernel that encodes what you know, and a great deal of high-stakes science becomes a linear-algebra problem whose answer arrives with the error bar attached.
+Kernel methods earn their place in these sciences when three conditions meet: labels are expensive, useful structure can be written as a covariance or inner product, and the resulting uncertainty can be checked against the decisions it will control. Quasi-periodic kernels encode evolving stellar signals; noise-weighted inner products define matched filters; symmetry-aware kernels reduce the sample burden of molecular potentials; spatial-spectral kernels connect satellite pixels to context. The output is never “an error bar for free.” It is a model-based covariance, score, or interval whose credibility depends on held-out residuals, shift tests, support, numerical approximation, and the cost of a wrong action. The scalable method must be named as carefully as the kernel: semiseparable structure, inducing points, sparse precision, or low-rank features change what is computed. In high-stakes work, the kernel is valuable because the modeling claim is explicit enough to test and reject.
 
-For further reading, Rasmussen and Williams (2006) remains the reference for Gaussian-process regression and its covariance; Angus et al. (2018) and Foreman-Mackey et al. (2017) develop the quasi-periodic and celerite models behind the astronomy cases; Bartok et al. (2013) and Rupp et al. (2012) introduce the SOAP and Coulomb-matrix representations for molecules and materials, and Jinnouchi et al. (2019) the on-the-fly force fields; Camps-Valls and Bruzzone (2005) and Verrelst et al. (2016) survey kernel methods and Gaussian-process retrieval for Earth observation.
+For further reading, use the astronomy review [@aigrain2023gp, Secs. 3--5], the molecular GP review [@deringer2021gpr, Secs. 2--6], and the Earth-observation survey [@campsvalls2016gpsurvey, Secs. II--V]. The individual protocol sections above point to the primary method descriptions.
 
 ::: {.exercises}
 ## Exercises {#exercises}
 
-1.  [warm-up]{.ex-tag} For each application, name the kernel property that earned it its place (calibrated uncertainty, data efficiency, or physics encoded in the kernel), in one phrase: (a) an on-the-fly interatomic potential; (b) matched filtering for gravitational waves; (c) a per-pixel satellite chlorophyll map; (d) recovering a stellar rotation period; (e) a Bayesian-optimization search for a new alloy. Some have more than one; give the dominant one.
-2.  [computation]{.ex-tag} In the matched-filter example the optimal SNR is \(\rho=\lVert h\rVert/\sigma\) and the normalized statistic at the true lag is \(\rho\) plus a standard normal. With \(\lVert h\rVert=7.372\) and \(\sigma=0.9215\), verify \(\rho=8\), and compute the probability that a single pure-noise sample of the statistic exceeds the observed peak of \(7.37\). Why does the loudest of many correlated noise lags still stay far below \(7.37\)?
+1.  [warm-up]{.ex-tag} For stellar rotation, matched filtering, an on-the-fly potential, orbit correction, and satellite retrieval, name the uncertainty currency and one operational validation test.
+2.  [computation]{.ex-tag} In the white-noise matched-filter fixture, \(\rho=\lVert h\rVert/\sigma\). With \(\lVert h\rVert=7.372\) and \(\sigma=0.9215\), verify \(\rho=8\), and compute the one-sided probability that one standard normal exceeds \(7.37\). Explain why this is not the search false-alarm probability.
     Hint
 
     ::: hint-body
-    \(7.372/0.9215=8.0\). A unit-normal exceeds \(7.37\) with probability about \(9\times10^{-14}\). The template width makes adjacent lags highly correlated, so the number of effectively independent noise trials is far smaller than the number of lags, and the expected maximum is a few, not eight.
+    \(7.372/0.9215=8.0\). Use \(\tfrac12\operatorname{erfc}(7.37/\sqrt2)\). A search maximizes over correlated times and templates and is exposed to non-Gaussian noise, so its background must be calibrated end to end.
     :::
 3.  [proof]{.ex-tag} Show that the composite kernel \(k=\mu\,k_1+(1-\mu)\,k_2\) with \(\mu\in[0,1]\) is positive definite whenever \(k_1,k_2\) are, and explain why the mixing weight \(\mu\) is therefore a safe, interpretable dial in the spatial-spectral remote-sensing kernel. What goes wrong if \(\mu\) is allowed outside \([0,1]\)?
     Hint
@@ -244,22 +301,28 @@ For further reading, Rasmussen and Williams (2006) remains the reference for Gau
     ::: hint-body
     A nonnegative combination of positive definite kernels is positive definite, since the Gram matrix is the same nonnegative combination of positive semidefinite matrices. Outside \([0,1]\) a negative coefficient can destroy positive definiteness, so the \"kernel\" is no longer a valid inner product.
     :::
-4.  [exploration]{.ex-tag} Reproduce the Morse-potential fit and study data efficiency: as you thin the training points from twelve to five, track the recovered bond length and the median leave-one-out error, and identify which points are most costly to remove. Relate your finding to why an active learner samples the repulsive wall first.
+4.  [computation]{.ex-tag} Reproduce the Morse fixture and compare the full design with the design that removes the shortest-bond samples. Report equilibrium error and maximum compressed-region error. Why is leave-one-out sensitivity not a predictive interval?
     Hint
 
     ::: hint-body
-    Removing points on the steep wall degrades the fit fastest because the curvature is highest there and the kernel must work hardest; the well is nearly flat and tolerates sparser sampling. The leave-one-out error you computed already ranks the wall points as the least redundant.
+    The executable check gives the exact values. Leave-one-out changes the fitted dataset and measures sensitivity at observed sites; it does not supply a probability model or coverage guarantee at a new configuration.
     :::
-5.  [challenge]{.ex-tag} The on-the-fly force field trusts the GP prediction while the posterior variance is below a threshold and calls quantum mechanics when it exceeds it. Frame this as a decision rule with a cost for a wrong prediction and a cost for a quantum call, and derive how the threshold should depend on the two costs. What failure mode arises if the kernel is misspecified so the variance is not calibrated?
+5.  [challenge]{.ex-tag} An on-the-fly force field trusts the GP below a score threshold. Let \(C_e\) be the cost of a hazardous error and \(C_q\) the cost of a reference call. Derive the decision rule if \(p(s)\) is a calibrated hazard probability given score \(s\). State what cannot be derived from an uncalibrated posterior variance.
     Hint
 
     ::: hint-body
-    Call quantum mechanics when the expected cost of trusting the GP (roughly the miscoverage probability times the error cost) exceeds the call cost; the threshold falls as the error cost rises. If the variance is miscalibrated low, the rule accepts predictions it should not, and the simulation drifts into unphysical regions unnoticed, the deployment analogue of the previous chapter's under-coverage.
+    Request the reference calculation when \(C_e p(s)\gt C_q\), or \(p(s)\gt C_q/C_e\). A variance threshold follows only after estimating a monotone calibration map from variance to hazard probability on representative held-out trajectories.
     :::
 6.  [exploration]{.ex-tag} The chapter claims the exact GP is cubic and every mature application pairs it with a scalability structure. Pick two, celerite's semi-separable covariance and inducing-point sparse GPs, and explain what structural assumption each exploits and what it gives up, connecting them to the Nyström and random-feature trade-offs of [[ch:large-scale-kernels|the large-scale chapter]].
     Hint
 
     ::: hint-body
     Celerite restricts the kernel to a sum of (complex) exponentials on one-dimensional inputs, buying an exact linear-time likelihood at the cost of generality; inducing points summarize the data by \(m\ll n\) pseudo-points, an approximation whose fidelity is governed by the effective dimension, the same quantity that sets how many Nyström landmarks suffice.
+    :::
+7.  [synthesis]{.ex-tag} Design an Earth-observation retrieval study using the eight-field template. Explain why random pixel splitting is invalid when residuals are spatially correlated, and give one predeclared coverage failure criterion.
+    Hint
+
+    ::: hint-body
+    Hold out complete regions and seasons, fit all preprocessing and hyperparameters inside the development data, and audit physical error plus interval coverage by region. A possible failure rule is coverage below \(90\%\) for a nominal \(95\%\) interval in any operational region with adequate sample size.
     :::
 :::

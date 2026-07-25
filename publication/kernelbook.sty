@@ -1,0 +1,281 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kernelbook}[2026/07/25 Kernel book interior identity]
+
+% ── Page geometry ─────────────────────────────────────────────────────────────
+% KOMA-Script's typearea deliberately sets a narrow classical text block,
+% which leaves most of a letter page empty at 10pt. Set an explicit type
+% area instead: 6.5in text width with a small inner binding offset.
+\usepackage{geometry}
+\geometry{letterpaper, top=1in, bottom=1in, inner=1.1in, outer=0.9in,
+  headsep=16pt, footskip=28pt}
+\usepackage{mathtools}
+% Libertinus supplies the book's mathematical voice. LuaTeX's assembly of its
+% horizontal brace extenders can render as solid bars in long annotations, so
+% use Latin Modern only for those four extensible glyphs.
+\setmathfont{Latin Modern Math}[range={\overbrace,\underbrace,\overbracket,\underbracket}]
+% Libertinus Math has no separately shipped bold font. Register the closely
+% related XITS face after the brace override as the complete bold math version
+% requested by \boldsymbol.
+\setmathfont{XITS Math}[version=bold]
+% Role-based print typography, shared with the web edition. Source Serif 4 is
+% designed for sustained reading; STIX remains the mathematical/display voice;
+% IBM Plex handles compact scholarly apparatus. Files are vendored so the
+% edition is reproducible on machines that do not have these families installed.
+\setmainfont{Source Serif 4}[
+  Path=publication/fonts/,
+  UprightFont=source-serif-4-latin-400-normal.ttf,
+  ItalicFont=source-serif-4-latin-400-italic.ttf,
+  BoldFont=source-serif-4-latin-600-normal.ttf,
+  BoldItalicFont=source-serif-4-latin-600-italic.ttf,
+  Scale=MatchLowercase]
+\newfontfamily\kbdisplay{STIX Two Text}[Scale=MatchLowercase]
+\setsansfont{IBM Plex Sans}[
+  Path=publication/fonts/,
+  UprightFont=ibm-plex-sans-latin-400-normal.ttf,
+  ItalicFont=ibm-plex-sans-latin-400-italic.ttf,
+  BoldFont=ibm-plex-sans-latin-600-normal.ttf,
+  Scale=MatchLowercase]
+\newfontfamily\kbmono{IBM Plex Mono}[
+  Path=publication/fonts/,
+  UprightFont=ibm-plex-mono-latin-400-normal.ttf,
+  BoldFont=ibm-plex-mono-latin-600-normal.ttf,
+  Scale=MatchLowercase]
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{xurl}          % allow URLs to break anywhere (bibliography)
+\usepackage{xcolor}
+\usepackage{tikz}
+
+% ── Identity palette (mirrors book.css and the web edition) ───────────────────
+\definecolor{KernelInk}{HTML}{142330}
+\definecolor{KernelDeep}{HTML}{0F2331}
+\definecolor{KernelPaper}{HTML}{F5F7F5}
+\definecolor{KernelAccent}{HTML}{B85F32}
+\definecolor{KernelSpectral}{HTML}{2F6B82}
+\definecolor{KernelSlate}{HTML}{326D8B}
+\definecolor{KernelMuted}{HTML}{52626D}
+\definecolor{KernelRule}{HTML}{D7DFE0}
+\definecolor{KernelIvory}{HTML}{F3F0E8}
+\definecolor{KernelBlue}{HTML}{173D5A}
+\definecolor{KernelRed}{HTML}{984A39}
+
+% Restrained link colours: internal references read as ink on paper, citations
+% take the accent, and external URLs a muted slate. AtBeginDocument so this
+% overrides the colours pandoc's template feeds to hyperref.
+\AtBeginDocument{\hypersetup{
+  linkcolor=KernelInk, citecolor=KernelAccent!85!black, urlcolor=KernelSlate,
+  pdfdisplaydoctitle=true}}
+
+% ── Body typography discipline ────────────────────────────────────────────────
+\clubpenalty=10000 \widowpenalty=10000 \displaywidowpenalty=6000
+\raggedbottom
+\setlength{\parindent}{1.15em}
+\setlength{\parskip}{0pt}
+\frenchspacing
+% Figures are referenced as "the figure below": never float them. With [H]
+% every plate is a normal block in the text flow, which also removes the
+% float/breakable-tcolorbox interaction that let transparent plates overlap
+% the preceding paragraph (the p.213 collision).
+\usepackage{float}
+\floatplacement{figure}{H}
+\usepackage{amsthm}
+
+% ── Formal mathematical statements ───────────────────────────────────────────
+% Real amsthm environments provide the book's mathematical grammar. All formal
+% results share a chapter-local counter, as in a research monograph. The theorem
+% family uses italic bodies; definitions, examples, remarks, and algorithms use
+% upright bodies. There are no cards, fills, rails, or semantic colours.
+\definecolor{kbDef}{HTML}{39705C}
+\definecolor{kbThm}{HTML}{A95430}
+\definecolor{kbEx}{HTML}{326D8B}
+\definecolor{kbRmk}{HTML}{6E5C91}
+\definecolor{kbAlgo}{HTML}{23727B}
+\definecolor{kbProof}{HTML}{52626D}
+\newtheoremstyle{kbplain}
+  {10pt}{5pt}
+  {\itshape}
+  {}
+  {\kbdisplay\bfseries\color{KernelInk}}
+  {.}
+  {.55em}
+  {}
+\newtheoremstyle{kbdefinition}
+  {10pt}{5pt}
+  {\normalfont}
+  {}
+  {\kbdisplay\bfseries\color{KernelInk}}
+  {.}
+  {.55em}
+  {}
+\theoremstyle{kbplain}
+\newtheorem{kbtheorem}{Theorem}[chapter]
+\newtheorem{kblemma}[kbtheorem]{Lemma}
+\newtheorem{kbproposition}[kbtheorem]{Proposition}
+\newtheorem{kbcorollary}[kbtheorem]{Corollary}
+\theoremstyle{kbdefinition}
+\newtheorem{kbdefinition}[kbtheorem]{Definition}
+\newtheorem{kbexample}[kbtheorem]{Example}
+\newtheorem{kbremark}[kbtheorem]{Remark}
+\newtheorem{kbalgorithm}[kbtheorem]{Algorithm}
+% Hints use a scholarly aside treatment, not a card.
+\newenvironment{kbhint}
+  {\par\addvspace{7pt}\begin{addmargin}[1.8em]{1.2em}\small\color{KernelMuted}%
+   \noindent\textit{\color{KernelInk}Hint.}\enspace\ignorespaces}
+  {\par\end{addmargin}\addvspace{8pt}}
+% Exercise difficulty tag.
+\newcommand{\kbextag}[1]{{\footnotesize\scshape\color{KernelMuted}#1}}
+% Review-boilerplate metadata inside formal boxes (Assumptions / Proof status):
+% present but visually subordinate to the mathematics.
+\newcommand{\kbmetaopen}{\par\addvspace{4pt}\begingroup\normalfont\footnotesize\color{KernelMuted}}
+\newcommand{\kbmetaclose}{\par\endgroup}
+% amsthm proofs: classical italic lead and an open square.
+\renewcommand{\qedsymbol}{$\square$}
+
+% ── Headings: STIX display serif, sans meta tags ──────────────────────────────
+% Serif bold display titles match the mathematics; the sans family is reserved
+% for structural labels (the "CHAPTER 12" tag, running heads, box titles).
+\setkomafont{disposition}{\kbdisplay\bfseries\unboldmath\color{KernelInk}}
+\setkomafont{chapter}{\kbdisplay\bfseries\unboldmath\color{KernelInk}\huge}
+\setkomafont{section}{\kbdisplay\bfseries\unboldmath\color{KernelInk}\Large}
+\setkomafont{subsection}{\kbdisplay\bfseries\unboldmath\color{KernelInk}\large}
+\setkomafont{subsubsection}{\kbdisplay\bfseries\unboldmath\color{KernelInk}\normalsize}
+% Accent section numbers: a quiet signal that recurs on every page.
+\renewcommand*{\sectionformat}{{\color{KernelAccent}\thesection}\enskip}
+\renewcommand*{\subsectionformat}{{\color{KernelAccent}\thesubsection}\enskip}
+\renewcommand*{\subsubsectionformat}{{\color{KernelAccent}\thesubsubsection}\enskip}
+
+% Chapter opener: a full-width accent hairline, a sans "CHAPTER N" tag, then
+% the serif title with a deep sink before the text starts.
+\newif\ifkbpreliminaries
+\kbpreliminariesfalse
+\newcommand{\kbpreliminariesmode}{%
+  \kbpreliminariestrue
+  \setcounter{chapter}{0}%
+  \renewcommand{\thechapter}{P}%
+  \renewcommand*{\chaptermarkformat}{Reference\enskip}}
+\newcommand{\kbmainmattermode}{%
+  \kbpreliminariesfalse
+  \setcounter{chapter}{0}%
+  \renewcommand{\thechapter}{\arabic{chapter}}%
+  \renewcommand*{\chaptermarkformat}{\thechapter\autodot\enskip}}
+\renewcommand\chapterlinesformat[3]{%
+  \parindent0pt\raggedright
+  {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}%
+  \vspace{14pt}%
+  \ifstr{#2}{}{}{%
+    {\sffamily\scriptsize\bfseries\color{KernelSpectral}\textls[105]{%
+      \ifkbpreliminaries\MakeUppercase{Reference chapter}%
+      \else\MakeUppercase{Chapter}\space#2\fi}\par}%
+    \vspace{10pt}}%
+  {\kbdisplay\bfseries\fontsize{27}{32}\selectfont #3\par}%
+  \vspace{4pt}%
+}
+\renewcommand*{\chapterformat}{\thechapter}
+\RedeclareSectionCommand[beforeskip=52pt, afterskip=30pt]{chapter}
+
+% ── Running heads (scrlayer-scrpage) ──────────────────────────────────────────
+% Verso: chapter. Recto: current section. Page numbers at the outer edge, all
+% in the meta sans, one size down, muted — navigation, not decoration.
+\usepackage[automark]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+\automark[section]{chapter}
+\ihead{\headmark}
+\ohead*{\pagemark}
+\setkomafont{pageheadfoot}{\sffamily\scriptsize\color{KernelMuted}}
+\setkomafont{pagenumber}{\kbdisplay\scriptsize\bfseries\color{KernelInk}}
+\KOMAoptions{headsepline=0.4pt}
+\addtokomafont{headsepline}{\color{KernelRule}}
+
+% ── Captions ──────────────────────────────────────────────────────────────────
+\setkomafont{caption}{\small\color{KernelInk}}
+\setkomafont{captionlabel}{\kbdisplay\small\bfseries\color{KernelAccent}}
+\setcapindent{0pt}
+\setlength{\abovecaptionskip}{9pt}
+
+% ── Chapter lead paragraph (the narrative hook) ───────────────────────────────
+% A readable chapter abstract: slightly larger text and a short closing rule.
+% The former inline rail could detach from the paragraph during Pandoc output,
+% leaving an orphaned blue stroke; pure typography is both safer and quieter.
+\newenvironment{kblead}
+  {\par\vspace{2pt}\begin{addmargin}[1.4em]{1.4em}\color{KernelMuted}%
+   \fontsize{10.8}{15.4}\selectfont\noindent\ignorespaces}
+  {\par\vspace{7pt}\noindent{\normalfont\color{KernelBlue}\rule{2.4cm}{0.7pt}}%
+   \end{addmargin}\vspace{16pt}}
+
+% ── Part openers ──────────────────────────────────────────────────────────────
+% \kbpart{numeral}{title}{intro}: a right-hand opener page carrying the part
+% numeral, title, and the part's own introduction, recorded in TOC + bookmarks.
+\newcommand{\kbpart}[3]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \phantomsection
+  \addcontentsline{toc}{part}{#1\ ·\ #2}%
+  \vspace*{0.12\textheight}
+  {\parindent0pt\raggedright
+    {\sffamily\scriptsize\color{KernelMuted}\textls[105]{\MakeUppercase{Part #1}}\par}
+    \vspace{11pt}
+    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
+    \vspace{30pt}
+    {\kbdisplay\mdseries\color{KernelInk}\fontsize{34}{40}\selectfont #2\par}
+    \vspace{28pt}
+    \begin{addmargin}[0pt]{1.0cm}
+      {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #3\par}
+    \end{addmargin}
+    \vspace{43pt}
+    \begin{center}
+      \begin{tikzpicture}[x=1cm,y=1cm]
+        \draw[KernelRule,line width=.45pt] (0,0) -- (7.5,0);
+        \foreach \c/\h/\op in {.7/.7/30,1.9/1.05/45,3.2/1.4/62,4.5/1.15/50,5.8/.85/38,6.8/.58/28}{
+          \draw[KernelBlue!\op,line width=.65pt,samples=42,smooth,domain=0:7.5]
+            plot (\x,{\h*exp(-1.2*(\x-\c)^2)});
+          \fill[KernelRed] (\c,0) circle (.9pt);
+        }
+      \end{tikzpicture}
+    \end{center}
+    \vfill
+    {\hfill\kbdisplay\fontsize{74}{74}\selectfont\color{KernelBlue!10}#1\par}}
+  \cleardoublepage
+}
+
+% The preliminary material is a reference division, not "Part 0".
+\newcommand{\kbpartreference}[2]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \phantomsection
+  \addcontentsline{toc}{part}{Reference · #1}%
+  \vspace*{0.12\textheight}
+  {\parindent0pt\raggedright
+    {\sffamily\scriptsize\color{KernelMuted}\textls[105]{\MakeUppercase{Reference}}\par}
+    \vspace{11pt}
+    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
+    \vspace{30pt}
+    {\kbdisplay\mdseries\color{KernelInk}\fontsize{34}{40}\selectfont #1\par}
+    \vspace{28pt}
+    \begin{addmargin}[0pt]{1.0cm}
+      {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #2\par}
+    \end{addmargin}
+    \vspace{43pt}
+    \begin{center}
+      \begin{tikzpicture}[x=1cm,y=1cm]
+        \draw[KernelRule,line width=.45pt] (0,0) -- (7.5,0);
+        \foreach \c/\h/\op in {.7/.7/30,1.9/1.05/45,3.2/1.4/62,4.5/1.15/50,5.8/.85/38,6.8/.58/28}{
+          \draw[KernelBlue!\op,line width=.65pt,samples=42,smooth,domain=0:7.5]
+            plot (\x,{\h*exp(-1.2*(\x-\c)^2)});
+          \fill[KernelRed] (\c,0) circle (.9pt);
+        }
+      \end{tikzpicture}
+    \end{center}
+    \vfill
+    {\hfill\kbdisplay\itshape\fontsize{58}{62}\selectfont\color{KernelBlue!9}%
+      \(k(\,\cdot\,,x)\)\par}}
+  \cleardoublepage
+}
+
+% ── Table of contents ─────────────────────────────────────────────────────────
+\setkomafont{partentry}{\sffamily\small\bfseries\color{KernelAccent}}
+\setkomafont{chapterentry}{\kbdisplay\bfseries\color{KernelInk}}
+\DeclareTOCStyleEntry[beforeskip=14pt]{tocline}{part}
+
+\input{publication/frontmatter.tex}
+\allowdisplaybreaks

@@ -2,19 +2,23 @@
 id: ch-accountable
 slug: accountable-kernels
 title: 'Accountable Kernels: Uncertainty, Explanation, and Audit'
-part: XVIII · Kernels You Can Defend
-order: 55
+part: XII · Reliable Practice
+order: 60
 tier: advanced
 prerequisites:
   - reproducing-kernel-banach-and-variation-spaces
 objectives:
+  - Separate model-based GP uncertainty from empirically calibrated coverage.
   - >-
-    Explain the central definitions and claims in Accountable Kernels:
-    Uncertainty, Explanation, and Audit.
-  - Apply the chapter's principal methods and interpret their outputs.
+    Compute example contributions and exact kernel-ridge leave-one-out
+    influence.
   - >-
-    State the assumptions behind formal results and connect them to earlier
-    chapters.
+    Use MMD and HSIC as tests without confusing non-rejection with a
+    certificate.
+  - >-
+    Assemble a reproducible model record that includes data, solver, tolerance,
+    and approximation.
+  - Define monitoring and recalibration triggers for a deployed kernel model.
 review_status: draft
 reviewers:
   technical: null
@@ -50,7 +54,7 @@ bibliography:
 ---
 # Accountable Kernels: Uncertainty, Explanation, and Audit
 
-<p class="lead">A prediction that will steer a spacecraft, propose a molecule for synthesis, or drive a satellite crop-yield estimate is not judged by its accuracy alone. Someone will ask how sure the model is, which training data the decision rests on, whether the inputs still resemble what the model was trained on, and whether the whole thing can be reproduced and documented for a review board. For most modern models these are afterthoughts, bolted on with a separate uncertainty head, a post-hoc saliency map, or a monitoring dashboard that lives outside the model. For a kernel machine they are not afterthoughts at all: they fall out of the same geometry the book has been building. The representer theorem makes every prediction an explicit, signed sum over named training points, so attribution is exact and free. The fit is a deterministic convex solve, so it is reproducible bit for bit. The Gaussian-process posterior returns a calibrated variance as a first-class output, and where that calibration is not to be trusted, a distribution-free conformal wrapper restores a finite-sample guarantee. The audit tools, drift tests and independence tests, are themselves kernel statistics. Accountability, in short, is a structural property of a kernel model rather than a wrapper around it, and the next chapter shows the payoff in the sciences that demand it.</p>
+<p class="lead">A prediction that will steer a spacecraft, propose a molecule for synthesis, or drive a satellite crop-yield estimate is not judged by its accuracy alone. Someone will ask how sure the model is, which training data support the decision, whether the inputs still resemble what the model was trained on, and whether the whole pipeline can be reproduced and documented for a review board. Kernel methods put unusually much of that evidence in one geometry. The representer theorem writes a prediction as a signed sum over named training points; convex objectives provide checkable optimality conditions; a Gaussian-process model supplies a predictive covariance; conformal calibration can add finite-sample marginal coverage under exchangeability; and kernel two-sample and independence statistics can monitor deployment. None of these is automatic trust. Contributions are not causal explanations, covariance is conditional on a model, numerical reproducibility needs a recorded implementation and tolerance, and statistical tests have finite power. This chapter turns those structural advantages into an audit chain whose assumptions and failure triggers can be stated before the model is deployed.</p>
 
 ## Accountability is a property of the model, not a wrapper {#a-property-not-a-wrapper}
 
@@ -60,25 +64,48 @@ The first is the representer theorem of [[ch:kernel-tricks|the kernel-tricks cha
 
 $$f(x)=\sum_{i=1}^n \alpha_i\,k(x_i,x).$$
 
-Every value the model ever outputs is a weighted vote over the training examples, with the weight on example \(i\) equal to \(\alpha_i\,k(x_i,x)\). This is not an approximation to an explanation; it is the model. Ask why the prediction at \(x\) came out as it did and the answer is a list of past cases and their signed similarities to \(x\).
+Every value the model outputs is a weighted vote over the training examples, with contribution \(\alpha_i\,k(x_i,x)\) from example \(i\). This decomposition is exact for the fitted function, so it answers the narrow question “which represented cases contribute to this value?” It does not by itself answer a causal question, certify that the kernel features are meaningful to a person, or distinguish a genuinely influential case from a redundant cluster of near-duplicates.
 
-The second is that fitting is a deterministic convex program. Kernel ridge regression and the Gaussian-process posterior mean solve the linear system \((K+\lambda I)\alpha=y\); the support vector machine of [[ch:support-vector-machines|its chapter]] solves a convex quadratic program with a unique optimum (Cortes and Vapnik 1995). There is no random initialization, no mini-batch order, no early-stopping seed. Given the data, the kernel, and the hyperparameters, refitting reproduces the same solution to the last bit that the arithmetic allows. A regulator who asks for a reproducible training procedure is handed a short, closed specification rather than a stochastic recipe.
+The second is that many canonical fits are convex and have residuals or optimality conditions that can be checked. Kernel ridge regression and the Gaussian-process posterior mean solve a regularized linear system; the support vector machine of [[ch:support-vector-machines|its chapter]] solves a convex quadratic program (Cortes and Vapnik 1995). Strict regularization makes the primal predictor unique in the usual formulations, although dual coefficients need not be unique when the Gram matrix is singular. Fixed data, preprocessing, kernel, hyperparameters, arithmetic, solver, and stopping tolerance define a short reproducibility record. Different libraries or parallel reductions can still differ in their final bits, so numerical residuals and prediction tolerances are more meaningful than a claim of bitwise identity.
 
 The third is that a Gaussian process, from [[ch:gaussian-processes-and-rvm|the Bayesian chapter]], returns not a point but a predictive distribution, whose variance
 
 $$\sigma^2(x_\star)=k(x_\star,x_\star)-k(x_\star)^\top(K+\sigma^2 I)^{-1}k(x_\star)$$
 
-depends only on where \(x_\star\) sits relative to the data, not on the observed labels. The model reports its own ignorance: far from the data the variance climbs back toward the prior. That error bar is delivered by the same solve as the mean, not by a separate procedure trained to imitate uncertainty.
+depends only on where \(x_\star\) sits relative to the data, not on the observed labels. Under the stated covariance and likelihood, the model reports where that model has little information: far from the training geometry the variance often climbs toward the prior. The covariance is delivered by the same factorization as the mean, but it is a conditional model quantity, not a distribution-free certificate of error.
 
-The contrast with a deep network is not a matter of taste. A network's explanation must be reconstructed after the fact by a saliency method whose faithfulness is itself in question; its uncertainty must be approximated by an ensemble or by dropout; its training run is not reproducible without pinning a dozen sources of nondeterminism. The kernel model supplies all three natively because they are consequences of positive definiteness and convexity. The rest of this chapter turns each fact into a working tool, and is honest about where each one strains: calibration depends on the kernel being right, attribution is only as inspectable as the training set is documented, and every exact statement here is an exact statement about a model small enough to solve exactly.
+The comparison with other model families should therefore be made capability by capability, not as a blanket hierarchy. A deterministic neural predictor can also be calibrated, monitored, and documented, while a large approximate kernel model can lose the exact algebra used here. The kernel advantage is narrower and useful: for several important estimators, contributions, uncertainty under a GP model, and convex optimality are explicit in the fitted object. The rest of the chapter turns those facts into working tools and keeps their scopes visible.
 
 ## Uncertainty you can put in a report {#uncertainty-you-can-report}
 
-A number without an error bar is not yet a scientific result, and a great deal of what makes kernel methods trusted in the sciences of the next chapter is that they hand back the error bar as part of the answer. We take the native Gaussian-process interval first, see exactly where it can be trusted and where it cannot, and then layer on the distribution-free guarantee that repairs the gap.
+A number without an error bar is not yet a scientific result, and a great deal of what makes kernel methods useful in the sciences of the next chapter is that they can return uncertainty as part of the answer. We take the native Gaussian-process interval first, identify the model assumptions behind it, and then layer on a conformal guarantee whose different assumption is exchangeability.
 
 ### The Gaussian-process interval, and its honest limits {#gp-error-bars}
 
-The predictive variance above has a clean reading. It starts at the prior variance \(k(x_\star,x_\star)\) and subtracts the quadratic form \(k(x_\star)^\top(K+\sigma^2 I)^{-1}k(x_\star)\), which is exactly the information the training data supply about \(x_\star\). Near a cluster of data the subtraction is large and the posterior tightens; in a gap or beyond the data the subtraction vanishes and the interval balloons back toward the prior. Under a correctly specified model, the intervals \([\,\mu(x_\star)\pm z_{1-\alpha/2}\,\sigma(x_\star)\,]\) are genuine Bayesian credible intervals with the coverage they claim.
+The predictive variance above has a clean model-based reading. It starts at the prior variance \(k(x_\star,x_\star)\) and subtracts the quadratic form \(k(x_\star)^\top(K+\sigma_\epsilon^2 I)^{-1}k(x_\star)\). The exact boundary is worth stating formally [@rasmussen2006, Section 2.2, especially Equations 2.22--2.24].
+
+:::: {.proposition #prop-accountable-gp-boundary}
+[Proposition (what a Gaussian-process interval guarantees)]{.box-title}
+
+Let \(f\sim\operatorname{GP}(m,k)\), where \(k\) is a finite-valued PSD covariance kernel. At fixed inputs \(X=(X_1,\ldots,X_n)\), observe \(Y_i=f(X_i)+\epsilon_i\), with independent \(\epsilon_i\sim N(0,\sigma_\epsilon^2)\) and \(\sigma_\epsilon^2\gt0\). Treat \(m\), \(k\), \(\sigma_\epsilon^2\), and \(X\) as fixed rather than estimated from the same response vector. Then, conditional on \(X,Y\),
+
+$$
+f(x_\star)\sim N\!\left(
+m(x_\star)+k_\star^\top(K+\sigma_\epsilon^2I)^{-1}(Y-m_X),
+\ k(x_\star,x_\star)-k_\star^\top(K+\sigma_\epsilon^2I)^{-1}k_\star
+\right).
+$$
+
+Consequently the corresponding Gaussian interval has posterior probability \(1-\alpha\) for the latent \(f(x_\star)\). Adding \(\sigma_\epsilon^2\) to the variance gives the posterior-predictive interval for a new noisy observation. If the asserted joint Gaussian data-generating model is correct, averaging over repeated \(Y\) also gives nominal model-based coverage. The proposition supplies no distribution-free, conditional-on-\(x_\star\), or misspecification-robust coverage statement.
+
+**Assumptions.** Fixed finite design, finite PSD covariance, positive Gaussian observation noise, fixed hyperparameters, and the asserted joint GP model.
+
+**Proof status.** Complete proof below.
+
+**Proof.** The displayed law is the conditional distribution of one block of a jointly Gaussian vector given the other; its covariance is the Schur complement. The Gaussian quantile has conditional posterior mass \(1-\alpha\). Every conclusion therefore inherits the asserted joint model. \(\square\)
+::::
+
+Hyperparameter fitting, covariance misspecification, non-Gaussian or heteroscedastic noise, and adaptive selection of \(x_\star\) move the deployed procedure outside this proposition unless separately justified. Frequentist coverage is therefore an empirical calibration target, not a consequence of a plotted posterior band.
 
 The qualifier is the whole story, so we make both halves of it concrete on numbers.
 
@@ -91,7 +118,7 @@ First the honest behavior. We fit a Gaussian process with an RBF kernel (length 
 :::
 
 1.  [Watch the band breathe.]{.wex-op} The posterior standard deviation is \(0.049\) at a training point (\(x=0.9\)), essentially the noise floor; it rises to \(0.472\) in the middle of the gap (\(x=3.5\)); and it is \(0.247\) just past the data (\(x=6.5\)). The model announces exactly where it has no evidence, and it does so from the inputs alone.
-2.  [Now misspecify the noise.]{.wex-op} Averaged over the whole domain the nominal \(90\%\) interval covers \(89.1\%\) of fresh points, which looks fine. It is not fine: restricted to the high-noise half of the domain (\(x\gt 0.5\)), coverage falls to \(79.2\%\). The single assumed noise is too small where the true noise is large, and the interval silently under-covers there.
+2.  [Now misspecify the noise.]{.wex-op} Averaged over the whole domain the nominal \(90\%\) interval covers \(89.1\%\) of fresh points, which looks fine. It is not fine: restricted to the high-noise half of the domain (\(x\gt0.5\)), coverage falls to \(79.2\%\). The single assumed noise is too small where the true noise is large, and the interval silently under-covers there.
 3.  [Read the lesson.]{.wex-op} The GP error bar is honest about *where* the data are sparse (step 1), because that part depends only on the kernel geometry. It is only as honest about *how noisy* the data are as the noise model you gave it (step 2). Aggregate coverage hid a local failure that a report on the noisy regime would have relied on.
 
 **Reading.** Two different promises live inside one interval. The width from the kernel geometry is trustworthy and is the source of the \"it knows when it is extrapolating\" behavior that makes GPs valued in the sciences. The width from the assumed noise model is trustworthy only under correct specification, and a misspecified kernel or noise level can make the nominal coverage a fiction exactly where it matters. This is the gap the next section closes.
@@ -102,7 +129,7 @@ First the honest behavior. We fit a Gaussian process with an RBF kernel (length 
 
 ### Conformal prediction: a distribution-free coverage guarantee {#conformal}
 
-The way to stop trusting the model's self-assessment and start certifying coverage is conformal prediction (Vovk, Gammerman, and Shafer 2005; Lei et al. 2018; Angelopoulos and Bates 2021). It wraps any predictor, kernel or otherwise, and turns its residuals into an interval with a finite-sample coverage guarantee that assumes nothing about the data distribution beyond exchangeability. The split, or inductive, form is a few lines.
+The way to stop trusting the model's self-assessment and start certifying coverage is conformal prediction [@vovk2005conformal, Chapter 2; @lei2018conformal, Section 2.2 and Theorem 2.1; @angelopoulos2021gentle, Section 2]. It wraps any predictor, kernel or otherwise, and turns residuals into an interval. “Distribution-free” means no parametric family is assumed; it does not remove exchangeability, data-splitting, or score-definition requirements.
 
 :::: {.algorithm #algo-55-1}
 [Algorithm (Split-conformal prediction for regression)]{.box-title}
@@ -114,15 +141,27 @@ The way to stop trusting the model's self-assessment and start certifying covera
 :::
 
 1.  Compute the conformity scores \(s_i=\lvert y_i-\hat f(x_i)\rvert\) on the calibration set.
-2.  Set \(\hat q\) to the \(\big\lceil (n+1)(1-\alpha)\big\rceil\)-th smallest score.
+2.  Put \(r=\big\lceil (n+1)(1-\alpha)\big\rceil\). If \(r\le n\), set \(\hat q=s_{(r)}\); if \(r=n+1\), set \(\hat q=+\infty\).
 3.  Return \(C(x)=[\,\hat f(x)-\hat q,\ \hat f(x)+\hat q\,]\).
 ::::
 
-The guarantee is the theorem of Vovk, Gammerman, and Shafer (2005), sharpened by Lei et al. (2018): if the calibration points and the test point are exchangeable, then
+:::: {.theorem #thm-accountable-split-conformal}
+[Theorem (finite-sample split-conformal coverage)]{.box-title}
+
+Let the proper-training data be independent of the \(n\) calibration pairs and the test pair. Conditional on the proper-training data, suppose \((X_1,Y_1),\ldots,(X_n,Y_n),(X_{n+1},Y_{n+1})\) are exchangeable. Let \(\hat f\) be measurable with respect to proper-training data only, use the same measurable score \(S(x,y)=|y-\hat f(x)|\) for calibration and test, and construct \(C\) by Algorithm 55.1. Then
 
 $$1-\alpha\ \le\ \mathbb P\big(Y_{n+1}\in C(X_{n+1})\big)\ \le\ 1-\alpha+\frac{1}{n+1},$$
 
-the upper bound holding when the scores are almost surely distinct. Nothing about the shape of the data enters. The predictor \(\hat f\) can be a kernel ridge fit, a support vector regressor, or a Gaussian-process mean; if it is good the interval is tight, and if it is poor the interval is wide, but the coverage is certified either way. The jackknife+ of Barber et al. (2021) achieves a companion guarantee using leave-one-out residuals, which sits especially well with kernel models because their leave-one-out residuals are closed form, as the next section shows.
+where the upper bound holds when the \(n+1\) scores are almost surely distinct and \(r\le n\); when \(r=n+1\), coverage is one.
+
+**Assumptions.** Split independence, conditional exchangeability, a fixed measurable score, and conservative handling of ties.
+
+**Proof status.** Complete proof below.
+
+**Proof.** Conditional on proper-training data, exchangeability makes the rank of the test score among the \(n+1\) scores uniform when ties are randomized. The test point is excluded only if its rank exceeds \(r\), whose probability is \((n+1-r)/(n+1)\le\alpha\). Conservative inclusion of ties can only increase coverage. If scores are distinct and \(r\le n\), inclusion has probability \(r/(n+1)\lt1-\alpha+1/(n+1)\). The \(r=n+1\) convention returns the whole line. Averaging over proper-training data proves the result. \(\square\)
+::::
+
+The theorem is marginal over a fresh exchangeable test pair. It is not conditional coverage at each \(x\), subgroup coverage, time-series validity, or validity after selecting the score or model on calibration responses. Predictor quality controls width, not validity. Jackknife+ supplies a different leave-one-out construction and guarantee [@barber2021jackknife, Theorem 1].
 
 ::::: {.example #example-55-2}
 [Example (conformal repairs the coverage the GP lost)]{.box-title}
@@ -142,10 +181,7 @@ Same heteroscedastic truth as the failure above. We fit kernel ridge regression 
 **Verification artifact.** checks/example-ch-accountable-example-55-2.json records the example source hash and verification scope.
 :::::
 
-<figure class="viz" data-widget="conformal-coverage">
-
-<figcaption>Split conformal on a live kernel-ridge fit. The band half-width is the calibration-residual quantile \(\hat q\); as the target coverage \(1-\alpha\) slides, \(\hat q\) is recomputed from the sorted residuals and a running counter over a held-out stream reports the empirical coverage, which tracks the target inside the \(1/(n{+}1)\) envelope. Shrinking the calibration size loosens the guarantee visibly.</figcaption>
-</figure>
+The reliability chapter returns to this construction under deployment shift and shows how retaining coverage can require wider sets; the present guarantee is the exchangeable baseline.
 
 ## Explanation for free: the representer theorem as attribution {#explanation-for-free}
 
@@ -153,7 +189,7 @@ When a kernel model makes a decision that someone wants to contest, the question
 
 ### Prediction as a weighted vote over training points {#representer-attribution}
 
-Return to \(f(x)=\sum_i\alpha_i\,k(x_i,x)\). Each training point casts a vote for the prediction at \(x\), of magnitude \(\lvert\alpha_i\rvert\,k(x_i,x)\) and sign \(\operatorname{sign}(\alpha_i)\). Two features make this a usable explanation rather than a formula. In the support vector machine the Karush-Kuhn-Tucker conditions force most \(\alpha_i\) to be exactly zero, so the prediction depends on a small, inspectable set of support vectors; the explanation is sparse by construction. In kernel ridge and Gaussian-process regression the weights \(\alpha=(K+\lambda I)^{-1}y\) are dense, so the credit is spread, but for a local kernel the factor \(k(x_i,x)\) concentrates the contribution on the training points near \(x\). Either way, \"why this prediction\" resolves to named examples with signed weights, and no surrogate model is needed to produce it.
+Return to \(f(x)=\sum_i\alpha_i\,k(x_i,x)\). Each training point contributes \(\alpha_i k(x_i,x)\) to the prediction at \(x\). In an SVM, only support vectors have nonzero dual contribution, although the support set need not be small and nonunique dual coefficients can redistribute contributions when the Gram matrix is degenerate. In kernel ridge and Gaussian-process regression the coefficients are generally dense; for a local kernel, multiplication by \(k(x_i,x)\) often concentrates contributions near the query. This is an exact decomposition in the model's chosen representation. Calling it an explanation additionally requires that examples, labels, and the similarity itself are interpretable for the decision at hand.
 
 The same RKHS machinery answers the dual question, \"which examples represent the data, and which are the edge cases,\" through the prototypes and criticisms of Kim, Khanna, and Koyejo (2016). Prototypes are the points whose empirical distribution best matches the data in the sense of maximum mean discrepancy from [[ch:kernel-mean-embeddings|the mean-embedding chapter]]; criticisms are the points in regions the prototypes represent worst, found by the witness function. Both are computed from the same Gram matrix the model already uses, and both are consumable by a human reviewer as \"these are the typical cases the model has learned, and these are the outliers it may not handle.\"
 
@@ -164,13 +200,30 @@ The same RKHS machinery answers the dual question, \"which examples represent th
 
 ### Exact influence and closed-form leave-one-out {#influence-loo}
 
-Beyond \"which points support this prediction\" is the sharper counterfactual, \"how would this prediction change if a given training point had never been collected.\" For general models this is the province of influence functions (Koh and Liang 2017), which approximate the effect of up-weighting a training point through the inverse Hessian of the loss. Their derivation needs the empirical risk to be twice differentiable and strictly convex, so that the Hessian is positive definite and invertible. That condition is exactly what a convex kernel machine satisfies and a deep network does not, which is why influence estimates are trustworthy here and demonstrably fragile for deep nets (Basu, Pope, and Feizi 2021). Leaning into that contrast is the point: the tool that is a fragile approximation elsewhere is exact for a kernel ridge model.
+Beyond \"which points support this prediction\" is the sharper counterfactual, \"how would this prediction change if a given training point had never been collected.\" General influence functions approximate infinitesimal up-weighting through an inverse Hessian [@koh2017influence, Section 2]. They require differentiability and a nonsingular Hessian, and they are not deletion-exact merely because an objective is convex; deep-network failures are documented by [@basu2021fragile, Sections 3--4]. Kernel ridge regression is special because it is a fixed linear smoother.
 
-Exact, and closed form. Kernel ridge regression is a linear smoother, \(\hat y = Hy\) with the hat matrix \(H=K(K+\lambda I)^{-1}\). The leave-one-out residual at a training point needs no refit,
+:::: {.proposition #prop-accountable-krr-loo}
+[Proposition (exact kernel-ridge deletion sensitivity)]{.box-title}
+
+Let \(K\in\mathbb R^{n\times n}\) be symmetric PSD, let \(\lambda\gt0\), and set \(A=K+\lambda I\), \(\alpha=A^{-1}y\), \(H=KA^{-1}\), and \(f_\star=k_\star^\top\alpha\). Fit the same kernel with the same \(\lambda\) after deleting observation \(i\). Then \(0\le H_{ii}\lt1\),
 
 $$y_i-\hat f^{(-i)}(x_i)=\frac{y_i-\hat y_i}{1-H_{ii}},$$
 
-where \(H_{ii}\) is the leverage of point \(i\); and the same block-inverse identity gives the exact change in any test prediction \(f(x_\star)\) when point \(i\) is deleted, at the cost of one rank-one update rather than a refit. Ranking training points by that change identifies, for a specific decision, the data it rests on.
+and
+
+$$
+f_\star-f_\star^{(-i)}
+=\frac{(A^{-1}k_\star)_i\,(y_i-\hat y_i)}{1-H_{ii}}.
+$$
+
+**Assumptions.** Fixed symmetric PSD Gram matrix, positive ridge, unchanged preprocessing, kernel, and regularization after deletion.
+
+**Proof status.** Complete proof below.
+
+**Proof.** Since \(A\succ0\), its inverse exists. Also \(I-H=\lambda A^{-1}\succ0\), hence \(H_{ii}\lt1\). Partitioning \(A\), \(y\), and \(k_\star\) around index \(i\), then applying the Schur-complement inverse formula, gives both identities after cancellation. \(\square\)
+::::
+
+This is sensitivity to deleting one record while holding the kernel, preprocessing, hyperparameters, and all other records fixed. It is not causal influence, uncertainty, or the effect of retuning. Numerically, an audit must fail rather than divide when \(1-H_{ii}\) is below a declared tolerance.
 
 :::: {.algorithm #algo-55-2}
 [Algorithm (Exact leave-one-out attribution for kernel ridge)]{.box-title}
@@ -205,17 +258,31 @@ Kernel ridge regression on \(40\) points of \(\sin(1.3x)\) with light noise on \
 **Verification artifact.** checks/example-ch-accountable-example-55-3.json records the example source hash and verification scope.
 :::::
 
+<figure class="viz" data-figure="influence-concentration-curve" data-alt="Cumulative absolute training-point contribution to one kernel-ridge prediction is plotted against the number of largest contributions retained for three RBF length scales."><figcaption>Example-based explanation has a concentration profile. Local kernels can place most of a prediction's absolute contribution on a small reviewable set, while broader kernels distribute responsibility. Reporting the mass captured by the top \(k\) cases is more informative than naming an arbitrary fixed number.</figcaption></figure>
+
 ## Auditing a deployed kernel model {#auditing-deployment}
 
-A model that was accountable at training time can drift out of validity in deployment, and the questions an auditor asks then are statistical: is the input distribution still the one the model was trained on, are the model's outputs independent of attributes they must not depend on, and can the whole pipeline be reproduced. Each of these is answered by a kernel statistic, and the first two come with p-values.
+A model that was accountable at training time can drift out of validity in deployment. An auditor then asks whether the input distribution still resembles training, whether outputs depend on attributes they should not use, and whether the whole pipeline can be reconstructed. Kernel tests address the first two questions; a recorded data and solver lineage addresses the third.
 
 ### Is the input still the training distribution? Kernel drift monitoring {#drift}
 
-The natural monitor is the kernel two-sample test of Gretton et al. (2012), which measures the maximum mean discrepancy between a reference sample (the training inputs) and a recent production window. Writing the mean embedding of a distribution as \(\mu_P=\mathbb E\,k(x,\cdot)\), the squared MMD is the RKHS distance between embeddings,
+The natural monitor is the kernel two-sample test [@gretton2012, Sections 2 and 5]. Let \(k\) be measurable and bounded, or satisfy the integrability conditions needed for both mean embeddings. Writing \(\mu_P=\mathbb E\,k(x,\cdot)\), the squared MMD is
 
 $$\mathrm{MMD}^2(P,Q)=\mathbb E\,k(x,x')+\mathbb E\,k(y,y')-2\,\mathbb E\,k(x,y),$$
 
-with an unbiased U-statistic estimator built directly from Gram blocks. For a characteristic kernel, from [[ch:kernel-mean-embeddings|the embedding chapter]] and Sriperumbudur et al. (2010), the embedding is injective, so \(\mathrm{MMD}=0\) if and only if \(P=Q\): the test can detect any distributional change, not only a shift in mean or variance. A permutation procedure supplies a finite-sample null and a p-value.
+with an unbiased U-statistic estimator built directly from Gram blocks.
+
+:::: {.proposition #prop-accountable-mmd-monitor}
+[Proposition (scope of an MMD deployment alarm)]{.box-title}
+
+Let \(X_1,\ldots,X_m\overset{\mathrm{iid}}{\sim}P\) and \(Y_1,\ldots,Y_n\overset{\mathrm{iid}}{\sim}Q\) be mutually independent. If \(k\) is characteristic on the declared class of Borel probability measures and its mean embeddings exist, then \(\operatorname{MMD}_k(P,Q)=0\) if and only if \(P=Q\), which is precisely the characteristic-kernel definition [@sriperumbudur2010, Definition 7]. Under \(H_0:P=Q\), the pooled observations are exchangeable. A permutation test that fixes the entire test rule in advance, or repeats every label-dependent kernel-selection step within each permutation, therefore controls Type I error at its randomization level.
+
+**Assumptions.** Mutually independent IID samples, existing mean embeddings, characteristic kernel for identification, and an exchangeability-preserving randomization design.
+
+**Proof status.** Population identification is cited; permutation validity follows from invariance of the pooled null law under label permutations.
+::::
+
+Rejection is evidence against \(P=Q\); non-rejection is not evidence of equality and supplies no lower bound on power. Serial dependence, overlapping windows, adaptive repeated testing, or bandwidth selection after inspecting source-versus-production labels invalidates this elementary calibration unless the resampling and multiplicity correction reflect that design. An alarm says that input distributions differ in a direction visible to the chosen kernel. It does not establish covariate shift, identify the changed coordinate, or prove that predictions are wrong.
 
 ::::: {.example #example-55-4}
 [Example (a drift alarm that does not cry wolf)]{.box-title}
@@ -242,11 +309,23 @@ A reference sample of \(200\) standard-normal inputs, an RBF kernel at the media
 
 ### Independence and fairness audits with HSIC {#independence-fairness}
 
-A different audit asks whether the model's outputs are statistically independent of an attribute they must not use, a protected characteristic, a batch label, a sensor id. The Hilbert-Schmidt Independence Criterion of Gretton et al. (2005) measures dependence as the squared Hilbert-Schmidt norm of the cross-covariance operator, estimated by
+A different audit asks whether outputs are statistically independent of an attribute, batch label, or sensor id. HSIC measures dependence as the squared Hilbert-Schmidt norm of the cross-covariance operator [@gretton2005hsic, Section 2], estimated here by
 
 $$\widehat{\mathrm{HSIC}}=\frac{1}{(n-1)^2}\operatorname{tr}(KHLH),\qquad H=I-\tfrac1n\mathbf 1\mathbf 1^\top,$$
 
-with \(K\) a kernel on the predictions and \(L\) a kernel on the attribute. For characteristic kernels \(\mathrm{HSIC}=0\) if and only if the two are independent, so it detects nonlinear dependence that a correlation would miss, and a permutation null turns it into a test (Gretton et al. 2008).
+with \(K\) a kernel on predictions and \(L\) a kernel on the attribute.
+
+:::: {.proposition #prop-accountable-hsic}
+[Proposition (what an HSIC fairness diagnostic establishes)]{.box-title}
+
+Let \((\widehat Y_i,A_i)_{i=1}^n\) be IID on compact domains. Suppose the two RKHSs have bounded universal kernels, with their unit balls uniformly bounded. Then population HSIC is zero if and only if \(\widehat Y\) and \(A\) are independent [@gretton2005hsic, Theorem 4]. Under the null, permuting the \(A_i\) gives an exact finite-sample randomization test when kernels and tuning choices are fixed independently of the pairing [@gretton2008hsictest, Sections 2--3].
+
+**Assumptions.** IID held-out pairs on compact domains, bounded universal kernels as in the cited theorem, and fixed tuning under permutation.
+
+**Proof status.** Population identification and the permutation construction are cited to the primary HSIC papers.
+::::
+
+Rejection establishes statistical dependence, not discrimination or causation. Non-rejection does not establish independence. Independence targets demographic parity; equalized odds instead requires \(\widehat Y\perp A\mid Y\), while calibration and individual fairness require different estimands. If predictions were produced by fitting on these same audit records, the pairs need not satisfy the IID requirement; use held-out audit data or repeat fitting inside a valid resampling design. An HSIC penalty can target empirical dependence [@perezsuay2017fair, Section 3], but a small training penalty is not a population fairness certificate.
 
 ::::: {.example #example-55-5}
 [Example (auditing dependence on a protected attribute)]{.box-title}
@@ -267,13 +346,53 @@ Two hundred cases, a continuous protected attribute, and two predictors: a biase
 
 ### Reproducibility and the audit trail {#reproducibility}
 
-The last audit needs no experiment. Because a kernel machine is the unique optimum of a convex program, its solution is a deterministic function of the data, the kernel, and the hyperparameters: the linear system \((K+\lambda I)\alpha=y\) for ridge and Gaussian processes, a convex quadratic program for the support vector machine. Rerunning the fit reproduces the same parameters to the precision of the arithmetic, with no seed, no batch order, and no early-stopping choice to record. The documentable configuration is short and closed, which is precisely what a reproducible audit trail requires and what a stochastic-gradient training run struggles to provide.
+The last audit is procedural rather than statistical. For regularized kernel ridge regression, the predictor is the solution of a specified linear system; for an SVM, it is the primal predictor satisfying a specified convex program and KKT tolerance. Reproduction therefore requires the data version, preprocessing, kernel convention, hyperparameters, approximation, arithmetic precision, solver, stopping tolerance, and software environment. With those fixed, independent runs should agree within a declared numerical tolerance. This is stronger and more testable than saying “rerun the code,” but it is not a promise of bitwise-identical coefficients across hardware and libraries.
 
-This is where the technical machinery meets the documentation frameworks that high-stakes deployment now expects. Model cards (Mitchell et al. 2019) ask for intended use, performance across conditions, and limitations; a kernel model supplies example-based attributions, feature-relevance tests with p-values, and certified intervals to fill them. Datasheets for datasets (Gebru et al. 2021) ask for data provenance; exact influence and data valuation make each training point's contribution auditable. Risk-management frameworks such as the NIST AI Risk Management Framework (2023) call for measured uncertainty, robustness, and fairness, and conformal coverage, MMD drift tests, and HSIC independence tests are exactly such measurements. Where a regime like the European Union's AI Act designates a system high-risk and demands traceability and technical documentation, the deterministic solve and the explicit representer form make the \"how it works and how to reproduce it\" section a closed specification. None of this is a legal guarantee, and none of it discharges an obligation; the point is narrower and sound, that kernel methods produce, as a byproduct of their mathematics, the technical evidence these frameworks ask a model to supply.
+This is where the technical machinery meets the documentation frameworks that high-stakes deployment now expects. Model cards (Mitchell et al. 2019) ask for intended use, performance across conditions, and limitations; a kernel model can supply example contributions, feature-dependence tests, and intervals with stated assumptions. Datasheets for datasets (Gebru et al. 2021) ask for data provenance; exact kernel-ridge deletion influence can connect particular predictions to particular records. Risk-management frameworks such as the NIST AI Risk Management Framework (2023) call for measured uncertainty, robustness, and fairness, and conformal coverage, MMD drift tests, and HSIC independence tests are relevant measurements when their assumptions match the question. These artifacts support technical traceability; they are neither a legal determination nor a substitute for governance.
+
+### A reproducible audit protocol {#reproducible-audit-protocol}
+
+An audit becomes operational only when it can stop deployment. The protocol below separates numerical failure, assumption failure, statistical alarm, and insufficient evidence instead of compressing all four into a green or red badge.
+
+:::: {.algorithm #algo-accountable-audit}
+[Algorithm (Predeclared accountable-kernel release gate)]{.box-title}
+
+::: algo-io
+[Input]{.algo-lab} immutable identifiers for training, calibration, reference, and held-out audit data; preprocessing and kernel specifications; hyperparameters; solver and precision; random seed; familywise monitoring schedule; thresholds \(\tau_{\mathrm{solve}},\tau_{\mathrm{loo}},\alpha_{\mathrm{cov}},\alpha_{\mathrm{drift}},\alpha_{\mathrm{fair}}\); and minimum subgroup sizes.
+
+[Output]{.algo-lab} a signed record with status `pass`, `fail`, or `insufficient evidence` for every gate.
+:::
+
+1.  Verify hashes, sample units, split disjointness, finiteness, Gram symmetry, and the smallest eigenvalue tolerance. Record the linear-system residual. Fail on mismatch, leakage, NaN/Inf, or residual above \(\tau_{\mathrm{solve}}\).
+2.  Recompute predictions and intervals from a fresh process. Require prediction agreement within the declared tolerance; do not require bitwise equality.
+3.  Compare every closed-form deletion effect against at least one direct deletion refit. Fail if the maximum discrepancy exceeds \(\tau_{\mathrm{loo}}\), or if any \(1-H_{ii}\) is below the leverage guard.
+4.  On untouched labeled audit data, report marginal and predeclared subgroup coverage with binomial uncertainty. Fail the marginal gate when its one-sided confidence bound is below the target; mark a subgroup `insufficient evidence` rather than passing it when its sample size is below the preregistered minimum.
+5.  Run the predeclared MMD and HSIC randomization tests on their declared independent sampling units. Correct for the number and cadence of tests. An adjusted drift rejection triggers investigation, abstention, or recollection; an adjusted HSIC rejection triggers a fairness investigation under the stated fairness estimand. Neither non-rejection is a certificate.
+6.  Stress-test GP intervals by coverage stratum and standardized residuals. A model-based band may be reported as a GP posterior interval, but it may be labeled calibrated only if the held-out calibration gate passes.
+7.  Store software versions, seed, thresholds, statistics, p-values, confidence bounds, warning states, and the exact action taken. Any changed model, kernel, threshold, or data version creates a new audit.
+::::
+
+::::: {.example #example-accountable-audit-fixture}
+[Example (a deterministic release gate with deliberate failures)]{.box-title}
+
+:::: wex
+::: wex-setup
+`checks/ch-accountable-audit.py` uses a fixed seed and a one-dimensional fixture. It fits kernel ridge regression, verifies one deletion both algebraically and by refitting, constructs a split-conformal interval, and runs fixed-permutation MMD and HSIC diagnostics. It then injects a shifted production window and an attribute-dependent score.
+:::
+
+1.  [Pass the numerical gates.]{.wex-op} The linear-system relative residual must be below \(10^{-10}\), the Gram matrix must be symmetric within \(10^{-12}\), and the deletion formula must agree with a direct refit within \(10^{-10}\).
+2.  [Separate a clean null from an alarm.]{.wex-op} The fixed randomization schedule must not reject the unshifted MMD fixture at \(0.05\), but must reject the shifted fixture. The same schedule must not reject the independent-score HSIC fixture and must reject the attribute-dependent fixture.
+3.  [Fail visibly.]{.wex-op} The script exits nonzero if any numerical invariant, expected null behavior, expected alarm, or conformal-rank convention changes. These expected outcomes are regression fixtures, not claims about test power in every deployment.
+
+**Reading.** A reproducible audit records both the calculation and the decision rule that consumes it. Determinism makes software regressions visible; it does not turn one synthetic fixture into external validation.
+::::
+
+**Verification artifact.** checks/example-ch-accountable-example-accountable-audit-fixture.json records the example source hash and verification scope.
+:::::
 
 ## Uncertainty that drives the next experiment {#uncertainty-drives-experiment}
 
-The calibrated variance is not only something to report; it is something to act on. When each new label costs a wet-lab experiment or a supercomputer run, the model's own uncertainty is the natural guide to where the next label should be spent, and this closes the loop from accountability to decision. The rule is uncertainty sampling: query where the posterior variance \(\sigma^2(x)\) is largest, since that is where a new observation most reduces the model's ignorance, and crucially the variance depends only on the input locations, so the most informative query can be chosen before the expensive label is known. Its acquisition-function generalizations, which trade the mean against the variance to optimize rather than merely explore, are the subject of [[ch:bayesian-optimization-and-bandits|the Bayesian optimization chapter]] (Frazier 2018; Shahriari et al. 2016), and the calibration of a computer model against reality by Kennedy and O'Hagan (2001) is the emulation backdrop the next chapter builds on.
+Model-based variance is not only something to report; it is something to act on. When each new label costs a wet-lab experiment or a supercomputer run, posterior variance can guide where the next label should be spent, provided the covariance is stress-tested against error. The basic rule is uncertainty sampling: query where \(\sigma^2(x)\) is largest. For a fixed GP covariance and noise model, this quantity depends only on input locations, so a query can be chosen before the expensive label is known. Its acquisition-function generalizations, which trade the mean against the variance to optimize rather than merely explore, are the subject of [[ch:bayesian-optimization-and-bandits|the Bayesian optimization chapter]] (Frazier 2018; Shahriari et al. 2016), and the calibration of a computer model against reality by Kennedy and O'Hagan (2001) is the emulation backdrop the next chapter builds on.
 
 <figure class="viz" data-widget="active-variance">
 
@@ -295,7 +414,7 @@ The practical goal is not a badge of trustworthiness but a documented chain: a d
 
 ## Summary and further reading {#summary}
 
-Accountability is not a layer added to a kernel model; it is a reading of the model's own structure. The representer theorem makes every prediction an explicit signed sum over named training points, so example-based explanation is exact and free, and for convex kernel machines the influence of a training point and the leave-one-out error are closed-form consequences of one hat matrix, exact where the same tools are fragile approximations for deep networks. The Gaussian-process posterior returns a calibrated variance from the same solve as the mean, honest about where the data are sparse; where its noise assumptions cannot be trusted, split conformal prediction wraps any kernel predictor in an interval with a distribution-free, finite-sample coverage guarantee. Deployment is audited with kernel statistics: the MMD two-sample test flags distributional drift with a characteristic kernel that misses nothing, HSIC turns a fairness check into a hypothesis test, and the deterministic convex solve makes the whole fit reproducible for a documentation trail. Finally, the calibrated variance that made the model reportable also makes it active, choosing the next expensive experiment where it is least sure. Every claim here is exact for a model small enough to solve exactly, and the honest cost of exactness, the cubic solve and the need for a well-chosen kernel, is the same cost the next chapter's sciences pay gladly for an error bar they can defend.
+Accountability is not a badge produced by one metric; it is a chain of evidence. The representer form supplies exact example contributions, while kernel-ridge deletion influence answers a sharper counterfactual with one hat matrix. A Gaussian process supplies covariance conditional on its kernel and likelihood; split conformal adds finite-sample marginal coverage under exchangeability. MMD and HSIC turn drift and dependence questions into tests, but population identifiability does not remove finite-sample power limits. Convex objectives make residuals and optimality conditions auditable, while reproducibility still requires a recorded preprocessing, approximation, solver, tolerance, and environment. The practical deliverable is therefore a model record with assumptions, diagnostics, and triggers: recalibrate when coverage fails, investigate when drift is detected, abstain when support is missing, and never promote a model-based variance into a real-world guarantee without validation.
 
 For further reading, Rasmussen and Williams (2006) is the reference for the Gaussian-process variance and its hyperparameter learning; Vovk, Gammerman, and Shafer (2005) and Angelopoulos and Bates (2023) develop conformal prediction and its finite-sample coverage; Koh and Liang (2017) motivate influence functions for accountability and Cook and Weisberg (1982) give the classical leave-one-out and hat-matrix identities; Gretton et al. (2012) and Gretton et al. (2005) supply the MMD and HSIC audit statistics used here.
 

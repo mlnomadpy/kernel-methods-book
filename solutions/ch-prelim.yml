@@ -69,3 +69,16 @@ exercises:
       integrable control. Dominated convergence repairs the exchange if f_n->f almost surely and
       |f_n|<=g for an integrable g; more generally uniform integrability plus convergence in
       probability provides a related repair.
+  - number: 7
+    kind: computation
+    status: draft
+    prompt: In the two-direction covariance fixture, let \(N_1\) of the \(n\) samples fall on
+      \(\sqrt2e_1\). Derive \(\widehat C\) and \(\lVert\widehat C-I_2\rVert_2\) as functions of
+      \(N_1\), then verify \(L\), \(v\), and \(r(V)\) for the Bernstein normalization
+      \(Y_i=(z_i z_i^\top-I_2)/n\).
+    answer: "Since n-N_1 samples fall on the second axis, the empirical covariance is
+      diag(2N_1/n,2(n-N_1)/n). Subtracting I_2 gives
+      diag(2N_1/n-1,1-2N_1/n), whose spectral norm is |2N_1/n-1|. For one draw,
+      zz^T-I_2 is either diag(1,-1) or diag(-1,1), so after division by n its norm is
+      L=1/n and its square is I_2/n^2. Summing n identical second moments gives
+      V=I_2/n and v=||V||_2=1/n. Finally r(V)=tr(V)/||V||_2=(2/n)/(1/n)=2."

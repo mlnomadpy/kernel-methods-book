@@ -5,214 +5,228 @@ status: author-mapped-pending-independent-verification
 private_source_sha256: null
 references:
   - micchelli2005vv
+  - argyriou2009
   - alvarez2012vv
 sections:
-  - id: operator-motivation
-    title: From scalar to vector-valued reproduction
-    contribution: adapted-and-expanded
-    sources:
-      - micchelli2005vv
+  - id: operator-paper-micchelli
+    title: "Paper module I: vector-valued RKHS learning"
+    contribution: reconstructed-primary-paper-module
+    sources: [micchelli2005vv]
     locators:
       - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-motivation
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        manuscript_locator: ch-operator.md#operator-paper-micchelli
+        source_locator: "Sections 2-3, especially the vector-valued RKHS/kernel correspondence and directional reproducing identity"
+        status: checked-against-source-copy
+    verified_by: Codex source-and-derivation audit
+    verified_on: 2026-07-24
     permission: citation-only
-  - id: operator-representer
-    title: The vector-valued representer theorem
-    contribution: adapted-and-expanded
-    sources:
-      - micchelli2005vv
+  - id: operator-representer-proof
+    title: A complete vector-valued representer proof
+    contribution: author-derived-proof-from-primary-result
+    sources: [micchelli2005vv]
     locators:
       - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-representer
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: operator-constructions
-    title: Separable and nonseparable constructions
-    contribution: adapted-and-expanded
-    sources:
-      - alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-representer-proof
+        source_locator: "Section 4, minimum-norm interpolation and regularization representer results"
+        status: checked-against-source-copy
+    verified_by: Codex source-and-derivation audit
+    verified_on: 2026-07-24
+    permission: original derivation with attributed theorem
+  - id: operator-block-system
+    title: Squared loss as a block operator equation
+    contribution: author-derived
+    sources: [micchelli2005vv, alvarez2012vv]
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-block-system
+        source_locator: "Section 4, regularized vector-valued learning"
+        status: checked-against-source-copy
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-block-system
+        source_locator: "Section 3.2, equations (4)-(6)"
+        status: checked-against-author-version
+    verified_by: Codex source-and-derivation audit
+    verified_on: 2026-07-24
+    permission: original algebra with citations
+  - id: operator-worked-transfer
+    title: "Worked example: transfer with missing outputs"
+    contribution: original-example
+    sources: [micchelli2005vv, alvarez2012vv]
+    locators:
+      - source: micchelli2005vv
+        manuscript_locator: ch-operator.md#operator-worked-transfer
+        source_locator: "Sections 3-4, operator-valued kernels and regularized learning"
+        status: model-instantiation-checked
+      - source: alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-worked-transfer
+        source_locator: "Sections 3.1-3.2, isotopic and heterotopic multi-output designs"
+        status: checked-against-author-version
+    verified_by: Codex hand calculation
+    verified_on: 2026-07-24
+    permission: original worked example
+  - id: operator-separable
+    title: Separable kernels and their spectral anatomy
+    contribution: reconstructed-and-expanded
+    sources: [alvarez2012vv]
     locators:
       - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-constructions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: operator-structured
-    title: Functional responses and structured outputs
-    contribution: adapted-and-expanded
-    sources: &a1
-      - micchelli2005vv
-      - alvarez2012vv
+        manuscript_locator: ch-operator.md#operator-separable
+        source_locator: "Section 4, separable kernels and sums of separable kernels; Section 6.1, computation"
+        status: checked-against-author-version
+    verified_by: Codex algebraic audit
+    verified_on: 2026-07-24
+    permission: original derivation with citation
+  - id: operator-paper-argyriou
+    title: "Paper module II: when matrix regularization has a representer form"
+    contribution: reconstructed-primary-paper-module
+    sources: [argyriou2009]
+    locators:
+      - source: argyriou2009
+        manuscript_locator: ch-operator.md#operator-paper-argyriou
+        source_locator: "Theorem 12; Proposition 13; Definition 14; Theorem 15; Proposition 17"
+        status: checked-against-jmlr-pdf
+    verified_by: Codex source-and-proof audit
+    verified_on: 2026-07-24
+    permission: original reconstruction with citation
+  - id: operator-comparison
+    title: A common currency for multi-output models
+    contribution: original-synthesis
+    sources: [micchelli2005vv, argyriou2009, alvarez2012vv]
     locators:
       - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-structured
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-operator.md#operator-comparison
+        source_locator: "Sections 2-4"
+        status: synthesis-source
+      - source: argyriou2009
+        manuscript_locator: ch-operator.md#operator-comparison
+        source_locator: "Sections 4.1-4.3"
+        status: synthesis-source
       - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-structured
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: operator-learning-output
-    title: Learning the output geometry
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+        manuscript_locator: ch-operator.md#operator-comparison
+        source_locator: "Sections 4-6"
+        status: synthesis-source
+    verified_by: Codex comparative audit
+    verified_on: 2026-07-24
+    permission: original comparison
+  - id: operator-functional
+    title: Functional responses without pretending a grid is truth
+    contribution: original-synthesis
+    sources: [micchelli2005vv, alvarez2012vv]
     locators:
       - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-learning-output
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-operator.md#operator-functional
+        source_locator: "Section 2, Hilbert-valued function setting"
+        status: checked-against-source-copy
       - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-learning-output
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        manuscript_locator: ch-operator.md#operator-functional
+        source_locator: "Sections 3-5, operator-valued and nonseparable constructions"
+        status: checked-against-author-version
+    verified_by: Codex functional-analysis audit
+    verified_on: 2026-07-24
+    permission: original synthesis with citations
   - id: operator-physical-fields
     title: Differentially constrained vector fields
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+    contribution: author-derived-kernel-certificate
+    sources: [alvarez2012vv]
     locators:
-      - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-physical-fields
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: alvarez2012vv
         manuscript_locator: ch-operator.md#operator-physical-fields
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: operator-structured-prediction
-    title: Structured prediction beyond vector regression
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+        source_locator: "Section 5.1, invariant and divergence-free/curl-free matrix-valued kernels"
+        status: checked-against-author-version
+    verified_by: Codex derivative-representer proof
+    verified_on: 2026-07-24
+    permission: original derivation with citation
+  - id: operator-learning-output
+    title: Learning output geometry and controlling scale
+    contribution: original-synthesis
+    sources: [argyriou2009, alvarez2012vv]
     locators:
-      - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-structured-prediction
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: argyriou2009
+        manuscript_locator: ch-operator.md#operator-learning-output
+        source_locator: "Sections 4.2-4.3, matrix nondecreasing and spectral regularizers"
+        status: checked-against-jmlr-pdf
       - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-structured-prediction
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: operator-functional-discretization
-    title: Functional responses and discretization
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
+        manuscript_locator: ch-operator.md#operator-learning-output
+        source_locator: "Sections 4.3 and 6, extensions and parameter estimation"
+        status: checked-against-author-version
+    verified_by: Codex source audit
+    verified_on: 2026-07-24
+    permission: original synthesis with citations
+  - id: operator-computation
+    title: Block computation without forming the block matrix
+    contribution: author-derived
+    sources: [alvarez2012vv]
     locators:
-      - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-functional-discretization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-functional-discretization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: operator-block-solvers
-    title: Scalable block solvers
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-block-solvers
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-block-solvers
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: operator-generalization
-    title: Generalization and negative transfer
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: micchelli2005vv
-        manuscript_locator: ch-operator.md#operator-generalization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: alvarez2012vv
-        manuscript_locator: ch-operator.md#operator-generalization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
+        manuscript_locator: ch-operator.md#operator-computation
+        source_locator: "Section 6.1, computational considerations for separable kernels"
+        status: checked-against-author-version
+    verified_by: Codex algebraic audit
+    verified_on: 2026-07-24
+    permission: original computational derivation
   - id: operator-practice
     title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-synthesis
+    sources: [micchelli2005vv, argyriou2009, alvarez2012vv]
     locators:
       - source: micchelli2005vv
         manuscript_locator: ch-operator.md#operator-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-4"
+        status: synthesis-source
+      - source: argyriou2009
+        manuscript_locator: ch-operator.md#operator-practice
+        source_locator: "Theorems 12 and 15"
+        status: synthesis-source
       - source: alvarez2012vv
         manuscript_locator: ch-operator.md#operator-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+        source_locator: "Sections 4-6"
+        status: synthesis-source
+    verified_by: Codex editorial audit
+    verified_on: 2026-07-24
+    permission: original synthesis
   - id: operator-summary
     title: Summary and further reading
-    contribution: adapted-and-expanded
-    sources:
-      - micchelli2005vv
-      - alvarez2012vv
+    contribution: original-synthesis
+    sources: [micchelli2005vv, argyriou2009, alvarez2012vv]
     locators:
       - source: micchelli2005vv
         manuscript_locator: ch-operator.md#operator-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-4"
+        status: synthesis-source
+      - source: argyriou2009
+        manuscript_locator: ch-operator.md#operator-summary
+        source_locator: "Sections 3-4"
+        status: synthesis-source
       - source: alvarez2012vv
         manuscript_locator: ch-operator.md#operator-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+        source_locator: "Sections 3-8"
+        status: synthesis-source
+    verified_by: Codex editorial audit
+    verified_on: 2026-07-24
+    permission: original prose
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-exercises
+    sources: [micchelli2005vv, argyriou2009, alvarez2012vv]
     locators:
       - source: micchelli2005vv
         manuscript_locator: ch-operator.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-4"
+        status: adapted-concepts
+      - source: argyriou2009
+        manuscript_locator: ch-operator.md#exercises
+        source_locator: "Theorems 12 and 15"
+        status: adapted-concepts
       - source: alvarez2012vv
         manuscript_locator: ch-operator.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+        source_locator: "Sections 4-6"
+        status: adapted-concepts
+    verified_by: Codex solution synchronization
+    verified_on: 2026-07-24
+    permission: original exercises and solutions
+mapping_method: exact section and theorem locators checked against accessible source copies
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24

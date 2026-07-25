@@ -10,34 +10,55 @@ exercises:
     kind: warm-up
     status: draft
     prompt: >-
-      Give one data-generating example for each shift type and explain which observable marginals would change.
+      Give one data-generating example for covariate, label, concept, and support shift. For each example, state which observable marginal changes and which conditional invariance would have to be defended.
     answer: >-
-      Covariate shift occurs when a sensor is deployed in a population with different ages but the same response mechanism; \(P_X\) changes. Label shift occurs when disease prevalence changes while class-conditional measurements stay fixed; \(P_Y\) and generally \(P_X\) change. Concept shift occurs after a treatment changes outcomes at fixed covariates; \(P_{Y|X}\) changes. Support shift occurs when a new device produces covariates outside the training range; target input mass appears where training mass is absent.
+      Covariate shift occurs when a hospital receives an older patient population while the diagnostic relationship \(P_{Y\mid X}\) remains unchanged; \(P_X\) changes and the conditional invariance to defend is \(P_{Y\mid X}=Q_{Y\mid X}\). Label shift occurs when disease prevalence changes while \(P_{X\mid Y}\) remains fixed; \(P_Y\) changes and usually \(P_X\) changes too. Concept shift occurs when a new treatment changes outcomes for the same measured covariates; \(P_{Y\mid X}\) changes, so source risk cannot be transferred using input weights. Support shift occurs when a new scanner produces inputs in a region with \(P_X\)-probability zero but positive \(Q_X\)-probability; \(Q_X\not\ll P_X\), so no source-only weighting correction is defined there.
   - number: 2
-    kind: computation
-    status: draft
-    prompt: >-
-      Expand the empirical kernel-mean-matching objective into its quadratic-program matrix and vector terms, including the normalization constraints.
-    answer: >-
-      With source Gram matrix \(K\) and source-target matrix \(K_{ST}\), the objective equals \(\beta^\top K\beta/n^2-2\beta^\top K_{ST}1/(nm)\) plus a target-only constant. Thus one may minimize \(\tfrac12\beta^\top(2K/n^2)\beta-(2K_{ST}1/(nm))^\top\beta\), subject to \(0\le\beta_i\le B\) and \(|n^{-1}1^\top\beta-1|\le\epsilon\). Check feasibility and report the resulting effective sample size.
-  - number: 3
     kind: proof
     status: draft
     prompt: >-
-      Prove the RKHS moment-balance proposition and state why it does not control every bounded measurable loss.
+      Prove the covariate-shift risk identity using conditional expectation and the Radon-Nikodym derivative. Then construct a bounded loss showing why the identity cannot hold for every target risk when \(Q_X\not\ll P_X\).
     answer: >-
-      Let \(\Delta\) be the difference between the weighted source and target empirical embeddings. The moment difference for \(h\) is \(\langle h,\Delta\rangle\), so Cauchy-Schwarz bounds its absolute value by \(\lVert h\rVert\lVert\Delta\rVert\le\epsilon\lVert h\rVert\). A bounded measurable loss outside the RKHS can have no finite RKHS norm and is therefore not covered; universality gives approximation possibilities, not a finite-sample uniform bound for every such loss.
+      Let \(m_f(x)=\mathbb E\{\ell(Y,f(X))\mid X=x\}\). Conditional invariance makes this function common to source and target. If \(Q_X\ll P_X\) with \(w=dQ_X/dP_X\), then \(R_Q(f)=\int m_f\,dQ_X=\int wm_f\,dP_X=\mathbb E_P\{w(X)\ell(Y,f(X))\}\), where the last equality is the tower property. If absolute continuity fails, there is a measurable \(A\) with \(P_X(A)=0\) and \(Q_X(A)>0\). The bounded loss \(\ell_A(x,y)=\mathbf 1_A(x)\) has target expectation \(Q_X(A)>0\), while \(\mathbb E_P\{v(X)\ell_A(X,Y)\}=0\) for every finite \(P_X\)-integrable weight \(v\). Thus no source-only weight reproduces all bounded target risks.
+  - number: 3
+    kind: computation
+    status: draft
+    prompt: >-
+      Expand the empirical KMM objective into its quadratic-program matrix and vector terms. For weights \((0.2,0.6,1.2,2.0)\), compute the effective sample size and explain what it says about variance.
+    answer: >-
+      With source Gram matrix \(K_{SS}\), source-target matrix \(K_{ST}\), and target Gram matrix \(K_{TT}\), the squared discrepancy is \(\beta^\top K_{SS}\beta/n^2-2\beta^\top K_{ST}\mathbf 1_m/(nm)+\mathbf 1_m^\top K_{TT}\mathbf 1_m/m^2\). The final term is constant, so in the convention \(\tfrac12\beta^\top H\beta-c^\top\beta\), take \(H=2K_{SS}/n^2\) and \(c=2K_{ST}\mathbf 1_m/(nm)\), together with the box and approximate-normalization constraints. For the given weights, \(\sum_i\beta_i=4\) and \(\sum_i\beta_i^2=0.04+0.36+1.44+4=5.84\), hence \(n_{\mathrm{eff}}=16/5.84\approx2.7397\). The weighted estimator therefore has weight concentration comparable to substantially fewer than four uniform observations; exact variance still depends on the weighted outcomes.
   - number: 4
     kind: proof
     status: draft
     prompt: >-
-      Prove split-conformal marginal coverage from the exchangeability of score ranks, including the finite-sample quantile correction.
+      Derive the population squared-MMD kernel formula and prove that the off-diagonal empirical estimator is unbiased. Explain why the unbiased estimate may be negative.
     answer: >-
-      Conditional on the proper training data, the calibration scores and test score are exchangeable. With \(m\) calibration cases, the test rank among \(m+1\) scores is uniform when ties are randomized and is stochastically no larger under conservative tie handling. Choosing the \(\lceil(m+1)(1-\alpha)\rceil\)-th calibration order statistic therefore makes exclusion probability at most \(\alpha\). Averaging over the proper training data preserves the marginal guarantee.
+      Expand \(\lVert\mu_P-\mu_Q\rVert_{\mathcal H}^2\) into two squared norms and a cross inner product. By reproducing and Fubini, these terms are \(\mathbb E k(X,X')\), \(\mathbb E k(Z,Z')\), and \(\mathbb E k(X,Z)\), with independent copies in the same-distribution terms. Averaging \(k(X_i,X_j)\) over \(i\ne j\) is a U-statistic whose expectation is \(\mathbb E k(X,X')\); the target term is identical and the complete cross average is unbiased for \(\mathbb E k(X,Z)\). Their stated linear combination is therefore unbiased for population squared MMD. Removing diagonal terms eliminates finite-sample upward bias but also removes the finite-sample norm-square representation, so random fluctuations can put the estimator below zero even though the population target is nonnegative.
   - number: 5
+    kind: proof
+    status: draft
+    prompt: >-
+      Prove split-conformal marginal coverage, including the corrected rank \(k=\lceil(m+1)(1-\alpha)\rceil\), conservative ties, and the case \(k=m+1\).
+    answer: >-
+      Conditional on proper training data, the \(m\) calibration scores and one test score are exchangeable. With independent randomized tie breakers, the test score rank \(R\) among \(m+1\) scores is uniform on \(\{1,\ldots,m+1\}\). Exclusion by the threshold \(S_{(k)}\) implies \(R>k\), so its probability is at most \((m+1-k)/(m+1)\le\alpha\). Conservative ties can only decrease the exclusion probability. If \(k=m+1\), define the threshold as \(+\infty\); exclusion is impossible and coverage is one. Averaging the conditional inequality over proper training data proves marginal coverage.
+  - number: 6
+    kind: computation
+    status: draft
+    prompt: >-
+      With calibration scores \(0.1,0.2,0.4,0.7,1.1,1.6,2.3,4.0,7.0\), compute split-conformal radii for target coverages \(0.50\), \(0.75\), \(0.80\), and \(0.90\). Identify every level for which the set is forced to be infinite.
+    answer: >-
+      Here \(m+1=10\). For coverage \(0.50\), \(k=\lceil5\rceil=5\) and the radius is \(1.1\). For \(0.75\), \(k=\lceil7.5\rceil=8\) and the radius is \(4.0\). For \(0.80\), \(k=\lceil8\rceil=8\) and the radius remains \(4.0\). For \(0.90\), \(k=\lceil9\rceil=9\) and the radius is \(7.0\). None of these is infinite. An infinite set is forced when \(\lceil10(1-\alpha)\rceil=10\), equivalently when the requested coverage exceeds \(0.9\). At exactly \(0.9\), the ninth finite score is used.
+  - number: 7
     kind: synthesis
     status: draft
     prompt: >-
-      Design a deployment audit for a kernel classifier moving from one hospital or sensor network to another. Specify shift tests, overlap criteria, weighting, conformal scoring, subgroup diagnostics, and retraining triggers.
+      Compare the assumptions and conclusions of the MMD test, KMM moment balance, the Feng et al. covariate-shift rate, split conformal, and the Burnaev-Vovk efficiency theorem. Give one implication that is invalid in each direction between neighboring methods.
     answer: >-
-      Reserve target labels for final evaluation, compare source and target covariates with MMD across preregistered scales, and inspect witness functions and support coverage. Apply kernel mean matching only if conditional invariance is clinically defensible, clipping weights by a validated rule and reporting effective sample size. Calibrate class-set scores on untouched representative data, report coverage, set size, error, and abstention by site and subgroup, and trigger retraining when shift, overlap, calibration, or residual performance crosses declared thresholds.
+      The MMD test uses independent source and target samples plus a valid kernel and calibrated null design to test equality of distributions; rejection neither proves covariate shift nor supplies valid weights. KMM uses a PSD Gram matrix and constraints to balance an empirical RKHS, but small KMM discrepancy neither proves a valid two-sample null nor controls losses outside the RKHS. The Feng et al. rates additionally require conditional invariance, overlap through bounded or second-moment ratios, bounded kernel eigenstructure, local loss curvature, and oracle or truncated ratios; KMM feasibility does not establish these assumptions, and a rate theorem does not calibrate a shift test. Split conformal requires exchangeability of calibration and test scores and proves marginal coverage, not target-risk consistency or narrowness. The Burnaev-Vovk efficiency result adds an IID finite-dimensional linear model, nonsingular second moment, and independent Gaussian homoscedastic noise to compare conformal and Bayesian ridge endpoints; ordinary conformal coverage does not imply this efficiency, while Gaussian ridge efficiency does not imply validity after distribution shift.
+  - number: 8
+    kind: challenge
+    status: draft
+    prompt: >-
+      Design a deployment audit for a kernel classifier moving between hospitals. Specify the sampling unit, shift tests, kernel-selection protocol, overlap criteria, weight estimation and clipping, conformal score, subgroup diagnostics, and actions triggered by support or coverage failure.
+    answer: >-
+      Treat a patient, not an image or visit fragment, as the independent sampling unit and split whole sites or time periods to match deployment. Before target labels are inspected, preregister clinically motivated kernels and either fix bandwidths or include bandwidth selection inside a permutation-calibrated MMD test. Inspect the witness, ratio tails, source-neighbor distances, and target mass outside a declared source-support envelope. Estimate ratios or KMM weights only if the clinical response mechanism is defensibly invariant, tune clipping without final target labels, and report embedding residual, clipping bias sensitivity, and effective sample size. Fit weighted and unweighted baselines. Use an untouched calibration cohort with a class-probability nonconformity score, and report marginal coverage, set size, error, and abstention by hospital, demographic group, device, and difficulty stratum. Support failure should trigger abstention and targeted data collection; failed coverage should trigger investigation and recalibration rather than silent interval widening; conditional-mechanism evidence should trigger model redevelopment rather than reweighting.

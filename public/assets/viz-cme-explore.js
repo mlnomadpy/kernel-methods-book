@@ -135,8 +135,8 @@
       const order = Array.from({ length: N }, (_, i) => i).sort((a, b) => Math.abs(XS[a] - xstar) - Math.abs(XS[b] - xstar));
       let near = 0;
       for (let k = 0; k < 10; k++) near += absb[order[k]];
-      ro.textContent = "x* = " + xstar.toFixed(2) + " · E[Y|X=x*] ≈ " + mstar.toFixed(3) +
-        " · " + Math.round(100 * near / Math.max(tot, 1e-12)) + "% of |β| mass on the 10 nearest neighbors · drag to move x*";
+      ro("x* = " + xstar.toFixed(2) + " · E[Y|X=x*] ≈ " + mstar.toFixed(3) +
+        " · " + Math.round(100 * near / Math.max(tot, 1e-12)) + "% of |β| mass on the 10 nearest neighbors · drag to move x*");
     }
 
     refactor();

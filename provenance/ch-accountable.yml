@@ -8,48 +8,78 @@ sections:
   - id: "a-property-not-a-wrapper"
     title: "Accountability is a property of the model, not a wrapper"
     contribution: adapted-and-expanded
-    sources: []
-    locators: []
+    sources: ["scholkopf2001", "kimeldorf1971", "cortes1995"]
+    locators:
+      - "Scholkopf et al. (2001), Theorem 1"
+      - "Cortes and Vapnik (1995), Sections 2-3"
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: "uncertainty-you-can-report"
     title: "Uncertainty you can put in a report"
     contribution: adapted-and-expanded
-    sources: []
-    locators: []
+    sources: ["rasmussen2006", "vovk2005conformal", "lei2018conformal", "angelopoulos2021gentle", "barber2021jackknife"]
+    locators:
+      - "Rasmussen and Williams (2006), Section 2.2, Equations 2.22-2.24"
+      - "Vovk, Gammerman, and Shafer (2005), Chapter 2"
+      - "Lei et al. (2018), Section 2.2 and Theorem 2.1"
+      - "Angelopoulos and Bates (2021), Section 2"
+      - "Barber et al. (2021), Theorem 1"
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: "explanation-for-free"
     title: "Explanation for free: the representer theorem as attribution"
     contribution: adapted-and-expanded
-    sources: []
-    locators: []
+    sources: ["kim2016critic", "koh2017influence", "basu2021fragile", "ghorbani2019shapley"]
+    locators:
+      - "Kim, Khanna, and Koyejo (2016), Sections 2-3"
+      - "Koh and Liang (2017), Section 2"
+      - "Basu, Pope, and Feizi (2021), Sections 3-4"
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: "auditing-deployment"
     title: "Auditing a deployed kernel model"
     contribution: adapted-and-expanded
-    sources: []
-    locators: []
+    sources: ["gretton2012", "sriperumbudur2010", "gretton2005hsic", "gretton2008hsictest", "perezsuay2017fair", "mitchell2019cards", "gebru2021datasheets", "nist2023rmf"]
+    locators:
+      - "Gretton et al. (2012), Sections 2 and 5"
+      - "Sriperumbudur et al. (2010), Definition 7"
+      - "Gretton et al. (2005), Section 2 and Theorem 4"
+      - "Gretton et al. (2008), Sections 2-3"
+      - "Perez-Suay et al. (2017), Section 3"
     verified_by: null
     verified_on: null
+    permission: citation-only
+  - id: "reproducible-audit-protocol"
+    title: "A reproducible audit protocol"
+    contribution: original-synthesis
+    sources: ["mitchell2019cards", "gebru2021datasheets", "nist2023rmf"]
+    locators:
+      - "Mitchell et al. (2019), Sections 3-4"
+      - "Gebru et al. (2021), Sections 3-4"
+      - "NIST AI RMF 1.0 (2023), Govern, Map, Measure, and Manage functions"
+    verified_by: "checks/ch-accountable-audit.py"
+    verified_on: "2026-07-25"
     permission: citation-only
   - id: "uncertainty-drives-experiment"
     title: "Uncertainty that drives the next experiment"
     contribution: adapted-and-expanded
-    sources: []
-    locators: []
+    sources: ["frazier2018", "shahriari2016", "kennedy2001calibration"]
+    locators:
+      - "Frazier (2018), Sections 3-5"
+      - "Shahriari et al. (2016), Sections 2-4"
+      - "Kennedy and O'Hagan (2001), Sections 2-3"
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: "summary"
     title: "Summary"
     contribution: adapted-and-expanded
-    sources: []
-    locators: []
+    sources: ["rasmussen2006", "lei2018conformal", "gretton2012", "gretton2005hsic"]
+    locators:
+      - "Synthesis of the chapter-local statements and cited source locators"
     verified_by: null
     verified_on: null
     permission: citation-only

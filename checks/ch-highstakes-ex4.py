@@ -61,7 +61,23 @@ def run_random(seed):
 
 n_active = run_active()
 n_random = np.mean([run_random(s) for s in range(30)])
+
+# Misspecification witness: train only on the left of a narrow, unmodelled bump.
+# The stationary GP variance is small near an observed point although the error is large.
+xs_miss = np.array([-2.0, -1.0, 0.0, 0.8, 1.0, 1.2, 2.0])
+ys_miss = f(xs_miss)
+mu_miss, sd_miss = gp_fit_predict(xs_miss, ys_miss)
+truth_miss = ytrue + 1.5 * np.exp(-((grid - 1.05) / 0.035) ** 2)
+i_bump = int(np.argmin(np.abs(grid - 1.05)))
+miss_error = abs(mu_miss[i_bump] - truth_miss[i_bump])
+miss_sd = sd_miss[i_bump]
 print(f"GP active learning vs random on a 1-D PES (RBF ell={ell}, target RMSE={target})")
 print(f"  points to target, uncertainty sampling : {n_active}")
 print(f"  points to target, random (mean of 30)  : {n_random:.1f}")
 print(f"  fraction of the random budget          : {n_active / n_random:.2f}")
+print(f"  misspecified bump error / model sd      : {miss_error:.3f} / {miss_sd:.3f}")
+
+assert n_active == 19
+assert abs(n_random - 26.6) < 0.05
+assert miss_error > 1.0 and miss_sd < 0.2
+assert np.isfinite([n_random, miss_error, miss_sd]).all()

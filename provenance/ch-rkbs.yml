@@ -1,194 +1,315 @@
 chapter: ch-rkbs
 slug: reproducing-kernel-banach-and-variation-spaces
 title: Reproducing-Kernel Banach and Variation Spaces
-status: author-mapped-pending-independent-verification
+status: author-reconstructed-from-primary-sources-pending-independent-verification
 private_source_sha256: null
 references:
   - zhang2009rkbs
   - wang2024sparserkbs
   - parhi2021banach
 sections:
+  - id: rkbs-three-questions
+    title: Three representer questions, not one
+    contribution: author-derived-framework
+    sources:
+      - zhang2009rkbs
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators: []
+    verified_by: null
+    verified_on: null
+    permission: citation-only
   - id: rkbs-hilbert-structure
-    title: What the Hilbert structure was buying
-    contribution: adapted-and-expanded
+    title: What Hilbert geometry supplied
+    contribution: author-derived-comparison
     sources:
       - zhang2009rkbs
     locators:
       - source: zhang2009rkbs
         manuscript_locator: ch-rkbs.md#rkbs-hilbert-structure
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 1, 4, and 5
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-module-zhang
+    title: "Paper module I: the RKBS construction of Zhang, Xu, and Zhang"
+    contribution: primary-paper-reconstruction
+    sources:
+      - zhang2009rkbs
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-module-zhang
+        source_locator: Sections 2, 4, and 5
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-dual-pair
+    title: Exact dual-pair setting
+    contribution: primary-paper-reconstruction
+    sources:
+      - zhang2009rkbs
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-dual-pair
+        source_locator: Definition 1 and Theorem 2
+        status: author-checked-against-primary-paper-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: rkbs-duality
-    title: Semi-inner products and duality mappings
-    contribution: adapted-and-expanded
-    sources: &a1
-      - zhang2009rkbs
-      - wang2024sparserkbs
-      - parhi2021banach
-    locators:
-      - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#rkbs-duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#rkbs-duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: parhi2021banach
-        manuscript_locator: ch-rkbs.md#rkbs-duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: rkbs-representer
-    title: Banach-space representer theorems
-    contribution: adapted-and-expanded
+    title: Semi-inner products and the duality map
+    contribution: adapted-derivation
     sources:
       - zhang2009rkbs
     locators:
       - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#rkbs-representer
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-rkbs.md#rkbs-duality
+        source_locator: Section 4, Theorems 10 and 11
+        status: author-checked-against-primary-paper-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: rkbs-sparse-atoms
-    title: Nonsmooth norms and sparse atoms
-    contribution: adapted-and-expanded
+  - id: rkbs-smooth-representer
+    title: The dual representer theorem
+    contribution: primary-paper-specialization-with-author-derived-proof
+    sources:
+      - zhang2009rkbs
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-smooth-representer
+        source_locator: Section 5.1, Proposition 16 and Theorem 19; Section 5.2
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-worked-lp
+    title: A finite-dimensional Banach calculation
+    contribution: original-hand-checkable-example
+    sources:
+      - zhang2009rkbs
+    locators:
+      - source: zhang2009rkbs
+        manuscript_locator: ch-rkbs.md#rkbs-worked-lp
+        source_locator: Section 5.1, Lp feature-space example
+        status: example-algebra-author-derived-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-nonsmooth-geometry
+    title: Nonsmooth geometry, preduals, and weak-star existence
+    contribution: author-derived-foundation
     sources:
       - wang2024sparserkbs
     locators:
       - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#rkbs-sparse-atoms
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-rkbs.md#rkbs-nonsmooth-geometry
+        source_locator: Sections 2 and 3, equations (15) through (18)
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-module-wang
+    title: "Paper module II: sparse representers in RKBS"
+    contribution: primary-paper-reconstruction
+    sources:
+      - wang2024sparserkbs
+    locators:
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-module-wang
+        source_locator: Sections 3 through 6
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-wang-setting
+    title: The paper's question and exact assumptions
+    contribution: primary-paper-reconstruction
+    sources:
+      - wang2024sparserkbs
+    locators:
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-wang-setting
+        source_locator: Section 3, Proposition 7 and Assumptions A1 and A2
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-wang-theorem
+    title: Sparse extreme-point theorem and derivation
+    contribution: primary-paper-reconstruction-with-proof
+    sources:
+      - wang2024sparserkbs
+    locators:
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-wang-theorem
+        source_locator: Section 3, Proposition 8, Lemma 9, and Theorem 10
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-worked-l1
+    title: Worked sparse certificate
+    contribution: original-hand-checkable-example
+    sources:
+      - wang2024sparserkbs
+    locators:
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-worked-l1
+        source_locator: Section 5, l1 sequence-space specialization
+        status: finite-dimensional-example-author-derived-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-wang-regularization
+    title: Regularization and its boundary
+    contribution: primary-paper-reconstruction-and-audit
+    sources:
+      - wang2024sparserkbs
+    locators:
+      - source: wang2024sparserkbs
+        manuscript_locator: ch-rkbs.md#rkbs-wang-regularization
+        source_locator: Section 4, Lemma 11 and Theorem 12
+        status: author-checked-against-primary-paper-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: variation-ridge-splines
-    title: Variation spaces and ridge splines
-    contribution: adapted-and-expanded
+    title: "Paper module III: neural networks as ridge splines"
+    contribution: primary-paper-reconstruction
     sources:
       - parhi2021banach
     locators:
       - source: parhi2021banach
         manuscript_locator: ch-rkbs.md#variation-ridge-splines
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2 through 5
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-parhi-setting
+    title: Radon-domain variation space
+    contribution: primary-paper-reconstruction
+    sources:
+      - parhi2021banach
+    locators:
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-parhi-setting
+        source_locator: Section 2, equations (6) through (9)
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-parhi-theorem
+    title: Finite-width theorem and proof skeleton
+    contribution: primary-paper-reconstruction
+    sources:
+      - parhi2021banach
+    locators:
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-parhi-theorem
+        source_locator: Theorem 1 and Section 4
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-parhi-regularizer
+    title: From variation norm to path norm and weight decay
+    contribution: primary-paper-reconstruction
+    sources:
+      - parhi2021banach
+    locators:
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-parhi-regularizer
+        source_locator: Section 2.3, Lemma 25 and Theorem 8
+        status: author-checked-against-primary-paper-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-worked-ridge-spline
+    title: A one-knot ridge-spline calculation
+    contribution: original-hand-checkable-example
+    sources:
+      - parhi2021banach
+    locators:
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-worked-ridge-spline
+        source_locator: Theorem 1 specialized to d=1 and m=2
+        status: example-proof-author-derived-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: rkbs-parhi-boundary
+    title: Failure boundary and afterlife
+    contribution: author-derived-audit
+    sources:
+      - parhi2021banach
+    locators:
+      - source: parhi2021banach
+        manuscript_locator: ch-rkbs.md#rkbs-parhi-boundary
+        source_locator: Sections 2.3 and 7.1
+        status: author-checked-against-primary-paper-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: rkbs-algorithms
-    title: "Algorithms: from duality to column generation"
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#rkbs-algorithms
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#rkbs-algorithms
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: parhi2021banach
-        manuscript_locator: ch-rkbs.md#rkbs-algorithms
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    title: Algorithms and certificates
+    contribution: author-derived-algorithmic-synthesis
+    sources:
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: rkbs-tradeoffs
-    title: Statistical and computational tradeoffs
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#rkbs-tradeoffs
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#rkbs-tradeoffs
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: parhi2021banach
-        manuscript_locator: ch-rkbs.md#rkbs-tradeoffs
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+  - id: rkbs-comparison
+    title: One comparison table
+    contribution: author-derived-comparison
+    sources:
+      - zhang2009rkbs
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: rkbs-practice
-    title: Common mistakes and practical implications
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#rkbs-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#rkbs-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: parhi2021banach
-        manuscript_locator: ch-rkbs.md#rkbs-practice
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    title: Common mistakes, failure boundaries, and practical implications
+    contribution: author-derived-audit
+    sources:
+      - zhang2009rkbs
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: rkbs-summary
     title: Summary and further reading
-    contribution: adapted-and-expanded
+    contribution: author-derived-synthesis
     sources:
       - zhang2009rkbs
       - wang2024sparserkbs
       - parhi2021banach
-    locators:
-      - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#rkbs-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#rkbs-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: parhi2021banach
-        manuscript_locator: ch-rkbs.md#rkbs-summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: exercises
     title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: zhang2009rkbs
-        manuscript_locator: ch-rkbs.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2024sparserkbs
-        manuscript_locator: ch-rkbs.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: parhi2021banach
-        manuscript_locator: ch-rkbs.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    contribution: original-exercises
+    sources:
+      - zhang2009rkbs
+      - wang2024sparserkbs
+      - parhi2021banach
+    locators: []
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
+mapping_method: claim-site citations plus exact theorem and section locators for reconstructed paper modules
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-24
