@@ -41,7 +41,7 @@ jobs:
       - name: Install PDF and EPUB toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc latexmk texlive-luatex texlive-latex-extra texlive-fonts-recommended fonts-stix
+          sudo apt-get install -y pandoc latexmk texlive-luatex texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra fonts-stix
           npm ci
       - name: Build PDF and EPUB
         run: npm run build:publication
