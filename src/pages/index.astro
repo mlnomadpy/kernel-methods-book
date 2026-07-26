@@ -64,8 +64,10 @@ for (let i = 0; i < N; i++) {
         <p class="cover-scope-line">{chapterCount} chapters · foundations to frontiers · free to read online · <a href="preface.html">dedication &amp; preface</a></p>
       </div>
       <div class="gram-wrap">
+        <span class="gram-axis gram-axis-y" aria-hidden="true">sample index \(i\)</span>
         <div class="gram-hero" style={`--n:${N}`} aria-hidden="true"><Fragment set:html={gcells} /></div>
-        <span class="gram-cap">{"\\(K_{ij}=e^{-(i-j)^2/2\\sigma^2}\\), the object this book is about"}</span>
+        <span class="gram-axis gram-axis-x" aria-hidden="true">sample index \(j\)</span>
+        <span class="gram-cap"><b>Plate 0.</b> {"\\(K_{ij}=e^{-(i-j)^2/2\\sigma^2}\\). Similarity becomes geometry."}</span>
       </div>
     </div>
     <p class="cover-positioning">{BOOK.positioning} <a href="about.html#sources">Sources, provenance, and review policy&nbsp;→</a></p>

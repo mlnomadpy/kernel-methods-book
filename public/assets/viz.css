@@ -6,18 +6,30 @@
  */
 .viz {
   position: relative;
-  margin: 2.15em 0 2.35em;
-  border: 1px solid var(--rule);
-  border-left: 4px solid transparent;
-  border-image: linear-gradient(to bottom, var(--accent) 0 36%, var(--spectral) 36% 100%) 1;
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--paper) 97%, var(--muted) 3%);
-  padding: clamp(12px, 2.5vw, 20px);
-  box-shadow: 0 8px 28px color-mix(in srgb, var(--ink) 7%, transparent);
+  margin: 2.7em 0 3em;
+  border: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  padding: clamp(14px, 2.5vw, 22px) 0 16px;
+  box-shadow: none;
+}
+.viz::before {
+  content: "K";
+  position: absolute;
+  top: -1px;
+  right: 0;
+  width: 2.25rem;
+  padding-top: .34rem;
+  border-top: 3px solid var(--spectral);
+  font-family: var(--display);
+  font-style: italic;
+  text-align: right;
+  color: var(--spectral);
 }
 .viz .viz-title {
   margin: 0 0 11px;
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--mono);
   font-size: .76rem;
   font-weight: 700;
   letter-spacing: .09em;
@@ -31,8 +43,8 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  border-radius: 2px;
-  background: #f5f7f5;
+  border-radius: 0;
+  background: transparent;
 }
 .viz-static svg { width: min(100%, 520px); height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; }
 .viz-static svg polyline { stroke: var(--accent); stroke-width: 2.2; }
@@ -52,7 +64,7 @@
   margin: 14px 0 2px;
   padding: 11px 0 0;
   border-top: 1px solid var(--rule);
-  font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; color: var(--muted);
+  font-family: var(--sans); font-size: 13px; color: var(--muted);
 }
 .viz .viz-controls label { display: inline-flex; align-items: center; gap: 6px; }
 .viz .viz-controls input[type=range] {
@@ -84,7 +96,7 @@
 .viz figcaption::before {
   content: "Figure";
   margin-right: .55em;
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--mono);
   font-size: .72rem;
   font-weight: 700;
   letter-spacing: .08em;
