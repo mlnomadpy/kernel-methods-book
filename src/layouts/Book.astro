@@ -3,6 +3,7 @@
 // All URLs are relative so the site can be served from any prefix.
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { BOOK } from "../lib/book.js";
 
 const {
   title,
@@ -24,18 +25,21 @@ const widgetModules = [...new Set(widgets)]
   .filter((widget) => existsSync(join(process.cwd(), "public", "assets", `viz-${widget}.js`)))
   .map((widget) => `assets/viz-${widget}.js`);
 const hasWidgets = widgets.length > 0;
-const author = {
-  name: "Taha Bouhsine",
-  url: "https://www.tahabouhsine.com",
-  affiliation: "AzettaAI",
-};
+const author = BOOK.authors?.[0] || {};
+const description = desc || BOOK.positioning || BOOK.subtitle || "";
+const canonical = new URL(Astro.url.pathname, Astro.site || Astro.url.origin).href;
+const language = BOOK.language || "en";
+const shortTitle = BOOK.short_title || BOOK.title;
+const markTitle = BOOK.mark_title || shortTitle;
+const markSubtitle = BOOK.mark_subtitle || BOOK.subtitle;
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Book",
-  name: "Kernels: The Geometry of Learning",
-  alternativeHeadline: "Foundations, Algorithms, and the Frontiers of Machine Intelligence",
-  description: "A rigorous, unified account of kernel methods from mathematical foundations to modern machine intelligence.",
-  inLanguage: "en",
+  name: BOOK.title,
+  alternativeHeadline: BOOK.subtitle,
+  description: BOOK.positioning,
+  url: canonical,
+  inLanguage: language,
   isAccessibleForFree: true,
   author: {
     "@type": "Person",
@@ -47,14 +51,23 @@ const structuredData = JSON.stringify({
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={language}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <meta name="description" content={desc} />
+    <meta name="description" content={description} />
     <meta name="author" content={author.name} />
-    <link rel="author" href={author.url} />
+    {author.url && <link rel="author" href={author.url} />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="book" />
+    <meta property="og:site_name" content={BOOK.title} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <script type="application/ld+json" set:html={structuredData}></script>
     <script is:inline>
       (function () {
@@ -79,7 +92,7 @@ const structuredData = JSON.stringify({
       <button type="button" class="tb-btn" id="menu-btn" aria-label="Open contents" aria-expanded="false">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
       </button>
-      <a class="tb-title" href="index.html">Kernels</a>
+      <a class="tb-title" href="index.html">{shortTitle}</a>
       <span class="tb-spacer"></span>
       <button type="button" class="tb-btn search-open" aria-label="Search the book">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>
@@ -90,11 +103,11 @@ const structuredData = JSON.stringify({
     </header>
     <div class="book">
       <nav class="toc" id="toc" aria-label="Table of contents">
-        <a class="edition-mark" href="index.html" aria-label="Kernels: The Geometry of Learning, home">
+        <a class="edition-mark" href="index.html" aria-label={`${BOOK.title}, home`}>
           <span class="edition-sigil" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
           </span>
-          <span><strong>Kernels</strong><small>The Geometry of Learning</small></span>
+          <span><strong>{markTitle}</strong><small>{markSubtitle}</small></span>
         </a>
         <div class="toc-tools">
           <button type="button" class="tool-btn search-open" aria-label="Search the book">
