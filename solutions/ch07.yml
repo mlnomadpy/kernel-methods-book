@@ -94,23 +94,22 @@ exercises:
   - number: 7
     kind: exploration
     status: draft
-    prompt: "Open the interactive Gram-matrix figure of the chapter, which assembles \\(\\mathbf K =
-      \\left(K(x_i, x_j) \\right)_{ij}\\) for a handful of points and shows both its heatmap and its
-      spectrum. This finite Gram matrix is precisely the discrete integral operator \\(L_K\\) of the
-      chapter, with the integral replaced by a sum over the sampled points. Widen and then narrow
-      the kernel bandwidth while watching the two panels. Describe how the off-diagonal structure of
-      the heatmap changes, and how the eigenvalue spectrum reshapes: which direction of the
-      bandwidth makes the spectrum decay fast (few cheap directions, a thin RKHS ellipsoid) and
-      which makes it decay slowly. Relate what you see to the statement that the eigenvalues shown
-      are the finite-sample stand-ins for the \\(\\lambda_k\\) of \\(L_K\\)."
-    answer: Widening a Gaussian kernel raises long-range off-diagonal similarities, making rows more
-      redundant and concentrating the uncentered spectrum into a few large eigenvalues; after
-      centering, an intermediate wide scale typically still gives fast early decay. Narrowing the
-      bandwidth suppresses off-diagonals and moves K toward the identity, whose eigenvalues are
-      flat, so many directions remain relevant. At the extreme constant-kernel limit centering
-      removes the sole common mode. The displayed finite eigenvalues are empirical versions of the
-      integral-operator spectrum, so the same bandwidth-dependent decay governs the apparent RKHS
-      ellipsoid and effective dimension.
+    prompt: Read the Mercer spectrum atlas from left to right. For each of the finite-rank,
+      Matérn/Sobolev, and Gaussian regimes, describe the tail of \((\lambda_j)\), the shape of
+      \(\mathcal N(\lambda)\) as \(\lambda\downarrow0\), and the resulting statistical cost of
+      reducing regularization. Which regime has a hard capacity ceiling, which has a polynomially
+      growing active dimension, and which keeps substantially fewer active directions at the same
+      \(\lambda\)?
+    answer: >-
+      A finite-rank spectrum becomes exactly zero after its last nonzero eigenvalue, so
+      \(\mathcal N(\lambda)\) rises only to the rank and then saturates: this is the hard capacity
+      ceiling. A Matérn or Sobolev spectrum has a polynomial tail, so decreasing \(\lambda\) activates
+      a polynomially growing number of directions and increases variance at a corresponding
+      polynomial rate. The Gaussian spectrum decays much faster, giving a slowly growing effective
+      dimension and substantially fewer active directions at the same regularization scale.
+      Therefore reducing regularization is statistically cheapest in the finite-rank regime after
+      saturation, more costly for Gaussian kernels, and most persistently costly for the long
+      polynomial Matérn/Sobolev tail.
   - number: 8
     kind: challenge
     status: draft
