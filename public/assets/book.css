@@ -1,4 +1,4 @@
-/* Kernels: The Geometry of Learning — the book's design system.
+/* Shared visual system for the kernel-methods book family.
  *
  * A mathematics monograph that behaves like a modern app: STIX Two Text for
  * the prose (the scientific-publishing face, at home next to KaTeX), IBM Plex
@@ -31,6 +31,13 @@
   --rmk: #6e5c91;
   --algo: #23727b;
   --code-bg: #e9eeed;
+  --code-keyword: #174f78;
+  --code-variable: #182b38;
+  --code-function: #27654f;
+  --code-literal: #8b4936;
+  --code-type: #66528a;
+  --code-comment: #66757b;
+  --code-operator: #496978;
   --card: #fcfdfb;
   --shadow: 0 18px 46px rgba(15, 35, 49, 0.12);
   --serif: "Source Serif 4", "Iowan Old Style", "Times New Roman", serif;
@@ -56,6 +63,13 @@
   --rmk: #b79ad9;
   --algo: #6fc4d0;
   --code-bg: #15232b;
+  --code-keyword: #86bfe6;
+  --code-variable: #edf3f1;
+  --code-function: #89cfae;
+  --code-literal: #e7a17d;
+  --code-type: #c0abe7;
+  --code-comment: #91a3a8;
+  --code-operator: #9bbbc7;
   --card: #122029;
   --shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
 }
@@ -78,6 +92,13 @@
     --rmk: #b79ad9;
     --algo: #6fc4d0;
     --code-bg: #15232b;
+    --code-keyword: #86bfe6;
+    --code-variable: #edf3f1;
+    --code-function: #89cfae;
+    --code-literal: #e7a17d;
+    --code-type: #c0abe7;
+    --code-comment: #91a3a8;
+    --code-operator: #9bbbc7;
     --card: #122029;
     --shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
   }
@@ -597,12 +618,55 @@ code {
   font-family: var(--mono); font-size: 0.84em; line-height: 1.5;
   background: var(--code-bg); padding: 0.08em 0.3em; border-radius: 1px;
 }
+div.sourceCode {
+  position: relative;
+  margin: 1.55em 0;
+  border-top: 2px solid color-mix(in srgb, var(--spectral) 62%, var(--rule));
+  background: var(--code-bg);
+}
+div.sourceCode::before {
+  content: "code";
+  position: absolute; z-index: 1; top: 0; right: 0;
+  padding: 5px 9px 4px;
+  color: var(--faint);
+  background: color-mix(in srgb, var(--code-bg) 88%, var(--paper));
+  border-left: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 0.62rem; font-weight: 600;
+  line-height: 1; letter-spacing: 0.075em; text-transform: uppercase;
+}
+div.sourceCode:has(pre.python)::before { content: "Python"; }
+div.sourceCode:has(pre.bash)::before,
+div.sourceCode:has(pre.sh)::before { content: "Shell"; }
+div.sourceCode:has(pre.json)::before { content: "JSON"; }
+div.sourceCode:has(pre.yaml)::before { content: "YAML"; }
+div.sourceCode:has(pre.julia)::before { content: "Julia"; }
 pre {
   background: var(--code-bg); border: 1px solid var(--rule);
-  border-radius: 0; padding: 15px 17px; overflow-x: auto;
-  font-size: 0.92em;
+  border-radius: 0; padding: 17px 44px 18px 19px; overflow-x: auto;
+  color: var(--code-variable); font-size: 0.89em;
+  font-variant-ligatures: none;
+  tab-size: 4;
 }
+div.sourceCode pre { margin: 0; border-top: 0; }
 pre code { background: none; padding: 0; }
+pre code > span { color: var(--code-variable); }
+code span.kw, code span.cf { color: var(--code-keyword); font-weight: 600; }
+code span.fu { color: var(--code-function); font-weight: 500; }
+code span.va, code span.n { color: var(--code-variable); }
+code span.bu, code span.dt, code span.cn { color: var(--code-type); }
+code span.st, code span.ch, code span.dv, code span.fl,
+code span.bn { color: var(--code-literal); }
+code span.op, code span.ot { color: var(--code-operator); }
+code span.at, code span.pp { color: var(--code-type); }
+code span.co, code span.do, code span.cv {
+  color: var(--code-comment); font-style: italic;
+}
+code span.al, code span.er { color: var(--accent); font-weight: 700; }
+code.sourceCode a[id^="cb"] {
+  color: color-mix(in srgb, var(--faint) 72%, transparent);
+  text-decoration: none;
+}
 
 /* math display scroll on small screens */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 3px 0; }
