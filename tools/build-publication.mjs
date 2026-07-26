@@ -393,11 +393,11 @@ if (format === "pdf") {
   // Pandoc enables Babel's experimental `bidi=basic` Lua node filter even for
   // this entirely left-to-right English manuscript. The filter crashes in the
   // TeX Live 2023 shipped by current Ubuntu runners (`babel-bidi-basic.lua`
-  // compares a missing direction value). The stable default mode needs no node
-  // rewriting and produces the same LTR output on both TeX Live 2023 and 2026.
+  // compares a missing direction value). Omitting Babel's bidi option disables
+  // the unnecessary node rewriting and preserves the same LTR output.
   const generatedTex = fs.readFileSync(texPath, "utf8").replace(
     "\\usepackage[bidi=basic,shorthands=off]{babel}",
-    "\\usepackage[bidi=default,shorthands=off]{babel}",
+    "\\usepackage[shorthands=off]{babel}",
   );
   fs.writeFileSync(texPath, generatedTex);
   execFileSync("latexmk", [
