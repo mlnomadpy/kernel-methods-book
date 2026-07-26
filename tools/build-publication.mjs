@@ -365,7 +365,6 @@ if (format === "pdf") {
     "--variable", "documentclass=scrbook",
     "--variable", "papersize=letter",
     "--variable", "fontsize=10pt",
-    "--variable", "mathfont=Libertinus Math",
     "--variable", "colorlinks=true",
     "--include-in-header", metaTex,
     "--include-in-header", path.join(root, "publication", "preamble.tex"),
