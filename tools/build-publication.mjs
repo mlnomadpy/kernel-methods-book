@@ -390,14 +390,16 @@ execFileSync("pandoc", common, {
   },
 });
 if (format === "pdf") {
-  // Pandoc enables Babel's experimental `bidi=basic` Lua node filter even for
-  // this entirely left-to-right English manuscript. The filter crashes in the
-  // TeX Live 2023 shipped by current Ubuntu runners (`babel-bidi-basic.lua`
-  // compares a missing direction value). Omitting Babel's bidi option disables
-  // the unnecessary node rewriting and preserves the same LTR output.
+  // Pandoc enables Babel's experimental Lua bidi node filter for LuaLaTeX even
+  // for this entirely left-to-right English manuscript. TeX Live 2023, used by
+  // current Ubuntu runners, can crash inside `babel-bidi-basic.lua` while
+  // shipping a paragraph. Babel is not otherwise needed by this monolingual
+  // publication, so remove both branches of Pandoc's generated Babel loader.
+  // Keep the surrounding engine conditional intact: empty branches are valid
+  // TeX and this is robust to Pandoc changing the order of Babel's options.
   const generatedTex = fs.readFileSync(texPath, "utf8").replace(
-    "\\usepackage[bidi=basic,shorthands=off]{babel}",
-    "\\usepackage[shorthands=off]{babel}",
+    /^\\usepackage\[[^\]]*\]\{babel\}\s*$/gm,
+    "% Babel omitted: monolingual LTR publication",
   );
   fs.writeFileSync(texPath, generatedTex);
   execFileSync("latexmk", [
