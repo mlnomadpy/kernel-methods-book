@@ -278,9 +278,17 @@ const header = `---
 title: "${book.title.replace(/"/g, '\\"')}"
 subtitle: "${book.subtitle.replace(/"/g, '\\"')}"
 date: "${publication.date}"
-lang: en-US
-rights: "Content CC BY-NC-SA 4.0; original code MIT"
+lang: ${book.language || "en"}
+rights: "Content ${publication.content_license}; original code ${publication.code_license}"
 ---`;
+const publicationMacros = [
+  ["kbtagline", book.tagline || book.subtitle],
+  ["kbpositioning", book.positioning || ""],
+  ["kbshorttitle", book.short_title || book.title],
+  ["kbpublicationurl", book.publication_url || "https://www.tahabouhsine.com"],
+  ["kbcontentlicense", publication.content_license],
+  ["kbcodelicense", publication.code_license],
+].map(([name, value]) => `\\renewcommand{\\${name}}{${texEscape(String(value || ""))}}`).join("\n");
 const openingMatter = (book.frontmatter || []).map(frontmatterMarkdown);
 // The bibliography as a real backmatter chapter: citeproc fills the `#refs`
 // div, and the unnumbered heading gives it running heads and a TOC entry.
@@ -306,7 +314,7 @@ const publicationSections = format === "pdf"
       // Keep the metadata block and \frontmatter in one segment. The generic
       // segment join inserts \cleardoublepage; separating these two commands
       // created two spurious blank leaves between the colophon and dedication.
-      `${header}\n\n\\frontmatter`,
+      `${header}\n\n${publicationMacros}\n\\frontmatter`,
       ...openingMatter,
       "\\tableofcontents",
       "\\mainmatter\n\\setcounter{chapter}{0}",
@@ -321,7 +329,7 @@ const releaseDir = path.join(root, "release");
 fs.mkdirSync(buildDir, { recursive: true });
 fs.mkdirSync(releaseDir, { recursive: true });
 const sourcePath = path.join(buildDir, "book.md");
-const outputPath = path.join(releaseDir, `kernels-the-geometry-of-learning.${format}`);
+const outputPath = path.join(releaseDir, `${book.slug || "book"}.${format}`);
 fs.writeFileSync(sourcePath, combined);
 // PDF compilation is deliberately two-stage. The generated TeX is a stable,
 // inspectable compiler artifact: manuscript conversion can be audited without

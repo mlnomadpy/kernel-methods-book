@@ -1,6 +1,12 @@
 % Front matter is independent from the interior style so print, bound, and
 % digital editions can vary without changing the body or generated book.tex.
 \providecommand{\kbeditionline}{Draft edition}
+\providecommand{\kbtagline}{}
+\providecommand{\kbpositioning}{}
+\providecommand{\kbshorttitle}{}
+\providecommand{\kbpublicationurl}{https://www.tahabouhsine.com}
+\providecommand{\kbcontentlicense}{CC BY-NC-SA 4.0}
+\providecommand{\kbcodelicense}{MIT}
 \setkomafont{title}{\color{KernelInk}\fontsize{36}{41}\selectfont\bfseries}
 \setkomafont{subtitle}{\color{KernelAccent}\fontsize{17}{23}\selectfont\mdseries}
 \setkomafont{author}{\color{KernelInk}\large\bfseries}
@@ -10,12 +16,12 @@
 \newcommand{\kbcolophonpage}{%
   \null\vfill
   {\parindent0pt\footnotesize\color{KernelMuted}\raggedright
-   \textcolor{KernelInk}{\kbdisplay\bfseries Kernels: The Geometry of Learning}\\
-   Foundations, Algorithms, and the Frontiers of Machine Intelligence\par
+   \textcolor{KernelInk}{\kbdisplay\bfseries \@title}\\
+   \@subtitle\par
    \vspace{9pt}
    Copyright \textcopyright{} 2026 Taha Bouhsine.\par
-   Text and figures are licensed under CC BY-NC-SA 4.0; the book's original
-   code is released under the MIT License.\par
+   Text and figures are licensed under \kbcontentlicense; the book's original
+   code is released under the \kbcodelicense{} License.\par
    \vspace{9pt}
    \kbeditionline{} · \@date.\par
    Typeset with LuaLaTeX in Source Serif 4 and Libertinus Math, with STIX Two
@@ -24,7 +30,7 @@
    a checked script.\par
    \vspace{9pt}
    The web edition, notebooks, errata, and revision history live at
-   \textcolor{KernelSlate}{\texttt{tahabouhsine.com}}.\par}%
+   \textcolor{KernelSlate}{\texttt{\kbpublicationurl}}.\par}%
 }
 
 \renewcommand{\maketitle}{%
@@ -33,16 +39,16 @@
     \thispagestyle{empty}
     \raggedright
     \vspace*{0.55cm}
-    {\sffamily\scriptsize\color{KernelMuted}\textls[105]{\MakeUppercase{A mathematical monograph on kernel methods}}\par}
+    {\sffamily\scriptsize\color{KernelMuted}\textls[105]{\MakeUppercase{\kbtagline}}\par}
     \vspace{0.38cm}
     {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
     \vspace{1.55cm}
-    {\kbdisplay\color{KernelInk}\fontsize{49}{52}\selectfont\mdseries Kernels\par}
+    {\kbdisplay\color{KernelInk}\fontsize{43}{48}\selectfont\mdseries \@title\par}
     \vspace{0.34cm}
-    {\kbdisplay\color{KernelBlue}\fontsize{28}{33}\selectfont\itshape The Geometry of Learning\par}
+    {\kbdisplay\color{KernelBlue}\fontsize{22}{29}\selectfont\itshape \@subtitle\par}
     \vspace{0.85cm}
-    {\kbdisplay\color{KernelMuted}\fontsize{14.5}{20}\selectfont
-      Foundations, algorithms, and the frontiers\\of machine intelligence\par}
+    {\kbdisplay\color{KernelMuted}\fontsize{13}{19}\selectfont
+      \kbpositioning\par}
     \vspace{1.45cm}
     \begin{center}
       \begin{tikzpicture}[x=.82cm,y=.82cm]
