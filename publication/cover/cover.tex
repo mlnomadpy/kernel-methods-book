@@ -14,8 +14,14 @@
 \newlength\KBBleed \setlength\KBBleed{0.125in}
 \newlength\KBSpine \setlength\KBSpine{2.15in}
 
-\setmainfont{STIX Two Text}
-\setmathfont{Libertinus Math}
+\setmainfont{STIX Two Text}[
+  Path=publication/fonts/,
+  UprightFont=stix-two-text-latin-400-normal.ttf,
+  ItalicFont=stix-two-text-latin-400-italic.ttf,
+  BoldFont=stix-two-text-latin-600-normal.ttf,
+  BoldItalicFont=stix-two-text-latin-600-italic.ttf]
+\setmathfont{LibertinusMath-Regular.otf}[
+  Path=publication/fonts/]
 \newfontfamily\kbmono{IBM Plex Mono}[
   Path=publication/fonts/,
   UprightFont=ibm-plex-mono-latin-400-normal.ttf,

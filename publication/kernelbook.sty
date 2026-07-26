@@ -12,11 +12,16 @@
 % Libertinus supplies the book's mathematical voice. LuaTeX's assembly of its
 % horizontal brace extenders can render as solid bars in long annotations, so
 % use Latin Modern only for those four extensible glyphs.
+\setmathfont{LibertinusMath-Regular.otf}[
+  Path=publication/fonts/]
 \setmathfont{Latin Modern Math}[range={\overbrace,\underbrace,\overbracket,\underbracket}]
 % Libertinus Math has no separately shipped bold font. Register the closely
 % related XITS face after the brace override as the complete bold math version
 % requested by \boldsymbol.
-\setmathfont{XITS Math}[version=bold]
+\setmathfont{XITSMath-Regular.otf}[
+  Path=publication/fonts/,
+  BoldFont=XITSMath-Bold.otf,
+  version=bold]
 % Role-based print typography, shared with the web edition. Source Serif 4 is
 % designed for sustained reading; STIX remains the mathematical/display voice;
 % IBM Plex handles compact scholarly apparatus. Files are vendored so the
@@ -28,7 +33,13 @@
   BoldFont=source-serif-4-latin-600-normal.ttf,
   BoldItalicFont=source-serif-4-latin-600-italic.ttf,
   Scale=MatchLowercase]
-\newfontfamily\kbdisplay{STIX Two Text}[Scale=MatchLowercase]
+\newfontfamily\kbdisplay{STIX Two Text}[
+  Path=publication/fonts/,
+  UprightFont=stix-two-text-latin-400-normal.ttf,
+  ItalicFont=stix-two-text-latin-400-italic.ttf,
+  BoldFont=stix-two-text-latin-600-normal.ttf,
+  BoldItalicFont=stix-two-text-latin-600-italic.ttf,
+  Scale=MatchLowercase]
 \setsansfont{IBM Plex Sans}[
   Path=publication/fonts/,
   UprightFont=ibm-plex-sans-latin-400-normal.ttf,

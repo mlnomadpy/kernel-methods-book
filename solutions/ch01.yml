@@ -89,22 +89,20 @@ exercises:
   - number: 7
     kind: exploration
     status: draft
-    prompt: "Open the two interactive figures of this chapter. In the Gram-matrix heatmap, place a
-      handful of points on the line, switch between the linear, polynomial, and Gaussian kernels,
-      and sweep the bandwidth: confirm that the smallest eigenvalue of the displayed matrix never
-      drops below zero, and describe what shrinking the Gaussian bandwidth does to the off-diagonal
-      entries and to the spread of eigenvalues. Then in the kernel-lab figure, drag a few data
-      points and raise the ridge weight \\(\\lambda\\): report what happens to the fitted curve and
-      relate the stiffening you observe to the bound \\(|f(x) - f(x')| \\le \\lVert f
-      \\rVert_{\\mathcal{H}}\\, d_K(x, x')\\) from the smoothness section."
-    answer: "Expected report: all three kernels produce positive-semidefinite Gram matrices up to
-      floating-point roundoff, so a displayed smallest eigenvalue may be a tiny negative number only
-      at numerical tolerance. Decreasing the Gaussian bandwidth suppresses off-diagonal similarities
-      and moves the matrix toward the identity; its eigenvalues consequently cluster near one
-      instead of showing a few dominant correlated directions. In the regression widget, increasing
-      lambda shrinks the RKHS norm and makes the curve flatter and less responsive to individual
-      points. This matches |f(x)-f(x')|<=||f||_H d_K(x,x'): stronger regularization reduces the norm
-      factor and therefore the permitted variation at a fixed kernel distance."
+    prompt: Read the positive-definiteness witness figure as a certificate rather than decoration.
+      Explain why positive entries, symmetry, and a unit diagonal fail to certify the matrix on the
+      right; use its negative eigenvalue to construct the form of a coefficient vector \(a\) for
+      which \(a^\top K a\lt0\). Then explain why no feature map into a Hilbert space can realize that
+      matrix, whereas the Gaussian matrix on the left is compatible with squared feature-space
+      lengths.
+    answer: Positive entries, symmetry, and a unit diagonal constrain individual entries but do not
+      control every quadratic form. Let \(v_-\) be an eigenvector of the right-hand matrix for its
+      negative eigenvalue \(\lambda_-<0\). Choosing \(a=v_-\) gives
+      \(a^\top K a=\lambda_-\lVert v_-\rVert^2<0\), which disproves positive definiteness. If a
+      Hilbert-space feature map existed, the same quantity would equal
+      \(\lVert\sum_i a_i\Phi(x_i)\rVert^2\ge0\), a contradiction. The Gaussian matrix passes the
+      spectral test, so its entries can be inner products and its induced distances are squared
+      feature-space lengths.
   - number: 8
     kind: challenge
     status: draft

@@ -22,6 +22,11 @@ jobs:
           python -m pip install -r requirements-notebooks.txt
       - name: Run content, numerical, notebook, link, and security gates
         run: npm run check
+        env:
+          # The five matrix-heavy reference checks finish reliably on hosted
+          # runners when they do not compete four-at-a-time for BLAS threads.
+          NUMERICAL_CHECK_WORKERS: "2"
+          NUMERICAL_CHECK_TIMEOUT_MS: "60000"
       - name: Install browser
         run: npx playwright install --with-deps chromium
       - name: Run browser and accessibility gates
@@ -36,10 +41,14 @@ jobs:
       - name: Install PDF and EPUB toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive-luatex texlive-latex-extra texlive-fonts-recommended fonts-stix
+          sudo apt-get install -y pandoc latexmk texlive-luatex texlive-latex-extra texlive-fonts-recommended
           npm ci
       - name: Build PDF and EPUB
         run: npm run build:publication
+        env:
+          # Preserve the exact LuaLaTeX diagnostic in CI; latexmk's silent mode
+          # otherwise hides the first actionable error on hosted runners.
+          PDF_DEBUG: "1"
       - uses: actions/upload-artifact@v4
         with:
           name: publication-drafts

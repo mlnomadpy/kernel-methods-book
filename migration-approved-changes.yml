@@ -4,6 +4,30 @@ _meta:
 _all:
   metrics: [headings]
   reason: Added the planned common-mistakes, practical-implications, summary, and further-reading template sections.
+ch01:
+  metrics: [widgets, chrefs]
+  reason: Replaced legacy interactive figures with publication-grade static plates and added an audited cross-chapter bridge.
+ch02:
+  metrics: [widgets]
+  reason: Replaced a redundant interactive figure with its publication-grade static plate.
+ch03:
+  metrics: [widgets]
+  reason: Replaced a redundant interactive figure with its publication-grade static plate.
+ch04:
+  metrics: [widgets]
+  reason: Replaced the legacy interactive figure with a publication-grade static plate.
+ch07:
+  metrics: [widgets]
+  reason: Replaced the legacy interactive figure with a publication-grade static plate.
+ch08:
+  metrics: [widgets]
+  reason: Replaced legacy interactive figures with publication-grade static plates.
+ch11:
+  metrics: [widgets, chrefs]
+  reason: Replaced a redundant interactive figure with its static plate and added an audited approximation bridge.
+ch12:
+  metrics: [widgets, chrefs]
+  reason: Replaced the legacy interactive figure with a static plate and added an audited randomized-approximation bridge.
 ch-online:
   metrics: [headings]
   reason: Added the planned NORMA and passive-aggressive coverage.
@@ -11,11 +35,11 @@ ch-strings2:
   metrics: [statements, proofs]
   reason: Added the audited recurrence-correctness and rolling-memory theorems with complete proofs.
 ch14:
-  metrics: [statements, examples]
-  reason: Added the audited deterministic finite-width failure experiment.
+  metrics: [statements, examples, widgets, chrefs]
+  reason: Added the audited deterministic finite-width failure experiment, replaced the legacy widget with a static plate, and added an audited theory bridge.
 ch06:
-  metrics: [statements, examples, proofs, exercises]
-  reason: Added audited population KPCA perturbation theory, pre-image boundaries, and denoising failure evidence.
+  metrics: [statements, examples, proofs, exercises, widgets, chrefs]
+  reason: Added audited population KPCA perturbation theory, pre-image boundaries, denoising failure evidence, a static publication plate, and a cross-chapter bridge.
 ch-cca:
   metrics: [statements, examples, proofs, exercises]
   reason: Added audited population KCCA operators, consistency schedules, repeated-root analysis, and held-out regularization evidence.
@@ -38,8 +62,8 @@ ch00:
   metrics: [chrefs]
   reason: Replaced the obsolete part-by-part legacy roadmap during the prerequisite-driven reorder.
 ch13:
-  metrics: [headings, algorithms, chrefs]
-  reason: Added the planned matrix-free, EigenPro, mixed-precision, distributed, federated, and streaming coverage.
+  metrics: [headings, algorithms, widgets, chrefs]
+  reason: Added the planned matrix-free, EigenPro, mixed-precision, distributed, federated, and streaming coverage and replaced legacy widgets with publication-grade static plates.
 ch-svr:
   metrics: [algorithms, chrefs]
   reason: Added expectile regression, noncrossing quantile families, and a distributional-prediction workflow.
@@ -62,8 +86,8 @@ ch-text:
   metrics: [chrefs]
   reason: Added pedagogical links connecting text representations to adjacent structured-kernel chapters.
 ch10:
-  metrics: [chrefs]
-  reason: Added a comparison link from graph kernels to modern geometric methods.
+  metrics: [widgets, chrefs]
+  reason: Added a comparison link from graph kernels to modern geometric methods and replaced its legacy widget with a static publication plate.
 ch-generative:
   metrics: [chrefs]
   reason: Added a pedagogical link clarifying the relation to distribution embeddings.

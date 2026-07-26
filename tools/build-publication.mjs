@@ -365,8 +365,6 @@ if (format === "pdf") {
     "--variable", "documentclass=scrbook",
     "--variable", "papersize=letter",
     "--variable", "fontsize=10pt",
-    "--variable", "mainfont=STIX Two Text",
-    "--variable", "mathfont=Libertinus Math",
     "--variable", "colorlinks=true",
     "--include-in-header", metaTex,
     "--include-in-header", path.join(root, "publication", "preamble.tex"),
@@ -392,6 +390,25 @@ execFileSync("pandoc", common, {
   },
 });
 if (format === "pdf") {
+  // Pandoc enables Babel's experimental Lua bidi node filter for LuaLaTeX even
+  // for this entirely left-to-right English manuscript. TeX Live 2023, used by
+  // current Ubuntu runners, can crash inside `babel-bidi-basic.lua` while
+  // shipping a paragraph. Babel is not otherwise needed by this monolingual
+  // publication, so remove both branches of Pandoc's generated Babel loader.
+  // Keep the surrounding engine conditional intact: empty branches are valid
+  // TeX and this is robust to Pandoc changing the order of Babel's options.
+  const generatedTex = fs.readFileSync(texPath, "utf8")
+    .replace(
+      /^\\usepackage\[[^\]]*\]\{babel\}\s*$/gm,
+      "% Babel omitted: monolingual LTR publication",
+    )
+    // Pandoc versions bundled by older Linux distributions can also emit this
+    // language declaration before loading Babel.
+    .replace(
+      /^\\babelprovide(?:\[[^\]]*\])?\{[^}]*\}\s*$/gm,
+      "% Babel language declaration omitted",
+    );
+  fs.writeFileSync(texPath, generatedTex);
   execFileSync("latexmk", [
     "-lualatex",
     ...(process.env.PDF_DEBUG ? [] : ["-silent"]),

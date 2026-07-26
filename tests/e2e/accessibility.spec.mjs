@@ -4,11 +4,11 @@ import AxeBuilder from "@axe-core/playwright";
 const widgetPages = [
   "bayesian-optimization-and-bandits.html", "conditional-mean-embeddings.html",
   "efficient-string-and-tree-kernels.html", "kernel-mean-embeddings.html",
-  "kernels-and-rkhs.html", "geometric-and-equivariant-kernels.html",
+  "geometric-and-equivariant-kernels.html",
   "kernel-quadrature-and-herding.html", "kernel-hypothesis-testing.html",
-  "kernels-and-deep-learning.html", "signature-and-time-series-kernels.html",
+  "signature-and-time-series-kernels.html",
   "optimal-transport-and-kernels.html", "indefinite-and-krein-kernels.html",
-  "kernel-stein-discrepancy.html", "support-vector-machines.html", "graph-kernels.html",
+  "kernel-stein-discrepancy.html", "support-vector-machines.html",
 ];
 
 for (const route of widgetPages) {

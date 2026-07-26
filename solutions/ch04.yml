@@ -88,25 +88,20 @@ exercises:
   - number: 6
     kind: exploration
     status: draft
-    prompt: 'Open the interactive kernel fit for this chapter (the \(\lambda\) slider on the figure in
-      the regularization section, [data-widget \"kernel-lab\"]{.ex-ref}). The penalized problem it
-      solves has \(\lambda\) playing the role of \(1/B\): larger \(\lambda\) means a smaller
-      effective RKHS ball. (a) Slide \(\lambda\) toward \(0\) and describe how the fitted curve
-      behaves; slide it up and describe the change. Which regime corresponds to a large radius
-      \(B\), and which to a small one? (b) The corollary bounds the estimation error by \(8
-      L_\varphi \kappa B / \sqrt n\). Predict, before moving the slider, what should happen to the
-      gap between training fit and out-of-sample behavior as you shrink the ball, and check it
-      against the figure. (c) Using the empirical norm identity \(\lVert f\rVert_{\mathcal H} =
-      \sqrt{\alpha^\top \mathbf K \alpha}\) for \(f = \sum_i \alpha_i K_{x_i}\), explain why
-      increasing \(\lambda\) literally shrinks the radius of the ball the solution occupies.'
-    answer: "As lambda approaches zero the effective norm budget grows: the fit becomes more flexible,
-      tracks training points closely, and may oscillate. Increasing lambda shrinks the solution
-      toward a smoother, flatter curve. Thus small lambda corresponds to large B, and large lambda
-      to small B. The bound 8 L_phi kappa B/sqrt(n) predicts a smaller estimation/generalization gap
-      as the ball shrinks, even though excessive shrinkage can raise approximation bias.
-      Algebraically the selected radius is ||f||=sqrt(alpha^T K alpha); increasing the coefficient
-      on this exact quantity makes large-norm candidates more expensive, so the optimizer moves to a
-      smaller RKHS ball."
+    prompt: Use the learning-error decomposition figure to audit three interventions. For each of
+      increasing the RKHS radius, collecting more samples, and running the optimizer longer, state
+      which of approximation, estimation, and optimization error should move directly and in which
+      direction. Then explain why increasing \(\lambda\) shrinks the effective radius through
+      \(\lVert f\rVert_{\mathcal H}=\sqrt{\alpha^\top\mathbf K\alpha}\), and why that move may lower
+      estimation error while raising approximation error.
+    answer: Increasing the RKHS radius enlarges the hypothesis class, so approximation error can
+      decrease while estimation error generally increases; it does not directly reduce optimization
+      error. Collecting more samples primarily lowers estimation error by stabilizing empirical risk.
+      Running the optimizer longer directly lowers optimization error toward its algorithmic floor.
+      In the penalized formulation, increasing \(\lambda\) raises the price of
+      \(\alpha^\top\mathbf K\alpha=\lVert f\rVert_{\mathcal H}^2\), so the selected function lies in
+      a smaller effective ball. That smaller class can reduce estimation error but may exclude a
+      better population predictor and therefore increase approximation error.
   - number: 7
     kind: challenge
     status: draft

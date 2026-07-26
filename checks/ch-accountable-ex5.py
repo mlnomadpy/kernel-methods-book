@@ -15,18 +15,26 @@ def rbf(v, g):
     d = v[:, None] - v[None, :]
     return np.exp(-g * d ** 2)
 
-def hsic(yhat, a):
-    n = len(yhat)
-    H = np.eye(n) - np.ones((n, n)) / n
-    gy = 1.0 / (2 * np.median(np.abs(yhat[:, None] - yhat[None, :])) ** 2)
-    ga = 1.0 / (2 * np.median(np.abs(a[:, None] - a[None, :])) ** 2 + 1e-12)
-    K = rbf(yhat, gy); L = rbf(a, ga)
-    return float(np.trace(K @ H @ L @ H) / (n - 1) ** 2)
+def centered_gram(v):
+    """Return the RBF Gram matrix centered without materializing H K H."""
+    g = 1.0 / (2 * np.median(np.abs(v[:, None] - v[None, :])) ** 2 + 1e-12)
+    K = rbf(v, g)
+    row_mean = K.mean(axis=1, keepdims=True)
+    return K - row_mean - row_mean.T + K.mean()
+
+def hsic_from_centered(Kc, Lc):
+    # For symmetric centered Gram matrices, tr(Kc Lc) is their Frobenius
+    # inner product. This is O(n^2), not the O(n^3) dense product.
+    return float(np.sum(Kc * Lc) / (len(Kc) - 1) ** 2)
 
 def perm_p(yhat, a, B=2000):
-    obs = hsic(yhat, a); c = 0
+    Kc, Lc = centered_gram(yhat), centered_gram(a)
+    obs = hsic_from_centered(Kc, Lc)
+    c = 0
     for _ in range(B):
-        if hsic(yhat, a[rng.permutation(len(a))]) >= obs:
+        p = rng.permutation(len(a))
+        # Centering commutes with a simultaneous row/column permutation.
+        if hsic_from_centered(Kc, Lc[np.ix_(p, p)]) >= obs:
             c += 1
     return obs, (c + 1) / (B + 1)
 
