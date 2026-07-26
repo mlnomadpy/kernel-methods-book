@@ -45,6 +45,10 @@ jobs:
           npm ci
       - name: Build PDF and EPUB
         run: npm run build:publication
+        env:
+          # Preserve the exact LuaLaTeX diagnostic in CI; latexmk's silent mode
+          # otherwise hides the first actionable error on hosted runners.
+          PDF_DEBUG: "1"
       - uses: actions/upload-artifact@v4
         with:
           name: publication-drafts
