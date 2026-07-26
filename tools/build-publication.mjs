@@ -397,10 +397,17 @@ if (format === "pdf") {
   // publication, so remove both branches of Pandoc's generated Babel loader.
   // Keep the surrounding engine conditional intact: empty branches are valid
   // TeX and this is robust to Pandoc changing the order of Babel's options.
-  const generatedTex = fs.readFileSync(texPath, "utf8").replace(
-    /^\\usepackage\[[^\]]*\]\{babel\}\s*$/gm,
-    "% Babel omitted: monolingual LTR publication",
-  );
+  const generatedTex = fs.readFileSync(texPath, "utf8")
+    .replace(
+      /^\\usepackage\[[^\]]*\]\{babel\}\s*$/gm,
+      "% Babel omitted: monolingual LTR publication",
+    )
+    // Pandoc versions bundled by older Linux distributions can also emit this
+    // language declaration before loading Babel.
+    .replace(
+      /^\\babelprovide(?:\[[^\]]*\])?\{[^}]*\}\s*$/gm,
+      "% Babel language declaration omitted",
+    );
   fs.writeFileSync(texPath, generatedTex);
   execFileSync("latexmk", [
     "-lualatex",
