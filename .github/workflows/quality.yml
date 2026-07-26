@@ -22,6 +22,11 @@ jobs:
           python -m pip install -r requirements-notebooks.txt
       - name: Run content, numerical, notebook, link, and security gates
         run: npm run check
+        env:
+          # The five matrix-heavy reference checks finish reliably on hosted
+          # runners when they do not compete four-at-a-time for BLAS threads.
+          NUMERICAL_CHECK_WORKERS: "2"
+          NUMERICAL_CHECK_TIMEOUT_MS: "60000"
       - name: Install browser
         run: npx playwright install --with-deps chromium
       - name: Run browser and accessibility gates
