@@ -4,8 +4,10 @@
   "anchor": "example-rand-maclaurin",
   "source_file": "manuscript/chapters/ch-randomized.md",
   "source_sha256": "06b6c9eeeb6a450d737b44ed2f5a1fd0d39187677f878a073698b3f9bc04e3f2",
-  "verification_status": "literal-audit",
-  "executable_checks": [],
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-randomized-ex2.py"
+  ],
   "numeric_literals": [
     "2",
     "1",
@@ -21,7 +23,7 @@
     "676",
     "675"
   ],
-  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

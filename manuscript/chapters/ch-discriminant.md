@@ -202,8 +202,6 @@ $$N=\begin{pmatrix}1&-1&-1&1\\-1&1&1&-1\\-1&1&1&-1\\1&-1&-1&1\end{pmatrix},$$
 
 **Reading.** The discriminant sends the two classes to cleanly separated points \(\pm 1\) with the threshold at \(0\), and the whole computation used only the Gram matrix. The singular \(N\) makes concrete why the \(+\mu I\) term is not a numerical convenience but a necessity.
 :::::
-
-**Verification artifact.** checks/example-ch-discriminant-example-16-1.json records the example source hash and verification scope.
 ::::::
 
 ## Principal components regression {#pcr}
@@ -248,8 +246,6 @@ $$K=\begin{pmatrix}4&0&-4\\0&1&-1\\-4&-1&5\end{pmatrix},\qquad y=(1,-1,0).$$
 
 **Reading.** The predictive direction here is the one of smaller variance. Truncating PCR at the single leading component discards precisely the direction that carries the signal; only keeping the second eigenvector recovers the response. This is the concrete failure mode that motivates partial least squares.
 :::::
-
-**Verification artifact.** checks/example-ch-discriminant-example-16-2.json records the example source hash and verification scope.
 ::::::
 
 ## Kernel partial least squares {#kernel-pls}
@@ -299,8 +295,6 @@ with columns of \(X\) and entries of \(y\) each summing to zero.
 
 **Reading.** One step selects the direction of maximum covariance with \(y\), fits a regression weight along it, and subtracts what it explained. The residual \(X_2\) is orthogonal to the score just used, so the next component is extracted from a genuinely new subspace: this orthogonality is what makes the deflation loop terminate cleanly and the coefficients accumulate independently.
 :::::
-
-**Verification artifact.** checks/example-ch-discriminant-example-16-3.json records the example source hash and verification scope.
 ::::::
 
 ### The dual and kernel PLS {#kernel-pls-dual}
@@ -333,6 +327,20 @@ where the matrix \(T^\top K B\) is upper triangular, so the inverse is cheap. Th
 ::::
 
 ## One engine, three methods {#unification}
+
+The shared engine is a regularized generalized eigenproblem, but the matrices encode
+different decisions. Kernel PCA maximizes total centered variance, kernel Fisher
+discriminant maximizes between-class relative to within-class scatter, and kernel CCA
+maximizes cross-view correlation relative to two marginal covariances. Feeding the same
+Gram matrix to all three therefore does not make their leading directions comparable.
+
+On a two-class dataset with a high-variance nuisance coordinate and a low-variance
+label-separating coordinate, KPCA selects the nuisance while KFD selects the separator.
+If a second view contains only the nuisance, KCCA selects it again. This witness explains
+what each numerator rewards. The common diagnostic is the original generalized-eigen
+residual; method-specific gates additionally check centering, regularized denominators,
+class scatter, or cross-view covariance. The next applications should be chosen by
+estimand, not by which eigensolver is already available.
 
 The three algorithms differ only in which matrices they feed to the shared engine and whether they solve one eigenproblem or iterate a deflation. All read the data through the kernel matrix alone, and all can be viewed as choosing directions that optimize a quadratic criterion under a quadratic constraint. The table makes the parallel explicit.
 

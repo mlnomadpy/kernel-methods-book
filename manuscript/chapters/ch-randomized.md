@@ -57,6 +57,7 @@ bibliography:
   - song2021tensor
   - han2015logdet
   - wenger2022preconditioning
+  - wang2024dependentrff
 ---
 # Random Features, Sketches, and Randomized Kernel Linear Algebra
 
@@ -213,8 +214,6 @@ $$
 $$
 
 The relative \(A_\gamma\)-norm error is approximately \(0.5858\), below the proposition's conservative bound \(0.5/(1-0.5)=1\). The example also shows why rank alone is not a statistical verdict. Discarding the eigenvalue \(0.04\) is harmless when ridge \(1\) already suppresses it, but discarding the eigenvalue \(1\) changes a direction the estimator still uses. No statement about population risk follows until the response and sampling model are specified.
-
-**Verification artifact.** checks/example-ch-randomized-example-rand-currencies.json records the example source hash and verification scope.
 :::
 
 ## Random Maclaurin features {#rand-maclaurin}
@@ -351,8 +350,6 @@ M(x,y)=5\cdot10+2\cdot1^2-2(1^2 3^2+2^2(-1)^2)=26,
 $$
 
 so a single feature has second moment \(26^2=676\) and variance \(675\). Averaging \(m\) copies reduces the variance to \(675/m\), but the example explains why Random Maclaurin can require many coordinates on high-norm data. Input normalization is part of the method, not cosmetic preprocessing.
-
-**Verification artifact.** checks/example-ch-randomized-example-rand-maclaurin.json records the example source hash and verification scope.
 :::
 
 **Failure boundary.** Negative Taylor coefficients invalidate this construction as a PSD mixture. A divergent series on the input range invalidates the interchange of expectation and summation. Even with nonnegative coefficients, large input norms or degree tails can make the variance enormous. TensorSketch attacks the \(dP\) multiplication cost and tensor dimension, but it does not erase the degree dependence.
@@ -600,6 +597,8 @@ R(\widetilde f)-R(f_\rho)
 $$
 
 The first term needs a source or approximation condition, the second needs a sampling and noise model, and the third needs a feature budget tied to \(\lambda\) and capacity. Rudi and Rosasco prove that a feature count much smaller than \(n\) can retain optimal learning rates under explicit capacity and source assumptions [@rudi2017]. Li et al. unify square-loss and Lipschitz-loss analyses and express budgets through effective degrees of freedom [@li2021rff, Theorems 9--12]. Neither result says that a small pointwise kernel error automatically yields a small excess risk.
+
+The sampling model is part of the rate. The standard decomposition is usually analyzed for independent observations; time series, spatial measurements, and repeated-user records violate that assumption even when the random features themselves are sampled independently. Wang et al. analyze random-feature KRR under \(\tau\)-mixing dependence [@wang2024dependentrff]. Their estimator retains minimax optimality under the paper's exponentially decaying dependence regime, while polynomially decaying dependence yields a slower result. This is not a blanket theorem for dependent data: the mixing definition, decay rate, source condition, capacity assumption, and feature budget all remain part of the claim.
 
 The four levels can be remembered as a quantifier ladder:
 
@@ -881,8 +880,6 @@ R_{\{1\}}
 $$
 
 The remaining squared power values are \(0.36\) and \(0.96\), so greedy pivoting chooses point \(3\) next. Uniform sampling would treat points \(2\) and \(3\) alike; the residual geometry does not. A DPP also disfavors selecting points \(1\) and \(2\) together because their \(2\times2\) determinant is \(1-0.8^2=0.36\), smaller than the determinant \(1-0.2^2=0.96\) for points \(1\) and \(3\).
-
-**Verification artifact.** checks/example-ch-randomized-example-rand-pchol.json records the example source hash and verification scope.
 :::
 
 **Failure boundary.** Greedy maximum-diagonal selection optimizes a local residual criterion, not downstream risk. DPP sampling promotes diversity but can be expensive to sample exactly, and diversity is not the same as label relevance. Ridge leverage depends on \(\gamma\); a landmark set chosen for one ridge can be inefficient for another. Near-duplicate points can make \(K_{SS}\) singular, so stable implementations use pivot tolerances and triangular solves rather than an explicit inverse.
@@ -1090,8 +1087,6 @@ $$
 $$
 
 Averaging both gives \(0.6931\), so using every possible probe direction has removed probe error but not one-step quadrature bias. With two Lanczos steps, the Krylov space is all of \(\mathbb R^2\), each quadratic form is exact, and averaging the two signs gives \(\operatorname{tr}\log A=\log\det A=0.5596\).
-
-**Verification artifact.** checks/example-ch-randomized-example-rand-slq.json records the example source hash and verification scope.
 :::
 
 **Failure boundary.** The logarithm requires \(A\succ0\). Tiny eigenvalues increase approximation difficulty and make a silently clipped spectrum unacceptable. Reusing probes across nearby hyperparameters can reduce noise in objective differences, but the dependence must be retained in uncertainty estimates. Finite-precision Lanczos loses orthogonality; residual and repeated-run checks are needed.

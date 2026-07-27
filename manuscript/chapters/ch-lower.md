@@ -106,6 +106,16 @@ $$
 \leq
 \sqrt{\frac{n}{2}\operatorname{KL}(P_0\Vert P_1)}.
 $$
+
+**Assumptions.** The observations have product laws \(P_0^n\) and \(P_1^n\);
+the loss is measurable, symmetric in the declared parameter arguments, and
+satisfies the displayed separation inequality for every admissible estimate.
+The Pinsker corollary additionally requires \(P_0\ll P_1\) and finite
+\(\operatorname{KL}(P_0\Vert P_1)\).
+
+**Proof status.** The testing reduction is proved immediately below. The
+testing-error identity and Pinsker inequality are standard and may also be
+found in [@tsybakov2009, Sections 2.2--2.3].
 :::
 
 ::: {.proof}
@@ -125,7 +135,7 @@ The minimum sum of the two testing errors is
 
 The theorem is deliberately modular. Geometry supplies \(\Delta\); probability supplies an upper bound on divergence. If either piece is weak, the lower bound is weak.
 
-### A Gaussian regression reduction {#lower-gaussian-reduction}
+**A Gaussian regression reduction.**
 
 Fix design points \(x_1,\ldots,x_n\), observe
 
@@ -175,6 +185,11 @@ $$
 s^2\left(1-\alpha-\frac{\log2}{\log M}\right).
 $$
 
+**Assumptions.** The parameter set contains an \(M\)-point measurable packing
+in the metric \(d\); \(M\geq2\); the average KL divergence to the declared
+reference measure \(Q\) is finite and satisfies the displayed information
+budget; the estimator is measurable.
+
 **Proof status.** The decoding reduction is proved below; the information inequality is cited to [@tsybakov2009, Section 2.5].
 :::
 
@@ -209,6 +224,10 @@ $$
 \frac{m\delta^2}{2}
 \min_j\left(1-\operatorname{TV}(\overline P_{j,+},\overline P_{j,-})\right).
 $$
+
+**Assumptions.** The hypercube experiments and their coordinate mixtures are
+well-defined probability measures, the decoder is measurable, and the loss
+dominates Hamming error with the displayed scale \(\delta^2\).
 
 **Proof status.** The coordinatewise testing reduction is given here; the standard measurable nearest-vertex step is sourced to [@tsybakov2009, Section 2.7].
 :::
@@ -270,6 +289,11 @@ $$
 
 Matching upper bounds hold for a regularizer whose qualification covers \(r\); ordinary KRR saturates when its qualification is exceeded. The exact endpoint and noise hypotheses depend on the source convention. This statement follows the integral-operator minimax framework of [@caponnetto2007] and the qualification comparison of [@dicker2015].
 
+**Assumptions.** Items 1--5 above define the sampling model, noise law,
+two-sided spectral supply, source ball, and eigenfunction regularity. The
+claimed exponent is for expected squared \(L^2(P_X)\) error; it is not an
+RKHS-norm, high-probability, or fixed-design result.
+
 **Proof status.** The exponent derivation and packing geometry are reconstructed below. The full random-design measure-theoretic realization and constants are not reproved here.
 :::
 
@@ -305,7 +329,7 @@ $$
 The omitted technical step verifies that the perturbed regression laws remain in the declared distribution class and controls random-design divergences. That step is part of the sourced theorem, not proved by the exponent calculation alone. \(\square\)
 :::
 
-### What exactly is matched {#lower-krr-match}
+**What exactly is matched.**
 
 The lower bound matches an upper bound only if the source exponent, capacity exponent, error norm, noise class, sampling model, and probability mode agree. Replacing two-sided eigenvalue decay by
 \(\mathcal N(\lambda)\leq C\lambda^{-p}\) changes a minimax class into a one-sided upper-bound class. Replacing expected \(L^2(P_X)\) risk by high-probability RKHS-norm error changes the currency. Calling KRR minimax for every \(r\) ignores saturation.
@@ -351,8 +375,6 @@ $$
 $$
 
 The bound is conservative because Pinsker discards the exact Gaussian testing error. Its value is conceptual: even a rank-one RKHS has a nonzero finite-sample noise floor.
-
-**Verification artifact.** checks/example-ch-lower-example-lower-gaussian.json records the example source hash and verification scope.
 :::
 
 ## Random features, Nyström methods, and sketches {#lower-randomized}
@@ -384,6 +406,13 @@ $$
 $$
 
 No sampling assumptions are required. The conclusion concerns regularized spectral error, not prediction risk.
+
+**Assumptions.** \(K\) and \(\widetilde K\) are finite real symmetric PSD
+matrices on the same \(n\)-dimensional space, \(\gamma\gt0\), and
+\(\operatorname{rank}(\widetilde K)\leq m\lt n\). The norm is the spectral norm.
+
+**Proof status.** Proved immediately below by a subspace-intersection argument
+and the Rayleigh quotient.
 :::
 
 ::: {.proof}
@@ -415,7 +444,7 @@ The proposition applies to any rank-\(m\) approximation, including feature matri
 | eigenvalue feature barrier | atoms/features | selected atoms in integral-operator model | approximation or quadrature objective | Nyström risk lower bound without reduction |
 | statistical sketch barrier | sketch rows | stated oblivious sketch family | fixed-design KRR prediction rate | matrix approximation for every input |
 
-### Failure witness: Frobenius accuracy can miss the used direction {#lower-frobenius-witness}
+**Failure witness: Frobenius accuracy can miss the used direction.**
 
 Let \(K=\operatorname{diag}(100,1)\), \(\widetilde K=\operatorname{diag}(100,0)\), and
 \(\gamma=0.01\). The relative Frobenius error is about \(0.01\), yet the regularized relative error on the second coordinate is
@@ -462,7 +491,7 @@ For kernel systems,
 \(\lambda_{\min}(K)\) may be zero. Ridge caps the condition number by
 \(1+\lambda_{\max}(K)/\gamma\), but small regularization can still make the solve hard. Conjugate gradients has a matching Chebyshev-type upper bound in this oracle model. Preconditioning changes the spectrum and therefore changes the problem to which the lower bound applies; it does not violate the theorem.
 
-### Residual, solution error, and statistical risk {#lower-opt-currencies}
+**Residual, solution error, and statistical risk.**
 
 The residual \(r_t=y-A\alpha_t\) satisfies
 
@@ -489,6 +518,10 @@ $$
 $$
 
 simultaneously at both points.
+
+**Assumptions.** The two distributions belong to the stated nested classes,
+their product experiments satisfy the two-point theorem, and the loss uses the
+same parameter map and separation constant \(\Delta\) at both points.
 
 **Proof status.** Immediate from Theorem [two-point lower bound](#thm-lower-le-cam).
 :::
@@ -536,6 +569,26 @@ Start from the desired impossibility statement, not from a favorite inequality.
 9. Exhibit an escape route showing the theorem's boundary.
 
 The most common mistake is to perform steps four and five in incompatible geometries. An RKHS-norm packing may have the wrong \(L^2(P_X)\) separation. A Frobenius-small matrix perturbation may be regularized-spectrally large. A hard quadratic may not be a Gram matrix in the kernel family under discussion.
+
+## Common mistakes and practical implications {#lower-common-mistakes}
+
+Three mistakes recur because they allow a true lower bound to answer the wrong
+question. First, changing the loss changes the theorem: a Frobenius-norm rank
+barrier does not establish population prediction hardness unless a reduction
+connects the omitted matrix directions to admissible labels. Second, changing
+the information interface changes the adversary: a matrix-vector oracle result
+does not constrain an algorithm that receives landmarks, entries, or a
+factorization. Third, changing one side of a rate comparison breaks the match:
+a minimax expectation bound under random design cannot certify optimality of a
+high-probability fixed-design algorithm.
+
+In practice, place upper and lower results in the same ledger row before
+calling a rate optimal. The row must agree on parameter class, observation
+model, loss, probability mode, computational access, and asymptotic regime. If
+one cell differs, report the results as complementary rather than matching.
+This comparison prevents an impossibility theorem from becoming a rhetorical
+flourish and tells an implementer which escape route (richer access,
+adaptivity, a narrower target class, or a different tolerance) remains open.
 
 ## Summary and further reading {#lower-summary}
 

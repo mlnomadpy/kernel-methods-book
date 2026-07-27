@@ -215,8 +215,6 @@ Three points in \(\mathbb{R}^2\): \(x_1=(0,0)\), \(x_2=(2,0)\), \(x_3=(1,1.5)\).
 
 **Reading.** The pre-image \(z^\star\approx(0.384,\,0.172)\) lands between the three points but nearest \(x_1\), the one with the largest weight, exactly where a single Gaussian bump best matches the weighted mixture. The projection \(J\) increases at every step, confirming the iteration is climbing toward the extremum.
 :::
-
-**Verification artifact.** checks/example-ch-invariance-example-20-1.json records the example source hash and verification scope.
 ::::
 
 ## Reduced set methods {#reduced-set}
@@ -283,8 +281,6 @@ An SVM-style expansion \(\Psi=\sum_{i=1}^3\alpha_i\Phi(x_i)\) with \(x_1=(0,0)\)
 
 **Reading.** One synthetic term captures the three-term vector with a relative error of \(0.3805/2.0314=18.7\%\). Collapsing three bumps into one loses a fifth of the vector's length; adding a second reduced-set vector on the residual, the next pass of the construction loop, would shrink it further. This is the speed-accuracy dial that reduced-set methods turn.
 :::
-
-**Verification artifact.** checks/example-ch-invariance-example-20-2.json records the example source hash and verification scope.
 ::::
 
 ### Sequential evaluation and face detection {#sequential-evaluation}

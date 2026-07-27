@@ -162,8 +162,6 @@ $$\tilde x_1=(-2,\ 1.5),\quad \tilde x_2=(2,\ 1.5),\quad \tilde x_3=(2,\ -1.5),\
 
 **Reading.** The two positive eigenvalues \(16=4^2\) and \(9=3^2\) are the squared side lengths, and the two zero eigenvalues certify that no third dimension is needed. Double-centering recovered the configuration up to the rotation and reflection that distances can never fix, which is exactly the freedom a visualization is allowed.
 ::::
-
-**Verification artifact.** checks/example-ch-mds-example-17-1.json records the example source hash and verification scope.
 :::::
 
 ## MDS is PCA is kernel PCA {#mds-pca-kernelpca}
@@ -195,8 +193,6 @@ $$Y^{\text{PCA}}:\ (-0.6923,\,1.0586),\ (-0.5293,\,-0.3462),\ (-1.9341,\,-0.5092
 
 **Reading.** The distance matrix carries the same information as the centered coordinates: run PCA on the points or MDS on their distances and the plot is the same, up to the sign of each axis that neither method can pin down. The two zero eigenvalues beyond the second again confirm the data was two-dimensional all along.
 ::::
-
-**Verification artifact.** checks/example-ch-mds-example-17-2.json records the example source hash and verification scope.
 :::::
 
 The step to kernels is now immediate and is the observation of Williams (2002). Replace the linear inner product \(\langle x_i,x_j\rangle\) by a kernel value \(\kappa(x_i,x_j)=\langle\phi(x_i),\phi(x_j)\rangle\). The feature-space squared distances are \(\|\phi(x_i)-\phi(x_j)\|^2=\kappa(x_i,x_i)-2\kappa(x_i,x_j)+\kappa(x_j,x_j)\), and running the same double-centering on them gives
@@ -266,8 +262,6 @@ $$K_{\mathrm{Iso}}=\begin{pmatrix}1.8716&0.9358&0&-0.9358&-1.8716\\0.9358&0.4679
 
 **Reading.** Swapping Euclidean distance for graph geodesic distance is the whole of Isomap, and it turns a two-dimensional bow into a one-dimensional line: the geodesic kernel \(K_{\mathrm{Iso}}\) has rank one where the Euclidean double-centering has rank two. Isomap is classical MDS, hence kernel PCA, on the kernel that the neighborhood graph supplies.
 :::
-
-**Verification artifact.** checks/example-ch-mds-example-17-3.json records the example source hash and verification scope.
 ::::
 
 ### Locally linear embedding: the max-eigenvalue-shift kernel {#lle-shift-kernel}
@@ -331,8 +325,6 @@ $$L^{\dagger}=\begin{pmatrix}0.5467&0.2133&0.08&-0.32&-0.52\\0.2133&0.5467&0.08&
 
 **Reading.** Inverting the Laplacian's spectrum turns its smallest nonzero eigenvectors into a kernel's largest, so the Laplacian-eigenmap embedding and kernel PCA on \(L^{\dagger}\) diagonalize the same operator and share their axes. The pseudo-inverse Laplacian is the kernel that was hiding inside Belkin and Niyogi's construction.
 ::::
-
-**Verification artifact.** checks/example-ch-mds-example-17-4.json records the example source hash and verification scope.
 :::::
 
 The three classical methods thus differ only in the kernel they hand to the same eigenproblem, and each kernel is manufactured from the neighborhood graph rather than chosen in advance.

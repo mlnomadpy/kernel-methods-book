@@ -235,8 +235,6 @@ Two paths in \(\mathbb{R}^2\), each three points. \(X:(0,0)\to(1,0)\to(1,1)\), \
 
 **Reading.** The two paths agree in displacement (level-1 term \(2\), the full self-value) but the opposite areas pull the level-2 term down to \(\tfrac12\) instead of \(\tfrac32\), and the similarity drops from \(1\) to \(7/9\). A depth-1 signature kernel would have called them identical; depth \(2\) is the first that feels the orientation. The reproducing script also sums the full untruncated kernel, \(\langle S(X),S(Y)\rangle\approx3.5592\), whose higher levels add only \(0.06\) on top of the depth-2 value.
 ::::
-
-**Verification artifact.** checks/example-ch-signature-example-26-1.json records the example source hash and verification scope.
 :::::
 
 ## The truncated signature kernel {#truncated-signature-kernel}
@@ -385,8 +383,6 @@ Real sequences \(x=(1,2,3)\) and \(y=(1,3)\), local similarity \(\kappa(a,b)=e^{
 
 **Reading.** The corner \(1.7451\) is the sum of the products of local similarities over all five alignments from \((1,1)\) to \((3,2)\); enumerating those five alignments and adding their products reproduces the same number, confirming that the recursion is a soft aggregation over alignments rather than the single best one. With \(\kappa\equiv1\) the corner would read \(5\), the count of alignments.
 :::::
-
-**Verification artifact.** checks/example-ch-signature-example-26-2.json records the example source hash and verification scope.
 ::::::
 
 ### Why the global alignment kernel is positive definite {#ga-pd}

@@ -164,8 +164,6 @@ Let \(\mathcal{F}\) label a point \(+1\) when it lies inside a chosen interval \
 
 **Reading.** The growth function is the exact polynomial \(S_{\mathcal{F}}(m)=\tfrac{m(m+1)}2+1\), quadratic rather than exponential, and the VC dimension is \(2\). The single un-realizable pattern \((+1,-1,+1)\) is the entire reason the class is learnable at all.
 :::
-
-**Verification artifact.** checks/example-ch-vc-example-12-1.json records the example source hash and verification scope.
 ::::
 
 :::: {.example #example-12-2}
@@ -181,8 +179,6 @@ Let \(\mathcal{F}=\{x\mapsto\operatorname{sgn}(w^\top x+b)\}\) be the oriented a
 
 **Reading.** Halfplanes in \(\mathbb{R}^2\) have VC dimension \(3\), one more than the input dimension. Both failure configurations, convex and non-convex, block the fourth point, which is why the count stops at three.
 :::
-
-**Verification artifact.** checks/example-ch-vc-example-12-2.json records the example source hash and verification scope.
 ::::
 
 The two examples contain the definition's logical asymmetry: to prove shattering we must realize every labeling of one configuration, while to disprove it one impossible labeling suffices. The figure places those witnesses side by side. Three non-collinear points admit every halfplane labeling; for four square corners, the alternating XOR labels are the obstruction.
@@ -268,8 +264,6 @@ Take the interval class above, VC dimension \(h=2\), with a separable training s
 
 **Reading.** A zero-error classifier of VC dimension \(2\) still only certifies a true error below \(0.389\) at a thousand examples, and raising the capacity to \(h=3\) loosens the certificate to \(0.451\). The bound is honest but conservative: it is a worst-case guarantee over all distributions, and one more VC dimension costs real confidence. The dependence \(\sqrt{h/m}\) is what makes small capacity valuable.
 :::
-
-**Verification artifact.** checks/example-ch-vc-example-12-3.json records the example source hash and verification scope.
 ::::
 
 ## Structural risk minimization {#srm-model-selection}
@@ -347,62 +341,46 @@ VC theory turns the combinatorial ability to realize labelings into a uniform la
 [Exercise 1 (warm-up)]{.box-title}
 
 Consider threshold functions on the line, \(f_t(x)=\operatorname{sgn}(x-t)\). Show that \(S_{\mathcal{F}}(m)=m+1\), that the class shatters one point but not two, and conclude that its VC dimension is \(1\).
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-4.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-5}
 [Exercise 2 (warm-up)]{.box-title}
 
 Using the two-sided Hoeffding inequality for a loss in \([0,1]\), how large must \(m\) be so that for a single fixed \(f\), \(|R_{\mathrm{emp}}[f]-R[f]|\le0.05\) with probability at least \(0.99\)? Explain why the answer does not involve any capacity measure.
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-5.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-6}
 [Exercise 3 (medium)]{.box-title}
 
 Axis-aligned rectangles in \(\mathbb{R}^2\) label a point \(+1\) inside the rectangle. Show that this class shatters four points but not five, so its VC dimension is \(4\). *Hint: for the positive part, place four points as the extreme north, south, east, and west of a small cross; for the negative part, given any five points, one is never extreme in any of the four directions and so cannot be excluded on its own.*
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-6.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-7}
 [Exercise 4 (medium)]{.box-title}
 
 Rederive the confidence interval of the VC generalization bound from \(\mathbb{P}\{\sup_f(R[f]-R_{\mathrm{emp}}[f])\ge\epsilon\}\le4\,S_{\mathcal{F}}(2m)\,e^{-m\epsilon^2/8}\) by setting the right-hand side equal to \(\delta\) and solving for \(\epsilon\). Confirm you recover \(\epsilon=\sqrt{\tfrac{8}{m}(\ln S_{\mathcal{F}}(2m)+\ln(4/\delta))}\).
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-7.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-8}
 [Exercise 5 (medium)]{.box-title}
 
 Derive the two-sided bound \(\mathbb{P}\{|\bar Z-\mathbb{E}\bar Z|\ge\epsilon\}\le2e^{-2m\epsilon^2}\) directly from the one-sided McDiarmid bound applied to \(g(z)=\tfrac1m\sum_i z_i\) and to \(-g\). Identify precisely where independence of the \(Z_i\) enters the argument.
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-8.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-9}
 [Exercise 6 (hard)]{.box-title}
 
 In the margin bound \(h\le R^2\Lambda^2\), suppose the data are rescaled by a factor \(\alpha\gt0\), \(x_i\mapsto\alpha x_i\). Show that the canonical-form constraint forces \(\|w\|\) to rescale as \(w\mapsto w/\alpha\), so that \(R\mapsto\alpha R\), \(\Lambda\mapsto\Lambda/\alpha\), and the product \(R^2\Lambda^2\) is invariant. Interpret this scale invariance: why should a capacity measure not change when we merely change units? *Hint: track what \(\min_i|\langle w,x_i\rangle|=1\) does to \(w\) under the rescaling.*
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-9.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-10}
 [Exercise 7 (hard)]{.box-title}
 
 A practitioner trains \(n\) classifiers with random hyperparameters and reports the one with the best error on a held-out test set of size \(t\). Model each test error as a mean of \(t\) independent Bernoulli losses. Use the union bound to show the reported error can underestimate the true error by roughly \(\sqrt{\ln(n)/(2t)}\). Explain how this is the same phenomenon as overfitting the training set, now transferred to the test set. *Hint: this is the union bound of the chapter with \(N=n\) fixed functions, and it is why tuning on the test set inflates optimism logarithmically in the number of trials.*
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-10.json records the example source hash and verification scope.
 :::
 
 ::: {.example #example-ch-vc-11}
 [Exercise 8 (hard)]{.box-title}
 
 The VC entropy is \(H_{\mathcal{F}}(m)=\mathbb{E}\ln\mathcal{N}_{\mathcal{F}}(x_1,\dots,x_m)\) and the annealed entropy is \(H^{\mathrm{ann}}_{\mathcal{F}}(m)=\ln\mathbb{E}\,\mathcal{N}_{\mathcal{F}}(x_1,\dots,x_m)\). Using Jensen's inequality, show \(H_{\mathcal{F}}(m)\le H^{\mathrm{ann}}_{\mathcal{F}}(m)\le G_{\mathcal{F}}(m)\), so that the growth-function condition \(G_{\mathcal{F}}(m)/m\to0\) is the strongest of the three sublinear-growth conditions and implies the others. *Hint: the logarithm is concave, and the maximum over samples dominates any average.*
-
-**Verification artifact.** checks/example-ch-vc-example-ch-vc-11.json records the example source hash and verification scope.
 :::

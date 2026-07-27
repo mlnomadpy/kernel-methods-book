@@ -30,6 +30,13 @@ references:
   - smola2000
   - zhang2008nystrom
   - bach2002
+  - abedsoltan2023eigenpro3
+  - rathore2024askotch
+  - wu2024alternatinggp
+  - lin2025latentkronecker
+  - rathore2025adasap
+  - hoffbauer2025kernelmatmul
+  - adlam2023millionkernels
 sections:
   - id: the-scaling-problem
     title: The scaling problem
@@ -406,6 +413,24 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: eigenpro3
+    title: Scaling the sample and the model separately
+    contribution: newly synthesized
+    permission: original prose; empirical and algorithmic claims attributed to primary sources
+    sources:
+      - abedsoltan2023eigenpro3
+      - adlam2023millionkernels
+    locators:
+      - source: abedsoltan2023eigenpro3
+        manuscript_locator: ch13.md#eigenpro3
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: adlam2023millionkernels
+        manuscript_locator: ch13.md#eigenpro3
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
   - id: decomposition
     title: "Before approximation: decomposition and interior-point solvers"
     contribution: adapted-and-expanded
@@ -1218,6 +1243,29 @@ sections:
         status: exact-page-section-or-theorem-locator-pending-independent-verification
     verified_by: null
     verified_on: null
+  - id: subblock-sketch-solvers
+    title: Subblock and sketch-and-project solvers
+    contribution: newly synthesized
+    permission: original prose; algorithmic and empirical claims attributed to primary sources
+    sources:
+      - rathore2024askotch
+      - wu2024alternatinggp
+      - rathore2025adasap
+    locators:
+      - source: rathore2024askotch
+        manuscript_locator: ch13.md#subblock-sketch-solvers
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: wu2024alternatinggp
+        manuscript_locator: ch13.md#subblock-sketch-solvers
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rathore2025adasap
+        manuscript_locator: ch13.md#subblock-sketch-solvers
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
   - id: fast-kernel-products
     title: Fast kernel products without global low rank
     contribution: newly synthesized
@@ -1329,6 +1377,14 @@ sections:
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: bach2002
+        manuscript_locator: ch13.md#fast-kernel-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2025latentkronecker
+        manuscript_locator: ch13.md#fast-kernel-products
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoffbauer2025kernelmatmul
         manuscript_locator: ch13.md#fast-kernel-products
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
@@ -1826,4 +1882,4 @@ mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-27

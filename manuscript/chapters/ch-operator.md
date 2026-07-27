@@ -266,9 +266,7 @@ $$
 
 For the independent-task kernel \(\rho=0\), they become \(2/3\) and \(1/6\). Coupling therefore moves the scarcely observed second task at \(x_1\) from \(0.1667\) to \(0.5926\). If the true second response at \(x_1\) has the same sign, this is useful transfer. If it has the opposite sign, the same algebra is negative transfer.
 
-**Verification.** The fractions follow from a \(2\times2\) solve and can be checked by direct substitution. The calculation verifies this finite example only; it does not establish a population advantage for task coupling. The existing deterministic artifact records the earlier two-task kernel validation at `checks/example-ch-operator-example-operator-two-task.json`.
-
-**Verification artifact.** checks/example-ch-operator-example-operator-two-task.json records the example source hash and verification scope.
+**Verification.** The fractions follow from a \(2\times2\) solve and can be checked by direct substitution. The calculation verifies this finite example only; it does not establish a population advantage for task coupling.
 :::
 
 <figure class="viz" data-figure="operator-valued-field" data-alt="Two panels show the vector response to a unit observation in output one. With an identity output matrix only output one responds; with positive off-diagonal coupling, output two receives a smaller dashed response with the same input shape."><figcaption>An operator-valued kernel separates two mechanisms. The input kernel determines where influence travels, while the output operator determines which response directions receive it. A wrong off-diagonal coupling produces negative transfer by the same mechanism that produces useful borrowing.</figcaption></figure>

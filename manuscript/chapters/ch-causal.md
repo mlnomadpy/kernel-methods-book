@@ -172,8 +172,6 @@ Gaussian kernels with bandwidth set by the median heuristic, which equals \(1\) 
 
 **Reading.** The endpoints of a chain are marginally dependent but conditionally independent given the middle variable, and the kernel statistic reports exactly that, dropping from \(0.0844\) to numerical zero once \(Y\) is partialled out. Note the honest limit: the fork \(X \leftarrow Y \to Z\) and the reversed chain \(Z \to Y \to X\) imply the same conditional independence, so this test constrains the graph without orienting every edge.
 ::::
-
-**Verification artifact.** checks/example-ch-causal-example-35-1.json records the example source hash and verification scope.
 :::::
 
 ## Estimating effects under confounding {#treatment-effects}
@@ -306,8 +304,6 @@ A confounded linear model, all variables centered, \(n=6\). Instrument \(z=(-1,-
 
 **Reading.** The confounder biases ordinary regression by \(1.2\), from the truth \(2\) up to \(3.2\). Routing the fit through the instrument, which is clean of the confounder, restores the causal slope. The kernel version replaces the two scalar regressions by two ridge regressions in feature space, so the same logic recovers a nonlinear structural function \(f\).
 ::::
-
-**Verification artifact.** checks/example-ch-causal-example-35-2.json records the example source hash and verification scope.
 :::::
 
 The two independent samples simplify propagation of stage-one error into stage two; they do not validate the instrument. An alternative avoids the nested regression: Muandet, Mehrjou, Lee, and Raj (2020), Sections 3 and 4, rewrite IV regression as a convex-concave saddle-point problem. Its identification still rests on the same moment restrictions and injectivity boundary.
@@ -336,6 +332,12 @@ $$
 $$
 
 If the \(W\)-given-\((Z,A,X)\) operator is complete on the bridge class, the bridge is unique up to null sets.
+
+**Assumptions.** The proxy conditional-independence restrictions,
+consistency, treatment positivity, integrability, bridge existence, and the
+two completeness roles stated in the preceding paragraphs hold on the
+declared bridge class. The mean formula is asserted only for treatments in the
+positivity region.
 
 **Proof status.** The identification argument follows Miao, Geng, and Tchetgen Tchetgen (2018), identification results in Sections 2 and 3. The kernel estimator follows Mastouri et al. (2021), Section 3 and Theorems 1 and 2; their consistency conditions include bounded kernels, RKHS well-specification or approximation control, operator-range/source assumptions, and vanishing regularization.
 ::::
@@ -403,8 +405,6 @@ $$
 
 **Sensitivity calculation.** In \(Y=\beta X+\delta Z+\gamma U\) with first-stage coefficient \(a=1\), the IV estimand is \(\beta+\delta\). Bounding \(|\delta|\le\rho\) gives the identified sensitivity interval \([\widehat\beta_{\mathrm{IV}}-\rho,\widehat\beta_{\mathrm{IV}}+\rho]\).
 ::::
-
-**Verification artifact.** checks/example-ch-causal-example-causal-nonidentification.json records the example source hash and verification scope.
 :::::
 
 ## What kernels buy, and what they do not {#assumptions}

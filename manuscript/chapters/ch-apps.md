@@ -62,6 +62,8 @@ bibliography:
   - matthews2017gpflow
   - gardner2018gpytorch
   - charlier2021keops
+  - kernelbook-code-ch-apps-ex1
+  - kernelbook-code-ch-apps-ex2
   - sonnenburg2010shogun
 ---
 # Applications and Practice
@@ -186,7 +188,7 @@ The worked example makes the inner loop concrete on a dataset small enough to ch
 
 :::: wex
 ::: wex-setup
-Six points on a line, \(x_{\text{raw}}=(0,1,2,3,4,5)\), with regression target \(y=\sin(x_{\text{raw}})=(0,\,0.8415,\,0.9093,\,0.1411,\,-0.7568,\,-0.9589)\). We standardize the inputs (mean \(2.5\), standard deviation \(1.7078\)) to \(x=(-1.4639,\,-0.8783,\,-0.2928,\,0.2928,\,0.8783,\,1.4639)\), fit kernel ridge regression with the RBF kernel \(k(x,x')=e^{-(x-x')^2/2\sigma^2}\) and fixed ridge \(\lambda=0.1\), and select the bandwidth by 2-fold cross-validation over \(\sigma\in\{0.5,\,2.0\}\). The interleaved folds are \(A=\{0,2,4\}\) and \(B=\{1,3,5\}\). All numbers from `checks/ch-apps-ex1.py`.
+Six points on a line, \(x_{\text{raw}}=(0,1,2,3,4,5)\), with regression target \(y=\sin(x_{\text{raw}})=(0,\,0.8415,\,0.9093,\,0.1411,\,-0.7568,\,-0.9589)\). We standardize the inputs (mean \(2.5\), standard deviation \(1.7078\)) to \(x=(-1.4639,\,-0.8783,\,-0.2928,\,0.2928,\,0.8783,\,1.4639)\), fit kernel ridge regression with the RBF kernel \(k(x,x')=e^{-(x-x')^2/2\sigma^2}\) and fixed ridge \(\lambda=0.1\), and select the bandwidth by 2-fold cross-validation over \(\sigma\in\{0.5,\,2.0\}\). The interleaved folds are \(A=\{0,2,4\}\) and \(B=\{1,3,5\}\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-apps-ex1].
 :::
 
 1.  [Score the narrow bandwidth.]{.wex-op} At \(\sigma=0.5\), training on \(A\) and testing on \(B\) gives held-out MSE \(0.1786\); training on \(B\) and testing on \(A\) gives \(0.1686\); the mean CV error is \(0.1736\).
@@ -196,8 +198,6 @@ Six points on a line, \(x_{\text{raw}}=(0,1,2,3,4,5)\), with regression target \
 
 **Reading.** Cross-validation, not a smoothness heuristic, chooses the bandwidth: here it prefers the narrower, higher-capacity kernel because the target genuinely wiggles over the range, even though \"wider is smoother is safer\" would have guessed otherwise. The wide-bandwidth fold swing and the narrow-bandwidth train-versus-CV gap are the two things to watch, and both are visible in numbers on six points.
 ::::
-
-**Verification artifact.** checks/example-ch-apps-example-44-1.json records the example source hash and verification scope.
 :::::
 
 ### Diagnosing under and overfitting through the spectrum {#spectrum-diagnosis}
@@ -213,7 +213,7 @@ which counts eigenvalues large compared to \(\lambda\) (each near \(1\)) and dis
 
 :::: wex
 ::: wex-setup
-The same six standardized points. We form the RBF Gram matrix at the two bandwidths and read its eigenvalues and effective dimension at \(\lambda=0.1\). The trace is \(6\) in both cases (unit diagonal), so the spectra differ only in how that fixed energy is distributed. All numbers from `checks/ch-apps-ex2.py`.
+The same six standardized points. We form the RBF Gram matrix at the two bandwidths and read its eigenvalues and effective dimension at \(\lambda=0.1\). The trace is \(6\) in both cases (unit diagonal), so the spectra differ only in how that fixed energy is distributed. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-apps-ex2].
 :::
 
 1.  [Take the wide-bandwidth spectrum.]{.wex-op} At \(\sigma=2.0\) the eigenvalues are \((4.8828,\,1.0143,\,0.0976,\,0.0052,\,0.0002,\,0.0000)\): the top two already hold \(98.3\%\) of the trace, and the tail is numerically negligible. The kernel exposes very few directions.
@@ -223,8 +223,6 @@ The same six standardized points. We form the RBF Gram matrix at the two bandwid
 
 **Reading.** The spectrum turns a vague worry about capacity into a number. A fast-decaying spectrum (small \(d_{\text{eff}}\)) means a simple model prone to underfitting: narrow the bandwidth or lower the ridge to expose more directions. A slow-decaying spectrum (large \(d_{\text{eff}}\)) with a train-versus-validation gap means overfitting: widen the bandwidth or raise the ridge. Both knobs act on the same quantity, \(d_{\text{eff}}\), and matching it to the data is the whole game.
 ::::
-
-**Verification artifact.** checks/example-ch-apps-example-44-2.json records the example source hash and verification scope.
 :::::
 
 ### Exact, Nystrom, or random features {#exact-nystrom-rff}

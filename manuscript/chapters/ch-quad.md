@@ -203,8 +203,6 @@ $$ K=\begin{pmatrix} 1 & 0.606531 & 0.135335\\ 0.606531 & 1 & 0.606531\\ 0.13533
 
 **Reading.** Reweighting the very same three nodes drops the squared worst-case error from \(0.004662\) to \(0.003079\), a fall of \(0.001583\), about \(34\%\), at zero extra evaluations of \(f\). The gain is pure geometry: the uniform rule places \(\mu_{Q_w}\) somewhere in the node span, while \(w^\star\) places it at the foot of the perpendicular from \(\mu_P\).
 ::::
-
-**Verification artifact.** checks/example-ch-quad-example-32-1.json records the example source hash and verification scope.
 :::::
 
 ## Bayesian quadrature {#bayesian-quadrature}
@@ -293,8 +291,6 @@ Target \(P=\mathcal N(0,1)\), kernel \(k(x,x')=e^{-(x-x')^2/2}\), so \(\mu_P(x)=
 
 **Reading.** The errors decrease monotonically, \(0.163137\to0.122814\to0.004662\), and the three greedy nodes are exactly \(\{0,-1,1\}=\{-1,0,1\}\), the node set of Example (optimal weights beat uniform). Herding chose that set from scratch with equal weights and worst-case squared error \(0.004662\); optimally reweighting it, that is, running Bayesian quadrature on the same nodes, presses the error further to \(0.003079\). For contrast, Proposition (Monte Carlo error) says a random \(3\)-node rule has expected squared error \((1-C)/3=0.140883\), some thirty times larger than herding's deterministic \(0.004662\). Deliberate placement, not luck, is what buys the accuracy.
 ::::
-
-**Verification artifact.** checks/example-ch-quad-example-32-2.json records the example source hash and verification scope.
 :::::
 
 ### Super-samples and the rate, stated carefully {#herding-convergence}

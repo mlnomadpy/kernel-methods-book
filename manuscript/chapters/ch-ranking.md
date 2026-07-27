@@ -136,8 +136,6 @@ with true order \(x_1 \succ x_2 \succ x_3 \succ x_4\). The candidate scoring dir
 
 **Reading.** The whole ranking task has become a linear classification of six difference vectors, and the ranking risk is just their training error, here one pair in six. The pair kernel reproduces the difference-vector inner product from base-kernel entries alone, so nothing here needed the features explicitly.
 :::::
-
-**Verification artifact.** checks/example-ch-ranking-example-8-1.json records the example source hash and verification scope.
 ::::::
 
 ## The soft-margin ranking SVM {#ranking-svm}
@@ -212,8 +210,6 @@ Start from \(w_0 = (0, 1)\), learning rate \(\eta = 1\). Preferred pairs: \((1{\
 
 **Reading.** A single correction along the difference vector of the swapped pair flips its margin from \(-1\) to \(+4\) and, here, repairs the entire ranking. This is the perceptron of Chapter [[ch:online-kernel-learning|Online Kernel Learning]] acting on pairs, and its update count is bounded by \((R/\gamma)^2\) just as in classification.
 :::::
-
-**Verification artifact.** checks/example-ch-ranking-example-8-2.json records the example source hash and verification scope.
 ::::::
 
 ## Ordinal regression: thresholds on the line {#ordinal-regression}
@@ -281,8 +277,6 @@ Three positive items with scores \((0.9, 0.6, 0.4)\) and three negative items wi
 
 **Reading.** No curve needs to be drawn: the AUC is a count of correctly ordered positive-negative pairs divided by the total. Because that count is exactly the complement of misordered pairs, a ranker trained to minimise pairwise risk is training its AUC upward.
 ::::
-
-**Verification artifact.** checks/example-ch-ranking-example-8-3.json records the example source hash and verification scope.
 :::::
 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}

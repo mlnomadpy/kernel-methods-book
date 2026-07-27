@@ -90,6 +90,12 @@ and
 
 $$f_\infty(x)=f_0(x)+\Theta_0(x,X)\Theta_0^{-1}(y-u(0)).$$
 
+**Assumptions.** The finite training set and squared-loss normalization are
+fixed; \(f_\theta\) is continuously differentiable along a gradient-flow
+trajectory. The closed-form limit additionally assumes a time-independent
+training Gram and cross-kernel, positive definiteness of the training Gram, and
+convergence over an infinite time horizon.
+
 **Proof status.** Proved below. This finite-dimensional identity does not prove that a nonlinear network has a constant NTK.
 ::::
 
@@ -201,8 +207,6 @@ $$\widehat K=\begin{pmatrix}1&0.9&0.9\\0.9&1&0.1\\0.9&0.1&1\end{pmatrix}.$$
 Its eigenvalues are approximately \((-0.2238,0.9000,2.3238)\). The exact feature map is valid, but the estimated matrix is indefinite. Clipping the negative eigenvalue gives a PSD matrix at Frobenius distance \(0.2238\), and changes the entrywise estimates. The right report contains the shot count, confidence intervals, minimum eigenvalue before repair, repair rule, and sensitivity of the final predictor.
 
 **Failure demonstrated.** Kernel validity does not survive arbitrary independent entrywise estimation.
-
-**Verification artifact.** checks/example-ch-frontier-example-frontier-shot-noise.json records the example source hash and verification scope.
 :::::
 
 ## Module III: foundation models as frozen feature maps {#foundation-model-kernels}
@@ -233,6 +237,16 @@ $$k_y(x,x')=\langle T_yE_\eta(x),T_yE_\eta(x')\rangle.$$
 
 This remains PSD for the realized data, but it is no longer a kernel fixed independently of the held-out outcomes. Standard test-error interpretation fails because the evaluation labels helped choose the geometry. PSD validity and evaluation validity are separate links in the argument.
 
+For a concrete negative control, randomize the held-out labels and repeat the
+entire prompt, layer, and projection search. A pipeline that still reports a
+large improvement has allowed evaluation information to enter the geometry.
+The repair is nested evaluation: choose \(T\) using only an inner training
+split, freeze its parameters and preprocessing statistics, then construct the
+outer-test Gram blocks. This is the same ownership rule used for bandwidths in
+[[ch:kernel-ridge-and-friends|the KRR model-selection treatment]] and kernel weights in
+[[ch:multiple-kernel-learning|the multiple-kernel chapter]]; foundation embeddings change the feature
+source, not the logic of held-out evidence.
+
 ## Evidence and maturity ledger {#frontier-update-policy}
 
 The ledger is maintained as part of the chapter, not as an optimistic closing paragraph.
@@ -262,6 +276,38 @@ Ask the questions in order:
 6. **What is the failure witness?** Kernel drift, rank collapse, shot-noise indefiniteness, contamination, shift, or an unfair baseline?
 
 If any answer is missing, the claim belongs in the ledger as unresolved rather than in a theorem box.
+
+## Practical implications {#frontier-practical-implications}
+
+The first operational decision is not whether a model is called a kernel
+method; it is which representation is frozen at evaluation time. A fixed
+encoder or tangent Gram lets the reader reuse the estimation, conditioning,
+and approximation tools developed earlier. A trained prompt, circuit,
+projection, or hidden layer changes the hypothesis-selection problem and
+requires nested validation around that choice. Earlier guarantees remain
+useful only conditionally on the learned geometry and after accounting for the
+data used to choose it.
+
+The second decision is what evidence to collect. For neural features, record
+parameter movement and Gram drift. For quantum features, record shots,
+pre-repair eigenvalues, and sensitivity to the repair. For frozen foundation
+features, record the encoder checksum, split-by-entity protocol, transformation
+fit set, and contamination uncertainty. These measurements turn “feature
+learning” from a label into a falsifiable regime claim.
+
+## Common mistakes {#frontier-common-mistakes}
+
+1. **Width without a regime certificate.** Large width does not choose between
+   lazy, mean-field, or maximal-update behavior; scaling and order of limits do.
+2. **PSD validity mistaken for evaluation validity.** A label-selected feature
+   map may still yield a PSD Gram matrix while invalidating held-out risk.
+3. **Ideal quantum kernels substituted for measured matrices.** Finite-shot
+   entry estimates can be indefinite, and PSD projection changes the estimator.
+4. **Small parameter motion used as a proxy for fixed features.** Kernel drift
+   can be large in a high-curvature parameterization.
+5. **Architectural possibility reported as observed mechanism.** A construction
+   showing that one transformer can implement an update does not identify what
+   an unspecified pretrained model actually computes.
 
 ## Summary and further reading {#summary-and-further-reading}
 

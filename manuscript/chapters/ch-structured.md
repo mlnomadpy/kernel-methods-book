@@ -396,7 +396,18 @@ $$
 
 At fixed \(w\), the smallest feasible slack is exactly \(H_i(w)\). Thus this program and the unconstrained structured-hinge objective are equivalent.
 
+Check the equivalence with two candidate outputs whose violations are \(0.3\) and
+\(-0.2\). Feasibility requires \(\xi_i\geq0.3\), so minimization sets
+\(\xi_i=0.3=H_i(w)\). If every violation is negative, nonnegativity sets \(\xi_i=0\).
+Dropping \(\xi_i\geq0\) would reward an already-correct example with negative slack and
+change the loss. This calculation is the scalar oracle for the restricted master.
+
 For working sets \(W_i\subseteq\mathcal Y(x_i)\), the restricted problem keeps only those constraints. Let its exact minimizer be \((w_W,\xi_W)\), and define the most violated value
+
+The numerical diagnostic is therefore not only the restricted optimizer residual. After
+each solve, loss-augmented inference over the full output space reports the largest omitted
+violation. A small restricted residual is not a global certificate when that violation
+exceeds tolerance. This failure forces the cutting-plane loop developed next.
 
 $$
 v_i(w_W)
@@ -647,8 +658,6 @@ $$
 
 Replacing \(e_t(b)\) by
 \(e_t(b)+\mathbf1\{b\ne y_t^\star\}\) performs Hamming loss augmentation without changing the state graph. The deterministic check enumerates all eight sequences and verifies the ordinary optimum \(000\), augmented optimum \(111\), hinge \(2.2\), and upper-bound inequality.
-
-**Verification artifact.** checks/example-ch-structured-example-structured-viterbi.json records the example source hash and verification scope.
 :::
 
 The example is tiny for a reason: every claim is hand-checkable. On a chain with \(T\) positions and \(L\) labels, the same recurrence costs \(O(TL^2)\) time and \(O(TL)\) memory with backpointers, or \(O(L)\) score memory if only the optimum value is needed.

@@ -48,6 +48,9 @@ bibliography:
   - krause2008sensors
   - gardner2014constraints
   - sui2015safe
+  - kernelbook-code-ch-bo-ex1
+  - kernelbook-code-ch-bo-ex2
+  - kernelbook-code-ch-bo-ex3
   - kandasamy2017multifidelity
 ---
 # Kernelized Bandits and Bayesian Optimization
@@ -109,7 +112,7 @@ A tiny run makes the two forces visible. We take a five-point grid, a squared-ex
 
 :::: wex
 ::: wex-setup
-Decision set \(D=\{0,\,0.5,\,1,\,1.5,\,2\}\); squared-exponential kernel \(k(x,x')=e^{-(x-x')^2/(2\ell^2)}\) with length scale \(\ell=0.5\); noise variance \(\sigma^2=0.01\); exploration weight fixed at \(\beta_t^{1/2}=2\) for illustration. The unknown objective is \(f(x)=\sin(3x)\), whose grid maximum sits at \(x^\star=0.5\) with \(f(x^\star)=0.9975\). We start from two observations at the ends, \((0,\,0)\) and \((2,\,-0.2794)\). All numbers from `checks/ch-bo-ex1.py`.
+Decision set \(D=\{0,\,0.5,\,1,\,1.5,\,2\}\); squared-exponential kernel \(k(x,x')=e^{-(x-x')^2/(2\ell^2)}\) with length scale \(\ell=0.5\); noise variance \(\sigma^2=0.01\); exploration weight fixed at \(\beta_t^{1/2}=2\) for illustration. The unknown objective is \(f(x)=\sin(3x)\), whose grid maximum sits at \(x^\star=0.5\) with \(f(x^\star)=0.9975\). We start from two observations at the ends, \((0,\,0)\) and \((2,\,-0.2794)\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-bo-ex1].
 :::
 
 1.  [Fit the surrogate (round 1).]{.wex-op} With the two end points the posterior mean over the grid is \(\mu=(-0,\,-0.003,\,-0.037,\,-0.168,\,-0.277)\) and the standard deviation is \(\sigma=(0.099,\,0.797,\,0.982,\,0.797,\,0.099)\): near the data \(\sigma\) collapses, in the unexplored middle it is largest.
@@ -119,8 +122,6 @@ Decision set \(D=\{0,\,0.5,\,1,\,1.5,\,2\}\); squared-exponential kernel \(k(x,x
 
 **Reading.** Two queries suffice here: round 1 spends its budget reducing uncertainty where the belief is blank, round 2 cashes that in, and the simple regret drops to \(0\). The swing is entirely driven by the \(\sigma\) term shrinking after the first observation, which is the exploration-exploitation tradeoff playing out in numbers.
 ::::
-
-**Verification artifact.** checks/example-ch-bo-example-41-1.json records the example source hash and verification scope.
 :::::
 
 ### Expected improvement {#expected-improvement}
@@ -157,7 +158,7 @@ The formula is worth reading termwise. The first term \((\mu-f^+)\Phi(z)\) is ex
 
 :::: wex
 ::: wex-setup
-Same surrogate as the GP-UCB example, conditioned on the two initial observations, so the incumbent is \(f^+=\max(0,\,-0.2794)=0\). We compute \(\mathrm{EI}\) in full at the candidate \(x=1.0\), where the posterior is \(\mu=-0.0374\), \(\sigma=0.9817\), then over the whole grid. Numbers from `checks/ch-bo-ex2.py`.
+Same surrogate as the GP-UCB example, conditioned on the two initial observations, so the incumbent is \(f^+=\max(0,\,-0.2794)=0\). We compute \(\mathrm{EI}\) in full at the candidate \(x=1.0\), where the posterior is \(\mu=-0.0374\), \(\sigma=0.9817\), then over the whole grid. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-bo-ex2].
 :::
 
 1.  [Standardize the gap.]{.wex-op} \(z=(\mu-f^+)/\sigma=(-0.0374-0)/0.9817=-0.0381\).
@@ -167,8 +168,6 @@ Same surrogate as the GP-UCB example, conditioned on the two initial observation
 
 **Reading.** At the left shoulder \(x=0.5\) the mean is higher but the uncertainty lower, giving \(\mathrm{EI}=0.317\), just under the \(0.373\) at the more uncertain \(x=1.0\). Early on, when little is known, expected improvement is uncertainty-led, and only as \(\sigma\) shrinks do the mean-driven terms take over: the same arc the UCB run traced.
 ::::
-
-**Verification artifact.** checks/example-ch-bo-example-41-2.json records the example source hash and verification scope.
 :::::
 
 ### Thompson sampling and probability of improvement {#thompson-sampling}
@@ -313,7 +312,7 @@ Since \(\beta_T\) grows only logarithmically and \(\gamma_T\) is sublinear, \(R_
 
 :::: wex
 ::: wex-setup
-Take the four points GP-UCB acquired in the first example, in order \(x=(0,\,2,\,1,\,0.5)\), same kernel and \(\sigma^2=0.01\). We compute the information gain \(I=\tfrac12\ln\det(I+\sigma^{-2}K)\), verify the telescoping identity, and check the variance-sum bound of the proof. Numbers from `checks/ch-bo-ex3.py`.
+Take the four points GP-UCB acquired in the first example, in order \(x=(0,\,2,\,1,\,0.5)\), same kernel and \(\sigma^2=0.01\). We compute the information gain \(I=\tfrac12\ln\det(I+\sigma^{-2}K)\), verify the telescoping identity, and check the variance-sum bound of the proof. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-bo-ex3].
 :::
 
 1.  [Batch information gain.]{.wex-op} With \(\sigma^{-2}=100\), the \(4\times 4\) Gram matrix gives \(I=\tfrac12\ln\det(I+100\,K)=8.7015\) nats. This is a lower bound on \(\gamma_4\), which maximizes over all four-point sets.
@@ -322,8 +321,6 @@ Take the four points GP-UCB acquired in the first example, in order \(x=(0,\,2,\
 
 **Reading.** The abstract chain of the proof becomes three concrete numbers: the queries earned \(8.70\) nats of information, the telescoping decomposition reproduces it exactly, and the cumulative posterior variance \(3.32\) sits below the certified ceiling \(3.77\). It is this ceiling, times the exploration factor, that the regret bound converts into a guarantee.
 ::::
-
-**Verification artifact.** checks/example-ch-bo-example-41-3.json records the example source hash and verification scope.
 :::::
 
 ### Sharper confidence: IGP-UCB {#igp-ucb}

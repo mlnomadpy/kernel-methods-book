@@ -224,8 +224,6 @@ $$
 When \(\varepsilon=1/10\), the scores are \(5/6\) and \(-5/6\): the weak bridge preserves the two label regions. When \(\varepsilon=10\), they are \(1/21\) and \(-1/21\): the strong bridge nearly erases both labels. If the bridge is an artifact of the ambient metric, adding more unlabeled points around it can reinforce the wrong answer.
 
 **Verification.** Substitution verifies both linear equations. This is a sensitivity calculation on one graph, not evidence that a particular graph rule is statistically consistent. The existing deterministic figure artifact records the chapter's graph-energy visualization.
-
-**Verification artifact.** checks/example-ch-manifold-example-manifold-bridge.json records the example source hash and verification scope.
 :::
 
 <figure class="viz" data-figure="manifold-graph-energy" data-alt="Two moon-shaped point clouds are connected by a sparse neighborhood graph. Four square vertices carry labels in the first panel; the second panel shows harmonic scores propagated along each moon, with blue positive values on the upper arc and red negative values on the lower arc."><figcaption>Graph smoothness propagates labels along connected paths, not across ambient empty space. The mechanism helps only when labels agree with the graph. A shortcut edge or a labeling rule that cuts across each moon turns the same regularizer into bias.</figcaption></figure>
@@ -467,6 +465,20 @@ Remove any one and unlabeled data can hurt. Concrete witnesses include:
 A claim that "unlabeled data helped" must compare against the same ambient model with \(\gamma_I=0\), use a fixed labeled validation protocol, and include graph perturbations. Choosing the best graph after inspecting test labels converts graph selection into leakage.
 
 ## Out-of-sample prediction is a modeling choice {#manifold-out-of-sample}
+
+Harmonic extension assigns values only to vertices in the observed graph. A new point has
+no value until we choose how it joins that graph, and different neighbor rules define
+different estimators. For a point placed midway between two oppositely labeled components,
+one-nearest-neighbor extension returns one extreme label, symmetric two-neighbor
+interpolation returns zero, and an ambient RKHS representer returns whatever its kernel
+geometry dictates. None follows from the transductive solution alone.
+
+The deployment diagnostic inserts the same query under several justified neighbor counts
+and bandwidths, then reports prediction spread and whether graph connectivity changes.
+A stable training harmonic function with unstable query attachment is not an
+out-of-sample predictor. This limitation motivates manifold regularization: its ambient
+RKHS term defines a function on the original input space while the graph term uses
+unlabeled geometry.
 
 Several mechanisms are called out-of-sample extension, but they define different estimators:
 

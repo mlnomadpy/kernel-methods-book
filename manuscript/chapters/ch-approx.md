@@ -368,8 +368,6 @@ $$
 and \(P_X(0.75) = \sqrt{0.125} = 0.3536\).
 
 **The bound versus the truth.** The native-space norm of the target is \(\lVert f \rVert^2 = \int_0^1 (2t)^2 dt = 4/3\), so \(\lVert f \rVert = 1.1547\) and the theorem promises \(\lvert f(0.75) - s(0.75) \rvert \le 0.3536 \times 1.1547 = 0.4082\). The actual values are \(s(0.75) = 0.25 + 1.5 \times 0.25 = 0.625\) and \(f(0.75) = 0.5625\), an error of \(0.0625\), comfortably inside the worst-case bar. The Bayesian reading of the same numbers: a Brownian-motion prior conditioned on these three observations has posterior mean \(0.625\) and posterior standard deviation \(0.3536\) at \(x_* = 0.75\).
-
-**Verification artifact.** checks/example-ch-approx-example-approx-power.json records the example source hash and verification scope.
 :::
 
 ## Common mistakes and practical implications {#approx-practice}

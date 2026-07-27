@@ -133,10 +133,11 @@ exercises:
   - number: 9
     kind: exploration
     status: draft
-    prompt: Run `checks/ch-cme-stability.py`. Compare the repeated-update diagnostics for
-      \(\delta=10^{-2}\) and \(\delta=10^{-6}\). Report the largest negative mass, largest
-      \(\ell_1\)-norm, and final perturbation amplification. Explain why dividing every coefficient
-      vector by its sum neither removes negative mass nor establishes stability.
+    prompt: Run the chapter's computational reference [@kernelbook-code-ch-cme-stability].
+      Compare the repeated-update diagnostics for \(\delta=10^{-2}\) and
+      \(\delta=10^{-6}\). Report the largest negative mass, largest \(\ell_1\)-norm, and
+      final perturbation amplification. Explain why dividing every coefficient vector by
+      its sum neither removes negative mass nor establishes stability.
     answer: The deterministic script prints the authoritative values. For delta=1e-2 the maximum
       negative mass is 0.144328, the maximum l1 norm is 0.730646, and the final amplification is
       0.000038. For delta=1e-6 they are 0.859314, 2.281870, and 0.029432. Thus the smaller ridge

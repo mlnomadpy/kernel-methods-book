@@ -126,8 +126,6 @@ Take \(s=\)\"gatta\" and \(t=\)\"cata\". Cells where \(s_i=t_j\) are shaded; the
 
 **Reading.** The kernel value \(\kappa(\text{"gatta"},\text{"cata"})=14\) is read straight off the bottom-right cell, and the whole table cost \(5\times4\) constant-time updates, matching the \(O(|s|\,|t|)\) bound.
 :::::
-
-**Verification artifact.** checks/example-ch-strings2-example-22-1.json records the example source hash and verification scope.
 ::::::
 
 ## The fixed-length subsequences kernel {#fixed-length}
@@ -253,8 +251,6 @@ Length \(p=2\), decay \(\lambda\). The level-1 suffix table has \(\lambda^2\) at
 
 **Reading.** The self-kernels are \(\kappa_2(\text{"cat"},\text{"cat"})=\kappa_2(\text{"car"},\text{"car"})=2\lambda^4+\lambda^6\), so the normalised kernel is \(\hat\kappa=\lambda^4/(2\lambda^4+\lambda^6)=(2+\lambda^2)^{-1}\). At \(\lambda=\tfrac12\) this is \(0.0625/0.140625=0.4444\), independent of any long-range structure the two three-letter words do not have.
 :::::
-
-**Verification artifact.** checks/example-ch-strings2-example-22-2.json records the example source hash and verification scope.
 ::::::
 
 ### Variants: character weightings, gap counts, and soft matching {#gap-variants}
@@ -365,8 +361,6 @@ Let \(S\) be a root with two children, a leaf and a \"cherry\" (a node with two 
 
 **Reading.** Summing the co-rooted kernel over all node pairs gives the all-subtree kernel \(\kappa(S,T)=\kappa_r(S,T)+\kappa_r(\text{cherry},T)=1+1=2\): the cherry pattern is shared once as the whole of \(T\) matched to \(S\)'s root and once as \(T\) matched to \(S\)'s internal cherry.
 :::::
-
-**Verification artifact.** checks/example-ch-strings2-example-22-3.json records the example source hash and verification scope.
 ::::::
 
 The all-subtree kernel promotes the feature set from co-rooted subtrees to all subtrees, and its value can be assembled from the co-rooted kernel by the identity \(\kappa(T_1,T_2)=\sum_{v_1\in T_1,\,v_2\in T_2}\kappa_r(\tau(v_1),\tau(v_2))\), since any subtree is co-rooted in the complete subtree at some node. A direct recursion is cheaper than that double sum. Partitioning the subtrees into those co-rooted with both roots and those sitting inside a child, with an inclusion-exclusion correction for the subtrees counted in two children, gives the dynamic program of Shawe-Taylor and Cristianini (2004).

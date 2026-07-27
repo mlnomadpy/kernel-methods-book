@@ -360,8 +360,8 @@ $$
 =\frac{3}{2b}+\frac12\{2\log a+\log b\}.
 $$
 
-At \(\rho=0\), \(a=b=1.01\) and the displayed quantity is approximately \(1.5000\). At
-\(\rho=0.99\), \(a=0.02\), \(b=2.99\), and it is approximately \(-2.8628\). The training evidence strongly prefers the nearly collapsed covariance because the labels are constant and the two unused contrast directions contribute tiny determinant eigenvalues.
+At \(\rho=0\), \(a=b=1.01\) and the displayed quantity is approximately \(1.5001\). At
+\(\rho=0.99\), \(a=0.02\), \(b=2.99\), and it is approximately \(-2.8627\). The training evidence strongly prefers the nearly collapsed covariance because the labels are constant and the two unused contrast directions contribute tiny determinant eigenvalues.
 
 Now map a genuinely unfamiliar test input to the same collapsed feature region, with prior covariance \(\rho\) to each training point. Its latent posterior variance is
 
@@ -374,8 +374,6 @@ $$
 At \(\rho=0.99\), \(v_\star\approx0.0166\). The model is highly confident because the learned representation declares the test point familiar. Positive definiteness and high training evidence do not reveal that the raw input was remote.
 
 For contrast labels such as \(y=(1,-2,1)\), the quadratic term is \(6/a\) and collapse is heavily penalized. Collapse is therefore label aligned, not inevitable.
-
-**Verification artifact.** checks/example-ch-dkl-example-dkl-collapse.json records the example source hash and verification scope.
 :::
 
 <figure class="viz" data-figure="dkl-collapse" data-alt="Two kernel similarity matrices compare separated and collapsed feature geometries."><figcaption>A composed kernel remains positive definite after representation collapse. When distant raw inputs become nearly identical in feature space, posterior uncertainty loses the geometry needed to express unfamiliarity.</figcaption></figure>

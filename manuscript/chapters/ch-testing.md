@@ -195,8 +195,6 @@ Two samples on the line, \(X = \{0,1,2,3\} \sim P\) and \(Y = \{7,8,9,10\} \sim 
 
 **Reading.** The observed discrepancy is matched by only its own mirror among seventy relabelings, a decisive rejection. The permutation-null mean sitting at exactly \(0\) is the unbiasedness of the U-statistic made visible: averaging over all label assignments reproduces the population value \(\mathrm{MMD}^2 = 0\) that holds under \(H_0\). With four points per sample the smallest attainable \(p\)-value is \(2/70 \approx 0.029\), already fine enough to clear \(0.05\).
 ::::
-
-**Verification artifact.** checks/example-ch-testing-example-30-1.json records the example source hash and verification scope.
 :::::
 
 An alternative to permutation is to bootstrap the chi-square mixture directly, estimating the eigenvalues \(\lambda_l\) from the spectrum of the centered Gram matrix, or to fit a two-parameter Gamma to the null by matching its first two moments (Gretton et al., 2012). These are faster when many tests are run, but the permutation test is exact and assumption-free, so we take it as the reference.
@@ -249,6 +247,19 @@ Because the selection step only ever inspects the selection set, the test set st
 
 ## The median heuristic and its limits {#median-heuristic}
 
+The pooled median distance is a scale convention, not an optimizer of test power. For two
+well-separated narrow Gaussians, it often gives a useful bandwidth; for a mixture differing
+only in a rare local component, the median is dominated by the common bulk and can wash
+out the alternative. Extremely high dimension adds distance concentration, making many
+bandwidths numerically similar while all have weak power.
+
+Separate selection from calibration. If a bandwidth grid is searched using the observed
+labels, repeat the complete search inside every permutation or use a valid aggregate test.
+On a tiny pooled sample, enumerate permutations and compare this procedure with the invalid
+shortcut that freezes the observed winner. Then report simulated null rejection and power
+for declared alternatives. The diagnostic is type-I error first and power second; a large
+observed MMD alone validates neither.
+
 Before optimizing a kernel one needs a default, and the near-universal default for a Gaussian kernel is the *median heuristic*: set the bandwidth to the median of the pairwise distances of the pooled sample, \(\sigma = \mathrm{median}\{\|z_i - z_j\|\}\). Its logic is to place the kernel at the scale of the data. A bandwidth far below that scale sends every off-diagonal \(k(z_i,z_j)\) to zero, so all points look mutually dissimilar and the discrepancy drowns in noise; a bandwidth far above it sends every \(k(z_i,z_j)\) to one, so all points look identical and the discrepancy vanishes. The median sits between these dead zones, and it costs nothing to compute.
 
 What the heuristic cannot do is notice *where* \(P\) and \(Q\) differ. It reads only the pooled inter-point distances, which reflect the overall spread of the data, not the discriminative scale of the difference between the distributions. When those two scales coincide, as they do for a plain location shift, the median heuristic is close to optimal; when they diverge, as when the difference lives in fine structure sitting on top of a broad common shape, the median heuristic picks a bandwidth blind to exactly the feature that separates the distributions, and its power collapses (Gretton et al., 2012b; Sutherland et al., 2017). The next example shows the sensitivity directly, and the same permutation test from before delivers opposite verdicts under two bandwidths on one dataset.
@@ -274,8 +285,6 @@ Overlapping samples \(X = \{-3,-2,-1,0,1\} \sim P\) and \(Y = \{0,1,2,3,4\} \sim
 
 **Reading.** The same data and the same test change verdict from retain to reject when the bandwidth widens from \(0.5\) to \(2\). The narrow kernel makes every distinct point look mutually dissimilar, collapsing the between-group signal into noise and even driving the unbiased estimate negative; the median heuristic lands squarely in the powerful regime, where the signal-to-noise proxy \(t\) has climbed above \(2\). Bandwidth is not cosmetic: it sets the power, and a poorly scaled kernel is blind by construction.
 ::::
-
-**Verification artifact.** checks/example-ch-testing-example-30-2.json records the example source hash and verification scope.
 :::::
 
 ## Learned and deep kernels {#learned-kernels}

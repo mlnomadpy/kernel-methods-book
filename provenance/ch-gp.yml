@@ -17,6 +17,10 @@ references:
   - hensman2013bigdata
   - wilson2013
   - damianou2013deepgp
+  - wu2024alternatinggp
+  - lin2025latentkronecker
+  - rathore2025adasap
+  - hoffbauer2025kernelmatmul
 sections:
   - id: bayesian-view
     title: "The Bayesian view: a prior over functions"
@@ -571,6 +575,34 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: modern-scalable-gp
+    title: Exact targets, approximate computation, and structured models
+    contribution: newly synthesized
+    permission: original prose; algorithmic, complexity, and empirical claims attributed to primary sources
+    sources:
+      - wu2024alternatinggp
+      - lin2025latentkronecker
+      - rathore2025adasap
+      - hoffbauer2025kernelmatmul
+    locators:
+      - source: wu2024alternatinggp
+        manuscript_locator: ch-gp.md#modern-scalable-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: lin2025latentkronecker
+        manuscript_locator: ch-gp.md#modern-scalable-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: rathore2025adasap
+        manuscript_locator: ch-gp.md#modern-scalable-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+      - source: hoffbauer2025kernelmatmul
+        manuscript_locator: ch-gp.md#modern-scalable-gp
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
   - id: deep-multioutput-gp
     title: Deep, multi-output, and spectral-mixture processes
     contribution: adapted-and-expanded
@@ -779,4 +811,4 @@ mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-20
+mapping_date: 2026-07-27

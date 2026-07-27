@@ -428,8 +428,6 @@ The certificate \(c=(1/2,1/2)\) has dual objective \(1\) and correlations
 [Example (quadratic and atomic regularization select different geometry)]{.box-title}
 
 An RKHS squared norm spreads a solution across correlated directions because energy adds quadratically. An atomic norm pays for the total magnitude of selected atoms and can prefer a small set of extreme directions. Both estimators can interpolate the same observations, yet one expresses smooth distributed energy while the other expresses sparse learned features.
-
-**Verification artifact.** checks/example-ch-rkbs-example-rkbs-dense-sparse.json records the example source hash and verification scope.
 :::
 
 <figure class="viz" data-figure="hilbert-vs-variation" data-alt="Two fitted curves nearly overlap a target made from two localized bumps. A coefficient plot shows the quadratic solution spreading weight across many correlated atoms while the atomic-norm solution uses a small active set."><figcaption>Prediction error alone does not reveal representation geometry. A Hilbert penalty distributes energy; an atomic penalty can expose a low-dimensional face and select a sparse certificate.</figcaption></figure>
@@ -624,6 +622,23 @@ The outer master problem can be convex while the oracle is nonconvex. A small re
 | Variation space | Ridge atoms plus null space | TV measure extreme points | Stable right inverse, continuous surjective measurements, null-space identification | Continuous nonconvex atom oracle |
 
 The statistical capacity measures also differ. RKHS analysis naturally uses eigenvalues and effective dimension. Atomic spaces use dual norms, metric entropy, variation bounds, or sparsity. A smaller active set lowers evaluation cost but does not by itself imply lower prediction risk.
+
+Read the rows as a decision procedure, not as a hierarchy. If squared RKHS
+norm and a fixed PSD kernel express the prior, a dense but convex Gram solve is
+the correct baseline. If the scientific claim requires a finite number of
+interpretable ridge atoms, the variation-space row supplies that sparsity, but
+it replaces the linear solve with a continuous nonconvex atom oracle. On a
+two-ridge target \(f(x)=a_1\sigma(v_1^\top x)+a_2\sigma(v_2^\top x)\), an
+atomic method may recover two directions while an RBF RKHS predictor spreads
+mass across many data sections; that is a structural advantage only if the
+oracle gap and prediction risk are both controlled.
+
+The diagnostic is therefore two-currency: report held-out risk and the
+certificate appropriate to the row. A short expansion without a restricted
+master gap can be a prematurely stopped search, while a low RKHS residual with
+an ill-conditioned Gram matrix can be numerically meaningless. Do not infer
+statistical superiority from atom count, or computational superiority from a
+representer theorem that leaves a hard nonlinear inverse map.
 
 ## Common mistakes, failure boundaries, and practical implications {#rkbs-practice}
 

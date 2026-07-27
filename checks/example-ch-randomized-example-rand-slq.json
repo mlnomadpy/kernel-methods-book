@@ -4,8 +4,10 @@
   "anchor": "example-rand-slq",
   "source_file": "manuscript/chapters/ch-randomized.md",
   "source_sha256": "de769f06acc085ad503661748b779f05001c31cad49d2fec671b7a32c2564a20",
-  "verification_status": "literal-audit",
-  "executable_checks": [],
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-randomized-ex4.py"
+  ],
   "numeric_literals": [
     "2",
     "0.5",
@@ -17,7 +19,7 @@
     "0",
     "0.6931"
   ],
-  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

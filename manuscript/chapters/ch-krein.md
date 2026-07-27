@@ -34,6 +34,9 @@ bibliography:
   - pekalska2005
   - alpay1991
   - schwartz1964
+  - kernelbook-code-ch-krein-ex1
+  - kernelbook-code-ch-krein-ex2
+  - kernelbook-code-ch-krein-ex3
   - vapnik1998
 ---
 # Indefinite and Krein-Space Kernels
@@ -54,7 +57,7 @@ One eigenvalue is negative. By [[ch:kernels-and-rkhs|Aronszajn's theorem]] this 
 
 $$d^2(2,3)=0.6044+0.9998-2(0.9354)=-0.2666\ \lt\ 0.$$
 
-A negative squared distance cannot occur among points of any Euclidean space. The negative eigenvalue of \(K\) is exactly this impossibility made numerical, and it is what every method in this chapter must confront. The numbers here are reproduced in `checks/ch-krein-ex1.py`.
+A negative squared distance cannot occur among points of any Euclidean space. The negative eigenvalue of \(K\) is exactly this impossibility made numerical, and it is what every method in this chapter must confront. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex1].
 
 ## Krein spaces and the \(k=k_+-k_-\) decomposition {#krein-spaces}
 
@@ -151,10 +154,8 @@ $$K_+=\begin{pmatrix}0.6761 & -0.3753 & -0.7559\\ -0.3753 & 0.7026 & 0.8116\\ -0
 3.  [Recombine.]{.wex-op} Entry by entry \(K_+-K_-=K\), with maximum discrepancy \(3\times 10^{-16}\). The indefinite similarity is the difference of two ordinary ones.
 4.  [Read off the Krein feature map.]{.wex-op} With \(\Phi(x_i)_\ell=\sqrt{|\lambda_\ell|}\,U_{i\ell}\) and signature \(J=\operatorname{diag}(-1,+1,+1)\), the rows are \(\Phi(x_1)=(0.2678,0.4173,-0.7085)\), \(\Phi(x_2)=(-0.3134,0.3742,0.7500)\), \(\Phi(x_3)=(0.3952,0.0139,1.0751)\). The indefinite inner product \(\Phi(x_i)^\top J\,\Phi(x_j)\) reproduces \(K\) exactly.
 
-**Reading.** The first coordinate, weighted by \(-1\) in \(J\), is the \(\mathcal H_-\) direction: it is where the geometry runs backward. The Krein squared norms \(\langle\Phi(x_i),\Phi(x_i)\rangle_{\mathcal K}\) equal the diagonal \((0.6044,0.6044,0.9998)\), all positive here, yet the negative eigenvalue still forced the impossible distance \(d^2(2,3)\lt 0\) of the previous section, because that distance mixes the backward direction across two points. Numbers from `checks/ch-krein-ex2.py`.
+**Reading.** The first coordinate, weighted by \(-1\) in \(J\), is the \(\mathcal H_-\) direction: it is where the geometry runs backward. The Krein squared norms \(\langle\Phi(x_i),\Phi(x_i)\rangle_{\mathcal K}\) equal the diagonal \((0.6044,0.6044,0.9998)\), all positive here, yet the negative eigenvalue still forced the impossible distance \(d^2(2,3)\lt 0\) of the previous section, because that distance mixes the backward direction across two points. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex2].
 ::::
-
-**Verification artifact.** checks/example-ch-krein-example-28-1.json records the example source hash and verification scope.
 :::::
 
 ## The representer theorem becomes a stabilization {#stabilization}
@@ -245,10 +246,8 @@ $$K_{\text{clip}}=\begin{pmatrix}0.6761 & -0.3753 & -0.7559\\ -0.3753 & 0.7026 &
 3.  [Shift.]{.wex-op} Adding \(|\lambda_{\min}|=0.3261\) to the diagonal leaves every off-diagonal of \(K\) untouched and raises every squared distance by the same \(2|\lambda_{\min}|=0.6522\); thus \(d^2(2,3)=-0.2666+0.6522=0.3856\), and the relative geometry of distinct points is preserved exactly.
 4.  [Compare the predictions.]{.wex-op} The fitted values \(f=\tilde K(\tilde K+\rho I)^{-1}y\) are \((0.129,-0.080,-0.151)\) for clip, \((0.145,-0.070,-0.154)\) for shift, but \((0.446,-0.450,0.317)\) for flip. Reading the classifier as \(\operatorname{sign} f\), clip and shift both label point \(3\) negative while flip labels it positive.
 
-**Reading.** The three transforms are not cosmetic variants; they are three different models. Shift stays closest to the raw similarity because it changes only the diagonal, and clip stays closest in matrix norm, yet flip disagrees with both on the sign of a prediction. The choice of repair is a modeling decision that a validation set, not the algebra, must make. Numbers from `checks/ch-krein-ex1.py`.
+**Reading.** The three transforms are not cosmetic variants; they are three different models. Shift stays closest to the raw similarity because it changes only the diagonal, and clip stays closest in matrix norm, yet flip disagrees with both on the sign of a prediction. The choice of repair is a modeling decision that a validation set, not the algebra, must make. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex1].
 :::
-
-**Verification artifact.** checks/example-ch-krein-example-28-2.json records the example source hash and verification scope.
 ::::
 
 Two caveats keep these heuristics honest. First, all four transforms are operations on the *training* Gram matrix. Extending them to a new test point is not automatic: the eigenvectors \(U\) were computed from the training data, so a new similarity vector must be projected through them and the same spectral map applied, an approximation that is exact only for shift, which never touches off-diagonals. The square transform sidesteps this because it has an explicit feature map: taking each row of \(K\) as the feature vector \(\phi(x)=(k(x,x_1),\dots,k(x,x_n))\), the linear kernel of these vectors is \(\langle\phi(x_i),\phi(x_j)\rangle=(K^\top K)_{ij}=(K^2)_{ij}\), always positive semidefinite and trivially evaluated on new points, which is why Chen et al. (2009) and Pekalska and Duin (2005) treat \"similarities as features\" as the safest embedding when out-of-sample consistency matters. Second, clipping is provably the closest positive semidefinite matrix, but \"closest in Frobenius norm\" is not the same as \"best for the task\": if the negative eigenvalues encode real structure, as they do for tangent and warping similarities, deleting them discards signal, and flip or an honest Krein method will do better.
@@ -290,10 +289,8 @@ $$G=\begin{pmatrix}0.6044 & 0.2913 & -0.8617\\ 0.2913 & 0.6044 & -0.9354\\ -0.86
 2.  [Exhibit an ascent direction.]{.wex-op} The equality constraint asks \(y^\top v=0\). The direction \(v=(1,2,1)\) satisfies \(y^\top v=1-2+1=0\) and gives \(v^\top G v=-0.2782\lt 0\).
 3.  [Read the curvature.]{.wex-op} Along \(v\) the dual objective has curvature \(-v^\top G v=+0.2782\gt 0\): it curves upward inside the feasible set, so it is not concave there.
 
-**Reading.** The box constraints keep the feasible set compact, so a maximum still exists, but the objective is a saddle-shaped quadratic and the maximizer can sit at any of several stationary points. The convexity that made the SVM tractable was exactly the positive definiteness of the kernel, and nothing less. Numbers from `checks/ch-krein-ex3.py`.
+**Reading.** The box constraints keep the feasible set compact, so a maximum still exists, but the objective is a saddle-shaped quadratic and the maximizer can sit at any of several stationary points. The convexity that made the SVM tractable was exactly the positive definiteness of the kernel, and nothing less. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex3].
 ::::
-
-**Verification artifact.** checks/example-ch-krein-example-28-3.json records the example source hash and verification scope.
 :::::
 
 Loosli, Canu, and Ong (2016) resolve this without ever deleting the negative eigenvalues, by taking the stabilization principle seriously. Their Krein SVM stabilizes the regularized hinge risk directly in the RKKS,

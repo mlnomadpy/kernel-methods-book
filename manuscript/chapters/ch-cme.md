@@ -37,6 +37,9 @@ bibliography:
   - grunewalder2012
   - muandet2017
   - song2013cme
+  - kernelbook-code-ch-cme-ex1
+  - kernelbook-code-ch-cme-ex2
+  - kernelbook-code-ch-cme-stability
   - fukumizu2013kbr
 ---
 # Conditional Mean Embeddings and Kernel Bayes' Rule
@@ -163,7 +166,7 @@ For many test inputs, factor \(K+n\lambda I\) once by Cholesky at \(O(n^3)\) cos
 
 :::: wex
 ::: wex-setup
-Four joint pairs \((x_i,y_i)=(0,0.0),(1,1.2),(2,1.8),(3,3.0)\), so \(y\) roughly tracks \(x\). Gaussian kernels \(k(x,x')=e^{-(x-x')^2/2}\) and \(\ell(y,y')=e^{-(y-y')^2/2}\) (both bandwidths \(1\)). Regularization \(\lambda=0.125\), so \(n\lambda=0.5\). Test input \(x_\ast=1.5\). All numbers from `checks/ch-cme-ex1.py`.
+Four joint pairs \((x_i,y_i)=(0,0.0),(1,1.2),(2,1.8),(3,3.0)\), so \(y\) roughly tracks \(x\). Gaussian kernels \(k(x,x')=e^{-(x-x')^2/2}\) and \(\ell(y,y')=e^{-(y-y')^2/2}\) (both bandwidths \(1\)). Regularization \(\lambda=0.125\), so \(n\lambda=0.5\). Test input \(x_\ast=1.5\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-cme-ex1].
 :::
 
 1.  [Form the input Gram matrix.]{.wex-op} With \(e^{-1/2}=0.6065\), \(e^{-2}=0.1353\), \(e^{-9/2}=0.0111\),
@@ -176,8 +179,6 @@ $$K=\begin{pmatrix}1&0.6065&0.1353&0.0111\\0.6065&1&0.6065&0.1353\\0.1353&0.6065
 
 **Reading.** The two central training points, at \(x=1\) and \(x=2\), carry almost all the weight and receive equal shares because \(x_\ast=1.5\) sits symmetrically between them; the far points are all but ignored. The response estimate \(1.28\) is close to the sensible \(1.5\) but pulled down, because the weights sum to \(0.85\) rather than \(1\): regularization shrinks the embedding toward the origin, which biases the plug-in mean toward \(0\). Note also that the RKHS query \(0.7164\) is not equal to \(\ell(2.0,\widehat{\mathbb E}[Y\mid X=1.5])=0.7708\): the embedding estimates \(\mathbb E[g(Y)\mid X]\), the average of \(g\) over the conditional, not \(g\) evaluated at the conditional mean, and the two differ whenever \(g\) is nonlinear.
 ::::
-
-**Verification artifact.** checks/example-ch-cme-example-33-1.json records the example source hash and verification scope.
 :::::
 
 The scalar query \(g(y)=y\) in step 4 is deliberately labelled a plug-in: on an unbounded domain the identity function need not belong to the Gaussian RKHS, so the conditional-reproducing guarantee does not automatically cover it. The genuine RKHS query in step 5 is covered. To estimate a raw conditional mean rigorously, use an output kernel whose RKHS contains or uniformly approximates the identity on the working domain, and include the approximation error.
@@ -309,7 +310,7 @@ The word *weights* is potentially misleading here. To expose the issue before th
 
 :::: wex
 ::: wex-setup
-Five joint pairs \((x_i,y_i)=(0,0),(1,1),(2,2),(3,3),(4,4)\), Gaussian kernels of bandwidth \(1\) on both sides. A non-uniform prior favoring large inputs, \(\mathbf m=(0.05,0.05,0.10,0.30,0.50)\), so the prior mean of \(X\) is \(3.15\). Regularizers \(\varepsilon=0.1\) (so \(n\varepsilon=0.5\)) and \(\delta=0.01\). We observe \(y=1.0\). All numbers from `checks/ch-cme-ex2.py`.
+Five joint pairs \((x_i,y_i)=(0,0),(1,1),(2,2),(3,3),(4,4)\), Gaussian kernels of bandwidth \(1\) on both sides. A non-uniform prior favoring large inputs, \(\mathbf m=(0.05,0.05,0.10,0.30,0.50)\), so the prior mean of \(X\) is \(3.15\). Regularizers \(\varepsilon=0.1\) (so \(n\varepsilon=0.5\)) and \(\delta=0.01\). We observe \(y=1.0\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-cme-ex2].
 :::
 
 1.  [Apply the sum rule.]{.wex-op} \(\boldsymbol\rho=(K+0.5\,I)^{-1}K\mathbf m=(0.0363,\ 0.0436,\ 0.0995,\ 0.2620,\ 0.3488)\), inheriting the prior's tilt toward large \(x\); set \(D=\mathrm{diag}(\boldsymbol\rho)\).
@@ -319,8 +320,6 @@ Five joint pairs \((x_i,y_i)=(0,0),(1,1),(2,2),(3,3),(4,4)\), Gaussian kernels o
 
 **Reading.** The prior placed the mean of \(X\) at \(3.15\), betting on large inputs. Observing \(y=1\) pulls the embedded posterior toward \(x=1\). The normalized value \(1.08\) is only a diagnostic, not a theorem-backed posterior mean: the weights sum to \(0.542\) and one is negative (\(-0.072\) at \(x=4\)), so division by their sum still leaves a signed measure. A simplex projection would produce a probability vector, but it would be a different estimator. The answer also depends on \(\varepsilon\) and \(\delta\), the price of regularizing two ill-posed inverse operations.
 ::::
-
-**Verification artifact.** checks/example-ch-cme-example-33-2.json records the example source hash and verification scope.
 :::::
 
 ::: {.remark}
@@ -356,7 +355,7 @@ $$\|a_{t+1}-b_{t+1}\|_2\le\operatorname{Lip}(F_t)\|a_t-b_t\|_2,$$
 
 and after \(T\) steps a perturbation may be multiplied by \(\prod_{t=1}^T\operatorname{Lip}(F_t)\). Small \(\delta\), weakly informative observations, and cancellation between positive and negative coefficients can make this product large even when every solve has a tiny residual. This chapter therefore makes no general contraction claim for the empirical Kernel Bayes map.
 
-The deterministic stress test `checks/ch-cme-stability.py` repeats the same observation update on the five-point example. At every step it reports the coefficient sum, negative mass \(\sum_i\max(-w_i,0)\), \(\ell_1\)-norm, minimum coefficient, solve residual, and the distance between two beliefs whose initial priors differ by \(10^{-6}\). Comparing \(\delta=10^{-2}\) with \(\delta=10^{-6}\) exposes the signed-weight and perturbation-amplification failure. It is deliberately a numerical witness, not a calibrated state-space experiment.
+The chapter's computational reference [@kernelbook-code-ch-cme-stability] repeats the same observation update on the five-point example as a deterministic stress test. At every step it reports the coefficient sum, negative mass \(\sum_i\max(-w_i,0)\), \(\ell_1\)-norm, minimum coefficient, solve residual, and the distance between two beliefs whose initial priors differ by \(10^{-6}\). Comparing \(\delta=10^{-2}\) with \(\delta=10^{-6}\) exposes the signed-weight and perturbation-amplification failure. It is deliberately a numerical witness, not a calibrated state-space experiment.
 
 For repeated filtering, predeclare four gates:
 
@@ -399,7 +398,7 @@ Song et al. [@song2009cme] develop empirical conditional embeddings, while Baker
     Hint
 
     ::: hint-body
-    Now \(\boldsymbol\ell_y\) peaks at the pair with \(y_i=3\), so the likelihood points where the prior already leans; the posterior mean should land near \(3\), close to but not exactly the prior mean, since the likelihood is informative. Edit `yobs` in `checks/ch-cme-ex2.py` to reproduce every number.
+    Now \(\boldsymbol\ell_y\) peaks at the pair with \(y_i=3\), so the likelihood points where the prior already leans; the posterior mean should land near \(3\), close to but not exactly the prior mean, since the likelihood is informative. Edit `yobs` in the chapter's computational reference [@kernelbook-code-ch-cme-ex2] to reproduce every number.
     :::
 7.  [challenge]{.ex-tag} Derive the finite-sample Kernel Bayes' Rule weights from the operator form \(\mu^{\pi}_{X\mid Y=y}=\mathcal C^{\pi}_{XY}((\mathcal C^{\pi}_{YY})^2+\delta I)^{-1}\mathcal C^{\pi}_{YY}\psi(y)\), where \(\mathcal C^{\pi}_{XY}=\Phi D\Upsilon^{\ast}\) and \(\mathcal C^{\pi}_{YY}=\Upsilon D\Upsilon^{\ast}\) with \(D=\mathrm{diag}(\boldsymbol\rho)\). Show that the posterior embedding is \(\Phi\mathbf w(y)\) with \(\mathbf w(y)=DL((DL)^2+\delta I)^{-1}D\boldsymbol\ell_y\), where \(\boldsymbol\ell_y=\Upsilon^{\ast}\psi(y)\). Then explain why the square \((\mathcal C^{\pi}_{YY})^2\) is inverted rather than \(\mathcal C^{\pi}_{YY}\) itself.
     Hint
@@ -408,5 +407,5 @@ Song et al. [@song2009cme] develop empirical conditional embeddings, while Baker
     Seek the vector \(z=((\mathcal C^{\pi}_{YY})^2+\delta I)^{-1}\mathcal C^{\pi}_{YY}\psi(y)\) in the range of \(\Upsilon\), writing \(z=\Upsilon\mathbf c\); the component orthogonal to that range is killed by \(\delta I\) and must vanish. Substituting gives \(((DL)^2+\delta I)\mathbf c=D\boldsymbol\ell_y\), and then \(\mathcal C^{\pi}_{XY}z=\Phi DL\mathbf c\). The square is inverted because \(\mathcal C^{\pi}_{YY}\) is built from the signed weights \(\boldsymbol\rho\) and need not be positive, whereas \((\mathcal C^{\pi}_{YY})^2+\delta I\) is always positive definite.
     :::
 8.  [proof]{.ex-tag} Prove the population regression decomposition \(\mathbb E\|\psi(Y)-C\varphi(X)\|^2=\mathbb E\|\psi(Y)-m(X)\|^2+\mathbb E\|m(X)-C\varphi(X)\|^2\). Identify the cross term and show exactly why it vanishes. Then explain what the minimizer is when no Hilbert-Schmidt \(C_\star\) satisfies \(m(x)=C_\star\varphi(x)\).
-9.  [exploration]{.ex-tag} Run `checks/ch-cme-stability.py`. Compare the repeated-update diagnostics for \(\delta=10^{-2}\) and \(\delta=10^{-6}\). Report the largest negative mass, largest \(\ell_1\)-norm, and final perturbation amplification. Explain why dividing every coefficient vector by its sum neither removes negative mass nor establishes stability.
+9.  [exploration]{.ex-tag} Run the chapter's computational reference [@kernelbook-code-ch-cme-stability]. Compare the repeated-update diagnostics for \(\delta=10^{-2}\) and \(\delta=10^{-6}\). Report the largest negative mass, largest \(\ell_1\)-norm, and final perturbation amplification. Explain why dividing every coefficient vector by its sum neither removes negative mass nor establishes stability.
 :::

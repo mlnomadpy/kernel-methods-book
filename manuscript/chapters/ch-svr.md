@@ -169,8 +169,6 @@ Five points on a line, \(x=(1,2,3,4,5)\), \(y=(1,2,3,4,5)\), with linear kernel 
 
 **Reading.** A perfectly linear dataset is fit not by the least-squares slope \(1.0\) but by the flatter slope \(0.75\): the tube lets the line relax toward horizontal until its two extreme points touch the edges, and those two points, alone, pin the solution. Everything in between is inert.
 ::::
-
-**Verification artifact.** checks/example-ch-svr-example-6-1.json records the example source hash and verification scope.
 :::::
 
 The bounded influence \(C/m\) buys a robustness property that is worth stating precisely, because it is often misread. Since the loss grows only linearly outside the tube, the multiplier of an exterior point is pinned at the ceiling \(C/m\) no matter how far out the point lies. Moving such a point further away does not change its force on the fit.
@@ -287,8 +285,6 @@ Six points \(x=(1,2,3,4,5,6)\), \(y=(1.0,\,2.6,\,2.0,\,4.2,\,3.4,\,5.6)\), linea
 
 **Reading.** One dial, \(\tau\), slides the fit up or down through the data with no tube at all: the asymmetry of the box does what the width \(\varepsilon\) did before. Two levels give two lines that fence the points between them, a distribution-free prediction band built from the same quadratic program as the classifier.
 ::::
-
-**Verification artifact.** checks/example-ch-svr-example-6-2.json records the example source hash and verification scope.
 :::::
 
 ## Expectile regression {#expectile-regression}
@@ -406,8 +402,6 @@ Five points \(x=(0,1,2,3,4)\), \(y=(0,\,0.9,\,0.2,\,-0.8,\,0.3)\), a Gaussian ke
 
 **Reading.** Turning one dial, \(\nu\), simultaneously widens or narrows the tube and controls how many points are allowed to escape it. You never specify \(\varepsilon\); you specify the fraction of the data you are willing to treat as errors, and the geometry follows.
 ::::
-
-**Verification artifact.** checks/example-ch-svr-example-6-3.json records the example source hash and verification scope.
 :::::
 
 ## Parametric insensitivity models {#parametric-insensitivity}
