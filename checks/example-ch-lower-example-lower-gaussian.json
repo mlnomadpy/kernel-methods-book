@@ -4,8 +4,10 @@
   "anchor": "example-lower-gaussian",
   "source_file": "manuscript/chapters/ch-lower.md",
   "source_sha256": "b3768081af1bb177ba7ab5fb379407e85b5c46a54ab1553dee6d255bc2d4f174",
-  "verification_status": "literal-audit",
-  "executable_checks": [],
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-lower-ex1.py"
+  ],
   "numeric_literals": [
     "-1",
     "+1",
@@ -17,7 +19,7 @@
     "32",
     "009153"
   ],
-  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

@@ -4,8 +4,10 @@
   "anchor": "example-manifold-bridge",
   "source_file": "manuscript/chapters/ch-manifold.md",
   "source_sha256": "c937a709f52d1dcd14e7418f71525b23fe594b8c2a023f7e14526bc459ca60bc",
-  "verification_status": "literal-audit",
-  "executable_checks": [],
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-manifold-ex1.py"
+  ],
   "numeric_literals": [
     "1",
     "-2",
@@ -22,7 +24,7 @@
     "-5",
     "21"
   ],
-  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

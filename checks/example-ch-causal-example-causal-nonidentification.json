@@ -4,8 +4,10 @@
   "anchor": "example-causal-nonidentification",
   "source_file": "manuscript/chapters/ch-causal.md",
   "source_sha256": "92a1fe70499292220fd769ce21e6a547932824359e387526a72be4b4b3268abf",
-  "verification_status": "literal-audit",
-  "executable_checks": [],
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-causal-ex3.py"
+  ],
   "numeric_literals": [
     "2",
     "5",
@@ -13,7 +15,7 @@
     "1",
     "+3"
   ],
-  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

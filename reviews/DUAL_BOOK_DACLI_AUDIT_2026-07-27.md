@@ -78,7 +78,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 
 ## Book-level status
 
-- Canonical revision: `9c7985f5dcd06effbf381c62405d47922ddf79a3` on `codex/full-book-revision`.
+- Canonical revision: `461842b686d560118b6507d5876e7f5e409b4aec` on `codex/full-book-revision`.
 - Scope: **62 chapters**, **1115 audited H2/H3 sections**, approximately **435,454 manuscript words**.
 - Structural triage: **53 sections rated thin or stub-like**.
 - Review maturity: **62/62 chapter records remain `draft`**; technical and pedagogical reviewer fields are unfilled.
@@ -2384,7 +2384,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 
 ## Book-level status
 
-- Canonical revision: `32dd2976f87baf94f332e38f0495b10ca377384b` on `main`.
+- Canonical revision: `038bec88f78801e695d465e31ad5f7d2ecf05f90` on `codex/deep-book-remediation-2026`.
 - Scope: **37 chapters**, **508 audited H2/H3 sections**, approximately **65,339 manuscript words**.
 - Structural triage: **151 sections rated thin or stub-like**.
 - Review maturity: **37/37 chapter records remain `draft`**; technical and pedagogical reviewer fields are unfilled.
@@ -3562,8 +3562,8 @@ This report enumerates **all 62 theory chapters and their 1115 H2/H3 sections**,
 
 ## Reproducibility notes
 
-- Theory repository: `https://github.com/mlnomadpy/kernel-methods-book.git`, `codex/full-book-revision`, `9c7985f5dcd06effbf381c62405d47922ddf79a3`.
-- JAX repository: `https://github.com/mlnomadpy/kernel-learning-with-jax.git`, `main`, `32dd2976f87baf94f332e38f0495b10ca377384b`.
+- Theory repository: `https://github.com/mlnomadpy/kernel-methods-book.git`, `codex/full-book-revision`, `461842b686d560118b6507d5876e7f5e409b4aec`.
+- JAX repository: `https://github.com/mlnomadpy/kernel-learning-with-jax.git`, `codex/deep-book-remediation-2026`, `038bec88f78801e695d465e31ad5f7d2ecf05f90`.
 - Section scoring reads the canonical Markdown, YAML provenance/review/solution records, and the theory book’s generated source-depth audit. It does not inspect rendered typography line by line.
 - Counts may change when chapters are edited; rerun the same structural audit before the next release.
 

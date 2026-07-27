@@ -360,8 +360,8 @@ $$
 =\frac{3}{2b}+\frac12\{2\log a+\log b\}.
 $$
 
-At \(\rho=0\), \(a=b=1.01\) and the displayed quantity is approximately \(1.5000\). At
-\(\rho=0.99\), \(a=0.02\), \(b=2.99\), and it is approximately \(-2.8628\). The training evidence strongly prefers the nearly collapsed covariance because the labels are constant and the two unused contrast directions contribute tiny determinant eigenvalues.
+At \(\rho=0\), \(a=b=1.01\) and the displayed quantity is approximately \(1.5001\). At
+\(\rho=0.99\), \(a=0.02\), \(b=2.99\), and it is approximately \(-2.8627\). The training evidence strongly prefers the nearly collapsed covariance because the labels are constant and the two unused contrast directions contribute tiny determinant eigenvalues.
 
 Now map a genuinely unfamiliar test input to the same collapsed feature region, with prior covariance \(\rho\) to each training point. Its latent posterior variance is
 

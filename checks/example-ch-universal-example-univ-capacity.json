@@ -4,8 +4,10 @@
   "anchor": "example-univ-capacity",
   "source_file": "manuscript/chapters/ch-universal.md",
   "source_sha256": "5f13b6c788492814039b7e31bac91cf0ac04a0fb493ce7c7682012e3ed43c7ba",
-  "verification_status": "literal-audit",
-  "executable_checks": [],
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-universal-ex1.py"
+  ],
   "numeric_literals": [
     "2",
     "1",
@@ -28,7 +30,7 @@
     "0.6613",
     "2.4501"
   ],
-  "scope": "The manifest verifies source identity and enumerates displayed numeric literals; independent executable validation is still required.",
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",
