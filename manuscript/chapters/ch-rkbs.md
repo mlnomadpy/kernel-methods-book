@@ -623,6 +623,23 @@ The outer master problem can be convex while the oracle is nonconvex. A small re
 
 The statistical capacity measures also differ. RKHS analysis naturally uses eigenvalues and effective dimension. Atomic spaces use dual norms, metric entropy, variation bounds, or sparsity. A smaller active set lowers evaluation cost but does not by itself imply lower prediction risk.
 
+Read the rows as a decision procedure, not as a hierarchy. If squared RKHS
+norm and a fixed PSD kernel express the prior, a dense but convex Gram solve is
+the correct baseline. If the scientific claim requires a finite number of
+interpretable ridge atoms, the variation-space row supplies that sparsity, but
+it replaces the linear solve with a continuous nonconvex atom oracle. On a
+two-ridge target \(f(x)=a_1\sigma(v_1^\top x)+a_2\sigma(v_2^\top x)\), an
+atomic method may recover two directions while an RBF RKHS predictor spreads
+mass across many data sections; that is a structural advantage only if the
+oracle gap and prediction risk are both controlled.
+
+The diagnostic is therefore two-currency: report held-out risk and the
+certificate appropriate to the row. A short expansion without a restricted
+master gap can be a prematurely stopped search, while a low RKHS residual with
+an ill-conditioned Gram matrix can be numerically meaningless. Do not infer
+statistical superiority from atom count, or computational superiority from a
+representer theorem that leaves a hard nonlinear inverse map.
+
 ## Common mistakes, failure boundaries, and practical implications {#rkbs-practice}
 
 - Bounded evaluation alone does not supply the two-sided RKBS structure used by Zhang, Xu, and Zhang.

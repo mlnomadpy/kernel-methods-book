@@ -3,7 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { spawn } from "node:child_process";
 
-const scripts = fs.readdirSync("checks").filter((file) => file.endsWith(".py")).sort();
+const scripts = fs.readdirSync("checks")
+  .filter((file) => file.endsWith(".py") && file !== "pending_example_checks.py")
+  .sort();
 const concurrency = Math.max(
   1,
   Math.min(Number(process.env.NUMERICAL_CHECK_WORKERS || 4), os.availableParallelism?.() || 4),

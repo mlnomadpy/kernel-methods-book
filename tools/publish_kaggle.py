@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import importlib.metadata
 import os
 import shutil
 import subprocess
@@ -26,8 +27,11 @@ if not cli:
     cli = str(sibling) if sibling.exists() else None
 if not cli:
     raise SystemExit("Kaggle CLI is not installed; install the pinned requirements")
-version = subprocess.run([cli, "--version"], check=True, capture_output=True, text=True).stdout.strip()
-if "2.2.3" not in version:
+try:
+    version = importlib.metadata.version("kaggle")
+except importlib.metadata.PackageNotFoundError as error:
+    raise SystemExit("Kaggle CLI package metadata is unavailable") from error
+if version != "2.2.3":
     raise SystemExit(f"Expected Kaggle CLI 2.2.3, found: {version}")
 
 catalog = json.loads((root / "notebooks/kaggle-catalog.json").read_text())

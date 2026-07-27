@@ -198,6 +198,19 @@ $$\big(0.2895,\ 0.0789,\ 0.0263,\ 0.0263,\ 0.0789\big),$$
 
 ## Lie groups and homogeneous spaces {#lie-groups}
 
+Euclidean stationarity uses differences \(x-y\); on a group the analogous object is
+\(g^{-1}h\), and invariance depends on whether transformations act on the left, right, or
+by conjugation. For rotations in \(SO(2)\), a periodic kernel
+\(\kappa(\theta-\phi)\) is well defined because angles differing by \(2\pi\) represent the
+same element. Applying an ordinary Gaussian to raw angles fails at the branch cut:
+\(\epsilon\) and \(2\pi-\epsilon\) are close rotations but far real numbers.
+
+The first diagnostic applies random group elements \(a\) and checks
+\(k(ag,ah)=k(g,h)\) at declared tolerance. A homogeneous-space kernel must additionally be
+independent of the chosen coset representatives. Passing PSD on one coordinate chart does
+not certify either property. The representation-theoretic constructions below solve the
+invariance problem by placing nonnegative weights on group Fourier components.
+
 Some domains are not just curved but are themselves groups, or quotients of groups. The rotations of three-dimensional space form the Lie group \(\mathrm{SO}(3)\), a natural home for orientations and poses; the sphere \(S^2\) is the homogeneous space \(\mathrm{SO}(3)/\mathrm{SO}(2)\), the orbit of a point under rotation. On such domains the spectral construction still applies, and representation theory hands us the eigenpairs in closed form. The Peter-Weyl theorem decomposes \(L^2\) of a compact group into the matrix coefficients of its irreducible representations, and these matrix coefficients are exactly the eigenfunctions of the Laplace-Beltrami operator, whose eigenvalues are read off the Casimir element of each representation. Azangulov et al. (2022) work this out for compact Lie groups and their homogeneous spaces, and Azangulov et al. (2023) extend it to non-compact symmetric spaces such as the hyperbolic plane, where the discrete sum over eigenfunctions becomes an integral over a continuous spectrum.
 
 The payoff is conceptual as well as computational. A Matern kernel built from the group's own Laplacian is automatically stationary in the group's sense: it is invariant under the group acting on itself, so \(k(gx,gy)=k(x,y)\) for every group element \(g\). Stationarity on a symmetric space is thus the same statement as invariance under the symmetry group, which is the bridge to the second half of the chapter. There, instead of assuming the domain is a group, we take an arbitrary kernel on an arbitrary space and force a chosen invariance by hand.

@@ -466,6 +466,20 @@ A claim that "unlabeled data helped" must compare against the same ambient model
 
 ## Out-of-sample prediction is a modeling choice {#manifold-out-of-sample}
 
+Harmonic extension assigns values only to vertices in the observed graph. A new point has
+no value until we choose how it joins that graph, and different neighbor rules define
+different estimators. For a point placed midway between two oppositely labeled components,
+one-nearest-neighbor extension returns one extreme label, symmetric two-neighbor
+interpolation returns zero, and an ambient RKHS representer returns whatever its kernel
+geometry dictates. None follows from the transductive solution alone.
+
+The deployment diagnostic inserts the same query under several justified neighbor counts
+and bandwidths, then reports prediction spread and whether graph connectivity changes.
+A stable training harmonic function with unstable query attachment is not an
+out-of-sample predictor. This limitation motivates manifold regularization: its ambient
+RKHS term defines a function on the original input space while the graph term uses
+unlabeled geometry.
+
 Several mechanisms are called out-of-sample extension, but they define different estimators:
 
 1. **Ambient RKHS extension:** evaluate the LapRLS expansion \(k_X(x)^\top\alpha\).

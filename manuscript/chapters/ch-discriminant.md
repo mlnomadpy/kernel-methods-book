@@ -328,6 +328,20 @@ where the matrix \(T^\top K B\) is upper triangular, so the inverse is cheap. Th
 
 ## One engine, three methods {#unification}
 
+The shared engine is a regularized generalized eigenproblem, but the matrices encode
+different decisions. Kernel PCA maximizes total centered variance, kernel Fisher
+discriminant maximizes between-class relative to within-class scatter, and kernel CCA
+maximizes cross-view correlation relative to two marginal covariances. Feeding the same
+Gram matrix to all three therefore does not make their leading directions comparable.
+
+On a two-class dataset with a high-variance nuisance coordinate and a low-variance
+label-separating coordinate, KPCA selects the nuisance while KFD selects the separator.
+If a second view contains only the nuisance, KCCA selects it again. This witness explains
+what each numerator rewards. The common diagnostic is the original generalized-eigen
+residual; method-specific gates additionally check centering, regularized denominators,
+class scatter, or cross-view covariance. The next applications should be chosen by
+estimand, not by which eigensolver is already available.
+
 The three algorithms differ only in which matrices they feed to the shared engine and whether they solve one eigenproblem or iterate a deflation. All read the data through the kernel matrix alone, and all can be viewed as choosing directions that optimize a quadratic criterion under a quadratic constraint. The table makes the parallel explicit.
 
   Method          Criterion optimized                                    Engine                                                                                                   Uses target?

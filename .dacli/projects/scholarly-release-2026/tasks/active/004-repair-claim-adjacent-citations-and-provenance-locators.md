@@ -15,3 +15,4 @@ Readers and reviewers can trace load-bearing mathematical claims to exact primar
 - [ ] The theorem and empirical-claim inventory identifies a claim-adjacent citation plus an exact theorem, section, page, or artifact locator for its non-authorial entries.
 - [ ] Bibliography metadata supplies a DOI or stable URL when one exists; exceptions are recorded explicitly.
 ## Log
+- 2026-07-27T20:07:39Z claimed by a-root

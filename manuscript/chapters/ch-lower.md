@@ -135,7 +135,7 @@ The minimum sum of the two testing errors is
 
 The theorem is deliberately modular. Geometry supplies \(\Delta\); probability supplies an upper bound on divergence. If either piece is weak, the lower bound is weak.
 
-### A Gaussian regression reduction {#lower-gaussian-reduction}
+**A Gaussian regression reduction.**
 
 Fix design points \(x_1,\ldots,x_n\), observe
 
@@ -329,7 +329,7 @@ $$
 The omitted technical step verifies that the perturbed regression laws remain in the declared distribution class and controls random-design divergences. That step is part of the sourced theorem, not proved by the exponent calculation alone. \(\square\)
 :::
 
-### What exactly is matched {#lower-krr-match}
+**What exactly is matched.**
 
 The lower bound matches an upper bound only if the source exponent, capacity exponent, error norm, noise class, sampling model, and probability mode agree. Replacing two-sided eigenvalue decay by
 \(\mathcal N(\lambda)\leq C\lambda^{-p}\) changes a minimax class into a one-sided upper-bound class. Replacing expected \(L^2(P_X)\) risk by high-probability RKHS-norm error changes the currency. Calling KRR minimax for every \(r\) ignores saturation.
@@ -444,7 +444,7 @@ The proposition applies to any rank-\(m\) approximation, including feature matri
 | eigenvalue feature barrier | atoms/features | selected atoms in integral-operator model | approximation or quadrature objective | Nyström risk lower bound without reduction |
 | statistical sketch barrier | sketch rows | stated oblivious sketch family | fixed-design KRR prediction rate | matrix approximation for every input |
 
-### Failure witness: Frobenius accuracy can miss the used direction {#lower-frobenius-witness}
+**Failure witness: Frobenius accuracy can miss the used direction.**
 
 Let \(K=\operatorname{diag}(100,1)\), \(\widetilde K=\operatorname{diag}(100,0)\), and
 \(\gamma=0.01\). The relative Frobenius error is about \(0.01\), yet the regularized relative error on the second coordinate is
@@ -491,7 +491,7 @@ For kernel systems,
 \(\lambda_{\min}(K)\) may be zero. Ridge caps the condition number by
 \(1+\lambda_{\max}(K)/\gamma\), but small regularization can still make the solve hard. Conjugate gradients has a matching Chebyshev-type upper bound in this oracle model. Preconditioning changes the spectrum and therefore changes the problem to which the lower bound applies; it does not violate the theorem.
 
-### Residual, solution error, and statistical risk {#lower-opt-currencies}
+**Residual, solution error, and statistical risk.**
 
 The residual \(r_t=y-A\alpha_t\) satisfies
 

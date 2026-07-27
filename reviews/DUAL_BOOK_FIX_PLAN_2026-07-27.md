@@ -39,12 +39,12 @@ independent review.
 |---|---|---|---|---|
 | 001 | Repair the five strict editorial release failures | must | **done** | `RELEASE_VERIFIED=1 npm run check:editorial` passes with 62/62 chapters and 322/322 documented formal results. |
 | 002 | Close the eleven pending executable numerical checks | must | **done** | Release-mode example audit passes; eleven named examples have deterministic commands, tolerances, and artifacts. |
-| 003 | Rewrite the 54 thin theory sections as teaching sequences | should | open | No conceptual section remains at 1/5 or 2/5 in the structural audit. |
-| 004 | Repair claim-adjacent citations and provenance locators | must | open | Source audit has no location-only or undeclared-citation flags; claims have exact primary locators. |
+| 003 | Rewrite the 54 thin theory sections as teaching sequences | should | **done** | No conceptual section remains at 1/5 or 2/5 in the structural audit. |
+| 004 | Repair claim-adjacent citations and provenance locators | must | in progress; external verification remains | Source audit has no undeclared citations, but exact primary-source locators and independent verification remain incomplete. |
 | 005 | Deepen compressed proof and example chains | should | open | No load-bearing thin-proof-chain or no-worked-example flags remain. |
-| 006 | Complete solution evidence and independent approval records | must | open, partly owner-gated | 492 solution records are substantive; approval fields name an external approver or remain draft. |
+| 006 | Complete solution evidence and independent approval records | must | authorial evidence done; independent approval owner-gated | 492/492 solution records are substantive and explicitly draft; 0/492 have an external approver. |
 | 007 | Commission independent chapter review | must | owner-gated | The 62 review records contain named technical and pedagogical approvals; specialist clusters have specialist approvals. |
-| 008 | Run full release build and publish the verified revision | must | waits on 002–007 | Content, manifests, solutions, editorial, examples, numerical checks, figures, tests, build, and links pass on the deployed commit. |
+| 008 | Run full release build and publish the verified revision | must | local build green; waits on external gates and deployment | Content, manifests, solutions, editorial, 124 numerical checks, 14 labs, figures, tests, 72-page build, links, and dependency audit pass locally. |
 
 ## JAX-companion DACLI work breakdown
 
@@ -53,13 +53,13 @@ independent review.
 | 001 | Rebuild Parts I and II around one exact kernel workload | must | **done** | `ch00`–`ch06` have no 1/5 or 2/5 conceptual sections and record shapes, dtypes, compilation, memory, failures, and diagnostics. |
 | 002 | Deepen Parts III and IV matrix-free and randomized methods | must | **done** | `ch07`–`ch16` compare CG, Lanczos, logdet, Nyström, Cholesky, features, and sketches with dense references at declared tolerances. |
 | 003 | Deepen Part V learning and inference systems | should | **done** | `ch17`–`ch22` state estimands, stopping rules, deterministic evidence, and statistical or model-based limits. |
-| 004 | Rewrite Part VI structured and scientific workloads | must | open | `ch23`–`ch28` certify kernels/operators, derive finite programs, execute examples, and expose domain-specific failures. |
-| 005 | Rewrite Part VII performance and trust chapters | must | open | `ch29`–`ch32` contain equal-accuracy timing, precision, non-finite, convergence, environment, and failure protocols. |
-| 006 | Rebuild Part VIII capstones as cumulative systems | must | open | `ch33`–`ch36` link to earlier results and publish input, memory, solver, failure, artifact, and command contracts. |
-| 007 | Align manuscript examples, labs, tests, and provenance | must | open | Companion figure/example checks and pytest pass; provenance points to exact evidence and source locators. |
-| 008 | Execute and validate the TPU v5e-8 study | must | environment-gated | The declared Kaggle package runs on TPU v5e-8 and validates without manual artifact edits. |
+| 004 | Rewrite Part VI structured and scientific workloads | must | **done** | `ch23`–`ch28` certify kernels/operators, derive finite programs, execute examples, and expose domain-specific failures. |
+| 005 | Rewrite Part VII performance and trust chapters | must | **done** | `ch29`–`ch32` contain equal-accuracy timing, precision, non-finite, convergence, environment, and failure protocols. |
+| 006 | Rebuild Part VIII capstones as cumulative systems | must | **done** | `ch33`–`ch36` link to earlier results and publish input, memory, solver, failure, artifact, and command contracts. |
+| 007 | Align manuscript examples, labs, tests, and provenance | must | **done** | Figure/example checks, the complete pytest suite, and a 37-chapter evidence manifest pass. |
+| 008 | Execute and validate the TPU v5e-8 study | must | package validated; exact Kaggle upload approval required | The private package is reproducible and validates locally; real TPU v5e-8 execution remains pending. |
 | 009 | Obtain independent technical and pedagogical approval | must | owner-gated | `ch00`–`ch36` reviews name external reviewers, dates, findings, and resolutions. |
-| 010 | Run the publication gate and deploy the accepted revision | must | waits on 001–009 | Companion publication script and GitHub software/publication/Pages workflows pass on the live commit. |
+| 010 | Run the publication gate and deploy the accepted revision | must | tests green; pinned-engine fetch and GitHub push approval required | Native figures, examples, provenance, release evidence, and pytest pass; the production build still needs explicit approval to fetch and execute the pinned remote engine. |
 
 ## Narrative acceptance template
 

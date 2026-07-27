@@ -237,6 +237,16 @@ $$k_y(x,x')=\langle T_yE_\eta(x),T_yE_\eta(x')\rangle.$$
 
 This remains PSD for the realized data, but it is no longer a kernel fixed independently of the held-out outcomes. Standard test-error interpretation fails because the evaluation labels helped choose the geometry. PSD validity and evaluation validity are separate links in the argument.
 
+For a concrete negative control, randomize the held-out labels and repeat the
+entire prompt, layer, and projection search. A pipeline that still reports a
+large improvement has allowed evaluation information to enter the geometry.
+The repair is nested evaluation: choose \(T\) using only an inner training
+split, freeze its parameters and preprocessing statistics, then construct the
+outer-test Gram blocks. This is the same ownership rule used for bandwidths in
+[[ch:kernel-ridge-and-friends|the KRR model-selection treatment]] and kernel weights in
+[[ch:multiple-kernel-learning|the multiple-kernel chapter]]; foundation embeddings change the feature
+source, not the logic of held-out evidence.
+
 ## Evidence and maturity ledger {#frontier-update-policy}
 
 The ledger is maintained as part of the chapter, not as an optimistic closing paragraph.

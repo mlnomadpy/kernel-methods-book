@@ -334,7 +334,9 @@ with independent Gaussian noises of variances \(\sigma_u^2\) and \(\sigma_f^2\).
 
 ### Covariance derivation and executable object {#scientific-gpde-derivation}
 
-Linearity gives
+The construction is easiest to audit one block at a time. Start with the prior
+covariance of the latent field, then apply the observation operator to the
+argument associated with each observed quantity. Linearity gives
 
 $$
 \begin{aligned}
@@ -354,6 +356,15 @@ K_{uu}(X_u,X_u)+\sigma_u^2I & K_{uf}(X_u,X_f)\\
 K_{fu}(X_f,X_u) & K_{ff}(X_f,X_f)+\sigma_f^2I
 \end{bmatrix}.
 $$
+
+For example, if \(\mathcal L^\phi=\phi\,\partial_x\), the upper-right entry is
+\(\phi\,\partial_z k_\theta(x,z)\), while the lower-right entry is
+\(\phi^2\partial_x\partial_z k_\theta(x,z)\). This two-observation check catches
+the most common implementation error: differentiating both arguments in an
+off-diagonal block. A second invariant is symmetry,
+\(K_{fu}(X_f,X_u)=K_{uf}(X_u,X_f)^\top\); its failure usually means that an
+operator was applied to the wrong argument or that row and column site orderings
+disagree.
 
 For a test functional \(M\), define
 
@@ -580,7 +591,8 @@ On \(N\) grid points, FFTs cost \(O(N\log N)\) per channel, while the learned sp
 
 ### A heat-operator calculation {#scientific-fno-heat}
 
-On the one-dimensional torus, the heat equation
+The heat semigroup supplies a useful oracle because its exact multiplier is
+known before any network is trained. On the one-dimensional torus, the heat equation
 
 $$
 \partial_tu=\nu\partial_{xx}u,\qquad u(\cdot,0)=a
@@ -599,6 +611,14 @@ $$
 R(m)=e^{-4\pi^2\nu m^2t}.
 $$
 
+Take \(a(x)=\sin(2\pi x)+\tfrac12\sin(6\pi x)\). At time \(t\), the two
+amplitudes must become \(e^{-4\pi^2\nu t}\) and
+\tfrac12e^{-36\pi^2\nu t}\). A learned layer that instead preserves their
+ratio has fitted an identity-like map, not diffusion. This hand-checkable
+two-mode input should therefore precede aggregate test error: it detects a
+wrong FFT convention, an incorrect frequency grid, or a multiplier attached
+to the wrong mode.
+
 If \(a\in H^s(\mathbb T)\), Parseval gives
 
 $$
@@ -609,7 +629,7 @@ $$
 \end{aligned}
 $$
 
-This is a truncation bound, not a learned-operator generalization bound. It explains why resolution transfer is plausible when the relevant spectrum is resolved, and why discontinuities or unresolved turbulence are a failure boundary.
+This is a truncation bound, not a learned-operator generalization bound. It explains why resolution transfer is plausible when the relevant spectrum is resolved, and why discontinuities or unresolved turbulence are a failure boundary. In practice, report the retained spectral energy and repeat the two-mode oracle on every evaluation grid; a small training loss cannot certify resolution transfer when the target energy lies above the cutoff.
 
 ### Comparison under one currency {#scientific-operator-comparison}
 
