@@ -38,7 +38,7 @@ independent review.
 | ID | Task | Priority | Current status | Measurable completion |
 |---|---|---|---|---|
 | 001 | Repair the five strict editorial release failures | must | **done** | `RELEASE_VERIFIED=1 npm run check:editorial` passes with 62/62 chapters and 322/322 documented formal results. |
-| 002 | Close the eleven pending executable numerical checks | must | open | Release-mode example audit passes; eleven named examples have deterministic commands, tolerances, and artifacts. |
+| 002 | Close the eleven pending executable numerical checks | must | **done** | Release-mode example audit passes; eleven named examples have deterministic commands, tolerances, and artifacts. |
 | 003 | Rewrite the 54 thin theory sections as teaching sequences | should | open | No conceptual section remains at 1/5 or 2/5 in the structural audit. |
 | 004 | Repair claim-adjacent citations and provenance locators | must | open | Source audit has no location-only or undeclared-citation flags; claims have exact primary locators. |
 | 005 | Deepen compressed proof and example chains | should | open | No load-bearing thin-proof-chain or no-worked-example flags remain. |
@@ -50,9 +50,9 @@ independent review.
 
 | ID | Task | Priority | Current status | Measurable completion |
 |---|---|---|---|---|
-| 001 | Rebuild Parts I and II around one exact kernel workload | must | **active** | `ch00`–`ch06` have no 1/5 or 2/5 conceptual sections and record shapes, dtypes, compilation, memory, failures, and diagnostics. |
-| 002 | Deepen Parts III and IV matrix-free and randomized methods | must | open | `ch07`–`ch16` compare CG, Lanczos, logdet, Nyström, Cholesky, features, and sketches with dense references at declared tolerances. |
-| 003 | Deepen Part V learning and inference systems | should | open | `ch17`–`ch22` state estimands, stopping rules, deterministic evidence, and statistical or model-based limits. |
+| 001 | Rebuild Parts I and II around one exact kernel workload | must | **done** | `ch00`–`ch06` have no 1/5 or 2/5 conceptual sections and record shapes, dtypes, compilation, memory, failures, and diagnostics. |
+| 002 | Deepen Parts III and IV matrix-free and randomized methods | must | **done** | `ch07`–`ch16` compare CG, Lanczos, logdet, Nyström, Cholesky, features, and sketches with dense references at declared tolerances. |
+| 003 | Deepen Part V learning and inference systems | should | **done** | `ch17`–`ch22` state estimands, stopping rules, deterministic evidence, and statistical or model-based limits. |
 | 004 | Rewrite Part VI structured and scientific workloads | must | open | `ch23`–`ch28` certify kernels/operators, derive finite programs, execute examples, and expose domain-specific failures. |
 | 005 | Rewrite Part VII performance and trust chapters | must | open | `ch29`–`ch32` contain equal-accuracy timing, precision, non-finite, convergence, environment, and failure protocols. |
 | 006 | Rebuild Part VIII capstones as cumulative systems | must | open | `ch33`–`ch36` link to earlier results and publish input, memory, solver, failure, artifact, and command contracts. |
@@ -108,4 +108,3 @@ The following outcomes cannot be closed by manuscript edits:
 
 Until those records exist, the corresponding review and evidence statuses stay
 `draft` or `pending`. The release notes must preserve that boundary.
-

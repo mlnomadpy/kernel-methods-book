@@ -6,11 +6,11 @@
 
 ## Executive verdict
 
-Both repositories contain real books rather than outlines: the theory volume has 62 chapters and the JAX companion has 37, with substantial prose, formal structure, exercises, artifacts, and working publication pipelines. The central remaining defect is **verification maturity**, not mere page count. All chapter reviews are still drafts with no independent technical or pedagogical reviewer. The theory book also has 62 pending provenance reviews, 492 unapproved solution drafts, 11 pending numerical example checks, and 5 chapters that fail the strict editorial release gate. The JAX book has a green exact-revision CI/publication history, but no local rerun was possible in this shell because JAX and pytest are absent; actual TPU execution evidence remains explicitly pending.
+Both repositories contain real books rather than outlines: the theory volume has 62 chapters and the JAX companion has 37, with substantial prose, formal structure, exercises, artifacts, and working publication pipelines. The central remaining defect is **verification maturity**, not mere page count. All chapter reviews are still drafts with no independent technical or pedagogical reviewer. The theory book still has 62 pending provenance reviews and 492 unapproved solution drafts, but its strict editorial gate now passes and all 170 numerical examples have artifacts with zero pending executable checks. The JAX environment was installed in an isolated virtual environment and 38 focused dense-reference tests passed locally; actual TPU execution evidence remains explicitly pending.
 
 The second defect is **uneven local depth**. A large chapter can still contain short sections that name an idea without teaching the obstacle that forces it, the derivation that resolves it, or a worked failure case. The tables below treat every H2 and H3 as a reader promise and identify where that promise is supported by motivation, derivation, code, example, provenance, cross-reference, and diagnostics.
 
-The imbalance is concentrated in the companion: **186 of its 508 H2/H3 sections** are structurally thin or stub-like under this audit, versus **54 of 1,112** in the theory book. Sixteen of the 37 JAX chapters fall into the “major rewrite” band, especially the early JAX/TPU mechanics, structured and scientific workloads, performance/trust, production design, and capstones. This confirms the reader complaint represented by phrases such as “`vmap` expresses independent kernel work”: the concept may be correct, but a heading-sized assertion is not yet a teaching sequence. Those chapters need fewer micro-sections and more sustained derivations and labs that expose why a transformation is needed, what changes in the compiled program, what can go wrong, and how equivalence is measured.
+The first three JAX remediation waves reduced the companion from **186 thin/stub H2/H3 sections out of 508** to **136 out of 500** by deepening prose and removing fragmented micro-headings; the theory book currently has **53 out of 1,115**. Chapters 0–22 now have no 1/5 or 2/5 conceptual sections under the audit’s exemption for summaries, practice, reading guides, and navigation containers. The remaining concentration is in structured/scientific workloads, performance/trust, production design, and capstones. The original complaint represented by “`vmap` expresses independent kernel work” has been repaired into a derivation, asymmetric cross-Gram example, failure boundary, and resource/placement distinction.
 
 ## What DACLI says—and what it does not
 
@@ -42,10 +42,9 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 
 ### P1 — blocks a clean release gate
 
-1. Repair the theory book’s five strict editorial failures: `ch-lower`, `ch-ot`, `ch-causal`, `ch14`, and `ch-frontier`.
-2. Execute or explicitly downgrade the theory book’s 11 pending numerical example checks.
-3. Replace frontmatter-only sourcing with claim-adjacent citations and exact locators; 47 theory chapters are flagged for frontmatter-only sources, and 49 bibliography entries lack DOI/URL metadata.
-4. Synchronize the JAX DACLI event store and rewrite linted acceptance criteria as objective release gates.
+1. Replace frontmatter-only sourcing with claim-adjacent citations and exact locators; 47 theory chapters are flagged for frontmatter-only sources, and 49 bibliography entries lack DOI/URL metadata.
+2. Finish the remaining conceptual-depth waves in both books, then rerun the complete rather than focused test and publication gates.
+3. Synchronize the remaining JAX DACLI event records and retain exact measurable acceptance criteria.
 
 ### P2 — raises the books from comprehensive drafts to durable teaching texts
 
@@ -58,11 +57,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 
 ### Theory book
 
-- `check:editorial`: 5/62 chapters have strict-template gaps; 309/322 formal results have complete metadata; 170/170 examples have artifacts.
+- `check:editorial`: passes in release mode; 62/62 chapters and 322/322 formal results satisfy the strict template; 170/170 examples have artifacts.
 - `check:content`: 62 chapters and 560 bibliography entries; 49 entries lack DOI/URL metadata.
 - `check:manifests`: 62/62 provenance records and 62/62 review records remain pending.
 - `check:solutions`: 492/492 solutions are substantive drafts; 0/492 independently approved.
-- `check:examples`: 170/170 artifacts exist, 124 are executable, and 11 executable numerical checks remain pending.
+- `check:examples`: 170/170 artifacts exist, 135 are executable references, 35 are conceptual audits, and zero executable numerical checks remain pending.
 - `check:figures`: 102/102 embedded figure IDs have deterministic generators.
 - `audit:sources`: 60/62 chapters flagged; 27 compressed, 11 thin bibliography, 11 thin proof chain, 6 without a worked example, and 47 with frontmatter-only sources.
 
@@ -71,14 +70,14 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 - Exact revision `32dd2976f87baf94f332e38f0495b10ca377384b` has successful GitHub Actions software, publication, build, link, and Pages deployment evidence.
 - The public site exposes the 37-chapter book at [tahabouhsine.com/kernel-learning-with-jax](https://www.tahabouhsine.com/kernel-learning-with-jax/).
 - The publication workflow runs companion-native figure/example checks, CPU/TPU evidence-boundary validation, tests, every executable lab, generic editorial/content/manifest/solution checks, build, and links.
-- Local rerun result for this audit: **not run**, because this shell lacks the declared `jax` and `pytest` dependencies. This is reported as an audit-environment limitation, not converted into a pass or failure.
+- Local focused rerun result: **38/38 tests passed** across operators, CG, Lanczos, SLQ, preconditioners, randomized approximations, learning/inference, and regression after installing the declared dependencies in an isolated virtual environment.
 - TPU status: CPU reference evidence and a validated Kaggle package exist; a real TPU v5e-8 execution is pending, so a hardware speedup claim remains prohibited.
 
 # Book A — Kernels: The Geometry of Learning
 
 ## Book-level status
 
-- Canonical revision: `461842b686d560118b6507d5876e7f5e409b4aec` on `codex/full-book-revision`.
+- Canonical revision: `336819bbdb4a36fda523a34e406beae39da8602e` on `codex/full-book-revision`.
 - Scope: **62 chapters**, **1115 audited H2/H3 sections**, approximately **435,454 manuscript words**.
 - Structural triage: **53 sections rated thin or stub-like**.
 - Review maturity: **62/62 chapter records remain `draft`**; technical and pedagogical reviewer fields are unfilled.
@@ -2384,9 +2383,9 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 
 ## Book-level status
 
-- Canonical revision: `038bec88f78801e695d465e31ad5f7d2ecf05f90` on `codex/deep-book-remediation-2026`.
-- Scope: **37 chapters**, **508 audited H2/H3 sections**, approximately **65,339 manuscript words**.
-- Structural triage: **151 sections rated thin or stub-like**.
+- Canonical revision: `4c310f4` on `codex/deep-book-remediation-2026`.
+- Scope: **37 chapters**, **500 audited H2/H3 sections**, approximately **67,041 manuscript words**.
+- Structural triage: **136 sections rated thin or stub-like**.
 - Review maturity: **37/37 chapter records remain `draft`**; technical and pedagogical reviewer fields are unfilled.
 - Therefore the book is a substantial authorial draft, not an independently verified scholarly edition.
 
@@ -2396,9 +2395,9 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 |---|---:|---:|---:|---|
 | I · From Formula to Program | 3 | 3.60 | 3 | Coherent arc, but local compression interrupts the journey; merge or deepen weak transitions. |
 | II · Arrays Across Eight Devices | 4 | 3.28 | 8 | The part names the right progression, but too many sections behave as notes rather than lessons. |
-| III · Matrix-Free Kernel Learning | 5 | 3.60 | 12 | Coherent arc, but local compression interrupts the journey; merge or deepen weak transitions. |
-| IV · Randomized and Low-Rank Kernels | 5 | 3.34 | 20 | The part names the right progression, but too many sections behave as notes rather than lessons. |
-| V · Learning and Inference at Scale | 6 | 3.51 | 20 | Coherent arc, but local compression interrupts the journey; merge or deepen weak transitions. |
+| III · Matrix-Free Kernel Learning | 5 | 3.85 | 5 | Coherent arc, but local compression interrupts the journey; merge or deepen weak transitions. |
+| IV · Randomized and Low-Rank Kernels | 5 | 3.47 | 17 | The part names the right progression, but too many sections behave as notes rather than lessons. |
+| V · Learning and Inference at Scale | 6 | 3.68 | 15 | Coherent arc, but local compression interrupts the journey; merge or deepen weak transitions. |
 | VI · Structured and Scientific Workloads | 6 | 2.70 | 40 | Major narrative rebuild: select fewer load-bearing ideas and carry examples across chapters. |
 | VII · Performance and Trust | 4 | 2.72 | 25 | Major narrative rebuild: select fewer load-bearing ideas and carry examples across chapters. |
 | VIII · Capstone Systems | 4 | 2.71 | 23 | Major narrative rebuild: select fewer load-bearing ideas and carry examples across chapters. |
@@ -2414,21 +2413,21 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | 5 | [Blocked Gram Computation](#jax-ch04) | 1,637 | 13 | 6 | 2 | 3.38 | draft | C — uneven/underdeveloped |
 | 6 | [Sharding Kernel Arrays](#jax-ch05) | 1,730 | 13 | 3 | 2 | 3.31 | draft | C — uneven/underdeveloped |
 | 7 | [Stable Kernel Linear Algebra](#jax-ch06) | 1,617 | 14 | 5 | 2 | 3.21 | draft | C — uneven/underdeveloped |
-| 8 | [Matrix-Free Kernel Operators](#jax-ch07) | 2,244 | 19 | 8 | 6 | 3.21 | draft | C — uneven/underdeveloped |
-| 9 | [Conjugate Gradients for Kernel Learning](#jax-ch08) | 2,441 | 17 | 9 | 3 | 3.47 | draft | C — uneven/underdeveloped |
+| 8 | [Matrix-Free Kernel Operators](#jax-ch07) | 2,490 | 13 | 9 | 1 | 3.92 | draft | B — solid draft |
+| 9 | [Conjugate Gradients for Kernel Learning](#jax-ch08) | 2,567 | 15 | 11 | 1 | 3.87 | draft | B — solid draft |
 | 10 | [Lanczos as a Spectral Instrument](#jax-ch09) | 2,472 | 14 | 11 | 1 | 3.93 | draft | B — solid draft |
 | 11 | [Stochastic Kernel Log Determinants](#jax-ch10) | 2,628 | 15 | 11 | 1 | 3.93 | draft | B — solid draft |
 | 12 | [Preconditioning Kernel Systems](#jax-ch11) | 2,674 | 16 | 8 | 1 | 3.62 | draft | B — solid draft |
-| 13 | [Nyström Approximations](#jax-ch12) | 2,098 | 14 | 4 | 3 | 3.29 | draft | C — uneven/underdeveloped |
+| 13 | [Nyström Approximations](#jax-ch12) | 2,254 | 14 | 5 | 2 | 3.50 | draft | C — uneven/underdeveloped |
 | 14 | [Pivoted Cholesky](#jax-ch13) | 1,913 | 11 | 7 | 3 | 3.73 | draft | B — solid draft |
 | 15 | [Random Fourier Features](#jax-ch14) | 1,871 | 11 | 5 | 4 | 3.36 | draft | C — uneven/underdeveloped |
-| 16 | [Structured Random Features](#jax-ch15) | 1,767 | 11 | 3 | 5 | 3.09 | draft | C — uneven/underdeveloped |
-| 17 | [Kernel Sketches](#jax-ch16) | 1,699 | 12 | 6 | 5 | 3.25 | draft | C — uneven/underdeveloped |
-| 18 | [Primal Learning with Explicit Features](#jax-ch17) | 2,047 | 13 | 8 | 4 | 3.46 | draft | C — uneven/underdeveloped |
-| 19 | [Classification at Scale](#jax-ch18) | 1,909 | 13 | 9 | 3 | 3.69 | draft | B — solid draft |
-| 20 | [Differentiable Hyperparameters](#jax-ch19) | 1,834 | 12 | 6 | 4 | 3.33 | draft | C — uneven/underdeveloped |
-| 21 | [Kernel PCA at Scale](#jax-ch20) | 2,093 | 10 | 6 | 3 | 3.70 | draft | B — solid draft |
-| 22 | [MMD at Scale](#jax-ch21) | 1,676 | 12 | 8 | 3 | 3.50 | draft | C — uneven/underdeveloped |
+| 16 | [Structured Random Features](#jax-ch15) | 1,892 | 11 | 4 | 4 | 3.27 | draft | C — uneven/underdeveloped |
+| 17 | [Kernel Sketches](#jax-ch16) | 1,877 | 12 | 7 | 4 | 3.50 | draft | C — uneven/underdeveloped |
+| 18 | [Primal Learning with Explicit Features](#jax-ch17) | 2,174 | 13 | 9 | 3 | 3.62 | draft | B — solid draft |
+| 19 | [Classification at Scale](#jax-ch18) | 2,039 | 13 | 10 | 2 | 3.92 | draft | B — solid draft |
+| 20 | [Differentiable Hyperparameters](#jax-ch19) | 2,111 | 12 | 7 | 3 | 3.58 | draft | B — solid draft |
+| 21 | [Kernel PCA at Scale](#jax-ch20) | 2,275 | 10 | 7 | 2 | 3.90 | draft | B — solid draft |
+| 22 | [MMD at Scale](#jax-ch21) | 1,831 | 12 | 9 | 2 | 3.67 | draft | B — solid draft |
 | 23 | [Matrix-Free Gaussian Processes](#jax-ch22) | 2,007 | 14 | 7 | 3 | 3.43 | draft | C — uneven/underdeveloped |
 | 24 | [Sequence Kernels](#jax-ch23) | 1,369 | 13 | 2 | 7 | 2.69 | draft | D — major rewrite |
 | 25 | [Graph Kernels](#jax-ch24) | 1,236 | 13 | 2 | 7 | 2.69 | draft | D — major rewrite |
@@ -2665,11 +2664,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch07"></a>
 ### 8. Matrix-Free Kernel Operators (`ch07`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,244 words, 19 audited sections, 8 strong/exemplary and 6 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 1 example markers, 2 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,490 words, 13 audited sections, 9 strong/exemplary and 1 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 1 example markers, 2 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 6 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 1 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
 |---:|---|---:|---|---|---|---|
@@ -2679,14 +2678,8 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **From a matrix to an operator** (`operator-abstraction`) | 118 | 4/5 — strong | executable code | executable-design; 1 source(s) | weak motivation/causal explanation |
 | H2 | **The idiomatic JAX transformation** (`operator-jax`) | 147 | 4/5 — strong | derivation, executable code, motivation, inline citation | executable-design; 2 source(s) | no failure boundary or diagnostic |
 | H2 | **What matrix-free does and does not save** (`operator-memory-model`) | 272 | 5/5 — exemplary | figure, diagnostic/failure analysis, motivation | derived; 1 source(s) | no structural depth gap detected; correctness still needs review |
-| H2 | **Operator diagnostics are executable assumptions** (`operator-diagnostics`) | 13 | 3/5 — structural container | diagnostic/failure analysis | authorial-synthesis; 1 source(s) | no structural depth gap detected; correctness still needs review |
-| H3 | **Dense agreement** (`operator-dense-agreement`) | 21 | 2/5 — thin | derivation, diagnostic/failure analysis | executable-design; 2 source(s) | too little explanatory prose |
-| H3 | **Linearity** (`operator-linearity`) | 25 | 2/5 — thin | derivation | derived; 1 source(s) | too little explanatory prose |
-| H3 | **Self-adjointness** (`operator-self-adjointness`) | 22 | 2/5 — thin | derivation, diagnostic/failure analysis | derived; 1 source(s) | too little explanatory prose |
-| H3 | **Positive curvature** (`operator-curvature`) | 56 | 2/5 — thin | derivation, diagnostic/failure analysis | derived; 1 source(s) | too little explanatory prose |
-| H2 | **Eight-device sharding is a data-movement decision** (`operator-eight-device`) | 32 | 3/5 — structural container | none detected | planned-experiment; 1 source(s) | no structural depth gap detected; correctness still needs review |
-| H3 | **Replicated references** (`operator-replicated-references`) | 85 | 2/5 — thin | none detected | derived; 2 source(s) | no structural depth gap detected; correctness still needs review |
-| H3 | **Circulated reference shards** (`operator-circulated-references`) | 117 | 4/5 — strong | derivation | planned-experiment; 2 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
+| H2 | **Operator diagnostics are executable assumptions** (`operator-diagnostics`) | 353 | 5/5 — exemplary | derivation, diagnostic/failure analysis, motivation | authorial-synthesis; 1 source(s) | no concrete example/code/figure |
+| H2 | **Eight-device sharding is a data-movement decision** (`operator-eight-device`) | 281 | 5/5 — exemplary | derivation, diagnostic/failure analysis | planned-experiment; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Benchmark protocol and empty result table** (`operator-benchmark`) | 125 | 4/5 — strong | executable code, inline citation | planned-experiment; 1 source(s) | weak motivation/causal explanation; no failure boundary or diagnostic |
 | H2 | **Failure laboratory: an operator that is not self-adjoint** (`operator-failure-lab`) | 144 | 4/5 — strong | derivation, diagnostic/failure analysis | planned-experiment; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Practice, common mistakes, and further reading** (`operator-practice`) | 46 | 2/5 — thin | diagnostic/failure analysis | authorial-synthesis; 3 source(s) | no structural depth gap detected; correctness still needs review |
@@ -2698,11 +2691,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch08"></a>
 ### 9. Conjugate Gradients for Kernel Learning (`ch08`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,441 words, 17 audited sections, 9 strong/exemplary and 3 thin/stub-like. **Evidence:** 2 formal results, 1 proofs, 1 example markers, 3 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,567 words, 15 audited sections, 11 strong/exemplary and 1 thin/stub-like. **Evidence:** 2 formal results, 1 proofs, 1 example markers, 3 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 1 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
 |---:|---|---:|---|---|---|---|
@@ -2713,11 +2706,9 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **Finite termination and the spectrum** (`cg-convergence`) | 278 | 5/5 — exemplary | formal result/proof, derivation, figure, diagnostic/failure analysis, inline citation | cited-result; 3 source(s) | weak motivation/causal explanation |
 | H2 | **An optimized `cg.py` API** (`cg-api`) | 175 | 4/5 — strong | executable code, diagnostic/failure analysis | executable-design; 2 source(s) | weak motivation/causal explanation |
 | H2 | **Stopping is a numerical contract** (`cg-stopping`) | 122 | 4/5 — strong | derivation, diagnostic/failure analysis | authorial-synthesis; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
-| H2 | **Prediction and coefficient checks** (`cg-prediction-checks`) | 48 | 2/5 — thin | derivation, diagnostic/failure analysis | derived; 2 source(s) | too little explanatory prose |
+| H2 | **Prediction and coefficient checks** (`cg-prediction-checks`) | 141 | 4/5 — strong | derivation, diagnostic/failure analysis, motivation | derived; 2 source(s) | no concrete example/code/figure |
 | H2 | **CPU memory and work** (`cg-cpu-model`) | 156 | 4/5 — strong | diagnostic/failure analysis, motivation | derived; 1 source(s) | no concrete example/code/figure |
-| H2 | **Eight-device CG** (`cg-eight-device`) | 30 | 3/5 — structural container | none detected | planned-experiment; 1 source(s) | no structural depth gap detected; correctness still needs review |
-| H3 | **Operator communication** (`cg-operator-communication`) | 61 | 2/5 — thin | derivation | derived; 1 source(s) | too little explanatory prose |
-| H3 | **Scalar reductions** (`cg-scalar-reductions`) | 97 | 3/5 — adequate | derivation, diagnostic/failure analysis, motivation | derived; 2 source(s) | no concrete example/code/figure |
+| H2 | **Eight-device CG** (`cg-eight-device`) | 227 | 5/5 — exemplary | derivation, diagnostic/failure analysis, motivation | planned-experiment; 1 source(s) | no concrete example/code/figure |
 | H2 | **Compile and steady-state benchmark** (`cg-benchmark`) | 164 | 4/5 — strong | executable code, diagnostic/failure analysis | planned-experiment; 1 source(s) | weak motivation/causal explanation |
 | H2 | **Failure laboratory: zero ridge with duplicate points** (`cg-failure-lab`) | 160 | 4/5 — strong | derivation, diagnostic/failure analysis | derived-and-planned-experiment; 2 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Practice, common mistakes, and further reading** (`cg-practice`) | 52 | 2/5 — thin | diagnostic/failure analysis | authorial-synthesis; 4 source(s) | no structural depth gap detected; correctness still needs review |
@@ -2820,11 +2811,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch12"></a>
 ### 13. Nyström Approximations (`ch12`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,098 words, 14 audited sections, 4 strong/exemplary and 3 thin/stub-like. **Evidence:** 2 formal results, 2 proofs, 0 example markers, 3 inline citations, 0 internal cross-references.
+**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,254 words, 14 audited sections, 5 strong/exemplary and 2 thin/stub-like. **Evidence:** 2 formal results, 2 proofs, 0 example markers, 3 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 2 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
@@ -2836,7 +2827,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **Learning with the factor** (`nystrom-learning`) | 82 | 3/5 — adequate | derivation, diagnostic/failure analysis | derived; 1 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Memory and eight-device placement** (`nystrom-memory`) | 242 | 5/5 — exemplary | diagnostic/failure analysis, motivation | derived; 1 source(s) | no concrete example/code/figure |
 | H2 | **Diagnostics and failure laboratory** (`nystrom-diagnostics`) | 181 | 5/5 — exemplary | derivation, diagnostic/failure analysis | planned-experiment; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
-| H2 | **Benchmark protocol** (`nystrom-benchmark`) | 55 | 2/5 — thin | diagnostic/failure analysis | planned-experiment; 1 source(s) | too little explanatory prose |
+| H2 | **Benchmark protocol** (`nystrom-benchmark`) | 211 | 5/5 — exemplary | diagnostic/failure analysis, motivation | planned-experiment; 1 source(s) | no concrete example/code/figure |
 | H2 | **Executable lab and evidence boundary** (`nystrom-artifact`) | 161 | 3/5 — adequate | diagnostic/failure analysis | executable-cpu-lab-kaggle-extension-delimited; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Practical implications** (`nystrom-practical-implications`) | 72 | 3/5 — adequate | diagnostic/failure analysis | authorial-synthesis; 3 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Common mistakes** (`nystrom-common-mistakes`) | 80 | 3/5 — adequate | diagnostic/failure analysis | authorial-synthesis; 2 source(s) | no structural depth gap detected; correctness still needs review |
@@ -2901,11 +2892,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch15"></a>
 ### 16. Structured Random Features (`ch15`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,767 words, 11 audited sections, 3 strong/exemplary and 5 thin/stub-like. **Evidence:** 0 formal results, 0 proofs, 0 example markers, 5 inline citations, 0 internal cross-references.
+**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,892 words, 11 audited sections, 4 strong/exemplary and 4 thin/stub-like. **Evidence:** 0 formal results, 0 proofs, 0 example markers, 5 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 5 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 4 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
@@ -2915,7 +2906,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **Dependence changes the variance analysis** (`sorf-dependence`) | 341 | 5/5 — exemplary | figure, diagnostic/failure analysis, motivation | cited-and-scoped; 2 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Memory and device layout** (`sorf-memory`) | 252 | 5/5 — exemplary | diagnostic/failure analysis, motivation | derived; 1 source(s) | no concrete example/code/figure |
 | H2 | **Failure laboratory** (`sorf-failure`) | 98 | 3/5 — adequate | diagnostic/failure analysis | planned-experiment; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
-| H2 | **Equal-accuracy comparison** (`sorf-benchmark`) | 173 | 2/5 — thin | none detected | planned-equal-accuracy-sorf-experiment; 2 source(s) | no concrete example/code/figure; weak motivation/causal explanation; no failure boundary or diagnostic |
+| H2 | **Equal-accuracy comparison** (`sorf-benchmark`) | 298 | 4/5 — strong | diagnostic/failure analysis, motivation | planned-equal-accuracy-sorf-experiment; 2 source(s) | no concrete example/code/figure |
 | H2 | **Practical implications** (`sorf-practical-implications`) | 54 | 2/5 — thin | none detected | authorial-synthesis; 2 source(s) | too little explanatory prose |
 | H2 | **Common mistakes** (`sorf-common-mistakes`) | 47 | 2/5 — thin | none detected | authorial-synthesis; 2 source(s) | too little explanatory prose |
 | H2 | **Further reading** (`sorf-further-reading`) | 48 | 2/5 — thin | inline citation | cited-reading-guide; 2 source(s) | no structural depth gap detected; correctness still needs review |
@@ -2927,16 +2918,16 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch16"></a>
 ### 17. Kernel Sketches (`ch16`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,699 words, 12 audited sections, 6 strong/exemplary and 5 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 0 example markers, 4 inline citations, 0 internal cross-references.
+**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,877 words, 12 audited sections, 7 strong/exemplary and 4 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 0 example markers, 4 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 5 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 4 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
 |---:|---|---:|---|---|---|---|
-| H2 | **Three objects that may be sketched** (`sketch-targets`) | 85 | 2/5 — thin | none detected | authorial-synthesis; 1 source(s) | no structural depth gap detected; correctness still needs review |
+| H2 | **Three objects that may be sketched** (`sketch-targets`) | 263 | 5/5 — exemplary | diagnostic/failure analysis, motivation | authorial-synthesis; 1 source(s) | no concrete example/code/figure |
 | H2 | **CountSketch** (`sketch-countsketch`) | 303 | 5/5 — exemplary | formal result/proof, derivation, diagnostic/failure analysis, motivation, inline citation | derived-with-fixed-pair-variance-bound; 1 source(s) | no concrete example/code/figure |
 | H2 | **Streaming JAX implementation** (`sketch-api`) | 172 | 4/5 — strong | executable code, diagnostic/failure analysis | executable-api-matched-to-implementation; 2 source(s) | weak motivation/causal explanation |
 | H2 | **Learning and resource model** (`sketch-learning`) | 213 | 5/5 — exemplary | derivation, diagnostic/failure analysis | derived; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
@@ -2958,18 +2949,18 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch17"></a>
 ### 18. Primal Learning with Explicit Features (`ch17`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,047 words, 13 audited sections, 8 strong/exemplary and 4 thin/stub-like. **Evidence:** 2 formal results, 2 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,174 words, 13 audited sections, 9 strong/exemplary and 3 thin/stub-like. **Evidence:** 2 formal results, 2 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 4 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
 |---:|---|---:|---|---|---|---|
 | H2 | **The workload and the approximation boundary** (`primal-workload`) | 221 | 5/5 — exemplary | derivation, diagnostic/failure analysis, inline citation | cited-and-derived; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Normal equations and the correct ridge convention** (`primal-normal-equations`) | 390 | 5/5 — exemplary | formal result/proof, derivation, motivation, inline citation | proved; 1 source(s) | no concrete example/code/figure; no failure boundary or diagnostic |
-| H2 | **A scalar reference before transformation** (`primal-scalar`) | 41 | 2/5 — thin | executable code, diagnostic/failure analysis | derived-executable-reference; 1 source(s) | too little explanatory prose |
+| H2 | **A scalar reference before transformation** (`primal-scalar`) | 168 | 4/5 — strong | executable code, diagnostic/failure analysis, motivation | derived-executable-reference; 1 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Three CPU solver regimes** (`primal-cpu-solvers`) | 173 | 4/5 — strong | derivation, motivation, inline citation | authorial-synthesis; 1 source(s) | no concrete example/code/figure; no failure boundary or diagnostic |
 | H2 | **JAX implementation contract** (`primal-jax`) | 125 | 4/5 — strong | executable code, diagnostic/failure analysis | local-direct-api-mapped-with-streaming-blueprint; 1 source(s) | weak motivation/causal explanation |
 | H2 | **Memory and communication across devices** (`primal-sharding`) | 222 | 3/5 — adequate | motivation | analytical-cost-model; 1 source(s) | no concrete example/code/figure; no failure boundary or diagnostic |
@@ -2986,11 +2977,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch18"></a>
 ### 19. Classification at Scale (`ch18`)
 
-**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,909 words, 13 audited sections, 9 strong/exemplary and 3 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,039 words, 13 audited sections, 10 strong/exemplary and 2 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 2 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
@@ -2998,7 +2989,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **Workload, scale, and approximation target** (`class-workload`) | 115 | 4/5 — strong | diagnostic/failure analysis, motivation, inline citation | analytical-scale-and-approximation-contract; 1 source(s) | no concrete example/code/figure |
 | H2 | **Scores, decisions, and probabilities** (`class-target`) | 122 | 4/5 — strong | derivation | derived; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation; no failure boundary or diagnostic |
 | H2 | **Convexity and identifiable parameters** (`class-convexity`) | 329 | 5/5 — exemplary | formal result/proof, derivation, motivation | proved; 1 source(s) | no concrete example/code/figure; no failure boundary or diagnostic |
-| H2 | **Scalar loss and derivative oracle** (`class-scalar`) | 57 | 2/5 — thin | executable code, diagnostic/failure analysis | derived-executable-reference; 1 source(s) | too little explanatory prose |
+| H2 | **Scalar loss and derivative oracle** (`class-scalar`) | 187 | 5/5 — exemplary | executable code, diagnostic/failure analysis, motivation | derived-executable-reference; 1 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Optimization choices** (`class-optimization`) | 182 | 5/5 — exemplary | derivation, diagnostic/failure analysis, inline citation | cited-and-derived; 2 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **JAX path** (`class-jax`) | 182 | 5/5 — exemplary | executable code, diagnostic/failure analysis | local-binary-api-mapped-scalable-extensions-pending; 1 source(s) | weak motivation/causal explanation |
 | H2 | **Data and class sharding** (`class-sharding`) | 207 | 4/5 — strong | derivation | analytical-cost-model; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation; no failure boundary or diagnostic |
@@ -3014,11 +3005,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch19"></a>
 ### 20. Differentiable Hyperparameters (`ch19`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,834 words, 12 audited sections, 6 strong/exemplary and 4 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,111 words, 12 audited sections, 7 strong/exemplary and 3 thin/stub-like. **Evidence:** 1 formal results, 1 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 4 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
@@ -3028,7 +3019,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **Unrolled and implicit targets** (`hyper-methods`) | 139 | 4/5 — strong | figure, diagnostic/failure analysis, motivation | authorial-synthesis-with-deterministic-figure; 3 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Executable dense reference** (`hyper-jax`) | 132 | 4/5 — strong | executable code, diagnostic/failure analysis | local-dense-reference-and-transformation-order-mapped; 1 source(s) | weak motivation/causal explanation |
 | H2 | **Mesh, memory, and communication** (`hyper-systems`) | 290 | 4/5 — strong | diagnostic/failure analysis, motivation | analytical-forward-adjoint-resource-model; 2 source(s) | no concrete example/code/figure |
-| H2 | **Randomness and approximation** (`hyper-randomness`) | 60 | 2/5 — thin | none detected | approximation-targets-separated; 1 source(s) | too little explanatory prose |
+| H2 | **Randomness and approximation** (`hyper-randomness`) | 337 | 5/5 — exemplary | derivation, diagnostic/failure analysis, motivation | approximation-targets-separated; 1 source(s) | no concrete example/code/figure |
 | H2 | **Executable failure laboratory** (`hyper-failures`) | 107 | 3/5 — adequate | executable code, diagnostic/failure analysis | inline-executable-local-cpu-run-not-independently-reviewed; 2 source(s) | weak motivation/causal explanation |
 | H2 | **Benchmark and artifact contract** (`hyper-practice`) | 138 | 4/5 — strong | diagnostic/failure analysis | shared-local-cpu-artifact-mapped-kaggle-tpu-unmeasured; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Common mistakes** (`hyper-common-mistakes`) | 57 | 2/5 — thin | none detected | authorial-synthesis; 2 source(s) | too little explanatory prose |
@@ -3041,11 +3032,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch20"></a>
 ### 21. Kernel PCA at Scale (`ch20`)
 
-**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,093 words, 10 audited sections, 6 strong/exemplary and 3 thin/stub-like. **Evidence:** 2 formal results, 2 proofs, 0 example markers, 9 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 2,275 words, 10 audited sections, 7 strong/exemplary and 2 thin/stub-like. **Evidence:** 2 formal results, 2 proofs, 0 example markers, 9 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 2 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
@@ -3054,7 +3045,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **Out-of-sample projection** (`kpca-oos`) | 423 | 5/5 — exemplary | formal result/proof, derivation, diagnostic/failure analysis, inline citation | derived-with-residual-gap-proposition; 3 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Exact operator and explicit-feature routes** (`kpca-routes`) | 293 | 5/5 — exemplary | derivation, figure, diagnostic/failure analysis, motivation, inline citation | cited-derived-with-gap-dependent-perturbation-guarantee-and-deterministic-figure; 3 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **JAX implementation** (`kpca-jax`) | 275 | 5/5 — exemplary | executable code, diagnostic/failure analysis, motivation, inline citation | local-dense-reference-and-eigensolver-autodiff-scope-mapped-matrix-free-api-absent; 2 source(s) | no structural depth gap detected; correctness still needs review |
-| H2 | **Sharding and communication** (`kpca-sharding`) | 279 | 2/5 — thin | none detected | analytical-lanczos-and-feature-route-resource-model; 2 source(s) | no concrete example/code/figure; weak motivation/causal explanation; no failure boundary or diagnostic |
+| H2 | **Sharding and communication** (`kpca-sharding`) | 461 | 4/5 — strong | diagnostic/failure analysis | analytical-lanczos-and-feature-route-resource-model; 2 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **Diagnostics and failure laboratory** (`kpca-failures`) | 176 | 4/5 — strong | executable code, diagnostic/failure analysis, motivation | inline-executable-local-cpu-run-not-independently-reviewed; 1 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Common mistakes** (`kpca-common-mistakes`) | 47 | 2/5 — thin | diagnostic/failure analysis | authorial-synthesis; 2 source(s) | too little explanatory prose |
 | H2 | **Further reading** (`kpca-further-reading`) | 41 | 2/5 — thin | diagnostic/failure analysis, inline citation | cited-reading-guide; 4 source(s) | no structural depth gap detected; correctness still needs review |
@@ -3066,11 +3057,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 <a id="jax-ch21"></a>
 ### 22. MMD at Scale (`ch21`)
 
-**Status:** C — uneven/underdeveloped; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,676 words, 12 audited sections, 8 strong/exemplary and 3 thin/stub-like. **Evidence:** 0 formal results, 0 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
+**Status:** B — solid draft; `draft` review record; technical reviewer `None`; pedagogical reviewer `None`. **Shape:** 1,831 words, 12 audited sections, 9 strong/exemplary and 2 thin/stub-like. **Evidence:** 0 formal results, 0 proofs, 0 example markers, 6 inline citations, 0 internal cross-references.
 
 **Priority actions:**
 
-- Rewrite 3 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
+- Rewrite 2 thin/stub-like section(s) around a motivating problem, worked artifact, failure case, and diagnostic.
 - Add one end-to-end worked example that changes a reader decision.
 
 | Level | Section | Words | Depth | Teaching/evidence assets | Provenance | Principal gap/status |
@@ -3081,7 +3072,7 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 | H2 | **A test needs calibration** (`mmd-test`) | 157 | 4/5 — strong | derivation, diagnostic/failure analysis, inline citation | cited-calibration-contract; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation |
 | H2 | **JAX implementations** (`mmd-jax`) | 143 | 4/5 — strong | executable code, diagnostic/failure analysis, motivation | current-dense-and-paired-api-executable-extensions-unimplemented; 1 source(s) | no structural depth gap detected; correctness still needs review |
 | H2 | **Memory and communication** (`mmd-sharding`) | 208 | 4/5 — strong | derivation | analytical-cost-model; 1 source(s) | no concrete example/code/figure; weak motivation/causal explanation; no failure boundary or diagnostic |
-| H2 | **Bandwidth selection and power** (`mmd-bandwidth`) | 60 | 2/5 — thin | none detected | authorial-synthesis; 1 source(s) | too little explanatory prose |
+| H2 | **Bandwidth selection and power** (`mmd-bandwidth`) | 215 | 4/5 — strong | motivation | authorial-synthesis; 1 source(s) | no concrete example/code/figure; no failure boundary or diagnostic |
 | H2 | **Failure laboratory** (`mmd-failures`) | 119 | 4/5 — strong | executable code, diagnostic/failure analysis | one-executable-fixture-other-drills-specified; 1 source(s) | weak motivation/causal explanation |
 | H2 | **Common mistakes** (`mmd-common-mistakes`) | 54 | 2/5 — thin | none detected | authorial-synthesis; 1 source(s) | too little explanatory prose |
 | H2 | **Further reading** (`mmd-further-reading`) | 41 | 2/5 — thin | inline citation | cited-reading-guide; 3 source(s) | no structural depth gap detected; correctness still needs review |
@@ -3558,12 +3549,11 @@ Verdict language is deliberately bounded: machine checks are “passed,” claim
 
 ## Coverage assertion
 
-This report enumerates **all 62 theory chapters and their 1115 H2/H3 sections**, and **all 37 JAX chapters and their 508 H2/H3 sections**, as listed in each repository’s canonical `book.yml`. The enumeration is mechanically checked below; completeness does not imply correctness.
+This report enumerates **all 62 theory chapters and their 1115 H2/H3 sections**, and **all 37 JAX chapters and their 500 H2/H3 sections**, as listed in each repository’s canonical `book.yml`. The enumeration is mechanically checked below; completeness does not imply correctness.
 
 ## Reproducibility notes
 
-- Theory repository: `https://github.com/mlnomadpy/kernel-methods-book.git`, `codex/full-book-revision`, `461842b686d560118b6507d5876e7f5e409b4aec`.
-- JAX repository: `https://github.com/mlnomadpy/kernel-learning-with-jax.git`, `codex/deep-book-remediation-2026`, `038bec88f78801e695d465e31ad5f7d2ecf05f90`.
+- Theory repository: `https://github.com/mlnomadpy/kernel-methods-book.git`, `codex/full-book-revision`, `336819bbdb4a36fda523a34e406beae39da8602e`.
+- JAX repository: `https://github.com/mlnomadpy/kernel-learning-with-jax.git`, `codex/deep-book-remediation-2026`, `6e49be3964228f4a4e05512fa1318975b1393154`.
 - Section scoring reads the canonical Markdown, YAML provenance/review/solution records, and the theory book’s generated source-depth audit. It does not inspect rendered typography line by line.
 - Counts may change when chapters are edited; rerun the same structural audit before the next release.
-
