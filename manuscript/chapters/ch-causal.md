@@ -333,6 +333,12 @@ $$
 
 If the \(W\)-given-\((Z,A,X)\) operator is complete on the bridge class, the bridge is unique up to null sets.
 
+**Assumptions.** The proxy conditional-independence restrictions,
+consistency, treatment positivity, integrability, bridge existence, and the
+two completeness roles stated in the preceding paragraphs hold on the
+declared bridge class. The mean formula is asserted only for treatments in the
+positivity region.
+
 **Proof status.** The identification argument follows Miao, Geng, and Tchetgen Tchetgen (2018), identification results in Sections 2 and 3. The kernel estimator follows Mastouri et al. (2021), Section 3 and Theorems 1 and 2; their consistency conditions include bounded kernels, RKHS well-specification or approximation control, operator-range/source assumptions, and vanishing regularization.
 ::::
 

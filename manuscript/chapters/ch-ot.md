@@ -105,6 +105,14 @@ $$\Phi_c=\bigl\{(f,g)\in L^1(P)\times L^1(Q):\ f(x)+g(y)\le c(x,y)\ \text{for al
 
 The primal infimum is attained. The displayed dual value is a supremum: existence of an integrable maximizing pair requires additional hypotheses and is not asserted here.
 
+**Assumptions.** The source and target are Borel probability measures on
+Polish spaces, the cost is nonnegative and lower semicontinuous, and the
+coupling set contains a finite-cost plan. Dual attainment is outside the
+claim.
+
+**Proof status.** Weak duality is proved below. Strong duality and primal
+attainment are cited to the exact source locator in the next sentence.
+
 **Source locator.** Villani [@villani2009, Theorem 5.10(i)] proves this lower-semicontinuous-cost form, including equality of the primal and dual values.
 :::::
 
@@ -138,6 +146,14 @@ $$W_1(P,Q)=\sup_{\mathrm{Lip}(f)\le 1}\ \Bigl(\mathbb E_{X\sim P}[f(X)]-\mathbb 
 the supremum running over all 1-Lipschitz functions, \(|f(x)-f(y)|\le d(x,y)\).
 
 An additive constant may be fixed by requiring \(f(x_0)=0\) at one base point. The first-moment assumption then makes every such normalized potential integrable.
+
+**Assumptions.** \((\mathcal X,d)\) is Polish, \(P\) and \(Q\) have finite
+first moments, and transport uses the metric cost \(d\). The normalized
+potentials are measurable and integrable under these moment conditions.
+
+**Proof status.** The reduction from two feasible potentials to one
+1-Lipschitz potential is explained below; the full duality theorem is cited to
+Villani at the stated locator.
 
 **Source locator.** This is the metric-cost specialization of Kantorovich duality in Villani [@villani2009, Particular Case 5.4 and Theorem 5.10].
 ::::
@@ -230,6 +246,10 @@ $$u=a\oslash(Kv),\qquad v=b\oslash(K^\top u),$$
 
 where \(\oslash\) is entrywise division. Such \(u,v\) exist and are unique up to a scalar (Sinkhorn and Knopp 1967).
 
+**Assumptions.** The retained marginal entries are strictly positive, the cost
+matrix is finite, and \(\varepsilon\gt0\); hence the Gibbs matrix is strictly
+positive. Zero-mass rows or columns must be removed before applying this form.
+
 **Proof status.** Proved immediately below.
 ::::
 
@@ -311,6 +331,15 @@ Let \(a,b\) be probability vectors on finite supports, let \(C\) be a finite sym
 $$S_\varepsilon(a,b)\ \xrightarrow{\ \varepsilon\to 0\ }\ \mathrm{OT}_0(a,b)\quad(\text{unregularized transport}),\qquad S_\varepsilon(a,b)\ \xrightarrow{\ \varepsilon\to\infty\ }\ \tfrac12\,\|a-b\|_{-C}^2,$$
 
 where \(\|a-b\|_{-C}^2=2\sum_{i,j}a_ib_jC_{ij}-\sum_{i,j}a_ia_jC_{ij}-\sum_{i,j}b_ib_jC_{ij}\). Conditional negative definiteness makes this nonnegative and identifies it with a squared MMD after centering the kernel \(-C\); it is an energy distance for negative-type distances.
+
+**Assumptions.** The supports are finite, \(a\) and \(b\) are probability
+vectors, \(C\) is finite and symmetric with zero diagonal, and \(C\) is
+conditionally negative definite. The two endpoints hold with support and cost
+fixed while \(\varepsilon\) varies.
+
+**Proof status.** The endpoint identity is cited rather than reproved. The
+finite-support specialization and the additional conditions needed for
+general measures are recorded in the scope statement below.
 
 **Scope and source locator.** The statement is the finite-support specialization of the endpoint identity in Feydy et al. [@feydy2019sinkhorn, Equation (4)]. For general measures, the small-\(\varepsilon\) limit additionally needs tightness and integrability of the cost, while the large-\(\varepsilon\) identification needs the corresponding negative-type energy to be finite.
 ::::

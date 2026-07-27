@@ -106,6 +106,16 @@ $$
 \leq
 \sqrt{\frac{n}{2}\operatorname{KL}(P_0\Vert P_1)}.
 $$
+
+**Assumptions.** The observations have product laws \(P_0^n\) and \(P_1^n\);
+the loss is measurable, symmetric in the declared parameter arguments, and
+satisfies the displayed separation inequality for every admissible estimate.
+The Pinsker corollary additionally requires \(P_0\ll P_1\) and finite
+\(\operatorname{KL}(P_0\Vert P_1)\).
+
+**Proof status.** The testing reduction is proved immediately below. The
+testing-error identity and Pinsker inequality are standard and may also be
+found in [@tsybakov2009, Sections 2.2--2.3].
 :::
 
 ::: {.proof}
@@ -175,6 +185,11 @@ $$
 s^2\left(1-\alpha-\frac{\log2}{\log M}\right).
 $$
 
+**Assumptions.** The parameter set contains an \(M\)-point measurable packing
+in the metric \(d\); \(M\geq2\); the average KL divergence to the declared
+reference measure \(Q\) is finite and satisfies the displayed information
+budget; the estimator is measurable.
+
 **Proof status.** The decoding reduction is proved below; the information inequality is cited to [@tsybakov2009, Section 2.5].
 :::
 
@@ -209,6 +224,10 @@ $$
 \frac{m\delta^2}{2}
 \min_j\left(1-\operatorname{TV}(\overline P_{j,+},\overline P_{j,-})\right).
 $$
+
+**Assumptions.** The hypercube experiments and their coordinate mixtures are
+well-defined probability measures, the decoder is measurable, and the loss
+dominates Hamming error with the displayed scale \(\delta^2\).
 
 **Proof status.** The coordinatewise testing reduction is given here; the standard measurable nearest-vertex step is sourced to [@tsybakov2009, Section 2.7].
 :::
@@ -269,6 +288,11 @@ n^{-\,2r/(2r+p)}.
 $$
 
 Matching upper bounds hold for a regularizer whose qualification covers \(r\); ordinary KRR saturates when its qualification is exceeded. The exact endpoint and noise hypotheses depend on the source convention. This statement follows the integral-operator minimax framework of [@caponnetto2007] and the qualification comparison of [@dicker2015].
+
+**Assumptions.** Items 1--5 above define the sampling model, noise law,
+two-sided spectral supply, source ball, and eigenfunction regularity. The
+claimed exponent is for expected squared \(L^2(P_X)\) error; it is not an
+RKHS-norm, high-probability, or fixed-design result.
 
 **Proof status.** The exponent derivation and packing geometry are reconstructed below. The full random-design measure-theoretic realization and constants are not reproved here.
 :::
@@ -382,6 +406,13 @@ $$
 $$
 
 No sampling assumptions are required. The conclusion concerns regularized spectral error, not prediction risk.
+
+**Assumptions.** \(K\) and \(\widetilde K\) are finite real symmetric PSD
+matrices on the same \(n\)-dimensional space, \(\gamma\gt0\), and
+\(\operatorname{rank}(\widetilde K)\leq m\lt n\). The norm is the spectral norm.
+
+**Proof status.** Proved immediately below by a subspace-intersection argument
+and the Rayleigh quotient.
 :::
 
 ::: {.proof}
@@ -488,6 +519,10 @@ $$
 
 simultaneously at both points.
 
+**Assumptions.** The two distributions belong to the stated nested classes,
+their product experiments satisfy the two-point theorem, and the loss uses the
+same parameter map and separation constant \(\Delta\) at both points.
+
 **Proof status.** Immediate from Theorem [two-point lower bound](#thm-lower-le-cam).
 :::
 
@@ -534,6 +569,26 @@ Start from the desired impossibility statement, not from a favorite inequality.
 9. Exhibit an escape route showing the theorem's boundary.
 
 The most common mistake is to perform steps four and five in incompatible geometries. An RKHS-norm packing may have the wrong \(L^2(P_X)\) separation. A Frobenius-small matrix perturbation may be regularized-spectrally large. A hard quadratic may not be a Gram matrix in the kernel family under discussion.
+
+## Common mistakes and practical implications {#lower-common-mistakes}
+
+Three mistakes recur because they allow a true lower bound to answer the wrong
+question. First, changing the loss changes the theorem: a Frobenius-norm rank
+barrier does not establish population prediction hardness unless a reduction
+connects the omitted matrix directions to admissible labels. Second, changing
+the information interface changes the adversary: a matrix-vector oracle result
+does not constrain an algorithm that receives landmarks, entries, or a
+factorization. Third, changing one side of a rate comparison breaks the match:
+a minimax expectation bound under random design cannot certify optimality of a
+high-probability fixed-design algorithm.
+
+In practice, place upper and lower results in the same ledger row before
+calling a rate optimal. The row must agree on parameter class, observation
+model, loss, probability mode, computational access, and asymptotic regime. If
+one cell differs, report the results as complementary rather than matching.
+This comparison prevents an impossibility theorem from becoming a rhetorical
+flourish and tells an implementer which escape route (richer access,
+adaptivity, a narrower target class, or a different tolerance) remains open.
 
 ## Summary and further reading {#lower-summary}
 
