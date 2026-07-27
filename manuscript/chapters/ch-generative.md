@@ -56,8 +56,6 @@ On the two-element set \(\mathcal X=\{x_1,x_2\}\) put all the mass off the diago
 $$\begin{pmatrix}0 & 0.5\\ 0.5 & 0\end{pmatrix},$$
 
 whose eigenvalues are \(\pm 0.5\). The negative eigenvalue means \(P\) is not positive semidefinite, so this perfectly good probability distribution is not a P-kernel. A distribution that rewards pairs for being *different* cannot be an inner product, which always rewards an object for agreeing with itself.
-
-**Verification artifact.** checks/example-ch-generative-example-25-1.json records the example source hash and verification scope.
 ::::
 
 What rescues the construction in general is a hidden variable, and the mechanism is worth isolating because it recurs in every kernel of this chapter.
@@ -161,8 +159,6 @@ Alphabet \(\Sigma=\{A,B\}\), hidden states \(\{1,2\}\). Emissions \(P(A\mid 1)=0
 
 **Reading.** The direct enumeration and the forward recursion return the identical value \(0.074040\), the recursion doing in two length-two updates what the enumeration does by touching all \(|A|^n=4\) paths. On a realistic protein model with dozens of states and sequences of length hundreds, the enumeration is impossible and the recursion is routine.
 ::::
-
-**Verification artifact.** checks/example-ch-generative-example-25-2.json records the example source hash and verification scope.
 :::::
 
 ## The pair hidden Markov model kernel {#pair-hmm}
@@ -233,8 +229,6 @@ Take a fixed binary tree with binary states and symbols, and assume both childre
 $$P(0\mid 1)=\epsilon,\quad P(1\mid 1)=1-\epsilon,\quad P(1\mid 0)=\delta,\quad P(0\mid 0)=1-\delta,$$
 
 and one root parameter \(P(h(v_0)=1)=\tau\). At an internal node \(v\) the two child messages \(\kappa_{\mathrm{ch}_1(v),b}\) and \(\kappa_{\mathrm{ch}_2(v),b}\) for \(b\in\{0,1\}\) are combined with these four probabilities into the two values \(\kappa_{v,0}\) and \(\kappa_{v,1}\), which are then passed to the parent. The root combines its two messages with \(\tau\) and \(1-\tau\) to produce the kernel. As with the linear HMM, the exponential sum over internal labelings becomes a linear sweep because the tree's conditional independences let each node summarize its entire subtree in \(|A|\) numbers.
-
-**Verification artifact.** checks/example-ch-generative-example-25-3.json records the example source hash and verification scope.
 ::::
 
 This hidden tree kernel is the phylogenetic instance of the marginalization framework: it compares two genes by their entire modeled evolutionary history rather than by a bare count of the organisms in which they co-occur. It underlies the kernels on phylogenetic profiles used to predict gene function, and its message passing is the same sum-product computation that runs the HMM recursions above, now on a tree instead of a chain. The construction extends from trees toward certain graphs, where the general machinery of probabilistic graphical models takes over, a theme picked up by the [[ch:graph-kernels|graph-kernels chapter]].
@@ -279,8 +273,6 @@ Model: symbols drawn iid from \(\Sigma=\{A,B\}\) with unnormalized weights \(\th
 
 **Reading.** The score turns each string into the vector of how much it would push the emission probability of each symbol up or down, and the Fisher kernel compares those pushes: \(s\) and \(t\) disagree (\(K=-0.5\)), while \(s\) and \(u\) agree strongly (\(K=1.5\)). Up to the centering term, this two-symbol model's Fisher kernel is the \(1\)-spectrum kernel, the count of shared symbols; enlarging the model to \(k\)-mer transitions recovers the \((k{+}1)\)-spectrum kernel, the sequence Fisher kernel derived in full in [[ch:string-kernels|the string-kernels chapter]].
 ::::
-
-**Verification artifact.** checks/example-ch-generative-example-25-4.json records the example source hash and verification scope.
 :::::
 
 Two further points connect the example to practice. First, the true information matrix is usually replaced by its empirical version \(\hat I_M=\tfrac1\ell\sum_{i=1}^\ell g(\theta_0,x_i)g(\theta_0,x_i)^\top\), the sample covariance of the scores, so whitening by \(\hat I_M^{-1}\) is exactly whitening the Fisher vectors; the invariance this buys can come at the cost of amplifying noise along parameters the data barely constrain. Second, for a hidden Markov model the score with respect to the emission and transition parameters is not a hard \(k\)-mer count but an expected state-occupancy and transition count, and each such expectation is delivered in one pass of the forward-backward algorithm, the same dynamic program that ran the marginalization kernels above. The Fisher kernel thereby reuses the entire generative apparatus, differentiating where the marginalized kernels summed. When the generative model additionally carries the class label as a latent variable, the leading Fisher coordinates become the class posteriors minus the priors, so a linear classifier on the Fisher features reconstructs the Bayes rule, which is why the Fisher kernel is asymptotically no worse than the model's own MAP labeling (Jaakkola and Haussler 1999).

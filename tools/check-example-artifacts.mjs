@@ -33,13 +33,14 @@ for (const chapter of chapters) {
       continue;
     }
     const block = lines.slice(index, end + 1);
-    const reference = block.join("\n").match(/checks\/(example-[A-Za-z0-9_.-]+\.json)/);
-    if (!reference || !fs.existsSync("checks/" + reference[1])) {
+    const artifactName =
+      "example-" + chapter.src + "-" + id.replace(/[^A-Za-z0-9_.-]/g, "-") + ".json";
+    if (!fs.existsSync("checks/" + artifactName)) {
       errors.push(chapter.src + "#" + id + ": missing example artifact");
       continue;
     }
-    const artifact = JSON.parse(fs.readFileSync("checks/" + reference[1], "utf8"));
-    const clean = block.filter((line) => !line.startsWith("**Verification artifact.**"));
+    const artifact = JSON.parse(fs.readFileSync("checks/" + artifactName, "utf8"));
+    const clean = [...block];
     while (clean.length > 1 && clean[clean.length - 2] === "") clean.splice(clean.length - 2, 1);
     if (artifact.chapter !== chapter.src || artifact.anchor !== id) {
       errors.push(chapter.src + "#" + id + ": artifact identity mismatch");

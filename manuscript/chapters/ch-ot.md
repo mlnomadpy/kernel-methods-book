@@ -183,8 +183,6 @@ ground cost \(c(x,y)=|x-y|\) for \(W_1\) and \(|x-y|^2\) for \(W_2\).
 
 **Reading.** Sorting solves one-dimensional transport exactly, and the monotone pairing beats the crossed one by a factor of three here. The Wasserstein distance \(1.0\) and the energy-distance MMD \(0.6667\) are different numbers reading different things off the same two samples: one the least work to move the mass, the other a fixed-feature discrepancy. We will see them reappear as the two limits of a single object.
 :::::
-
-**Verification artifact.** checks/example-ch-ot-example-31-1.json records the example source hash and verification scope.
 ::::::
 
 ## Sample complexity: the price of geometry {#sample-complexity}
@@ -289,8 +287,6 @@ The Gibbs kernel is \(K=e^{-C}\), with \(e^{-1}=0.3679\) and \(e^{-4}=0.0183\).
 
 **Reading.** Each column update locks the column marginal onto \(b\) exactly while leaving the rows slightly off; the next row update repairs the rows, and the marginal error halves each pass. The converged plan carries mass rightward (the large entries sit above the diagonal), matching the left-heavy \(a\) to the right-heavy \(b\) as an entropically blurred version of the optimal map, all from repeated matrix-vector products.
 :::::
-
-**Verification artifact.** checks/example-ch-ot-example-31-2.json records the example source hash and verification scope.
 ::::::
 
 ## Sinkhorn divergences: debiasing and the bridge to MMD {#sinkhorn-divergences}

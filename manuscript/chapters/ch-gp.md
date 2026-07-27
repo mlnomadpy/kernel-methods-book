@@ -43,6 +43,9 @@ bibliography:
   - titsias2009svgp
   - hensman2013bigdata
   - wilson2013
+  - kernelbook-code-ch-gp-ex1
+  - kernelbook-code-ch-gp-ex2
+  - kernelbook-code-ch-gp-ex3
   - damianou2013deepgp
 ---
 # Gaussian Processes and the RVM
@@ -150,7 +153,7 @@ Three features of these equations deserve emphasis. The mean is a linear combina
 
 :::: wex
 ::: wex-setup
-Training inputs \(x=(0,1,2)\), targets \(y=(1,\ 0.5,\ -0.5)\), Gaussian kernel \(k(x,x')=e^{-(x-x')^2/2}\) (length scale \(\ell=1\)), noise variance \(\sigma^2=0.1\). Predict at \(x_*=0.5\). All numbers from `checks/ch-gp-ex1.py`.
+Training inputs \(x=(0,1,2)\), targets \(y=(1,\ 0.5,\ -0.5)\), Gaussian kernel \(k(x,x')=e^{-(x-x')^2/2}\) (length scale \(\ell=1\)), noise variance \(\sigma^2=0.1\). Predict at \(x_*=0.5\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-gp-ex1].
 :::
 
 1.  [Form the Gram matrix.]{.wex-op} With \(e^{-1/2}=0.6065\) and \(e^{-2}=0.1353\),
@@ -164,8 +167,6 @@ $$K=\begin{pmatrix}1&0.6065&0.1353\\0.6065&1&0.6065\\0.1353&0.6065&1\end{pmatrix
 
 **Reading.** The prediction at \(x_*=0.5\) is \(0.82\pm0.29\). The error bar is tight here because \(x_*\) sits close to two training points; it would widen in a region with no data, since the variance ignores \(y\) and tracks only the geometry of the inputs.
 ::::
-
-**Verification artifact.** checks/example-ch-gp-example-40-1.json records the example source hash and verification scope.
 :::::
 
 That local calculation scales into the full posterior picture. The mean is pulled toward the observations, while the covariance shrinks wherever the kernel regards a test point as well covered. Far from data the mean returns toward its prior value and the uncertainty returns toward its prior scale.
@@ -206,7 +207,7 @@ writing \(t=K\alpha\). This is the regularized least-squares objective whose sta
 
 :::: wex
 ::: wex-setup
-Same kernel \(k(x,x')=e^{-(x-x')^2/2}\) on \(x=(0,1,2)\), now with \(y=(1,0,-1)\). Ridge parameter \(\lambda=0.05\), \(n=3\), so \(\lambda n=0.15\); set the GP noise variance to the matched value \(\sigma^2=0.15\). Numbers from `checks/ch-gp-ex2.py`.
+Same kernel \(k(x,x')=e^{-(x-x')^2/2}\) on \(x=(0,1,2)\), now with \(y=(1,0,-1)\). Ridge parameter \(\lambda=0.05\), \(n=3\), so \(\lambda n=0.15\); set the GP noise variance to the matched value \(\sigma^2=0.15\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-gp-ex2].
 :::
 
 1.  [Solve the ridge system.]{.wex-op} \(\alpha_{\mathrm{KRR}}=(K+0.15\,I)^{-1}y=(0.9855,\ 0,\ -0.9855)\). The middle coefficient vanishes because both \(y\) and the geometry are antisymmetric about \(x=1\).
@@ -215,8 +216,6 @@ Same kernel \(k(x,x')=e^{-(x-x')^2/2}\) on \(x=(0,1,2)\), now with \(y=(1,0,-1)\
 
 **Reading.** The two algorithms, derived from a loss-plus-penalty on one side and from Bayes' rule on the other, return the same numbers to the last digit. The Gaussian process adds only what ridge cannot supply: a variance at each test point.
 ::::
-
-**Verification artifact.** checks/example-ch-gp-example-40-2.json records the example source hash and verification scope.
 :::::
 
 ## The marginal likelihood and hyperparameter learning {#marginal-likelihood}
@@ -435,7 +434,7 @@ Read \(\mathcal L_T\) term by term. The first term is exactly the DTC evidence. 
 
 :::: wex
 ::: wex-setup
-Training inputs \(x=(-2,\,-1,\,0.5,\,2)\), targets \(y=(-1.7,\,-0.8,\,0.7,\,1.5)\), squared-exponential kernel \(k(x,x')=e^{-(x-x')^2/8}\) (length scale \(\ell=2\)), noise \(\sigma^2=0.1\). Inducing inputs \(Z=(-1,\,0.5)\), the two middle training points, so \(n=4\) and \(m=2\). Predict at \(x_*=0.3\). All numbers from `checks/ch-gp-ex3.py`.
+Training inputs \(x=(-2,\,-1,\,0.5,\,2)\), targets \(y=(-1.7,\,-0.8,\,0.7,\,1.5)\), squared-exponential kernel \(k(x,x')=e^{-(x-x')^2/8}\) (length scale \(\ell=2\)), noise \(\sigma^2=0.1\). Inducing inputs \(Z=(-1,\,0.5)\), the two middle training points, so \(n=4\) and \(m=2\). Predict at \(x_*=0.3\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-gp-ex3].
 :::
 
 1.  [Fit the exact GP for reference.]{.wex-op}
@@ -454,8 +453,6 @@ $$Q_{ff}=K_{fu}K_{uu}^{-1}K_{uf}=\begin{pmatrix}0.8797&0.8825&0.4578&0.0397\\0.8
 
 **Reading.** Half the data serving as inducing set moves the predictive means by a few hundredths, but the error bars tell the finer story: \(0.0423\) (SoR) \(\lt 0.0443\) (DTC) \(\lt 0.0608\) (FITC) against the exact \(0.0648\); the more of the discarded conditional variance a scheme keeps, the closer its uncertainty comes to the truth. The bound line is the operational one. \(\mathcal L_T\) sits \(1.6602\) below the exact evidence, all of it charged by the trace over the two badly covered inputs \(x_1\) and \(x_4\), so an optimizer ascending \(\mathcal L_T\) over \(Z\) is pushed to cover exactly those points, and at \(Z=X\) the bound closes.
 ::::
-
-**Verification artifact.** checks/example-ch-gp-example-40-3.json records the example source hash and verification scope.
 :::::
 
 ### Stochastic variational Gaussian processes {#svgp-big-data}

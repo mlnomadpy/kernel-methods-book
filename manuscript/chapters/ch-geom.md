@@ -31,6 +31,8 @@ bibliography:
   - azangulov2023
   - haasdonk2007
   - cohen2016
+  - kernelbook-code-ch-geom-ex1
+  - kernelbook-code-ch-geom-ex2
   - bietti2019
 ---
 # Geometric and Equivariant Kernels
@@ -177,7 +179,7 @@ These kernels are the tunable-smoothness completion of the family in [[ch:graph-
 
 :::: wex
 ::: wex-setup
-The graph is the cycle \(C_5\) on nodes \(0,1,2,3,4\), the discrete circle. Laplacian \(L=2I-A\) with \(A\) the cycle adjacency. Matern uses \(\nu=1,\ \kappa^2=1\), so the filter is \((2+\lambda)^{-1}\); diffusion uses \(t=\kappa^2/2=1\). All numbers from `checks/ch-geom-ex1.py`.
+The graph is the cycle \(C_5\) on nodes \(0,1,2,3,4\), the discrete circle. Laplacian \(L=2I-A\) with \(A\) the cycle adjacency. Matern uses \(\nu=1,\ \kappa^2=1\), so the filter is \((2+\lambda)^{-1}\); diffusion uses \(t=\kappa^2/2=1\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-geom-ex1].
 :::
 
 1.  [Read off the spectrum.]{.wex-op} The Laplacian eigenvalues are the discrete Fourier frequencies of the cycle, \(\lambda=(0,\ 1.382,\ 1.382,\ 3.618,\ 3.618)\), with \(1.382=2-2\cos 72^\circ\) and \(3.618=2-2\cos 144^\circ\).
@@ -192,8 +194,6 @@ $$\big(0.2895,\ 0.0789,\ 0.0263,\ 0.0263,\ 0.0789\big),$$
 
 **Reading.** Both kernels come straight from the Laplacian spectrum, are stationary on the discrete circle because \(C_5\) is vertex-transitive, and are positive definite for free because their spectral filters are positive. The diffusion kernel is visibly the smooth \(\nu\to\infty\) endpoint of the Matern family.
 ::::
-
-**Verification artifact.** checks/example-ch-geom-example-27-1.json records the example source hash and verification scope.
 :::::
 
 ## Lie groups and homogeneous spaces {#lie-groups}
@@ -286,7 +286,7 @@ The invariance is a hard constraint, not a preference, and this is the essential
 
 :::: wex
 ::: wex-setup
-The group \(G=\mathbb Z_4\) acts on \(\mathbb R^2\) by rotations of \(0,90,180,270\) degrees, matrices \(R_0,\dots,R_3\). Base kernel is the RBF \(k(x,y)=e^{-\|x-y\|^2/2}\), which is jointly invariant since rotations preserve distance. Points \(x_1=(1,\,0.4)\), \(x_2=(0.3,\,0.6)\), \(x_3=(-0.7,\,0.5)\). All numbers from `checks/ch-geom-ex2.py`.
+The group \(G=\mathbb Z_4\) acts on \(\mathbb R^2\) by rotations of \(0,90,180,270\) degrees, matrices \(R_0,\dots,R_3\). Base kernel is the RBF \(k(x,y)=e^{-\|x-y\|^2/2}\), which is jointly invariant since rotations preserve distance. Points \(x_1=(1,\,0.4)\), \(x_2=(0.3,\,0.6)\), \(x_3=(-0.7,\,0.5)\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-geom-ex2].
 :::
 
 1.  [Average over the orbit.]{.wex-op} For the pair \((x_1,x_2)\) the four transformed base kernels are \(k(x_1,R_jx_2)=(0.7672,\ 0.2767,\ 0.2605,\ 0.7225)\), whose mean is \(k_G(x_1,x_2)=0.5067\).
@@ -300,8 +300,6 @@ $$K_G=\begin{pmatrix}0.4313&0.5067&0.4733\\0.5067&0.6705&0.5987\\0.4733&0.5987&0
 
 **Reading.** Averaging the base kernel over the four-element orbit produces a positive definite kernel that is blind to the rotation, a symmetry the raw RBF plainly does not respect. The invariance is exact, not approximate, because it is built into the feature map rather than encouraged by extra data.
 ::::
-
-**Verification artifact.** checks/example-ch-geom-example-27-2.json records the example source hash and verification scope.
 :::::
 
 ## Summary {#summary}

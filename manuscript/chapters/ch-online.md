@@ -96,8 +96,6 @@ Process the four points in the fixed order shown, pass after pass, with \(\alpha
 
 **Reading.** The perceptron made \(8\) updates in all and converged after four sweeps to \(\alpha=(1,3,3,1)\), a hypothesis that classifies all four points correctly even though the raw inputs are not linearly separable. The kernel did the lifting; the update rule never changed. Notice the coefficients are larger on the two inner points, which straddle the decision region and cost the learner more mistakes.
 :::::
-
-**Verification artifact.** checks/example-ch-online-example-10-1.json records the example source hash and verification scope.
 ::::::
 
 ## Novikoff's mistake bound {#novikoff}
@@ -170,8 +168,6 @@ Two points sit at \(x_1=\pm 1\), close to the boundary; two sit far out at \((\p
 
 **Reading.** The guarantee, \(25\) mistakes, is honored with room to spare by the actual count of \(2\). The gap is instructive: the two far-flung points at \((\pm5,0)\) inflate \(R\) and hence the bound, yet the perceptron never errs on them, because they lie deep inside their half-spaces. Novikoff's theorem bounds the worst case over all orderings, not the typical run; it is an upper bound, and a loose one whenever the geometry is benign.
 :::::
-
-**Verification artifact.** checks/example-ch-online-example-10-2.json records the example source hash and verification scope.
 ::::::
 
 ### Voted and averaged perceptrons {#voted-averaged}
@@ -244,8 +240,6 @@ Take \(\eta=0.05\), \(\alpha=0\). The reference max-margin dual, from the quadra
 
 **Reading.** The adatron, driven only by local gradient steps and a clip to the box, lands on \(\alpha^\ast=(\tfrac19,0,\tfrac19,0)\): the two margin points \(p_1,p_3\) become support vectors, the two interior points \(p_2,p_4\) are switched off. The dual value climbs to \(W^\ast=\tfrac19\) and the induced margin equals the batch SVM's exactly. The online process and the batch quadratic program reach the same optimum; only the route differs.
 :::::
-
-**Verification artifact.** checks/example-ch-online-example-10-3.json records the example source hash and verification scope.
 ::::::
 
 ## Online support vector regression {#online-svr}

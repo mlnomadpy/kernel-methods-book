@@ -40,6 +40,7 @@ bibliography:
   - fiedler1973
   - hagen1992
   - bengio2004
+  - kernelbook-code-ch-cluster-ex1
   - williams2001
 ---
 # Kernel Clustering and Spectral Methods
@@ -390,7 +391,7 @@ The recipe is now fixed by the derivation rather than chosen: build the affinity
 
 :::: wex
 ::: wex-setup
-Two triangles joined by one weak bridge. Cluster \(A = \{0, 1, 2\}\) and cluster \(B = \{3, 4, 5\}\) are each a complete triangle of unit-weight edges, and the only edge between them is the bridge \(\{2, 3\}\) with weight \(\varepsilon = 0.1\). So \(W\) is \(6\times 6\), \(D = \operatorname{diag}(d_i)\), \(L = D - W\), and \(L_{\mathrm{sym}} = D^{-1/2} L D^{-1/2}\). All numbers from `checks/ch-cluster-ex1.py`.
+Two triangles joined by one weak bridge. Cluster \(A = \{0, 1, 2\}\) and cluster \(B = \{3, 4, 5\}\) are each a complete triangle of unit-weight edges, and the only edge between them is the bridge \(\{2, 3\}\) with weight \(\varepsilon = 0.1\). So \(W\) is \(6\times 6\), \(D = \operatorname{diag}(d_i)\), \(L = D - W\), and \(L_{\mathrm{sym}} = D^{-1/2} L D^{-1/2}\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-cluster-ex1].
 :::
 
 1.  [Read the degrees and the true cut.]{.wex-op} The interior points have degree \(2\) and the two bridge endpoints degree \(2.1\), so \(d = (2, 2, 2.1, 2.1, 2, 2)\), giving \(\operatorname{vol}(A) = \operatorname{vol}(B) = 6.1\) and \(\operatorname{vol}(V) = 12.2\). Only the bridge crosses, so \(\operatorname{cut}(A, B) = 0.1\) and
@@ -422,8 +423,6 @@ $$
 
 **Reading.** The normalized Laplacian is assembled from the affinity alone, its second eigenvalue is small exactly because a light cut exists, and the sign of the matching eigenvector reproduces the two triangles without ever enumerating partitions. The gap between \(\lambda_2 = 0.0314\) and \(\operatorname{Ncut} = 0.0328\) is the price of relaxing a discrete indicator to a real eigenvector.
 ::::
-
-**Verification artifact.** checks/example-ch-cluster-example-14-1.json records the example source hash and verification scope.
 :::::
 
 ### What the relaxation gives up {#what-relaxation-loses}

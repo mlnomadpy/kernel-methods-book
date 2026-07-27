@@ -173,8 +173,6 @@ $$ \mathbf K=\begin{pmatrix}1&0.7218&0.4857&0.4006\\0.7218&1&0.7317&0.4561\\0.48
 
 **Reading.** Stage one has turned four bags of numbers into four points whose pairwise similarities form the matrix \(\mathbf K\). The kernel behaves geometrically: it is \(1\) on the diagonal, decays monotonically as the generating means pull apart (from \(0.7218\) for neighbours to \(0.4006\) for the extremes), and its positive spectrum certifies that any downstream kernel machine may use it. Every number here came from bag samples through the base kernel alone; the embeddings \(\widehat\mu_i\) were never formed.
 :::::
-
-**Verification artifact.** checks/example-ch-distreg-example-36-1.json records the example source hash and verification scope.
 ::::::
 
 ## The two-stage estimator {#two-stage-estimator}
@@ -215,8 +213,6 @@ $$ \mathbf K_{\mathrm{tr}}=\begin{pmatrix}1&0.7218&0.4006\\0.7218&1&0.4561\\0.40
 
 **Reading.** From three labelled bags the estimator predicts the held-out label as \(1.87\), close to the truth \(2.0\). It falls a little short for two reasons that are exactly the two error sources of the model: the ridge penalty shrinks the fit toward zero (a stage-two effect that shrinks with more bags and smaller \(\lambda\)), and each bag has only three points, so the embedding \(\widehat\mu_3\) is a noisy stand-in for \(\mu_{P_3}\) (a stage-one effect that shrinks as the bags grow). The naive baseline, blind to which distribution each bag came from, does far worse.
 ::::
-
-**Verification artifact.** checks/example-ch-distreg-example-36-2.json records the example source hash and verification scope.
 :::::
 
 ## Consistency and the two error sources {#consistency}

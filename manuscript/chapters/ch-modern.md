@@ -141,8 +141,6 @@ Isotropic model with \(n=40\), noise \(\sigma^2=0.25\), signal \(\|\beta\|^2=r^2
 
 **Reading.** The curve is not a U. It descends, spikes at \(p=n\), and descends again into the overparameterized regime, where the best test error (\(0.76\) at \(\gamma=2\)) beats every underparameterized model. Every simulated number matches the closed form to sampling error, and the spike is exactly the two Wishart denominators \(n-p-1\) and \(p-n-1\) passing through zero.
 ::::
-
-**Verification artifact.** checks/example-ch-modern-example-42-1.json records the example source hash and verification scope.
 :::::
 
 The geometry of the curve is easier to retain than its case-specific constants. Just below interpolation, the fit has almost no slack and noise is amplified; just above it, the minimum-norm rule can spread the interpolating solution over additional directions. Whether the right-hand branch keeps falling is then a spectral question, not a universal law.
@@ -205,8 +203,6 @@ Spiked covariance: \(s=5\) signal eigenvalues equal to \(1\), then a flat junk t
 
 **Reading.** The same interpolation rule, on the same signal, is harmless with a wide tail (risk \(0.04\)) and ruinous with a narrow one (risk \(0.61\)). The single quantity that flips is the tail's effective rank \(R_{k^\star}\): \(20{,}000\) versus \(150\). A high-dimensional spectral tail is not a nuisance to be regularized away; it is the mechanism that makes interpolation safe.
 ::::
-
-**Verification artifact.** checks/example-ch-modern-example-42-2.json records the example source hash and verification scope.
 :::::
 
 The connection to double descent is now exact. The isotropic model interpolates harmfully because \(\Sigma=I\) has no tail: every direction is a strong direction, \(k^\star\) grows with \(p\), and there is no low-variance subspace to absorb the noise. A decaying kernel spectrum is the opposite, and Liang and Rakhlin's (2020) result that kernel ridgeless regression can generalize is the infinite-dimensional face of the same theorem, with the effective ranks read off the Mercer eigenvalues of [[ch:mercer-and-rates]].
@@ -264,8 +260,6 @@ A discrete domain of \(P=1200\) points with the uniform measure carries a kernel
 
 **Reading.** The generalization error is not a single opaque number but a sum over modes, each switched on when the sample size crosses its eigenvalue. The replica formula reproduces the whole KRR learning curve from the spectrum and the target alone, and its power-law tail is the kernel version of a neural scaling law.
 ::::
-
-**Verification artifact.** checks/example-ch-modern-example-42-3.json records the example source hash and verification scope.
 :::::
 
 These curves are the theoretical backbone of the empirical scaling laws seen in large models, and they close the loop with double descent. The near-singular direction that produces the interpolation peak is exactly the mode whose eigenvalue the sample size has just reached, where \(n\eta_i\approx\kappa\) and \(\mathcal L_i\approx\tfrac12\): the peak and the power-law tail are two views of one spectral accounting. The exponent depends on the target, so the same kernel learns a smooth function fast and a rough one slowly, which is why the \"right\" kernel for a task is the one whose eigenfunctions align with the target, the alignment that Canatar, Bordelon, and Pehlevan (2021) quantify.

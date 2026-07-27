@@ -26,7 +26,10 @@ for (const [order, chapter] of chapters.entries()) {
     continue;
   }
   const parsed = matter(read(sourceFile));
-  const source = parsed.content;
+  // Structural and citation checks apply to manuscript prose, not to literal
+  // code. Python comments beginning with "# " are not chapter headings, and
+  // decorators such as @jax.jit are not bibliography citations.
+  const source = parsed.content.replace(/^```[\s\S]*?^```/gm, "");
   const meta = parsed.data;
   const required = ["id", "slug", "title", "part", "order", "tier", "prerequisites", "objectives", "review_status", "reviewers", "provenance", "verification_date", "bibliography"];
   for (const key of required) if (!(key in meta)) errors.push(`${chapter.src}: missing frontmatter field ${key}`);

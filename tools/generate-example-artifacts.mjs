@@ -50,9 +50,16 @@ for (const chapter of chapters) {
       cleanBlock.splice(cleanBlock.length - 2, 1);
     }
     const body = cleanBlock.slice(1, -1).join("\n");
+    const filename = "example-" + chapter.src + "-" + id.replace(/[^A-Za-z0-9_.-]/g, "-") + ".json";
+    const previousArtifact = fs.existsSync("checks/" + filename)
+      ? JSON.parse(fs.readFileSync("checks/" + filename, "utf8"))
+      : null;
     const existingChecks = [...body.matchAll(/checks\/([A-Za-z0-9_.-]+\.(?:py|json))/g)]
       .map((match) => "checks/" + match[1])
       .filter((value, pos, all) => all.indexOf(value) === pos);
+    for (const check of previousArtifact?.executable_checks || []) {
+      if (!existingChecks.includes(check)) existingChecks.push(check);
+    }
     const conventionalCheck = "checks/" + chapter.src + "-ex" + ordinal + ".py";
     if (fs.existsSync(conventionalCheck) && !existingChecks.includes(conventionalCheck)) {
       existingChecks.push(conventionalCheck);
@@ -69,6 +76,8 @@ for (const chapter of chapters) {
     }
     const status = override?.status || (existingChecks.some((file) => file.endsWith(".py"))
       ? "executable-reference"
+      : previousArtifact?.verification_status === "conceptual-audit"
+        ? "conceptual-audit"
       : numericLiterals.length
         ? "literal-audit"
         : "conceptual-audit");
@@ -76,7 +85,6 @@ for (const chapter of chapters) {
     else if (status === "literal-audit") literal += 1;
     else conceptual += 1;
 
-    const filename = "example-" + chapter.src + "-" + id.replace(/[^A-Za-z0-9_.-]/g, "-") + ".json";
     const artifact = {
       schema_version: 1,
       chapter: chapter.src,
@@ -100,10 +108,6 @@ for (const chapter of chapters) {
       independent_review_required: true,
     };
     fs.writeFileSync("checks/" + filename, JSON.stringify(artifact, null, 2) + "\n");
-    const artifactLine =
-      "**Verification artifact.** checks/" + filename +
-      " records the example source hash and verification scope.";
-    cleanBlock.splice(cleanBlock.length - 1, 0, "", artifactLine);
     output.push(...cleanBlock);
     index = end;
     total += 1;

@@ -224,8 +224,6 @@ $$
 When \(\varepsilon=1/10\), the scores are \(5/6\) and \(-5/6\): the weak bridge preserves the two label regions. When \(\varepsilon=10\), they are \(1/21\) and \(-1/21\): the strong bridge nearly erases both labels. If the bridge is an artifact of the ambient metric, adding more unlabeled points around it can reinforce the wrong answer.
 
 **Verification.** Substitution verifies both linear equations. This is a sensitivity calculation on one graph, not evidence that a particular graph rule is statistically consistent. The existing deterministic figure artifact records the chapter's graph-energy visualization.
-
-**Verification artifact.** checks/example-ch-manifold-example-manifold-bridge.json records the example source hash and verification scope.
 :::
 
 <figure class="viz" data-figure="manifold-graph-energy" data-alt="Two moon-shaped point clouds are connected by a sparse neighborhood graph. Four square vertices carry labels in the first panel; the second panel shows harmonic scores propagated along each moon, with blue positive values on the upper arc and red negative values on the lower arc."><figcaption>Graph smoothness propagates labels along connected paths, not across ambient empty space. The mechanism helps only when labels agree with the graph. A shortcut edge or a labeling rule that cuts across each moon turns the same regularizer into bias.</figcaption></figure>

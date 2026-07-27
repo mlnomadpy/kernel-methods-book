@@ -470,8 +470,6 @@ Apply four fitted-value filters: interpolation, ridge with \(\lambda=0.05\), cut
 | Landweber | \(1,0.8926,0.2776,0.0198\) | \(0.051689\) | \(5.727\) |
 
 Interpolation wins this one low-noise prediction comparison, yet its inverse norm is ten to nineteen times larger. A small change in the fourth observation is divided by \(0.0025\). The example therefore rejects two shortcuts: the smallest training or oracle prediction error need not identify the most stable inverse, and coefficient norm alone does not identify the best predictor.
-
-**Verification artifact.** checks/example-ch-inverse-example-inverse-filter.json records the example source hash and verification scope.
 :::
 
 ## Parameter choice, Krylov methods, and computation {#inverse-parameter-choice}

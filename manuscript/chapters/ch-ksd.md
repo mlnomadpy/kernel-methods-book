@@ -37,6 +37,9 @@ bibliography:
   - liu2016svgd
   - oates2017
   - hyvarinen2005
+  - kernelbook-code-ch-ksd-ex1
+  - kernelbook-code-ch-ksd-ex2
+  - kernelbook-code-ch-ksd-ex3
   - muandet2017
 ---
 # Kernel Stein Discrepancy and Stein Methods
@@ -261,7 +264,7 @@ This is the concrete object we now compute with. It is symmetric, and on the dia
 
 :::: wex
 ::: wex-setup
-Target \(p = \mathcal N(0,1)\), score \(s_p(x) = -x\), RBF kernel with \(h = 1\), so \(u_p(x,x') = [x x' + 1 - 2(x-x')^2]\,e^{-(x-x')^2/2}\). Two samples of size \(n = 3\): sample A \(= (-1, 0, 1)\), symmetric about the mean and consistent with \(p\); sample B \(= (2, 3, 4)\), shifted well to the right. All numbers from `checks/ch-ksd-ex1.py`.
+Target \(p = \mathcal N(0,1)\), score \(s_p(x) = -x\), RBF kernel with \(h = 1\), so \(u_p(x,x') = [x x' + 1 - 2(x-x')^2]\,e^{-(x-x')^2/2}\). Two samples of size \(n = 3\): sample A \(= (-1, 0, 1)\), symmetric about the mean and consistent with \(p\); sample B \(= (2, 3, 4)\), shifted well to the right. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-ksd-ex1].
 :::
 
 1.  [Build the Stein kernel matrix for sample A.]{.wex-op} Evaluating \(u_p(x_i,x_j)\) on \((-1,0,1)\),
@@ -283,8 +286,6 @@ $$ \widehat{\mathrm{KSD}}^2_V(B) = \frac{51.6797}{9} = 5.7422, \qquad \widehat{\
 
 **Reading.** The manifestly non-negative V-statistic reports \(0.045\) for the fitting sample against \(5.74\) for the shifted one, a hundredfold gap that flags B as inconsistent with \(p\). The unbiased U-statistic sharpens the contrast, dipping slightly negative for A (its target is \(0\), so finite-sample noise puts it just below, exactly as the unbiased MMD does under its null) while staying firmly positive at \(3.28\) for B. Every entry was computed from the score \(s_p(x) = -x\) alone, never from the constant \(1/\sqrt{2\pi}\).
 ::::
-
-**Verification artifact.** checks/example-ch-ksd-example-34-1.json records the example source hash and verification scope.
 :::::
 
 ## Empirical KSD: U-statistics and V-statistics {#empirical-ksd}
@@ -405,7 +406,7 @@ The two terms in the update have a clean mechanical reading. The driving force \
 
 :::: wex
 ::: wex-setup
-Target \(p = \mathcal N(0,1)\), score \(s_p(x) = -x\), RBF kernel with \(h = 1\) so \(\nabla_{x_j} k(x_j,x_i) = (x_i - x_j)\,k(x_j,x_i)\), step size \(\epsilon = 0.1\). Three particles start at \(x = (1, 2, 3)\), all to the right of the mean. All numbers from `checks/ch-ksd-ex2.py`.
+Target \(p = \mathcal N(0,1)\), score \(s_p(x) = -x\), RBF kernel with \(h = 1\) so \(\nabla_{x_j} k(x_j,x_i) = (x_i - x_j)\,k(x_j,x_i)\), step size \(\epsilon = 0.1\). Three particles start at \(x = (1, 2, 3)\), all to the right of the mean. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-ksd-ex2].
 :::
 
 1.  [Form the kernel matrix.]{.wex-op} With \(K_{ji} = k(x_j, x_i) = e^{-(x_j - x_i)^2/2}\),
@@ -423,8 +424,6 @@ $$ \hat\phi = (-1.1654,\ -1.4754,\ -1.1571), \qquad x^{\text{new}} = x + 0.1\,\h
 
 **Reading.** Every particle moved left toward the target's center: the cloud mean drops from \(2.0000\) to \(1.8734\) in a single step. The driving term did the transport while the repulsion split the outer two apart by equal and opposite amounts. This one-step calculation does not prove that repeated finite-particle updates converge to \(\mathcal N(0,1)\). As with the test, the update touched \(p\) only through the score \(s_p(x) = -x\).
 ::::
-
-**Verification artifact.** checks/example-ch-ksd-example-34-2.json records the example source hash and verification scope.
 :::::
 
 ## Choosing the kernel, and a bridge to quadrature {#kernel-choice}
@@ -468,7 +467,7 @@ The contrast is sharp. Gorham and Mackey (2017), Theorem 6, construct non-tight 
 
 :::: wex
 ::: wex-setup
-Take \(P=\mathcal N(0,1)\), the unit-bandwidth Gaussian base kernel, and the five-point sample \(x=(10,20,30,40,50)\). All points are deep in the target's tails and separated by ten standard deviations. Values are produced by `checks/ch-ksd-ex3.py`.
+Take \(P=\mathcal N(0,1)\), the unit-bandwidth Gaussian base kernel, and the five-point sample \(x=(10,20,30,40,50)\). All points are deep in the target's tails and separated by ten standard deviations. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-ksd-ex3].
 :::
 
 1.  [Inspect off-diagonal visibility.]{.wex-op} The largest absolute off-diagonal Stein-kernel entry is below \(4.0\times10^{-19}\). Gaussian kernel decay has effectively disconnected every pair.
@@ -477,8 +476,6 @@ Take \(P=\mathcal N(0,1)\), the unit-bandwidth Gaussian base kernel, and the fiv
 
 **Reading.** This witness separates two hazards. At finite \(n\), dropping the diagonal can hide isolated tail points when a light-tailed kernel kills every cross interaction. Asymptotically in \(d\ge3\), Gorham and Mackey's Theorem 6 shows a stronger population failure: even the KSD itself can miss a carefully constructed non-tight sequence. Neither issue is repaired by zero-identification alone.
 ::::
-
-**Verification artifact.** checks/example-ch-ksd-example-34-3.json records the example source hash and verification scope.
 :::::
 
 The same Stein-kernel machinery has a second life beyond testing and sampling. If \(u_p\) is a kernel whose functions integrate to a known value against \(p\), one can build control variates that cancel the variance of a Monte Carlo estimator: the control functionals of Oates, Girolami, and Chopin (2017) fit an RKHS function in the range of the Stein operator to an integrand, subtract it, and are left with an estimator of far lower variance, sometimes converging faster than the Monte Carlo rate. It is the same object read a third way. The Stein operator that annihilates \(p\) in expectation gives, at once, a discrepancy for testing, a transport direction for sampling, and a zero-mean correction for integration.

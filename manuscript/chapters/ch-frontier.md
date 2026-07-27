@@ -201,8 +201,6 @@ $$\widehat K=\begin{pmatrix}1&0.9&0.9\\0.9&1&0.1\\0.9&0.1&1\end{pmatrix}.$$
 Its eigenvalues are approximately \((-0.2238,0.9000,2.3238)\). The exact feature map is valid, but the estimated matrix is indefinite. Clipping the negative eigenvalue gives a PSD matrix at Frobenius distance \(0.2238\), and changes the entrywise estimates. The right report contains the shot count, confidence intervals, minimum eigenvalue before repair, repair rule, and sensitivity of the final predictor.
 
 **Failure demonstrated.** Kernel validity does not survive arbitrary independent entrywise estimation.
-
-**Verification artifact.** checks/example-ch-frontier-example-frontier-shot-noise.json records the example source hash and verification scope.
 :::::
 
 ## Module III: foundation models as frozen feature maps {#foundation-model-kernels}

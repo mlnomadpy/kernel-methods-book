@@ -141,8 +141,6 @@ Four points in \(\mathbb{R}^2\) with a linear kernel \(K(x,x')=x^\top x'\): \(x_
 
 **Reading.** The optimal-threshold interval \([b_{\text{low}},b_{\text{up}}]=[2.5,0]\) is empty, which is precisely the signature of a KKT violation, and the gap \(2.5\) is the amount of suboptimality the next step must remove. Points \(3\) and \(1\) are the pair whose coefficients should move.
 ::::
-
-**Verification artifact.** checks/example-ch-solve-example-9-1.json records the example source hash and verification scope.
 :::::
 
 ## Sequential minimal optimization {#smo}
@@ -243,8 +241,6 @@ Two points on the line with a linear kernel: \(x_1=(1,0)\), \(x_2=(2,0)\), label
 
 **Reading.** A single analytic step drives both coefficients from \(0.1\) to the upper bound \(C=1\): the two points become bound support vectors, and the misclassified point \(2\) (whose error \(E_2=0.8\) flagged the violation) is corrected. No inner solver was called; the entire move is the four formulas for \(\eta\), the clipped \(\alpha_2\), the partner \(\alpha_1\), and \(b\).
 ::::
-
-**Verification artifact.** checks/example-ch-solve-example-9-2.json records the example source hash and verification scope.
 :::::
 
 ## Caching and shrinking {#caching-shrinking}

@@ -153,8 +153,6 @@ Document-term matrix \(D\) of raw term frequencies:
 
 **Reading.** The kernel sees \(d_1\) and \(d_2\) as related and \(d_1\) and \(d_3\) as completely unrelated, because \(K_{13}=0\): the two documents share no term. Yet both are about pets. The vector space kernel cannot possibly know this, and \(d_4\) sits in its own orthogonal corner. Fixing the \(K_{13}=0\) blind spot is the task of the rest of the chapter.
 ::::
-
-**Verification artifact.** checks/example-ch-text-example-23-1.json records the example source hash and verification scope.
 :::::
 
 ## Semantic smoothing with a proximity matrix {#semantic-smoothing}
@@ -203,8 +201,6 @@ on \(\{\text{cat},\text{kitten},\text{dog},\text{puppy}\}\), and a separate \(2\
 
 **Reading.** Documents \(d_1\) and \(d_3\) share not one word, yet the corpus statistics make them \(0.692\)-similar, because the hub document taught the model that their vocabularies belong together. Meanwhile pets and vehicles stay apart. Co-occurrence has manufactured exactly the semantic link the raw kernel was missing.
 :::::
-
-**Verification artifact.** checks/example-ch-text-example-23-2.json records the example source hash and verification scope.
 ::::::
 
 ## Latent semantic kernels {#lsi}
@@ -280,8 +276,6 @@ $$v_1=(0.348,\,0.615,\,0.615,\,0.348,\,0,\,0),\qquad v_2=(0,\,0,\,0,\,0,\,0.894,
 
 **Reading.** Two documents with disjoint vocabularies come out perfectly aligned, because once the corpus is summarised by its two real concepts both documents are seen to be entirely about pets. The vehicle document remains orthogonal. The rank-2 projection has extracted the meaning the surface words hid: this is the payoff that a hand-built proximity matrix promised and that the SVD delivers automatically.
 ::::::
-
-**Verification artifact.** checks/example-ch-text-example-23-3.json records the example source hash and verification scope.
 :::::::
 
 ## Semantic diffusion kernels {#diffusion}
@@ -358,8 +352,6 @@ Three short documents, no two of which share a word:
 
 **Reading.** Documents \(A\) and \(B\) share no word, yet both the embedding cosine kernel (\(0.968\)) and the Word Mover's Distance (\(1.069\)) recognise them as near, while placing the vehicle document \(C\) far away (cosine \(0.263\), distance \(7.913\)). The bag-of-words kernel returned \(0\) for both pairs and could not tell the two topics apart. Learned word geometry supplies the semantic link that orthogonal term axes destroyed.
 ::::
-
-**Verification artifact.** checks/example-ch-text-example-23-4.json records the example source hash and verification scope.
 :::::
 
 ::: {.remark}

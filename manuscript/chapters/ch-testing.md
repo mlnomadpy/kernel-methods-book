@@ -195,8 +195,6 @@ Two samples on the line, \(X = \{0,1,2,3\} \sim P\) and \(Y = \{7,8,9,10\} \sim 
 
 **Reading.** The observed discrepancy is matched by only its own mirror among seventy relabelings, a decisive rejection. The permutation-null mean sitting at exactly \(0\) is the unbiasedness of the U-statistic made visible: averaging over all label assignments reproduces the population value \(\mathrm{MMD}^2 = 0\) that holds under \(H_0\). With four points per sample the smallest attainable \(p\)-value is \(2/70 \approx 0.029\), already fine enough to clear \(0.05\).
 ::::
-
-**Verification artifact.** checks/example-ch-testing-example-30-1.json records the example source hash and verification scope.
 :::::
 
 An alternative to permutation is to bootstrap the chi-square mixture directly, estimating the eigenvalues \(\lambda_l\) from the spectrum of the centered Gram matrix, or to fit a two-parameter Gamma to the null by matching its first two moments (Gretton et al., 2012). These are faster when many tests are run, but the permutation test is exact and assumption-free, so we take it as the reference.
@@ -274,8 +272,6 @@ Overlapping samples \(X = \{-3,-2,-1,0,1\} \sim P\) and \(Y = \{0,1,2,3,4\} \sim
 
 **Reading.** The same data and the same test change verdict from retain to reject when the bandwidth widens from \(0.5\) to \(2\). The narrow kernel makes every distinct point look mutually dissimilar, collapsing the between-group signal into noise and even driving the unbiased estimate negative; the median heuristic lands squarely in the powerful regime, where the signal-to-noise proxy \(t\) has climbed above \(2\). Bandwidth is not cosmetic: it sets the power, and a poorly scaled kernel is blind by construction.
 ::::
-
-**Verification artifact.** checks/example-ch-testing-example-30-2.json records the example source hash and verification scope.
 :::::
 
 ## Learned and deep kernels {#learned-kernels}

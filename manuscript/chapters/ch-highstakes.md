@@ -62,6 +62,8 @@ bibliography:
   - verrelst2012retrieval
   - verrelst2013uncertainty
   - verrelst2016emulation
+  - kernelbook-code-ch-highstakes-ex1
+  - kernelbook-code-ch-highstakes-ex5
   - perezsuay2017fair
 ---
 # Kernels in Science and Space
@@ -106,7 +108,7 @@ with period \(P\), coherence \(\ell\), and modulation \(\Gamma\), combines perio
 
 :::: wex
 ::: wex-setup
-This is an **illustrative deterministic simulation**, not a published benchmark. We synthesize \(120\) irregular observations over \(60\) days from the stated GP with \(P=10\), \(\ell=30\), and \(\Gamma=2\), plus Gaussian noise. A grid posterior uses a flat prior on \(P\in[5,20]\). All values and assertions are in `checks/ch-highstakes-ex1.py`.
+This is an **illustrative deterministic simulation**, not a published benchmark. We synthesize \(120\) irregular observations over \(60\) days from the stated GP with \(P=10\), \(\ell=30\), and \(\Gamma=2\), plus Gaussian noise. A grid posterior uses a flat prior on \(P\in[5,20]\). The simulation and its assertions are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-highstakes-ex1].
 :::
 
 1.  [Marginalize over the period.]{.wex-op} With a flat prior on \(P\), the posterior peaks at a maximum-a-posteriori value of \(10.10\) days with posterior mean also \(10.10\) days, recovering the true \(10.00\) days.
@@ -115,8 +117,6 @@ This is an **illustrative deterministic simulation**, not a published benchmark.
 
 **Reading.** This fixture verifies a calculation under a correctly specified generator. It does not establish frequentist coverage, robustness to detrending, or performance on real stars.
 ::::
-
-**Verification artifact.** checks/example-ch-highstakes-example-56-1.json records the example source hash and verification scope.
 :::::
 
 <figure class="viz" data-widget="quasiperiodic-gp">
@@ -154,8 +154,6 @@ This is an **illustrative deterministic white-noise simulation**, not a detectio
 
 **Reading.** The fixture checks projection geometry only. It deliberately does not report a detection probability.
 ::::
-
-**Verification artifact.** checks/example-ch-highstakes-example-56-2.json records the example source hash and verification scope.
 :::::
 
 <figure class="viz" data-widget="matched-filter">
@@ -193,8 +191,6 @@ This is an **illustrative deterministic simulation**, not an ab initio benchmark
 
 **Reading.** The fixture verifies interpolation arithmetic and an extrapolation failure. It does not validate a molecular potential.
 ::::
-
-**Verification artifact.** checks/example-ch-highstakes-example-56-3.json records the example source hash and verification scope.
 :::::
 
 ### The killer app: variance triggers a calculation {#active-learning-chemistry}
@@ -217,8 +213,6 @@ This is an **illustrative deterministic simulation** on a declared one-dimension
 
 **Reading.** The result is conditional on this generator, grid, kernel, seed set, and stopping rule. The negative control demonstrates that low model variance need not imply low error under misspecification.
 ::::
-
-**Verification artifact.** checks/example-ch-highstakes-example-56-4.json records the example source hash and verification scope.
 :::::
 
 <figure class="viz" data-widget="onthefly-mlip">
@@ -247,7 +241,7 @@ a PSD construction used in composite-kernel classification [@campsvalls2006compo
 
 :::: wex
 ::: wex-setup
-This **illustrative deterministic simulation** creates spatially correlated groups with group-specific offsets. It compares a random pixel split with leave-one-region-out evaluation and audits Gaussian interval coverage. All numbers and assertions are in `checks/ch-highstakes-ex5.py`.
+This **illustrative deterministic simulation** creates spatially correlated groups with group-specific offsets. It compares a random pixel split with leave-one-region-out evaluation and audits Gaussian interval coverage. The simulation and its assertions are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-highstakes-ex5].
 :::
 
 1. [Leak by splitting pixels.]{.wex-op} Nearby training pixels reveal the regional offset, so the random split looks artificially accurate.
@@ -256,8 +250,6 @@ This **illustrative deterministic simulation** creates spatially correlated grou
 
 **Reading.** The unit of independence determines the credibility of both accuracy and uncertainty. This fixture is not a satellite benchmark.
 ::::
-
-**Verification artifact.** checks/example-ch-highstakes-example-highstakes-spatial.json records the example source hash and verification scope.
 :::::
 
 ## What the cases share {#what-the-cases-share}

@@ -647,8 +647,6 @@ $$
 
 Replacing \(e_t(b)\) by
 \(e_t(b)+\mathbf1\{b\ne y_t^\star\}\) performs Hamming loss augmentation without changing the state graph. The deterministic check enumerates all eight sequences and verifies the ordinary optimum \(000\), augmented optimum \(111\), hinge \(2.2\), and upper-bound inequality.
-
-**Verification artifact.** checks/example-ch-structured-example-structured-viterbi.json records the example source hash and verification scope.
 :::
 
 The example is tiny for a reason: every claim is hand-checkable. On a chain with \(T\) positions and \(L\) labels, the same recurrence costs \(O(TL^2)\) time and \(O(TL)\) memory with backpointers, or \(O(L)\) score memory if only the optimum value is needed.

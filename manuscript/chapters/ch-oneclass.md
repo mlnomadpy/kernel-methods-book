@@ -120,8 +120,6 @@ The diagonal of the Gram matrix is \(k(x_i,x_i)=\|x_i\|^2=(0,4,8,4,2)\).
 
 **Reading.** The dual weights are supported entirely on the boundary. Four points define the disc and the fifth is redundant, exactly the sparsity that makes the solution cheap to store and to test against.
 :::::
-
-**Verification artifact.** checks/example-ch-oneclass-example-7-1.json records the example source hash and verification scope.
 ::::::
 
 ### The soft hypersphere {#soft-hypersphere}
@@ -205,8 +203,6 @@ The Gram diagonal is \(k(x_i,x_i)=\|x_i\|^2=(4,4,1,1)\).
 
 **Reading.** One labelled outlier moved the center from \((0,0)\) to \((0,1.5)\) and grew the radius from \(2\) to \(2.5\), just enough to expel it. The negative carries weight \(\alpha_4=1.5\) with a minus sign, the only new ingredient, and it earns a place on the boundary exactly as a support vector does.
 :::::
-
-**Verification artifact.** checks/example-ch-oneclass-example-7-2.json records the example source hash and verification scope.
 ::::::
 
 ## Separating the data from the origin {#one-class-svm-origin}
@@ -281,8 +277,6 @@ with a Gaussian kernel \(k(x,x')=e^{-(x-x')^2/c}\), width \(c=1\). Solve the \(\
 
 **Reading.** One number \(\nu\) squeezes the answer from both sides. It is an upper bound on how much data you throw away and a lower bound on how many points define the region, so setting \(\nu\) is the same as declaring, in advance, the outlier rate you are willing to tolerate.
 :::::
-
-**Verification artifact.** checks/example-ch-oneclass-example-7-3.json records the example source hash and verification scope.
 ::::::
 
 ### Connection to classification and robustness {#connection-and-robustness}
@@ -366,8 +360,6 @@ a Gaussian window of bandwidth \(h=1\), so \(Z=1/(\sqrt{2\pi}\,h)=0.3989\). Esti
 
 **Reading.** The one-class decision is a thresholded Parzen estimate to the last digit: the offset \(\rho=0.376\) is the density level \(\tau=0.15\) divided by the window constant \(Z\), and the estimated support is the density super-level set \(\{\hat p_h\ge 0.15\}\). Novelty detection is level-set estimation.
 :::::
-
-**Verification artifact.** checks/example-ch-oneclass-example-7-4.json records the example source hash and verification scope.
 ::::::
 
 ## Uniqueness, generalization, and experiments {#theory}

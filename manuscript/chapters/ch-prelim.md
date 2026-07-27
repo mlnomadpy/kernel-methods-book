@@ -298,8 +298,6 @@ $$
 $$
 
 To use Bernstein, set \(Y_i=(z_i z_i^\top-I_2)/n\). Then \(\mathbb EY_i=0\), \(\lVert Y_i\rVert_2=1/n\), \(Y_i^2=I_2/n^2\), and therefore \(L=1/n\), \(V=I_2/n\), \(v=1/n\), and \(r(V)=2\). The calculation checks every normalization by hand. At \(n=4\) and \(t=1/2\), the probability upper bound exceeds one and is therefore vacuous; concentration becomes informative only as \(n\) grows. A correct theorem need not be a sharp small-sample certificate.
-
-**Verification artifact.** checks/example-ch-prelim-example-prelim-matrix-concentration.json records the example source hash and verification scope.
 :::
 
 This module is the probabilistic bridge to regularized spectral approximation in [[ch:random-features-sketches-and-randomized-kernel-linear-algebra]] and to Nyström and iterative scaling methods in [[ch:large-scale-kernels]]. In each use, first identify the random self-adjoint summand, then its expectation, spectral bound, variance proxy, normalization, and the exact matrix quantity the downstream algorithm needs.

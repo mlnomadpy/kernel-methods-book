@@ -297,8 +297,6 @@ The exact solution is recovered because it lies in the RKHS and the three indepe
 [Example (boundary constraints change the admissible space)]{.box-title}
 
 Two kernel solvers may use the same interior differential residuals but different boundary functionals. Their solutions can agree at every interior collocation site and still represent different boundary-value problems. Boundary conditions are part of the operator and function space, not an afterthought to be patched onto an unconstrained regression fit.
-
-**Verification artifact.** checks/example-ch-scientific-example-scientific-boundary.json records the example source hash and verification scope.
 :::
 
 <figure class="viz" data-figure="collocation-residual" data-alt="The left panel compares the exact sine solution with a values-only RBF fit and a fit constrained by values, differential-equation residuals, and zero boundary conditions. The right panel compares equation residuals at independent locations."><figcaption>Different information functionals produce different representers. A smaller independent residual supports the discretized solver, but a continuous error claim still needs stability and a sampling inequality.</figcaption></figure>

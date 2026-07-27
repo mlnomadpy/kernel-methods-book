@@ -27,15 +27,18 @@ for (const chapter of chapters) {
 
   const exampleOpenings = [...source.matchAll(/^:{3,} \{\.example\b[^}]*\}/gm)];
   examples += exampleOpenings.length;
-  for (let i = 0; i < exampleOpenings.length; i++) {
-    const end = i + 1 < exampleOpenings.length ? exampleOpenings[i + 1].index : Math.min(source.length, exampleOpenings[i].index + 5000);
-    if (/checks\/[a-zA-Z0-9_.-]+\.(?:py|json)/.test(source.slice(exampleOpenings[i].index, end))) linkedExamples += 1;
+  for (const opening of exampleOpenings) {
+    const id = opening[0].match(/#([A-Za-z][A-Za-z0-9_.:-]*)/)?.[1];
+    if (!id) continue;
+    const filename =
+      `checks/example-${chapter.src}-${id.replace(/[^A-Za-z0-9_.-]/g, "-")}.json`;
+    if (fs.existsSync(filename)) linkedExamples += 1;
   }
   if (chapterGaps.length) gaps.push({ chapter: chapter.src, items: [...new Set(chapterGaps)] });
 }
 
 console.log(`Editorial template gaps: ${gaps.length}/${chapters.length} chapters.`);
-console.log(`Formal result metadata: ${formalDocumented}/${formal}; examples declaring check artifacts: ${linkedExamples}/${examples}.`);
+console.log(`Formal result metadata: ${formalDocumented}/${formal}; examples with verification artifacts: ${linkedExamples}/${examples}.`);
 if (release && gaps.length) {
   for (const gap of gaps) console.error(`ERROR ${gap.chapter}: ${gap.items.join(", ")}`);
   process.exitCode = 1;

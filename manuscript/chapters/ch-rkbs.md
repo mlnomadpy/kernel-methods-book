@@ -428,8 +428,6 @@ The certificate \(c=(1/2,1/2)\) has dual objective \(1\) and correlations
 [Example (quadratic and atomic regularization select different geometry)]{.box-title}
 
 An RKHS squared norm spreads a solution across correlated directions because energy adds quadratically. An atomic norm pays for the total magnitude of selected atoms and can prefer a small set of extreme directions. Both estimators can interpolate the same observations, yet one expresses smooth distributed energy while the other expresses sparse learned features.
-
-**Verification artifact.** checks/example-ch-rkbs-example-rkbs-dense-sparse.json records the example source hash and verification scope.
 :::
 
 <figure class="viz" data-figure="hilbert-vs-variation" data-alt="Two fitted curves nearly overlap a target made from two localized bumps. A coefficient plot shows the quadratic solution spreading weight across many correlated atoms while the atomic-norm solution uses a small active set."><figcaption>Prediction error alone does not reveal representation geometry. A Hilbert penalty distributes energy; an atomic penalty can expose a low-dimensional face and select a sparse certificate.</figcaption></figure>

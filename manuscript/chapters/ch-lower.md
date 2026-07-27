@@ -351,8 +351,6 @@ $$
 $$
 
 The bound is conservative because Pinsker discards the exact Gaussian testing error. Its value is conceptual: even a rank-one RKHS has a nonzero finite-sample noise floor.
-
-**Verification artifact.** checks/example-ch-lower-example-lower-gaussian.json records the example source hash and verification scope.
 :::
 
 ## Random features, Nyström methods, and sketches {#lower-randomized}

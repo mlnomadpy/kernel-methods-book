@@ -50,6 +50,12 @@ bibliography:
   - nist2023rmf
   - frazier2018
   - shahriari2016
+  - kernelbook-code-ch-accountable-ex1
+  - kernelbook-code-ch-accountable-ex2
+  - kernelbook-code-ch-accountable-ex3
+  - kernelbook-code-ch-accountable-ex4
+  - kernelbook-code-ch-accountable-ex5
+  - kernelbook-code-ch-accountable-audit
   - kennedy2001calibration
 ---
 # Accountable Kernels: Uncertainty, Explanation, and Audit
@@ -114,7 +120,7 @@ The qualifier is the whole story, so we make both halves of it concrete on numbe
 
 :::: wex
 ::: wex-setup
-First the honest behavior. We fit a Gaussian process with an RBF kernel (length scale \(1\), noise \(0.05\)) to eight points of \(\sin x\) on \([0,6]\) with a deliberate gap in \((2.5,4.5)\), and read the posterior standard deviation at three places. Then the failure. We draw \(40\) points from a wiggly mean \(\sin(3x)\) on \([0,1]\) corrupted by heteroscedastic noise whose standard deviation grows from \(0.05\) at \(x=0\) to \(0.5\) at \(x=1\), and fit a GP that wrongly assumes a single homoscedastic noise equal to the average, \(\hat\sigma=0.292\). We then measure how often the nominal \(90\%\) interval actually covers fresh data. All numbers from `checks/ch-accountable-ex1.py`.
+First the honest behavior. We fit a Gaussian process with an RBF kernel (length scale \(1\), noise \(0.05\)) to eight points of \(\sin x\) on \([0,6]\) with a deliberate gap in \((2.5,4.5)\), and read the posterior standard deviation at three places. Then the failure. We draw \(40\) points from a wiggly mean \(\sin(3x)\) on \([0,1]\) corrupted by heteroscedastic noise whose standard deviation grows from \(0.05\) at \(x=0\) to \(0.5\) at \(x=1\), and fit a GP that wrongly assumes a single homoscedastic noise equal to the average, \(\hat\sigma=0.292\). We then measure how often the nominal \(90\%\) interval actually covers fresh data. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex1].
 :::
 
 1.  [Watch the band breathe.]{.wex-op} The posterior standard deviation is \(0.049\) at a training point (\(x=0.9\)), essentially the noise floor; it rises to \(0.472\) in the middle of the gap (\(x=3.5\)); and it is \(0.247\) just past the data (\(x=6.5\)). The model announces exactly where it has no evidence, and it does so from the inputs alone.
@@ -123,8 +129,6 @@ First the honest behavior. We fit a Gaussian process with an RBF kernel (length 
 
 **Reading.** Two different promises live inside one interval. The width from the kernel geometry is trustworthy and is the source of the \"it knows when it is extrapolating\" behavior that makes GPs valued in the sciences. The width from the assumed noise model is trustworthy only under correct specification, and a misspecified kernel or noise level can make the nominal coverage a fiction exactly where it matters. This is the gap the next section closes.
 ::::
-
-**Verification artifact.** checks/example-ch-accountable-example-55-1.json records the example source hash and verification scope.
 :::::
 
 ### Conformal prediction: a distribution-free coverage guarantee {#conformal}
@@ -168,7 +172,7 @@ The theorem is marginal over a fresh exchangeable test pair. It is not condition
 
 :::: wex
 ::: wex-setup
-Same heteroscedastic truth as the failure above. We fit kernel ridge regression (RBF length scale \(0.15\), ridge \(10^{-2}\)) on a training split, calibrate on \(n=500\) held-out points at \(\alpha=0.10\), and test on \(8000\) fresh points. We compare the conformal band against a naive Gaussian band \(\hat f(x)\pm 1.645\,\hat\sigma\) using a single \(\hat\sigma\) estimated from the training residuals. All numbers from `checks/ch-accountable-ex2.py`.
+Same heteroscedastic truth as the failure above. We fit kernel ridge regression (RBF length scale \(0.15\), ridge \(10^{-2}\)) on a training split, calibrate on \(n=500\) held-out points at \(\alpha=0.10\), and test on \(8000\) fresh points. We compare the conformal band against a naive Gaussian band \(\hat f(x)\pm 1.645\,\hat\sigma\) using a single \(\hat\sigma\) estimated from the training residuals. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex2].
 :::
 
 1.  [Read the quantile off the calibration residuals.]{.wex-op} The rank is \(\lceil 501\cdot 0.9\rceil=451\), so \(\hat q\) is the \(451\)st smallest of the \(500\) absolute residuals, \(\hat q=0.512\). The band is \(\hat f(x)\pm 0.512\), width \(1.025\).
@@ -177,8 +181,6 @@ Same heteroscedastic truth as the failure above. We fit kernel ridge regression 
 
 **Reading.** A defensible interval for a report is one whose coverage you can certify without believing the model's noise assumptions, and split conformal delivers exactly that from a held-out set and a single sorted list of residuals. Its honest limitation is that the certificate is marginal: to tighten it where the data are hard, one conditions the score on the input (normalized or locally-weighted conformal), which the exercises pursue. The pairing is the practical recipe of the chapter: let the Gaussian process propose the interval, and let conformal certify it.
 ::::
-
-**Verification artifact.** checks/example-ch-accountable-example-55-2.json records the example source hash and verification scope.
 :::::
 
 The reliability chapter returns to this construction under deployment shift and shows how retaining coverage can require wider sets; the present guarantee is the exchangeable baseline.
@@ -245,7 +247,7 @@ This is sensitivity to deleting one record while holding the kernel, preprocessi
 
 :::: wex
 ::: wex-setup
-Kernel ridge regression on \(40\) points of \(\sin(1.3x)\) with light noise on \([-3,3]\) (RBF length scale \(0.4\), ridge \(0.1\)). We ask which training points most determine the prediction at \(x_\star=0.7\), computing the deletion effect both by brute-force refitting and by the rank-one formula of the algorithm. All numbers from `checks/ch-accountable-ex3.py`.
+Kernel ridge regression on \(40\) points of \(\sin(1.3x)\) with light noise on \([-3,3]\) (RBF length scale \(0.4\), ridge \(0.1\)). We ask which training points most determine the prediction at \(x_\star=0.7\), computing the deletion effect both by brute-force refitting and by the rank-one formula of the algorithm. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex3].
 :::
 
 1.  [Confirm the closed form is exact.]{.wex-op} The full-model prediction is \(f(x_\star)=0.7249\). The rank-one deletion effect \(\Delta_i\) agrees with an actual refit-without-\(i\) to \(1.6\times 10^{-15}\), machine precision: the formula is not an approximation.
@@ -254,8 +256,6 @@ Kernel ridge regression on \(40\) points of \(\sin(1.3x)\) with light noise on \
 
 **Reading.** Data attribution that is a delicate approximation for deep models is, for a kernel ridge model, a closed-form consequence of the hat matrix. The same quantity \(1-H_{ii}\) that yields the leave-one-out error yields the influence of a point on any prediction, so cross-validation and attribution are the same linear algebra. Data-valuation schemes such as Data Shapley (Ghorbani and Zou 2019) build on exactly this notion of a training point's marginal worth.
 ::::
-
-**Verification artifact.** checks/example-ch-accountable-example-55-3.json records the example source hash and verification scope.
 :::::
 
 <figure class="viz" data-figure="influence-concentration-curve" data-alt="Cumulative absolute training-point contribution to one kernel-ridge prediction is plotted against the number of largest contributions retained for three RBF length scales."><figcaption>Example-based explanation has a concentration profile. Local kernels can place most of a prediction's absolute contribution on a small reviewable set, while broader kernels distribute responsibility. Reporting the mass captured by the top \(k\) cases is more informative than naming an arbitrary fixed number.</figcaption></figure>
@@ -289,7 +289,7 @@ Rejection is evidence against \(P=Q\); non-rejection is not evidence of equality
 
 :::: wex
 ::: wex-setup
-A reference sample of \(200\) standard-normal inputs, an RBF kernel at the median-heuristic bandwidth, and \(2000\) permutations for the null. We test the reference against a fresh unshifted draw and against a window shifted in mean by \(0.5\). All numbers from `checks/ch-accountable-ex4.py`.
+A reference sample of \(200\) standard-normal inputs, an RBF kernel at the median-heuristic bandwidth, and \(2000\) permutations for the null. We test the reference against a fresh unshifted draw and against a window shifted in mean by \(0.5\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex4].
 :::
 
 1.  [Set the bandwidth from the data.]{.wex-op} The median pairwise distance is \(0.946\), giving \(\gamma=0.559\) in \(k(x,x')=e^{-\gamma(x-x')^2}\).
@@ -298,8 +298,6 @@ A reference sample of \(200\) standard-normal inputs, an RBF kernel at the media
 
 **Reading.** This is a principled replacement for an ad-hoc threshold on some summary statistic: a hypothesis test whose null rejection means the production inputs no longer look like training. It is also the guard on the previous section's guarantee, because conformal coverage assumes the test point is exchangeable with calibration, and an MMD alarm is precisely a signal that the assumption has broken. Its honest cost is that a characteristic kernel and adequate sample size are needed for power, and that it reports that the distributions differ, not which feature moved.
 ::::
-
-**Verification artifact.** checks/example-ch-accountable-example-55-4.json records the example source hash and verification scope.
 :::::
 
 <figure class="viz" data-widget="drift-mmd">
@@ -332,7 +330,7 @@ Rejection establishes statistical dependence, not discrimination or causation. N
 
 :::: wex
 ::: wex-setup
-Two hundred cases, a continuous protected attribute, and two predictors: a biased one whose score leans on the attribute, and a fair one from which that dependence has been removed. We test each with HSIC and a permutation null. All numbers from `checks/ch-accountable-ex5.py`.
+Two hundred cases, a continuous protected attribute, and two predictors: a biased one whose score leans on the attribute, and a fair one from which that dependence has been removed. We test each with HSIC and a permutation null. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex5].
 :::
 
 1.  [Test the biased model.]{.wex-op} \(\mathrm{HSIC}=0.0231\) with p-value \(0.000\): the hypothesis of independence is decisively rejected, so the predictions do depend on the attribute.
@@ -340,8 +338,6 @@ Two hundred cases, a continuous protected attribute, and two predictors: a biase
 
 **Reading.** A group-fairness audit becomes a hypothesis test with a p-value, and because HSIC can also be added as a training penalty (Fair Kernel Learning, Pérez-Suay et al. 2017, which we meet again over satellite data in the next chapter), the property is both testable and enforceable with one kernel quantity. The honest caveat is that HSIC targets statistical independence, a demographic-parity-style notion, and other fairness definitions require other criteria.
 ::::
-
-**Verification artifact.** checks/example-ch-accountable-example-55-5.json records the example source hash and verification scope.
 :::::
 
 ### Reproducibility and the audit trail {#reproducibility}
@@ -377,7 +373,7 @@ An audit becomes operational only when it can stop deployment. The protocol belo
 
 :::: wex
 ::: wex-setup
-`checks/ch-accountable-audit.py` uses a fixed seed and a one-dimensional fixture. It fits kernel ridge regression, verifies one deletion both algebraically and by refitting, constructs a split-conformal interval, and runs fixed-permutation MMD and HSIC diagnostics. It then injects a shifted production window and an attribute-dependent score.
+the chapter's computational reference [@kernelbook-code-ch-accountable-audit] uses a fixed seed and a one-dimensional fixture. It fits kernel ridge regression, verifies one deletion both algebraically and by refitting, constructs a split-conformal interval, and runs fixed-permutation MMD and HSIC diagnostics. It then injects a shifted production window and an attribute-dependent score.
 :::
 
 1.  [Pass the numerical gates.]{.wex-op} The linear-system relative residual must be below \(10^{-10}\), the Gram matrix must be symmetric within \(10^{-12}\), and the deletion formula must agree with a direct refit within \(10^{-10}\).
@@ -386,8 +382,6 @@ An audit becomes operational only when it can stop deployment. The protocol belo
 
 **Reading.** A reproducible audit records both the calculation and the decision rule that consumes it. Determinism makes software regressions visible; it does not turn one synthetic fixture into external validation.
 ::::
-
-**Verification artifact.** checks/example-ch-accountable-example-accountable-audit-fixture.json records the example source hash and verification scope.
 :::::
 
 ## Uncertainty that drives the next experiment {#uncertainty-drives-experiment}

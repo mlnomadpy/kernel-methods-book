@@ -38,6 +38,7 @@ bibliography:
   - hardoon2004
   - lai2000kcca
   - scholkopf2002
+  - kernelbook-code-ch-cca-ex2
   - shawe2004
 ---
 # Kernel CCA and Correlation Analysis
@@ -291,8 +292,6 @@ $$
 
 **Reading.** The unregularized \(1.000\) is an artifact of an invertible, expressive kernel and carries no information about the data. The shrinkage turns \(\kappa\) into a dial that trades that illusory perfect fit for a genuine, data-dependent correlation, which is exactly the \((K + \kappa I)\) ridge whose vanishing rate the consistency theory prescribes.
 :::::
-
-**Verification artifact.** checks/example-ch-cca-example-15-1.json records the example source hash and verification scope.
 ::::::
 
 ### What consistency actually requires {#cca-consistency}
@@ -348,9 +347,7 @@ With deterministic seed \(1502\), nearly unregularized linear CCA reports traini
 
 As a negative control, permuting the training pairing destroys the shared relation. Across the same ridge sweep, every absolute held-out correlation is below \(0.027\). A large training canonical correlation without held-out paired alignment is a failure witness, not evidence of dependence.
 
-**Verification.** The deterministic generator, train/test centering, permutation control, and assertions are checked by `checks/ch-cca-ex2.py`.
-
-**Verification artifact.** checks/example-ch-cca-example-cca-regularization-study.json records the example source hash and verification scope.
+**Verification.** The deterministic generator, train/test centering, permutation control, and assertions are checked by the chapter's computational reference [@kernelbook-code-ch-cca-ex2].
 :::
 
 This is not a universal tuning recommendation. It demonstrates the protocol: preserve pairs when splitting, fit centering on training data only, select shrinkage by held-out paired performance, and include a pairing permutation as a negative control.
