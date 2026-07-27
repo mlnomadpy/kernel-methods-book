@@ -42,6 +42,10 @@ bibliography:
   - snelson2006fitc
   - titsias2009svgp
   - hensman2013bigdata
+  - wu2024alternatinggp
+  - lin2025latentkronecker
+  - rathore2025adasap
+  - hoffbauer2025kernelmatmul
   - wilson2013
   - kernelbook-code-ch-gp-ex1
   - kernelbook-code-ch-gp-ex2
@@ -361,7 +365,7 @@ mirror the Gaussian process formulas of the regression section, now built on onl
 
 ## Sparse and variational Gaussian processes {#sparse-variational-gp}
 
-The Relevance Vector Machine made its predictor sparse because the prior wanted few active basis functions. A second, blunter pressure pushes in the same direction: cost. Every exact GP quantity in this chapter, the posterior mean, the variance, the evidence and its gradient, passes through a factorization of the \(n\times n\) matrix \(K+\sigma^2 I\), at \(O(n^3)\) time and \(O(n^2)\) memory, repeated at every step of hyperparameter learning. Beyond a few tens of thousands of points the exact equations stop being computable. [[ch:large-scale-kernels|The large-scale chapter]] develops the generic remedies, random features and Nyström-type low-rank factorizations, which approximate the *matrix*. The Gaussian process literature developed a complementary line that approximates the *model*: replace the full process by one whose information about the data is carried by \(m\ll n\) well-placed points. The prize for staying inside the probabilistic frame is that variances and evidences survive with their meaning intact, and the quality of the approximation itself becomes a measurable quantity. Throughout this section \(n\) counts training points and \(m\) counts inducing points.
+The Relevance Vector Machine made its predictor sparse because the prior wanted few active basis functions. A second, blunter pressure pushes in the same direction: cost. Every exact GP quantity in this chapter, the posterior mean, the variance, the evidence and its gradient, passes through linear solves or spectral functions of the \(n\times n\) matrix \(K+\sigma^2 I\). A dense Cholesky implementation spends \(O(n^3)\) time and \(O(n^2)\) memory, repeated at every step of hyperparameter learning, and becomes impractical beyond at most a few tens of thousands of points on ordinary hardware. The equations themselves do not stop there: matrix-free, subblock, and structured solvers can still target them at far larger \(n\), as the modern scaling section below explains. [[ch:large-scale-kernels|The large-scale chapter]] develops generic remedies, including random features and Nyström-type low-rank factorizations, which approximate the *matrix*. The Gaussian process literature developed a complementary line that approximates the *model*: replace the full process by one whose information about the data is carried by \(m\ll n\) well-placed points. The prize for staying inside the probabilistic frame is that variances and evidences survive with their meaning intact, and the quality of the approximation itself becomes a measurable quantity. Throughout this section \(n\) counts training points and \(m\) counts inducing points.
 
 :::: {.definition #def-40-6}
 [Definition (inducing points and the Nyström surrogate)]{.box-title}
@@ -465,6 +469,26 @@ where \(q(f_i)\) is Gaussian with mean \(k_{ui}^\top K_{uu}^{-1}m_u\) and varian
 
 Two further dividends. Because each expectation in the sum is a one-dimensional Gaussian integral, any likelihood whose scalar expectations can be computed or quadratured slots straight in, so the same loop trains GP classifiers with the links of the classification section on data far beyond the Laplace approximation's reach. And the machinery composes: the sparse variational posterior is the substrate on which the deep constructions of the next section stand, and it is what makes Gaussian process surrogates affordable inside larger systems.
 
+### Exact targets, approximate computation, and structured models {#modern-scalable-gp}
+
+The inducing-variable section solved the cubic bottleneck by replacing the posterior family. That move is powerful, but it creates a new question: if the scientific decision genuinely needs the original covariance model, must scale force a different posterior? Not always. The matrix-free and subblock ideas of [[ch:large-scale-kernels|the large-scale chapter]] preserve a full linear-system target while changing how it is reached, and domain structure can sometimes change the cost of a kernel product without changing the structured model at all.
+
+“Approximate GP” can therefore describe three mathematically different operations. An inducing-point method changes the inference family, or in older constructions changes the covariance model. An iterative solver may leave the model and posterior target unchanged but approximate a linear solve to a declared residual. A structured method may compute the exact posterior efficiently only for covariances and observation patterns with special algebra. These routes cannot be ranked by sample count alone:
+
+| Route | What remains exact? | What is approximated or assumed? | Representative recent work |
+|---|---|---|---|
+| subblock iteration | the target system \( (K+\sigma^2I)\alpha=y \) | a finite iteration budget | alternating projection [@wu2024alternatinggp] |
+| latent structure | the posterior for the structured model | a latent Cartesian-product representation | latent Kronecker GPs [@lin2025latentkronecker] |
+| sketch-and-project | selected posterior-mean directions | randomized distributed projections | ADASAP [@rathore2025adasap] |
+| inducing variables | the original GP prior in the variational formulation | posterior family \(q(f,u)\) | SVGP |
+| sparse kernel products | the chosen iterative target | sparsity approximation and time-series structure | KernelMatmul [@hoffbauer2025kernelmatmul] |
+
+Alternating projection accesses covariance subblocks and reports training and inference on datasets up to four million points. Latent-Kronecker inference uses an observation projection around a latent product grid and reports real applications with up to five million examples. ADASAP distributes approximate sketch-and-project updates and reports a problem with more than \(3\times10^8\) samples, but its primary guarantee concerns the posterior mean rather than the full covariance. KernelMatmul obtains linear time and memory for its large-time-series construction. These are substantial computational results, but each preserves a different object.
+
+The deployment diagnostic follows directly. For an exact-target iterative method, report the true residual of every solve and the error of stochastic log-determinant or trace estimates used in hyperparameter learning. For a structured method, validate the structure rather than merely its speed. For a posterior approximation, test predictive means, variances, and calibration separately. A fast mean with a distorted covariance is not a fast Gaussian process for decisions that depend on uncertainty.
+
+Consider the same million observations under two geometries. Daily measurements from \(1{,}000\) sensors over \(1{,}000\) common time points form a product index; a separable space-time kernel can expose Kronecker structure, so latent-grid algebra is a plausible model and computational strategy. One million unrelated molecular descriptors have the same sample count but no corresponding Cartesian product. Relabeling them onto a grid would alter the covariance model merely to obtain a fast algorithm. For the first dataset, test the separability and projection residuals. For the second, use a matrix-free, subblock, center, or feature method and report its own approximation target. The sample count never made that decision; the geometry did.
+
 ## Deep, multi-output, and spectral-mixture processes {#deep-multioutput-gp}
 
 The prior we have used so far is restrictive in three separable ways: the kernel is picked from a small catalogue of fixed stationary forms, the process models a single scalar function, and the function is drawn in one shot rather than built out of simpler stages. Each restriction has a principled lift, and all three run on machinery this chapter has already built, evidence-driven hyperparameter learning and inducing-point inference.
@@ -493,11 +517,11 @@ Stationarity is a strong commitment: one length scale for the whole input space.
 
 The posterior interval is conditional on the kernel, likelihood, noise model, and fitted hyperparameters; it is not an unconditional promise of coverage. Keep latent-function variance separate from observation variance, and check calibration on held-out or time-ordered data. Marginal likelihood can prefer pathological length scales or noise levels when parameters are weakly identified, so inspect profiles or multiple starts rather than reporting one optimizer result.
 
-Never invert a covariance matrix explicitly. Use a Cholesky factor, report jitter relative to the diagonal scale, and treat failure of the factorization as a modeling diagnostic. Sparse approximations require an additional declaration: subset-of-regressors changes the prior, while variational inducing methods approximate inference in the original model. Their error bars are not interchangeable.
+Never invert a covariance matrix explicitly. Use a Cholesky factor or a monitored iterative solve, report jitter relative to the diagonal scale, and treat factorization failure or stalled residuals as modeling diagnostics. Sparse approximations require an additional declaration: subset-of-regressors changes the prior, variational inducing methods approximate inference in the original model, and structured or sketch-based solvers preserve still other targets. Their error bars are not interchangeable.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-A Gaussian process turns a kernel into a covariance law and Bayes' rule into two coupled predictions: a posterior mean and a posterior covariance. The mean is kernel ridge regression with noise variance in the role of regularization; the covariance adds geometry-dependent uncertainty. Marginal likelihood learns kernel parameters by balancing fit against volume, Laplace approximation handles non-Gaussian classification, and RVM or inducing constructions trade exactness for sparsity in different ways. The durable reference is [@rasmussen2006]; the network-to-process connection begins with [@neal1996], and early classification developments include [@williams1996].
+A Gaussian process turns a kernel into a covariance law and Bayes' rule into two coupled predictions: a posterior mean and a posterior covariance. The mean is kernel ridge regression with noise variance in the role of regularization; the covariance adds geometry-dependent uncertainty. Marginal likelihood learns kernel parameters by balancing fit against volume, Laplace approximation handles non-Gaussian classification, and RVM or inducing constructions trade exactness for sparsity in different ways. Modern iterative, structured, and sketch-based systems extend the computational frontier, but only after stating whether they preserve the model, the target solve, the posterior mean, or the full posterior. The durable reference is [@rasmussen2006]; the network-to-process connection begins with [@neal1996], and early classification developments include [@williams1996].
 
 ## Exercises {#exercises}
 

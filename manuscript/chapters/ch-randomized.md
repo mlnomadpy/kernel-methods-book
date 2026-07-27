@@ -57,6 +57,7 @@ bibliography:
   - song2021tensor
   - han2015logdet
   - wenger2022preconditioning
+  - wang2024dependentrff
 ---
 # Random Features, Sketches, and Randomized Kernel Linear Algebra
 
@@ -596,6 +597,8 @@ R(\widetilde f)-R(f_\rho)
 $$
 
 The first term needs a source or approximation condition, the second needs a sampling and noise model, and the third needs a feature budget tied to \(\lambda\) and capacity. Rudi and Rosasco prove that a feature count much smaller than \(n\) can retain optimal learning rates under explicit capacity and source assumptions [@rudi2017]. Li et al. unify square-loss and Lipschitz-loss analyses and express budgets through effective degrees of freedom [@li2021rff, Theorems 9--12]. Neither result says that a small pointwise kernel error automatically yields a small excess risk.
+
+The sampling model is part of the rate. The standard decomposition is usually analyzed for independent observations; time series, spatial measurements, and repeated-user records violate that assumption even when the random features themselves are sampled independently. Wang et al. analyze random-feature KRR under \(\tau\)-mixing dependence [@wang2024dependentrff]. Their estimator retains minimax optimality under the paper's exponentially decaying dependence regime, while polynomially decaying dependence yields a slower result. This is not a blanket theorem for dependent data: the mixing definition, decay rate, source condition, capacity assumption, and feature budget all remain part of the claim.
 
 The four levels can be remembered as a quantifier ladder:
 

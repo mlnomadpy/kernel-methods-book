@@ -25,6 +25,7 @@ references:
   - song2021tensor
   - han2015logdet
   - wenger2022preconditioning
+  - wang2024dependentrff
 sections:
   - id: rand-four-currencies
     title: Four error currencies
@@ -136,6 +137,7 @@ sections:
     sources:
       - rudi2017
       - li2021rff
+      - wang2024dependentrff
     locators:
       - source: rudi2017
         manuscript_locator: ch-randomized.md#rand-rff-risk
@@ -145,6 +147,10 @@ sections:
         manuscript_locator: ch-randomized.md#rand-rff-risk
         source_locator: Theorems 9--12
         status: author-checked-against-primary-source
+      - source: wang2024dependentrff
+        manuscript_locator: ch-randomized.md#rand-rff-risk
+        source_locator: null
+        status: exact-page-section-or-theorem-locator-pending-independent-verification
     verified_by: null
     verified_on: null
   - id: rand-adaptive-features
@@ -412,4 +418,4 @@ mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
-mapping_date: 2026-07-24
+mapping_date: 2026-07-27
