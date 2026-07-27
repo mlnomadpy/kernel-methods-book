@@ -15,3 +15,4 @@ The public edition exactly matches the revision that passed every available rele
 - [ ] GitHub Pages deploys that exact commit and the live site exposes the 62 chapter IDs declared in book.yml.
 - [ ] The release notes list owner-gated review records and evidence records that remain incomplete without converting them into passes.
 ## Log
+- 2026-07-27T21:50:07Z claimed by a-root

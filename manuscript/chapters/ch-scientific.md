@@ -613,7 +613,7 @@ $$
 
 Take \(a(x)=\sin(2\pi x)+\tfrac12\sin(6\pi x)\). At time \(t\), the two
 amplitudes must become \(e^{-4\pi^2\nu t}\) and
-\tfrac12e^{-36\pi^2\nu t}\). A learned layer that instead preserves their
+\(\tfrac12e^{-36\pi^2\nu t}\). A learned layer that instead preserves their
 ratio has fitted an identity-like map, not diffusion. This hand-checkable
 two-mode input should therefore precede aggregate test error: it detects a
 wrong FFT convention, an incorrect frequency grid, or a multiplier attached
