@@ -3,17 +3,24 @@
   "chapter": "ch08",
   "anchor": "example-19-1",
   "source_file": "manuscript/chapters/ch08.md",
-  "source_sha256": "e2f009ed493f6ed4917c3cc79576abf7d24192cb7a106e8b498d23191f6ad119",
+  "source_sha256": "808c213bd045c5f9072f90cd9ed06b6a1f2187a6b60764ee6452e6b508c147ef",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch08-ex1.py"
+    "checks/ch08-ex0.py"
   ],
   "numeric_literals": [
     "1",
     "2",
-    "0"
+    "0",
+    "-4",
+    "5",
+    "200",
+    "01",
+    "1e-10",
+    "2.5",
+    "0.0"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Numerically integrates the Fourier characters against normalized Lebesgue measure and recovers the Kronecker-delta coefficients displayed in the box.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

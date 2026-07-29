@@ -3,7 +3,7 @@
   "chapter": "ch-inverse",
   "anchor": "example-inverse-filter",
   "source_file": "manuscript/chapters/ch-inverse.md",
-  "source_sha256": "8470423bd6bfc02dcd81afd766b8a66388b5770056f5c301610c78411dcfa1da",
+  "source_sha256": "d367104b5f5db8e7c762aaa3746a7e3ccf5788ff4d46274d4302a67a14a7bffc",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/additional-example-checks.py"
@@ -28,9 +28,19 @@
     "0.0198",
     "0.051689",
     "5.727",
-    "0.0025"
+    "1.0",
+    "0.25",
+    "0.04",
+    "0.0025",
+    "2.0",
+    "0.5",
+    "-0.05",
+    "10",
+    "2",
+    "5e-7",
+    "5e-4"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The shared executable check now recomputes the same four filters, retained fractions, prediction errors, and inverse-coordinate norms displayed by the visible chapter code.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

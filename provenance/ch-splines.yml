@@ -8,6 +8,7 @@ references:
   - cravenwahba1979
   - wahba1990
   - green1984
+  - scholkopf2001
 sections:
   - id: roughness-to-estimator
     title: The variational problem and its hidden null space
@@ -16,6 +17,7 @@ sections:
     sources:
       - kimeldorf1971
       - wahba1990
+      - scholkopf2001
     locators:
       - source: kimeldorf1971
         manuscript_locator: ch-splines.md#roughness-to-estimator
@@ -24,6 +26,10 @@ sections:
       - source: wahba1990
         manuscript_locator: ch-splines.md#roughness-to-estimator
         source_locator: "Chapters 1-2"
+        status: locator-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch-splines.md#roughness-to-estimator
+        source_locator: "Theorem 1 and Section 2, generalized representer theorem"
         status: locator-pending-independent-verification
     verified_by: null
     verified_on: null

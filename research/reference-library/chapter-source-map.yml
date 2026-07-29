@@ -1,0 +1,123 @@
+schema_version: 1
+updated_on: 2026-07-29
+purpose: >-
+  Editorial routing map for the local research library. This file does not
+  replace section-level provenance records; it determines which source should
+  be consulted before a chapter is expanded.
+
+sources:
+  - file: bach-learning-theory-from-first-principles.pdf
+    bibliography_key: bach2024learning
+    edition: author-hosted open-access edition
+    chapter_targets:
+      ch03: operator bias, variance, and risk decomposition
+      ch04: approximation-estimation-optimization ledger and PAC-Bayes bridge
+      ch-online: online convex optimization, mirror descent, and lower bounds
+      ch-structured: structured surrogates, calibration, and generalization
+      ch13: dual, stochastic, and approximation algorithms
+      ch-randomized: column sampling and random features
+      ch-modern: implicit bias, double descent, and lazy training
+      ch14: neural tangent kernels and finite-width boundaries
+      ch-rkbs: RKHS and variation-norm comparison
+
+  - file: boyd-vandenberghe-convex-optimization.pdf
+    bibliography_key: boyd2004
+    edition: author-hosted Cambridge edition
+    chapter_targets:
+      ch03: convex objectives and optimality
+      ch05: primal-dual derivation and KKT conditions
+      ch-svr: constrained regression duality
+      ch-solve: residuals and stopping
+      ch-structured: constrained margin programs
+      ch12: multiple-kernel optimization
+
+  - file: hennig-osborne-kersting-probabilistic-numerics.pdf
+    bibliography_key: hennig2022probnum
+    edition: pre-publication author draft
+    chapter_targets:
+      ch13: computational constraints and linear solvers
+      ch-quad: Bayesian quadrature and calibration
+      ch-bo: value loss and acquisition decisions
+      ch-scientific: information operators, ODE solvers, and calibration
+      ch-accountable: model-based versus calibrated uncertainty
+
+  - file: lattimore-szepesvari-bandit-algorithms.pdf
+    bibliography_key: lattimore2020bandit
+    edition: free online Cambridge edition
+    chapter_targets:
+      ch-online: feedback models, regret, and online lower bounds
+      ch-bo: confidence bounds, information, and regret
+      ch-lower: information-theoretic lower-bound constructions
+
+  - file: muandet-et-al-kernel-mean-embeddings.pdf
+    bibliography_key: muandet2017
+    edition: arXiv author manuscript
+    chapter_targets:
+      ch11: marginal embeddings, covariance operators, and MMD
+      ch-testing: dependency measures and testing
+      ch-cme: conditional embeddings and regularized operators
+      ch-causal: conditional dependence and causal discovery
+      ch-distreg: learning on distributions
+      ch-dynamics: embeddings for Markov processes and reinforcement learning
+
+  - file: peters-janzing-scholkopf-elements-causal-inference.pdf
+    bibliography_key: peters2017causal
+    edition: MIT Press open-access edition
+    chapter_targets:
+      ch-causal: query, assumptions, identification, and estimation
+      ch-testing: dependence does not imply intervention
+      ch-cme: conditional operators versus causal conditionals
+      ch-dynamics: time-series causal assumptions
+
+  - file: peyre-cuturi-computational-optimal-transport.pdf
+    bibliography_key: peyre2019cot
+    edition: official project edition
+    chapter_targets:
+      ch-ot: primal-dual OT, entropy, Sinkhorn, and stabilization
+      ch-testing: MMD and transport comparison
+      ch-quad: variational and integration connections
+      ch-generative: transport-based comparison of generated distributions
+
+  - file: rasmussen-williams-gpml.pdf
+    bibliography_key: rasmussen2006
+    edition: MIT Press open-access edition
+    chapter_targets:
+      ch-gp: complete GP model-computation-decision spine
+      ch03: GP posterior mean and kernel ridge regression
+      ch08: covariance design
+      ch-splines: equivalent kernels and spline connections
+      ch-bo: posterior decisions
+      ch-dkl: learned covariance functions
+
+  - file: roberts-yaida-hanin-deep-learning-theory-draft.pdf
+    bibliography_key: roberts2022principles
+    edition: author-approved arXiv draft
+    chapter_targets:
+      ch14: GP and NTK limits with finite-width corrections
+      ch-dkl: kernel learning versus representation learning
+      ch-rkbs: variation-space bridge
+      ch-frontier: evidence boundaries beyond lazy training
+
+  - file: saad-iterative-methods-for-sparse-linear-systems-first-edition.pdf
+    bibliography_key: saad1996iterative
+    edition: author-hosted first edition
+    chapter_targets:
+      ch13: Krylov methods, CG, preconditioning, and residuals
+      ch-randomized: sketches and iterative solves
+      ch-inverse: Krylov regularization and stopping
+      ch-solve: projection methods and numerical certificates
+
+  - file: sutton-barto-reinforcement-learning-draft.pdf
+    bibliography_key: sutton2016rldraft
+    edition: September 2016 second-edition draft
+    chapter_targets:
+      ch-dynamics: MDPs, Bellman equations, TD learning, and off-policy failure
+      ch-cme: conditional operators for transition modeling
+
+  - file: chung-spectral-graph-theory.pdf
+    bibliography_key: chung1996lectures
+    edition: partial author-hosted lecture notes
+    chapter_targets:
+      ch-cluster: spectral gaps and graph cuts
+      ch-manifold: Laplacian geometry and connectivity
+      ch10: kernels on graph vertices

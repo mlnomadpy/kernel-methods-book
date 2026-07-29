@@ -21,6 +21,14 @@ references:
   - lin2025latentkronecker
   - rathore2025adasap
   - hoffbauer2025kernelmatmul
+  - jylanki2011robustgp
+  - kuss2005gpc
+  - szabo2015coverage
+  - vanderVaart2008gpcontraction
+  - zhang2004microergodic
+  - kernelbook-code-ch-gp-ex1
+  - kernelbook-code-ch-gp-ex2
+  - kernelbook-code-ch-gp-ex3
 sections:
   - id: bayesian-view
     title: "The Bayesian view: a prior over functions"
@@ -215,6 +223,45 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: gp-paths-rkhs
+    title: Finite values, sample paths, and the RKHS are different objects
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-paths-rkhs
+        source_locator: "chapter 4, section 4.1.1; chapter 6, section 6.1"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-joint-posterior
+    title: The posterior is a process, not a collection of unrelated error bars
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-joint-posterior
+        source_locator: "chapter 2, sections 2.2 and 2.7"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-decision-theory
+    title: Prediction becomes a decision only after a loss is named
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-decision-theory
+        source_locator: "chapter 2, section 2.4"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
   - id: krr-gp
     title: Kernel ridge regression is the GP posterior mean
     contribution: adapted-and-expanded
@@ -275,6 +322,19 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: gp-equivalent-kernel
+    title: The spectral view explains both smoothing and uncertainty
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-equivalent-kernel
+        source_locator: "chapter 2, section 2.6; chapter 7, section 7.1"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
   - id: marginal-likelihood
     title: The marginal likelihood and hyperparameter learning
     contribution: adapted-and-expanded
@@ -332,6 +392,19 @@ sections:
         manuscript_locator: ch-gp.md#marginal-likelihood
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-model-selection-diagnostics
+    title: Evidence is a model score, not an oracle
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-model-selection-diagnostics
+        source_locator: "chapter 5, sections 5.1--5.4"
+        status: author-checked-against-public-edition
     verified_by: null
     verified_on: null
     permission: citation-only
@@ -663,6 +736,138 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: gp-matern-regularity
+    title: Matérn smoothness can be read from one increment
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-matern-regularity
+        source_locator: "chapter 4, sections 4.1.1 and 4.2.1"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-linear-observations
+    title: General linear observations reuse the same conditioning theorem
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-linear-observations
+        source_locator: "chapter 9, section 9.4"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-learning-curves
+    title: "Learning curves: where eigenvalue decay becomes statistical rate"
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-learning-curves
+        source_locator: "chapter 7, section 7.3"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-microergodicity
+    title: "Fixed-domain asymptotics: prediction can succeed while parameters do not"
+    contribution: newly-synthesized
+    sources:
+      - zhang2004microergodic
+    locators:
+      - source: zhang2004microergodic
+        manuscript_locator: ch-gp.md#gp-microergodicity
+        source_locator: "Theorems 2--3 and fixed-domain discussion"
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-contraction-coverage
+    title: Posterior contraction is not credible-set coverage
+    contribution: newly-synthesized
+    sources:
+      - vanderVaart2008gpcontraction
+      - szabo2015coverage
+    locators:
+      - source: vanderVaart2008gpcontraction
+        manuscript_locator: ch-gp.md#gp-contraction-coverage
+        source_locator: "sections 2--3"
+        status: author-checked-against-primary-source
+      - source: szabo2015coverage
+        manuscript_locator: ch-gp.md#gp-contraction-coverage
+        source_locator: "abstract and main coverage theorems"
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-expectation-propagation
+    title: Expectation propagation matches moments instead of curvature
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+      - kuss2005gpc
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-expectation-propagation
+        source_locator: "chapter 3, section 3.6"
+        status: author-checked-against-public-edition
+      - source: kuss2005gpc
+        manuscript_locator: ch-gp.md#gp-expectation-propagation
+        source_locator: "sections 2--4"
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-multiclass
+    title: Multiclass likelihoods couple classes at each observation
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+      - williams1998classification
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-multiclass
+        source_locator: "chapter 3, section 3.5"
+        status: author-checked-against-public-edition
+      - source: williams1998classification
+        manuscript_locator: ch-gp.md#gp-multiclass
+        source_locator: "multiclass Laplace construction"
+        status: exact-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-robust-likelihood
+    title: A non-Gaussian likelihood changes both robustness and computation
+    contribution: newly-synthesized
+    sources:
+      - jylanki2011robustgp
+    locators:
+      - source: jylanki2011robustgp
+        manuscript_locator: ch-gp.md#gp-robust-likelihood
+        source_locator: "sections 2--4"
+        status: author-checked-against-primary-source
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: gp-cross-chapter-journey
+    title: The GP journey through the rest of the book
+    contribution: newly-synthesized
+    sources:
+      - rasmussen2006
+    locators:
+      - source: rasmussen2006
+        manuscript_locator: ch-gp.md#gp-cross-chapter-journey
+        source_locator: "chapters 4--9"
+        status: author-checked-against-public-edition
+    verified_by: null
+    verified_on: null
+    permission: citation-only
   - id: common-mistakes-and-practical-implications
     title: Common mistakes and practical implications
     contribution: newly synthesized
@@ -805,6 +1010,54 @@ sections:
         status: exact-page-section-or-theorem-locator-pending-independent-verification
     verified_by: null
     verified_on: null
+    permission: citation-only
+  - id: claim-locator-index
+    title: Exact source index for chapter-level cited claims
+    contribution: source-index
+    sources:
+      - mackay1992
+      - scholkopf2002
+      - neal1996
+      - williams1996
+      - tipping2001
+      - quinonero2005
+      - snelson2006fitc
+      - titsias2009svgp
+      - hensman2013bigdata
+      - wilson2013
+      - damianou2013deepgp
+      - wu2024alternatinggp
+      - lin2025latentkronecker
+      - rathore2025adasap
+      - hoffbauer2025kernelmatmul
+      - kernelbook-code-ch-gp-ex1
+      - kernelbook-code-ch-gp-ex2
+      - kernelbook-code-ch-gp-ex3
+    locators:
+      - {source: mackay1992, manuscript_locator: "ch-gp.md#bayesian-view", source_locator: "Neural Computation 4(3), pp. 415--447; Sections 2--3", status: author-mapped}
+      - {source: scholkopf2002, manuscript_locator: "ch-gp.md#bayesian-view", source_locator: "Learning with Kernels, Chapter 2 and Section 6.2", status: author-mapped}
+      - {source: neal1996, manuscript_locator: "ch-gp.md#gaussian-processes", source_locator: "Bayesian Learning for Neural Networks, Chapter 2, Section 2.3; Chapter 4", status: author-mapped}
+      - {source: williams1996, manuscript_locator: "ch-gp.md#gaussian-processes", source_locator: "NIPS 9, pp. 295--301; Sections 2--3", status: author-mapped}
+      - {source: tipping2001, manuscript_locator: "ch-gp.md#relevance-vector-machine", source_locator: "JMLR 1, pp. 211--244; Sections 2--3, Equations (4)--(11)", status: author-mapped}
+      - {source: quinonero2005, manuscript_locator: "ch-gp.md#sparse-gps", source_locator: "JMLR 6, pp. 1939--1959; Sections 2--3 and Table 1", status: author-mapped}
+      - {source: snelson2006fitc, manuscript_locator: "ch-gp.md#sparse-gps", source_locator: "NIPS 18, pp. 1257--1264; Sections 2--3", status: author-mapped}
+      - {source: titsias2009svgp, manuscript_locator: "ch-gp.md#variational-inducing-variables", source_locator: "AISTATS 2009, PMLR 5:567--574; Section 3, Equations (8)--(10)", status: author-mapped}
+      - {source: hensman2013bigdata, manuscript_locator: "ch-gp.md#stochastic-variational-gps", source_locator: "UAI 2013, pp. 282--290; Sections 2--3, Equations (4)--(9)", status: author-mapped}
+      - {source: wilson2013, manuscript_locator: "ch-gp.md#spectral-mixture-kernels", source_locator: "ICML 2013, PMLR 28(3):1067--1075; Sections 2--3, Equations (3)--(5)", status: author-mapped}
+      - {source: damianou2013deepgp, manuscript_locator: "ch-gp.md#deep-gaussian-processes", source_locator: "AISTATS 2013, PMLR 31:207--215; Sections 2--3", status: author-mapped}
+      - {source: wu2024alternatinggp, manuscript_locator: "ch-gp.md#large-scale-gp-landscape", source_locator: "AISTATS 2024, PMLR 238:2620--2628; Sections 3--4", status: author-mapped}
+      - {source: lin2025latentkronecker, manuscript_locator: "ch-gp.md#large-scale-gp-landscape", source_locator: "ICML 2025, PMLR 267:37730--37744; Sections 3--4", status: author-mapped}
+      - {source: rathore2025adasap, manuscript_locator: "ch-gp.md#large-scale-gp-landscape", source_locator: "NeurIPS 2025 paper; Sections 3--4 and Algorithm 2 (ADASAP)", status: author-mapped}
+      - {source: hoffbauer2025kernelmatmul, manuscript_locator: "ch-gp.md#large-scale-gp-landscape", source_locator: "AAAI 39(16), pp. 17223--17230; Sections 3--4", status: author-mapped}
+      - {source: kernelbook-code-ch-gp-ex1, manuscript_locator: "ch-gp.md#example-40-1", source_locator: "checks/example-ch-gp-example-40-1.json; checks/ch-gp-ex1.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-gp-ex2, manuscript_locator: "ch-gp.md#example-40-2", source_locator: "checks/example-ch-gp-example-40-2.json; checks/ch-gp-ex2.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-gp-ex3, manuscript_locator: "ch-gp.md#example-40-3", source_locator: "checks/example-ch-gp-example-40-3.json; checks/ch-gp-ex3.py", status: executable-artifact}
+    verified_by:
+      - checks/ch-gp-depth.py
+      - checks/ch-gp-ex1.py
+      - checks/ch-gp-ex2.py
+      - checks/ch-gp-ex3.py
+    verified_on: 2026-07-29
     permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:

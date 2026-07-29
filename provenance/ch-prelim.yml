@@ -6,6 +6,9 @@ private_source_sha256: null
 references:
   - scholkopf2002
   - shawe2004
+  - boyd2004
+  - hoeffding1963
+  - mcdiarmid1989
 sections:
   - id: linear-algebra
     title: Linear algebra and matrices
@@ -97,6 +100,26 @@ sections:
     locators: []
     verified_by: null
     verified_on: null
+  - id: concentration-and-optimization-sources
+    title: Concentration and convex optimization source boundaries
+    contribution: claim-level source mapping
+    sources: [mcdiarmid1989, hoeffding1963, boyd2004]
+    locators:
+      - source: mcdiarmid1989
+        manuscript_locator: ch-prelim.md#probability
+        source_locator: "Bounded-differences theorem for functions of independent variables"
+        status: citation-mapped-pending-independent-verification
+      - source: hoeffding1963
+        manuscript_locator: ch-prelim.md#probability-for-inference
+        source_locator: "Theorem 2, independent bounded summands"
+        status: citation-mapped-pending-independent-verification
+      - source: boyd2004
+        manuscript_locator: ch-prelim.md#optimization
+        source_locator: "Chapters 4-5, convex optimization and Lagrange duality"
+        status: citation-mapped-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
   - id: optimization
     title: Convex optimization and duality
     contribution: adapted-and-expanded
@@ -321,6 +344,15 @@ sections:
         status: exact-page-section-or-theorem-locator-pending-independent-verification
     verified_by: null
     verified_on: null
+  - id: claim-locator-index
+    title: Exact locator for cited foundation
+    contribution: source-index
+    sources: [scholkopf2002]
+    locators:
+      - {source: scholkopf2002, manuscript_locator: "ch-prelim.md#finite-dimensional-spectral-theorem", source_locator: "Learning with Kernels, Appendix A, especially Sections A.1--A.2", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

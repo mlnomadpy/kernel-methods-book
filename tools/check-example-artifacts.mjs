@@ -16,6 +16,13 @@ function digest(text) {
   return crypto.createHash("sha256").update(text).digest("hex");
 }
 
+function numericLiterals(text) {
+  return [...text.matchAll(/(?<![A-Za-z_])[-+]?\d+(?:\.\d+)?(?:e[-+]?\d+)?/gi)]
+    .map((match) => match[0])
+    .filter((value, position, values) => values.indexOf(value) === position)
+    .slice(0, 100);
+}
+
 for (const chapter of chapters) {
   const sourceFile = "manuscript/chapters/" + chapter.src + ".md";
   const source = matter(fs.readFileSync(sourceFile, "utf8")).content;
@@ -47,6 +54,13 @@ for (const chapter of chapters) {
     }
     if (artifact.source_sha256 !== digest(clean.join("\n"))) {
       errors.push(chapter.src + "#" + id + ": artifact source hash is stale");
+    }
+    const expectedNumericLiterals = numericLiterals(clean.slice(1, -1).join("\n"));
+    if (
+      JSON.stringify(artifact.numeric_literals ?? []) !==
+      JSON.stringify(expectedNumericLiterals)
+    ) {
+      errors.push(chapter.src + "#" + id + ": numeric literal inventory is stale");
     }
     if (artifact.verification_status === "executable-reference") executable += 1;
     if (artifact.verification_status === "executable-reference") {

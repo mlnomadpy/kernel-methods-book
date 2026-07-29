@@ -37,18 +37,21 @@ print("k_{x*} =", np.round(kxs, 4))
 A = K + gamma * np.eye(n)
 print("gamma = n*lam =", round(gamma, 4))
 beta = np.linalg.solve(A, kxs)       # CME weights at x*
+assert np.isclose(beta.sum(), 0.8522, atol=5e-5)
 print("beta(x*) =", np.round(beta, 4))
 print("sum beta =", round(float(beta.sum()), 4))
 
 # plug-in conditional mean of Y (g(y) = y, not in the RKHS, but the standard
 # predictor for the conditional mean of the response)
 EY = float(beta @ y)
+assert np.isclose(EY, 1.2784, atol=5e-5)
 print("E[Y | X=1.5] (plug-in) =", round(EY, 4))
 
 # rigorous RKHS estimate for g = l(y0, .): E[g(Y)|X=x*] = sum_i beta_i g(y_i)
 g_at_yi = ky(y, y0)
 print("g(y_i) = l(y_i, 2.0) =", np.round(g_at_yi, 4))
 Eg = float(beta @ g_at_yi)
+assert np.isclose(Eg, 0.7164, atol=5e-5)
 print("E[l(2.0, Y) | X=1.5] =", round(Eg, 4))
 
 # for contrast: value of that same g at the plug-in conditional mean

@@ -46,6 +46,10 @@ print(f"uniform e^2 = {float(eu2):.6f}   e = {float(np.sqrt(eu2)):.6f}")
 # optimal weights w* = K^{-1} z
 ws = np.linalg.solve(K, z)
 es2 = C - z @ np.linalg.solve(K, z)                        # = C - z^T K^{-1} z
+assert np.allclose(ws, [0.304856, 0.337297, 0.304856], atol=1e-6)
+assert np.isclose(eu2, 0.004662, atol=1e-6)
+assert np.isclose(es2, 0.003079, atol=1e-6)
+assert es2 < eu2
 print("optimal w* =", np.round(ws, 6), f" sum = {float(ws.sum()):.6f}")
 print(f"optimal e^2 = {float(es2):.6f}   e = {float(np.sqrt(es2)):.6f}")
 print(f"check e*^2 via quad form = {float(C - 2 * ws @ z + ws @ K @ ws):.6f}")

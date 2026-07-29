@@ -28,12 +28,12 @@ def posterior(Xobs, Yobs):
     Xobs = np.asarray(Xobs); Yobs = np.asarray(Yobs)
     K = k(Xobs[:, None], Xobs[None, :])
     A = K + sigma2 * np.eye(len(Xobs))
-    Ainv = np.linalg.inv(A)
+    alpha = np.linalg.solve(A, Yobs)
     mu = np.empty_like(grid); var = np.empty_like(grid)
     for i, xs in enumerate(grid):
         ks = k(Xobs, xs)
-        mu[i] = ks @ Ainv @ Yobs
-        var[i] = k(xs, xs) - ks @ Ainv @ ks
+        mu[i] = ks @ alpha
+        var[i] = k(xs, xs) - ks @ np.linalg.solve(A, ks)
     return K, A, mu, var
 
 def gpucb_step(Xobs, Yobs, label):
@@ -63,8 +63,10 @@ Xobs.append(x3); Yobs.append(y3)
 
 x4, y4 = gpucb_step(Xobs, Yobs, "step 2 (t=4)")
 Xobs.append(x4); Yobs.append(y4)
+assert [x3, x4] == [1.0, 0.5]
 
 # best value found so far vs the optimum
 best = max(Yobs)
+assert np.isclose(best, f(0.5))
 print("best observed value after 4 evaluations =", round(best, 4))
 print("simple regret f(x*) - best =", round(float(f(grid).max()) - best, 4))

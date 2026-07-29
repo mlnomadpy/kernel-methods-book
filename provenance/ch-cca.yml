@@ -11,6 +11,7 @@ references:
   - hardoon2004
   - lai2000kcca
   - scholkopf2002
+  - kernelbook-code-ch-cca-ex2
   - shawe2004
 sections:
   - id: kernel-cca
@@ -125,9 +126,28 @@ sections:
     sources: [fukumizu2007cca, hardoon2004]
     locators:
       - {source: fukumizu2007cca, manuscript_locator: "ch-cca.md#exercises", source_locator: "Sections 2-5", status: author-checked-pending-independent-verification}
+  - id: claim-level-citation-index
+    title: Executable-artifact locator
+    contribution: provenance-index-only
+    sources:
+      - kernelbook-code-ch-cca-ex2
+    locators:
+      - source: kernelbook-code-ch-cca-ex2
+        manuscript_locator: ch-cca.md#cca-regularization-study
+        source_locator: checks/ch-cca-ex2.py; checks/example-ch-cca-example-cca-regularization-study.json
+        status: machine-check-path-mapped-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: exact section, equation, theorem, lemma, and experiment locators
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-25
+release_evidence:
+  controlled_quantity: regularized cross-view correlation under covariance whitening
+  manuscript_example: ch-cca.md#example-15-1
+  executable_check: checks/ch-cca-ex1.py
+  artifact: checks/example-ch-cca-example-15-1.json
+  status: machine-checked-author-artifact

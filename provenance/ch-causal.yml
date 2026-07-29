@@ -23,770 +23,123 @@ references:
   - mastouri2021
   - muandet2021cme
 sections:
-  - id: dependence-to-intervention
-    title: From dependence to intervention
-    contribution: adapted-and-expanded
-    sources: &a1
-      - gretton2005hsic
-      - fukumizu2008
-      - sriperumbudur2010
-      - gretton2012
-      - song2013cme
-      - muandet2017
-      - szabo2016dr
-      - spirtes2000
-      - pearl2009
-      - zhang2011kcit
-      - newey2003
-      - darolles2011
-      - angrist1996
-      - singh2019kiv
-      - muandet2020dualiv
-      - miao2018
-      - mastouri2021
-      - muandet2021cme
-    locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#dependence-to-intervention
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
   - id: hsic
     title: Dependence as a distance between embeddings
     contribution: adapted-and-expanded
-    sources: *a1
+    sources: [gretton2005hsic, sriperumbudur2010, gretton2012, muandet2017]
     locators:
       - source: gretton2005hsic
         manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 2, Hilbert-Schmidt independence criterion
+        status: author-located-pending-independent-verification
       - source: sriperumbudur2010
         manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3-4, characteristic kernels and injective embeddings
+        status: author-located-pending-independent-verification
       - source: gretton2012
         manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3, empirical MMD and null calibration
+        status: author-located-pending-independent-verification
       - source: muandet2017
         manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#hsic
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3.1 and 3.6, embeddings and dependence measures
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-ci
     title: Conditional independence in an RKHS
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: adapted-and-expanded-with-visible-executable-example
+    sources: [fukumizu2008, song2013cme, zhang2011kcit]
     locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: fukumizu2008
         manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3, conditional cross-covariance operator
+        status: author-located-pending-independent-verification
       - source: song2013cme
         manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 3, empirical conditional mean embeddings
+        status: author-located-pending-independent-verification
       - source: zhang2011kcit
         manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#kernel-ci
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3, kernel conditional-independence statistic and null law
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: treatment-effects
-    title: Estimating effects under confounding
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: Adjustment, balancing, and instrumental variables
+    contribution: synthesized-with-identification-boundaries
+    sources: [newey2003, darolles2011, angrist1996, singh2019kiv, muandet2020dualiv]
     locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: angrist1996
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-causal.md#kernel-iv
+        source_locator: Sections II-III, instrumental-variable assumptions and estimands
+        status: author-located-pending-independent-verification
+      - source: newey2003
+        manuscript_locator: ch-causal.md#kernel-iv
+        source_locator: Sections 2-3, completeness and nonparametric identification
+        status: author-located-pending-independent-verification
+      - source: darolles2011
+        manuscript_locator: ch-causal.md#kernel-iv
+        source_locator: Sections 2-3, nonparametric IV inverse problem and regularization
+        status: author-located-pending-independent-verification
       - source: singh2019kiv
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-causal.md#kernel-iv
+        source_locator: Sections 2-3, two-stage kernel instrumental variables
+        status: author-located-pending-independent-verification
       - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-causal.md#kernel-iv
+        source_locator: Sections 2-3, dual instrumental-variable formulation
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: proximal
+    title: Proximal causal learning
+    contribution: synthesized-with-completeness-assumptions
+    sources: [miao2018, mastouri2021]
+    locators:
       - source: miao2018
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-causal.md#proximal
+        source_locator: Sections 2-3, proxy restrictions and bridge identification
+        status: author-located-pending-independent-verification
       - source: mastouri2021
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#treatment-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-causal.md#proximal
+        source_locator: Sections 3-4, kernel proxy-variable bridge estimation
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: distributional-effects
-    title: "Beyond the mean: distributional and counterfactual effects"
+    title: Distributional and counterfactual effects
     contribution: adapted-and-expanded
-    sources: *a1
+    sources: [muandet2021cme, szabo2016dr]
     locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: muandet2021cme
         manuscript_locator: ch-causal.md#distributional-effects
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-4, counterfactual mean embeddings
+        status: author-located-pending-independent-verification
+      - source: szabo2016dr
+        manuscript_locator: ch-causal.md#summary-and-further-reading
+        source_locator: Sections 2-3, two-stage distribution-regression sampling
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: assumptions
     title: What kernels buy, and what they do not
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: original-synthesis
+    sources: [spirtes2000, pearl2009]
     locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: spirtes2000
         manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Chapters 3-5, Markov equivalence, faithfulness, and discovery
+        status: author-located-pending-independent-verification
       - source: pearl2009
         manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#assumptions
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Chapters 1 and 3, intervention semantics and identifiability
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: summary
-    title: Summary
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: common-mistakes-and-practical-implications
-    title: Common mistakes and practical implications
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: summary-and-further-reading
-    title: Summary and further reading
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - gretton2005hsic
-      - fukumizu2008
-      - sriperumbudur2010
-    locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: exercises
-    title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: gretton2005hsic
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fukumizu2008
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2010
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: song2013cme
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: szabo2016dr
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: spirtes2000
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: pearl2009
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: zhang2011kcit
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: newey2003
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: darolles2011
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: angrist1996
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: singh2019kiv
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2020dualiv
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: miao2018
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mastouri2021
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2021cme
-        manuscript_locator: ch-causal.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
-mapping_author:
-  name: Taha Bouhsine
-  website: https://www.tahabouhsine.com
-  affiliation: AzettaAI
-mapping_date: 2026-07-20

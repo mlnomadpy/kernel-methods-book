@@ -3,10 +3,10 @@
   "chapter": "ch-svr",
   "anchor": "example-6-3",
   "source_file": "manuscript/chapters/ch-svr.md",
-  "source_sha256": "2777966353b5012465c5b9503b37c3d4f146152966ccdfd69a792a64cc4c3dea",
+  "source_sha256": "1e2656e2f8623db34d2b7e45e053035eeab67b55eb7de422f1c9e6199fe1e23c",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch-svr-ex3.py"
+    "checks/ch-svr-ex2.py"
   ],
   "numeric_literals": [
     "0",
@@ -36,7 +36,11 @@
     "-1",
     "0.5",
     "3.0",
-    "0.15"
+    "0.15",
+    "565",
+    "502",
+    "330",
+    "8"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

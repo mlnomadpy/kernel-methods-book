@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-manifold
 slug: semi-supervised-and-manifold-regularization
 title: Semi-Supervised and Manifold Regularization
@@ -38,10 +39,13 @@ bibliography:
   - belkin2003
   - belkin2006manifold
   - vonluxburg2007
+  - scholkopf2001
+  - smola2003
+narrative_link_policy: exact
 ---
 # Semi-Supervised and Manifold Regularization
 
-<p class="lead">A hospital may hold a million scans and labels for only a thousand. The unlabeled scans reveal which anatomies are common, which variations connect smoothly, and where the data form separate populations. They do not reveal which diagnosis belongs to any of those regions. That logical gap is the whole subject: unlabeled inputs identify the marginal distribution \(P_X\), while prediction depends on \(P_{Y\mid X}\). Manifold methods become useful only after making a compatibility bet that connects them. This chapter reconstructs two foundational papers rather than treating that bet as a slogan. Laplacian eigenmaps turn a neighborhood graph into a discrete geometry, while manifold regularization combines that geometry with an ambient RKHS to obtain an inductive predictor. We derive both finite problems, prove the representer and harmonic-extension results, expose the graph-to-manifold limit, and build failure tests for the cases in which more unlabeled data makes the answer worse.</p>
+<p class="lead">A hospital may hold a million scans and labels for only a thousand. The unlabeled scans reveal which anatomies are common, which variations connect smoothly, and where the data form separate populations. They do not reveal which diagnosis belongs to any of those regions. That logical gap is the whole subject: unlabeled inputs identify the marginal distribution \(P_X\), while prediction depends on \(P_{Y\mid X}\). Manifold methods become useful only after making a compatibility bet that connects them. We inherit the RKHS evaluation geometry of Chapter [[ch:kernels-and-rkhs|Kernels and Reproducing Kernel Hilbert Spaces]], then add a second geometry estimated from unlabeled points. Laplacian eigenmaps turn a neighborhood graph into a discrete geometry, while manifold regularization combines that geometry with an ambient RKHS to obtain an inductive predictor. We derive both finite problems, prove the representer and harmonic-extension results, expose the graph-to-manifold limit, and build failure tests for cases in which more unlabeled data makes the answer worse.</p>
 
 ## The identifiability barrier {#manifold-identifiability}
 
@@ -55,7 +59,11 @@ Fix any marginal distribution \(P_X\) on \(\mathcal X\). There exist two joint d
 **Assumptions.** Binary labels and a marginal assigning positive probability to a measurable set \(A\) and its complement. **Proof status.** Proved by construction below.
 :::
 
-**Proof.** Under \(P^{(0)}\), set \(Y=1\) on \(A\) and \(Y=-1\) on \(A^c\). Under \(P^{(1)}\), reverse the two labels. Both models generate exactly the same unlabeled samples because both have marginal \(P_X\), but their Bayes classifiers disagree everywhere. No statistic of unlabeled inputs can tell which conditional law generated the labels. \(\square\)
+::: {.proof}
+[Proof]{.box-title}
+
+Under \(P^{(0)}\), set \(Y=1\) on \(A\) and \(Y=-1\) on \(A^c\). Under \(P^{(1)}\), reverse the two labels. Both models generate exactly the same unlabeled samples because both have marginal \(P_X\), but their Bayes classifiers disagree everywhere. No statistic of unlabeled inputs can tell which conditional law generated the labels. \(\square\)
+:::
 
 A semi-supervised guarantee therefore needs a restricted family of conditional laws. Common restrictions include:
 
@@ -130,7 +138,10 @@ For a \(p\)-dimensional embedding, take \(p\) \(D\)-orthonormal generalized eige
 **Assumptions.** \(W\) is symmetric and nonnegative, \(D\) is positive diagonal, and the graph is connected. **Proof status.** Derived below from the Rayleigh quotient. This is the finite optimization at the center of [@belkin2003].
 :::
 
-**Derivation.** Form the Lagrangian
+::: {.proof}
+[Proof]{.box-title}
+
+Form the Lagrangian
 
 $$
 \mathcal L(f,\lambda,\mu)
@@ -144,12 +155,13 @@ $$
 $$
 
 Left-multiply by \(\mathbf1^\top\). Since \(\mathbf1^\top L=0\), \(f^\top D\mathbf1=0\), and \(\mathbf1^\top D\mathbf1\gt0\), we obtain \(\mu=0\). Thus \(Lf=\lambda Df\). The Courant-Fischer principle for the symmetric matrix \(D^{-1/2}LD^{-1/2}\) identifies the constrained minimum with its smallest positive eigenvalue. \(\square\)
+:::
 
 **Executable object.** The algorithm is graph construction followed by a sparse generalized eigensolve. The output is a coordinate for each current vertex, not a prediction rule on \(\mathcal X\).
 
 **Failure boundary.** A disconnected graph has one zero mode per component, so the phrase "the first nonconstant eigenvector" becomes ambiguous. Isolated vertices make \(D^{-1/2}\) undefined. A shortcut edge can collapse distant manifold regions. A graph built at one bandwidth can encode a different geometry from the graph built at another. The paper introduces a locality-preserving representation; it does not make every neighborhood graph a consistent manifold estimator.
 
-**Comparison and afterlife.** Kernel PCA preserves variance in an ambient-kernel feature space; Laplacian eigenmaps preserve local graph relations through low Dirichlet energy. Spectral clustering uses closely related eigenvectors but discretizes them into groups. Later convergence work asks when these finite eigenvectors approach eigenfunctions of a continuum operator, while out-of-sample methods address the fact that the original finite embedding has no automatic value at a new point.
+**Comparison and afterlife.** Kernel PCA preserves variance in an ambient-kernel feature space; Laplacian eigenmaps preserve local graph relations through low Dirichlet energy. Spectral clustering uses closely related eigenvectors but discretizes them into groups. Graph regularization can also be read spectrally as suppressing high-frequency graph modes [@smola2003]. Later convergence work asks when these finite eigenvectors approach eigenfunctions of a continuum operator, while out-of-sample methods address the fact that the original finite embedding has no automatic value at a new point.
 
 ## Harmonic extension as a discrete boundary-value problem {#manifold-harmonic}
 
@@ -186,7 +198,10 @@ $$
 **Assumptions.** A finite undirected graph with nonnegative weights and fixed labels. **Proof status.** Proved below from the graph-energy identity.
 :::
 
-**Proof.** For \(v\in\mathbb R^u\), pad it with zeros on labeled vertices to form \(\widetilde v\). Then
+::: {.proof}
+[Proof]{.box-title}
+
+For \(v\in\mathbb R^u\), pad it with zeros on labeled vertices to form \(\widetilde v\). Then
 
 $$
 v^\top L_{uu}v
@@ -197,6 +212,7 @@ v^\top L_{uu}v
 $$
 
 This is zero exactly when \(\widetilde v\) is constant on each connected component. Any component meeting a labeled vertex has constant zero because \(\widetilde v\) is zero there. Thus the only null vector is zero precisely under the stated component condition. The first-order condition on an unlabeled coordinate is \((Lf)_i=0\), which rearranges to the weighted-average identity. \(\square\)
+:::
 
 The averaging equation yields a random-walk interpretation. With labeled vertices absorbing, \(f_i\) is a weighted average of boundary labels using absorption probabilities. It also exposes a limitation: a disconnected unlabeled component is unidentified, not merely assigned a large standard error.
 
@@ -222,6 +238,22 @@ f_3=-\frac{1}{1+2\varepsilon}.
 $$
 
 When \(\varepsilon=1/10\), the scores are \(5/6\) and \(-5/6\): the weak bridge preserves the two label regions. When \(\varepsilon=10\), they are \(1/21\) and \(-1/21\): the strong bridge nearly erases both labels. If the bridge is an artifact of the ambient metric, adding more unlabeled points around it can reinforce the wrong answer.
+
+The same calculation can be rerun directly:
+
+```python
+import numpy as np
+
+def harmonic_scores(epsilon):
+    system = np.array([[1 + epsilon, -epsilon],
+                       [-epsilon, 1 + epsilon]], dtype=float)
+    scores = np.linalg.solve(system, np.array([1., -1.]))
+    np.testing.assert_allclose(system @ scores, [1., -1.], atol=1e-12)
+    return scores
+
+np.testing.assert_allclose(harmonic_scores(0.1), [5 / 6, -5 / 6])
+np.testing.assert_allclose(harmonic_scores(10.), [1 / 21, -1 / 21])
+```
 
 **Verification.** Substitution verifies both linear equations. This is a sensitivity calculation on one graph, not evidence that a particular graph rule is statistically consistent. The existing deterministic figure artifact records the chapter's graph-energy visualization.
 :::
@@ -258,7 +290,10 @@ $$
 **Assumptions.** Point evaluation is bounded in \(\mathcal H_k\), the loss depends only on labeled evaluations, \(L\succeq0\), \(\gamma_A\gt0\), and a minimizer exists. Strict convexity of the loss is not needed for the representation. **Proof status.** Proved below. This is Theorem 2 and Section 3.4 of [@belkin2006manifold].
 ::::
 
-**Proof.** Let
+::: {.proof}
+[Proof]{.box-title}
+
+Let
 
 $$
 \mathcal S=\operatorname{span}\{k(x_i,\cdot):1\le i\le n\}
@@ -283,8 +318,9 @@ $$
 $$
 
 Since \(\gamma_A\gt0\), a minimizer cannot have \(f_\perp\ne0\). \(\square\)
+:::
 
-**Contribution relative to inherited machinery.** The orthogonal proof is inherited from the standard representer theorem. The new move is recognizing that the empirical intrinsic penalty still depends only on the \(n\) sample evaluations, so unlabeled points enter the representer span even though they carry no loss term. The ambient norm turns that finite geometric regularizer into an inductive function.
+**Contribution relative to inherited machinery.** The orthogonal proof is inherited from the standard representer theorem [@scholkopf2001]. The new move is recognizing that the empirical intrinsic penalty still depends only on the \(n\) sample evaluations, so unlabeled points enter the representer span even though they carry no loss term. The ambient norm turns that finite geometric regularizer into an inductive function.
 
 **Failure boundary.** If \(\gamma_A=0\), many functions agree on all graph vertices and differ elsewhere, so the graph objective does not determine an inductive extension. If deployment points lie away from the sampled graph, the intrinsic term contributes no local evidence there; extrapolation comes entirely from the ambient kernel.
 
@@ -464,7 +500,9 @@ Remove any one and unlabeled data can hurt. Concrete witnesses include:
 
 A claim that "unlabeled data helped" must compare against the same ambient model with \(\gamma_I=0\), use a fixed labeled validation protocol, and include graph perturbations. Choosing the best graph after inspecting test labels converts graph selection into leakage.
 
-## Out-of-sample prediction is a modeling choice {#manifold-out-of-sample}
+<span id="manifold-out-of-sample"></span>
+
+**Out-of-sample prediction is a modeling choice.**
 
 Harmonic extension assigns values only to vertices in the observed graph. A new point has
 no value until we choose how it joins that graph, and different neighbor rules define
@@ -491,7 +529,9 @@ The ambient extension is stable with respect to keeping old vertices fixed, but 
 
 State which estimator is deployed. Transductive test performance on vertices present during graph construction does not establish inductive performance on future samples.
 
-## Scaling without changing the estimator silently {#manifold-scaling}
+<span id="manifold-scaling"></span>
+
+**Scaling without changing the estimator silently.**
 
 Sparse neighbor graphs make \(Lv\) cost \(O(|E|)\). The ambient kernel can remain the bottleneck. With random features \(K\approx ZZ^\top\), writing \(f_X=Zw\) gives
 
@@ -525,7 +565,9 @@ Approximate nearest-neighbor search changes \(W\), hence the statistical estimat
 7. Report runtime, memory, residual, and task error separately.
 ::::
 
-## Common mistakes and practical implications {#manifold-practice}
+<span id="manifold-practice"></span>
+
+**Common mistakes and practical implications.**
 
 - Unlabeled samples identify \(P_X\), not \(P_{Y\mid X}\).
 - A graph Laplacian is not automatically the Laplace-Beltrami operator.
@@ -542,7 +584,7 @@ The minimum credible report includes the supervised ablation, graph construction
 
 Laplacian eigenmaps turn local graph relationships into coordinates by minimizing a finite Dirichlet energy under a degree-weighted normalization [@belkin2003]. Manifold regularization uses the same geometry as an intrinsic penalty and combines it with an ambient RKHS norm, yielding the representer expansion over both labeled and unlabeled inputs and a genuine out-of-sample function [@belkin2006manifold]. The two contributions solve different problems: one estimates coordinates on a point cloud; the other regularizes a predictor.
 
-Neither paper removes the compatibility assumption. Graph construction, normalization, density, boundary, and deployment support define the geometry actually used. The spectral tutorial [@vonluxburg2007] is valuable precisely because it separates these graph choices and their consequences. The practical standard is therefore comparative and falsifiable: unlabeled data count as useful only when the joint method beats its supervised counterpart under a label-only validation protocol and remains stable across plausible graphs.
+Neither paper removes the compatibility assumption. Graph construction, normalization, density, boundary, and deployment support define the geometry actually used. The spectral tutorial [@vonluxburg2007] is valuable precisely because it separates these graph choices and their consequences. The practical standard is therefore comparative and falsifiable: unlabeled data count as useful only when the joint method beats its supervised counterpart under a label-only validation protocol and remains stable across plausible graphs. Chapter [[ch:geometric-and-equivariant-kernels|Geometric and Equivariant Kernels]] continues the journey by asking when geometry should be encoded in the kernel itself rather than estimated through a sample graph.
 
 ## Exercises {#exercises}
 

@@ -1,4 +1,5 @@
 ---
+narrative_link_policy: exact
 id: ch-svr
 slug: support-vector-regression
 title: Support Vector Regression
@@ -34,10 +35,13 @@ bibliography:
   - koenker1978quantile
   - takeuchi2006quantile
   - newey1987expectiles
+example_code_policy: visible-for-executable
 ---
 # Support Vector Regression
 
 <p class="lead">Many targets come with a tolerance: a forecast that lands within half a degree is simply right, and nobody pays for the decimals. Least squares does not think this way; it charges for every deviation, however small, so every training point leaves its mark on the fit. The support vector machine of [[ch:support-vector-machines]] runs on the opposite bargain, a loss that ignores comfortable points entirely, and that indifference is exactly what makes its solution sparse. This chapter carries the bargain from labels to real targets. Vapnik's \(\varepsilon\)-insensitive loss opens a flat-bottomed valley of zero cost around each target; points that fall into the valley cost nothing, contribute nothing, and drop out of the solution, so the regressor is written on a small subset of the data, the support vectors, exactly as in classification. We build the primal program, derive its dual and the box constraints that structure it, read the geometry of the resulting \(\varepsilon\)-tube, and then meet the \(\nu\)-variant that trades the awkward parameter \(\varepsilon\) for a parameter \(\nu\) with a clean statistical meaning: it bounds the fraction of points allowed outside the tube. We follow Vapnik (1995) and Schölkopf and Smola (2002) throughout, with the \(\nu\)-formulation from Schölkopf, Smola, Williamson, and Bartlett (2000).</p>
+
+The inherited mechanism is the constrained primal-dual geometry of [[ch:support-vector-machines|Support Vector Machines]]: complementary slackness makes only active constraints carry nonzero dual mass, and the representer expansion is written entirely on those active points. SVR keeps that mechanism but replaces a single separating margin by two parallel inequalities around a real-valued target, which is why the two dual multipliers below appear as a signed difference.
 
 ## The \(\varepsilon\)-insensitive loss and where sparsity comes from {#epsilon-insensitive-loss}
 
@@ -167,6 +171,16 @@ Five points on a line, \(x=(1,2,3,4,5)\), \(y=(1,2,3,4,5)\), with linear kernel 
 3.  [Classify the points.]{.wex-op} The residuals \(y_i-f(x_i)\) are \((-0.5,-0.25,0,+0.25,+0.5)\). Points \(x_2,x_3,x_4\) lie strictly inside the tube (\(|{\cdot}|\lt 0.5\)) and get \(\beta_i=0\); points \(x_1\) and \(x_5\) sit exactly on the lower and upper edges and are the two support vectors. The SV fraction is \(2/5=0.4\).
 4.  [Check strong duality.]{.wex-op} The dual objective evaluates to \(0.75-0.1875-0.28125=0.28125\); the primal objective is \(\tfrac12 w^2+0=0.5(0.5625)=0.28125\) since no slack is used. The duality gap is zero.
 
+```python
+import numpy as np
+x, y = np.arange(1., 6.), np.arange(1., 6.)
+beta = np.array([-.1875, 0, 0, 0, .1875])
+w, b = beta @ x, .75
+residual = y - (w*x + b)
+np.testing.assert_allclose([w, b, *residual, .5*w*w],
+                           [.75, .75, -.5, -.25, 0, .25, .5, .28125])
+```
+
 **Reading.** A perfectly linear dataset is fit not by the least-squares slope \(1.0\) but by the flatter slope \(0.75\): the tube lets the line relax toward horizontal until its two extreme points touch the edges, and those two points, alone, pin the solution. Everything in between is inert.
 ::::
 :::::
@@ -282,6 +296,17 @@ Six points \(x=(1,2,3,4,5,6)\), \(y=(1.0,\,2.6,\,2.0,\,4.2,\,3.4,\,5.6)\), linea
 2.  [Fit both levels.]{.wex-op} Solving the dual QP gives the low line \(f(x)=0.6x+0.4\) at \(\tau=0.25\) and the high line \(f(x)=0.75x+1.1\) at \(\tau=0.75\). The low line lies below the high line at every \(x\), so the two bracket the data.
 3.  [Count what is beneath.]{.wex-op} At \(\tau=0.25\) the residuals \(y_i-f(x_i)\) are \((0,\,1.0,\,-0.2,\,1.4,\,0,\,1.6)\): one point (\(x_3\)) sits below the line, two (\(x_1,x_5\)) on it, three above. At \(\tau=0.75\) the residuals are \((-0.85,\,0,\,-1.35,\,0.1,\,-1.45,\,0)\): three points below, two on, one above. The fraction beneath rises from \(1/6\) to \(3/6\) as \(\tau\) grows.
 4.  [Check the quantile bracket.]{.wex-op} At \(\tau=0.25\), \(\tfrac16\le0.25\le\tfrac36\), that is \(0.167\le0.25\le0.500\); at \(\tau=0.75\), \(\tfrac36\le0.75\le\tfrac56\), that is \(0.500\le0.75\le0.833\). The level is trapped between the strictly-below and the on-or-below fractions in both rows, and strong duality holds, the dual and primal objectives agreeing at \(2.480\) and \(2.256\).
+
+```python
+import numpy as np
+x = np.arange(1., 7.)
+y = np.array([1., 2.6, 2., 4.2, 3.4, 5.6])
+low, high = y-(.6*x+.4), y-(.75*x+1.1)
+np.testing.assert_allclose(low, [0, 1, -.2, 1.4, 0, 1.6])
+np.testing.assert_allclose(high, [-.85, 0, -1.35, .1, -1.45, 0])
+assert np.sum(low < 0)/6 <= .25 <= np.sum(low <= 0)/6
+assert np.sum(high < 0)/6 <= .75 <= np.sum(high <= 0)/6
+```
 
 **Reading.** One dial, \(\tau\), slides the fit up or down through the data with no tube at all: the asymmetry of the box does what the width \(\varepsilon\) did before. Two levels give two lines that fence the points between them, a distribution-free prediction band built from the same quadratic program as the classifier.
 ::::
@@ -400,6 +425,18 @@ Five points \(x=(0,1,2,3,4)\), \(y=(0,\,0.9,\,0.2,\,-0.8,\,0.3)\), a Gaussian ke
 3.  [Check the bounds.]{.wex-op} In every row the fraction of errors \(\le\nu\le\) the fraction of SVs: \(0.00\le0.2\le0.60\), then \(0.00\le0.4\le0.80\), then \(0.40\le0.6\le0.80\). The proposition holds line by line.
 4.  [Inspect \(\nu=0.6\).]{.wex-op} Here \(\beta=(-0.5,\,1,\,0,\,-1,\,0.5)\), so \(\sum_i\beta_i=0\) and the budget \(\sum_i|\beta_i|=3.0\) equals \(C\nu=3.0\) exactly, confirming the constraint is active. Points \(x_1,x_3\) hit the ceiling \(|\beta|=1\) and lie outside the tube (the two errors); \(x_0,x_4\) are in-bound SVs on the edges; \(x_2\) is inside. The recovered offset is \(b=0.15\).
 
+```python
+import numpy as np
+nu = np.array([.2, .4, .6])
+epsilon = np.array([.565, .502, .330])
+sv_fraction = np.array([.6, .8, .8])
+error_fraction = np.array([0., 0., .4])
+assert np.all(error_fraction <= nu) and np.all(nu <= sv_fraction)
+assert np.all(np.diff(epsilon) < 0)
+beta = np.array([-.5, 1., 0., -1., .5])
+np.testing.assert_allclose([beta.sum(), np.abs(beta).sum()], [0, 3])
+```
+
 **Reading.** Turning one dial, \(\nu\), simultaneously widens or narrows the tube and controls how many points are allowed to escape it. You never specify \(\varepsilon\); you specify the fraction of the data you are willing to treat as errors, and the geometry follows.
 ::::
 :::::
@@ -424,6 +461,8 @@ A tempting idea, storing only the support vectors as a compressed encoding of th
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
 The \(\varepsilon\)-tube encodes application tolerance, not posterior uncertainty, and its nominal width does not imply a coverage probability. A larger \(\varepsilon\) often increases sparsity but can hide systematic bias; report residuals on both sides of the tube and the fraction of support vectors. Quantile curves fitted independently may cross, while expectiles target asymmetric squared-loss functionals rather than quantiles. For \(\nu\)-SVR, treat the fraction bounds as training-sample properties under the proposition's conditions, not as guaranteed future error rates.
+
+An \(\varepsilon\)-tube decides which deviations deserve attention only after a target value has been supplied. The next pressure is more basic: learn a boundary when there are no negative labels, or no labels at all, and decide whether a new point belongs to the learned support. [[ch:one-class-and-novelty|One-Class and Novelty Detection]] turns the same margin machinery into support estimation, replacing regression residuals by geometric departure from the training distribution.
 
 ## Summary and further reading {#summary-and-further-reading}
 

@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-invariance
 slug: invariances-and-pre-images
 title: Invariances and the Pre-Image Problem
@@ -36,6 +38,8 @@ bibliography:
 # Invariances and the Pre-Image Problem
 
 <p class="lead">The original support vector machine would classify a handwritten digit exactly the same way if you first scrambled every pixel by a fixed permutation. It knew nothing of images, and on a task that is all about spatial layout that blindness is at once striking and damning. Nothing in the kernel machinery built so far tells the machine that a digit survives a one-pixel shift or a small rotation, and nothing lets it hand back a cleaned-up image once its answer lives in feature space as an expansion \(\sum_i \alpha_i \Phi(x_i)\). This chapter takes up both gaps. The first half teaches a kernel machine the invariances we already know, through virtual examples, tangent-vector penalties, and kernels that fold the transformation into their evaluation, the ingredient that turned support vector machines into a benchmark-winning tool. The second solves the pre-image problem of recovering a point in input space from a feature-space vector, which has no exact solution in general and a workable approximate one that powers kernel PCA denoising and reduced-set compression. The two themes meet at one place: both are about the map \(\Phi\) between input and feature space, one pushing prior structure forward through it, the other pulling solutions back.</p>
+
+The closure rules and feature constructions of [[ch:kernel-families|Translation-Invariant, Semigroup, and Probabilistic Kernels]] guarantee positive definiteness when kernels are averaged or composed. Invariance uses that result as an admissibility engine: averaging over a transformation group identifies inputs along known nuisance directions without leaving the cone of valid kernels. The pre-image half of this chapter then asks the inverse question that closure rules do not answer: whether a feature-space point still corresponds to any input.
 
 ## Prior knowledge and invariance {#prior-knowledge}
 
@@ -215,6 +219,47 @@ Three points in \(\mathbb{R}^2\): \(x_1=(0,0)\), \(x_2=(2,0)\), \(x_3=(1,1.5)\).
 
 **Reading.** The pre-image \(z^\star\approx(0.384,\,0.172)\) lands between the three points but nearest \(x_1\), the one with the largest weight, exactly where a single Gaussian bump best matches the weighted mixture. The projection \(J\) increases at every step, confirming the iteration is climbing toward the extremum.
 :::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+
+# --- setup ---
+X = np.array([[0.0, 0.0],
+              [2.0, 0.0],
+              [1.0, 1.5]])
+beta = np.array([0.5, 0.3, 0.2])
+sigma = 1.0
+two_s2 = 2.0 * sigma**2
+
+print("X =\n", X)
+print("beta =", beta)
+print("sigma =", sigma)
+
+def weights(z):
+    d2 = np.sum((X - z)**2, axis=1)
+    return beta * np.exp(-d2 / two_s2)
+
+def objective(z):
+    # <Psi, Phi(z)> = sum_i beta_i k(x_i, z)
+    return np.sum(weights(z))
+
+# start at the plain weighted mean of the points
+z = beta @ X
+print("z0 =", z, " J(z0) = <Psi,Phi(z0)> =", round(objective(z), 6))
+
+for n in range(1, 7):
+    w = weights(z)
+    z = (w @ X) / w.sum()
+    print(f"z{n} =", np.round(z, 6), " J =", round(objective(z), 6))
+
+z_star = z
+print("z* =", np.round(z_star, 6))
+print("J(z*) =", round(objective(z_star), 6))
+```
 ::::
 
 ## Reduced set methods {#reduced-set}
@@ -281,6 +326,59 @@ An SVM-style expansion \(\Psi=\sum_{i=1}^3\alpha_i\Phi(x_i)\) with \(x_1=(0,0)\)
 
 **Reading.** One synthetic term captures the three-term vector with a relative error of \(0.3805/2.0314=18.7\%\). Collapsing three bumps into one loses a fifth of the vector's length; adding a second reduced-set vector on the residual, the next pass of the construction loop, would shrink it further. This is the speed-accuracy dial that reduced-set methods turn.
 :::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+
+# --- setup ---
+X = np.array([[0.0, 0.0],
+              [1.0, 0.0],
+              [0.5, 1.0]])
+alpha = np.array([1.0, 0.8, 0.6])
+sigma = 1.0
+two_s2 = 2.0 * sigma**2
+
+def k(a, b):
+    return np.exp(-np.sum((a - b)**2) / two_s2)
+
+# Gram matrix of the x_i
+K = np.array([[k(X[i], X[j]) for j in range(3)] for i in range(3)])
+print("K =\n", K)
+
+# ||Psi||^2 = sum_ij alpha_i alpha_j k(x_i, x_j)
+Psi2 = alpha @ K @ alpha
+print("||Psi||^2 =", round(Psi2, 6))
+print("||Psi||   =", round(np.sqrt(Psi2), 6))
+
+def weights(z):
+    d2 = np.sum((X - z)**2, axis=1)
+    return alpha * np.exp(-d2 / two_s2)
+
+# (a) fixed-point iteration for the pre-image
+z = alpha @ X / alpha.sum()
+print("z0 =", np.round(z, 6))
+for n in range(1, 8):
+    w = weights(z)
+    z = (w @ X) / w.sum()
+    print(f"z{n} =", np.round(z, 6))
+z_star = z
+
+# (b) optimal single coefficient
+kz = np.array([k(X[i], z_star) for i in range(3)])
+print("k(x_i, z*) =", np.round(kz, 6))
+beta = alpha @ kz          # divided by k(z,z)=1
+print("beta =", round(beta, 6))
+
+# (c) approximation error in feature space
+err2 = Psi2 - beta**2      # = ||Psi||^2 - 2 beta<Psi,Phi(z)> + beta^2, with <Psi,Phi(z)>=beta
+print("||Psi - beta Phi(z*)||^2 =", round(err2, 6))
+print("||Psi - beta Phi(z*)||   =", round(np.sqrt(err2), 6))
+print("relative error =", round(np.sqrt(err2 / Psi2), 6))
+```
 ::::
 
 ### Sequential evaluation and face detection {#sequential-evaluation}
@@ -295,6 +393,8 @@ Two problems, one map. Incorporating invariances pushes prior knowledge forward 
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
 Do not impose a transformation merely because it is available: over-invariance identifies inputs whose labels may differ. A jittering similarity need not be positive definite, so inspect its Gram spectrum before feeding it to a solver that assumes convexity. The Gaussian pre-image update is a local fixed-point method, not a global convergence theorem; monitor the objective, guard a near-zero denominator, and restart from several initial points. Exact pre-images of multi-centre Gaussian expansions generally do not exist. For reduced sets, report both feature-space residual and task performance, because the smallest residual need not give the best classification boundary.
+
+Group averaging encodes equivalence, but it does not express the roughness penalty or unpenalized polynomial directions needed for function estimation. [[ch:smoothing-splines-and-additive-rkhs|Smoothing Splines and Additive RKHSs]] addresses that next pressure by deriving a kernel from a differential seminorm and by keeping its null space explicit instead of hiding it inside an invariant feature map.
 
 ## Summary and further reading {#summary-and-further-reading}
 

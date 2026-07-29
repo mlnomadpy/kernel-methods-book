@@ -5,6 +5,7 @@ status: author-mapped-pending-independent-verification
 private_source_sha256: null
 references:
   - bartlett2006
+  - kernelbook-code-ch04-ex1
   - vapnik1995
   - bartlett2002
   - ledoux1991
@@ -871,6 +872,39 @@ sections:
         manuscript_locator: ch04.md#exercises
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source and executable-artifact locators
+    contribution: provenance-index-only
+    sources:
+      - bartlett2002
+      - bartlett2006
+      - kernelbook-code-ch04-ex1
+      - steinwart2008
+      - vapnik1995
+    locators:
+      - source: bartlett2002
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: JMLR 3:463-482, Sections 2-4, especially Theorems 8 and 12
+        status: author-located-pending-independent-verification
+      - source: bartlett2006
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: JASA 101(473):138-156, Sections 2-3 and Theorems 1-3
+        status: author-located-pending-independent-verification
+      - source: kernelbook-code-ch04-ex1
+        manuscript_locator: ch04.md#the-fixed-point
+        source_locator: checks/ch04-ex1.py; checks/example-ch04-example-11-1.json
+        status: machine-check-path-mapped-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: Chapters 5-7, regularized risk, generalization, and consistency
+        status: author-located-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch04.md#summary-and-further-reading
+        source_locator: Chapters 3-5, VC dimension and structural risk minimization
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only

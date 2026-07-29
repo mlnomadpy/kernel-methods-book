@@ -3,10 +3,10 @@
   "chapter": "ch05",
   "anchor": "example-5-4",
   "source_file": "manuscript/chapters/ch05.md",
-  "source_sha256": "939cf6c6d3f642e01db45c794aad547abbdd0481260199f5610631614bd787ed",
+  "source_sha256": "cf3a72063dc5f57de8086a23fefc1d1cd8502d199c31898a39cd4cbb71aba2b2",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch05-ex4.py"
+    "checks/ch05-ex3.py"
   ],
   "numeric_literals": [
     "4",
@@ -40,6 +40,21 @@
     "4.408633",
     "3",
     "0.285845",
+    "-2",
+    "5",
+    "909732",
+    "260042",
+    "1111",
+    "2056",
+    "3489",
+    "4578",
+    "5486",
+    "6569",
+    "7986",
+    "8725",
+    "5e-5",
+    "285845",
+    "1e-5",
     "0.2858"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",

@@ -33,6 +33,8 @@ bibliography:
   - scholkopf2002
   - boyd2004
   - vapnik1982
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Solving the SVM: Decomposition and SMO
 
@@ -139,6 +141,16 @@ Four points in \(\mathbb{R}^2\) with a linear kernel \(K(x,x')=x^\top x'\): \(x_
 4.  [Bracket the threshold.]{.wex-op} \(b_{\text{up}}=\min(F_1,F_3,F_4)=0\) at point \(1\); \(b_{\text{low}}=\max(F_1,F_2,F_3)=2.5\) at point \(3\).
 5.  [Read the violation.]{.wex-op} Since \(b_{\text{low}}-b_{\text{up}}=2.5\gt 0\), the KKT test fails: the point is not optimal. The most-violating pair is \((i_{\text{low}},i_{\text{up}})=(3,1)\).
 
+```python
+import numpy as np
+
+X = np.array([[0., 0.], [2., 0.], [1., 2.], [3., 2.]])
+y, alpha = np.array([-1., -1., 1., 1.]), np.array([.5, 0., .5, 0.])
+F = (X @ X.T) @ (alpha * y)
+np.testing.assert_allclose(F, [0, 1, 2.5, 3.5])
+assert F[[0, 1, 2]].max() - F[[0, 2, 3]].min() == 2.5
+```
+
 **Reading.** The optimal-threshold interval \([b_{\text{low}},b_{\text{up}}]=[2.5,0]\) is empty, which is precisely the signature of a KKT violation, and the gap \(2.5\) is the amount of suboptimality the next step must remove. Points \(3\) and \(1\) are the pair whose coefficients should move.
 ::::
 :::::
@@ -191,6 +203,12 @@ The clipped update is \(\alpha_j^{\text{new}}=\min(\max(\alpha_j^{\text{new,unc}
 **Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
 :::::
 
+::: {.proof}
+[Proof]{.box-title}
+
+When \(y_i\ne y_j\), feasibility fixes \(\alpha_i-\alpha_j\). Substitute \(\alpha_i=\alpha_j+\alpha_i^{old}-\alpha_j^{old}\) into the box constraints and intersect the resulting intervals to obtain the first \(L,H\). When labels agree, feasibility fixes \(\alpha_i+\alpha_j\); substitution gives the second pair. Along either interval the dual is a concave quadratic, so projecting its vertex onto \([L,H]\) is the exact constrained maximizer. \(\square\)
+:::
+
 These are exactly the endpoints where the feasible line exits the box. When the labels differ, the line has slope \(+1\) and slides along a diagonal; when they agree, slope \(-1\) and slides along the anti-diagonal, and the two cases produce the two formulas above. Clipping is not an approximation: since the objective is a concave parabola in \(\alpha_j\), its constrained maximizer on an interval is the unconstrained vertex projected onto that interval, so the single \(\min\)-\(\max\) is exact.
 
 Finally the threshold \(b\) is refreshed so that the KKT conditions hold at the freshly non-bound points. Requiring \(f(x_i)=y_i\) after the update, that is \(E_i=0\), yields a candidate \(b_1\); requiring \(f(x_j)=y_j\) yields a candidate \(b_2\):
@@ -238,6 +256,15 @@ Two points on the line with a linear kernel: \(x_1=(1,0)\), \(x_2=(2,0)\), label
 4.  [Clip to the box.]{.wex-op} Labels differ, so \(L=\max(0,\,0.1-0.1)=0\) and \(H=\min(1,\,1+0.1-0.1)=1\); the value \(2.0\) is clipped to \(\alpha_2^{\text{new}}=1\).
 5.  [Update the partner.]{.wex-op} \(\alpha_1^{\text{new}}=0.1+s(0.1-1)=0.1+(-1)(-0.9)=1.0\); the constraint holds, \(y_1\alpha_1+y_2\alpha_2=1-1=0\), as before.
 6.  [Refresh the threshold.]{.wex-op} \(b_1=0-(-1.1)-1(0.9)(1)-(-1)(0.9)(2)=2.0\) and \(b_2=0-0.8-1(0.9)(2)-(-1)(0.9)(4)=1.0\). Both new coefficients sit at the bound \(C=1\), so \(b=\tfrac12(b_1+b_2)=1.5\).
+
+```python
+import numpy as np
+
+old, errors = np.array([.1, .1]), np.array([-1.1, .8])
+new_j = np.clip(old[1] - (errors[0] - errors[1]), 0., 1.)
+new_i = old[0] - (old[1] - new_j)
+np.testing.assert_allclose([new_i, new_j, (2. + 1.) / 2], [1, 1, 1.5])
+```
 
 **Reading.** A single analytic step drives both coefficients from \(0.1\) to the upper bound \(C=1\): the two points become bound support vectors, and the misclassified point \(2\) (whose error \(E_2=0.8\) flagged the violation) is corrected. No inner solver was called; the entire move is the four formulas for \(\eta\), the clipped \(\alpha_2\), the partner \(\alpha_1\), and \(b\).
 ::::

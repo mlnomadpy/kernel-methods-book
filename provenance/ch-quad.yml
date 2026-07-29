@@ -14,481 +14,87 @@ references:
   - briol2019
   - muandet2017
 sections:
-  - id: integration-problem
-    title: The integration problem, and why randomness is wasteful
-    contribution: adapted-and-expanded
-    sources: &a1
-      - ohagan1991
-      - rasmussen2003bmc
-      - welling2009herding
-      - chen2010herding
-      - bach2012herding
-      - huszar2012
-      - bach2017quadrature
-      - briol2019
-      - muandet2017
-    locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#integration-problem
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
   - id: worst-case-error
     title: Worst-case error is a maximum mean discrepancy
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: synthesized-with-complete-local-proofs
+    sources: [muandet2017, briol2019]
     locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: muandet2017
         manuscript_locator: ch-quad.md#worst-case-error
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3.1 and 4.2, mean embeddings and distribution comparison
+        status: author-located-pending-independent-verification
+      - source: briol2019
+        manuscript_locator: ch-quad.md#worst-case-error
+        source_locator: Section 2, integration error in an RKHS
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: optimal-weights
     title: Optimally weighted quadrature
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: synthesized-with-visible-executable-example
+    sources: [ohagan1991, rasmussen2003bmc, briol2019]
     locators:
       - source: ohagan1991
         manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#optimal-weights
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: bayesian-quadrature
-    title: Bayesian quadrature
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3, Bayes-Hermite quadrature construction
+        status: author-located-pending-independent-verification
       - source: rasmussen2003bmc
         manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3, Bayesian Monte Carlo posterior
+        status: author-located-pending-independent-verification
       - source: briol2019
         manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#bayesian-quadrature
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-4, probabilistic integration and contraction
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: kernel-herding
-    title: Kernel herding
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: Kernel herding and its rate boundary
+    contribution: synthesized-with-assumption-qualified-rate
+    sources: [welling2009herding, chen2010herding, bach2012herding, huszar2012]
     locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: welling2009herding
         manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Algorithm 1, herding update
+        status: author-located-pending-independent-verification
       - source: chen2010herding
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-quad.md#herding-convergence
+        source_locator: Sections 3-4, super-sample convergence conditions
+        status: author-located-pending-independent-verification
       - source: bach2012herding
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-quad.md#herding-convergence
+        source_locator: Sections 2-3, equivalence with conditional gradients
+        status: author-located-pending-independent-verification
       - source: huszar2012
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#kernel-herding
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-quad.md#optimally-weighted-herding
+        source_locator: Sections 2-3, Bayesian-quadrature interpretation and reweighting
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: leverage-dpp
     title: Optimal nodes, leverage scores, and determinantal sampling
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: synthesized
+    sources: [bach2017quadrature]
     locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: bach2017quadrature
         manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#leverage-dpp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-4, quadrature-feature duality and optimized sampling
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: coresets
-    title: A note on coresets
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#coresets
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: summary
-    title: Summary
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: common-mistakes-and-practical-implications
-    title: Common mistakes and practical implications
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: muandet2017
-        manuscript_locator: ch-quad.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
   - id: summary-and-further-reading
     title: Summary and further reading
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - ohagan1991
-      - rasmussen2003bmc
-      - welling2009herding
+    contribution: original-synthesis
+    sources: [ohagan1991, rasmussen2003bmc, welling2009herding, chen2010herding, bach2012herding, huszar2012, bach2017quadrature, briol2019, muandet2017]
     locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: exercises
-    title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: ohagan1991
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: rasmussen2003bmc
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: welling2009herding
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chen2010herding
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2012herding
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: huszar2012
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: bach2017quadrature
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: briol2019
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: muandet2017
-        manuscript_locator: ch-quad.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-quad.md#summary-and-further-reading
+        source_locator: Section 4.2, mean-embedding approximation applications
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
-mapping_author:
-  name: Taha Bouhsine
-  website: https://www.tahabouhsine.com
-  affiliation: AzettaAI
-mapping_date: 2026-07-20

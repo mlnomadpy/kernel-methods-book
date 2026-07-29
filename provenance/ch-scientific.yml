@@ -8,6 +8,7 @@ references:
   - raissi2017gpde
   - cockayne2019probnum
   - li2020fno
+  - hennig2022probnum
 sections:
   - id: scientific-continuous-problem
     title: The continuous problem comes before the matrix
@@ -136,11 +137,16 @@ sections:
     contribution: primary-paper-reconstruction
     sources:
       - cockayne2019probnum
+      - hennig2022probnum
     locators:
       - source: cockayne2019probnum
         manuscript_locator: ch-scientific.md#probabilistic-numerics
         source_locator: Sections 2 and 3
         status: author-checked-against-primary-paper-pending-independent-verification
+      - source: hennig2022probnum
+        manuscript_locator: ch-scientific.md#probabilistic-numerics
+        source_locator: Parts II, III, and VI
+        status: author-checked-against-local-book-text
     verified_by: null
     verified_on: null
     permission: citation-only

@@ -4,12 +4,10 @@
   "anchor": "example-4-1",
   "source_file": "manuscript/chapters/ch03.md",
   "source_sha256": "8d5328daa0fbfabc36662944bda54ea28b225b82ba57534abb210c636c23c768",
-  "verification_status": "executable-reference",
-  "executable_checks": [
-    "checks/ch03-ex1.py"
-  ],
+  "verification_status": "conceptual-audit",
+  "executable_checks": [],
   "numeric_literals": [],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Conceptual task-typing example: identifies molecular graphs as inputs and a real-valued inhibition target; it contains no numerical claim.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

@@ -35,12 +35,23 @@ bibliography:
   - burnaev2014conformal
   - gretton2012
   - sriperumbudur2012
+  - vovk2005conformal
+  - barber2021jackknife
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Distribution Shift, Robustness, and Conformal Prediction
 
 <p class="lead">The model was accurate yesterday and wrong today, and nothing in the training pipeline warned you. Held-out accuracy certifies performance under a sampling system; replace a sensor, move to a new hospital, or let time pass, and that certificate may become irrelevant while every validation dashboard still shows green. Kernel methods offer a useful chain of defenses. Mean embeddings turn distribution change into a geometric quantity. Importance weighting transfers risk under a restricted shift model. Robust optimization declares a neighborhood of distributions against which the predictor is protected. Conformal prediction turns score ranks into finite-sample prediction sets. This chapter develops those tools at research depth, including the assumptions behind the theorems, the derivations behind the algorithms, and the failure boundaries that determine whether a guarantee survives deployment.</p>
 
 ## A taxonomy of distribution change {#shift-taxonomy}
+
+The [[ch:the-frontier|frontier chapter]] ended by asking what happens when a
+learned representation meets a changed deployment distribution. Earlier,
+[[ch:kernel-hypothesis-testing|kernel hypothesis testing]] supplied calibrated
+two-sample tools. Reliability begins by separating three questions those tools
+cannot answer at once: did the distribution change, can risk be transferred,
+and can prediction sets retain coverage?
 
 Not all change is alike. A shifted input distribution, a changed labeling mechanism, and a region absent from training require different responses. Let \(P\) be the source distribution and \(Q\) the target distribution on \(\mathcal X\times\mathcal Y\). Assume throughout that the relevant regular conditional distributions exist.
 
@@ -81,7 +92,12 @@ If \(Q_X\not\ll P_X\), no finite source-only weighting function can reproduce ev
 
 **Proof status.** Complete proof below.
 
-**Proof.** Let \(m_f(x)=\mathbb E\{\ell_f(X,Y)\mid X=x\}\), which is common to \(P\) and \(Q\) under conditional invariance. The Radon-Nikodym change of measure gives
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Let \(m_f(x)=\mathbb E\{\ell_f(X,Y)\mid X=x\}\), which is common to \(P\) and \(Q\) under conditional invariance. The Radon-Nikodym change of measure gives
 
 $$
 R_Q(f)=\int m_f\,dQ_X=\int w\,m_f\,dP_X
@@ -151,7 +167,12 @@ $$
 
 **Proof status.** Complete proof below.
 
-**Proof.** By reproducing and Fubini,
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+By reproducing and Fubini,
 
 $$
 \begin{aligned}
@@ -230,7 +251,12 @@ $$
 
 **Proof status.** Complete proof below.
 
-**Proof.** Write the empirical embedding difference as \(\Delta\). By the reproducing property, the expression inside the absolute value is \(\langle h,\Delta\rangle_{\mathcal H}\). Cauchy-Schwarz gives
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Write the empirical embedding difference as \(\Delta\). By the reproducing property, the expression inside the absolute value is \(\langle h,\Delta\rangle_{\mathcal H}\). Cauchy-Schwarz gives
 \(|\langle h,\Delta\rangle|\le\lVert h\rVert\lVert\Delta\rVert\le
 \varepsilon\lVert h\rVert\). \(\square\)
 ::::
@@ -382,6 +408,8 @@ k=\left\lceil(m+1)(1-\alpha)\right\rceil,
 $$
 
 where \(S_{(k)}\) is the \(k\)-th calibration order statistic and is interpreted as \(+\infty\) if \(k=m+1\).
+This rank construction belongs to the broader conformal prediction framework
+developed by Vovk, Gammerman, and Shafer [@vovk2005conformal].
 
 :::: {.theorem #thm-split-conformal-coverage}
 [Theorem (finite-sample marginal coverage)]{.box-title}
@@ -399,7 +427,12 @@ With randomized tie handling, the rank argument can give exact rather than conse
 
 **Proof status.** Complete proof below.
 
-**Proof.** Conditional on the proper training data, the scores
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Conditional on the proper training data, the scores
 \(S_1,\ldots,S_m,S_{m+1}\) are exchangeable. If ties are broken by independent continuous random variables, the rank \(R\) of \(S_{m+1}\) among the \(m+1\) scores is uniform on
 \(\{1,\ldots,m+1\}\). The test response is excluded only if
 \(S_{m+1}\gt S_{(k)}\), which implies \(R\gt k\). Therefore
@@ -417,6 +450,12 @@ The guarantee is finite-sample and distribution-free within exchangeability. It 
 
 For regression, \(s(x,y)=|y-\widehat f(x)|\) yields
 \([\widehat f(x)-S_{(k)},\widehat f(x)+S_{(k)}]\). Locally scaled residuals can adapt width, but the scale model must be trained without calibration-label leakage. For classification, a score based on fitted class probabilities yields a set of labels.
+
+Other resampling-based predictive intervals, such as jackknife+, trade the
+explicit split for repeated leave-one-out fits and have their own finite-sample
+coverage statements [@barber2021jackknife]. They are not interchangeable with
+the split theorem above: the fitted scores, computational cost, and assumptions
+must match the method actually run.
 
 <figure class="viz" data-widget="conformal-coverage">
 
@@ -460,7 +499,9 @@ for vectors \(a,b\) independent of the candidate value. Every comparison between
 
 **Failure boundary.** Under exchangeability but model misspecification, coverage survives while the endpoint-efficiency theorem may fail. Under covariate or concept shift, even marginal coverage may fail. A singular or nearly singular design is outside the nonsingular second-moment assumption and can make the comparison unstable. At significance \(\alpha\), a conformal method cannot give an informative finite-sample set until enough ranks exist; very small calibration samples therefore impose coarse or infinite thresholds.
 
-## Conformal prediction under shift {#conformal-under-shift}
+<span id="conformal-under-shift"></span>
+
+**Conformal prediction under shift.**
 
 Ordinary conformal validity can fail when calibration and deployment examples are not exchangeable. Under covariate shift, suppose the calibration pairs follow \(P\), the test pair follows \(Q\), the conditional law is invariant, and the density ratio \(w=dQ_X/dP_X\) is known. A weighted rank construction assigns calibration mass proportional to \(w(X_i)\) and test mass proportional to \(w(x)\). The target point is no longer uniformly ranked, but it is ranked according to these likelihood weights.
 
@@ -477,6 +518,9 @@ Temporal data require another design. Blocking can make calibration units approx
 <figure class="viz" data-figure="conformal-coverage-width-shift" data-alt="Coverage and interval width are plotted against the ratio of deployment noise to calibration noise. Frozen conformal intervals lose coverage as noise grows, while shift-aware recalibration maintains ninety percent coverage by widening the interval."><figcaption>Exchangeability failure appears as a coverage-width tradeoff. Keeping the old residual quantile keeps the old width but loses the certificate; restoring \(90\%\) coverage under a scale change requires wider sets. A reliability report should show both quantities.</figcaption></figure>
 
 ## A worked deployment calculation {#reliability-worked-example}
+
+:::: {.example #example-shift-detection-correction}
+[Example (weight correction, effective sample size, and conformal rank)]{.box-title}
 
 Consider four source observations with binary outcomes
 
@@ -524,6 +568,35 @@ so the split-conformal radius is \(4.0\). Using the seventh order statistic \(2.
 Finally, suppose the deployment system adds a new input region \(A\) with
 \(P_X(A)=0\) and \(Q_X(A)=0.05\). Neither the weights above nor the residual quantile provides a certificate on \(A\). The appropriate output is an overlap alarm and, depending on the application, abstention or targeted label collection.
 
+```python
+import numpy as np
+
+outcomes = np.array([0.0, 0.0, 1.0, 1.0])
+weights = np.array([0.2, 0.6, 1.2, 2.0])
+weighted_mean = np.mean(weights * outcomes)
+effective_n = weights.sum() ** 2 / np.sum(weights**2)
+
+residuals = np.array([0.1, 0.2, 0.4, 0.7, 1.1, 1.6, 2.3, 4.0, 7.0])
+coverage = 0.75
+rank = int(np.ceil((len(residuals) + 1) * coverage))
+radius = np.sort(residuals)[rank - 1]
+
+np.testing.assert_allclose(weights.mean(), 1.0)
+np.testing.assert_allclose(weighted_mean, 0.8)
+np.testing.assert_allclose(effective_n, 16.0 / 5.84)
+assert rank == 8
+np.testing.assert_allclose(radius, 4.0)
+assert effective_n < len(weights)
+```
+
+The three outputs answer three different questions. The weighted mean is the
+covariate-shift correction under conditional invariance. Effective sample size
+warns how much variance that correction can induce. The conformal radius is a
+rank certificate under exchangeability of a separate calibration set. None of
+them addresses the target-only region \(A\). Combining tools does not combine
+their assumptions into a stronger guarantee.
+::::
+
 ## An auditable reliability pipeline {#reliable-pipeline}
 
 :::: {.algorithm #algo-reliable-kernel-pipeline}
@@ -566,6 +639,12 @@ The practical objective is not a universal certificate. It is a chain of claims 
 ## Summary and further reading {#reliability-summary}
 
 Distribution shift first requires identification of the quantity that changed. MMD turns a difference between distributions into an RKHS norm and supports a calibrated two-sample test under an explicit sampling design [@gretton2012]. KMM minimizes an empirical version of that norm, but guarantees balance only over the chosen RKHS. Covariate-shift rates depend jointly on overlap, loss curvature, and kernel spectral complexity; truncated ratios trade clipping bias for concentration [@feng2023covshift]. MMD ambiguity sets protect only losses controlled by the corresponding function class [@sriperumbudur2012]. Split conformal prediction proves finite-sample marginal coverage from exchangeable ranks, while conformalized ridge regression shows that validity can coexist with asymptotic efficiency under a much stronger Gaussian linear model [@burnaev2014conformal]. None of these results repairs target-only support or arbitrary concept drift.
+
+The [[ch:applications-and-practice|applications and practice chapter]] turns
+this assumption ledger into model-selection and deployment decisions. The
+handoff is deliberate: reliability is not a final wrapper placed around a
+finished predictor, but a constraint on splitting, tuning, monitoring, and
+fallback design from the beginning.
 
 ## Exercises {#exercises}
 

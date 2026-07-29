@@ -3,7 +3,7 @@
   "chapter": "ch-testing",
   "anchor": "example-30-2",
   "source_file": "manuscript/chapters/ch-testing.md",
-  "source_sha256": "3c41b5effdc047e9ee5b47068f6a105957455d86716ca7de2e723a6304ad77c7",
+  "source_sha256": "2c8d106348574a152690a3f6834369ea6a7898c06f7e194217f20f692f00622d",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-testing-ex2.py"
@@ -50,7 +50,22 @@
     "0.714",
     "0.190",
     "0.087",
-    "0.040"
+    "0.040",
+    "-3.0",
+    "-2.0",
+    "-1.0",
+    "0.0",
+    "4.0",
+    "1e-12",
+    "0.3",
+    "0.8",
+    "10.0",
+    "25.0",
+    "1e-9",
+    "5.2",
+    "9.5",
+    "9.4",
+    "16"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

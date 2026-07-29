@@ -3,7 +3,7 @@
   "chapter": "ch-causal",
   "anchor": "example-causal-nonidentification",
   "source_file": "manuscript/chapters/ch-causal.md",
-  "source_sha256": "92a1fe70499292220fd769ce21e6a547932824359e387526a72be4b4b3268abf",
+  "source_sha256": "511c0db4afca91d316b7efd6c9c503f1fdd996f0c155e16bbff897f8f5705137",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-causal-ex3.py"
@@ -13,7 +13,15 @@
     "5",
     "3",
     "1",
-    "+3"
+    "+3",
+    "-1",
+    "1.25",
+    "2.5",
+    "3.75",
+    "2.0",
+    "0.4",
+    "1.6",
+    "2.4"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

@@ -3,21 +3,27 @@
   "chapter": "ch-bo",
   "anchor": "example-41-2",
   "source_file": "manuscript/chapters/ch-bo.md",
-  "source_sha256": "d912210d43e004f1a987cf49fac66acb9cef1f2ba3f23c47746d40d2fb66e310",
+  "source_sha256": "c9378b39acf7b33b0a20c8cc036c1904324e73f3cdc64cb1af4b0311283e64a3",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-bo-ex2.py"
   ],
   "numeric_literals": [
+    "0.0",
+    "2.01",
+    "0.5",
+    "2.0",
+    "3.0",
+    "2",
+    "0.01",
+    "1.0",
+    "1",
     "0",
     "-0.2794",
-    "1.0",
     "-0.0374",
     "0.9817",
-    "1",
     "-0",
     "-0.0381",
-    "2",
     "0.4848",
     "0.3987",
     "3",
@@ -30,8 +36,7 @@
     "0.317",
     "0.373",
     "0.241",
-    "0.000",
-    "0.5"
+    "0.000"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

@@ -1,5 +1,6 @@
 ---
 id: ch-randomized
+example_code_policy: visible-for-executable
 slug: random-features-sketches-and-randomized-kernel-linear-algebra
 title: 'Random Features, Sketches, and Randomized Kernel Linear Algebra'
 part: III · Optimization and Scaling
@@ -58,12 +59,17 @@ bibliography:
   - han2015logdet
   - wenger2022preconditioning
   - wang2024dependentrff
+narrative_link_policy: exact
 ---
 # Random Features, Sketches, and Randomized Kernel Linear Algebra
 
 <p class="lead">A million-point kernel problem does not have one approximation problem. It has several. A feature map can approximate every kernel value and still distort the regularized directions that kernel ridge regression uses. A low-rank matrix can have a small Frobenius error and still be a poor preconditioner. An iterative solve can reach a tiny residual while the resulting predictor has the wrong risk. Randomization becomes reliable only after we name the object that must survive it. This chapter develops that discipline from end to end. We construct random features for dot-product and stationary kernels, compress polynomial tensors without forming them, select data-adaptive frequencies and landmarks, sketch ridge systems, estimate traces and log determinants, and maintain approximations in a stream. Each paper module states its setting, central move, guarantee, executable object, and failure boundary. The common language is a set of four error currencies that prevents matrix accuracy, numerical accuracy, and statistical accuracy from being mistaken for one another.</p>
 
 ## Four error currencies {#rand-four-currencies}
+
+The [[ch:large-scale-kernels|large-scale kernel chapter]] introduced
+low-rank and feature approximations. Here the question is stricter: which
+downstream quantity does each approximation actually preserve?
 
 Let \(x_1,\ldots,x_n\) be fixed inputs, let \(K \in \mathbb R^{n\times n}\) be their positive semidefinite Gram matrix, and let \(\widetilde K \succeq 0\) be a randomized approximation. Write
 
@@ -214,6 +220,21 @@ $$
 $$
 
 The relative \(A_\gamma\)-norm error is approximately \(0.5858\), below the proposition's conservative bound \(0.5/(1-0.5)=1\). The example also shows why rank alone is not a statistical verdict. Discarding the eigenvalue \(0.04\) is harmless when ridge \(1\) already suppresses it, but discarding the eigenvalue \(1\) changes a direction the estimator still uses. No statement about population risk follows until the response and sampling model are specified.
+
+```python
+import numpy as np
+K = np.diag([9., 1., .04])
+K_tilde = np.diag([9., 0., 0.])
+y = np.array([0., 1., 1.])
+A, A_tilde = K + np.eye(3), K_tilde + np.eye(3)
+alpha = np.linalg.solve(A, y)
+alpha_tilde = np.linalg.solve(A_tilde, y)
+regularized = np.linalg.norm(np.linalg.solve(A, K-K_tilde), 2)
+assert np.isclose(np.linalg.norm(K-K_tilde, 2), 1.)
+assert np.isclose(regularized, .5)
+assert np.allclose(alpha, [0., .5, 1/1.04])
+print(regularized, alpha, alpha_tilde)
+```
 :::
 
 ## Random Maclaurin features {#rand-maclaurin}
@@ -350,6 +371,17 @@ M(x,y)=5\cdot10+2\cdot1^2-2(1^2 3^2+2^2(-1)^2)=26,
 $$
 
 so a single feature has second moment \(26^2=676\) and variance \(675\). Averaging \(m\) copies reduces the variance to \(675/m\), but the example explains why Random Maclaurin can require many coordinates on high-norm data. Input normalization is part of the method, not cosmetic preprocessing.
+
+```python
+import numpy as np
+x, y = np.array([1.,2.]), np.array([3.,-1.])
+w1, w2 = np.array([1.,1.]), np.array([1.,-1.])
+sample = np.dot(w1,x)*np.dot(w1,y)*np.dot(w2,x)*np.dot(w2,y)
+M = np.dot(x,x)*np.dot(y,y)+2*np.dot(x,y)**2-2*np.dot(x*x,y*y)
+assert sample == -24 and M == 26
+assert M**2 - np.dot(x,y)**4 == 675
+print(sample, M**2-1)
+```
 :::
 
 **Failure boundary.** Negative Taylor coefficients invalidate this construction as a PSD mixture. A divergent series on the input range invalidates the interchange of expectation and summation. Even with nonnegative coefficients, large input norms or degree tails can make the variance enormous. TensorSketch attacks the \(dP\) multiplication cost and tensor dimension, but it does not erase the degree dependence.
@@ -513,7 +545,9 @@ which is the stated bound. [\(\square\)]{.qed}
 
 The theorem says nothing uniform over a region and nothing about a learned predictor. The literature supplies four distinct levels.
 
-### Pointwise and uniform function approximation {#rand-rff-pointwise-uniform}
+<span id="rand-rff-pointwise-uniform"></span>
+
+**Pointwise and uniform function approximation.**
 
 Pointwise concentration fixes \((x,y)\) before features are drawn. Uniform approximation asks for
 
@@ -561,7 +595,9 @@ Cover the difference set \(\mathcal X-\mathcal X\) by an \(r\)-net. Apply the po
 
 The dimension, diameter, and spectral moment are the price of the supremum. If \(p\) has tails too heavy for the required Lipschitz control, the displayed compact-domain bound does not apply. Uniform kernel approximation is stronger than pointwise approximation, but still does not identify which directions of the sample Gram matrix matter after regularization.
 
-### Spectral approximation {#rand-rff-spectral}
+<span id="rand-rff-spectral"></span>
+
+**Spectral approximation.**
 
 For sample points \(x_1,\ldots,x_n\), let \(\varphi_\omega\in\mathbb C^n\) have entries \(e^{i\omega^\top x_j}\). Then
 
@@ -880,6 +916,16 @@ R_{\{1\}}
 $$
 
 The remaining squared power values are \(0.36\) and \(0.96\), so greedy pivoting chooses point \(3\) next. Uniform sampling would treat points \(2\) and \(3\) alike; the residual geometry does not. A DPP also disfavors selecting points \(1\) and \(2\) together because their \(2\times2\) determinant is \(1-0.8^2=0.36\), smaller than the determinant \(1-0.2^2=0.96\) for points \(1\) and \(3\).
+
+```python
+import numpy as np
+K = np.array([[1,.8,.2],[.8,1,.3],[.2,.3,1.]])
+C = K[:,[0]]
+R = K - np.matmul(C,C.T)/K[0,0]
+assert np.allclose(R, [[0,0,0],[0,.36,.14],[0,.14,.96]])
+assert np.argmax(np.diag(R)) == 2
+print(R)
+```
 :::
 
 **Failure boundary.** Greedy maximum-diagonal selection optimizes a local residual criterion, not downstream risk. DPP sampling promotes diversity but can be expensive to sample exactly, and diversity is not the same as label relevance. Ridge leverage depends on \(\gamma\); a landmark set chosen for one ridge can be inefficient for another. Near-duplicate points can make \(K_{SS}\) singular, so stable implementations use pivot tolerances and triangular solves rather than an explicit inverse.
@@ -1087,6 +1133,21 @@ $$
 $$
 
 Averaging both gives \(0.6931\), so using every possible probe direction has removed probe error but not one-step quadrature bias. With two Lanczos steps, the Krylov space is all of \(\mathbb R^2\), each quadratic form is exact, and averaging the two signs gives \(\operatorname{tr}\log A=\log\det A=0.5596\).
+
+```python
+import numpy as np
+A = np.array([[2.,.5],[.5,1.]])
+probes = [np.array([1.,1.]), np.array([1.,-1.])]
+one_step = np.mean([
+    np.dot(z,z)*np.log(np.dot(z,np.matmul(A,z))/np.dot(z,z))
+    for z in probes
+])
+exact = np.linalg.slogdet(A)[1]
+assert np.isclose(one_step, np.log(2))
+assert np.isclose(exact, np.log(1.75))
+assert not np.isclose(one_step, exact)
+print(one_step, exact)
+```
 :::
 
 **Failure boundary.** The logarithm requires \(A\succ0\). Tiny eigenvalues increase approximation difficulty and make a silently clipped spectrum unacceptable. Reusing probes across nearby hyperparameters can reduce noise in objective differences, but the dependence must be retained in uncertainty estimates. Finite-precision Lanczos loses orthogonality; residual and repeated-run checks are needed.
@@ -1243,6 +1304,10 @@ If uncertainty is used, add calibration or coverage. A single kernel RMSE curve 
 **Clipping without diagnosis.** Tiny negative residual diagonals from roundoff may be clipped after recording their scale. Materially negative values indicate a broken PSD assumption, inconsistent kernel evaluations, or unstable updates.
 
 ## Summary and further reading {#rand-summary}
+
+The operational handoff is [[ch:applications-and-practice|end-to-end kernel
+practice]], where an approximation is accepted only against the controlled
+quantity it was selected to preserve.
 
 Randomized kernel computation is a collection of typed approximations. Random Maclaurin samples an analytic dot-product expansion. TensorSketch hashes a tensor product and computes the hash by FFT convolution. RFF samples a Fourier integral, while ridge-leverage features adapt that integral to the regularized sample spectrum. Fastfood, ORF, and QMC change the cost or variance of spectral sampling. Pivoted Cholesky, leverage Nyström, and DPPs choose data columns according to residual uncertainty, regularized importance, or diversity. Oblivious sketches preserve a statistically relevant eigenspace. Hutchinson and Lanczos target spectral sums rather than predictors. Streaming methods preserve only what can be updated and carried forward.
 

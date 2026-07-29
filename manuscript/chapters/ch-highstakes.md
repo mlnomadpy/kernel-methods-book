@@ -65,8 +65,15 @@ bibliography:
   - kernelbook-code-ch-highstakes-ex1
   - kernelbook-code-ch-highstakes-ex5
   - perezsuay2017fair
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 ---
 # Kernels in Science and Space
+
+The [[ch:accountable-kernels|accountability chapter]] supplied uncertainty,
+influence, drift, and audit tools. High-stakes science supplies the missing
+criterion: whether those tools protect the scientific or operational quantity
+that motivated the model.
 
 <p class="lead">An orbit prediction is useless to a collision-avoidance system without a covariance whose calibration has been tested; a planet's mass is not a result until it carries an interval conditional on an explicit noise model; a molecular simulation must know when its cheap surrogate has left validated territory; a global crop map needs a confidence layer and a rule for pixels outside support. These are domains where a bare point estimate is operationally incomplete. Kernel methods earned a role here because the covariance can encode quasi-periodicity, symmetry, spatial dependence, or a detector's noise geometry, while the fitted model can return uncertainty and identify expensive places to sample next. The mathematics does not make those outputs trustworthy by itself. Each case in this chapter therefore pairs the useful kernel structure with the validation, approximation, and failure condition required to act on it.</p>
 
@@ -93,7 +100,7 @@ The split must follow the scientific unit. Randomly splitting nearby pixels, adj
 
 Astronomy was among the first fields to make Gaussian processes standard equipment, and the review of Aigrain and Foreman-Mackey (2023) is the map of that adoption across exoplanets, stellar rotation, and asteroseismology. The through-line is that the covariance kernel is a statement of stellar physics, and the posterior is a distribution over the quantity a mission actually needs.
 
-### Stellar rotation and exoplanet light curves {#light-curves}
+**Stellar rotation and exoplanet light curves.** {#light-curves}
 
 A star's brightness is modulated as spots rotate into and out of view, but spots form and decay. The quasi-periodic covariance
 
@@ -105,6 +112,27 @@ with period \(P\), coherence \(\ell\), and modulation \(\Gamma\), combines perio
 
 ::::: {.example #example-56-1}
 [Example (a rotation period, with a credible interval)]{.box-title}
+
+```python
+import numpy as np
+rng = np.random.default_rng(7)
+def qp(t1,t2,p):
+    d=t1[:,None]-t2[None,:]
+    return np.exp(-d*d/(2*30**2)-2*np.sin(np.pi*np.abs(d)/p)**2)
+t=np.sort(rng.uniform(0,60,120))
+y=np.linalg.cholesky(qp(t,t,10)+1e-8*np.eye(120))@rng.normal(size=120)
+y+=.15*rng.normal(size=120)
+grid=np.linspace(5,20,601)
+def log_evidence(p):
+    L=np.linalg.cholesky(qp(t,t,p)+.15**2*np.eye(120))
+    a=np.linalg.solve(L.T,np.linalg.solve(L,y))
+    return -.5*y@a-np.log(np.diag(L)).sum()
+logp=np.array([log_evidence(p) for p in grid])
+mass=np.exp(logp-logp.max()); mass/=mass.sum()
+interval=grid[np.searchsorted(np.cumsum(mass),[.16,.84])]
+print(grid[np.argmax(logp)],interval)
+assert np.allclose(interval,[10.,10.2])
+```
 
 :::: wex
 ::: wex-setup
@@ -124,13 +152,13 @@ This is an **illustrative deterministic simulation**, not a published benchmark.
 <figcaption>A quasi-periodic Gaussian process conditioned live on a synthetic light curve. Drag the period and coherence length; the posterior mean and credible band recompute and the log marginal likelihood peaks as the period locks onto the truth, tightening the band. The readout reports the recovered period and its credible interval. Real GP conditioning on every change.</figcaption>
 </figure>
 
-### Disentangling a planet from stellar activity {#radial-velocity}
+**Disentangling a planet from stellar activity.** {#radial-velocity}
 
 The same signal becomes a nuisance when the target is a planet's mass. Rajpaul et al. model radial velocity and activity indicators as linear functionals of a shared latent GP [@rajpaul2015rv, Secs. 2--3]. Haywood et al. combine a Keplerian component with an activity covariance in the CoRoT-7 analysis [@haywood2014corot7, Secs. 3--5]. We do not transfer a reported mass or interval into this chapter because it is conditional on that paper's data reduction, priors, activity model, and instrument treatment.
 
 **Study protocol: radial velocity.** Publish timestamps, instruments, velocities, quoted errors, activity indicators, exclusion rules, and injection generator. Hold out complete observing seasons or instruments; tune priors and kernels without the final block. Compare a shared latent GP plus Keplerian model with a Keplerian-only model, a GP without activity channels, and an activity-only model. The uncertainty currency is a posterior over orbital parameters and derived mass, not an unconditional confidence statement. Report injection-recovery error, interval coverage, false inclusion under no-planet injections, posterior predictive residuals by instrument, and sensitivity to priors and kernels. Negative controls include phase-shuffled injections, an activity indicator decoupled from velocity, and a planet period near the activity period. Failure means non-identifiability, poor injection coverage, instrument-specific residual structure, or conclusions that reverse under a defensible activity kernel. Operational validation requires recovery of blind injections before interpreting a real candidate.
 
-### Gravitational waves: the noise-weighted inner product is a kernel {#matched-filter}
+**Gravitational waves: the noise-weighted inner product is a kernel.** {#matched-filter}
 
 Matched filtering makes detection a projection in a noise-weighted space. For stationary Gaussian noise and a known waveform \(h\), the statistic is
 
@@ -142,6 +170,24 @@ where \(S_n\) is the noise power spectral density. FINDCHIRP defines the discret
 
 ::::: {.example #example-56-2}
 [Example (finding a chirp by projection)]{.box-title}
+
+```python
+import numpy as np
+rng=np.random.default_rng(11); n=512; t=np.linspace(0,1,n)
+env=np.exp(-(t-.55)**2/(2*.12**2))
+h=env*np.sin(2*np.pi*(8*t+20*t**2)); h-=h.mean()
+sigma=np.linalg.norm(h)/8; arrival=60
+data=sigma*rng.normal(size=3*n); data[n+arrival:n+arrival+n]+=h
+lags=np.arange(-n//2,n//2)
+def filter(template):
+    scale=sigma*np.linalg.norm(template)
+    return np.array([data[n+j:n+j+n]@template/scale for j in lags])
+rho=filter(h)
+wrong=env*np.sin(2*np.pi*(15*t+4*t**2)); wrong-=wrong.mean()
+rho_wrong=filter(wrong)
+print(lags[np.argmax(rho)],rho.max(),rho_wrong[lags==arrival][0])
+assert lags[np.argmax(rho)]==arrival and rho_wrong[lags==arrival][0]<2
+```
 
 :::: wex
 ::: wex-setup
@@ -161,7 +207,7 @@ This is an **illustrative deterministic white-noise simulation**, not a detectio
 <figcaption>Matched filtering as projection. A chirp is injected into a noisy stream, invisible by eye. Drag the template's frequency; the lower panel shows the live matched-filter statistic, the real noise-weighted inner product slid over time, which spikes sharply at the true arrival when the template matches and flattens into the noise when it is mistuned.</figcaption>
 </figure>
 
-### Spacecraft telemetry and orbit uncertainty {#telemetry-orbits}
+**Spacecraft telemetry and orbit uncertainty.** {#telemetry-orbits}
 
 Kernel-PCA reconstruction error is a score for nominal telemetry, not a fault probability [@fujimaki2005telemetry, Secs. 2--4]. A learned correction to a physical orbit propagator is likewise useful only if residual covariance is validated [@peng2018orbit, Secs. 2--4].
 
@@ -171,7 +217,7 @@ Kernel-PCA reconstruction error is a score for nominal telemetry, not a fault pr
 
 Kernel models remain important in molecular simulation because labels can be expensive, symmetry can be built into the representation, and a model-based variance can drive data acquisition. Deringer et al. review the GP construction, descriptors, sparse approximations, and validation problems [@deringer2021gpr, Secs. 2--6].
 
-### Potentials from a kernel that knows the symmetries {#force-fields}
+**Potentials from a kernel that knows the symmetries.** {#force-fields}
 
 A Gaussian Approximation Potential regresses energies and derivatives using local atomic environments [@bartok2010gap, method and Eqs. (1)--(4)]. SOAP obtains rotational invariance by integrating overlap between smooth neighbor densities [@bartok2013soap, Secs. II--IV]. Gradient-domain learning imposes energy conservation through derivatives of a scalar kernel [@chmiela2017gdml, method and Eq. (1)]. Published benchmark numbers are not repeated here because comparisons depend on electronic-structure level, molecular split, conformation overlap, force weighting, and units.
 
@@ -179,6 +225,29 @@ A Gaussian Approximation Potential regresses energies and derivatives using loca
 
 ::::: {.example #example-56-3}
 [Example (a bond length from a handful of points)]{.box-title}
+
+```python
+import numpy as np
+De,re,a=4.75,.7416,1.942
+morse=lambda r: De*(1-np.exp(-a*(r-re)))**2
+def rbf(x,z,ell=.18):
+    return np.exp(-(np.asarray(x)[:,None]-np.asarray(z)[None,:])**2/(2*ell**2))
+r=np.array([.55,.60,.66,.72,.74,.78,.85,.95,1.1,1.4,1.8,2.4]); y=morse(r)
+A=rbf(r,r)+1e-6*np.eye(r.size); coef=np.linalg.solve(A,y)
+grid=np.linspace(.5,2.5,4001); prediction=rbf(grid,r)@coef
+r_hat=grid[np.argmin(prediction)]
+H=rbf(r,r)@np.linalg.solve(A,np.eye(r.size))
+loo=(y-H@y)/(1-np.diag(H))
+thin=r[2:]
+thin_pred=rbf(grid,thin)@np.linalg.solve(
+    rbf(thin,thin)+1e-6*np.eye(thin.size),morse(thin))
+compressed=grid<=.72
+print(r_hat,np.max(np.abs(loo)))
+assert np.isclose(r_hat,.7425)
+assert np.max(np.abs(thin_pred[compressed]-morse(grid[compressed]))) > (
+  2*np.max(np.abs(prediction[compressed]-morse(grid[compressed])))
+)
+```
 
 :::: wex
 ::: wex-setup
@@ -193,7 +262,7 @@ This is an **illustrative deterministic simulation**, not an ab initio benchmark
 ::::
 :::::
 
-### The killer app: variance triggers a calculation {#active-learning-chemistry}
+**The killer app: variance triggers a calculation.** {#active-learning-chemistry}
 
 For a fixed covariance and observation model, posterior variance can flag geometry unsupported by the design. Vandermause et al. use a GP uncertainty threshold to decide whether to accept a force prediction or request a first-principles calculation [@vandermause2020flare, Methods: “Bayesian active learning”]. Jinnouchi et al. use a related on-the-fly loop [@jinnouchi2019onthefly, Sec. II]. We omit savings percentages because they are protocol-specific.
 
@@ -201,6 +270,33 @@ For a fixed covariance and observation model, posterior variance can flag geomet
 
 ::::: {.example #example-56-4}
 [Example (uncertainty sampling reaches accuracy sooner)]{.box-title}
+
+```python
+import numpy as np
+f=lambda x:(x*x-1)**2+.3*np.sin(4*x)
+grid=np.linspace(-2,2,400); truth=f(grid)
+def rbf(x,z,ell=.35):
+    return np.exp(-(np.asarray(x)[:,None]-np.asarray(z)[None,:])**2/(2*ell**2))
+def predict(x):
+    L=np.linalg.cholesky(rbf(x,x)+1e-4*np.eye(len(x))); cross=rbf(grid,x)
+    mean=cross@np.linalg.solve(L.T,np.linalg.solve(L,f(x)))
+    v=np.linalg.solve(L,cross.T)
+    return mean,np.sqrt(np.maximum(1-(v*v).sum(0),0))
+def run(seed=None):
+    rng=np.random.default_rng(seed); x=np.array([-2.,0.,2.])
+    for _ in range(25):
+        mean,sd=predict(x)
+        if np.sqrt(np.mean((mean-truth)**2))<.05:return len(x)
+        x=np.append(x,grid[np.argmax(sd)] if seed is None else rng.uniform(-2,2))
+    return len(x)
+active=run(); random_mean=np.mean([run(s) for s in range(30)])
+miss_x=np.array([-2.,-1.,0.,.8,1.,1.2,2.]); miss_mean,miss_sd=predict(miss_x)
+i=np.argmin(np.abs(grid-1.05))
+miss_truth=truth+1.5*np.exp(-((grid-1.05)/.035)**2)
+print(active,random_mean,abs(miss_mean[i]-miss_truth[i]),miss_sd[i])
+assert active==19 and abs(random_mean-26.6)<.05
+assert abs(miss_mean[i]-miss_truth[i])>1 and miss_sd[i]<.2
+```
 
 :::: wex
 ::: wex-setup
@@ -220,7 +316,7 @@ This is an **illustrative deterministic simulation** on a declared one-dimension
 <figcaption>An on-the-fly potential in miniature. A simulated trajectory runs across a one-dimensional energy surface on the cheap Gaussian-process energy; the predictive variance is plotted along the path, and when it spikes at an unseen barrier crossing a quantum calculation is triggered, marked, and added, after which the variance drops and the training set grows. The trajectory, the variance spike, and the retrain are all real computed events.</figcaption>
 </figure>
 
-### Bayesian optimization for discovery {#bo-discovery}
+**Bayesian optimization for discovery.** {#bo-discovery}
 
 When the target is the best material or reaction, the posterior drives Bayesian optimization. The underlying computer-experiment design is described by Sacks et al. [@sacks1989dace, Secs. 2--4], and the sequential workflow by Shahriari et al. [@shahriari2016, Secs. 2--4]. Chemistry and materials case studies demonstrate the design pattern [@shields2021bo, Methods; @xue2016adaptive, Methods; @lookman2019active, Secs. 2--4], but their headline counts are not transferable performance guarantees.
 
@@ -249,6 +345,38 @@ This **illustrative deterministic simulation** creates spatially correlated grou
 3. [Audit the uncertainty.]{.wex-op} A standard deviation estimated from leaked residuals under-covers the held-out region, so the confidence layer fails its declared currency.
 
 **Reading.** The unit of independence determines the credibility of both accuracy and uncertainty. This fixture is not a satellite benchmark.
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(29)
+region = np.repeat(np.arange(8), 40)
+x = rng.uniform(-1.0, 1.0, region.size)
+offset = np.array([-1.4, -0.9, -0.5, -0.1, 0.2, 0.6, 1.0, 1.5])
+y = 2.0 * x + offset[region] + 0.12 * rng.standard_normal(x.size)
+
+def evaluate(train, test):
+    design = lambda idx: np.column_stack(
+        [np.ones(idx.size), x[idx]] +
+        [(region[idx] == group).astype(float) for group in range(8)]
+    )
+    X_train = design(train)
+    coef = np.linalg.solve(
+        X_train.T @ X_train + 1e-8 * np.eye(10), X_train.T @ y[train]
+    )
+    residual = y[train] - X_train @ coef
+    prediction = design(test) @ coef
+    sigma = np.sqrt(np.mean(residual**2))
+    return (np.sqrt(np.mean((y[test] - prediction)**2)),
+            np.mean(np.abs(y[test] - prediction) <= 1.96 * sigma))
+
+permutation = rng.permutation(y.size)
+random_result = evaluate(permutation[80:], permutation[:80])
+held_out = region == 7
+group_result = evaluate(np.flatnonzero(~held_out), np.flatnonzero(held_out))
+assert random_result[0] < 0.15 and group_result[0] > 1.0
+print(random_result, group_result)
+```
 ::::
 :::::
 
@@ -271,11 +399,23 @@ Scalability is part of the estimand. Semiseparable covariance, inducing points, 
 
 The practical implication is consistent across all domains: every deliverable should name the data version, split unit, kernel, baseline, uncertainty currency, calibration test, negative controls, failure threshold, and operational decision.
 
+Each case therefore has four ledgers. Kernel validity, symmetry, and
+conservative-force construction are theorem-level claims. Recovery curves and
+benchmark errors are empirical evidence. GP variance and acquisition scores
+are model-based uncertainty. Operational validation measures missed events,
+trajectory stability, simulator discrepancy, spatial transfer, and the cost
+of an unnecessary intervention.
+
 ## Summary and further reading {#summary}
 
 Kernel methods earn their place in these sciences when three conditions meet: labels are expensive, useful structure can be written as a covariance or inner product, and the resulting uncertainty can be checked against the decisions it will control. Quasi-periodic kernels encode evolving stellar signals; noise-weighted inner products define matched filters; symmetry-aware kernels reduce the sample burden of molecular potentials; spatial-spectral kernels connect satellite pixels to context. The output is never “an error bar for free.” It is a model-based covariance, score, or interval whose credibility depends on held-out residuals, shift tests, support, numerical approximation, and the cost of a wrong action. The scalable method must be named as carefully as the kernel: semiseparable structure, inducing points, sparse precision, or low-rank features change what is computed. In high-stakes work, the kernel is valuable because the modeling claim is explicit enough to test and reject.
 
 For further reading, use the astronomy review [@aigrain2023gp, Secs. 3--5], the molecular GP review [@deringer2021gpr, Secs. 2--6], and the Earth-observation survey [@campsvalls2016gpsurvey, Secs. II--V]. The individual protocol sections above point to the primary method descriptions.
+
+The complete workflow returns to
+[[ch:applications-and-practice|the applications chapter]]: encode the domain,
+fit within a leakage-safe split, test the operational quantity, and retain the
+evidence needed to reconstruct every decision.
 
 ::: {.exercises}
 ## Exercises {#exercises}

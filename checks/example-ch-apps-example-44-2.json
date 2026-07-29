@@ -3,7 +3,7 @@
   "chapter": "ch-apps",
   "anchor": "example-44-2",
   "source_file": "manuscript/chapters/ch-apps.md",
-  "source_sha256": "e821a5df33adfb63600c6723e38b16e527ead969684027293f5d97195a46615c",
+  "source_sha256": "ec714792598893d405a8adc6ede5de2f97b826dcae7d4aec8223db9436e07210",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-apps-ex2.py"
@@ -32,7 +32,10 @@
     "3",
     "2.43",
     "5.11",
-    "4"
+    "4",
+    "6.0",
+    "-1",
+    "0.01"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

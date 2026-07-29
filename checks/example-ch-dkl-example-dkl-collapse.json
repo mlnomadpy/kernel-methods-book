@@ -3,7 +3,7 @@
   "chapter": "ch-dkl",
   "anchor": "example-dkl-collapse",
   "source_file": "manuscript/chapters/ch-dkl.md",
-  "source_sha256": "caa2678f7e853f571a68db201e50b1065780f3695f3edfc6cc0d18aa993326e5",
+  "source_sha256": "7847d9ac63b9f87c2c5d99e1f4b2437bb29d2ca9a62859c6c50e3e2881a80f89",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-dkl-ex1.py"
@@ -22,9 +22,15 @@
     "-1",
     "0166",
     "-2",
-    "6"
+    "6",
+    "0.01",
+    "1.0",
+    "0.5",
+    "0.0",
+    "5e-5",
+    "0.0166"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The executable check and visible NumPy code validate the separated and collapsed evidence values, posterior variance, and label-aligned ordering.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

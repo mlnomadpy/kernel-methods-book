@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-cme
 slug: conditional-mean-embeddings
 title: Conditional Mean Embeddings and Kernel Bayes' Rule
@@ -41,6 +42,7 @@ bibliography:
   - kernelbook-code-ch-cme-ex2
   - kernelbook-code-ch-cme-stability
   - fukumizu2013kbr
+narrative_link_policy: exact
 ---
 # Conditional Mean Embeddings and Kernel Bayes' Rule
 
@@ -178,6 +180,27 @@ $$K=\begin{pmatrix}1&0.6065&0.1353&0.0111\\0.6065&1&0.6065&0.1353\\0.1353&0.6065
 5.  [Predict a genuine RKHS query.]{.wex-op} For \(g=\ell(2.0,\cdot)\in\mathcal H_{\mathcal Y}\), evaluate \(g(y_i)=\ell(y_i,2.0)=(0.1353,\ 0.7261,\ 0.9802,\ 0.6065)\), so \(\widehat{\mathbb E}[\ell(2.0,Y)\mid X=1.5]=\sum_i\beta_i(x_\ast)g(y_i)=0.7164\).
 
 **Reading.** The two central training points, at \(x=1\) and \(x=2\), carry almost all the weight and receive equal shares because \(x_\ast=1.5\) sits symmetrically between them; the far points are all but ignored. The response estimate \(1.28\) is close to the sensible \(1.5\) but pulled down, because the weights sum to \(0.85\) rather than \(1\): regularization shrinks the embedding toward the origin, which biases the plug-in mean toward \(0\). Note also that the RKHS query \(0.7164\) is not equal to \(\ell(2.0,\widehat{\mathbb E}[Y\mid X=1.5])=0.7708\): the embedding estimates \(\mathbb E[g(Y)\mid X]\), the average of \(g\) over the conditional, not \(g\) evaluated at the conditional mean, and the two differ whenever \(g\) is nonlinear.
+
+The executable core uses one regularized solve and checks both a plug-in
+response mean and a genuine RKHS conditional expectation. The coefficients
+are embedding coordinates, not probabilities.
+
+```python
+import numpy as np
+
+x = np.array([0., 1., 2., 3.])
+y = np.array([0., 1.2, 1.8, 3.])
+rbf = lambda a, b: np.exp(-(a-b)**2 / 2)
+K = rbf(x[:, None], x[None, :])
+weights = np.linalg.solve(K + .5*np.eye(4), rbf(x, 1.5))
+conditional_mean = np.dot(weights, y)
+kernel_expectation = np.dot(weights, rbf(y, 2.))
+
+assert np.isclose(weights.sum(), .8522, atol=5e-5)
+assert np.isclose(conditional_mean, 1.2784, atol=5e-5)
+assert np.isclose(kernel_expectation, .7164, atol=5e-5)
+print(weights, conditional_mean, kernel_expectation)
+```
 ::::
 :::::
 
@@ -225,7 +248,9 @@ $$\mathbb E\|\psi(Y)-C\varphi(X)\|^2
 
 Indeed, \(\mathbb E[\psi(Y)-m(X)\mid X]=0\), so its inner product with the \(X\)-measurable vector \(m(X)-C\varphi(X)\) has expectation zero. Thus regression targets the \(L^2(P_X;\mathcal H_{\mathcal Y})\)-projection of \(m\) onto the closure of \(\{x\mapsto C\varphi(x):C\text{ Hilbert-Schmidt}\}\). It recovers the exact conditional embedding only when \(m(x)=C_\star\varphi(x)\) almost surely for an admissible \(C_\star\).
 
-### Range, source, and capacity conditions {#cme-range-source-capacity}
+<span id="cme-range-source-capacity"></span>
+
+**Range, source, and capacity conditions.**
 
 The assumptions hidden by the formal inverse have separate jobs.
 
@@ -266,7 +291,9 @@ $$\widehat\mu^{\pi}_Y=\widehat{\mathcal C}_{Y\mid X}\,\Phi\mathbf m=\Upsilon\,(K
 
 The weights \(\boldsymbol\rho\) are the sum-rule reweighting of the sample induced by the prior.
 
-### The kernel chain rule {#kernel-chain-rule}
+<span id="kernel-chain-rule"></span>
+
+**The kernel chain rule.**
 
 The chain rule factors a joint as \(Q(x,y)=P(y\mid x)\pi(x)\). In embedding language the joint is represented by an (uncentered) cross-covariance operator, and the chain rule says it is obtained by reweighting the empirical joint feature outer products with the same sum-rule weights \(\boldsymbol\rho\):
 
@@ -320,6 +347,55 @@ Five joint pairs \((x_i,y_i)=(0,0),(1,1),(2,2),(3,3),(4,4)\), Gaussian kernels o
 
 **Reading.** The prior placed the mean of \(X\) at \(3.15\), betting on large inputs. Observing \(y=1\) pulls the embedded posterior toward \(x=1\). The normalized value \(1.08\) is only a diagnostic, not a theorem-backed posterior mean: the weights sum to \(0.542\) and one is negative (\(-0.072\) at \(x=4\)), so division by their sum still leaves a signed measure. A simplex projection would produce a probability vector, but it would be a different estimator. The answer also depends on \(\varepsilon\) and \(\delta\), the price of regularizing two ill-posed inverse operations.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+n = 5
+sigma = 1.0
+tau = 1.0
+eps = 0.1        # sum-rule regularization, appears as (K + n*eps I)
+delta = 0.01     # Bayes-rule (squared-operator) regularization
+yobs = 1.0
+
+def kx(a, b):
+    return np.exp(-(a - b) ** 2 / (2 * sigma ** 2))
+
+def ky(a, b):
+    return np.exp(-(a - b) ** 2 / (2 * tau ** 2))
+
+K = kx(x[:, None], x[None, :])
+L = ky(y[:, None], y[None, :])
+
+m = np.array([0.05, 0.05, 0.10, 0.30, 0.50])   # prior weights on x_i (sum 1)
+print("prior weights m =", np.round(m, 4), " sum =", round(float(m.sum()), 4))
+print("prior mean E[X] =", round(float(m @ x), 4))
+
+# kernel sum rule: rho weights the predictive embedding of Y under the prior
+rho = np.linalg.solve(K + n * eps * np.eye(n), K @ m)
+print("rho =", np.round(rho, 4), " sum =", round(float(rho.sum()), 4))
+
+D = np.diag(rho)
+l_y = ky(y, yobs)                 # l_{y} = [l(y_i, yobs)]
+print("l_y =", np.round(l_y, 4))
+
+DL = D @ L
+inner = np.linalg.solve(DL @ DL + delta * np.eye(n), D @ l_y)
+w = DL @ inner                    # posterior embedding weights w(y)
+print("w(y) =", np.round(w, 4), " sum =", round(float(w.sum()), 4))
+
+post_mean = float(w @ x)
+print("posterior mean E[X | Y=1.0] =", round(post_mean, 4))
+
+# normalized posterior weights (project to a probability vector for reading)
+wn = w / w.sum()
+print("normalized w =", np.round(wn, 4))
+print("posterior mean (normalized) =", round(float(wn @ x), 4))
+```
 :::::
 
 ::: {.remark}
@@ -375,7 +451,7 @@ For **Conditional Mean Embeddings and Kernel Bayes' Rule**, never read \(\mathca
 
 ## Summary and further reading {#summary-and-further-reading}
 
-Song et al. [@song2009cme] develop empirical conditional embeddings, while Baker [@baker1973] and Fukumizu et al. [@fukumizu2004] supply the operator background. The safest practical route is the regression route: declare the vector-valued prediction target, regularize the Gram solve, validate conditional queries on held-out pairs, and treat the operator calculus as a compact language for composing those fitted maps rather than as permission to invert compact population operators.
+Song et al. [@song2009cme] develop empirical conditional embeddings, while Baker [@baker1973] and Fukumizu et al. [@fukumizu2004] supply the operator background. The vector-valued regression interpretation is due to [@grunewalder2012], with broader operator and implementation context in [@muandet2017; @song2013cme]. Kernel Bayes' rule is developed in [@fukumizu2013kbr]. The safest practical route is the regression route: declare the vector-valued prediction target, regularize the Gram solve, validate conditional queries on held-out pairs, and treat the operator calculus as a compact language for composing those fitted maps rather than as permission to invert compact population operators.
 
 ## Exercises {#exercises}
 

@@ -760,9 +760,43 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - aronszajn1950
+      - caponnetto2007
+      - mercer1909
+      - steinwart2009rates
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: Transactions of the AMS 68(3):337-404, Sections 1-4 and Theorems 1-4
+        status: author-located-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: Definition 1; Theorems 1-2; Section 4
+        status: author-located-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: Philosophical Transactions A 209:415-446, pp. 437-441
+        status: author-located-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch07.md#summary-and-further-reading
+        source_locator: COLT 2009, pp. 79-93, Theorems 1-2 and Corollary 3
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-20
+release_evidence:
+  controlled_quantity: RKHS energy, effective dimension, spectral bias and variance
+  manuscript_example: ch07.md#example-18-1
+  executable_check: checks/ch07-ex1.py
+  artifact: checks/example-ch07-example-18-1.json
+  status: machine-checked-author-artifact

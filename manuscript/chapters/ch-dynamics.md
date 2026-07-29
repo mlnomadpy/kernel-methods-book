@@ -36,12 +36,24 @@ bibliography:
   - eleftheriadis2017gpssm
   - farahmand2016policy
   - song2013cme
+  - sutton2016rldraft
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Kernels for Dynamical Systems, Control, and Reinforcement Learning
 
 <p class="lead">A robot that plans with a learned model of its own dynamics is betting on that model hundreds of steps ahead. A bias too small to notice in one-step validation is fed back as the next input, compounds along the rollout, and can steer the plan into states no training trajectory ever visited. Sequential learning therefore cannot be treated as ordinary regression with a time index attached. Dynamics determine dependence, control changes the future sampling distribution, and projection error is repeatedly amplified by an operator. Kernels enter at three complementary levels: Gaussian-process priors model unknown transitions, Koopman and conditional-embedding operators linearize the evolution of observables or distributions, and RKHS regularization controls value and policy estimation. This chapter reconstructs the central paper arguments behind all three views, then connects their mathematical guarantees to the closed-loop diagnostics that deployment actually needs.</p>
 
 ## Sequential objects and error decomposition {#dynamics-setting}
+
+The [[ch:conditional-mean-embeddings|conditional mean embedding chapter]]
+already gave us an operator that maps a present-state feature to expectations
+of future features. The [[ch:inverse-learning-and-spectral-regularization|inverse
+learning chapter]] explained why estimating and repeatedly applying such an
+operator requires regularization. Sequential learning begins when we add one
+more fact: the learned object influences which inputs will be seen next. A
+transition model used by a controller, or a value function used to improve a
+policy, changes its own future evaluation distribution.
 
 Let \((\mathcal X,\mathscr X)\) be a measurable state space and let \(\mathcal A\) be a finite action set. A controlled Markov process has transition kernel
 
@@ -65,6 +77,52 @@ Four error sources must remain separate:
 Three additional errors appear in computation: regularization bias, finite-rank or inducing-point approximation, and optimization error. Off-policy learning adds a change of measure because data come from a behavior policy while the target value belongs to another policy.
 
 The relevant sample size is not the number of rows in a transition table. If adjacent rows come from one slowly mixing trajectory, their information can be much smaller. Splits must preserve whole trajectories or contiguous blocks, and any IID theorem must be labeled as such rather than silently applied.
+
+**One transition, four operator questions.**
+
+Take a single record \((x_t,a_t,r_t,x_{t+1})\). It can support four different
+questions, and confusing them is the source of much shallow discussion in this
+area.
+
+1. **State prediction:** estimate \(x_{t+1}\) or its conditional distribution.
+   A GP state-space model answers this question, possibly after inferring a
+   latent \(x_t\).
+2. **Observable evolution:** estimate how
+   \(g(x_{t+1})\) depends on \(g(x_t)\). Koopman and EDMD methods answer this
+   question. Their object depends on the observable space.
+3. **Distribution propagation:** estimate
+   \(\mathbb E[\psi(X_{t+1})\mid X_t=x_t,A_t=a_t]\). Conditional embeddings
+   answer this question without claiming that a single future state was
+   predicted.
+4. **Decision evaluation:** estimate a fixed point whose target contains the
+   future estimate itself, as in a Bellman equation. Kernel policy evaluation
+   answers this question under a sampling and coverage model.
+
+All four can use Gram matrices, but they do not estimate the same operator.
+For a deterministic map \(F\), state prediction estimates \(F\), while the
+Koopman operator estimates composition \(g\mapsto g\circ F\). These arrows run
+in opposite conceptual directions: \(F\) moves states forward; Koopman pulls
+observables back along that motion. Under stochastic dynamics, conditional
+expectation replaces composition. In reinforcement learning, rewards and
+discounting turn that conditional expectation into a fixed-point operator.
+
+We will follow that progression through the chapter:
+
+$$
+\text{latent transition}
+\longrightarrow
+\text{observable operator}
+\longrightarrow
+\text{conditional expectation}
+\longrightarrow
+\text{Bellman fixed point}.
+$$
+
+The unifying problem is repeated application. A one-step error is not merely
+scored once; it is propagated through time, a spectral power, or policy
+improvement. That is why this chapter keeps returning to three audits:
+closure of the chosen function space, stability under iteration, and coverage
+of the distributions on which the operator will be used.
 
 ## Paper module: structured GP state-space identification {#gpssm-paper-module}
 
@@ -212,10 +270,16 @@ Thus columns of \(BW\) are Koopman modes for the eigenfunction coordinates
 
 **Proof status.** Complete proof below.
 
-**Proof.** Invariance gives
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Invariance gives
 \(\psi(F(x))=\mathcal U\psi(x)=M\psi(x)\). Induction yields
 \(\psi(F^t(x))=M^t\psi(x)\). Substitute the eigendecomposition
-\(M^t=W\Lambda^tW^{-1}\) and multiply by \(B\). \(\square\)
+\(M^t=W\Lambda^tW^{-1}\) and multiply by \(B\).
+[\(\square\)]{.qed}
 ::::
 
 **Two exact comparisons.** If \(F(x)=Ax\) is linear and \(A\) has a complete set of right and left eigenvectors \(v_j,w_j\), then
@@ -293,10 +357,16 @@ Then \(f_\alpha=\sum_j\alpha_jk(x_j,\cdot)\) is an eigenfunction of the regulari
 
 **Proof status.** Complete proof below.
 
-**Proof.** The normal equation sends input coefficients \(\alpha\) to
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+The normal equation sends input coefficients \(\alpha\) to
 \(\beta=(G+n\lambda I)^{-1}A\alpha\). The generalized eigen-equation gives
 \(\beta=\xi\alpha\). Therefore the empirical operator sends
-\(f_\alpha\) to \(f_\beta=\xi f_\alpha\). \(\square\)
+\(f_\alpha\) to \(f_\beta=\xi f_\alpha\).
+[\(\square\)]{.qed}
 ::::
 
 The proposition is finite-sample algebra. Population convergence needs a sampling law, a function space on which the Koopman operator is well defined, regularization tending to zero at a controlled rate, and approximation control for the empirical span. If \(G\) is singular, one must work on its range or use a stable generalized solve; coefficients may be nonunique even when the empirical function is unique.
@@ -358,6 +428,32 @@ $$
 
 It therefore has the unique fixed point \(Q^\pi\).
 
+This familiar contraction argument [@sutton2016rldraft] contains the reason
+that sequential prediction is harder than one-step regression. An error made
+now contributes once at the present state, then again after one transition
+with weight \(\gamma\), again after two with weight \(\gamma^2\), and so on.
+The geometric series sums to \(1/(1-\gamma)\). The discount is therefore both
+an economic preference over time and an error-amplification parameter.
+
+But the contraction lives in the supremum norm. Kernel algorithms are usually
+fit in an empirical \(L^2\) norm because that produces a regularized
+least-squares problem. To move between those statements, one needs more than
+algebra. If a distribution \(\rho\) is absolutely continuous with respect to
+the sampling distribution \(\nu\), then Cauchy--Schwarz gives
+
+$$
+\lVert h\rVert_{L^1(\rho)}
+=\int |h|\frac{d\rho}{d\nu}\,d\nu
+\leq
+\left\lVert\frac{d\rho}{d\nu}\right\rVert_{L^2(\nu)}
+\lVert h\rVert_{L^2(\nu)}.
+$$
+
+The density-ratio norm is the price of transferring an empirical error to the
+distribution that a policy actually visits. If the derivative does not exist,
+no finite version of this argument survives. The two-state example later in
+the chapter will make that failure exact rather than asymptotic.
+
 :::: {.theorem #thm-bellman-residual-value-error}
 [Theorem (Bellman residual controls value error in sup norm)]{.box-title}
 
@@ -373,7 +469,12 @@ $$
 
 **Proof status.** Complete proof below.
 
-**Proof.** Write \(e=Q-T^\pi Q\). Because
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Write \(e=Q-T^\pi Q\). Because
 \(T^\pi Q-T^\pi Q^\pi=\gamma P^\pi(Q-Q^\pi)\),
 
 $$
@@ -389,7 +490,8 @@ $$
 $$
 
 Rearranging proves the bound. Equivalently,
-\(Q-Q^\pi=\sum_{t\ge0}\gamma^t(P^\pi)^te\). \(\square\)
+\(Q-Q^\pi=\sum_{t\ge0}\gamma^t(P^\pi)^te\).
+[\(\square\)]{.qed}
 ::::
 
 The norm is crucial. A small residual in \(L^2(\nu)\) under a behavior distribution \(\nu\) does not imply a small supremum residual or small target-policy value error without a change-of-measure bound.
@@ -413,6 +515,22 @@ $$
 $$
 
 The variance term depends on \(Q\), so minimizing the single-sample squared temporal-difference target can select a different function from Bellman-residual minimization. Independent duplicate next-state draws would remove this bias from a product estimator, but such double samples are rarely available. Projected moment equations and instrumental-variable constructions avoid squaring the same transition noise in different ways.
+
+To see the double-sample repair, let \(Y_Q\) and
+\(\widetilde Y_Q\) be conditionally independent draws from the same next-state
+and reward law given \(Z=z\). Then
+
+$$
+\mathbb E[
+\{Q(z)-Y_Q\}\{Q(z)-\widetilde Y_Q\}\mid Z=z]
+=\{Q(z)-T^\pi Q(z)\}^2.
+$$
+
+Conditional independence makes the two centered noise terms multiply to zero
+in expectation. Reusing the same draw replaces that cross-product by a square
+and leaves the conditional variance term. This is why “we used unbiased
+one-step targets” does not imply “we optimized an unbiased squared Bellman
+residual”: unbiasedness is lost after the nonlinear squaring operation.
 
 <figure class="viz" data-figure="bellman-residual-policy-loss" data-alt="Three curves show the value-error certificate epsilon divided by one minus gamma against discount factor gamma. Even for a fixed small residual, the certificate grows steeply as gamma approaches one.">
 <figcaption>The discount factor converts a Bellman residual into a value-error guarantee. Near \(\gamma=1\), long-horizon amplification dominates: reporting a residual without its norm and the factor \(1/(1-\gamma)\) can make a weak certificate look strong.</figcaption>
@@ -554,11 +672,31 @@ $$
 
 This bound is deterministic and local to the region on which both assumptions hold. If the learned rollout leaves that region, the derivation stops. Posterior GP variance does not replace the uniform approximation assumption and is not a safety certificate.
 
+The three regimes tell different engineering stories. When \(L\lt1\), the
+dynamics contract perturbations and the long-run error is bounded by
+\(\varepsilon/(1-L)\); improving one-step accuracy has a stable, linear
+benefit. At \(L=1\), the same local error accumulates once per step. When
+\(L\gt1\), it can grow geometrically, so a model with excellent held-out
+one-step RMSE may still be unusable for a long planning horizon. The constant
+\(L\) is not a generic property of the model class: it must hold on the region
+actually traversed by both rollouts.
+
+The recurrence also reveals what an uncertainty band must cover. It is not
+enough to calibrate \(F(x)-\widehat F(x)\) at independently sampled test
+points. The band must remain valid on inputs generated adaptively by
+\(\widehat F\) and the controller. Once the learned trajectory enters a region
+with no error control, inserting a large posterior variance into the plot
+does not restore the assumptions of the bound. Coverage, local stability, and
+model error have to be checked together.
+
 <figure class="viz" data-figure="rollout-error" data-alt="The first panel shows true and learned trajectories that begin together but slowly separate over forty rollout steps. The second panel shows absolute state error rising far above the small one-step error marked by a horizontal reference line."><figcaption>A one-step error is fed back as a new input. The resulting rollout error is governed jointly by local model error and dynamical amplification, so held-out one-step accuracy and long-horizon validity are different quantities.</figcaption></figure>
 
 Model-predictive control adds optimization and approximation errors because the model is queried repeatedly inside a constrained search. Sparse GPs, random features, and local experts reduce cost, but their predictor error can change the chosen action and constraint margin. Validation must include posterior approximation, solver tolerance, reachable-state coverage, perturbations to dynamics, fallback actions, and actual closed-loop constraint violations.
 
 ## A worked two-state failure witness {#dynamics-worked-example}
+
+:::: {.example #example-dynamics-rollout}
+[Example (zero observed residual, unconstrained target value)]{.box-title}
 
 Consider states \(\{0,1\}\), one fixed action, discount \(\gamma=0.8\), rewards
 \(r(0)=0\) and \(r(1)=1\), and transition matrix
@@ -596,6 +734,56 @@ Under an evaluation distribution concentrated at state \(1\), the error of \(\wi
 
 The same example distinguishes process noise from uncertainty about the transition. At state \(1\), the next state is genuinely random under known \(P\). More data reduce uncertainty about the probability \(1/2\), but they do not eliminate the process variance
 \(\operatorname{Var}\{V(X')\mid X=1\}\).
+
+The following code computes the true fixed point, checks both Bellman
+residuals, and makes the change-of-measure failure explicit. It uses no
+learning library because the impossibility comes from the data distribution,
+not the optimizer.
+
+```python
+import numpy as np
+
+gamma = 0.8
+transition = np.array([[1.0, 0.0], [0.5, 0.5]])
+reward = np.array([0.0, 1.0])
+
+# Solve (I - gamma P)V = r.
+true_value = np.linalg.solve(
+    np.eye(2) - gamma * transition,
+    reward,
+)
+bad_value = np.array([0.0, 100.0])
+
+def bellman_residual(value):
+    return value - (reward + gamma * transition @ value)
+
+true_residual = bellman_residual(true_value)
+bad_residual = bellman_residual(bad_value)
+
+# Behavior observes state 0 only; evaluation asks about state 1 only.
+behavior = np.array([1.0, 0.0])
+evaluation = np.array([0.0, 1.0])
+observed_bad_residual = np.sqrt(
+    np.sum(behavior * bad_residual**2)
+)
+target_absolute_error = np.sum(
+    evaluation * np.abs(bad_value - true_value)
+)
+
+np.testing.assert_allclose(true_value, [0.0, 5.0 / 3.0], atol=1e-14)
+np.testing.assert_allclose(true_residual, [0.0, 0.0], atol=1e-14)
+np.testing.assert_allclose(observed_bad_residual, 0.0)
+np.testing.assert_allclose(target_absolute_error, 100.0 - 5.0 / 3.0)
+assert behavior[1] == 0.0 and evaluation[1] > 0.0
+```
+
+The last assertion is the decisive line. A density ratio would require
+\(\rho(1)/\nu(1)=1/0\), so it is not merely large; it is undefined. Adding a
+more expressive kernel cannot repair this. Stronger regularization can select
+one extrapolation among many, but it cannot turn the extrapolation into an
+identified value. The appropriate response is to gather state-\(1\) data,
+restrict the target policy to covered states, or return no guarantee there.
+::::
 
 ## An auditable sequential workflow {#dynamics-pipeline}
 
@@ -636,10 +824,22 @@ Linear solves stop at declared residuals. Policy iteration stops only when polic
 - A controller changes the data distribution used to fit its model.
 
 Sequential kernel methods must be evaluated as operators and closed-loop systems, not only as regressors.
+The decisive question is always where the fitted object will be applied after
+the first step, because that future distribution is part of the problem
+definition even when it is absent from the training table.
 
 ## Summary and further reading {#dynamics-summary}
 
 Structured GP state-space models couple latent-state smoothing with nonparametric transition learning; the resulting ELBO exposes both the computational gain and the variational gap [@eleftheriadis2017gpssm]. Koopman theory makes nonlinear dynamics linear on observables, but finite mode expansions require invariant or spectrally complete observable spaces; DMD supplies a snapshot Ritz approximation rather than an automatic population spectrum [@rowley2009koopman]. Kernel EDMD replaces a dictionary by an empirical RKHS span and turns the projected eigenproblem into regularized Gram algebra. Conditional embeddings propagate expectations in stochastic systems [@song2013cme]. RKHS policy evaluation must distinguish a sampled temporal-difference objective from a projected Bellman equation. The REG-LSPI analysis shows how capacity, Bellman smoothness, and concentrability enter a finite-sample guarantee [@farahmand2016policy]. Across all methods, stability and coverage determine whether local fit survives repeated evolution.
+
+The [[ch:scientific-computing-and-operator-learning|scientific computing and
+operator learning chapter]] takes the next step: instead of learning only a
+time-evolution or decision operator, it asks how kernels interact with
+differential equations, numerical solvers, and maps between function spaces.
+The handoff is the same question that governed rollouts here: when an estimated
+operator is composed many times or embedded inside a solver, which local
+errors are amplified, and which structural constraints prevent that
+amplification?
 
 ## Exercises {#exercises}
 

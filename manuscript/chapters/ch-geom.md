@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-geom
 slug: geometric-and-equivariant-kernels
 title: Geometric and Equivariant Kernels
@@ -194,6 +196,63 @@ $$\big(0.2895,\ 0.0789,\ 0.0263,\ 0.0263,\ 0.0789\big),$$
 
 **Reading.** Both kernels come straight from the Laplacian spectrum, are stationary on the discrete circle because \(C_5\) is vertex-transitive, and are positive definite for free because their spectral filters are positive. The diffusion kernel is visibly the smooth \(\nu\to\infty\) endpoint of the Matern family.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+m = 5
+
+# --- build the 5-cycle Laplacian -------------------------------------------
+A = np.zeros((m, m))
+for i in range(m):
+    A[i, (i + 1) % m] = 1.0
+    A[i, (i - 1) % m] = 1.0
+D = np.diag(A.sum(axis=1))
+L = D - A
+print("Laplacian L of C_5 =\n", L)
+
+# eigenpairs of L (Fourier modes of the cycle)
+lam, U = np.linalg.eigh(L)
+print("Laplacian eigenvalues lambda =", np.round(lam, 4))
+
+def spectral_kernel(phi):
+    """Assemble sum_i phi(lambda_i) u_i u_i^T from the eigenpairs."""
+    return (U * phi(lam)) @ U.T
+
+# --- Matern kernel, nu = 1, kappa^2 = 1  ->  (2 I + L)^(-1) -----------------
+nu, kappa2 = 1.0, 1.0
+Kmat = spectral_kernel(lambda l: (2 * nu / kappa2 + l) ** (-nu))
+print("\nMatern kernel K_1 = (2 I + L)^(-1) =\n", Kmat)
+print("eigenvalues of K_1 = 1/(2+lambda) =", np.round(np.sort(1.0 / (2 + lam)), 4))
+print("min eigenvalue of K_1 =", round(float(np.min(np.linalg.eigvalsh(Kmat))), 6))
+
+# normalized to unit diagonal (correlation form); C_5 is vertex-transitive so
+# every diagonal entry is equal and normalization is a single rescaling.
+d = np.sqrt(np.diag(Kmat))
+Kmat_n = Kmat / np.outer(d, d)
+print("normalized Matern (unit diagonal), row 0 =", np.round(Kmat_n[0], 4))
+
+# --- diffusion (heat) kernel, t = 1  ->  exp(-L) ---------------------------
+t = 1.0
+H = spectral_kernel(lambda l: np.exp(-t * l))
+print("\ndiffusion kernel H = exp(-L) =\n", H)
+print("eigenvalues of H = exp(-lambda) =", np.round(np.sort(np.exp(-lam)), 4))
+print("min eigenvalue of H =", round(float(np.min(np.linalg.eigvalsh(H))), 6))
+
+# --- diffusion kernel is the nu -> infinity Matern limit --------------------
+# normalized Matern filter g_nu(lambda) = (1 + (kappa2/(2 nu)) lambda)^(-nu),
+# with kappa2 = 2 so that kappa2/2 = 1 = t. As nu grows, g_nu -> exp(-lambda).
+kappa2_lim = 2.0
+for nu_big in [2, 10, 50]:
+    Gnu = spectral_kernel(
+        lambda l, n=nu_big: (1 + (kappa2_lim / (2 * n)) * l) ** (-n)
+    )
+    print(f"nu={nu_big:>3}: max|G_nu - exp(-L)| =",
+          round(float(np.max(np.abs(Gnu - H))), 6))
+```
 :::::
 
 ## Lie groups and homogeneous spaces {#lie-groups}
@@ -313,6 +372,64 @@ $$K_G=\begin{pmatrix}0.4313&0.5067&0.4733\\0.5067&0.6705&0.5987\\0.4733&0.5987&0
 
 **Reading.** Averaging the base kernel over the four-element orbit produces a positive definite kernel that is blind to the rotation, a symmetry the raw RBF plainly does not respect. The invariance is exact, not approximate, because it is built into the feature map rather than encouraged by extra data.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+
+def rot(theta):
+    c, s = np.cos(theta), np.sin(theta)
+    return np.array([[c, -s], [s, c]])
+
+# Z_4 rotation group
+G = [rot(j * np.pi / 2) for j in range(4)]
+
+s2 = 1.0  # s^2 in the RBF
+def k(x, y):
+    return np.exp(-np.sum((x - y) ** 2) / (2 * s2))
+
+def kG(x, y):
+    return np.mean([k(x, R @ y) for R in G])
+
+# three generic 2-D points (no special symmetry among them)
+X = [np.array([1.0, 0.4]),
+     np.array([0.3, 0.6]),
+     np.array([-0.7, 0.5])]
+labels = ["x1", "x2", "x3"]
+
+# --- base RBF Gram (not invariant) -----------------------------------------
+Kbase = np.array([[k(a, b) for b in X] for a in X])
+print("base RBF Gram K =\n", Kbase)
+
+# --- invariant (group-averaged) Gram ---------------------------------------
+KG = np.array([[kG(a, b) for b in X] for a in X])
+print("\ninvariant Gram kG =\n", KG)
+print("symmetric? max|kG - kG^T| =", round(float(np.max(np.abs(KG - KG.T))), 12))
+evals = np.linalg.eigvalsh(KG)
+print("eigenvalues of kG =", np.round(evals, 4))
+print("min eigenvalue of kG =", round(float(np.min(evals)), 6), "(>= 0 => PSD)")
+
+# --- per-orbit terms for x1,x2 (shows what the average is made of) ----------
+terms = [k(X[0], R @ X[1]) for R in G]
+print("\norbit terms k(x1, R_j x2), j=0..3 =", np.round(terms, 4))
+print("their mean kG(x1,x2) =", round(float(np.mean(terms)), 4))
+
+# --- invariance check: rotate an argument by a group element ---------------
+R = G[1]  # 90-degree rotation
+print("\nInvariance under the 90-degree rotation R:")
+print("  raw RBF   k(R x1, x2) =", round(k(R @ X[0], X[1]), 4),
+      "  vs k(x1, x2) =", round(k(X[0], X[1]), 4),
+      "  -> differ:", round(abs(k(R @ X[0], X[1]) - k(X[0], X[1])), 4))
+print("  invariant kG(R x1, x2) =", round(kG(R @ X[0], X[1]), 6),
+      "  vs kG(x1, x2) =", round(kG(X[0], X[1]), 6),
+      "  -> differ:", round(abs(kG(R @ X[0], X[1]) - kG(X[0], X[1])), 12))
+print("  invariant kG(R x1, R x3) =", round(kG(R @ X[0], R @ X[2]), 6),
+      "  vs kG(x1, x3) =", round(kG(X[0], X[2]), 6),
+      "  -> differ:", round(abs(kG(R @ X[0], R @ X[2]) - kG(X[0], X[2])), 12))
+```
 :::::
 
 ## Summary {#summary}

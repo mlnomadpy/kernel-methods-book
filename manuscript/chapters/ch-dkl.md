@@ -34,12 +34,24 @@ bibliography:
   - wilson2016dkl
   - wilson2015kissgp
   - ober2021dkl
+  - rasmussen2006
+  - titsias2009svgp
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Deep Kernel Learning
 
 <p class="lead">A neural network can learn the representation a task demands, while a Gaussian process can return a distribution rather than a point. Deep kernel learning joins them by placing a kernel on learned coordinates. That construction is valid for every fixed representation, but validity is the easy part. Joint training can collapse distant inputs onto the same latent point, trade feature scale against length scale along a flat objective direction, and exploit a flexible covariance matrix until marginal likelihood becomes a training criterion rather than protection from overfitting. Approximation adds another layer: an inducing or interpolation scheme changes the covariance whose determinant, inverse, and uncertainty drive training. This chapter reconstructs the original scalable model, proves the central matrix derivatives and failure mechanism, derives structured kernel interpolation, and builds an audit in which accuracy, calibration, geometry, approximation, and shift behavior must agree.</p>
 
 ## The composed kernel and the model being fitted {#dkl-model}
+
+The [[ch:gaussian-processes-and-rvm|Gaussian-process chapter]] separated
+covariance validity, posterior computation, and calibration. The
+[[ch:kernels-and-deep-learning|deep-kernel limits chapter]] separated fixed
+tangent features from representation learning. Deep kernel learning combines
+those stories and their failure modes: a valid covariance can be learned from
+a distorted representation, and an exact GP posterior can be conditional on
+badly identified feature parameters.
 
 Let \(\mathcal X\) be the input domain, let
 \(h_\theta:\mathcal X\to\mathbb R^p\) be a deterministic feature map, and let
@@ -89,6 +101,9 @@ C=K_{\theta,\phi}+\sigma_n^2 I.
 $$
 
 Unless stated otherwise, \(m=0\), \(C\) is strictly positive definite, and all parameters are point estimates. This last clause matters: uncertainty in \(f\) conditional on a point-estimated network is not uncertainty over the network weights.
+The likelihood and posterior formulas are the ordinary GP equations
+[@rasmussen2006]; what changes is that the covariance geometry is selected by
+a high-dimensional supervised optimization.
 
 ::: {.definition #def-dkl}
 [Definition (deep kernel learning)]{.box-title}
@@ -98,11 +113,30 @@ Deep kernel learning jointly estimates a parametric representation and kernel or
 
 DKL is not a fixed neural tangent kernel, because movement of \(h_\theta\) changes the kernel. It is not a deep Gaussian process, because the intermediate map is deterministic at a point estimate. It is not merely a neural last layer, because a general base kernel can represent infinitely many basis functions in feature space.
 
+Three geometries must be audited separately. Raw-input geometry determines
+which perturbations a domain expert regards as small or unfamiliar. Feature
+geometry is the learned distance
+\(\lVert h_\theta(x)-h_\theta(z)\rVert\). Covariance geometry applies the base
+kernel and determines Gram eigenvalues, posterior leverage, and predictive
+variance. A training objective observes only the final covariance. It can
+therefore improve while the feature map destroys a raw-space distinction that
+matters at deployment.
+
+This gives the chapter its running question. For every favorable objective
+value, ask which movement produced it: did labels become easier to interpolate,
+did the determinant shrink through unused directions, did the learned noise
+change, or did the approximation become cheaper on a more compressible Gram
+matrix? Those mechanisms can have identical training curves and different
+consequences under shift. Monitoring feature distances, covariance spectra,
+and noise alongside the objective is how we tell them apart.
+
 ## Paper module: Wilson et al. train the geometry by evidence {#dkl-paper-wilson}
 
 The obstacle addressed by [@wilson2016dkl] was a three-way tension. Flexible neural features did not by themselves provide GP inference, expressive GPs were expensive at scale, and fitting a GP only after freezing a network could not adapt the representation to the probabilistic objective. Their construction composes a deep map with an RBF or spectral-mixture kernel, initializes from a trained network, and then jointly optimizes network and kernel parameters through GP marginal likelihood. Structured kernel interpolation supplies scale.
 
-### Exact objective and gradient {#dkl-marginal-likelihood}
+<span id="dkl-marginal-likelihood"></span>
+
+**Exact objective and gradient.**
 
 The negative log marginal likelihood is
 
@@ -207,7 +241,9 @@ No positivity assumption on individual interpolation weights is needed. \(\squar
 
 The algebra reveals what SKI buys. A matrix-vector product costs one multiplication by \(W^\top\), one by \(K_{UU}\), and one by \(W\). With \(c\) nonzeros per row and Toeplitz structure in one-dimensional \(K_{UU}\), this is \(O(cn+m\log m)\) time and \(O(cn+m)\) storage. Kronecker structure gives a different complexity depending on grid dimension. Conjugate gradients then solve systems using only these products. The 2015 paper derives this construction in its Section 3 and Equation (8), and reports the structured costs in Section 3.2 [@wilson2015kissgp].
 
-### What covariance approximation does to inference {#dkl-approximation}
+<span id="dkl-approximation"></span>
+
+**What covariance approximation does to inference.**
 
 Matrix approximation, posterior approximation, and objective approximation are different claims. Let
 
@@ -218,6 +254,22 @@ $$
 
 with \(K,\widetilde K\succeq0\), and assume
 \(\lVert K-\widetilde K\rVert_2\leq\varepsilon\).
+
+In a fixed-kernel experiment, this error is assessed after the covariance is
+chosen. Joint DKL training creates a feedback loop: the approximate covariance
+produces the gradient that moves the representation, and that representation
+changes where interpolation error is largest. A small error at initialization
+does not bound the error at the selected checkpoint. The approximation audit
+must therefore be repeated along training or at least at every candidate
+checkpoint, using exact subproblems or successively refined inducing grids on
+manageable subsets.
+
+The noise floor sets the sensitivity scale. Resolvent bounds contain
+\(\sigma_n^{-2}\) or stronger powers, so learned noise approaching zero can
+turn a visually modest covariance discrepancy into a large solve, determinant,
+or variance discrepancy. “SKI preserved PSD” answers only the kernel-certificate
+question; it does not answer whether the optimized approximate posterior is
+close to the exact posterior.
 
 :::: {.proposition #prop-dkl-perturbation}
 [Proposition (solve and log-determinant sensitivity)]{.box-title}
@@ -374,6 +426,32 @@ $$
 At \(\rho=0.99\), \(v_\star\approx0.0166\). The model is highly confident because the learned representation declares the test point familiar. Positive definiteness and high training evidence do not reveal that the raw input was remote.
 
 For contrast labels such as \(y=(1,-2,1)\), the quadratic term is \(6/a\) and collapse is heavily penalized. Collapse is therefore label aligned, not inevitable.
+
+```python
+import numpy as np
+
+def evidence_without_constant(rho, labels, noise_variance=0.01):
+    signal = (1.0 - rho) * np.eye(3) + rho * np.ones((3, 3))
+    covariance = signal + noise_variance * np.eye(3)
+    solved = np.linalg.solve(covariance, labels)
+    sign, logdet = np.linalg.slogdet(covariance)
+    assert sign > 0
+    return 0.5 * labels @ solved + 0.5 * logdet, covariance
+
+constant = np.ones(3)
+separated, _ = evidence_without_constant(0.0, constant)
+collapsed, covariance = evidence_without_constant(0.99, constant)
+
+cross_covariance = np.full(3, 0.99)
+posterior_variance = 1.0 - cross_covariance @ np.linalg.solve(
+    covariance, cross_covariance
+)
+
+np.testing.assert_allclose(separated, 1.5001, atol=5e-5)
+np.testing.assert_allclose(collapsed, -2.8627, atol=5e-5)
+np.testing.assert_allclose(posterior_variance, 0.0166, atol=5e-5)
+assert collapsed < separated
+```
 :::
 
 <figure class="viz" data-figure="dkl-collapse" data-alt="Two kernel similarity matrices compare separated and collapsed feature geometries."><figcaption>A composed kernel remains positive definite after representation collapse. When distant raw inputs become nearly identical in feature space, posterior uncertainty loses the geometry needed to express unfamiliarity.</figcaption></figure>
@@ -447,6 +525,11 @@ Free latent locations need not equal \(h_\theta(x)\) for any realizable input. A
 
 For classification and other non-Gaussian likelihoods, the expected log likelihood needs quadrature or Monte Carlo. Feature gradients then inherit both minibatch and posterior-sampling noise. Report the estimator, number of samples, control variates, and whether inducing rank was increased until proper scores stabilized.
 
+This variational construction inherits the inducing-variable logic of sparse
+GP regression [@titsias2009svgp]. In DKL, however, inducing locations and the
+feature map may move together, so a tight variational bound need not isolate
+representation error from posterior-family error.
+
 An improved ELBO is not automatically improved posterior variance. The objective controls an average divergence inside the assumed model and variational family. It does not certify shifted-input calibration.
 
 ## OOD uncertainty is representation-relative {#dkl-ood}
@@ -465,9 +548,18 @@ If \(h_\theta(x)=h_\theta(z)\), then under a zero-mean DKL GP with fixed paramet
 
 The proof is immediate because their kernel rows and diagonal entries coincide. The consequence is not: no readout diagnostic can recover a distinction erased by \(h_\theta\). Raw-space distance, semantic novelty, or acquisition risk may therefore disagree with GP variance.
 
+The statement is stronger than saying that a particular OOD score performs
+poorly. It is an information barrier for every statistic computed only from
+the GP readout: equal feature images generate equal covariance rows. Repair
+must occur before the readout, through constraints, auxiliary objectives,
+multiple views, or explicit raw-space monitoring. Post-hoc rescaling of the
+same variance cannot reconstruct information the feature map discarded.
+
 OOD evaluation needs at least one shift specified before training. Useful tests include support expansion, time shift, sensor corruption, class-conditional shift, and adversarial movement along directions to which the feature map is insensitive. Report proper scores, interval or set coverage, width, OOD ranking, and feature-space distance. Conformal calibration can repair marginal coverage only under its exchangeability or shift assumptions. It cannot make a collapsed representation informative.
 
-## Comparisons that identify the source of an improvement {#dkl-comparisons}
+<span id="dkl-comparisons"></span>
+
+**Comparisons that identify the source of an improvement.**
 
 | Model | Features | Bayesian or kernel uncertainty | What the comparison isolates |
 |---|---|---|---|
@@ -516,6 +608,11 @@ Use stable solves rather than explicit inverses, double precision when condition
 ## Summary and further reading {#dkl-summary}
 
 Deep kernel learning composes a learned map with a valid base kernel and trains the resulting covariance. Wilson et al. made the construction scalable and jointly optimized it through GP marginal likelihood [@wilson2016dkl]; structured kernel interpolation supplies fast products through \(WK_{UU}W^\top\) [@wilson2015kissgp]. Ober et al. showed why a highly parameterized covariance can overfit despite the familiar evidence decomposition, and why integrating network uncertainty can help in their tested regimes [@ober2021dkl]. A defensible DKL result must therefore identify which gain comes from features, which from GP inference, which from approximation, and which survives shift.
+
+The [[ch:reproducing-kernel-banach-and-variation-spaces|RKBS and variation-space
+chapter]] follows by asking whether learned features should be understood
+through a fixed Hilbert norm at all, or through sparse and measure-valued
+geometries whose representer theorems have different conclusions.
 
 ## Exercises {#exercises}
 

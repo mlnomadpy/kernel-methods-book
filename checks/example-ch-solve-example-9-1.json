@@ -3,10 +3,10 @@
   "chapter": "ch-solve",
   "anchor": "example-9-1",
   "source_file": "manuscript/chapters/ch-solve.md",
-  "source_sha256": "c6b5afd1a73a20ff6113ad544a15a6dc13ddad85bbc24ce568c90d00069a0504",
+  "source_sha256": "d3e1856443d3a45b0a79899eac5d0b8f67e0cd482e451a15ce7ec34f55e6ff88",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch-solve-ex1.py"
+    "checks/ch-solve-ex2.py"
   ],
   "numeric_literals": [
     "2",
@@ -25,7 +25,7 @@
     "4",
     "5"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Computes the KKT up/low sets, threshold gap, and most-violating pair displayed in the box.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

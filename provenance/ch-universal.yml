@@ -295,6 +295,74 @@ sections:
         status: exact-page-section-or-theorem-locator-pending-independent-verification
     verified_by: null
     verified_on: null
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - caponnetto2007
+      - devroye1996
+      - mercer1909
+      - micchelli2006
+      - scholkopf2002
+      - sriperumbudur2010
+      - sriperumbudur2011
+      - steinwart2001
+      - steinwart2008
+      - steinwart2009rates
+      - vapnik1998
+      - widom1963
+    locators:
+      - source: caponnetto2007
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: Definition 1; Theorems 1-2; Section 4
+        status: author-located-pending-independent-verification
+      - source: devroye1996
+        manuscript_locator: ch-universal.md#univ-no-free-lunch
+        source_locator: Chapter 7, Sections 7.1-7.2, universal consistency and absence of distribution-uniform rates
+        status: author-located-pending-independent-verification
+      - source: mercer1909
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: Philosophical Transactions A 209:415-446, pp. 437-441
+        status: author-located-pending-independent-verification
+      - source: micchelli2006
+        manuscript_locator: ch-universal.md#univ-mxz
+        source_locator: JMLR 7:2651-2667, Sections 2-4 and Theorems 1-3
+        status: author-located-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-universal.md#univ-summary
+        source_locator: Chapters 2 and 7, RKHS foundations and statistical learning
+        status: author-located-pending-independent-verification
+      - source: sriperumbudur2010
+        manuscript_locator: ch-universal.md#univ-hierarchy
+        source_locator: Sections 2-4, Theorems 7-9, characteristic kernels and probability metrics
+        status: author-located-pending-independent-verification
+      - source: sriperumbudur2011
+        manuscript_locator: ch-universal.md#univ-hierarchy
+        source_locator: JMLR 12:2389-2410, Sections 3-4, universality and characteristicness equivalences
+        status: author-located-pending-independent-verification
+      - source: steinwart2001
+        manuscript_locator: ch-universal.md#univ-steinwart-criterion
+        source_locator: JMLR 2:67-93, Definition 4 and Theorems 9-10
+        status: author-located-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-universal.md#univ-consistency
+        source_locator: Chapters 4, 7, and 8, universality, consistency, entropy, and rates
+        status: author-located-pending-independent-verification
+      - source: steinwart2009rates
+        manuscript_locator: ch-universal.md#univ-consistency
+        source_locator: COLT 2009, pp. 79-93, Theorems 1-2 and Corollary 3
+        status: author-located-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-universal.md#univ-capacity
+        source_locator: Chapters 3-4, uniform convergence and capacity control
+        status: author-located-pending-independent-verification
+      - source: widom1963
+        manuscript_locator: ch-universal.md#univ-eigenvalues
+        source_locator: Transactions of the AMS 109:278-295, Theorems 1-3
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

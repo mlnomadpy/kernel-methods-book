@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "chapter": "ch00",
+  "anchor": "example-intro-gram-compatibility",
+  "source_file": "manuscript/chapters/ch00.md",
+  "source_sha256": "ddb05ca803fe1de194b53ee886fe6d6ea4f589a9b079456668c15f67e1f61ab3",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch00-ex1.py"
+  ],
+  "numeric_literals": [
+    "1",
+    "0",
+    "0.8",
+    "0.6",
+    "2",
+    "+1",
+    "-2",
+    "0.4",
+    "-0.4",
+    "-1",
+    "1.0",
+    "0.0",
+    "2.0",
+    "6",
+    "-1e-12",
+    "-1e-3"
+  ],
+  "scope": "Checks PSD of the feature-derived Gram matrix, the negative eigenvalue of a pairwise-plausible incompatible edit, and the stated kernel distance.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

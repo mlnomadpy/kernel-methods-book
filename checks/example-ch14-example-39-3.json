@@ -3,10 +3,10 @@
   "chapter": "ch14",
   "anchor": "example-39-3",
   "source_file": "manuscript/chapters/ch14.md",
-  "source_sha256": "88214b0a05b84a85854da58ef65b027f2c57b4ea8b7a25cc20e9e2c22d0305df",
+  "source_sha256": "65bc22f641dee91b013a38cd3b419b0c3839a88e7c91eafa6caaf5fbc47a8b36",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch14-ex2.py"
+    "checks/ch14-ex3.py"
   ],
   "numeric_literals": [
     "16",
@@ -24,9 +24,15 @@
     "0.116120",
     "2048",
     "0.051238",
-    "0.093207"
+    "0.093207",
+    "-1.0",
+    "1.0",
+    "2.0",
+    "0.0",
+    "1e-10",
+    "1409"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Computes finite-width ReLU feature Grams and verifies their relative errors, ranks, and limiting-kernel spectrum.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

@@ -38,6 +38,9 @@ print("W_1 (sorted coupling)      =", round(float(W1), 4))
 abs_rev = np.abs(xs - ys[::-1])
 print("|x_(i) - y_(n+1-i)| =", abs_rev)
 W1_rev = abs_rev.sum() / n
+assert np.isclose(W1, 1.0)
+assert np.isclose(W1_rev, 3.0)
+assert W1 < W1_rev
 print("cost of reversed coupling  =", round(float(W1_rev), 4))
 
 # --- W_2 by the same sorted coupling ---
@@ -53,6 +56,7 @@ FP = cdf(x, grid)
 FQ = cdf(y, grid)
 d = np.abs(FP - FQ)
 integral = np.sum((d[:-1] + d[1:]) / 2 * np.diff(grid))   # trapezoidal rule
+assert np.isclose(integral, W1, atol=2e-5)
 print("integral |F_P - F_Q| dt    =", round(float(integral), 4))
 
 # --- energy distance = squared MMD with kernel -|x-y| ---
@@ -62,6 +66,7 @@ Exy = mean_abs(x, y)
 Exx = mean_abs(x, x)
 Eyy = mean_abs(y, y)
 energy = 2 * Exy - Exx - Eyy
+assert np.isclose(energy, 2 / 3)
 print("E|X-Y| =", round(float(Exy), 4),
       " E|X-X'| =", round(float(Exx), 4),
       " E|Y-Y'| =", round(float(Eyy), 4))

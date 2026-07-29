@@ -3,10 +3,10 @@
   "chapter": "ch-generative",
   "anchor": "example-25-2",
   "source_file": "manuscript/chapters/ch-generative.md",
-  "source_sha256": "99b811418a0446eec5f019e57b9144546fa6dcfd19b91d551c1e1efeeab73170",
+  "source_sha256": "62658ad26467c0f06ece42388c0152ccfee8ca580790a22b96339da983f49579",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch-generative-ex2.py"
+    "checks/ch-generative-ex1.py"
   ],
   "numeric_literals": [
     "2",
@@ -45,9 +45,17 @@
     "+0.0216",
     "0.028728",
     "5",
-    "+0.028728"
+    "+0.028728",
+    "0.0",
+    "1.0",
+    "0",
+    "10",
+    "6.3",
+    "6.4",
+    "6",
+    "1e-12"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Computes the hidden-path sum and the forward recursion independently and verifies the displayed HMM kernel value.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

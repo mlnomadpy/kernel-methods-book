@@ -1,5 +1,6 @@
 ---
 id: ch-cca
+example_code_policy: visible-for-executable
 slug: kernel-cca-and-correlation
 title: Kernel CCA and Correlation Analysis
 part: V · Spectral Geometry and Unlabeled Structure
@@ -40,6 +41,7 @@ bibliography:
   - scholkopf2002
   - kernelbook-code-ch-cca-ex2
   - shawe2004
+narrative_link_policy: exact
 ---
 # Kernel CCA and Correlation Analysis
 
@@ -47,9 +49,14 @@ bibliography:
 
 ## Kernel canonical correlation analysis {#kernel-cca}
 
+The [[ch:kernel-pca|kernel-PCA chapter]] diagonalized variation in one feature
+space; CCA asks which directions co-vary across two feature spaces.
+
 The last method in this chapter relates two views of the same objects rather than analyzing one. Suppose every object comes with two representations: an image and its caption, a gene's sequence and its expression profile, an audio clip and its transcript. Canonical correlation analysis (CCA) looks for a direction in each view such that the two projected signals are maximally correlated, extracting the shared structure between the views.
 
-### Classical CCA {#cca-classical}
+<span id="cca-classical"></span>
+
+**Classical CCA.**
 
 What does it mean, concretely, for two views to share structure? CCA answers with a single number to maximize: the correlation between one projection of each view. The kernel version will inherit the linear one's eigenstructure wholesale, so we set up the linear problem first. Given two views collected as data matrices \(X \in \mathbb{R}^{n \times p}\), whose rows are \(\mathbf{x}_1^\top, \ldots, \mathbf{x}_n^\top\), and \(Y \in \mathbb{R}^{n \times d}\), whose rows are \(\mathbf{y}_1^\top, \ldots, \mathbf{y}_n^\top\), of the same \(n\) objects (so \(\mathbf{x}_i \in \mathbb{R}^p\) and \(\mathbf{y}_i \in \mathbb{R}^d\) are the two descriptions of object \(i\)), and assuming both views centered, CCA seeks directions \(\mathbf{w}_a \in \mathbb{R}^p\) and \(\mathbf{w}_b \in \mathbb{R}^d\) maximizing the empirical correlation of the projections \(\mathbf{w}_a^\top \mathbf{x}_i\) and \(\mathbf{w}_b^\top \mathbf{y}_i\):
 
@@ -71,7 +78,9 @@ $$
 
 This first optimum gives the first pair of canonical directions; subsequent pairs are found by solving the same problem under the constraint of orthogonality to the directions already found.
 
-### CCA is a generalized eigenvalue problem {#cca-eigenproblem}
+<span id="cca-eigenproblem"></span>
+
+**CCA is a generalized eigenvalue problem.**
 
 The ratio is invariant to rescaling \(\mathbf{w}_a\) and \(\mathbf{w}_b\), so we may fix the scale by demanding unit projected variance and maximize only the numerator:
 
@@ -105,7 +114,9 @@ $$
 
 whose eigenvalues are the canonical correlations and whose eigenvectors, transformed back, give the canonical directions. The derivation follows Section 6.5 of Shawe-Taylor and Cristianini (2004).
 
-### Kernelizing CCA {#kernel-cca-formulation}
+<span id="kernel-cca-formulation"></span>
+
+**Kernelizing CCA.**
 
 Exactly as with PCA, we can replace each view by an RKHS embedding. Take two p.d. kernels \(K_a, K_b : \mathcal{X} \times \mathcal{X} \to \mathbb{R}\), with embeddings \(\varphi_a : \mathcal{X} \to \mathcal{H}_a\) and \(\varphi_b : \mathcal{X} \to \mathcal{H}_b\), giving two views \((\varphi_a(\mathbf{x}_i))_i\) and \((\varphi_b(\mathbf{x}_i))_i\) of the dataset. We look for directions \(f_a \in \mathcal{H}_a\) and \(f_b \in \mathcal{H}_b\) maximizing
 
@@ -208,7 +219,9 @@ The output is easier to read in score space than in coefficient space. Each pair
 
 <figure class="viz" data-figure="cca-paired-projections" data-alt="Two paired two-dimensional views share a latent variable hidden by nuisance variation. After regularized CCA, their one-dimensional canonical scores lie close to the diagonal, so matching observations receive similar scores."><figcaption>CCA is successful when paired observations agree after projection: regularization suppresses view-specific directions and exposes the shared coordinate rather than manufacturing perfect in-sample correlation.</figcaption></figure>
 
-### Variance, covariance, and correlation as one family {#cca-covariance-family}
+<span id="cca-covariance-family"></span>
+
+**Variance, covariance, and correlation as one family.**
 
 It is worth stepping back to see that the unsupervised methods of this chapter are the same construction tuned by a single choice: what we ask of a pair of directions. Shawe-Taylor and Cristianini (2004) organize their whole treatment this way. Given one view, asking for the direction of maximal variance gives PCA, the eigenvectors of the covariance matrix. Given two paired views \(X\) and \(Y\), we can instead ask for a pair of directions \((\mathbf{w}_a, \mathbf{w}_b)\) maximizing the raw covariance of the projections,
 
@@ -291,6 +304,21 @@ $$
 4.  [Read off the canonical directions.]{.wex-op} At \(\kappa = 1\) the leading dual weights, normalized to unit length, are \(\boldsymbol{\alpha} = (0.519,\, 0.635,\, 0.572)\) and \(\boldsymbol{\beta} = (0.632,\, 0.627,\, 0.456)\), giving one concrete pair of canonical functions \(f_a = \sum_i \alpha_i K_a(x_i^a, \cdot)\) and \(f_b = \sum_i \beta_i K_b(x_i^b, \cdot)\).
 
 **Reading.** The unregularized \(1.000\) is an artifact of an invertible, expressive kernel and carries no information about the data. The shrinkage turns \(\kappa\) into a dial that trades that illusory perfect fit for a genuine, data-dependent correlation, which is exactly the \((K + \kappa I)\) ridge whose vanishing rate the consistency theory prescribes.
+
+```python
+import numpy as np
+xa, xb = np.array([-1.,0.,2.]), np.array([0.,1.,1.5])
+rbf_gram = lambda z: np.exp(-(z[:,None]-z[None,:])**2/2)
+Ka, Kb = rbf_gram(xa), rbf_gram(xb)
+def correlation(ridge):
+    A = np.linalg.solve(Ka + ridge*np.eye(3), Ka)
+    B = np.linalg.solve(Kb + ridge*np.eye(3), Kb)
+    return np.linalg.eigvals(np.matmul(A, B)).real.max()
+values = np.array([correlation(r) for r in [.1,.5,1.]])
+assert np.allclose(values, [.896,.611,.413], atol=8e-4)
+assert np.all(np.diff(values) < 0)
+print(values)
+```
 :::::
 ::::::
 
@@ -348,6 +376,28 @@ With deterministic seed \(1502\), nearly unregularized linear CCA reports traini
 As a negative control, permuting the training pairing destroys the shared relation. Across the same ridge sweep, every absolute held-out correlation is below \(0.027\). A large training canonical correlation without held-out paired alignment is a failure witness, not evidence of dependence.
 
 **Verification.** The deterministic generator, train/test centering, permutation control, and assertions are checked by the chapter's computational reference [@kernelbook-code-ch-cca-ex2].
+
+```python
+import numpy as np
+def rcca(X, Y, ridge):
+    n = len(X)
+    Cxx, Cyy, Cxy = np.matmul(X.T, X)/n, np.matmul(Y.T, Y)/n, np.matmul(X.T, Y)/n
+    lx, Ux = np.linalg.eigh(Cxx+ridge*np.eye(X.shape[1]))
+    ly, Uy = np.linalg.eigh(Cyy+ridge*np.eye(Y.shape[1]))
+    Wx, Wy = np.matmul(Ux*(1/np.sqrt(lx)), Ux.T), np.matmul(Uy*(1/np.sqrt(ly)), Uy.T)
+    U, s, Vt = np.linalg.svd(np.linalg.multi_dot([Wx, Cxy, Wy]))
+    return np.matmul(Wx, U[:, 0]), np.matmul(Wy, Vt.T[:, 0]), s[0]
+rng = np.random.default_rng(1502)
+def sample(n, d=30):
+    z = rng.normal(size=(n, 1))
+    return (np.c_[z+.2*rng.normal(size=(n, 1)), rng.normal(size=(n, d-1))],
+            np.c_[z+.2*rng.normal(size=(n, 1)), rng.normal(size=(n, d-1))])
+Xtr, Ytr = sample(36); Xte, Yte = sample(400)
+Xte -= Xtr.mean(0); Yte -= Ytr.mean(0); Xtr -= Xtr.mean(0); Ytr -= Ytr.mean(0)
+for ridge in [1e-6, .03, .3, 3., 30.]:
+    a, b, train = rcca(Xtr, Ytr, ridge)
+    print(ridge, train, np.corrcoef(np.matmul(Xte, a), np.matmul(Yte, b))[0, 1])
+```
 :::
 
 This is not a universal tuning recommendation. It demonstrates the protocol: preserve pairs when splitting, fit centering on training data only, select shrinkage by held-out paired performance, and include a pairing permutation as a negative control.
@@ -382,6 +432,10 @@ For a book-length treatment of the methods in this chapter, Schölkopf and Smola
 - Compare against linear CCA. A nonlinear map earns its complexity only when its held-out alignment improves.
 
 ## Summary and further reading {#summary-and-further-reading}
+
+The next chapter, [[ch:kernel-discriminants-and-projections|kernel
+discriminants and projections]], changes the controlled numerator from
+cross-view covariance to label relevance.
 
 CCA searches for two variance-normalized projections whose scores covary as strongly as possible. Kernelization makes those projections nonlinear but also makes perfect empirical correlation trivial whenever both Gram matrices are invertible. RKHS-norm shrinkage is therefore part of the estimand, not merely a numerical patch: it restricts which score patterns each view may realize and turns the problem back into a meaningful generalized eigenproblem. Covariance analysis, CCA, kernel CCA, and deep CCA differ mainly in the representation and normalization they choose; all must control expressive directions and be judged on held-out paired observations. For primary treatments, see [@bach2002], [@hardoon2004], [@fukumizu2007cca], and [@andrew2013dcca].
 

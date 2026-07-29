@@ -248,9 +248,28 @@ sections:
         source_locator: Section 2
         status: author-checked-pending-independent-verification
     permission: original exercises
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - williams2002
+    locators:
+      - source: williams2002
+        manuscript_locator: ch06.md#summary-and-further-reading
+        source_locator: Machine Learning 46:11-19, Sections 2-3 and Equations (3)-(6)
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: claim-site citations and exact section/equation locators
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-25
+release_evidence:
+  controlled_quantity: centered feature-space variance and eigenspace stability
+  manuscript_example: ch06.md#example-13-1
+  executable_check: checks/ch06-ex1.py
+  artifact: checks/example-ch06-example-13-1.json
+  status: machine-checked-author-artifact

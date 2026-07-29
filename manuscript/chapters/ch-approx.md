@@ -1,5 +1,7 @@
 ---
+narrative_link_policy: exact
 id: ch-approx
+example_code_policy: visible-for-executable
 slug: kernel-interpolation-and-approximation
 title: Kernel Interpolation and Approximation Theory
 part: 'IV · Generalization, Approximation, and Limits'
@@ -50,6 +52,8 @@ bibliography:
 # Kernel Interpolation and Approximation Theory
 
 <p class="lead">A network of weather stations reports temperature at a few hundred scattered sites, and a forecaster must fill in the map between them; a wind-tunnel campaign yields drag at a dozen operating points, and an engineer must predict it everywhere else. Both want a surface that passes exactly through the measurements, together with an honest statement of how wrong it can be in between. Machine learning instinct says exact fitting is overfitting, yet approximation theory reaches the opposite verdict: when the data are noiseless, the kernel interpolant is the optimal recovery of every function the kernel's norm can measure, and it comes with a computable pointwise error bar. This chapter builds that theory. We solve the interpolation system and prove the solution has minimum RKHS norm, read the native space as a smoothness scale through the Fourier transform, derive the power function and recognize it as the Gaussian-process posterior standard deviation, convert point-set geometry into convergence rates, and prove the uncertainty relation that couples spectral accuracy to exponential ill-conditioning.</p>
+
+[[ch:inverse-learning-and-spectral-regularization|Inverse Learning and Spectral Regularization]] established that small operator eigenvalues amplify noise and that a spectral filter controls the amplification. Interpolation deliberately removes that filter: in the noiseless regime it solves every sampled direction exactly. The inherited inverse-problem decomposition therefore tells us where instability can enter, while the power function developed here answers the complementary deterministic question of how much uncertainty remains away from the sampled sites.
 
 ## Kernel interpolation as minimum-norm recovery {#approx-minimum-norm}
 
@@ -368,6 +372,25 @@ $$
 and \(P_X(0.75) = \sqrt{0.125} = 0.3536\).
 
 **The bound versus the truth.** The native-space norm of the target is \(\lVert f \rVert^2 = \int_0^1 (2t)^2 dt = 4/3\), so \(\lVert f \rVert = 1.1547\) and the theorem promises \(\lvert f(0.75) - s(0.75) \rvert \le 0.3536 \times 1.1547 = 0.4082\). The actual values are \(s(0.75) = 0.25 + 1.5 \times 0.25 = 0.625\) and \(f(0.75) = 0.5625\), an error of \(0.0625\), comfortably inside the worst-case bar. The Bayesian reading of the same numbers: a Brownian-motion prior conditioned on these three observations has posterior mean \(0.625\) and posterior standard deviation \(0.3536\) at \(x_* = 0.75\).
+
+```python
+import numpy as np
+
+X = np.array([.25, .5, 1.])
+y = X**2
+K = np.minimum(X[:, None], X[None, :])
+c = np.linalg.solve(K, y)
+x_star = .75
+k_star = np.minimum(X, x_star)
+mean = np.dot(k_star, c)
+power2 = x_star-np.dot(k_star, np.linalg.solve(K, k_star))
+error = abs(x_star**2-mean)
+bound = np.sqrt(power2)*np.sqrt(4/3)
+assert np.allclose(c, [-.5, -.75, 1.5])
+assert np.allclose([mean, power2, error], [.625, .125, .0625])
+assert error <= bound
+print(c, mean, np.sqrt(power2), bound)
+```
 :::
 
 ## Common mistakes and practical implications {#approx-practice}
@@ -379,6 +402,8 @@ and \(P_X(0.75) = \sqrt{0.125} = 0.3536\).
 - Rates are driven by the fill distance, not the sample size. Clustered designs waste points; near-uniform or greedy power-function designs achieve the same \(h\) with far fewer sites, at bounded mesh ratio.
 - Conditionally positive definite kernels require their polynomial block. Dropping the moment conditions \(P^\top c = 0\) for thin-plate or multiquadric interpolation produces a system that may be singular and an interpolant without polynomial reproduction.
 - The GP posterior standard deviation and the power function are the same formula, but their guarantees differ. Quoting a worst-case bound requires a norm estimate for the target; quoting a credible interval requires defending the prior. Choose one and say which.
+
+Power-function bounds say how accurately a target already belonging to the native space can be recovered. They do not say whether that space can approach the targets a learning problem may present in the first place. [[ch:universality-capacity-and-consistency|Universality, Capacity, and Consistency]] takes up that unresolved approximation-bias question, separating density of the RKHS from the statistical price of searching it.
 
 ## Summary and further reading {#approx-summary}
 

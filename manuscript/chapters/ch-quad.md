@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-quad
 slug: kernel-quadrature-and-herding
 title: Kernel Quadrature and Herding
@@ -40,6 +41,7 @@ bibliography:
   - bach2017quadrature
   - briol2019
   - muandet2017
+narrative_link_policy: exact
 ---
 # Kernel Quadrature and Herding
 
@@ -202,6 +204,33 @@ $$ K=\begin{pmatrix} 1 & 0.606531 & 0.135335\\ 0.606531 & 1 & 0.606531\\ 0.13533
 5.  [Score the optimal rule.]{.wex-op} \(e(w^\star)^2=C-z^\top K^{-1}z=0.003079\), so \(e(w^\star)=0.055490\).
 
 **Reading.** Reweighting the very same three nodes drops the squared worst-case error from \(0.004662\) to \(0.003079\), a fall of \(0.001583\), about \(34\%\), at zero extra evaluations of \(f\). The gain is pure geometry: the uniform rule places \(\mu_{Q_w}\) somewhere in the node span, while \(w^\star\) places it at the foot of the perpendicular from \(\mu_P\).
+
+The executable calculation is short enough to inspect in full. It uses a
+linear solve, evaluates both rules from the same quadratic form, and asserts
+the claimed improvement rather than relying on rounded output.
+
+```python
+import numpy as np
+
+x = np.array([-1.0, 0.0, 1.0])
+K = np.exp(-(x[:, None] - x[None, :]) ** 2 / 2)
+z = np.exp(-x**2 / 4) / np.sqrt(2)
+C = 1 / np.sqrt(3)
+
+uniform = np.full(3, 1 / 3)
+optimal = np.linalg.solve(K, z)
+
+def squared_error(w):
+    return C - 2 * w @ z + w @ K @ w
+
+e2_uniform = squared_error(uniform)
+e2_optimal = squared_error(optimal)
+assert np.allclose(optimal, [0.304856, 0.337297, 0.304856], atol=1e-6)
+assert np.isclose(e2_uniform, 0.004662, atol=1e-6)
+assert np.isclose(e2_optimal, 0.003079, atol=1e-6)
+assert e2_optimal < e2_uniform
+print(optimal, e2_uniform, e2_optimal)
+```
 ::::
 :::::
 
@@ -291,6 +320,59 @@ Target \(P=\mathcal N(0,1)\), kernel \(k(x,x')=e^{-(x-x')^2/2}\), so \(\mu_P(x)=
 
 **Reading.** The errors decrease monotonically, \(0.163137\to0.122814\to0.004662\), and the three greedy nodes are exactly \(\{0,-1,1\}=\{-1,0,1\}\), the node set of Example (optimal weights beat uniform). Herding chose that set from scratch with equal weights and worst-case squared error \(0.004662\); optimally reweighting it, that is, running Bayesian quadrature on the same nodes, presses the error further to \(0.003079\). For contrast, Proposition (Monte Carlo error) says a random \(3\)-node rule has expected squared error \((1-C)/3=0.140883\), some thirty times larger than herding's deterministic \(0.004662\). Deliberate placement, not luck, is what buys the accuracy.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+def k(a, b):
+    return np.exp(-(a - b) ** 2 / 2.0)
+
+def m(x):                                     # kernel mean of N(0,1)
+    return (1.0 / np.sqrt(2.0)) * np.exp(-np.asarray(x, float) ** 2 / 4.0)
+
+C = 1.0 / np.sqrt(3.0)
+grid = np.array([-1.0, -0.5, 0.0, 0.5, 1.0])
+print("candidate grid =", list(grid))
+
+def wce2(nodes):
+    nodes = np.asarray(nodes, float)
+    t = len(nodes)
+    G = k(nodes[:, None], nodes[None, :])
+    return C - (2.0 / t) * m(nodes).sum() + G.sum() / t ** 2
+
+chosen = []
+for step in range(1, 4):
+    if not chosen:
+        acq = m(grid)
+    else:
+        gprev = np.array([np.mean([k(xi, c) for c in chosen]) for xi in grid])
+        acq = m(grid) - gprev
+    j = int(np.argmax(acq))                   # ties -> smallest index (leftmost)
+    print(f"step {step}: acquisition a(x) over grid =", np.round(acq, 6))
+    print(f"        argmax index {j} -> x_{step} = {grid[j]}")
+    chosen.append(float(grid[j]))
+    e2 = wce2(chosen)
+    print(f"        nodes so far = {chosen}")
+    print(f"        E_{step}^2 = {round(float(e2),6)},  E_{step} = {round(float(np.sqrt(e2)),6)}")
+
+print("final nodes =", chosen)
+print("(E_1^2, E_2^2, E_3^2) =",
+      tuple(round(float(wce2(chosen[:i])), 6) for i in (1, 2, 3)))
+
+# optimally reweighting the herded nodes = Bayesian quadrature on them (example 1):
+nodes = np.asarray(chosen, float)
+Kf = k(nodes[:, None], nodes[None, :])
+zf = m(nodes)
+es2 = C - zf @ np.linalg.solve(Kf, zf)
+print(f"optimal-reweight E^2 on herded nodes = {float(es2):.6f}")
+
+# Monte Carlo baseline: expected squared worst-case error of n i.i.d. draws with
+# uniform weights is (E_P[k(X,X)] - E_{PxP}[k]) / n = (1 - C)/n here (k(x,x)=1).
+for nn in (3,):
+    print(f"MC expected E^2 at n={nn} nodes = {round(float((1.0 - C) / nn), 6)}")
+```
 :::::
 
 ### Super-samples and the rate, stated carefully {#herding-convergence}
@@ -330,7 +412,7 @@ For **Kernel Quadrature and Herding**, verify that the kernel mean \(z_i=\int k(
 
 ## Summary and further reading {#summary-and-further-reading}
 
-O'Hagan [@ohagan1991] and Rasmussen and Ghahramani [@rasmussen2003bmc] develop the probabilistic route to quadrature; Welling [@welling2009herding] supplies the deterministic greedy route. Their common object is the residual mean embedding. In practice, choose the route by the desired output: signed optimal weights and a model-based variance for one integral, or uniformly weighted representative points for reuse across many downstream queries.
+O'Hagan [@ohagan1991] and Rasmussen and Ghahramani [@rasmussen2003bmc] develop the probabilistic route to quadrature; Welling [@welling2009herding] and Chen et al. [@chen2010herding] supply the deterministic greedy route. Frank-Wolfe analysis explains the rate boundary [@bach2012herding], while optimal reweighting [@huszar2012], leverage sampling [@bach2017quadrature], and probabilistic-numerics calibration [@briol2019] expose different consequences of approximating the same residual mean embedding. The mean-embedding review [@muandet2017] places these routes in a common framework. In practice, choose the route by the desired output: signed optimal weights and a model-based variance for one integral, or uniformly weighted representative points for reuse across many downstream queries. The next decision problem is no longer where to integrate but where to observe; [[ch:bayesian-optimization-and-bandits|Bayesian optimization]] reuses posterior variance to allocate that sequential budget.
 
 ## Exercises {#exercises}
 

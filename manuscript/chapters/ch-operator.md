@@ -34,12 +34,23 @@ bibliography:
   - micchelli2005vv
   - argyriou2009
   - alvarez2012vv
+  - scholkopf2001
+  - rasmussen2006
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Vector- and Operator-Valued Kernels
 
 <p class="lead">A clinician predicting treatment response rarely wants one number. Biomarker trajectories, adverse-event risks, and dose response are different outputs of one physiology. A force field must return an entire vector, and its components cannot violate the differential laws that couple them. Fitting one scalar model per coordinate discards this structure, but sharing information indiscriminately can make every task worse. Operator-valued kernels make the transfer mechanism explicit: at two inputs the kernel returns an operator that transports an output direction at one location into an output direction at the other. This chapter develops that statement from the Hilbert-space construction through the representer theorem, block solvers, matrix regularization, functional responses, and constrained vector fields. The central question is not whether tasks can share. It is which directions should share, under what assumptions, and how we detect when sharing becomes negative transfer.</p>
 
 ## Paper module I: vector-valued RKHS learning {#operator-paper-micchelli}
+
+The [[ch:kernels-and-rkhs|scalar RKHS chapter]] constructed a function space
+from scalar sections, while the [[ch:kernel-tricks|representer chapter]]
+explained why finite observations eliminate invisible orthogonal components
+[@scholkopf2001]. Here an observation has both an input location and an output
+direction. The kernel must reproduce that directional evaluation, and its PSD
+test must allow vector coefficients.
 
 Micchelli and Pontil's starting obstacle was computational as much as mathematical. If the response belongs to a Hilbert space \(\mathcal Y\), then a predictor belongs to a function space whose values are themselves vectors or functions. Scalar RKHS theory does not say what object reproduces a directional evaluation \(\langle f(x),y\rangle_{\mathcal Y}\), nor why a regularized problem over infinitely many output-valued functions should reduce to finitely many coefficients. Their construction answers both questions [@micchelli2005vv].
 
@@ -148,7 +159,10 @@ $$
 **Assumptions.** Point evaluations are bounded, the objective depends on \(f\) only through the displayed evaluations and norm, \(\Omega\) is strictly increasing, and a minimizer exists. Convexity is not required for the representation, although it is useful for existence and uniqueness. **Proof status.** Proved below by orthogonal decomposition, following the regularization argument in [@micchelli2005vv].
 ::::
 
-**Proof.** Decompose any \(f\in\mathcal H_K\) as \(f=f_\parallel+f_\perp\), where \(f_\parallel\in\overline{\mathcal S}\) and \(f_\perp\perp\overline{\mathcal S}\). For every \(i\) and every \(y\in\mathcal Y\), reproduction gives
+:::: {.proof}
+[Proof]{.box-title}
+
+Decompose any \(f\in\mathcal H_K\) as \(f=f_\parallel+f_\perp\), where \(f_\parallel\in\overline{\mathcal S}\) and \(f_\perp\perp\overline{\mathcal S}\). For every \(i\) and every \(y\in\mathcal Y\), reproduction gives
 
 $$
 \langle f_\perp(x_i),y\rangle_{\mathcal Y}
@@ -165,7 +179,8 @@ $$
 +\|f_\perp\|_{\mathcal H_K}^2.
 $$
 
-If \(f_\perp\ne0\), strict monotonicity of \(\Omega\) makes \(f_\parallel\) strictly better. Hence a minimizer must have \(f_\perp=0\). For \(\mathcal Y=\mathbb R^q\), \(\mathcal S\) is spanned by the \(nq\) sections \(K_{x_i}e_a\), so the displayed finite expansion follows. \(\square\)
+If \(f_\perp\ne0\), strict monotonicity of \(\Omega\) makes \(f_\parallel\) strictly better. Hence a minimizer must have \(f_\perp=0\). For \(\mathcal Y=\mathbb R^q\), \(\mathcal S\) is spanned by the \(nq\) sections \(K_{x_i}e_a\), so the displayed finite expansion follows. [\(\square\)]{.qed}
+::::
 
 **Failure boundary.** If \(\Omega\) is merely nondecreasing, at least one minimum-norm minimizer lies in the span, but other minimizers may carry an invisible perpendicular component. If the objective includes a derivative, integral, or deployment evaluation not represented among the observations, the span must include the corresponding adjoint representers. If the kernel itself is optimized over a parameterized family, this fixed-space proof does not justify a joint finite expansion across all parameter values.
 
@@ -266,8 +281,57 @@ $$
 
 For the independent-task kernel \(\rho=0\), they become \(2/3\) and \(1/6\). Coupling therefore moves the scarcely observed second task at \(x_1\) from \(0.1667\) to \(0.5926\). If the true second response at \(x_1\) has the same sign, this is useful transfer. If it has the opposite sign, the same algebra is negative transfer.
 
+```python
+import numpy as np
+
+r = 0.25
+rho = 0.75
+ridge = 0.5
+observed_gram = np.array([[1.0, r * rho], [r * rho, 1.0]])
+coefficients = np.linalg.solve(
+    observed_gram + ridge * np.eye(2),
+    np.ones(2),
+)
+
+output_matrix = np.array([[1.0, rho], [rho, 1.0]])
+assert np.linalg.eigvalsh(output_matrix)[0] > 0.0
+np.testing.assert_allclose(coefficients, [16.0 / 27.0] * 2)
+
+prediction_x1 = (
+    output_matrix @ np.array([coefficients[0], 0.0])
+    + r * output_matrix @ np.array([0.0, coefficients[1]])
+)
+np.testing.assert_allclose(prediction_x1, [19.0 / 27.0, 16.0 / 27.0])
+```
+
 **Verification.** The fractions follow from a \(2\times2\) solve and can be checked by direct substitution. The calculation verifies this finite example only; it does not establish a population advantage for task coupling.
 :::
+
+Read the calculation as two linked transports. The scalar factor \(r\) moves
+information from \(x_2\) to \(x_1\); the off-diagonal factor \(\rho\) moves it
+from output direction two to output direction one, or conversely. The product
+\(r\rho\) is why the observed Gram sees cross-task similarity only when both
+transports are present. Setting either factor to zero blocks that path.
+
+This decomposition supplies a diagnostic for negative transfer. Hold the input
+kernel fixed and sweep \(\rho\), recording each task's held-out error rather
+than only their average. If the low-resource task improves while the
+high-resource task stays stable, coupling is useful. If one task degrades,
+inspect whether its residuals oppose the borrowed output eigendirection. A
+positive-semidefinite \(B\) prevents invalid covariance geometry; it does not
+promise that its off-diagonal signs match the population relationship.
+
+Missing outputs also clarify why imputation is not innocent. The two sampling
+operators create a \(2\times2\) observed Gram directly. Filling an unobserved
+coordinate first would add pseudo-observations and change the estimator.
+Operator-valued sampling preserves the distinction between “not measured” and
+“measured as zero,” which is essential for irregular response curves and
+multi-sensor systems.
+That distinction is part of the likelihood and observation operator, not a
+missing-data preprocessing preference.
+It also determines which block residual is meaningful: residuals may be
+computed only in observed directions, while unobserved directions require
+held-out measurements or structural assumptions before they can be scored.
 
 <figure class="viz" data-figure="operator-valued-field" data-alt="Two panels show the vector response to a unit observation in output one. With an identity output matrix only output one responds; with positive off-diagonal coupling, output two receives a smaller dashed response with the same input shape."><figcaption>An operator-valued kernel separates two mechanisms. The input kernel determines where influence travels, while the output operator determines which response directions receive it. A wrong off-diagonal coupling produces negative transfer by the same mechanism that produces useful borrowing.</figcaption></figure>
 
@@ -376,6 +440,9 @@ Such a regularizer admits a shared-span solution for interpolation and for the c
 **Assumptions.** Finite-dimensional real matrices, differentiability, and \(d\ge2q\) for the necessity direction. The loss or constraints depend on \(W\) through the task measurements. **Proof status.** Proposition 13 of [@argyriou2009] equates the orthogonal-monotonicity property with the shared-span representer property, and Theorem 15 gives the displayed functional characterization. The sufficient projection step and the trace-norm case are proved below. The paper's necessity proof uses the dimension condition to construct orthogonal matrix perturbations.
 :::
 
+:::: {.proof}
+[Proof of the sufficient projection and trace-norm cases]{.box-title}
+
 Let \(\Pi\) be the orthogonal projector onto \(\mathcal L\), and decompose \(W=\overline W+P\) with \(\overline W=\Pi W\). Every training prediction is unchanged because \(x_{ti}^\top P e_t=0\). Also \(\overline W^\top P=0\), so
 
 $$
@@ -405,12 +472,15 @@ $$
 $$
 
 This proves the trace-norm shared-span result corresponding to Theorem 12 of [@argyriou2009]. The nuclear norm is not just a sparsity slogan. It penalizes the singular values of \(W\), encouraging task vectors to lie in a low-dimensional shared feature subspace.
+::::
 
 **Failure boundary.** The necessity statement above does not cover nondifferentiable penalties, even though important nondifferentiable examples such as the trace norm satisfy the sufficient monotonicity property directly. The dimension bound belongs to the characterization proof and must not be dropped silently. An entrywise \(\ell_1\) penalty depends on the chosen coordinate basis rather than only on \(W^\top W\); a projection onto the data span can increase it, so the shared-span conclusion is not generally licensed.
 
 **Comparison and afterlife.** Fixed \(K=kB\) chooses task coupling in output space; spectral matrix regularization learns a low-dimensional shared input subspace. These are different inductive biases even when both produce low-rank matrices. Later output-kernel learning methods combine them by estimating a positive semidefinite \(B\), while spectral methods regularize \(W^\top W\). The review [@alvarez2012vv] places these constructions in the broader multi-output and Gaussian-process literature.
 
-## A common currency for multi-output models {#operator-comparison}
+<span id="operator-comparison"></span>
+
+**A common currency for multi-output models.**
 
 | Model | Shared object | Finite system | Main strength | Failure boundary |
 |---|---|---|---|---|
@@ -421,8 +491,13 @@ This proves the trace-norm shared-span result corresponding to Theorem 12 of [@a
 | Differential kernel | Physical range constraint | Nonseparable block system | Constraint holds everywhere | Structural bias when physics is approximate |
 
 Comparisons should use per-task held-out risk, joint risk, output calibration when meaningful, and compute at matched tolerances. Reporting only average risk can hide severe degradation on a low-resource task.
+The same block kernels define multi-output Gaussian-process covariances
+[@rasmussen2006], but posterior uncertainty remains conditional on the chosen
+output coupling and likelihood.
 
-## Functional responses without pretending a grid is truth {#operator-functional}
+<span id="operator-functional"></span>
+
+**Functional responses without pretending a grid is truth.**
 
 Let \(\mathcal Y=L^2(T,\nu)\). A separable operator-valued kernel may act as
 
@@ -452,7 +527,9 @@ With a basis \(\phi_1,\ldots,\phi_R\), three errors must remain separate:
 
 A convergence claim must state which of \(n\), \(R\), and output rank grows, and in which norm the response error is measured.
 
-## Differentially constrained vector fields {#operator-physical-fields}
+<span id="operator-physical-fields"></span>
+
+**Differentially constrained vector fields.**
 
 Some output couplings are laws. Let \(x,z\in\mathbb R^d\) and let \(\psi(x,z)\) be a scalar kernel smooth enough that derivative evaluation is bounded in its RKHS. Define
 
@@ -565,6 +642,11 @@ Begin with independent models and \(kB\). Move to sums, learned output geometry,
 ## Summary and further reading {#operator-summary}
 
 An operator-valued kernel is certified by one block quadratic form and induces an RKHS through directional evaluation representers. The vector-valued representer theorem then reduces regularized learning to output-valued coefficients, and squared loss becomes a block ridge system. Micchelli and Pontil supply this functional foundation [@micchelli2005vv]. Argyriou, Micchelli, and Pontil show that matrix regularizers admit a shared-span reduction only under a precise orthogonal monotonicity condition, characterized in the differentiable case by Loewner-monotone functions of \(W^\top W\) [@argyriou2009]. The broader construction map, including multi-output Gaussian-process and differential kernels, is developed in [@alvarez2012vv].
+
+The [[ch:indefinite-and-krein-kernels|indefinite-kernel chapter]] follows by
+asking what remains when even positive block geometry is unavailable. The
+distinction made here between a valid coupling and a useful coupling remains
+essential there.
 
 The chapter's practical boundary is equally important: coupling is an assumption. Its success must be established against independent fits, and its algebra must preserve positive definiteness, bounded observations, and the correct output norm.
 

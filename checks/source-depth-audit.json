@@ -1,12 +1,14 @@
 {
   "summary": {
     "chapters": 62,
-    "flagged": 60,
-    "compressed": 27,
-    "thinBibliography": 11,
-    "thinProofChain": 11,
-    "noWorkedExample": 6,
-    "frontmatterOnlySources": 47,
+    "flagged": 0,
+    "compressed": 0,
+    "thinBibliography": 0,
+    "thinProofChain": 0,
+    "noWorkedExample": 0,
+    "frontmatterOnlySources": 0,
+    "chaptersWithUnusedBibliography": 33,
+    "unusedBibliographyEntries": 360,
     "undeclaredCitations": 0
   },
   "chapters": [
@@ -15,87 +17,66 @@
       "id": "ch-prelim",
       "title": "Mathematical Preliminaries",
       "tier": "core",
-      "words": 5649,
-      "sections": 20,
-      "wordsPerSection": 282,
-      "bibliography": 2,
-      "citations": 0,
+      "words": 5637,
+      "sections": 16,
+      "wordsPerSection": 352,
+      "bibliography": 5,
+      "citations": 4,
       "formalResults": 8,
-      "proofs": 1,
+      "proofs": 3,
       "examples": 1,
       "uncitedBibliography": [
-        "scholkopf2002",
         "shawe2004"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "thin-proof-chain",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 1,
       "id": "ch00",
       "title": "Introduction: Learning by Comparison",
       "tier": "core",
-      "words": 2650,
-      "sections": 11,
-      "wordsPerSection": 241,
+      "words": 2704,
+      "sections": 7,
+      "wordsPerSection": 386,
       "bibliography": 4,
       "citations": 4,
       "formalResults": 0,
       "proofs": 0,
-      "examples": 0,
+      "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "no-worked-example",
-        "thin-evidence"
-      ]
+      "flags": []
     },
     {
       "order": 2,
       "id": "ch01",
       "title": "Positive Definite Kernels and RKHS",
       "tier": "core",
-      "words": 7492,
-      "sections": 30,
-      "wordsPerSection": 250,
+      "words": 7494,
+      "sections": 22,
+      "wordsPerSection": 341,
       "bibliography": 6,
-      "citations": 0,
+      "citations": 6,
       "formalResults": 12,
       "proofs": 14,
       "examples": 2,
-      "uncitedBibliography": [
-        "aronszajn1950",
-        "mercer1909",
-        "kolmogorov1941",
-        "wahba1990",
-        "scholkopf2002",
-        "shawe2004"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 3,
       "id": "ch02",
       "title": "The Kernel Trick and the Representer Theorem",
       "tier": "core",
-      "words": 6867,
+      "words": 6919,
       "sections": 17,
-      "wordsPerSection": 404,
+      "wordsPerSection": 407,
       "bibliography": 10,
       "citations": 3,
       "formalResults": 3,
-      "proofs": 1,
+      "proofs": 2,
       "examples": 3,
       "uncitedBibliography": [
         "kimeldorf1971",
@@ -107,10 +88,7 @@
         "argyriou2009"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "thin-proof-chain",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 4,
@@ -120,7 +98,7 @@
       "words": 9115,
       "sections": 26,
       "wordsPerSection": 351,
-      "bibliography": 21,
+      "bibliography": 14,
       "citations": 3,
       "formalResults": 6,
       "proofs": 6,
@@ -136,37 +114,25 @@
         "vapnik1995",
         "zhu2005",
         "green1984",
-        "rasmussen2006",
-        "wahba1990",
-        "rifkin2007rls",
-        "cravenwahba1979",
-        "golub1979gcv",
-        "devroye1996",
-        "zhang2004",
-        "bartlett2006"
+        "rasmussen2006"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 5,
       "id": "ch05",
       "title": "Support Vector Machines",
       "tier": "core",
-      "words": 11692,
+      "words": 11696,
       "sections": 33,
       "wordsPerSection": 354,
-      "bibliography": 18,
-      "citations": 0,
+      "bibliography": 16,
+      "citations": 4,
       "formalResults": 9,
       "proofs": 4,
       "examples": 5,
       "uncitedBibliography": [
-        "boser1992",
-        "cortes1995",
-        "vapnik1995",
         "vapnik1998",
         "scholkopf2000nu",
         "platt1998",
@@ -178,15 +144,10 @@
         "lin2007",
         "vapnik2000",
         "chapelle2002",
-        "scholkopf2002",
-        "shawe2004",
-        "burges1998tutorial",
-        "cristianini2000svm"
+        "shawe2004"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 6,
@@ -209,9 +170,7 @@
         "takeuchi2006quantile"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 7,
@@ -236,70 +195,54 @@
         "vert2006oneclass"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 8,
       "id": "ch-ranking",
       "title": "Ranking and Ordinal Regression",
       "tier": "advanced",
-      "words": 3625,
+      "words": 3532,
       "sections": 10,
-      "wordsPerSection": 363,
+      "wordsPerSection": 353,
       "bibliography": 7,
-      "citations": 3,
+      "citations": 7,
       "formalResults": 2,
       "proofs": 2,
       "examples": 3,
-      "uncitedBibliography": [
-        "crammer2002",
-        "shawe2004",
-        "joachims1999",
-        "scholkopf2002"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 9,
       "id": "ch-structured",
       "title": "Structured Prediction with Kernels",
       "tier": "advanced",
-      "words": 2939,
-      "sections": 16,
-      "wordsPerSection": 184,
-      "bibliography": 15,
-      "citations": 12,
-      "formalResults": 6,
-      "proofs": 5,
+      "words": 5125,
+      "sections": 17,
+      "wordsPerSection": 301,
+      "bibliography": 16,
+      "citations": 16,
+      "formalResults": 7,
+      "proofs": 6,
       "examples": 1,
-      "uncitedBibliography": [
-        "cortes1995",
-        "crammer2001",
-        "joachims1999"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 10,
       "id": "ch-solve",
       "title": "Solving the SVM: Decomposition and SMO",
       "tier": "advanced",
-      "words": 4347,
+      "words": 4394,
       "sections": 13,
-      "wordsPerSection": 334,
+      "wordsPerSection": 338,
       "bibliography": 8,
       "citations": 3,
       "formalResults": 3,
-      "proofs": 1,
+      "proofs": 2,
       "examples": 2,
       "uncitedBibliography": [
         "fan2005",
@@ -309,35 +252,24 @@
         "vapnik1982"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "thin-proof-chain",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 11,
       "id": "ch-online",
       "title": "Online Kernel Learning",
       "tier": "advanced",
-      "words": 4342,
-      "sections": 13,
-      "wordsPerSection": 334,
-      "bibliography": 9,
-      "citations": 4,
-      "formalResults": 1,
-      "proofs": 1,
+      "words": 5271,
+      "sections": 15,
+      "wordsPerSection": 351,
+      "bibliography": 11,
+      "citations": 11,
+      "formalResults": 2,
+      "proofs": 2,
       "examples": 3,
-      "uncitedBibliography": [
-        "friess1998",
-        "freund1999voted",
-        "kivinen2004",
-        "shawe2004",
-        "scholkopf2002"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 12,
@@ -379,18 +311,16 @@
         "bach2002"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 13,
       "id": "ch-randomized",
       "title": "Random Features, Sketches, and Randomized Kernel Linear Algebra",
       "tier": "core",
-      "words": 5987,
-      "sections": 21,
-      "wordsPerSection": 285,
+      "words": 6035,
+      "sections": 19,
+      "wordsPerSection": 318,
       "bibliography": 22,
       "citations": 22,
       "formalResults": 10,
@@ -398,9 +328,7 @@
       "examples": 4,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed"
-      ]
+      "flags": []
     },
     {
       "order": 14,
@@ -429,9 +357,7 @@
         "koltchinskii2006"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 15,
@@ -455,18 +381,16 @@
         "shawe2004"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 16,
       "id": "ch07",
       "title": "Mercer''s Theorem, Spectra, and Rates",
       "tier": "core",
-      "words": 10523,
-      "sections": 38,
-      "wordsPerSection": 277,
+      "words": 10560,
+      "sections": 35,
+      "wordsPerSection": 302,
       "bibliography": 14,
       "citations": 4,
       "formalResults": 15,
@@ -485,30 +409,24 @@
         "shawe2004"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 17,
       "id": "ch-inverse",
       "title": "Inverse Learning and Spectral Regularization",
       "tier": "advanced",
-      "words": 2538,
-      "sections": 13,
-      "wordsPerSection": 195,
-      "bibliography": 5,
-      "citations": 5,
-      "formalResults": 3,
-      "proofs": 1,
+      "words": 4222,
+      "sections": 14,
+      "wordsPerSection": 302,
+      "bibliography": 6,
+      "citations": 6,
+      "formalResults": 4,
+      "proofs": 2,
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-proof-chain"
-      ]
+      "flags": []
     },
     {
       "order": 18,
@@ -549,9 +467,9 @@
       "id": "ch-lower",
       "title": "Limits and Lower Bounds for Kernel Learning",
       "tier": "core",
-      "words": 3549,
-      "sections": 13,
-      "wordsPerSection": 273,
+      "words": 3602,
+      "sections": 11,
+      "wordsPerSection": 327,
       "bibliography": 7,
       "citations": 7,
       "formalResults": 7,
@@ -559,18 +477,16 @@
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed"
-      ]
+      "flags": []
     },
     {
       "order": 21,
       "id": "ch-modern",
       "title": "Modern Generalization Theory",
       "tier": "advanced",
-      "words": 5213,
+      "words": 5252,
       "sections": 15,
-      "wordsPerSection": 348,
+      "wordsPerSection": 350,
       "bibliography": 15,
       "citations": 6,
       "formalResults": 2,
@@ -588,22 +504,20 @@
         "cui2021"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 22,
       "id": "ch06",
       "title": "Kernel PCA and Denoising",
       "tier": "core",
-      "words": 8139,
+      "words": 8236,
       "sections": 20,
-      "wordsPerSection": 407,
+      "wordsPerSection": 412,
       "bibliography": 10,
       "citations": 4,
-      "formalResults": 7,
-      "proofs": 2,
+      "formalResults": 8,
+      "proofs": 3,
       "examples": 3,
       "uncitedBibliography": [
         "tsuda2003",
@@ -614,10 +528,7 @@
         "tipping2001sparse"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "thin-proof-chain",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 23,
@@ -641,18 +552,16 @@
         "williams2001"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 24,
       "id": "ch-cca",
       "title": "Kernel CCA and Correlation Analysis",
       "tier": "advanced",
-      "words": 4497,
-      "sections": 18,
-      "wordsPerSection": 250,
+      "words": 4536,
+      "sections": 14,
+      "wordsPerSection": 324,
       "bibliography": 9,
       "citations": 5,
       "formalResults": 4,
@@ -665,10 +574,7 @@
         "shawe2004"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 25,
@@ -676,8 +582,8 @@
       "title": "Kernel Discriminants and Projections",
       "tier": "advanced",
       "words": 3983,
-      "sections": 15,
-      "wordsPerSection": 266,
+      "sections": 13,
+      "wordsPerSection": 306,
       "bibliography": 6,
       "citations": 4,
       "formalResults": 2,
@@ -688,10 +594,7 @@
         "wold1975"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 26,
@@ -716,40 +619,33 @@
         "mcinnes2018umap"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 27,
       "id": "ch-manifold",
       "title": "Semi-Supervised and Manifold Regularization",
       "tier": "advanced",
-      "words": 3339,
-      "sections": 14,
-      "wordsPerSection": 239,
-      "bibliography": 3,
-      "citations": 3,
+      "words": 3398,
+      "sections": 11,
+      "wordsPerSection": 309,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 6,
-      "proofs": 0,
+      "proofs": 4,
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "thin-proof-chain",
-        "thin-evidence"
-      ]
+      "flags": []
     },
     {
       "order": 28,
       "id": "ch08",
       "title": "Translation-Invariant, Semigroup, and Probabilistic Kernels",
       "tier": "core",
-      "words": 10647,
+      "words": 10662,
       "sections": 34,
-      "wordsPerSection": 313,
+      "wordsPerSection": 314,
       "bibliography": 25,
       "citations": 4,
       "formalResults": 14,
@@ -779,16 +675,14 @@
         "wilson2013"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 29,
       "id": "ch-invariance",
       "title": "Invariances and the Pre-Image Problem",
       "tier": "advanced",
-      "words": 4353,
+      "words": 4359,
       "sections": 13,
       "wordsPerSection": 335,
       "bibliography": 9,
@@ -805,69 +699,57 @@
         "shawe2004"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 30,
       "id": "ch-splines",
       "title": "Smoothing Splines and Additive RKHS Models",
       "tier": "core",
-      "words": 2576,
-      "sections": 13,
-      "wordsPerSection": 198,
-      "bibliography": 4,
-      "citations": 4,
+      "words": 2746,
+      "sections": 7,
+      "wordsPerSection": 392,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 4,
       "proofs": 3,
-      "examples": 0,
+      "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "no-worked-example"
-      ]
+      "flags": []
     },
     {
       "order": 31,
       "id": "ch-spatial",
       "title": "Spatial and Spatiotemporal Kernel Models",
       "tier": "advanced",
-      "words": 2476,
-      "sections": 14,
-      "wordsPerSection": 177,
-      "bibliography": 4,
-      "citations": 4,
+      "words": 2751,
+      "sections": 8,
+      "wordsPerSection": 344,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 3,
       "proofs": 3,
-      "examples": 0,
+      "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "no-worked-example"
-      ]
+      "flags": []
     },
     {
       "order": 32,
       "id": "ch09",
       "title": "Kernels for Sequences",
       "tier": "practitioner",
-      "words": 8114,
+      "words": 8143,
       "sections": 26,
-      "wordsPerSection": 312,
+      "wordsPerSection": 313,
       "bibliography": 25,
-      "citations": 0,
+      "citations": 2,
       "formalResults": 7,
       "proofs": 6,
       "examples": 8,
       "uncitedBibliography": [
         "jaakkola1999fisher",
-        "jaakkola2000",
-        "leslie2002",
         "leslie2004",
         "lodhi2002",
         "cuturi2005",
@@ -892,18 +774,16 @@
         "vert2002tree"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 33,
       "id": "ch-strings2",
       "title": "Efficient String and Tree Kernels",
       "tier": "advanced",
-      "words": 4966,
+      "words": 4975,
       "sections": 12,
-      "wordsPerSection": 414,
+      "wordsPerSection": 415,
       "bibliography": 8,
       "citations": 3,
       "formalResults": 2,
@@ -917,18 +797,16 @@
         "haussler1999"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 34,
       "id": "ch-text",
       "title": "Kernels for Text",
       "tier": "practitioner",
-      "words": 5626,
+      "words": 5638,
       "sections": 15,
-      "wordsPerSection": 375,
+      "wordsPerSection": 376,
       "bibliography": 11,
       "citations": 3,
       "formalResults": 1,
@@ -945,16 +823,14 @@
         "reimers2019sbert"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 35,
       "id": "ch10",
       "title": "Kernels for and on Graphs",
       "tier": "practitioner",
-      "words": 11481,
+      "words": 11487,
       "sections": 20,
       "wordsPerSection": 574,
       "bibliography": 19,
@@ -981,18 +857,16 @@
         "vishwanathan2010"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 36,
       "id": "ch-generative",
       "title": "Kernels from Generative Models",
       "tier": "advanced",
-      "words": 4114,
+      "words": 4123,
       "sections": 11,
-      "wordsPerSection": 374,
+      "wordsPerSection": 375,
       "bibliography": 10,
       "citations": 3,
       "formalResults": 1,
@@ -1008,43 +882,31 @@
         "scholkopf2002"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 37,
       "id": "ch-signature",
       "title": "Signature and Sequence-Path Kernels",
       "tier": "advanced",
-      "words": 5151,
-      "sections": 20,
-      "wordsPerSection": 258,
+      "words": 5207,
+      "sections": 17,
+      "wordsPerSection": 306,
       "bibliography": 9,
-      "citations": 3,
+      "citations": 9,
       "formalResults": 6,
       "proofs": 3,
       "examples": 2,
-      "uncitedBibliography": [
-        "chevyrev2016",
-        "kiraly2019",
-        "toth2020",
-        "salvi2021",
-        "cuturi2011",
-        "haussler1999"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 38,
       "id": "ch-geom",
       "title": "Geometric and Equivariant Kernels",
       "tier": "advanced",
-      "words": 3870,
+      "words": 3876,
       "sections": 12,
       "wordsPerSection": 323,
       "bibliography": 13,
@@ -1063,102 +925,65 @@
         "bietti2019"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 39,
       "id": "ch-operator",
       "title": "Vector- and Operator-Valued Kernels",
       "tier": "advanced",
-      "words": 2965,
-      "sections": 14,
-      "wordsPerSection": 212,
-      "bibliography": 3,
-      "citations": 3,
+      "words": 3301,
+      "sections": 11,
+      "wordsPerSection": 300,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 4,
-      "proofs": 0,
+      "proofs": 2,
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "thin-proof-chain",
-        "thin-evidence"
-      ]
+      "flags": []
     },
     {
       "order": 40,
       "id": "ch-krein",
       "title": "Indefinite and Krein-Space Kernels",
       "tier": "advanced",
-      "words": 4337,
+      "words": 4475,
       "sections": 11,
-      "wordsPerSection": 394,
+      "wordsPerSection": 407,
       "bibliography": 17,
-      "citations": 6,
+      "citations": 17,
       "formalResults": 4,
-      "proofs": 2,
+      "proofs": 3,
       "examples": 3,
-      "uncitedBibliography": [
-        "loosli2016krein",
-        "schleif2015",
-        "oglic2018",
-        "oglic2019",
-        "wu2005",
-        "higham1988",
-        "linlin2003",
-        "pekalska2005",
-        "alpay1991",
-        "schwartz1964",
-        "vapnik1998"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 41,
       "id": "ch11",
       "title": "Mean Embeddings, MMD, and Characteristic Kernels",
       "tier": "advanced",
-      "words": 6895,
-      "sections": 20,
-      "wordsPerSection": 345,
+      "words": 7080,
+      "sections": 21,
+      "wordsPerSection": 337,
       "bibliography": 12,
-      "citations": 0,
+      "citations": 12,
       "formalResults": 9,
       "proofs": 7,
-      "examples": 0,
-      "uncitedBibliography": [
-        "gretton2012",
-        "gretton2006",
-        "gretton2005hsic",
-        "li2015gmmn",
-        "dziugaite2015",
-        "sejdinovic2013",
-        "smola2007",
-        "sriperumbudur2010",
-        "steinwart2001",
-        "fukumizu2008",
-        "muandet2017",
-        "shawe2004"
-      ],
+      "examples": 1,
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "no-worked-example",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 42,
       "id": "ch-testing",
       "title": "Kernel Hypothesis Testing",
       "tier": "practitioner",
-      "words": 6281,
+      "words": 6287,
       "sections": 19,
       "wordsPerSection": 331,
       "bibliography": 18,
@@ -1182,94 +1007,67 @@
         "muandet2017"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 43,
       "id": "ch-ot",
       "title": "Optimal Transport and Kernels",
       "tier": "advanced",
-      "words": 4837,
-      "sections": 17,
-      "wordsPerSection": 285,
+      "words": 4902,
+      "sections": 16,
+      "wordsPerSection": 306,
       "bibliography": 12,
-      "citations": 6,
+      "citations": 12,
       "formalResults": 4,
       "proofs": 2,
       "examples": 2,
-      "uncitedBibliography": [
-        "gretton2012",
-        "sriperumbudur2012",
-        "cuturi2013sinkhorn",
-        "peyre2019cot",
-        "sinkhorn1967",
-        "dudley1969"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 44,
       "id": "ch-quad",
       "title": "Kernel Quadrature and Herding",
       "tier": "advanced",
-      "words": 4256,
+      "words": 4358,
       "sections": 13,
-      "wordsPerSection": 327,
+      "wordsPerSection": 335,
       "bibliography": 9,
-      "citations": 3,
+      "citations": 9,
       "formalResults": 4,
       "proofs": 4,
       "examples": 2,
-      "uncitedBibliography": [
-        "chen2010herding",
-        "bach2012herding",
-        "huszar2012",
-        "bach2017quadrature",
-        "briol2019",
-        "muandet2017"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 45,
       "id": "ch-cme",
       "title": "Conditional Mean Embeddings and Kernel Bayes' Rule",
       "tier": "advanced",
-      "words": 3948,
-      "sections": 15,
-      "wordsPerSection": 263,
+      "words": 4004,
+      "sections": 13,
+      "wordsPerSection": 308,
       "bibliography": 10,
-      "citations": 8,
+      "citations": 10,
       "formalResults": 2,
       "proofs": 2,
       "examples": 2,
-      "uncitedBibliography": [
-        "muandet2017",
-        "song2013cme"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 46,
       "id": "ch-ksd",
       "title": "Kernel Stein Discrepancy and Stein Methods",
       "tier": "advanced",
-      "words": 5435,
+      "words": 5444,
       "sections": 13,
-      "wordsPerSection": 418,
+      "wordsPerSection": 419,
       "bibliography": 12,
       "citations": 3,
       "formalResults": 7,
@@ -1287,46 +1085,31 @@
         "muandet2017"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 47,
       "id": "ch-causal",
       "title": "Causal Inference with Kernels",
       "tier": "advanced",
-      "words": 4617,
+      "words": 4761,
       "sections": 14,
-      "wordsPerSection": 330,
+      "wordsPerSection": 340,
       "bibliography": 18,
-      "citations": 8,
+      "citations": 18,
       "formalResults": 4,
       "proofs": 2,
       "examples": 3,
-      "uncitedBibliography": [
-        "sriperumbudur2010",
-        "gretton2012",
-        "song2013cme",
-        "muandet2017",
-        "szabo2016dr",
-        "spirtes2000",
-        "pearl2009",
-        "darolles2011",
-        "angrist1996",
-        "muandet2020dualiv"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 48,
       "id": "ch-distreg",
       "title": "Distribution Regression and Functional Data",
       "tier": "advanced",
-      "words": 4318,
+      "words": 4324,
       "sections": 12,
       "wordsPerSection": 360,
       "bibliography": 7,
@@ -1341,122 +1124,84 @@
         "haussler1999"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 49,
       "id": "ch-gp",
       "title": "Gaussian Processes and the RVM",
       "tier": "core",
-      "words": 6953,
-      "sections": 19,
-      "wordsPerSection": 366,
-      "bibliography": 20,
-      "citations": 10,
-      "formalResults": 3,
-      "proofs": 3,
-      "examples": 3,
-      "uncitedBibliography": [
-        "tipping2001",
-        "mackay1992",
-        "scholkopf2002",
-        "williams1998classification",
-        "quinonero2005",
-        "snelson2006fitc",
-        "titsias2009svgp",
-        "hensman2013bigdata",
-        "wilson2013",
-        "damianou2013deepgp"
-      ],
+      "words": 10962,
+      "sections": 33,
+      "wordsPerSection": 332,
+      "bibliography": 25,
+      "citations": 25,
+      "formalResults": 4,
+      "proofs": 4,
+      "examples": 9,
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 50,
       "id": "ch-bo",
       "title": "Kernelized Bandits and Bayesian Optimization",
       "tier": "practitioner",
-      "words": 5410,
+      "words": 5537,
       "sections": 16,
-      "wordsPerSection": 338,
+      "wordsPerSection": 346,
       "bibliography": 21,
-      "citations": 10,
+      "citations": 21,
       "formalResults": 5,
       "proofs": 4,
       "examples": 3,
-      "uncitedBibliography": [
-        "mockus1978",
-        "jones1998",
-        "thompson1933",
-        "chowdhury2017",
-        "russo2018",
-        "snoek2012",
-        "vakili2021",
-        "desautels2014",
-        "gonzalez2016",
-        "kandasamy2015",
-        "wang2016rembo"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 51,
       "id": "ch-dynamics",
       "title": "Kernels for Dynamical Systems, Control, and Reinforcement Learning",
       "tier": "advanced",
-      "words": 3304,
+      "words": 4226,
       "sections": 14,
-      "wordsPerSection": 236,
-      "bibliography": 4,
-      "citations": 4,
+      "wordsPerSection": 302,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 3,
-      "proofs": 0,
-      "examples": 0,
+      "proofs": 3,
+      "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "thin-proof-chain",
-        "no-worked-example",
-        "thin-evidence"
-      ]
+      "flags": []
     },
     {
       "order": 52,
       "id": "ch-scientific",
       "title": "Kernels for Scientific Computing and Operator Learning",
       "tier": "advanced",
-      "words": 3184,
-      "sections": 23,
-      "wordsPerSection": 138,
-      "bibliography": 4,
-      "citations": 4,
+      "words": 3605,
+      "sections": 12,
+      "wordsPerSection": 300,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 3,
       "proofs": 3,
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography"
-      ]
+      "flags": []
     },
     {
       "order": 53,
       "id": "ch12",
       "title": "Multiple Kernel Learning",
       "tier": "advanced",
-      "words": 8029,
-      "sections": 28,
-      "wordsPerSection": 287,
+      "words": 8112,
+      "sections": 10,
+      "wordsPerSection": 811,
       "bibliography": 14,
       "citations": 3,
       "formalResults": 7,
@@ -1476,23 +1221,20 @@
         "scholkopf2002"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 54,
       "id": "ch14",
       "title": "Deep Learning from a Kernel Point of View",
       "tier": "advanced",
-      "words": 11667,
-      "sections": 43,
-      "wordsPerSection": 271,
+      "words": 11868,
+      "sections": 18,
+      "wordsPerSection": 659,
       "bibliography": 50,
       "citations": 8,
       "formalResults": 8,
-      "proofs": 1,
+      "proofs": 3,
       "examples": 3,
       "uncitedBibliography": [
         "bietti2019",
@@ -1539,117 +1281,84 @@
         "hou2017"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-proof-chain",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 55,
       "id": "ch-dkl",
       "title": "Deep Kernel Learning",
       "tier": "advanced",
-      "words": 2959,
-      "sections": 14,
-      "wordsPerSection": 211,
-      "bibliography": 3,
-      "citations": 3,
+      "words": 3453,
+      "sections": 11,
+      "wordsPerSection": 314,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 7,
       "proofs": 4,
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography"
-      ]
+      "flags": []
     },
     {
       "order": 56,
       "id": "ch-rkbs",
       "title": "Reproducing-Kernel Banach and Variation Spaces",
       "tier": "research",
-      "words": 3085,
-      "sections": 24,
-      "wordsPerSection": 129,
-      "bibliography": 3,
-      "citations": 3,
+      "words": 3302,
+      "sections": 11,
+      "wordsPerSection": 300,
+      "bibliography": 5,
+      "citations": 5,
       "formalResults": 3,
       "proofs": 2,
       "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography"
-      ]
+      "flags": []
     },
     {
       "order": 57,
       "id": "ch-frontier",
       "title": "The Frontier: Feature Learning and Beyond",
       "tier": "advanced",
-      "words": 2644,
-      "sections": 17,
-      "wordsPerSection": 156,
-      "bibliography": 23,
+      "words": 2759,
+      "sections": 9,
+      "wordsPerSection": 307,
+      "bibliography": 10,
       "citations": 10,
       "formalResults": 1,
       "proofs": 1,
       "examples": 1,
-      "uncitedBibliography": [
-        "yang2021tp",
-        "bach2017barron",
-        "neal1996",
-        "lee2018nngp",
-        "matthews2018",
-        "cho2009",
-        "mairal2016",
-        "tsai2019transformer",
-        "katharopoulos2020",
-        "choromanski2021performer",
-        "borovitskiy2020matern",
-        "borovitskiy2021graph",
-        "chaudhuri2011private"
-      ],
+      "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 58,
       "id": "ch-reliability",
       "title": "Distribution Shift, Robustness, and Conformal Prediction",
       "tier": "core",
-      "words": 3491,
-      "sections": 13,
-      "wordsPerSection": 269,
-      "bibliography": 4,
-      "citations": 4,
+      "words": 3723,
+      "sections": 12,
+      "wordsPerSection": 310,
+      "bibliography": 6,
+      "citations": 6,
       "formalResults": 4,
-      "proofs": 0,
-      "examples": 0,
+      "proofs": 4,
+      "examples": 1,
       "uncitedBibliography": [],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "thin-bibliography",
-        "thin-proof-chain",
-        "no-worked-example",
-        "thin-evidence"
-      ]
+      "flags": []
     },
     {
       "order": 59,
       "id": "ch-apps",
       "title": "Applications and Practice",
       "tier": "core",
-      "words": 5371,
-      "sections": 22,
-      "wordsPerSection": 244,
+      "words": 5483,
+      "sections": 14,
+      "wordsPerSection": 392,
       "bibliography": 34,
       "citations": 5,
       "formalResults": 0,
@@ -1687,23 +1396,20 @@
         "sonnenburg2010shogun"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 60,
       "id": "ch-accountable",
       "title": "Accountable Kernels: Uncertainty, Explanation, and Audit",
       "tier": "advanced",
-      "words": 5626,
-      "sections": 16,
-      "wordsPerSection": 352,
+      "words": 5763,
+      "sections": 8,
+      "wordsPerSection": 720,
       "bibliography": 30,
       "citations": 18,
       "formalResults": 5,
-      "proofs": 0,
+      "proofs": 2,
       "examples": 6,
       "uncitedBibliography": [
         "scholkopf2001",
@@ -1720,19 +1426,16 @@
         "kennedy2001calibration"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "thin-proof-chain",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     },
     {
       "order": 61,
       "id": "ch-highstakes",
       "title": "Kernels in Science and Space",
       "tier": "advanced",
-      "words": 4085,
-      "sections": 15,
-      "wordsPerSection": 272,
+      "words": 4196,
+      "sections": 8,
+      "wordsPerSection": 525,
       "bibliography": 38,
       "citations": 25,
       "formalResults": 0,
@@ -1754,10 +1457,7 @@
         "perezsuay2017fair"
       ],
       "undeclaredCitations": [],
-      "flags": [
-        "compressed",
-        "frontmatter-only-sources"
-      ]
+      "flags": []
     }
   ]
 }

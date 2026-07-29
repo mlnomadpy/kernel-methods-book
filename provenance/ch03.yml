@@ -622,6 +622,17 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for regularized kernel regression
+    contribution: source-index
+    sources: [kimeldorf1971, scholkopf2002, shawe2004]
+    locators:
+      - {source: kimeldorf1971, manuscript_locator: "ch03.md#summary", source_locator: "Journal of Mathematical Analysis and Applications 33(1), pp. 82--95; Theorem 1", status: author-mapped-pending-independent-verification}
+      - {source: scholkopf2002, manuscript_locator: "ch03.md#summary", source_locator: "Learning with Kernels, Sections 4.2 and 7.1", status: author-mapped-pending-independent-verification}
+      - {source: shawe2004, manuscript_locator: "ch03.md#summary", source_locator: "Kernel Methods for Pattern Analysis, Sections 7.1--7.3", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

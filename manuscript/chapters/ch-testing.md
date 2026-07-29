@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-testing
 slug: kernel-hypothesis-testing
 title: Kernel Hypothesis Testing
@@ -195,6 +197,77 @@ Two samples on the line, \(X = \{0,1,2,3\} \sim P\) and \(Y = \{7,8,9,10\} \sim 
 
 **Reading.** The observed discrepancy is matched by only its own mirror among seventy relabelings, a decisive rejection. The permutation-null mean sitting at exactly \(0\) is the unbiasedness of the U-statistic made visible: averaging over all label assignments reproduces the population value \(\mathrm{MMD}^2 = 0\) that holds under \(H_0\). With four points per sample the smallest attainable \(p\)-value is \(2/70 \approx 0.029\), already fine enough to clear \(0.05\).
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+from itertools import combinations
+
+X = np.array([0.0, 1.0, 2.0, 3.0])
+Y = np.array([7.0, 8.0, 9.0, 10.0])
+pool = np.concatenate([X, Y])
+n = len(X)
+N = len(pool)
+
+# --- median-heuristic bandwidth over the pooled sample -----------------------
+dists = [abs(pool[i] - pool[j]) for i, j in combinations(range(N), 2)]
+sigma = float(np.median(dists))
+print(f"pooled pairwise |z_i - z_j| (28 values), median sigma = {sigma:.4f}")
+
+def kmat(a, b):
+    d = a[:, None] - b[None, :]
+    return np.exp(-(d ** 2) / (2 * sigma ** 2))
+
+def mmd2_biased(a, b):
+    na, nb = len(a), len(b)
+    Kxx, Kyy, Kxy = kmat(a, a), kmat(b, b), kmat(a, b)
+    return Kxx.mean() + Kyy.mean() - 2 * Kxy.mean()
+
+def mmd2_unbiased(a, b):
+    na, nb = len(a), len(b)
+    Kxx, Kyy, Kxy = kmat(a, a), kmat(b, b), kmat(a, b)
+    sxx = (Kxx.sum() - np.trace(Kxx)) / (na * (na - 1))
+    syy = (Kyy.sum() - np.trace(Kyy)) / (nb * (nb - 1))
+    sxy = Kxy.mean()
+    return sxx + syy - 2 * sxy
+
+# --- block sums that make up the statistic -----------------------------------
+Kxx, Kyy, Kxy = kmat(X, X), kmat(Y, Y), kmat(X, Y)
+print("\nwithin-X kernel matrix K(x_i,x_j) =")
+print(np.round(Kxx, 4))
+print("cross kernel matrix K(x_i,y_j) =")
+print(np.round(Kxy, 6))
+sxx = (Kxx.sum() - np.trace(Kxx)) / (n * (n - 1))
+syy = (Kyy.sum() - np.trace(Kyy)) / (n * (n - 1))
+sxy = Kxy.mean()
+print(f"\noff-diagonal within-X average  = {sxx:.6f}")
+print(f"off-diagonal within-Y average  = {syy:.6f}")
+print(f"cross average                  = {sxy:.6e}")
+
+V = mmd2_biased(X, Y)
+U = mmd2_unbiased(X, Y)
+print(f"\nbiased   V-statistic MMD^2_V = {V:.6f}")
+print(f"unbiased U-statistic MMD^2_U = {U:.6f}")
+
+# --- exact permutation null ---------------------------------------------------
+T0 = U
+perm_stats = []
+for idx in combinations(range(N), n):
+    idx = list(idx)
+    comp = [i for i in range(N) if i not in idx]
+    A, B = pool[idx], pool[comp]
+    perm_stats.append(mmd2_unbiased(A, B))
+perm_stats = np.array(perm_stats)
+count = int(np.sum(perm_stats >= T0 - 1e-12))
+pval = count / len(perm_stats)
+print(f"\nexact permutation null over C(8,4) = {len(perm_stats)} relabelings")
+print(f"null mean = {perm_stats.mean():.6f}, null std = {perm_stats.std():.6f}")
+print(f"null max  = {perm_stats.max():.6f}  (observed T0 = {T0:.6f})")
+print(f"# relabelings with T >= T0 : {count}")
+print(f"p-value = {count}/{len(perm_stats)} = {pval:.4f}")
+print(f"decision at alpha=0.05 : {'REJECT H0' if pval <= 0.05 else 'fail to reject'}")
+```
 :::::
 
 An alternative to permutation is to bootstrap the chi-square mixture directly, estimating the eigenvalues \(\lambda_l\) from the spectrum of the centered Gram matrix, or to fit a two-parameter Gamma to the null by matching its first two moments (Gretton et al., 2012). These are faster when many tests are run, but the permutation test is exact and assumption-free, so we take it as the reference.
@@ -285,6 +358,58 @@ Overlapping samples \(X = \{-3,-2,-1,0,1\} \sim P\) and \(Y = \{0,1,2,3,4\} \sim
 
 **Reading.** The same data and the same test change verdict from retain to reject when the bandwidth widens from \(0.5\) to \(2\). The narrow kernel makes every distinct point look mutually dissimilar, collapsing the between-group signal into noise and even driving the unbiased estimate negative; the median heuristic lands squarely in the powerful regime, where the signal-to-noise proxy \(t\) has climbed above \(2\). Bandwidth is not cosmetic: it sets the power, and a poorly scaled kernel is blind by construction.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+from itertools import combinations
+
+X = np.array([-3.0, -2.0, -1.0, 0.0, 1.0])
+Y = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+pool = np.concatenate([X, Y])
+n = len(X)
+N = len(pool)
+
+dists = [abs(pool[i] - pool[j]) for i, j in combinations(range(N), 2)]
+sigma_med = float(np.median(dists))
+print(f"mean(X)={X.mean():.2f} mean(Y)={Y.mean():.2f} (shift 3, overlap on [0,1])")
+print(f"median-heuristic sigma = median of {len(dists)} pairwise distances = {sigma_med:.4f}")
+
+def mmd2_unbiased(a, b, s):
+    na, nb = len(a), len(b)
+    Kxx = np.exp(-((a[:, None] - a[None, :]) ** 2) / (2 * s ** 2))
+    Kyy = np.exp(-((b[:, None] - b[None, :]) ** 2) / (2 * s ** 2))
+    Kxy = np.exp(-((a[:, None] - b[None, :]) ** 2) / (2 * s ** 2))
+    sxx = (Kxx.sum() - np.trace(Kxx)) / (na * (na - 1))
+    syy = (Kyy.sum() - np.trace(Kyy)) / (nb * (nb - 1))
+    return sxx + syy - 2 * Kxy.mean()
+
+def exact_test(s):
+    T0 = mmd2_unbiased(X, Y, s)
+    stats = []
+    for idx in combinations(range(N), n):
+        idx = list(idx)
+        comp = [i for i in range(N) if i not in idx]
+        stats.append(mmd2_unbiased(pool[idx], pool[comp], s))
+    stats = np.array(stats)
+    count = int(np.sum(stats >= T0 - 1e-12))
+    return T0, stats.std(), count, count / len(stats), len(stats)
+
+print("\n sigma   MMD^2_U    std_null   t=MMD^2/std   p-value    decision(0.05)")
+for s in [0.3, 0.5, 0.8, 1.0, 1.5, 2.0, 3.0, 5.0, 10.0, 25.0]:
+    T0, sd, count, p, B = exact_test(s)
+    t = T0 / sd if sd > 0 else float("nan")
+    dec = "REJECT" if p <= 0.05 else "fail"
+    marker = "  <- median heuristic" if abs(s - sigma_med) < 1e-9 else ""
+    print(f" {s:5.2f} {T0:9.5f}  {sd:9.5f}   {t:9.4f}   {p:.4f} ({count}/{B})  {dec}{marker}")
+
+print("\n--- the two bandwidths quoted in the worked example ---")
+for label, s in [("narrow", 0.5), ("median-heuristic", 2.0)]:
+    T0, sd, count, p, B = exact_test(s)
+    print(f"{label:16s} sigma={s}: MMD^2_U={T0:.5f}, t={T0/sd:.4f}, "
+          f"p={count}/{B}={p:.4f}, {'REJECT' if p <= 0.05 else 'fail to reject'} at 0.05")
+```
 :::::
 
 ## Learned and deep kernels {#learned-kernels}
@@ -411,6 +536,8 @@ A kernel two-sample test is the MMD plus a decision rule with guarantees. The un
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
 For **Kernel Hypothesis Testing**, validity comes from the calibration scheme, not from a large MMD value. Verify exchangeability before permuting rows; clustered, temporal, or spatial data need transformations that preserve their null dependence. Freeze preprocessing and kernel selection before the final test, or use a method whose theorem explicitly accounts for selection. Report the effect estimate, attainable p-value resolution, permutation count, randomization correction, and power against a scientifically meaningful alternative. Repeated deployment monitoring also needs an anytime-valid or predeclared-horizon design; repeatedly applying a level-\(\alpha\) batch test is not a level-\(\alpha\) monitor.
+
+MMD tests are strongest when a kernel exposes the discrepancy of interest, but their geometry can underweight displacement when two distributions have little overlapping support. [[ch:optimal-transport-and-kernels|Optimal Transport and Kernels]] takes up that sensitivity pressure by charging for the distance mass must move, then asks when the resulting transport geometry can itself be combined safely with positive-definite kernels.
 
 ## Summary and further reading {#summary-and-further-reading}
 

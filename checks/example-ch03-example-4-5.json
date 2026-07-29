@@ -3,7 +3,7 @@
   "chapter": "ch03",
   "anchor": "example-4-5",
   "source_file": "manuscript/chapters/ch03.md",
-  "source_sha256": "7759b636e05dcb7b95000a15dddf52bd63f38a07b5b921265f501c8bd0fc7439",
+  "source_sha256": "0905f7f7a74cd2a3b0595e553a5d51983b1e982d0db4ecc1862ed34c54881ef0",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch03-ex1.py"
@@ -64,9 +64,12 @@
     "4.4221",
     "0.7512",
     "0.9025",
+    "3205",
+    "3354",
+    "2e-4",
     "1.7"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Computes the five-point KRR smoother, closed-form leave-one-out residuals, refit comparison, degrees of freedom, LOO, and GCV quantities.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

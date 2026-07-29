@@ -3,7 +3,7 @@
   "chapter": "ch-causal",
   "anchor": "example-35-1",
   "source_file": "manuscript/chapters/ch-causal.md",
-  "source_sha256": "60b3b1cad24c4662d9d45f1acf12ab33f3d79d6dd3b6c4335cd2930c95f7e362",
+  "source_sha256": "5f8dd8c6cc1ca4bdeb0b8b7090e7cf0cc8f017bcfb591f00693be29e8846663c",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-causal-ex1.py"
@@ -26,9 +26,14 @@
     "0.000000",
     "1.3",
     "-12",
-    "0.097"
+    "0.097",
+    "1e-3",
+    "5e-5",
+    "1e-10",
+    "0.097063",
+    "1e-6"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The deterministic check validates marginal dependence, a numerical-zero conditional-null statistic, and a positive conditional-dependence witness; the executable core is rendered in the chapter.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

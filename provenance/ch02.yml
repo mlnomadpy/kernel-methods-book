@@ -336,6 +336,17 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for kernelization and representation
+    contribution: source-index
+    sources: [aronszajn1950, scholkopf2002, vapnik1995]
+    locators:
+      - {source: aronszajn1950, manuscript_locator: "ch02.md#representer-theorem", source_locator: "Transactions of the AMS 68(3), pp. 337--404; Part I, Sections 2--4", status: author-mapped-pending-independent-verification}
+      - {source: scholkopf2002, manuscript_locator: "ch02.md#summary", source_locator: "Learning with Kernels, Sections 2.1--2.3 and 4.2", status: author-mapped-pending-independent-verification}
+      - {source: vapnik1995, manuscript_locator: "ch02.md#summary", source_locator: "The Nature of Statistical Learning Theory, Chapters 4--5", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

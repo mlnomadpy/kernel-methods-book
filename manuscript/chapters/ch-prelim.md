@@ -35,10 +35,15 @@ verification_date: null
 bibliography:
   - scholkopf2002
   - shawe2004
+  - boyd2004
+  - hoeffding1963
+  - mcdiarmid1989
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Mathematical Preliminaries
 
-<p class="lead">Kernel methods sit at a crossroads of linear algebra, real and functional analysis, probability, and convex optimization, and the book's later parts reach further, into spectral graph theory, groups and their actions, couplings of measures, the tensor calculus of paths, and inner products without positivity. This chapter gathers, in one place, the results the rest of the book uses by name. It is a reference, not a course: each section states the definitions and facts a later chapter leans on, with just enough intuition to make them usable. Read it straight through for a refresher, or jump to a result when a chapter cites it.</p>
+<p class="lead">Kernel methods sit at a crossroads of linear algebra, analysis, probability, and convex optimization. This chapter gathers the results the rest of the book uses by name, beginning with the Gram-matrix questions that Chapter [[ch:introduction|Introduction: Learning by Comparison]] turns into a learning program. It is a reference, not a substitute for a course: each section states the assumptions and failure boundary a later derivation needs. Read it straight through for a refresher, or return when a chapter cites a particular result.</p>
 
 ## Linear algebra and matrices {#linear-algebra}
 
@@ -64,6 +69,8 @@ The eigenvalues \(\lambda_k\) are real. \(A \succeq 0\) iff all \(\lambda_k \geq
 **Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
 **Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
 ::::
+
+The finite spectral statement and its PSD consequences are standard kernel linear algebra [@scholkopf2002, Appendix A]. Its scope is finite real symmetric matrices; compact operators require the separate theorem below.
 
 Several consequences recur. A PSD matrix has a unique PSD **square root** \(A^{1/2} = U\Lambda^{1/2}U^\top\), and it factors as \(A = B^\top B\) (take \(B = \Lambda^{1/2}U^\top\)); conversely any \(B^\top B\) is PSD, which is why a Gram matrix \(K = \Phi\Phi^\top\) is always PSD. The **trace** \(\operatorname{tr}(A) = \sum_i A_{ii} = \sum_k \lambda_k\) is the sum of eigenvalues and is cyclic, \(\operatorname{tr}(AB) = \operatorname{tr}(BA)\); the **determinant** \(\det(A) = \prod_k \lambda_k\). The **rank** is the number of nonzero eigenvalues. For the eigenvalue extremes, the **Rayleigh quotient** gives
 
@@ -174,7 +181,7 @@ Two families of results are used to turn samples into guarantees. The **laws of 
 
 $$ \Pr\bigl(\,f(X_1,\dots,X_n) - \mathbb{E}f \geq t\,\bigr) \leq \exp\!\Bigl(\frac{-2t^2}{\sum_i c_i^2}\Bigr), $$
 
-where \(c_i\) bounds the change from moving coordinate \(i\). McDiarmid applied to the worst-case empirical error is the engine behind the Rademacher bounds of [[ch:learning-theory]]. A last modeling link: minimizing a loss is often maximum-likelihood estimation in disguise, since a loss \(\ell(y, f)\) equal to \(-\log p(y \mid f)\) makes empirical risk minimization the same as fitting a probabilistic noise model, the reading that connects the squared loss to Gaussian noise and the logistic loss to a Bernoulli model.
+where \(c_i\) bounds the change from moving coordinate \(i\) [@mcdiarmid1989]. McDiarmid applied to the worst-case empirical error is the engine behind the Rademacher bounds of [[ch:learning-theory]].
 
 This section covers what empirical risk minimization needs. The inference chapters ask for more, and the deeper material, Gaussian conditioning, Bayes' rule, score functions, U-statistics, and a precise statement of Hoeffding's inequality, is collected in the section on [conditioning, scores, and U-statistics](#probability-for-inference) below.
 
@@ -298,6 +305,18 @@ $$
 $$
 
 To use Bernstein, set \(Y_i=(z_i z_i^\top-I_2)/n\). Then \(\mathbb EY_i=0\), \(\lVert Y_i\rVert_2=1/n\), \(Y_i^2=I_2/n^2\), and therefore \(L=1/n\), \(V=I_2/n\), \(v=1/n\), and \(r(V)=2\). The calculation checks every normalization by hand. At \(n=4\) and \(t=1/2\), the probability upper bound exceeds one and is therefore vacuous; concentration becomes informative only as \(n\) grows. A correct theorem need not be a sharp small-sample certificate.
+
+```python
+from fractions import Fraction
+
+def fixture(n, first):
+    diagonal = (Fraction(2 * first, n), Fraction(2 * (n - first), n))
+    return diagonal, max(abs(x - 1) for x in diagonal)
+
+assert fixture(4, 2) == ((1, 1), 0)
+assert fixture(4, 3) == ((Fraction(3, 2), Fraction(1, 2)),
+                          Fraction(1, 2))
+```
 :::
 
 This module is the probabilistic bridge to regularized spectral approximation in [[ch:random-features-sketches-and-randomized-kernel-linear-algebra]] and to Nyström and iterative scaling methods in [[ch:large-scale-kernels]]. In each use, first identify the random self-adjoint summand, then its expectation, spectral bound, variance proxy, normalization, and the exact matrix quantity the downstream algorithm needs.
@@ -326,7 +345,7 @@ $$ \alpha_i \geq 0 \quad\text{(dual feasibility)}, \qquad \alpha_i\, g_i(x) = 0 
 Complementary slackness is the operative one for kernel machines: the SVM's support vectors are exactly the points whose inequality multiplier \(\alpha_i\) is nonzero, read straight off this condition.
 ::::::
 
-The algorithms that solve these problems at scale are covered in [[ch:large-scale-kernels]], but their basics belong here. **Gradient descent** steps against the gradient, \(x_{t+1} = x_t - \eta\nabla f(x_t)\), and converges on convex, smooth objectives; **stochastic gradient descent** replaces the full gradient with a cheap unbiased estimate from one example or a minibatch, trading exactness for a per-step cost independent of \(n\). Smoothness (a Lipschitz gradient) and strong convexity (a curvature lower bound) are the two properties that set the convergence rate. Finally, a **quadratic program**, minimizing a convex quadratic subject to linear constraints, is the exact form of the SVM dual, and interior-point and decomposition methods are how it is solved.
+The algorithms that solve these problems at scale are covered in [[ch:large-scale-kernels]], but their basics belong here. Gradient and stochastic-gradient convergence require explicit smoothness, curvature, step-size, and noise assumptions. Convexity alone guarantees neither a rate nor convergence of an arbitrary update. The convex-duality and algorithmic scope used here follows [@boyd2004, Chapters 4-5].
 
 The **Fenchel conjugate** of a proper convex function \(f\) is \(f^*(u)=\sup_x\{\langle u,x\rangle-f(x)\}\). Fenchel-Young gives \(f(x)+f^*(u)\ge\langle u,x\rangle\), with equality exactly when \(u\in\partial f(x)\). This is the compact route from a primal loss to its dual constraint. Strong Fenchel duality still needs a qualification condition; convexity alone does not erase a duality gap.
 
@@ -352,6 +371,12 @@ The conditional mean is affine in the observed block, and the conditional covari
 :::::
 
 Read with \(\Sigma\) a kernel Gram matrix over training and test points, this theorem *is* Gaussian process regression: the posterior mean is a linear smoother in the observations and the posterior variance is a Schur complement, which is how [[ch:gaussian-processes-and-rvm]] derives its predictive equations and how the acquisition rules of [[ch:bayesian-optimization-and-bandits]] know where they are uncertain. The Schur complement is also the block that appears when the matrix inversion lemma of the linear-algebra section inverts a partitioned matrix.
+
+::: {.proof}
+[Proof by completing the square]{.box-title}
+
+Hold \(x_2\) fixed in the joint Gaussian density and complete the quadratic in \(x_1\). The resulting center is \(\mu_1+\Sigma_{12}\Sigma_{22}^{-1}(x_2-\mu_2)\), while the remaining quadratic has covariance \(\Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}\). Normalizing this Gaussian kernel gives the displayed conditional law. The argument requires \(\Sigma_{22}\succ0\); singular conditioning needs a support-restricted or generalized-inverse formulation. \(\square\)
+:::
 
 :::: {.definition #def-p-13}
 [Bayes' rule and conditional expectation]{.box-title}
@@ -400,8 +425,14 @@ Every term of \(U_n\) has expectation \(\theta = \mathbb{E}[h(X, X')]\) for inde
 
 The squared maximum mean discrepancy of [[ch:kernel-mean-embeddings]] is estimated exactly this way, as a two-sample U- or V-statistic whose kernel is built from \(k\); the null distributions that calibrate the tests of [[ch:kernel-hypothesis-testing]] come from the degenerate case of U-statistic limit theory, where the usual Gaussian limit collapses and a weighted sum of \(\chi^2\) variables takes its place.
 
+::: {.proof}
+[Why the U-statistic is unbiased]{.box-title}
+
+For every ordered pair \(i\ne j\), independence and identical distribution give \(\mathbb E h(X_i,X_j)=\mathbb E h(X,X')=\theta\). Linearity gives \(\mathbb E U_n=[n(n-1)]^{-1}n(n-1)\theta=\theta\). The summands themselves are not independent when pairs share an index; unbiasedness therefore does not justify an i.i.d. variance calculation. \(\square\)
+:::
+
 :::: {.theorem #thm-p-16}
-[Hoeffding's inequality]{.box-title}
+[Hoeffding's inequality [@hoeffding1963]]{.box-title}
 
 Let \(X_1, \dots, X_n\) be independent with \(X_i \in [a_i, b_i]\) almost surely, and let \(\bar X = \frac{1}{n} \sum_{i=1}^n X_i\). For every \(t \gt 0\),
 
@@ -489,25 +520,33 @@ a difference of two genuine inner products.
 
 Cauchy-Schwarz fails outright: \(\langle f, f \rangle_{\mathcal K}\) can vanish on nonzero (neutral) vectors, so it no longer induces a norm and nothing bounds \(\lvert \langle f, g \rangle_{\mathcal K} \rvert\); topology and projections must instead be borrowed from the associated Hilbert space \(\mathcal{H}_+ \oplus \mathcal{H}_-\). Kernels that decompose as a difference \(k_+ - k_-\) of two positive definite kernels reproduce in exactly such spaces, the subject of [[ch:indefinite-and-krein-kernels]].
 
-## Numerical linear algebra clinic {#numerical-linear-algebra-clinic}
+<span id="numerical-linear-algebra-clinic"></span>
+
+**Numerical linear algebra clinic.**
 
 Exact identities do not specify stable algorithms. Normal equations square the condition number, explicit inverses waste work and magnify rounding error, and a small ridge changes the statistical problem even when introduced as "jitter." For every Gram solve, distinguish four quantities: backward error, forward coefficient error, prediction error, and optimization residual. They need not move together.
 
 A dependable workflow scales features, inspects the Gram diagonal and a spectral estimate, uses a factorization or matrix-free solver appropriate to definiteness, and checks the residual in the original system. Cholesky is preferred for a well-conditioned positive-definite matrix; pivoted Cholesky or eigendecomposition exposes low rank; QR is safer for rectangular least squares; iterative methods require a stopping rule and preconditioner. The scaling chapter [[ch:large-scale-kernels]] turns these choices into algorithms.
 
-## Measure and probability clinic {#measure-probability-clinic}
+<span id="measure-probability-clinic"></span>
+
+**Measure and probability clinic.**
 
 Three distinctions prevent many later errors. Almost-sure equality is not pointwise equality; convergence in probability is weaker than almost-sure convergence and does not by itself permit exchanging a limit and expectation; and an expectation under \(Q\) can be rewritten under \(P\) only when \(Q\) is absolutely continuous with respect to \(P\). In that last case the Radon-Nikodym derivative \(dQ/dP\) is the abstract density ratio behind importance weighting.
 
 Conditional expectation is defined relative to a sigma-algebra, even when no density exists. Regular conditional distributions need assumptions on the measurable spaces. Hilbert-valued expectations need measurability and norm integrability, not only formal linearity. When a proof moves an operator, limit, derivative, or supremum through an expectation, name the theorem that permits it.
 
-## Functional and convex analysis clinic {#functional-convex-clinic}
+<span id="functional-convex-clinic"></span>
+
+**Functional and convex analysis clinic.**
 
 Finite-dimensional intuition fails in two recurring ways. Bounded closed sets need not be compact in an infinite-dimensional norm topology, and a bounded sequence can converge weakly without converging in norm. Compact operators convert some weak convergence into strong convergence and make inverse problems spectrally tractable, but their inverses are typically unbounded on their ranges.
 
 For convex programs, KKT conditions are necessary and sufficient only under the relevant convexity and qualification conditions. Slater's condition is a common sufficient qualification for convex inequality constraints. Existence also needs coercivity, compactness, or lower-semicontinuity plus an appropriate compactness argument. Algorithmic convergence adds smoothness, step-size, stochastic-noise, and stopping assumptions beyond the existence of an optimum.
 
-## Structured-domain clinic {#structured-domain-clinic}
+<span id="structured-domain-clinic"></span>
+
+**Structured-domain clinic.**
 
 Graphs, manifolds, groups, tensors, and paths each have more than one natural normalization. A graph Laplacian depends on the affinity scale and degree convention; a manifold kernel depends on metric, boundary, and volume measure; group averaging depends on the action and invariant measure; tensor features grow exponentially with degree; path signatures depend on augmentation and truncation. State these choices before invoking a theorem.
 
@@ -515,7 +554,7 @@ The test for a structured kernel remains the ordinary Gram test: for every finit
 
 ## Summary and further reading {#prelim-summary}
 
-Kernel methods reduce nonlinear learning to linear algebra in Hilbert spaces, but the reduction remains sound only when its analytic hypotheses travel with it. Spectra govern geometry and conditioning; bounded evaluation and projection produce RKHS representations; measure theory and Bochner integration make distribution embeddings well defined; convex duality turns losses into coefficient problems; and structured domains contribute their own operators and symmetries. Readers needing proof-level measure theory, functional analysis, or convex analysis should consult a dedicated graduate text before relying on an interchange, compactness claim, or duality theorem.
+Kernel methods reduce nonlinear learning to linear algebra in Hilbert spaces, but the reduction remains sound only when its analytic hypotheses travel with it. Spectra govern geometry and conditioning; bounded evaluation and projection produce RKHS representations; measure theory and Bochner integration make distribution embeddings well defined; convex duality turns losses into coefficient problems; and structured domains contribute their own operators and symmetries. Chapter [[ch:kernels-and-rkhs|Positive Definite Kernels and RKHS]] now uses this chain to construct a function space from a PSD certificate.
 
 ## Notation and conventions {#notation-conventions}
 

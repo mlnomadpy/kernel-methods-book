@@ -3,7 +3,7 @@
   "chapter": "ch-mds",
   "anchor": "example-17-1",
   "source_file": "manuscript/chapters/ch-mds.md",
-  "source_sha256": "4fd1880a58903dc7fd7c5565e04a9dc8687d5f265f98ba53ee20a44a5b460646",
+  "source_sha256": "e03371f938ba4cd0676879f3ee89e11bab1004c5038e185d8d2e4ea163b0853c",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-mds-ex1.py"
@@ -26,7 +26,9 @@
     "1.75",
     "-2",
     "1.5",
-    "-1.5"
+    "-1.5",
+    "-0.5",
+    "-1"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

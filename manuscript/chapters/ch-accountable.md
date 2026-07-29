@@ -57,8 +57,16 @@ bibliography:
   - kernelbook-code-ch-accountable-ex5
   - kernelbook-code-ch-accountable-audit
   - kennedy2001calibration
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 ---
 # Accountable Kernels: Uncertainty, Explanation, and Audit
+
+The [[ch:applications-and-practice|practice chapter]] ended with a
+reproducibility packet. Accountability begins where reproduction stops:
+deciding which quantities are mathematical guarantees, which are
+model-conditional uncertainty, which are empirical diagnostics, and which
+must be validated against consequences in deployment.
 
 <p class="lead">A prediction that will steer a spacecraft, propose a molecule for synthesis, or drive a satellite crop-yield estimate is not judged by its accuracy alone. Someone will ask how sure the model is, which training data support the decision, whether the inputs still resemble what the model was trained on, and whether the whole pipeline can be reproduced and documented for a review board. Kernel methods put unusually much of that evidence in one geometry. The representer theorem writes a prediction as a signed sum over named training points; convex objectives provide checkable optimality conditions; a Gaussian-process model supplies a predictive covariance; conformal calibration can add finite-sample marginal coverage under exchangeability; and kernel two-sample and independence statistics can monitor deployment. None of these is automatic trust. Contributions are not causal explanations, covariance is conditional on a model, numerical reproducibility needs a recorded implementation and tolerance, and statistical tests have finite power. This chapter turns those structural advantages into an audit chain whose assumptions and failure triggers can be stated before the model is deployed.</p>
 
@@ -86,7 +94,7 @@ The comparison with other model families should therefore be made capability by 
 
 A number without an error bar is not yet a scientific result, and a great deal of what makes kernel methods useful in the sciences of the next chapter is that they can return uncertainty as part of the answer. We take the native Gaussian-process interval first, identify the model assumptions behind it, and then layer on a conformal guarantee whose different assumption is exchangeability.
 
-### The Gaussian-process interval, and its honest limits {#gp-error-bars}
+**The Gaussian-process interval, and its honest limits.** {#gp-error-bars}
 
 The predictive variance above has a clean model-based reading. It starts at the prior variance \(k(x_\star,x_\star)\) and subtracts the quadratic form \(k(x_\star)^\top(K+\sigma_\epsilon^2 I)^{-1}k(x_\star)\). The exact boundary is worth stating formally [@rasmussen2006, Section 2.2, especially Equations 2.22--2.24].
 
@@ -118,6 +126,33 @@ The qualifier is the whole story, so we make both halves of it concrete on numbe
 ::::: {.example #example-55-1}
 [Example (an honest error bar, and a dishonest one)]{.box-title}
 
+```python
+import numpy as np
+rng=np.random.default_rng(0)
+def rbf(x,z,ell):
+    return np.exp(-(np.asarray(x)[:,None]-np.asarray(z)[None,:])**2/(2*ell**2))
+def fit(x,y,ell,noise):
+    L=np.linalg.cholesky(rbf(x,x,ell)+noise**2*np.eye(len(x)))
+    a=np.linalg.solve(L.T,np.linalg.solve(L,y))
+    def predict(z,observation=False):
+        cross=rbf(z,x,ell); v=np.linalg.solve(L,cross.T)
+        var=1-(v*v).sum(0)+(noise**2 if observation else 0)
+        return cross@a,np.sqrt(np.maximum(var,0))
+    return predict
+
+x=np.array([.3,.9,1.6,2.2,4.7,5.1,5.6,6.]); gp=fit(x,np.sin(x),1.,.05)
+_,sd=gp(np.array([.9,3.5,6.5]))
+mean=lambda z:np.sin(3*z); true_sd=lambda z:.05+.45*z
+xtr=np.sort(rng.uniform(0,1,40))
+ytr=mean(xtr)+true_sd(xtr)*rng.normal(size=40)
+assumed=float(np.mean(true_sd(xtr))); wrong=fit(xtr,ytr,.15,assumed)
+xte=rng.uniform(0,1,4000); yte=mean(xte)+true_sd(xte)*rng.normal(size=4000)
+mu,spread=wrong(xte,observation=True)
+covered=np.abs(yte-mu)<=1.645*spread
+print(sd,covered.mean(),covered[xte>.5].mean())
+assert np.allclose(sd,[.049,.472,.247],atol=.001)
+```
+
 :::: wex
 ::: wex-setup
 First the honest behavior. We fit a Gaussian process with an RBF kernel (length scale \(1\), noise \(0.05\)) to eight points of \(\sin x\) on \([0,6]\) with a deliberate gap in \((2.5,4.5)\), and read the posterior standard deviation at three places. Then the failure. We draw \(40\) points from a wiggly mean \(\sin(3x)\) on \([0,1]\) corrupted by heteroscedastic noise whose standard deviation grows from \(0.05\) at \(x=0\) to \(0.5\) at \(x=1\), and fit a GP that wrongly assumes a single homoscedastic noise equal to the average, \(\hat\sigma=0.292\). We then measure how often the nominal \(90\%\) interval actually covers fresh data. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex1].
@@ -131,7 +166,7 @@ First the honest behavior. We fit a Gaussian process with an RBF kernel (length 
 ::::
 :::::
 
-### Conformal prediction: a distribution-free coverage guarantee {#conformal}
+**Conformal prediction: a distribution-free coverage guarantee.** {#conformal}
 
 The way to stop trusting the model's self-assessment and start certifying coverage is conformal prediction [@vovk2005conformal, Chapter 2; @lei2018conformal, Section 2.2 and Theorem 2.1; @angelopoulos2021gentle, Section 2]. It wraps any predictor, kernel or otherwise, and turns residuals into an interval. “Distribution-free” means no parametric family is assumed; it does not remove exchangeability, data-splitting, or score-definition requirements.
 
@@ -162,13 +197,46 @@ where the upper bound holds when the \(n+1\) scores are almost surely distinct a
 
 **Proof status.** Complete proof below.
 
-**Proof.** Conditional on proper-training data, exchangeability makes the rank of the test score among the \(n+1\) scores uniform when ties are randomized. The test point is excluded only if its rank exceeds \(r\), whose probability is \((n+1-r)/(n+1)\le\alpha\). Conservative inclusion of ties can only increase coverage. If scores are distinct and \(r\le n\), inclusion has probability \(r/(n+1)\lt1-\alpha+1/(n+1)\). The \(r=n+1\) convention returns the whole line. Averaging over proper-training data proves the result. \(\square\)
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Conditional on proper-training data, exchangeability makes the rank of the
+test score among the \(n+1\) scores uniform when ties are randomized. The test
+point is excluded only if its rank exceeds \(r\), whose probability is
+\((n+1-r)/(n+1)\le\alpha\). Conservative inclusion of ties can only increase
+coverage. If scores are distinct and \(r\le n\), inclusion has probability
+\(r/(n+1)\lt1-\alpha+1/(n+1)\). The \(r=n+1\) convention returns the whole
+line. Averaging over proper-training data proves the result.
+[\(\square\)]{.qed}
 ::::
 
 The theorem is marginal over a fresh exchangeable test pair. It is not conditional coverage at each \(x\), subgroup coverage, time-series validity, or validity after selecting the score or model on calibration responses. Predictor quality controls width, not validity. Jackknife+ supplies a different leave-one-out construction and guarantee [@barber2021jackknife, Theorem 1].
 
 ::::: {.example #example-55-2}
 [Example (conformal repairs the coverage the GP lost)]{.box-title}
+
+```python
+import numpy as np
+rng=np.random.default_rng(1)
+rbf=lambda x,z:np.exp(-(x[:,None]-z[None,:])**2/(2*.15**2))
+mean=lambda x:np.sin(3*x); noise=lambda x:.05+.45*x
+def sample(n):
+    x=rng.uniform(0,1,n)
+    return x,mean(x)+noise(x)*rng.normal(size=n)
+xtr,ytr=sample(200); xcal,ycal=sample(500); xte,yte=sample(8000)
+coef=np.linalg.solve(rbf(xtr,xtr)+1e-2*np.eye(200),ytr)
+predict=lambda x:rbf(x,xtr)@coef
+scores=np.abs(ycal-predict(xcal)); rank=int(np.ceil(501*.9))
+qhat=np.sort(scores)[rank-1]
+test_mean=predict(xte)
+conformal=np.abs(yte-test_mean)<=qhat
+sigma=np.std(ytr-predict(xtr))
+naive=np.abs(yte-test_mean)<=1.645*sigma
+print(rank,qhat,conformal.mean(),naive.mean(),conformal[xte>.5].mean())
+assert rank==451 and abs(qhat-.512)<.001
+```
 
 :::: wex
 ::: wex-setup
@@ -189,7 +257,7 @@ The reliability chapter returns to this construction under deployment shift and 
 
 When a kernel model makes a decision that someone wants to contest, the question is rarely \"which pixels\" and usually \"which prior cases, and how much.\" Kernel machines answer that question exactly, because the answer is written into the representer form, and for the convex ones the sensitivity of a prediction to each training point is closed form rather than estimated.
 
-### Prediction as a weighted vote over training points {#representer-attribution}
+**Prediction as a weighted vote over training points.** {#representer-attribution}
 
 Return to \(f(x)=\sum_i\alpha_i\,k(x_i,x)\). Each training point contributes \(\alpha_i k(x_i,x)\) to the prediction at \(x\). In an SVM, only support vectors have nonzero dual contribution, although the support set need not be small and nonunique dual coefficients can redistribute contributions when the Gram matrix is degenerate. In kernel ridge and Gaussian-process regression the coefficients are generally dense; for a local kernel, multiplication by \(k(x_i,x)\) often concentrates contributions near the query. This is an exact decomposition in the model's chosen representation. Calling it an explanation additionally requires that examples, labels, and the similarity itself are interpretable for the decision at hand.
 
@@ -200,7 +268,7 @@ The same RKHS machinery answers the dual question, \"which examples represent th
 <figcaption>A live kernel-ridge fit on a handful of points. Drag the query \(x_\star\); each training point glows in proportion to its signed contribution \(\alpha_i\,k(x_i,x_\star)\) to the prediction there, and the readout names the three most influential points. Toggle to the exact leave-one-out influence, the change in \(f(x_\star)\) if that point were deleted, and the ranking shifts to what the decision truly rests on. Every number is read from the actual fitted expansion.</figcaption>
 </figure>
 
-### Exact influence and closed-form leave-one-out {#influence-loo}
+**Exact influence and closed-form leave-one-out.** {#influence-loo}
 
 Beyond \"which points support this prediction\" is the sharper counterfactual, \"how would this prediction change if a given training point had never been collected.\" General influence functions approximate infinitesimal up-weighting through an inverse Hessian [@koh2017influence, Section 2]. They require differentiability and a nonsingular Hessian, and they are not deletion-exact merely because an objective is convex; deep-network failures are documented by [@basu2021fragile, Sections 3--4]. Kernel ridge regression is special because it is a fixed linear smoother.
 
@@ -222,7 +290,35 @@ $$
 
 **Proof status.** Complete proof below.
 
-**Proof.** Since \(A\succ0\), its inverse exists. Also \(I-H=\lambda A^{-1}\succ0\), hence \(H_{ii}\lt1\). Partitioning \(A\), \(y\), and \(k_\star\) around index \(i\), then applying the Schur-complement inverse formula, gives both identities after cancellation. \(\square\)
+::::
+
+:::: {.proof}
+[Proof]{.box-title}
+
+Since \(A\succ0\), its inverse exists. Also
+\(I-H=\lambda A^{-1}\succ0\), hence \(H_{ii}\lt1\). Reorder index \(i\)
+first and partition
+
+$$
+A=\begin{pmatrix}a&b^\top\\b&C\end{pmatrix},
+\qquad
+s=a-b^\top C^{-1}b.
+$$
+
+The block inverse gives \((A^{-1})_{ii}=s^{-1}\) and
+\(\alpha_i=s^{-1}(y_i-b^\top C^{-1}y_{-i})\). Because
+\(y_i-\hat y_i=\lambda\alpha_i\) and
+\(1-H_{ii}=\lambda(A^{-1})_{ii}=\lambda s^{-1}\), their ratio is
+\(y_i-b^\top C^{-1}y_{-i}\), the leave-one-out residual. Applying the same
+block inverse to \(k_\star^\top A^{-1}y\) and subtracting
+\(k_{\star,-i}^\top C^{-1}y_{-i}\) yields
+
+$$
+f_\star-f_\star^{(-i)}
+=\frac{(A^{-1}k_\star)_i(y_i-\hat y_i)}{1-H_{ii}}.
+$$
+
+[\(\square\)]{.qed}
 ::::
 
 This is sensitivity to deleting one record while holding the kernel, preprocessing, hyperparameters, and all other records fixed. It is not causal influence, uncertainty, or the effect of retuning. Numerically, an audit must fail rather than divide when \(1-H_{ii}\) is below a declared tolerance.
@@ -255,6 +351,26 @@ Kernel ridge regression on \(40\) points of \(\sin(1.3x)\) with light noise on \
 3.  [Turn it into an audit statement.]{.wex-op} The decision at \(x_\star\) rests chiefly on three named training points; if any were later found mislabeled or unrepresentative, the exact effect on this prediction is known in advance, at the cost of one solve.
 
 **Reading.** Data attribution that is a delicate approximation for deep models is, for a kernel ridge model, a closed-form consequence of the hat matrix. The same quantity \(1-H_{ii}\) that yields the leave-one-out error yields the influence of a point on any prediction, so cross-validation and attribution are the same linear algebra. Data-valuation schemes such as Data Shapley (Ghorbani and Zou 2019) build on exactly this notion of a training point's marginal worth.
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(3)
+x = np.sort(rng.uniform(-3.0, 3.0, 40))
+y = np.sin(1.3 * x) + 0.1 * rng.standard_normal(40)
+rbf = lambda a, b: np.exp(-((a[:, None] - b[None, :]) ** 2) / (2 * 0.4**2))
+K = rbf(x, x)
+A = K + 0.1 * np.eye(x.size)
+alpha = np.linalg.solve(A, y)
+H = K @ np.linalg.solve(A, np.eye(x.size))
+kstar = rbf(np.array([0.7]), x).ravel()
+loo_residual = (y - H @ y) / (1.0 - np.diag(H))
+deletion_effect = np.linalg.solve(A, kstar) * loo_residual
+top_three = np.argsort(-np.abs(deletion_effect))[:3]
+
+assert np.allclose(x[top_three], [0.781, 0.521, 0.963], atol=0.001)
+print(x[top_three], deletion_effect[top_three])
+```
 ::::
 :::::
 
@@ -264,7 +380,7 @@ Kernel ridge regression on \(40\) points of \(\sin(1.3x)\) with light noise on \
 
 A model that was accountable at training time can drift out of validity in deployment. An auditor then asks whether the input distribution still resembles training, whether outputs depend on attributes they should not use, and whether the whole pipeline can be reconstructed. Kernel tests address the first two questions; a recorded data and solver lineage addresses the third.
 
-### Is the input still the training distribution? Kernel drift monitoring {#drift}
+**Is the input still the training distribution? Kernel drift monitoring.** {#drift}
 
 The natural monitor is the kernel two-sample test [@gretton2012, Sections 2 and 5]. Let \(k\) be measurable and bounded, or satisfy the integrability conditions needed for both mean embeddings. Writing \(\mu_P=\mathbb E\,k(x,\cdot)\), the squared MMD is
 
@@ -287,6 +403,26 @@ Rejection is evidence against \(P=Q\); non-rejection is not evidence of equality
 ::::: {.example #example-55-4}
 [Example (a drift alarm that does not cry wolf)]{.box-title}
 
+```python
+import numpy as np
+rng=np.random.default_rng(4)
+def mmd(x,y,g):
+    k=lambda a,b:np.exp(-g*(a[:,None]-b[None,:])**2)
+    xx,yy=k(x,x),k(y,y); np.fill_diagonal(xx,0); np.fill_diagonal(yy,0)
+    return xx.sum()/(len(x)*(len(x)-1))+yy.sum()/(len(y)*(len(y)-1))-2*k(x,y).mean()
+def test(x,y,g,B=2000):
+    observed=mmd(x,y,g); z=np.r_[x,y]; exceed=0
+    for _ in range(B):
+        p=rng.permutation(len(z))
+        exceed+=mmd(z[p[:len(x)]],z[p[len(x):]],g)>=observed
+    return observed,(exceed+1)/(B+1)
+ref=rng.normal(size=200); same=rng.normal(size=200); shifted=rng.normal(size=200)+.5
+d=np.abs(ref[:,None]-ref[None,:]); median=np.median(d[d>0]); gamma=1/(2*median**2)
+null=test(ref,same,gamma); alarm=test(ref,shifted,gamma)
+print(median,gamma,null,alarm)
+assert null[1]>.05 and alarm[1]<.05
+```
+
 :::: wex
 ::: wex-setup
 A reference sample of \(200\) standard-normal inputs, an RBF kernel at the median-heuristic bandwidth, and \(2000\) permutations for the null. We test the reference against a fresh unshifted draw and against a window shifted in mean by \(0.5\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex4].
@@ -305,7 +441,7 @@ A reference sample of \(200\) standard-normal inputs, an RBF kernel at the media
 <figcaption>A live drift monitor. Slide the covariate-shift amount applied to the production window; the unbiased \(\mathrm{MMD}^2\) between reference and window is recomputed, a fast permutation null is redrawn, and the statistic is shown against the null band with its p-value falling below the alarm level as the shift grows. Real statistic, real permutation null on every change.</figcaption>
 </figure>
 
-### Independence and fairness audits with HSIC {#independence-fairness}
+**Independence and fairness audits with HSIC.** {#independence-fairness}
 
 A different audit asks whether outputs are statistically independent of an attribute, batch label, or sensor id. HSIC measures dependence as the squared Hilbert-Schmidt norm of the cross-covariance operator [@gretton2005hsic, Section 2], estimated here by
 
@@ -328,6 +464,27 @@ Rejection establishes statistical dependence, not discrimination or causation. N
 ::::: {.example #example-55-5}
 [Example (auditing dependence on a protected attribute)]{.box-title}
 
+```python
+import numpy as np
+rng=np.random.default_rng(5)
+def centered(v):
+    d=np.abs(v[:,None]-v[None,:]); gamma=1/(2*np.median(d)**2+1e-12)
+    K=np.exp(-gamma*d*d)
+    return K-K.mean(0)-K.mean(1)[:,None]+K.mean()
+def test(score,attribute,B=2000):
+    K,L=centered(score),centered(attribute)
+    hsic=lambda Q:np.sum(K*Q)/(len(K)-1)**2
+    observed=hsic(L); exceed=0
+    for _ in range(B):
+        p=rng.permutation(len(L)); exceed+=hsic(L[np.ix_(p,p)])>=observed
+    return observed,(exceed+1)/(B+1)
+a=rng.normal(size=200); signal=rng.normal(size=200)
+biased=test(signal+.8*a+.1*rng.normal(size=200),a)
+fair=test(signal+.1*rng.normal(size=200),a)
+print(biased,fair)
+assert biased[1]<.05 and fair[1]>.05
+```
+
 :::: wex
 ::: wex-setup
 Two hundred cases, a continuous protected attribute, and two predictors: a biased one whose score leans on the attribute, and a fair one from which that dependence has been removed. We test each with HSIC and a permutation null. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-accountable-ex5].
@@ -340,13 +497,13 @@ Two hundred cases, a continuous protected attribute, and two predictors: a biase
 ::::
 :::::
 
-### Reproducibility and the audit trail {#reproducibility}
+**Reproducibility and the audit trail.** {#reproducibility}
 
 The last audit is procedural rather than statistical. For regularized kernel ridge regression, the predictor is the solution of a specified linear system; for an SVM, it is the primal predictor satisfying a specified convex program and KKT tolerance. Reproduction therefore requires the data version, preprocessing, kernel convention, hyperparameters, approximation, arithmetic precision, solver, stopping tolerance, and software environment. With those fixed, independent runs should agree within a declared numerical tolerance. This is stronger and more testable than saying “rerun the code,” but it is not a promise of bitwise-identical coefficients across hardware and libraries.
 
 This is where the technical machinery meets the documentation frameworks that high-stakes deployment now expects. Model cards (Mitchell et al. 2019) ask for intended use, performance across conditions, and limitations; a kernel model can supply example contributions, feature-dependence tests, and intervals with stated assumptions. Datasheets for datasets (Gebru et al. 2021) ask for data provenance; exact kernel-ridge deletion influence can connect particular predictions to particular records. Risk-management frameworks such as the NIST AI Risk Management Framework (2023) call for measured uncertainty, robustness, and fairness, and conformal coverage, MMD drift tests, and HSIC independence tests are relevant measurements when their assumptions match the question. These artifacts support technical traceability; they are neither a legal determination nor a substitute for governance.
 
-### A reproducible audit protocol {#reproducible-audit-protocol}
+**A reproducible audit protocol.** {#reproducible-audit-protocol}
 
 An audit becomes operational only when it can stop deployment. The protocol below separates numerical failure, assumption failure, statistical alarm, and insufficient evidence instead of compressing all four into a green or red badge.
 
@@ -370,6 +527,62 @@ An audit becomes operational only when it can stop deployment. The protocol belo
 
 ::::: {.example #example-accountable-audit-fixture}
 [Example (a deterministic release gate with deliberate failures)]{.box-title}
+
+```python
+import numpy as np
+rng=np.random.default_rng(5506)
+rbf=lambda x,z:np.exp(-.5*((x[:,None]-z[None,:])/.35)**2)
+x=np.linspace(-1,1,31); y=np.sin(2.2*x)+.03*np.cos(7*x); ridge=.08
+K=rbf(x,x); A=K+ridge*np.eye(len(x)); coef=np.linalg.solve(A,y)
+symmetry=np.max(np.abs(K-K.T))
+residual=np.linalg.norm(A@coef-y)/np.linalg.norm(y)
+
+# Closed-form deletion effect versus a direct refit.
+query=np.array([.37]); kq=rbf(x,query).ravel(); G=np.linalg.solve(A,np.eye(len(x)))
+H=K@G; i=17
+loo=(y[i]-(H@y)[i])/(1-H[i,i])
+closed=(G@kq)[i]*loo
+keep=np.arange(len(x))!=i
+deleted=np.linalg.solve(rbf(x[keep],x[keep])+ridge*np.eye(keep.sum()),y[keep])
+direct=kq@coef-rbf(query,x[keep]).ravel()@deleted
+deletion_error=abs(closed-direct)
+
+# The finite conformal rank is itself a release invariant.
+xcal=np.linspace(-.95,.95,39)
+scores=np.abs(np.sin(2.2*xcal)+.11*np.sin(13*xcal)-rbf(xcal,x)@coef)
+rank=int(np.ceil((len(scores)+1)*.9)); qhat=np.sort(scores)[rank-1]
+
+# Fixed permutation schedules make the expected nulls and alarms reproducible.
+def mmd(a,b):
+    aa,bb,ab=rbf(a,a),rbf(b,b),rbf(a,b)
+    np.fill_diagonal(aa,0); np.fill_diagonal(bb,0)
+    return aa.sum()/(len(a)*(len(a)-1))+bb.sum()/(len(b)*(len(b)-1))-2*ab.mean()
+def perm_test(stat,left,right,perms):
+    observed=stat(left,right); pooled=np.r_[left,right]; n=len(left)
+    exceed=sum(stat(pooled[p[:n]],pooled[p[n:]])>=observed for p in perms)
+    return (exceed+1)/(len(perms)+1)
+n=80; permutations=np.array([rng.permutation(2*n) for _ in range(499)])
+reference=rng.normal(size=n); same=rng.normal(size=n); shifted=rng.normal(1,1,n)
+p_same=perm_test(mmd,reference,same,permutations)
+p_shift=perm_test(mmd,reference,shifted,permutations)
+def hsic(score,attribute):
+    H=np.eye(len(score))-np.ones((len(score),len(score)))/len(score)
+    return np.trace(rbf(score,score)@H@rbf(attribute,attribute)@H)/(len(score)-1)**2
+def hsic_test(score,attribute,perms):
+    observed=hsic(score,attribute)
+    return (1+sum(hsic(score,attribute[p])>=observed for p in perms))/(len(perms)+1)
+attribute=rng.normal(size=n); independent=rng.normal(size=n)
+dependent=attribute+.15*rng.normal(size=n)
+hperms=np.array([rng.permutation(n) for _ in range(499)])
+p_independent=hsic_test(independent,attribute,hperms)
+p_dependent=hsic_test(dependent,attribute,hperms)
+print(symmetry,residual,deletion_error,rank,qhat,
+      p_same,p_shift,p_independent,p_dependent)
+assert symmetry<1e-12 and residual<1e-10 and deletion_error<1e-10
+assert rank==36 and np.isfinite(qhat)
+assert p_same>.05 and p_shift<=.05
+assert p_independent>.05 and p_dependent<=.05
+```
 
 :::: wex
 ::: wex-setup
@@ -406,11 +619,22 @@ The next chapter turns this from a demonstration into a working method. In an on
 
 The practical goal is not a badge of trustworthiness but a documented chain: a disclosed kernel and noise model, an error bar with its assumptions, a coverage guarantee with its exchangeability caveat, and drift and dependence audits that can fail visibly and trigger a retrain.
 
+The report must label its evidence. Split-conformal coverage is a
+finite-sample theorem under exchangeability. A GP interval is model-based
+uncertainty. MMD, HSIC, and deletion influence are empirical diagnostics with
+sampling and tuning choices. Operational validation asks whether alarms arrive
+soon enough, intervals cover relevant subgroups, explanations support a real
+review action, and fallback procedures limit harm.
+
 ## Summary and further reading {#summary}
 
 Accountability is not a badge produced by one metric; it is a chain of evidence. The representer form supplies exact example contributions, while kernel-ridge deletion influence answers a sharper counterfactual with one hat matrix. A Gaussian process supplies covariance conditional on its kernel and likelihood; split conformal adds finite-sample marginal coverage under exchangeability. MMD and HSIC turn drift and dependence questions into tests, but population identifiability does not remove finite-sample power limits. Convex objectives make residuals and optimality conditions auditable, while reproducibility still requires a recorded preprocessing, approximation, solver, tolerance, and environment. The practical deliverable is therefore a model record with assumptions, diagnostics, and triggers: recalibrate when coverage fails, investigate when drift is detected, abstain when support is missing, and never promote a model-based variance into a real-world guarantee without validation.
 
 For further reading, Rasmussen and Williams (2006) is the reference for the Gaussian-process variance and its hyperparameter learning; Vovk, Gammerman, and Shafer (2005) and Angelopoulos and Bates (2023) develop conformal prediction and its finite-sample coverage; Koh and Liang (2017) motivate influence functions for accountability and Cook and Weisberg (1982) give the classical leave-one-out and hat-matrix identities; Gretton et al. (2012) and Gretton et al. (2005) supply the MMD and HSIC audit statistics used here.
+
+[[ch:kernels-in-science-and-space|The science-and-space chapter]] makes these
+boundaries operational, where a missed event, unstable force field, or biased
+retrieval has a domain consequence that cannot be replaced by an RKHS identity.
 
 ::: {.exercises}
 ## Exercises {#exercises}

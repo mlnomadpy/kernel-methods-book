@@ -3,7 +3,7 @@
   "chapter": "ch-approx",
   "anchor": "example-approx-power",
   "source_file": "manuscript/chapters/ch-approx.md",
-  "source_sha256": "f158e85f773bca78a9cd82baaae93071a2a59c8730da073da4d5cb5cb20ba3d9",
+  "source_sha256": "b29cc62cb9ec042c3fdae6e1001ce92435c2c79394a0829c933141207ca7cb9a",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-approx-ex1.py"
@@ -29,7 +29,13 @@
     "3",
     "1.1547",
     "0.4082",
-    "0.5625"
+    "0.5625",
+    "25",
+    "5",
+    "75",
+    "625",
+    "125",
+    "0625"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

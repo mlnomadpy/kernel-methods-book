@@ -3,7 +3,7 @@
   "chapter": "ch-modern",
   "anchor": "example-42-1",
   "source_file": "manuscript/chapters/ch-modern.md",
-  "source_sha256": "478b6cbf47f5b3d2d489af3def30e1d27e54bace08040d8ed9b20a2868a51e25",
+  "source_sha256": "e096a5f86aed8ad95bc392e8afbdc592f14293e7025c783769d99e759417d28d",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-modern-ex1.py"
@@ -34,7 +34,11 @@
     "400",
     "10",
     "0.928",
-    "0.76"
+    "0.76",
+    "25",
+    "0",
+    "2631579",
+    "7564103"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

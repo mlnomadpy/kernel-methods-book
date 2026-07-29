@@ -30,16 +30,18 @@ bibliography:
   - shawe2004
   - joachims1999
   - scholkopf2002
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Ranking and Ordinal Regression
 
-<p class="lead">A search engine does not need to know how relevant each page is on some absolute scale; it needs to put the best page first. A recommender does not have to predict a star rating exactly; it has to order the films you have not seen so the one you would love sits at the top. These are ranking problems, and they are subtly different from the classification and regression tasks of the previous chapters: the object we want to learn is an ordering, not a label and not a number. This chapter builds ranking on the kernel machinery already in hand. The key move is to reduce a preference between two items to a single classification on their difference vector, which turns the whole apparatus of the support vector machine loose on orderings. We derive the soft-margin ranking SVM and its dual, a perceptron-style online ranking rule, the threshold model of ordinal regression that partitions the real line into ranks, and the exact identity that ties the number of misordered pairs to the area under the ROC curve.</p>
+<p class="lead">A search engine does not need to know how relevant each page is on some absolute scale; it needs to put the best page first. A recommender does not have to predict a star rating exactly; it has to order the films you have not seen so the one you would love sits at the top. These are ranking problems, and they are subtly different from the classification and regression tasks of the previous chapters: the object we want to learn is an ordering, not a label and not a number. This chapter inherits the margin geometry and dual machinery of Chapter [[ch:support-vector-machines|Support Vector Machines]], but changes the statistical unit from one labeled object to one comparison. The key move is to reduce a preference between two items to a single classification on their difference vector. We derive the soft-margin ranking SVM and its dual, a perceptron-style online ranking rule, the threshold model of ordinal regression that partitions the real line into ranks, and the exact identity that ties the number of misordered pairs to the area under the ROC curve.</p>
 
 ## The ranking problem {#the-ranking-problem}
 
 In a ranking problem the training data comes with a relative ordering rather than an isolated target. Following the setup of Shawe-Taylor and Cristianini (2004), we are given instance and rank pairs \((x_i, y_i)\), where each instance lives in an implicit kernel-defined feature space through a map \(\phi\), and each rank \(y_i\) is drawn from a finite set \(Y\) carrying a total order. We say \(x_i\) is preferred over \(x_j\), written \(x_i \succ x_j\), when \(y_i \succ y_j\); the two items are incomparable when \(y_i = y_j\). The order on \(Y\) therefore induces a partial order on the instances that partitions them into equivalence classes, one per rank.
 
-The goal is a ranking rule, a map \(r : X \to Y\) that assigns each instance a rank consistent with the preferences seen in training and, we hope, with the preferences of unseen data. Two features of the problem distinguish it from ordinary classification. First, the labels are not exchangeable: confusing rank 5 with rank 4 is a milder error than confusing rank 5 with rank 1, because the labels themselves are ordered. Second, what we ultimately care about is often not the absolute rank but the relative order of pairs, which is exactly what a search or recommendation system exposes to a user. Herbrich, Graepel, and Obermayer (2000) introduced the large-margin treatment of this problem under the name ordinal regression, and Joachims (2002) showed that framing web-search relevance as a ranking task, learned from click-through pairs, outperforms treating it as regression on relevance scores.
+The goal is a ranking rule, a map \(r : X \to Y\) that assigns each instance a rank consistent with the preferences seen in training and, we hope, with the preferences of unseen data. Two features of the problem distinguish it from ordinary classification. First, the labels are not exchangeable: confusing rank 5 with rank 4 is a milder error than confusing rank 5 with rank 1, because the labels themselves are ordered. Second, what we ultimately care about is often not the absolute rank but the relative order of pairs, which is exactly what a search or recommendation system exposes to a user. The large-margin formulation makes these two distinctions explicit [@herbrich2000], while the search-ranking reduction shows why preference supervision can be better aligned with retrieval than regression on relevance scores [@joachims2002].
 
 Before any optimisation, we pin down the two objects everything else manipulates: the preference relation the ranks induce on instances, and the rule we are trying to learn.
 
@@ -73,7 +75,7 @@ Because the reduction never touches \(\phi\) except through inner products, it s
 
 $$\langle z_{ij},\, z_{kl} \rangle = \langle \phi(x_i) - \phi(x_j),\, \phi(x_k) - \phi(x_l) \rangle = K_{ik} - K_{il} - K_{jk} + K_{jl},$$
 
-where \(K_{ab} = \kappa(x_a, x_b)\) is the Gram matrix of the original data. So the pairwise problem has its own kernel, computed from the base kernel with no explicit features, and any dual algorithm of Chapter [[ch:support-vector-machines|Support Vector Machines]] runs on it unchanged. The one cost is size: with \(\ell\) instances there can be on the order of \(\ell^2\) preferred pairs, so the pairwise sample grows quadratically, a point flagged by Shawe-Taylor and Cristianini (2004) and addressed in practice by Joachims (2002) through a decomposition that never materialises all pairs at once.
+where \(K_{ab} = \kappa(x_a, x_b)\) is the Gram matrix of the original data. So the pairwise problem has its own kernel, computed from the base kernel with no explicit features, and any dual algorithm of Chapter [[ch:support-vector-machines|Support Vector Machines]] runs on it unchanged. The one cost is size: with \(\ell\) instances there can be on the order of \(\ell^2\) preferred pairs. General kernel constructions justify the difference-space Gram representation [@scholkopf2002], while ranking-specific decomposition methods avoid materializing all comparisons [@joachims1999; @joachims2002].
 
 The reduction is more than an algebraic convenience. Every arrow from a less-preferred item to a more-preferred one becomes a point in difference space; reversing the preference negates that point. A ranking scorer is therefore a hyperplane through the origin that keeps preferred differences on its positive side.
 
@@ -134,6 +136,25 @@ with true order \(x_1 \succ x_2 \succ x_3 \succ x_4\). The candidate scoring dir
 4.  [Count the misordered pairs.]{.wex-op} Exactly one pair, \((2{\succ}3)\), is misordered, so the ranking risk is \(\widehat{R}(f) = 1/6 \approx 0.1667\).
 5.  [Check the pair kernel.]{.wex-op} Between pairs \((2{\succ}3)\) and \((1{\succ}4)\), \(\langle z_{23}, z_{14} \rangle = (1)(3) + (3)(-1) = 0\); via the Gram matrix, \(K_{21} - K_{24} - K_{31} + K_{34} = 15 - 9 - 8 + 2 = 0\), matching.
 
+The calculation is short enough to reproduce exactly:
+
+```python
+import numpy as np
+from itertools import combinations
+
+X = np.array([[4., 1.], [3., 3.], [2., 0.], [1., 2.]])
+y = np.array([4, 3, 2, 1])
+w = np.array([1., -1.])
+K = X @ X.T
+pairs = [(i, j) for i, j in combinations(range(4), 2) if y[i] > y[j]]
+margins = np.array([w @ (X[i] - X[j]) for i, j in pairs])
+risk = np.mean(margins <= 0)
+direct = (X[1] - X[2]) @ (X[0] - X[3])
+gram = K[1, 0] - K[1, 3] - K[2, 0] + K[2, 3]
+np.testing.assert_allclose(margins, [3, 1, 4, -2, 1, 3])
+np.testing.assert_allclose([risk, direct, gram], [1 / 6, 0, 0])
+```
+
 **Reading.** The whole ranking task has become a linear classification of six difference vectors, and the ranking risk is just their training error, here one pair in six. The pair kernel reproduces the difference-vector inner product from base-kernel entries alone, so nothing here needed the features explicitly.
 :::::
 ::::::
@@ -168,7 +189,7 @@ $$\max_{\alpha}\ \sum_{(ij) \in P} \alpha_{ij} - \frac12 \sum_{(ij),(kl) \in P} 
 
 This is precisely a support vector machine dual whose Gram matrix is the pair kernel, so any solver from Chapter [[ch:support-vector-machines|Support Vector Machines]] applies, and the resulting \(w\) lies in the span of the difference vectors, giving the kernelised scorer in the algorithm's output. Notice there is no equality constraint \(\sum_i \alpha_i y_i = 0\): every pairwise label is \(+1\) and the classifier passes through the origin, so the bias term is absent.
 
-Shawe-Taylor and Cristianini (2004) reach an equivalent optimiser from a stability bound rather than from a margin postulate. They upper bound the ranking risk by a Rademacher-style quantity built from the pairwise slacks and the trace of the kernel, then minimise that bound; the program that results is the same soft ranking objective, with a \(\nu\)-parametrisation (in the style of Chapter [[ch:support-vector-machines|Support Vector Machines]]) in which at most a fraction \(\nu\) of the constraints are allowed nonzero slack while at least a fraction \(\nu\) sit on the margin. The connection to generalisation is therefore not incidental: minimising the norm of \(w\) is minimising an upper bound on the probability that a fresh pair is misordered, the theme developed in Chapter [[ch:learning-theory|Learning Theory in RKHS Balls]].
+A stability analysis reaches an equivalent optimizer from a generalization bound rather than from a margin postulate [@shawe2004]. It upper bounds ranking risk by a Rademacher-style quantity built from pairwise slacks and the kernel trace, then minimizes that bound; the resulting program has the same soft ranking objective and a \(\nu\)-parametrization. The connection to generalization is therefore not incidental, but neither does the empirical pair expansion create independent observations: the sampling unit and group dependence still have to match the theorem.
 
 ## Online ranking: a perceptron for preferences {#online-ranking}
 
@@ -189,7 +210,7 @@ The batch SVM must hold all pairs in memory, which is costly when the data strea
 4.  Repeat over the stream (or over passes through a fixed set) until no pair is misordered or a pass budget is reached.
 ::::
 
-Because \(w\) is only ever incremented by difference vectors, it stays in their span, \(w = \sum_{(ij)} \alpha_{ij} z_{ij}\) with nonnegative integer-multiple coefficients when \(\eta = 1\), so the margin evaluates through the pair kernel exactly as in the batch case, and the update is kernelisable. The convergence guarantee is inherited wholesale from the perceptron: if the preferred pairs are separable with ranking margin \(\gamma\) and the difference vectors have norm at most \(R\), the number of updates is at most \((R/\gamma)^2\), by the Novikoff argument of Chapter [[ch:online-kernel-learning|Online Kernel Learning]] applied to the difference vectors. Shawe-Taylor and Cristianini (2004) give the matching stability bound for the ranking perceptron, and Crammer and Singer (2002) analyse the closely related online ordinal algorithm PRank that we meet in the next section.
+Because \(w\) is only ever incremented by difference vectors, it stays in their span, \(w = \sum_{(ij)} \alpha_{ij} z_{ij}\) with nonnegative integer-multiple coefficients when \(\eta = 1\), so the margin evaluates through the pair kernel exactly as in the batch case, and the update is kernelisable. If the preferred pairs are separable with ranking margin \(\gamma\) and the difference vectors have norm at most \(R\), the Novikoff argument from Chapter [[ch:online-kernel-learning|Online Kernel Learning]] gives at most \((R/\gamma)^2\) updates. The ranking stability analysis and PRank extension make the distinct batch and ordinal scopes explicit [@shawe2004; @crammer2002].
 
 :::::: {.example #example-8-2}
 [Example (one update fixes a swapped pair)]{.box-title}
@@ -207,6 +228,18 @@ Start from \(w_0 = (0, 1)\), learning rate \(\eta = 1\). Preferred pairs: \((1{\
 2.  [Form the offending difference vector.]{.wex-op} \(z_{23} = x_2 - x_3 = (2, -1)\), with margin \(\langle w_0, z_{23} \rangle = (0)(2) + (1)(-1) = -1 \le 0\), confirming the violation.
 3.  [Apply the perceptron update.]{.wex-op} \(w_1 = w_0 + \eta\, z_{23} = (0,1) + (2,-1) = (2, 0)\). The new margin on that pair is \(\langle w_1, z_{23} \rangle = (2)(2) + (0)(-1) = +4 \gt 0\), so the pair is now ordered.
 4.  [Recount over all pairs.]{.wex-op} With \(w_1 = (2, 0)\), \(f = (8,\, 6,\, 2)\), giving order \(x_1 \succ x_2 \succ x_3\). All three preferred pairs are correct: misordered count is zero.
+
+```python
+import numpy as np
+
+X = np.array([[4., 4.], [3., 0.], [1., 1.]])
+w0 = np.array([0., 1.])
+z23 = X[1] - X[2]
+w1 = w0 + z23
+np.testing.assert_allclose([w0 @ z23, w1 @ z23], [-1, 4])
+np.testing.assert_allclose(X @ w1, [8, 6, 2])
+assert np.all(np.diff(X @ w1) < 0)
+```
 
 **Reading.** A single correction along the difference vector of the swapped pair flips its margin from \(-1\) to \(+4\) and, here, repairs the entire ranking. This is the perceptron of Chapter [[ch:online-kernel-learning|Online Kernel Learning]] acting on pairs, and its update count is bounded by \((R/\gamma)^2\) just as in classification.
 :::::
@@ -234,7 +267,7 @@ $$\min_{w, b, \gamma, \xi}\ -\gamma + C \sum_{i=1}^\ell \big(\xi^u_i + \xi^l_i\b
 
 the soft ranking computation of Shawe-Taylor and Cristianini (2004). Its dual multipliers satisfy \(\sum_i (\alpha^u_i + \alpha^l_i) = 1\), and, with \(C = 1/(\nu \ell)\), at most a fraction \(\nu\) of the instances miss the margin at both adjacent thresholds while at least a fraction \(\nu\) achieve it, the familiar \(\nu\)-property transported to ranking.
 
-The online counterpart is the PRank algorithm of Crammer and Singer (2002), which maintains \(w\) together with the whole ordered vector of thresholds and updates both on a mistake. When an instance of true rank \(y_i\) is predicted at rank \(y = r_{\alpha, b}(x_i) \ne y_i\), the coefficient of \(x_i\) is adjusted by \(y_i - y\) and each threshold strictly between the predicted and true ranks is shifted one step toward correcting the error. A short case analysis, given in Shawe-Taylor and Cristianini (2004), shows the shifts can never cross two thresholds, so the update preserves \(b_y \le b_{y'}\) for \(y \prec y'\): the thresholds stay ordered, and the rule remains a valid ranking rule after every step. The stability of PRank follows from the perceptron mistake bound exactly as in the pairwise case, now with a factor \(|Y| - 1\) counting the thresholds an error can involve.
+The online counterpart is PRank, which maintains \(w\) together with the ordered threshold vector and updates both after a mistake [@crammer2002]. When an instance of true rank \(y_i\) is predicted at rank \(y\ne y_i\), the coefficient of \(x_i\) and every crossed threshold move toward correcting that interval error. The update preserves threshold order under its stated construction; a broader stability treatment connects this ordinal rule back to margin analysis [@shawe2004]. This is not the same target as pairwise AUC: thresholds must be identifiable and coherent even when many within-rank comparisons are irrelevant.
 
 ## Ranking and the area under the ROC curve {#auc}
 
@@ -275,6 +308,20 @@ Three positive items with scores \((0.9, 0.6, 0.4)\) and three negative items wi
 4.  [Total the pairs.]{.wex-op} Concordant \(= 3 + 2 + 1 = 6\), discordant \(= 3\), ties \(= 0\), so the Mann-Whitney statistic is \(U = 6\).
 5.  [Form the AUC.]{.wex-op} \(\mathrm{AUC} = U / 9 = 6/9 \approx 0.6667\), while the bipartite ranking risk is \(3/9 \approx 0.3333\), and indeed \(\mathrm{AUC} + \widehat{R}_{\text{bip}} = 1\).
 
+```python
+import numpy as np
+
+positive = np.array([0.9, 0.6, 0.4])
+negative = np.array([0.7, 0.5, 0.2])
+comparisons = positive[:, None] - negative[None, :]
+concordant = np.sum(comparisons > 0)
+discordant = np.sum(comparisons < 0)
+auc = concordant / comparisons.size
+risk = discordant / comparisons.size
+np.testing.assert_allclose([concordant, discordant, auc, risk],
+                           [6, 3, 2 / 3, 1 / 3])
+```
+
 **Reading.** No curve needs to be drawn: the AUC is a count of correctly ordered positive-negative pairs divided by the total. Because that count is exactly the complement of misordered pairs, a ranker trained to minimise pairwise risk is training its AUC upward.
 ::::
 :::::
@@ -285,7 +332,7 @@ Pairs derived from the same query or item are dependent, so a random split of pa
 
 ## Summary and further reading {#summary-and-further-reading}
 
-Pairwise ranking becomes ordinary margin learning on differences, with a four-term kernel that never materializes the feature map. This reduction makes the ranking SVM and perceptron immediate, but it can expand \(\ell\) items into \(O(\ell^2)\) comparisons and can overcount dependent pairs. Ordinal regression instead learns ordered thresholds around one score, and bipartite ranking connects pair inversions exactly to \(1-\mathrm{AUC}\). See [@herbrich2000] for the difference-space construction, [@joachims2002] for scalable ranking SVMs, and [@freund2003rank] for the online ranking perspective.
+Pairwise ranking becomes ordinary margin learning on differences, with a four-term kernel that never materializes the feature map. This reduction makes the ranking SVM and perceptron immediate, but it can expand \(\ell\) items into \(O(\ell^2)\) dependent comparisons. Ordinal regression instead learns ordered thresholds around one score, and bipartite ranking connects pair inversions exactly to \(1-\mathrm{AUC}\). The classical constructions cover difference-space ranking [@herbrich2000], scalable ranking SVMs [@joachims1999; @joachims2002], stability and ordinal reductions [@shawe2004], PRank [@crammer2002], and online pairwise boosting [@freund2003rank]. Chapter [[ch:learning-theory|Learning Theory in RKHS Balls]] supplies the next question: which sampling unit and complexity control turn these empirical margins into a valid population statement?
 
 ## Exercises {#exercises}
 

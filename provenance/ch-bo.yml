@@ -18,735 +18,151 @@ references:
   - gonzalez2016
   - kandasamy2015
   - wang2016rembo
+  - krause2008sensors
+  - gardner2014constraints
+  - sui2015safe
+  - kernelbook-code-ch-bo-ex1
+  - kernelbook-code-ch-bo-ex2
+  - kernelbook-code-ch-bo-ex3
+  - kandasamy2017multifidelity
 sections:
-  - id: sequential-optimization
-    title: Sequential optimization of an unknown function
-    contribution: adapted-and-expanded
-    sources: &a1
-      - shahriari2016
-      - frazier2018
-      - srinivas2010
-      - mockus1978
-      - jones1998
-      - thompson1933
-      - chowdhury2017
-      - russo2018
-      - snoek2012
-      - vakili2021
-      - desautels2014
-      - gonzalez2016
-      - kandasamy2015
-      - wang2016rembo
-      - krause2008sensors
-      - gardner2014constraints
-      - sui2015safe
-      - kandasamy2017multifidelity
-    locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#sequential-optimization
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: surrogate-gp
-    title: "The surrogate: a running Gaussian process belief"
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#surrogate-gp
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
   - id: acquisition
     title: Acquisition functions and the exploration-exploitation tradeoff
-    contribution: adapted-and-expanded
-    sources: *a1
+    contribution: synthesized-with-visible-executable-example
+    sources: [mockus1978, jones1998, thompson1933, snoek2012, kernelbook-code-ch-bo-ex1, kernelbook-code-ch-bo-ex2]
     locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: mockus1978
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-bo.md#expected-improvement
+        source_locator: Chapter 4, expected-improvement decision rule
+        status: author-located-pending-independent-verification
       - source: jones1998
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-bo.md#expected-improvement
+        source_locator: Section 3, efficient global optimization
+        status: author-located-pending-independent-verification
       - source: thompson1933
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-bo.md#thompson-sampling
+        source_locator: Pages 285-294, posterior probability matching
+        status: author-located-pending-independent-verification
       - source: snoek2012
         manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#acquisition
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3, practical Bayesian optimization
+        status: author-located-pending-independent-verification
+      - source: kernelbook-code-ch-bo-ex1
+        manuscript_locator: ch-bo.md#example-41-1
+        source_locator: checks/ch-bo-ex1.py
+        status: machine-checked-author-artifact
+      - source: kernelbook-code-ch-bo-ex2
+        manuscript_locator: ch-bo.md#example-41-2
+        source_locator: checks/ch-bo-ex2.py
+        status: machine-checked-author-artifact
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: regret
-    title: Regret and the maximum information gain
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: Regret and maximum information gain
+    contribution: adapted-with-complete-local-middle-proof
+    sources: [srinivas2010, chowdhury2017, russo2018, vakili2021, kernelbook-code-ch-bo-ex3]
     locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: srinivas2010
         manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Theorems 1-3 and Lemmas 5.1-5.3, GP-UCB confidence and regret
+        status: author-located-pending-independent-verification
       - source: chowdhury2017
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-bo.md#igp-ucb
+        source_locator: Theorems 1-3, self-normalized concentration and IGP-UCB
+        status: author-located-pending-independent-verification
       - source: russo2018
         manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 4-6, information-theoretic regret analysis
+        status: author-located-pending-independent-verification
       - source: vakili2021
         manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#regret
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Main theorem, refined maximum-information-gain bounds
+        status: author-located-pending-independent-verification
+      - source: kernelbook-code-ch-bo-ex3
+        manuscript_locator: ch-bo.md#example-41-3
+        source_locator: checks/ch-bo-ex3.py
+        status: machine-checked-author-artifact
     verified_by: null
     verified_on: null
     permission: citation-only
   - id: active-learning-and-design
     title: Active learning and experimental design
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - krause2008sensors
+    contribution: synthesized
+    sources: [krause2008sensors]
     locators:
       - source: krause2008sensors
         manuscript_locator: ch-bo.md#active-learning-and-design
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 3-4, submodular information-gain sensor placement
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
+    permission: citation-only
   - id: constrained-and-safe-bo
     title: Constrained and safe optimization
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - gardner2014constraints
-      - sui2015safe
+    contribution: synthesized-with-assumption-boundaries
+    sources: [gardner2014constraints, sui2015safe]
     locators:
       - source: gardner2014constraints
         manuscript_locator: ch-bo.md#constrained-and-safe-bo
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 3, constrained expected improvement
+        status: author-located-pending-independent-verification
       - source: sui2015safe
         manuscript_locator: ch-bo.md#constrained-and-safe-bo
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-3 and Theorem 1, safe-set expansion
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
+    permission: citation-only
   - id: multi-fidelity-and-cost-aware
     title: Multi-fidelity and cost-aware search
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - kandasamy2017multifidelity
+    contribution: synthesized
+    sources: [kandasamy2017multifidelity]
     locators:
       - source: kandasamy2017multifidelity
         manuscript_locator: ch-bo.md#multi-fidelity-and-cost-aware
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-4, continuous-fidelity model and regret analysis
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
+    permission: citation-only
   - id: batch-highdim
-    title: A note on batch and high-dimensional Bayesian optimization
-    contribution: adapted-and-expanded
-    sources: *a1
+    title: Batch, asynchronous, and high-dimensional Bayesian optimization
+    contribution: synthesized-with-structural-assumptions
+    sources: [desautels2014, gonzalez2016, kandasamy2015, wang2016rembo]
     locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: desautels2014
         manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-4 and Theorem 1, GP-BUCB
+        status: author-located-pending-independent-verification
       - source: gonzalez2016
         manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 3, local penalization
+        status: author-located-pending-independent-verification
       - source: kandasamy2015
         manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-4, additive high-dimensional optimization
+        status: author-located-pending-independent-verification
       - source: wang2016rembo
         manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#batch-highdim
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Section 3 and Theorem 2, random embeddings
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-  - id: summary
-    title: Summary
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: common-mistakes-and-practical-implications
-    title: Common mistakes and practical implications
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
   - id: summary-and-further-reading
     title: Summary and further reading
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - shahriari2016
-      - frazier2018
-      - srinivas2010
+    contribution: original-synthesis
+    sources: [shahriari2016, frazier2018]
     locators:
       - source: shahriari2016
         manuscript_locator: ch-bo.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-5, Bayesian-optimization taxonomy
+        status: author-located-pending-independent-verification
       - source: frazier2018
         manuscript_locator: ch-bo.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: exercises
-    title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: shahriari2016
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: frazier2018
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: srinivas2010
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: mockus1978
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: jones1998
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: thompson1933
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: chowdhury2017
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: russo2018
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: snoek2012
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: vakili2021
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: desautels2014
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gonzalez2016
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2015
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: wang2016rembo
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: krause2008sensors
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gardner2014constraints
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sui2015safe
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: kandasamy2017multifidelity
-        manuscript_locator: ch-bo.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: Sections 2-6, tutorial and practical extensions
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
-mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
-mapping_author:
-  name: Taha Bouhsine
-  website: https://www.tahabouhsine.com
-  affiliation: AzettaAI
-mapping_date: 2026-07-20

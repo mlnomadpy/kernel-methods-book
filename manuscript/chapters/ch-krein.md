@@ -38,6 +38,8 @@ bibliography:
   - kernelbook-code-ch-krein-ex2
   - kernelbook-code-ch-krein-ex3
   - vapnik1998
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Indefinite and Krein-Space Kernels
 
@@ -47,7 +49,7 @@ bibliography:
 
 The positive definite world of [[ch:kernels-and-rkhs|Chapter 1]] and the conditionally positive definite extension of [[ch:kernel-families|Chapter 8]] both keep one foot inside a Hilbert space: a p.d. kernel is an inner product after an embedding, and a conditionally p.d. kernel is a squared distance in one. Indefinite similarities leave that world entirely. They arise for concrete reasons, not as pathologies to be avoided.
 
-The sigmoid or \"neural network\" kernel \(k(x,x')=\tanh(a\,\langle x,x'\rangle+c)\), proposed to make a support vector machine mimic a two-layer perceptron, is positive definite only for a narrow range of \(a\) and \(c\), and indefinite almost everywhere else (Vapnik 1998; Lin and Lin 2003). The tangent distance built to be invariant to small image deformations is symmetric but not a metric, and its Gram matrix is indefinite. The edit distance between strings of [[ch:string-kernels|the string-kernel chapter]] and the dynamic time warping alignment score between series of [[ch:signature-and-time-series-kernels|the time-series chapter]] both violate the triangle inequality, and the similarities read off from them are indefinite. Protein-alignment scores such as Smith-Waterman, human similarity judgments, and countless application-specific matrices behave the same way. Schleif and Tino (2015) survey this landscape under the name indefinite proximity learning and make the point that indefiniteness is the rule, not the exception, once similarities come from an algorithm rather than a dot product.
+The sigmoid or \"neural network\" kernel \(k(x,x')=\tanh(a\,\langle x,x'\rangle+c)\), proposed to make a support vector machine mimic a two-layer perceptron, is positive definite only for a narrow range of \(a\) and \(c\), and indefinite almost everywhere else [@vapnik1998; @linlin2003]. The tangent distance built to be invariant to small image deformations is symmetric but not a metric, and its Gram matrix is indefinite. The edit distance between strings of [[ch:string-kernels|the string-kernel chapter]] and the dynamic time warping alignment score between series of [[ch:signature-and-time-series-kernels|the time-series chapter]] both violate the triangle inequality, and the similarities read off from them are indefinite. Protein-alignment scores such as Smith-Waterman, human similarity judgments, and countless application-specific matrices behave the same way. Schleif and Tino survey this landscape under the name indefinite proximity learning and make the point that indefiniteness is the rule, not the exception, once similarities come from an algorithm rather than a dot product [@schleif2015].
 
 What exactly goes wrong is best seen on a small matrix. Take the sigmoid kernel with \(a=\tfrac12\), \(c=\tfrac15\) on the three one-dimensional points \(x=(-1,1,3)\). Its Gram matrix and spectrum are
 
@@ -61,7 +63,7 @@ A negative squared distance cannot occur among points of any Euclidean space. Th
 
 ## Krein spaces and the \(k=k_+-k_-\) decomposition {#krein-spaces}
 
-Before repairing the matrix, it pays to ask what geometry an indefinite kernel does describe, because it describes one perfectly well, just not a Hilbert geometry. The right setting was identified by Ong, Mary, Canu, and Smola (2004), building on the operator-theoretic reproducing kernel Krein spaces of Schwartz (1964) and Alpay (1991). The idea is to allow the feature space to have directions of negative squared length.
+Before repairing the matrix, it pays to ask what geometry an indefinite kernel does describe, because it describes one perfectly well, just not a Hilbert geometry. The right setting was identified by Ong, Mary, Canu, and Smola, building on the operator-theoretic reproducing kernel Krein spaces of Schwartz and Alpay [@ong2004krein; @schwartz1964; @alpay1991]. The idea is to allow the feature space to have directions of negative squared length.
 
 ### Indefinite inner products {#indefinite-inner-products}
 
@@ -112,8 +114,15 @@ $$k=k_+-k_-,$$
 
 where \(k_+\) and \(k_-\) are the reproducing kernels of the Hilbert spaces \(\mathcal H_+\) and \(\mathcal H_-\) of a fundamental decomposition. The decomposition is not unique: adding any common positive definite kernel \(p\) to both, \(k=(k_++p)-(k_-+p)\), leaves \(k\) unchanged, and among all decompositions there is a minimal one.
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
-**Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
+**Assumptions.** The kernel is real valued and symmetric, and the positive
+decomposition defines Hilbert spaces in which every point evaluation is
+continuous.
+
+**Proof status.** The infinite-domain completion and minimal-decomposition
+statement are imported from Sections 2--3 of [@ong2004krein], not reproved
+here. The finite-sample signed Gram decomposition used computationally in this
+chapter is proved completely in the next lemma. Diagonalizing one training
+matrix does not construct compatible kernels on all future finite subsets.
 ::::
 
 The contrast with the positive definite world is exact and worth stating in one line. In an RKHS the kernel is a single positive definite object and \(\langle f,f\rangle_{\mathcal H}=\|f\|_{\mathcal H}^2\ge 0\) is a true squared norm. In an RKKS the kernel is a difference \(k_+-k_-\), and \(\langle f,f\rangle_{\mathcal K}\) is indefinite. The positive part \(k_+\) carries the ordinary similarity; the negative part \(k_-\) is the correction that a plain inner product cannot express.
@@ -125,7 +134,9 @@ On a finite sample the decomposition is nothing more than the spectral split of 
 
 Every symmetric \(K\in\mathbb R^{n\times n}\) decomposes as \(K=K_+-K_-\) with \(K_+,K_-\succeq 0\), built from the eigendecomposition \(K=U\Lambda U^\top\) by \(K_+=U\Lambda_+U^\top\) and \(K_-=U\Lambda_-U^\top\), where \((\Lambda_+)_{ii}=\max(\lambda_i,0)\) and \((\Lambda_-)_{ii}=\max(-\lambda_i,0)\). Moreover the feature map \(\Phi(x_i)_\ell=\sqrt{|\lambda_\ell|}\,U_{i\ell}\) with signature \(J=\operatorname{diag}(\operatorname{sign}\lambda_\ell)\) reproduces \(K\) as an indefinite inner product, \(K_{ij}=\Phi(x_i)^\top J\,\Phi(x_j)\).
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+**Assumptions.** \(K\) is a finite real symmetric matrix; its orthonormal
+eigendecomposition exists by the spectral theorem, and zero eigenvalues carry
+zero coordinates in the signed feature map.
 **Proof status.** Proved immediately below.
 :::
 
@@ -155,6 +166,24 @@ $$K_+=\begin{pmatrix}0.6761 & -0.3753 & -0.7559\\ -0.3753 & 0.7026 & 0.8116\\ -0
 4.  [Read off the Krein feature map.]{.wex-op} With \(\Phi(x_i)_\ell=\sqrt{|\lambda_\ell|}\,U_{i\ell}\) and signature \(J=\operatorname{diag}(-1,+1,+1)\), the rows are \(\Phi(x_1)=(0.2678,0.4173,-0.7085)\), \(\Phi(x_2)=(-0.3134,0.3742,0.7500)\), \(\Phi(x_3)=(0.3952,0.0139,1.0751)\). The indefinite inner product \(\Phi(x_i)^\top J\,\Phi(x_j)\) reproduces \(K\) exactly.
 
 **Reading.** The first coordinate, weighted by \(-1\) in \(J\), is the \(\mathcal H_-\) direction: it is where the geometry runs backward. The Krein squared norms \(\langle\Phi(x_i),\Phi(x_i)\rangle_{\mathcal K}\) equal the diagonal \((0.6044,0.6044,0.9998)\), all positive here, yet the negative eigenvalue still forced the impossible distance \(d^2(2,3)\lt 0\) of the previous section, because that distance mixes the backward direction across two points. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex2].
+
+```python
+import numpy as np
+
+x = np.array([-1.0, 1.0, 3.0])
+K = np.tanh(0.5 * np.outer(x, x) + 0.2)
+eigenvalues, U = np.linalg.eigh(K)
+K_pos = (U * np.maximum(eigenvalues, 0.0)) @ U.T
+K_neg = (U * np.maximum(-eigenvalues, 0.0)) @ U.T
+J = np.diag(np.sign(eigenvalues))
+Phi = U * np.sqrt(np.abs(eigenvalues))
+
+assert np.linalg.eigvalsh(K_pos).min() > -1e-12
+assert np.linalg.eigvalsh(K_neg).min() > -1e-12
+assert np.allclose(K_pos - K_neg, K)
+assert np.allclose(Phi @ J @ Phi.T, K)
+print(eigenvalues, K_pos, K_neg)
+```
 ::::
 :::::
 
@@ -187,15 +216,51 @@ Let \(k\) be the reproducing kernel of an RKKS \(\mathcal K\), and let \(J(f)=c\
 
 $$f^\star=\sum_{i=1}^n \alpha_i\,k(x_i,\cdot),\qquad \alpha\in\mathbb R^n.$$
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
-**Proof status.** No separate proof is attached to this result; independent technical review must determine whether the surrounding derivation is sufficient.
+**Assumptions.** Evaluations are continuous; \(c\) and \(\Omega\) are
+differentiable at the claimed stabilizer; \(\Omega'\ne0\) there; a stabilizer
+exists; and the data-section span is nondegenerate, so it has a
+Krein-orthogonal complement.
+
+**Proof status.** Complete below for this nondegenerate finite-observation
+scope. Degenerate formulations require the quotient-space treatment in
+[@ong2004krein].
 ::::
 
-The proof is the Krein version of the RKHS argument: decompose \(f=f_\parallel+f_\perp\) into its part in \(\mathrm{span}\{k(x_i,\cdot)\}\) and the orthogonal remainder in the associated Hilbert space. The values \(f(x_i)=\langle f,k(x_i,\cdot)\rangle_{\mathcal K}\) depend only on \(f_\parallel\), and \(\langle f,f\rangle_{\mathcal K}\) splits so that \(f_\perp\) enters only through its own indefinite square, which stationarity sends to zero. Substituting the expansion, \(f^\star(x_i)=(K\alpha)_i\) and \(\langle f^\star,f^\star\rangle_{\mathcal K}=\alpha^\top K\alpha\) with the indefinite Gram matrix \(K\), so the infinite-dimensional saddle collapses to a finite one in \(\alpha\). Everything now depends on the sign structure of \(K\), and that is where the practical trouble concentrates.
+:::: {.proof}
+[Proof]{.box-title}
+
+Let \(\mathcal S=\operatorname{span}\{k(x_i,\cdot)\}_{i=1}^n\). By
+nondegeneracy, write \(f^\star=s+r\) with \(s\in\mathcal S\) and
+\(r\in\mathcal S^{[\perp]}\), where orthogonality is for the Krein form.
+Reproduction gives
+
+$$
+r(x_i)=\langle r,k(x_i,\cdot)\rangle_{\mathcal K}=0,
+$$
+
+so the data term has zero directional derivative in every
+\(h\in\mathcal S^{[\perp]}\). Stationarity of \(J\) yields
+
+$$
+0=2\Omega'\{\langle f^\star,f^\star\rangle_{\mathcal K}\}
+\,\langle r,h\rangle_{\mathcal K}
+$$
+
+for every such \(h\). Since \(\Omega'\ne0\) and the form is nondegenerate on
+\(\mathcal S^{[\perp]}\), this forces \(r=0\). Hence
+\(f^\star=s=\sum_i\alpha_i k(x_i,\cdot)\). Substitution gives
+\(f^\star(x_i)=(K\alpha)_i\) and
+\(\langle f^\star,f^\star\rangle_{\mathcal K}=\alpha^\top K\alpha\).
+[\(\square\)]{.qed}
+::::
+
+The finite reduction survives, but its variational meaning has changed from a
+minimum to a stabilizer. Everything now depends on the sign structure of
+\(K\), and that is where the practical trouble concentrates.
 
 ## Spectrum transformations {#spectrum-transforms}
 
-The RKKS theory tells us the geometry is coherent and the solution is a finite expansion. It does not, by itself, make the standard convex solvers apply, because those were built for a positive semidefinite \(K\). The most common response in practice is blunt and often effective: change the eigenvalues of \(K\) until it is positive semidefinite, then hand the repaired matrix to an ordinary kernel machine. Chen, Garcia, Gupta, Rahimi, and Cazzanti (2009) and Wu, Chang, and Zhang (2005) catalog the options; three act directly on the spectrum.
+The RKKS theory tells us the geometry is coherent and the solution is a finite expansion. It does not, by itself, make the standard convex solvers apply, because those were built for a positive semidefinite \(K\). The most common response in practice is blunt and often effective: change the eigenvalues of \(K\) until it is positive semidefinite, then hand the repaired matrix to an ordinary kernel machine. Chen, Garcia, Gupta, Rahimi, and Cazzanti and Wu, Chang, and Zhang catalog the options [@chen2009similarity; @wu2005]; three act directly on the spectrum.
 
 :::: {.algorithm #algo-28-1}
 [Algorithm (spectrum transformation of an indefinite Gram matrix)]{.box-title}
@@ -222,7 +287,7 @@ The RKKS theory tells us the geometry is coherent and the solution is a finite e
 <figcaption>The bars are the spectrum of a tanh similarity on ten points; negative bars form the Krein part, and a steeper slope drives them farther below zero. Each repair recomposes the matrix from altered eigenvalues. The Frobenius comparison shows that clipping changes the finite Gram matrix least, exactly the nearest-PSD result proved above; the web version varies the slope and repair.</figcaption>
 </figure>
 
-Each transform embodies a different belief about the negative eigenvalues, and each pays a different price. Clip declares them noise and deletes them; it yields \(K_+\), which is exactly the nearest positive semidefinite matrix to \(K\) in Frobenius norm (Higham 1988), so it is the least violent repair, but it throws away whatever signal the negative part carried. Flip declares the negative directions informative and keeps their magnitude, \(|\lambda_i|\), which preserves all spectral energy but reverses the geometry along those directions. Shift lifts the entire spectrum by \(|\lambda_{\min}|\); it preserves every eigenvector and every off-diagonal similarity, touching only the diagonal, but it inflates each point's self-similarity and can be a large perturbation when \(\lambda_{\min}\) is very negative.
+Each transform embodies a different belief about the negative eigenvalues, and each pays a different price. Clip declares them noise and deletes them; it yields \(K_+\), which is exactly the nearest positive semidefinite matrix to \(K\) in Frobenius norm [@higham1988], so it is the least violent repair, but it throws away whatever signal the negative part carried. Flip declares the negative directions informative and keeps their magnitude, \(|\lambda_i|\), which preserves all spectral energy but reverses the geometry along those directions. Shift lifts the entire spectrum by \(|\lambda_{\min}|\); it preserves every eigenvector and every off-diagonal similarity, touching only the diagonal, but it inflates each point's self-similarity and can be a large perturbation when \(\lambda_{\min}\) is very negative.
 
   Transform        Map on \(\lambda_i\)   Result                                 Keeps                               Cost
   ---------------- --------------------------------------------- -------------------------------------- ----------------------------------- ----------------------------------------------------------------------------
@@ -247,10 +312,29 @@ $$K_{\text{clip}}=\begin{pmatrix}0.6761 & -0.3753 & -0.7559\\ -0.3753 & 0.7026 &
 4.  [Compare the predictions.]{.wex-op} The fitted values \(f=\tilde K(\tilde K+\rho I)^{-1}y\) are \((0.129,-0.080,-0.151)\) for clip, \((0.145,-0.070,-0.154)\) for shift, but \((0.446,-0.450,0.317)\) for flip. Reading the classifier as \(\operatorname{sign} f\), clip and shift both label point \(3\) negative while flip labels it positive.
 
 **Reading.** The three transforms are not cosmetic variants; they are three different models. Shift stays closest to the raw similarity because it changes only the diagonal, and clip stays closest in matrix norm, yet flip disagrees with both on the sign of a prediction. The choice of repair is a modeling decision that a validation set, not the algebra, must make. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex1].
+
+```python
+import numpy as np
+
+x = np.array([-1.0, 1.0, 3.0])
+y = np.array([1.0, -1.0, 1.0])
+K = np.tanh(0.5 * np.outer(x, x) + 0.2)
+eigenvalues, U = np.linalg.eigh(K)
+spectra = {
+    "clip": np.maximum(eigenvalues, 0.0),
+    "flip": np.abs(eigenvalues),
+    "shift": eigenvalues - eigenvalues.min(),
+}
+for name, repaired_spectrum in spectra.items():
+    repaired = (U * repaired_spectrum) @ U.T
+    fitted = repaired @ np.linalg.solve(repaired + 0.5 * np.eye(3), y)
+    assert np.linalg.eigvalsh(repaired).min() > -1e-12
+    print(name, np.round(fitted, 4), np.sign(fitted).astype(int))
+```
 :::
 ::::
 
-Two caveats keep these heuristics honest. First, all four transforms are operations on the *training* Gram matrix. Extending them to a new test point is not automatic: the eigenvectors \(U\) were computed from the training data, so a new similarity vector must be projected through them and the same spectral map applied, an approximation that is exact only for shift, which never touches off-diagonals. The square transform sidesteps this because it has an explicit feature map: taking each row of \(K\) as the feature vector \(\phi(x)=(k(x,x_1),\dots,k(x,x_n))\), the linear kernel of these vectors is \(\langle\phi(x_i),\phi(x_j)\rangle=(K^\top K)_{ij}=(K^2)_{ij}\), always positive semidefinite and trivially evaluated on new points, which is why Chen et al. (2009) and Pekalska and Duin (2005) treat \"similarities as features\" as the safest embedding when out-of-sample consistency matters. Second, clipping is provably the closest positive semidefinite matrix, but \"closest in Frobenius norm\" is not the same as \"best for the task\": if the negative eigenvalues encode real structure, as they do for tangent and warping similarities, deleting them discards signal, and flip or an honest Krein method will do better.
+Two caveats keep these heuristics honest. First, all four transforms are operations on the *training* Gram matrix. Extending them to a new test point is not automatic: the eigenvectors \(U\) were computed from the training data, so a new similarity vector must be projected through them and the same spectral map applied, an approximation that is exact only for shift, which never touches off-diagonals. The square transform sidesteps this because it has an explicit feature map: taking each row of \(K\) as the feature vector \(\phi(x)=(k(x,x_1),\dots,k(x,x_n))\), the linear kernel of these vectors is \(\langle\phi(x_i),\phi(x_j)\rangle=(K^\top K)_{ij}=(K^2)_{ij}\), always positive semidefinite and trivially evaluated on new points, which is why similarities-as-features are often the safest embedding when out-of-sample consistency matters [@chen2009similarity; @pekalska2005]. Second, clipping is provably the closest positive semidefinite matrix, but \"closest in Frobenius norm\" is not the same as \"best for the task\": if the negative eigenvalues encode real structure, as they do for tangent and warping similarities, deleting them discards signal, and flip or an honest Krein method will do better.
 
 ## Learning the SVM in a Krein space {#krein-svm}
 
@@ -261,21 +345,36 @@ $$\max_{\alpha\in\mathbb R^n}\ \sum_{i=1}^n \alpha_i-\tfrac12\,\alpha^\top G\,\a
 Its good behavior rests entirely on \(G\) being positive semidefinite, which makes the objective concave and the problem a convex quadratic program with a unique solution. An indefinite kernel destroys exactly this.
 
 ::: {.proposition #prop-28-7}
-[Proposition (indefinite kernel gives a non-convex dual)]{.box-title}
+[Proposition (when an indefinite kernel gives a nonconcave SVM dual)]{.box-title}
 
-If \(K\) has a negative eigenvalue, then \(G=\operatorname{diag}(y)\,K\,\operatorname{diag}(y)\) has one too, so the Hessian \(-G\) of the dual objective is indefinite and the objective is not concave.
+If \(K\) has a negative eigenvalue, then
+\(G=\operatorname{diag}(y)K\operatorname{diag}(y)\) has one too, so the dual
+quadratic is not concave on the ambient coefficient space. It is nonconcave
+on the equality-feasible affine space when there exists a direction \(v\)
+with \(y^\top v=0\) and \(v^\top Gv\lt 0\).
 
-**Assumptions.** All domains, quantifiers, regularity conditions, and parameter restrictions stated in the result are in force; no converse is implied.
+**Assumptions.** Labels satisfy \(y_i\in\{-1,+1\}\). For the constrained
+conclusion, the displayed feasible negative-curvature direction exists and can
+be scaled to remain inside the box constraints locally.
 **Proof status.** Proved immediately below.
 :::
 
 ::: {.proof}
 [Proof]{.box-title}
 
-Let \(D=\operatorname{diag}(y)\). Because \(y_i\in\{-1,+1\}\), we have \(D^\top=D\) and \(D^2=I\), so \(D\) is orthogonal with \(D^{-1}=D\). Then \(G=DKD=DKD^{-1}\) is a similarity transform of \(K\) by an orthogonal matrix, and similar matrices have identical spectra, so \(\operatorname{eig}(G)=\operatorname{eig}(K)\) and the negative eigenvalue of \(K\) is inherited by \(G\). Concavity of \(\alpha\mapsto-\tfrac12\alpha^\top G\alpha\) is equivalent to \(-G\preceq 0\), that is to \(G\succeq 0\), which the inherited negative eigenvalue contradicts. For general nonzero weights \(D\) the same conclusion follows from Sylvester's law of inertia, since \(G=DKD^\top\) is a congruence and preserves the number of negative eigenvalues. [\(\square\)]{.qed}
+Let \(D=\operatorname{diag}(y)\). Because \(y_i\in\{-1,+1\}\), we have \(D^\top=D\) and \(D^2=I\), so \(D\) is orthogonal with \(D^{-1}=D\). Then \(G=DKD=DKD^{-1}\) is a similarity transform of \(K\) by an orthogonal matrix, and similar matrices have identical spectra. Thus the negative eigenvalue of \(K\) is inherited by \(G\), and the ambient Hessian \(-G\) has a positive direction.
+
+On the equality-feasible tangent space, a direction must additionally satisfy
+\(y^\top v=0\). Along such a \(v\), the second directional derivative of the
+dual objective is \(-v^\top Gv\). It is positive when \(v^\top Gv\lt 0\),
+contradicting concavity on that affine space. A sufficiently small step from a
+relative-interior feasible point preserves the box constraints. An ambient
+negative eigenvector need not lie in this tangent space; the worked example
+therefore supplies the required feasible witness explicitly.
+[\(\square\)]{.qed}
 :::
 
-The consequence is not a mere inconvenience. An indefinite quadratic program is non-convex, has in general multiple local maxima, and is NP-hard to solve globally, so a sequential minimal optimization solver run on an indefinite \(K\) converges to a stationary point that need not be the global optimum (Lin and Lin 2003). Haasdonk (2005) gives this stationary point a precise geometric meaning: it minimizes the distance between reduced convex hulls in the pseudo-Euclidean feature space of the Krein embedding, so the machine is still separating the classes, just in an indefinite metric where \"maximum margin\" is no longer defined.
+The consequence is not a mere inconvenience. An indefinite quadratic program is non-convex, has in general multiple local maxima, and is NP-hard to solve globally, so a sequential minimal optimization solver run on an indefinite \(K\) converges to a stationary point that need not be the global optimum [@linlin2003]. Haasdonk gives this stationary point a precise geometric meaning: it minimizes the distance between reduced convex hulls in the pseudo-Euclidean feature space of the Krein embedding, so the machine is still separating the classes, just in an indefinite metric where \"maximum margin\" is no longer defined [@haasdonk2005].
 
 ::::: {.example #example-28-3}
 [Example (the dual loses concavity)]{.box-title}
@@ -290,10 +389,26 @@ $$G=\begin{pmatrix}0.6044 & 0.2913 & -0.8617\\ 0.2913 & 0.6044 & -0.9354\\ -0.86
 3.  [Read the curvature.]{.wex-op} Along \(v\) the dual objective has curvature \(-v^\top G v=+0.2782\gt 0\): it curves upward inside the feasible set, so it is not concave there.
 
 **Reading.** The box constraints keep the feasible set compact, so a maximum still exists, but the objective is a saddle-shaped quadratic and the maximizer can sit at any of several stationary points. The convexity that made the SVM tractable was exactly the positive definiteness of the kernel, and nothing less. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-krein-ex3].
+
+```python
+import numpy as np
+
+x = np.array([-1.0, 1.0, 3.0])
+y = np.array([1.0, -1.0, 1.0])
+K = np.tanh(0.5 * np.outer(x, x) + 0.2)
+G = np.diag(y) @ K @ np.diag(y)
+direction = np.array([1.0, 2.0, 1.0])
+
+assert np.allclose(np.linalg.eigvalsh(G), np.linalg.eigvalsh(K))
+assert np.isclose(y @ direction, 0.0)
+curvature = -(direction @ G @ direction)
+assert curvature > 0.0
+print(np.linalg.eigvalsh(G), curvature)
+```
 ::::
 :::::
 
-Loosli, Canu, and Ong (2016) resolve this without ever deleting the negative eigenvalues, by taking the stabilization principle seriously. Their Krein SVM stabilizes the regularized hinge risk directly in the RKKS,
+Loosli, Canu, and Ong resolve this without ever deleting the negative eigenvalues, by taking the stabilization principle seriously [@loosli2016krein]. Their Krein SVM stabilizes the regularized hinge risk directly in the RKKS,
 
 $$\operatorname*{stab}_{f\in\mathcal K}\ \tfrac12\,\langle f,f\rangle_{\mathcal K}+C\sum_{i=1}^n\max\big(0,\,1-y_if(x_i)\big),$$
 
@@ -314,7 +429,7 @@ which by the representer theorem is a finite saddle problem in \(\alpha\) with \
 4.  Classify a new point by \(\operatorname{sign}\big(\sum_i\beta_i\,k(x_i,x)+b\big)\), evaluated with the original indefinite kernel \(k\).
 ::::
 
-The difference from clipping is now sharp. Clipping trains and predicts with \(K_+\), erasing \(k_-\) entirely; the Krein SVM uses \(|K|=k_++k_-\) only as a computational device to convexify the stabilization, then predicts with \(k=k_+-k_-\). The negative part is carried through to the decision function rather than thrown away. Oglic and Gärtner (2018, 2019) push this further, formulating learning in the RKKS as a principled min-max problem with a regularizer on the negative component, and giving scalable solvers with convergence guarantees, so that the arbitrariness of choosing among clip, flip, and shift is replaced by a single well-posed objective.
+The difference from clipping is now sharp. Clipping trains and predicts with \(K_+\), erasing \(k_-\) entirely; the Krein SVM uses \(|K|=k_++k_-\) only as a computational device to convexify the stabilization, then predicts with \(k=k_+-k_-\). The negative part is carried through to the decision function rather than thrown away. Oglic and Gärtner push this further, formulating learning in the RKKS as a principled min-max problem with a regularizer on the negative component, and giving scalable solvers with convergence guarantees [@oglic2018; @oglic2019], so that the arbitrariness of choosing among clip, flip, and shift is replaced by a single well-posed objective.
 
 ## Summary {#summary}
 
@@ -324,6 +439,12 @@ Symmetric similarities that are not positive definite are common, not exotic: th
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
 Declare an eigenvalue tolerance relative to \(\|K\|\); tiny negative values from rounding are not evidence of meaningful Krein geometry. A finite Gram decomposition does not by itself define one globally valid out-of-sample kernel split. Clip, flip, and shift are different models, not interchangeable numerical cleanups, and a transductive spectrum repair needs an explicit rule for new points. In an RKKS the indefinite form is not a norm and regularized learning is a saddle-point stabilization, so do not reuse RKHS convexity arguments unchanged. State whether prediction uses the original indefinite similarity or the repaired matrix, and compare both accuracy and spectral distortion.
+
+Those diagnostics feed directly into
+[[ch:applications-and-practice|the applications workflow]]: negative spectral
+mass, the chosen repair, its out-of-sample extension, and prediction
+sensitivity across repairs belong in the model record. A repaired training
+matrix without a declared test-time kernel is not a deployable kernel method.
 
 ## Summary and further reading {#summary-and-further-reading}
 

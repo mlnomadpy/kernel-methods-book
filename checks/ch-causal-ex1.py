@@ -67,6 +67,8 @@ Kz = H @ rbf(Z) @ H
 Ky = H @ rbf(Y) @ H
 Ry = eps * np.linalg.solve(Ky + eps * np.eye(n), np.eye(n))
 T_ci = np.trace((Ry @ Kxd @ Ry) @ (Ry @ Kz @ Ry)) / n
+assert np.isclose(hsic_b(X, Z), 0.0844, atol=5e-5)
+assert T_ci < 1e-10
 print("T_CI(X,Z | Y) = %.6f   (X, Z conditionally independent given Y)" % T_ci)
 print("ratio T_CI(X,Z|Y) / HSIC_b(X,Z) = %.4g" % (T_ci / hsic_b(X, Z)))
 
@@ -76,4 +78,6 @@ Kzd = H @ rbf(Zdep) @ H
 Xd2 = np.column_stack([X, Y])
 Kxd2 = H @ rbf(Xd2) @ H
 T_dep = np.trace((Ry @ Kxd2 @ Ry) @ (Ry @ Kzd @ Ry)) / n
+assert np.isclose(T_dep, 0.097063, atol=1e-6)
+assert T_dep > 1e6 * T_ci
 print("T_CI when Z depends on X given Y = %.6f   (statistic is not vacuous)" % T_dep)

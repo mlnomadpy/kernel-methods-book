@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-ot
 slug: optimal-transport-and-kernels
 title: Optimal Transport and Kernels
@@ -43,6 +44,7 @@ bibliography:
   - genevay2018
   - feydy2019sinkhorn
   - dudley1969
+narrative_link_policy: exact
 ---
 # Optimal Transport and Kernels
 
@@ -60,7 +62,9 @@ Optimal transport is the answer to a different question. Picture \(P\) as a dist
 
 ## The Monge and Kantorovich problems {#monge-kantorovich}
 
-### Monge's map {#monge}
+<span id="monge"></span>
+
+**Monge's map.**
 
 The original 1781 formulation of Monge asks for a transport *map*: a function \(T:\mathcal X\to\mathcal X\) that sends each grain at \(x\) to a single destination \(T(x)\), pushing \(P\) onto \(Q\) (written \(T_\sharp P=Q\), meaning \(Q(A)=P(T^{-1}(A))\) for every measurable \(A\)) at least total cost,
 
@@ -198,6 +202,29 @@ ground cost \(c(x,y)=|x-y|\) for \(W_1\) and \(|x-y|^2\) for \(W_2\).
 5.  [Contrast with a kernel discrepancy.]{.wex-op} The energy distance \(\mathcal E(P,Q)=2\,\mathbb E|X-Y|-\mathbb E|X-X'|-\mathbb E|Y-Y'|\), which is an MMD with kernel \(-|x-y|\) (Sejdinovic, Sriperumbudur, Gretton, and Fukumizu 2013), evaluates to \(2(2.1111)-2.2222-1.3333=0.6667\) on the same pair.
 
 **Reading.** Sorting solves one-dimensional transport exactly, and the monotone pairing beats the crossed one by a factor of three here. The Wasserstein distance \(1.0\) and the energy-distance MMD \(0.6667\) are different numbers reading different things off the same two samples: one the least work to move the mass, the other a fixed-feature discrepancy. We will see them reappear as the two limits of a single object.
+
+The visible calculation checks the monotone coupling against a deliberately
+crossed plan and computes the kernel energy discrepancy on the same atoms.
+
+```python
+import numpy as np
+
+x = np.array([0., 2., 5.])
+y = np.array([1., 3., 4.])
+xs, ys = np.sort(x), np.sort(y)
+w1 = np.mean(np.abs(xs - ys))
+crossed = np.mean(np.abs(xs - ys[::-1]))
+
+def mean_distance(a, b):
+    return np.mean(np.abs(a[:, None] - b[None, :]))
+
+energy = 2*mean_distance(x, y) - mean_distance(x, x) - mean_distance(y, y)
+assert np.isclose(w1, 1.)
+assert np.isclose(crossed, 3.)
+assert np.isclose(energy, 2/3)
+assert w1 < crossed
+print(w1, crossed, energy)
+```
 :::::
 ::::::
 
@@ -307,6 +334,54 @@ The Gibbs kernel is \(K=e^{-C}\), with \(e^{-1}=0.3679\) and \(e^{-4}=0.0183\).
 
 **Reading.** Each column update locks the column marginal onto \(b\) exactly while leaving the rows slightly off; the next row update repairs the rows, and the marginal error halves each pass. The converged plan carries mass rightward (the large entries sit above the diagonal), matching the left-heavy \(a\) to the right-heavy \(b\) as an entropically blurred version of the optimal map, all from repeated matrix-vector products.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+
+x = np.array([0.0, 1.0, 2.0])
+y = np.array([0.0, 1.0, 2.0])
+C = (x[:, None] - y[None, :]) ** 2
+a = np.array([0.5, 0.2, 0.3])
+b = np.array([0.2, 0.3, 0.5])
+eps = 1.0
+K = np.exp(-C / eps)
+
+print("C =\n", C)
+print("K = exp(-C/eps) =\n", np.round(K, 4))
+
+u = np.ones(3)
+v = np.ones(3)
+for t in range(1, 5):
+    u = a / (K @ v)
+    v = b / (K.T @ u)
+    P = u[:, None] * K * v[None, :]     # diag(u) K diag(v)
+    row = P.sum(axis=1)
+    col = P.sum(axis=0)
+    err = np.abs(row - a).sum() + np.abs(col - b).sum()
+    cost = float((C * P).sum())
+    print(f"--- iteration {t} ---")
+    print("u =", np.round(u, 4), " v =", np.round(v, 4))
+    print("plan pi =\n", np.round(P, 4))
+    print("row sums =", np.round(row, 4), " (target a =", a, ")")
+    print("col sums =", np.round(col, 4), " (target b =", b, ")")
+    print("marginal error |row-a|+|col-b| =", round(float(err), 4))
+    print("transport cost <C,pi> =", round(cost, 4))
+
+# converged reference (many iterations) for the transport cost
+for _ in range(2000):
+    u = a / (K @ v)
+    v = b / (K.T @ u)
+Pstar = u[:, None] * K * v[None, :]
+print("=== converged ===")
+print("plan pi* =\n", np.round(Pstar, 4))
+print("row sums =", np.round(Pstar.sum(1), 4))
+print("col sums =", np.round(Pstar.sum(0), 4))
+print("transport cost <C,pi*> =", round(float((C * Pstar).sum()), 4))
+```
 ::::::
 
 ## Sinkhorn divergences: debiasing and the bridge to MMD {#sinkhorn-divergences}
@@ -386,7 +461,7 @@ For **Optimal Transport and Kernels**, specify the ground cost, its units, and t
 
 ## Summary and further reading {#summary-and-further-reading}
 
-Kantorovich [@kantorovich1942] introduced the coupling relaxation, and Villani [@villani2009] develops its modern geometry and duality. The comparison with energy distance and MMD is made precise by Sejdinovic et al. [@sejdinovic2013]. The practical decision is now explicit: use transport when movement in the ground space is the estimand, MMD when stable high-dimensional estimation is primary, and Sinkhorn divergence when a controlled compromise is preferable to either endpoint.
+Kantorovich [@kantorovich1942] introduced the coupling relaxation, and Villani [@villani2009] develops its modern geometry and duality; [@dudley1969] supplies the weak-convergence boundary. The MMD and energy-distance comparison is made precise by [@gretton2012; @sriperumbudur2012; @sejdinovic2013], while empirical transport rates appear in [@fournier2015]. Matrix scaling begins with [@sinkhorn1967], entropic transport with [@cuturi2013sinkhorn], and the computational treatment is surveyed in [@peyre2019cot]. Sinkhorn divergences and their statistical interpolation are analyzed in [@genevay2018; @feydy2019sinkhorn]. The practical decision is now explicit: use transport when movement in the ground space is the estimand, MMD when stable high-dimensional estimation is primary, and Sinkhorn divergence when a controlled compromise is preferable to either endpoint.
 
 ## Exercises {#exercises}
 

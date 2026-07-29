@@ -4,6 +4,7 @@ title: Structured Prediction with Kernels
 status: author-mapped-pending-independent-verification
 private_source_sha256: null
 references:
+  - bach2024learning
   - taskar2003m3n
   - tsochantaridis2005structured
   - joachims2009struct
@@ -172,6 +173,22 @@ sections:
     verified_by: Codex scope and proof audit
     verified_on: 2026-07-24
     permission: original boundary analysis; structured-surrogate primary citations pending
+  - id: structured-generalization
+    title: From an empirical margin to population task risk
+    contribution: complete-original-stability-proof-and-source-guided-synthesis
+    sources: [bach2024learning, tsochantaridis2005structured]
+    locators:
+      - source: bach2024learning
+        manuscript_locator: ch-structured.md#structured-generalization
+        source_locator: Chapter 13, structured prediction and generalization
+        status: author-checked-book-source
+      - source: tsochantaridis2005structured
+        manuscript_locator: ch-structured.md#structured-generalization
+        source_locator: Sections 2-3, structured hinge and margin formulation
+        status: primary-formulation-source
+    verified_by: Codex line-by-line stability derivation
+    verified_on: 2026-07-29
+    permission: original proof and exposition with framework attribution
   - id: structured-failure-witness
     title: A failure witness, marginally best and jointly impossible
     contribution: original-counterexample
@@ -193,8 +210,8 @@ sections:
         manuscript_locator: ch-structured.md#structured-sequence-example
         source_locator: Chapters 9 and 11, sequence representations and dynamic-programming kernel computations
         status: general-sequence-kernel-context-only; example is original
-    verified_by: checks/ch-structured-ex1.py
-    verified_on: 2026-07-24
+    verified_by: visible manuscript code and checks/ch-structured-ex1.py
+    verified_on: 2026-07-29
     permission: original construction
   - id: structured-decoding-gap
     title: The computational-statistical decoding gap
@@ -239,8 +256,12 @@ sections:
   - id: structured-summary
     title: Summary and further reading
     contribution: original-synthesis
-    sources: [scholkopf2002, shawe2004, steinwart2008, bartlett2006, zhang2004, boyd2004, micchelli2005vv]
+    sources: [bach2024learning, scholkopf2002, shawe2004, steinwart2008, bartlett2006, zhang2004, boyd2004, micchelli2005vv]
     locators:
+      - source: bach2024learning
+        manuscript_locator: ch-structured.md#structured-summary
+        source_locator: Chapter 13
+        status: author-checked-book-source
       - source: scholkopf2002
         manuscript_locator: ch-structured.md#structured-summary
         source_locator: Chapters 2-4

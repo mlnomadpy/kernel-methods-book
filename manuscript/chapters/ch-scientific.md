@@ -38,12 +38,23 @@ bibliography:
   - raissi2017gpde
   - cockayne2019probnum
   - li2020fno
+  - hennig2022probnum
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Kernels for Scientific Computing and Operator Learning
 
 <p class="lead">A curve that passes through every measurement can still be physically impossible. It can violate the equation governing the field, contradict a boundary condition, or conserve the wrong quantity. Scientific learning therefore asks more than prediction at another row of a data table. The unknown may be a function constrained by a differential operator, a coefficient visible only through a forward solve, or an operator mapping one field to another on meshes never seen during training. Kernels can address all three, but only after the continuous problem is stated precisely. This chapter develops the shared mechanism, bounded linear information in a function space, and then follows it through collocation, differential-equation Gaussian processes, probabilistic numerics, and operator learning. At every stage we keep five errors separate: approximation, information discretization, linear-algebra error, observation noise, and model discrepancy.</p>
 
 ## The continuous problem comes before the matrix {#scientific-continuous-problem}
+
+The [[ch:dynamical-systems-control-and-reinforcement-learning|dynamics
+chapter]] ended with an estimated operator being applied repeatedly. Here the
+operator is often known, such as a differential or boundary operator, but its solution
+must be reconstructed from finite information. The
+[[ch:inverse-learning-and-spectral-regularization|inverse-learning chapter]]
+therefore supplies the inherited warning: uniqueness of a continuous solution
+does not make its discretized recovery stable.
 
 Let \(\Omega\subset\mathbb R^d\) be a bounded domain and let \(X\) and \(Y\) be normed spaces of functions or distributions. A linear boundary-value problem has the abstract form
 
@@ -202,7 +213,9 @@ $$
 
 Weights are not cosmetic. Interior residuals, boundary values, and physical measurements have different units and counts. A factor that changes when the mesh is refined can silently change the continuous objective.
 
-### From sampled residual to solution error {#scientific-residual-stability}
+<span id="scientific-residual-stability"></span>
+
+**From sampled residual to solution error.**
 
 Suppose \(\mathcal T:X\to Y\) is injective and stable:
 
@@ -287,11 +300,56 @@ $$
 =x-x^2.
 $$
 
+The computation is short enough to expose every object rather than hiding the
+functional Gram behind a collocation package:
+
+```python
+import numpy as np
+
+gram = np.array([
+    [1.0, 1.0, 0.0],
+    [1.0, 4.0, -2.0],
+    [0.0, -2.0, 4.0],
+])
+information = np.array([0.0, 0.0, 2.0])
+coefficients = np.linalg.solve(gram, information)
+
+def recovered(x):
+    representers = np.array([
+        1.0,
+        (1.0 + x) ** 2,
+        -2.0 * x**2,
+    ])
+    return coefficients @ representers
+
+grid = np.linspace(0.0, 1.0, 101)
+exact = grid * (1.0 - grid)
+
+np.testing.assert_allclose(coefficients, [-0.5, 0.5, 0.75])
+np.testing.assert_allclose(
+    [recovered(x) for x in grid],
+    exact,
+    atol=2e-15,
+)
+assert np.linalg.eigvalsh(gram)[0] > 0.0
+```
+
 The exact solution is recovered because it lies in the RKHS and the three independent functionals identify all three polynomial coefficients. The same calculation also exposes three failure boundaries.
 
 - Removing either boundary functional leaves a nontrivial null direction.
 - Replacing \(k\) by a degree-one polynomial kernel makes second-derivative information identically zero.
 - Perturbing the forcing to a nonconstant function leaves the discrete equation satisfied at \(x=1/2\) but does not make the global residual vanish.
+
+This one solve also locates the five errors from the opening ledger. There is
+no approximation error because \(u^\dagger\) belongs to the three-dimensional
+RKHS. There is no discretization error because the selected information is
+unisolvent on that space. The direct solve is accurate enough that algebraic
+error is negligible, and the data contain neither observation noise nor model
+discrepancy. Changing any one of those facts changes the conclusion. In
+particular, exact satisfaction of the three rows is not itself evidence that
+the continuous differential equation has been solved; it becomes evidence
+only because the hypothesis space, operator, and information set make those
+rows determining.
 
 ::: {.example #example-scientific-boundary}
 [Example (boundary constraints change the admissible space)]{.box-title}
@@ -307,7 +365,9 @@ Two kernel solvers may use the same interior differential residuals but differen
 
 ## Paper module I: Gaussian processes for linear differential equations {#scientific-module-gpde}
 
-### The question and exact setting {#scientific-gpde-setting}
+<span id="scientific-gpde-setting"></span>
+
+**The question and exact setting.**
 
 Raissi, Perdikaris, and Karniadakis asked whether the unknown coefficients of a linear differential equation could be learned jointly with a latent solution from scarce, noisy observations [@raissi2017gpde]. Let
 
@@ -332,7 +392,9 @@ $$
 
 with independent Gaussian noises of variances \(\sigma_u^2\) and \(\sigma_f^2\). The paper's new move is not merely differentiating a kernel. It treats the differential equation as a map between jointly Gaussian latent fields and learns \((\theta,\phi,\sigma_u,\sigma_f)\) through their joint marginal likelihood.
 
-### Covariance derivation and executable object {#scientific-gpde-derivation}
+<span id="scientific-gpde-derivation"></span>
+
+**Covariance derivation and executable object.**
 
 The construction is easiest to audit one block at a time. Start with the prior
 covariance of the latent field, then apply the observation operator to the
@@ -395,7 +457,9 @@ $$
 
 The first term rewards fit; the second penalizes covariance volume. When \(\phi\) enters only through \(\mathcal L^\phi\), both terms carry information about the differential equation.
 
-### What is proved, what is inherited, and what fails {#scientific-gpde-boundary}
+<span id="scientific-gpde-boundary"></span>
+
+**What is proved, what is inherited, and what fails.**
 
 The joint Gaussian formulas are exact under the stated prior and linear information model. They do not prove that marginal-likelihood optimization identifies \(\phi\). Identification fails if two parameter values induce the same covariance on the observed sites, if the latent field has insufficient excitation, or if \(\phi\) can be traded against a kernel length scale. The construction also changes qualitatively for a nonlinear operator because \(\mathcal N(u)\) is generally not Gaussian.
 
@@ -412,9 +476,18 @@ Neither reading automatically includes operator misspecification or numerical di
 
 ## Paper module II: Bayesian probabilistic numerical methods {#probabilistic-numerics}
 
-### Numerical tasks as inverse problems {#scientific-pn-setting}
+<span id="scientific-pn-setting"></span>
+
+**Numerical tasks as inverse problems.**
 
 Cockayne, Oates, Sullivan, and Girolami separate three maps [@cockayne2019probnum]:
+
+Hennig, Osborne, and Kersting develop this organizing idea across quadrature,
+linear algebra, differential equations, and optimization, repeatedly comparing
+the probabilistic construction with its classical numerical counterpart
+[@hennig2022probnum]. A distribution over numerical error is useful only after
+the information model and its calibration have been tested; Bayesian
+conditioning alone does not establish frequentist coverage.
 
 $$
 u\in\mathcal U,\qquad
@@ -432,7 +505,9 @@ the pushforward of the conditional distribution through \(Q\).
 
 This definition is the paper's central contribution. It prevents a distribution attached to a deterministic answer from being called Bayesian unless it is generated by conditioning a coherent prior through the actual information operator.
 
-### Gaussian linear case and Bayes-risk derivation {#scientific-pn-derivation}
+<span id="scientific-pn-derivation"></span>
+
+**Gaussian linear case and Bayes-risk derivation.**
 
 Let \(\mathcal U\) be a separable Hilbert space, \(u\sim\mathcal N(m,C)\), and let \(A:\mathcal U\to\mathbb R^m\) and \(Q:\mathcal U\to\mathbb R^q\) be bounded linear maps. With additive Gaussian information noise \(\eta\sim\mathcal N(0,\Gamma)\),
 
@@ -488,13 +563,17 @@ $$
 The second term is minimized by the posterior mean. Taking expectation proves the identity. \(\square\)
 ::::
 
-### Failure boundary and afterlife {#scientific-pn-boundary}
+<span id="scientific-pn-boundary"></span>
+
+**Failure boundary and afterlife.**
 
 The proposition is an average statement under \(\mu\). It is not pointwise frequentist calibration for a fixed \(u^\dagger\), and it can be badly misleading when \(\mu\) assigns too little mass near the true solution or when \(A\) is implemented approximately but treated as exact. A narrow conditional distribution can coexist with a large \(e_{\mathrm{model}}\) or \(e_{\mathrm{alg}}\).
 
 Probabilistic mesh refinement can choose the next functional by expected reduction in posterior loss. Deterministic residual refinement chooses it by an error indicator. The two policies should be compared on actual target error, not on their own internal uncertainty criteria.
 
-## Inverse scientific problems {#scientific-inverse-problems}
+<span id="scientific-inverse-problems"></span>
+
+**Inverse scientific problems.**
 
 In an inverse problem the coefficient \(a\) is unknown and the measured field is generated through a forward solution operator:
 
@@ -559,7 +638,9 @@ Testing on a finer grid addresses only part of this inequality.
 
 ## Paper module III: Fourier neural operators {#scientific-module-fno}
 
-### Architecture and derivation {#scientific-fno-derivation}
+<span id="scientific-fno-derivation"></span>
+
+**Architecture and derivation.**
 
 Li and collaborators target repeated solution of a parametric PDE by learning the operator \(a\mapsto u\), rather than one discretized vector-to-vector map [@li2020fno]. On a periodic domain, a neural-operator layer has the form
 
@@ -589,7 +670,9 @@ $$
 
 On \(N\) grid points, FFTs cost \(O(N\log N)\) per channel, while the learned spectral multiplication costs \(O(|\Lambda_M|c^2)\) for channel width \(c\). The same spectral parameters can be evaluated on another uniform grid if that grid resolves the retained modes.
 
-### A heat-operator calculation {#scientific-fno-heat}
+<span id="scientific-fno-heat"></span>
+
+**A heat-operator calculation.**
 
 The heat semigroup supplies a useful oracle because its exact multiplier is
 known before any network is trained. On the one-dimensional torus, the heat equation
@@ -631,7 +714,9 @@ $$
 
 This is a truncation bound, not a learned-operator generalization bound. It explains why resolution transfer is plausible when the relevant spectrum is resolved, and why discontinuities or unresolved turbulence are a failure boundary. In practice, report the retained spectral energy and repeat the two-mode oracle on every evaluation grid; a small training loss cannot certify resolution transfer when the target energy lies above the cutoff.
 
-### Comparison under one currency {#scientific-operator-comparison}
+<span id="scientific-operator-comparison"></span>
+
+**Comparison under one currency.**
 
 The FNO paper contributes a mesh-independent parameterization and experiments on Burgers, Darcy, and Navier-Stokes problems, including evaluation at higher resolution than training. It does not establish that arbitrary grid refinement reduces the error of a trained model. Grid transfer can expose the same learned low-mode operator more finely without reducing its approximation or statistical error.
 
@@ -682,9 +767,31 @@ Stop refinement when the operational error and an independent diagnostic stabili
 - FNO spectral truncation can hide high-frequency error even when the output grid is fine.
 - A faster surrogate comparison is incomplete if data generation and retraining costs are omitted.
 
+For every scientific result, report a chain of residuals rather than one
+headline score. The linear-system residual answers whether the discretized
+algebra was solved. An independent collocation residual answers whether the
+fitted function satisfies sampled physics away from the training sites. A
+solution-norm error, when reference data exist, answers whether residual
+stability transferred that information to the state. Finally, the operational
+quantity, such as conserved mass, drag, flux, or posterior coverage, answers
+whether the scientific decision survived the approximations. These residuals
+can disagree, and that disagreement is diagnostic: a small algebraic residual
+with a large independent physics residual indicts discretization or
+approximation, while a small physics residual with a large state error
+indicates instability or a mismatch in boundary conditions and norms.
+
 ## Summary and further reading {#scientific-summary}
 
 Bounded linear information turns differential equations and boundary conditions into RKHS representers. Symmetric collocation inherits positive semidefiniteness from their Gram geometry, while continuous error control additionally requires PDE stability and a sampling inequality [@wendland2005]. Linear differential-equation GPs construct exact covariance blocks by applying operators to kernel arguments and can learn equation parameters only when those parameters are identifiable [@raissi2017gpde]. Bayesian probabilistic numerics defines uncertainty through conditioning and pushforward, with calibration interpreted relative to the prior and information model [@cockayne2019probnum]. Kernel operator regression and FNOs learn maps between functions through different geometries; neither mesh transfer nor low training loss removes discretization, model, or distribution-shift error [@li2020fno].
+
+The next chapter, [[ch:multiple-kernel-learning|multiple kernel learning]],
+asks how to choose among candidate geometries. Scientific problems make that
+choice concrete: different kernels encode different boundary regularity,
+length scales, conservation structure, or operator couplings, so selecting a
+mixture changes the hypothesis space rather than merely tuning a cosmetic
+hyperparameter.
+That choice must therefore be validated against the governing equation and the
+downstream scientific quantity, not training loss alone.
 
 ## Exercises {#exercises}
 

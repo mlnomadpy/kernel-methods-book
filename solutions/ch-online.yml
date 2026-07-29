@@ -126,3 +126,39 @@ exercises:
       beta'_S=beta_S+K_SS^{-1}k_{Sr}beta_r; otherwise use the minimum-norm pseudoinverse solution.
       Plain removal fixes beta'_S=beta_S and discards beta_r without redistributing its correlated
       component, so it is the coupling-blind special case rather than the optimal projection.
+  - number: 9
+    kind: proof
+    status: draft
+    prompt: Reproduce the RKHS online-gradient-descent theorem. Mark the exact step that needs convexity,
+      the step that needs nonexpansive projection, and the step that needs a bounded comparator
+      diameter. Then substitute \(g_t=a_tK(x_t,\cdot)\) and derive \(G=L\kappa\) from
+      \(|a_t|\le L\) and \(K(x_t,x_t)\le\kappa^2\).
+    answer: >-
+      Convexity gives
+      \(\ell_t(f_t)-\ell_t(u)\le\langle g_t,f_t-u\rangle\). Nonexpansiveness of projection gives
+      \[
+      \|f_{t+1}-u\|^2\le\|f_t-\eta g_t-u\|^2
+      =\|f_t-u\|^2-2\eta\langle g_t,f_t-u\rangle+\eta^2\|g_t\|^2.
+      \]
+      Rearrangement and summation telescope the squared distances, yielding
+      \(\sum_t[\ell_t(f_t)-\ell_t(u)]\le D^2/(2\eta)+\eta G^2T/2\), where the bounded comparator
+      diameter supplies the initial-distance bound \(D\). Finally,
+      \(\|g_t\|=|a_t|\|K(x_t,\cdot)\|=|a_t|\sqrt{K(x_t,x_t)}\le L\kappa\), so \(G=L\kappa\).
+  - number: 10
+    kind: synthesis
+    status: draft
+    prompt: For the one-point label-switch stream, compute static regret for the learner that always
+      predicts \(+1\) under zero-one loss. Choose a comparator sequence that switches once and
+      compute its path length when the two comparator functions are
+      \(u_+=K(x,\cdot)/K(x,x)\) and \(u_-=-u_+\). Explain why reporting dynamic regret without that
+      path length would make the benchmark uninformative.
+    answer: >-
+      Suppose the label is \(+1\) for the first \(m\) rounds and \(-1\) for the remaining
+      \(T-m\). The always-positive learner loses \(T-m\) times. The best static constant label
+      loses \(\min(m,T-m)\), so its static regret is
+      \(T-m-\min(m,T-m)\). A comparator that uses \(u_+\) before the switch and \(u_-\) afterward
+      incurs zero loss. It moves once, and because
+      \(\|K(x,\cdot)\|=\sqrt{K(x,x)}\), its path length is
+      \(\|u_--u_+\|=2/\sqrt{K(x,x)}\). Without reporting that variation budget, one could compare
+      against an arbitrarily fast-switching sequence that tracks every label and achieves zero
+      loss, making dynamic regret a measure of comparator flexibility rather than learner quality.

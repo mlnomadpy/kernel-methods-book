@@ -1,5 +1,6 @@
 ---
 id: ch-modern
+example_code_policy: visible-for-executable
 slug: kernels-now
 title: Modern Generalization Theory
 part: 'IV · Generalization, Approximation, and Limits'
@@ -44,12 +45,16 @@ bibliography:
   - neyshabur2018
   - elkaroui2010
   - cheng2013
+narrative_link_policy: exact
 ---
 # Modern Generalization Theory
 
 <p class="lead">The two textbooks this book synthesizes were finished around 2004, and their account of generalization rests on a single intuition: a model with more capacity than it needs will fit the noise and generalize badly, so the art is to stop short of interpolation. Deep learning broke that intuition in plain sight, and kernels turned out to be the cleanest setting in which to understand why. This chapter derives the three results that rebuilt the theory around interpolation rather than against it: the <em>double descent</em> risk curve and its peak at the interpolation threshold, the <em>benign overfitting</em> condition under which a minimum-norm interpolant of noisy data still generalizes, and the <em>spectral learning curves</em> that fix the power-law rate at which a kernel method learns. The common thread is the kernel's spectrum: the eigenvalue decay that [[ch:mercer-and-rates]] read as a smoothness scale is, in this modern light, also the dial that decides whether interpolation is safe and how fast learning proceeds. Feature learning, the neural tangent kernel, and attention, the other half of the modern story, are the subject of the closing chapter [[ch:the-frontier]]; here we stay with the fixed kernel and ask what it does when it interpolates.</p>
 
 ## The interpolation revolution {#interpolation}
+
+The [[ch:mercer-and-rates|spectral-rates chapter]] described regularized
+learning; modern theory asks when its zero-ridge boundary remains safe.
 
 The most consequential modern result is that a central lesson of Parts II and IV is incomplete. The classical theory says a model that fits the training data exactly, an interpolant, must generalize badly, because it has spent all its capacity memorizing noise; the RKHS-ball bounds of [[ch:learning-theory]] and the bias-variance decomposition of [[ch:mercer-and-rates]] both rest on that reading. Modern practice contradicts it. Overparameterized networks, and kernel machines too, routinely drive the training error to zero on noisy labels and still predict well on unseen data. Belkin, Ma, and Mandal (2018) argued the point in their title, that to understand deep learning we need to understand kernel learning, precisely because kernel machines also interpolate noisy data and still generalize, so whatever explains the phenomenon must already be visible in the linear algebra of kernels.
 
@@ -140,6 +145,23 @@ Isotropic model with \(n=40\), noise \(\sigma^2=0.25\), signal \(\|\beta\|^2=r^2
 4.  [Approach the ceiling.]{.wex-op} Far overparameterized, \(p=400\) (\(\gamma=10\)) has risk \(0.928\) (both exact and simulated), climbing back toward \(r^2=1\) as the interpolant sheds signal.
 
 **Reading.** The curve is not a U. It descends, spikes at \(p=n\), and descends again into the overparameterized regime, where the best test error (\(0.76\) at \(\gamma=2\)) beats every underparameterized model. Every simulated number matches the closed form to sampling error, and the spike is exactly the two Wishart denominators \(n-p-1\) and \(p-n-1\) passing through zero.
+
+```python
+import numpy as np
+n, noise, signal = 40, .25, 1.
+def risk(p):
+    if p < n-1:
+        return noise*p/(n-p-1)
+    if p > n+1:
+        return signal*(p-n)/p + noise*n/(p-n-1)
+    return np.inf
+values = np.array([risk(p) for p in [20,36,40,44,80,400]])
+assert np.isinf(values[2])
+assert np.isclose(values[0], .2631579)
+assert np.isclose(values[4], .7564103)
+assert values[1] > values[0] and values[3] > values[4]
+print(values)
+```
 ::::
 :::::
 
@@ -202,6 +224,19 @@ Spiked covariance: \(s=5\) signal eigenvalues equal to \(1\), then a flat junk t
 4.  [Watch overfitting turn harmful.]{.wex-op} The simulated excess risk is \(0.608\), most of the way to the null risk of \(1.0\): with only \(\sim n\) tail directions, the noise cannot be diluted and floods the prediction.
 
 **Reading.** The same interpolation rule, on the same signal, is harmless with a wide tail (risk \(0.04\)) and ruinous with a narrow one (risk \(0.61\)). The single quantity that flips is the tail's effective rank \(R_{k^\star}\): \(20{,}000\) versus \(150\). A high-dimensional spectral tail is not a nuisance to be regularized away; it is the mechanism that makes interpolation safe.
+
+```python
+def tail_budget(m, n=100, sigma2=.25):
+    # A flat tail has R_k=(sum lambda)^2/sum(lambda^2)=m.
+    k_star, R_tail = 5, float(m)
+    return R_tail, sigma2*(k_star/n+n/R_tail)
+
+wide, narrow = tail_budget(20_000), tail_budget(150)
+assert wide[0] == 20_000 and narrow[0] == 150
+assert wide[1] < narrow[1]
+print("wide R, variance budget:", wide)
+print("narrow R, variance budget:", narrow)
+```
 ::::
 :::::
 
@@ -259,6 +294,28 @@ A discrete domain of \(P=1200\) points with the uniform measure carries a kernel
 4.  [Fit the power law.]{.wex-op} The large-\(n\) points give a slope \(\beta\approx1.17\) on log-log axes, near the source-limited value \(b-1=1\) predicted by the tail estimate.
 
 **Reading.** The generalization error is not a single opaque number but a sum over modes, each switched on when the sample size crosses its eigenvalue. The replica formula reproduces the whole KRR learning curve from the spectrum and the target alone, and its power-law tail is the kernel version of a neural scaling law.
+
+```python
+import numpy as np
+
+rho = np.arange(1, 1201, dtype=float)
+eta, target2, ridge = rho**-1.5, rho**-2, 1e-4
+def prediction(n):
+    lo, hi = 1e-12, ridge+eta.sum()+1
+    for _ in range(200):
+        kappa = (lo+hi)/2
+        residual = kappa-ridge-np.sum(eta*kappa/(n*eta+kappa))
+        lo, hi = (kappa, hi) if residual < 0 else (lo, kappa)
+    kappa = (lo+hi)/2
+    learn = n*eta/(n*eta+kappa)
+    gamma = np.sum(learn**2)/n
+    error = np.sum((1-learn)**2*target2)/(1-gamma)
+    return kappa, gamma, error
+
+rows = np.array([prediction(n) for n in [10,20,40,80,160,320]])
+assert np.all(np.diff(rows[:, 2]) < 0) and np.all(rows[:, 1] < 1)
+print(rows)
+```
 ::::
 :::::
 
@@ -334,6 +391,10 @@ Interpolation is a property of the training fit, not a guarantee of benign overf
 Do not diagnose a spectral tail from eigenvalues alone. Compare target coefficients with those eigenfunctions, report finite-sample uncertainty in the empirical spectrum, and test whether ridge changes the apparent peak. PAC-Bayes, compression, stability, and spectral formulas answer different questions; presenting several does not make them mutually validating certificates.
 
 ## Summary and further reading {#summary-and-further-reading}
+
+The handoff to [[ch:the-frontier|the frontier chapter]] is conditional:
+fixed-kernel interpolation theory is a baseline, not a theorem about learned
+representations.
 
 Modern generalization theory replaces the slogan “capacity causes overfitting” with a more precise question: which solution does the algorithm select inside an interpolating class? At the interpolation threshold noise amplification creates a peak; beyond it, minimum norm can distribute the fit across additional directions. Benign overfitting requires a spectrum with enough tail dimension to absorb noise without corrupting signal, and learning curves require target alignment as well as eigenvalue decay. Double descent was crystallized by [@belkin2019dd] and [@belkin2018understand], with detailed linear-model analysis in [@hastie2019]. The spectrum unifies the phenomena, but it does not make their assumptions universal.
 

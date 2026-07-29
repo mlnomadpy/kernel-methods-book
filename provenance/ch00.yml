@@ -9,6 +9,14 @@ references:
   - scholkopf2002
   - shawe2004
 sections:
+  - id: example-intro-gram-compatibility
+    title: Three plausible pairwise scores need not form one geometry
+    contribution: original-worked-example-and-counterexample
+    sources: []
+    locators: []
+    verified_by: deterministic NumPy eigenvalue check
+    verified_on: 2026-07-29
+    permission: original calculation and code
   - id: the-promise
     title: "The promise: patterns are relations"
     contribution: adapted-and-expanded
@@ -165,6 +173,17 @@ sections:
         manuscript_locator: ch00.md#exercises
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for the geometry motivation
+    contribution: source-index
+    sources: [cover1965, scholkopf2002, shawe2004]
+    locators:
+      - {source: cover1965, manuscript_locator: "ch00.md#further-reading", source_locator: "IEEE Transactions on Electronic Computers EC-14(3), pp. 326--334; Sections II--III", status: author-mapped-pending-independent-verification}
+      - {source: scholkopf2002, manuscript_locator: "ch00.md#further-reading", source_locator: "Learning with Kernels, Sections 2.1--2.3", status: author-mapped-pending-independent-verification}
+      - {source: shawe2004, manuscript_locator: "ch00.md#further-reading", source_locator: "Kernel Methods for Pattern Analysis, Sections 2.1--2.3", status: author-mapped-pending-independent-verification}
     verified_by: null
     verified_on: null
     permission: citation-only

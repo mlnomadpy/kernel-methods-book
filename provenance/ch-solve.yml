@@ -444,6 +444,17 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for decomposition and SMO
+    contribution: source-index
+    sources: [platt1998, joachims1999, osuna1997]
+    locators:
+      - {source: platt1998, manuscript_locator: "ch-solve.md#summary", source_locator: "Microsoft Research Technical Report MSR-TR-98-14, Sections 2--3 and 12; Algorithm 1", status: author-mapped-pending-independent-verification}
+      - {source: joachims1999, manuscript_locator: "ch-solve.md#summary", source_locator: "Advances in Kernel Methods, pp. 169--184; Sections 2--4", status: author-mapped-pending-independent-verification}
+      - {source: osuna1997, manuscript_locator: "ch-solve.md#summary", source_locator: "IEEE NNSP 1997, pp. 276--285; Theorem 1 and Section 3", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

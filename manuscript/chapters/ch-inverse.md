@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-inverse
 slug: inverse-learning-and-spectral-regularization
 title: Inverse Learning and Spectral Regularization
@@ -37,12 +38,22 @@ bibliography:
   - raskutti2014early
   - steinwart2012
   - blanchard2018
+  - saad1996iterative
+narrative_link_policy: exact
 ---
 # Inverse Learning and Spectral Regularization
 
 <p class="lead">Why does stopping gradient descent early prevent overfitting, and why can an interrupted optimizer behave like a ridge penalty? Kernel regression is an inverse problem in disguise. The population operator suppresses directions with small eigenvalues, while estimation tries to reconstruct them from noisy samples. Direct inversion divides by those eigenvalues and can turn a harmless perturbation into the largest component of the answer. Ridge, spectral cutoff, Landweber iteration, and conjugate gradients all decide how much of each direction may pass. Their spectral filters make that decision visible. Source conditions describe the target, effective dimension describes the number of noisy directions available to the estimator, and qualification describes the smoothness a filter can exploit before it saturates. This chapter develops those claims from their operator assumptions through rate calculations, stopping rules, failure witnesses, and a worked spectral audit.</p>
 
 ## The two inverse problems hidden in regression {#inverse-formulation}
+
+The [[ch:mercer-and-rates|Mercer and rates chapter]] taught us to read a
+kernel integral operator one eigendirection at a time. There, a small
+eigenvalue meant that the RKHS assigns a large norm to a function using that
+direction. Here the same eigenvalue acquires a second meaning: it is a weak
+measurement channel. Estimation asks us to reverse that channel. The spectral
+basis is therefore no longer only a language for capacity; it is where
+instability becomes visible.
 
 Let \((\mathcal X,\mathcal A,P_X)\) be a probability space and let \(\mathcal H\) be a separable real RKHS with measurable kernel \(k\). Assume
 
@@ -92,6 +103,59 @@ T_n=S_n^\ast S_n=\frac1n\sum_{i=1}^n k_{x_i}\otimes k_{x_i},
 $$
 
 and \(g_n=S_n^\ast y/\sqrt n=n^{-1}\sum_i y_i k_{x_i}\). The empirical normal equation is \(T_n f=g_n\). Learning therefore perturbs both the right-hand side and the operator. Treating it as a fixed-operator inverse problem misses the random discretization error \(T_n-T\).
+
+### The first failed attempt: divide by every eigenvalue {#inverse-naive-inversion}
+
+Before introducing a regularizer, isolate the failure it must repair. Suppose
+for a moment that the operator is fixed and diagonal:
+
+$$
+Af=\sum_{j\geq1}\sqrt{\mu_j}\,\langle f,e_j\rangle u_j,
+\qquad
+y^\delta=Af^\dagger+\varepsilon,
+\qquad
+\lVert\varepsilon\rVert\leq\delta.
+$$
+
+The singular vectors \(e_j\) and \(u_j\) live in the parameter and data spaces,
+respectively, and \(T=A^\ast A\) has eigenvalues \(\mu_j\). Direct inversion
+sets
+
+$$
+\langle f_{\mathrm{inv}}^\delta,e_j\rangle
+=\frac{\langle y^\delta,u_j\rangle}{\sqrt{\mu_j}}
+=\langle f^\dagger,e_j\rangle+
+\frac{\langle\varepsilon,u_j\rangle}{\sqrt{\mu_j}}.
+$$
+
+The last fraction is the entire difficulty. If \(\mu_j\downarrow0\), no
+constant \(C\) can make
+\(\lVert f_{\mathrm{inv}}^\delta-f^\dagger\rVert\leq C\delta\) uniformly over
+the data. Put all the noise in a direction with \(\mu_j\lt C^{-2}\), and the
+error already exceeds \(C\delta\). Thus an injective compact operator can
+still have an unbounded inverse on its range. “There is a unique solution” and
+“the solution can be stably reconstructed” are different claims.
+
+This diagonal problem will be our running model. Every method below replaces
+the dangerous multiplier \(1/\sqrt{\mu}\) by a controlled multiplier. Every
+rate will answer two questions that the failed inverse leaves open:
+
+1. How much true signal is suppressed in the weak directions?
+2. How much noise is allowed back through?
+
+The population learning equation is slightly more subtle because its observed
+right-hand side is \(g=A^\ast y^\delta\). That is why the filter estimator is
+written
+
+$$
+f_\lambda^\delta=g_\lambda(T)A^\ast y^\delta.
+$$
+
+In direction \(e_j\), its data-to-solution multiplier is
+\(\sqrt{\mu_j}g_\lambda(\mu_j)\), while its fitted-signal fraction is
+\(q_\lambda(\mu_j)=\mu_jg_\lambda(\mu_j)\). Keeping those two quantities
+separate prevents a common error: a bounded fitted-value filter does not by
+itself bound inverse amplification.
 
 ### Paper module: Rosasco et al. make the analogy literal {#inverse-paper-rosasco}
 
@@ -174,11 +238,128 @@ This identity is the bias calculation. It says nothing about the empirical opera
 | Landweber | \(\{1-(1-\eta\mu)^t\}/\mu\) | \((1-\eta\mu)^t\) | stopping time and step size are part of estimator |
 | Gradient flow | \(\{1-e^{-t\mu}\}/\mu\) | \(e^{-t\mu}\) | continuous-time idealization |
 
+The table becomes useful only after we turn its scalar entries into an error
+bound. Let \(y^\delta=Af^\dagger+\varepsilon\), set \(T=A^\ast A\), and use
+\(f_\lambda^\delta=g_\lambda(T)A^\ast y^\delta\). Add and subtract the
+noise-free filtered solution:
+
+$$
+\begin{aligned}
+f_\lambda^\delta-f^\dagger
+&=\{g_\lambda(T)T-I\}f^\dagger
+  +g_\lambda(T)A^\ast\varepsilon\\
+&=-r_\lambda(T)f^\dagger
+  +g_\lambda(T)A^\ast\varepsilon.
+\end{aligned}
+$$
+
+This is the bias--noise decomposition for the fixed-operator problem. The two
+terms pull \(\lambda\) in opposite directions. Sending \(\lambda\) to zero
+reduces \(r_\lambda(T)\) on every positive eigendirection, but it increases the
+largest possible value of
+\(\sqrt{\mu}\lvert g_\lambda(\mu)\rvert\), which is precisely the
+data-to-solution amplification from the running diagonal model.
+
+:::: {.theorem #thm-filter-bias-noise}
+[Theorem (a deterministic filter balance)]{.box-title}
+
+**Assumptions.** \(A\) is a bounded operator between Hilbert spaces, the noise
+and source conditions below hold with \(r\gt0\), and the filter constants are
+uniform in \(\lambda\) over the spectrum of \(T=A^\ast A\).
+
+**Proof status.** Complete below.
+
+Let \(A:\mathcal H\to\mathcal Y\) be bounded between Hilbert spaces and let
+\(T=A^\ast A\). Suppose
+
+$$
+y^\delta=Af^\dagger+\varepsilon,\qquad
+\lVert\varepsilon\rVert_{\mathcal Y}\leq\delta,\qquad
+f^\dagger=T^r v,\qquad \lVert v\rVert_{\mathcal H}\leq R,
+$$
+
+for some \(r\gt0\). Assume the filter family obeys, for constants \(C_r,C_N\)
+independent of \(\lambda\),
+
+$$
+\sup_{0\leq\mu\leq\lVert T\rVert}
+\mu^r\lvert r_\lambda(\mu)\rvert\leq C_r\lambda^r,
+\qquad
+\sup_{0\leq\mu\leq\lVert T\rVert}
+\sqrt{\mu}\lvert g_\lambda(\mu)\rvert
+\leq\frac{C_N}{\sqrt{\lambda}}.
+$$
+
+Then
+
+$$
+\lVert f_\lambda^\delta-f^\dagger\rVert_{\mathcal H}
+\leq C_rR\lambda^r+\frac{C_N\delta}{\sqrt{\lambda}}.
+$$
+
+Consequently, choosing
+\(\lambda\asymp(\delta/R)^{2/(2r+1)}\) gives the deterministic reconstruction
+rate
+
+$$
+\lVert f_\lambda^\delta-f^\dagger\rVert_{\mathcal H}
+=O\!\left(
+R^{1/(2r+1)}\delta^{2r/(2r+1)}
+\right).
+$$
+
+**Boundary.** This is a norm-bounded deterministic-noise result for a known
+operator. It is not an \(n\)-sample statistical learning rate, and its source
+exponent can be used only up to the qualification of the chosen filter.
+::::
+
+:::: {.proof}
+The displayed decomposition and the triangle inequality give
+
+$$
+\lVert f_\lambda^\delta-f^\dagger\rVert
+\leq\lVert r_\lambda(T)T^rv\rVert
+ +\lVert g_\lambda(T)A^\ast\varepsilon\rVert.
+$$
+
+Functional calculus bounds the first operator by the supremum of
+\(\mu^r\lvert r_\lambda(\mu)\rvert\), so the bias is at most
+\(C_rR\lambda^r\). For the second term, use the polar decomposition
+\(A=UT^{1/2}\), hence \(A^\ast=T^{1/2}U^\ast\), where \(U^\ast\) is a
+contraction. Therefore
+
+$$
+\lVert g_\lambda(T)A^\ast\rVert
+\leq\sup_\mu\sqrt{\mu}\lvert g_\lambda(\mu)\rvert
+\leq C_N\lambda^{-1/2},
+$$
+
+and the noise contribution is at most \(C_N\delta/\sqrt{\lambda}\).
+Balancing powers in
+\(R\lambda^r\asymp\delta\lambda^{-1/2}\) yields
+\(\lambda^{r+1/2}\asymp\delta/R\), and substitution gives the stated rate.
+[\(\square\)]{.qed}
+::::
+
+For ordinary Tikhonov,
+\(g_\lambda(\mu)=(\mu+\lambda)^{-1}\). Its noise multiplier reaches its
+maximum at \(\mu=\lambda\):
+
+$$
+\sup_{\mu\geq0}\frac{\sqrt{\mu}}{\mu+\lambda}
+=\frac{1}{2\sqrt{\lambda}}.
+$$
+
+This small calculation explains the ubiquitous square root in deterministic
+inverse bounds. It also shows why the earlier admissibility condition
+\(\sup_\mu|g_\lambda(\mu)|\leq E/\lambda\) is not the sharp bound for data
+noise after applying \(A^\ast\).
+
 ## Source conditions, qualification, and saturation {#inverse-source}
 
 Qualification is visible as a slope limit. If a source condition contributes smoothness exponent \(\nu\), an ideal cutoff can continue converting larger \(\nu\) into faster bias decay, whereas first-order Tikhonov regularization cannot exploit smoothness beyond qualification one. The plate isolates this bias mechanism; variance and parameter choice must be added before it becomes a risk comparison.
 
-<figure class="viz" data-figure="spectral-qualification-saturation" data-alt="Two log-log panels compare worst-case bias scales for three source smoothness exponents. Tikhonov curves for exponents one and two coincide, while spectral cutoff retains distinct slopes."><figcaption>Saturation means that a smoother source stops improving the regularization bias. Tikhonov's qualification-one curves merge for \(\nu=1\) and \(\nu=2\); spectral cutoff has no finite qualification in this stylized source calculation. The figure compares bias orders only, not total statistical risk.</figcaption></figure>
+<figure class="viz" data-figure="spectral-qualification-saturation" data-alt="Two log-log panels compare worst-case bias scales for three source smoothness exponents. Tikhonov curves for exponents one and two coincide, while spectral cutoff retains distinct slopes."><figcaption>Saturation means that a smoother source stops improving the regularization bias. Tikhonov's qualification-one curves merge for source exponents one and two; spectral cutoff has no finite qualification in this stylized source calculation. The figure compares bias orders only, not total statistical risk.</figcaption></figure>
 
 A source condition types the target relative to the operator:
 
@@ -204,6 +385,42 @@ $$
 
 Qualification is a property of the filter and the chosen scale convention. It is not a property of the target.
 :::
+
+Why introduce a second smoothness number after already defining \(r\)? Because
+the source and the method answer different questions. The exponent \(r\)
+describes how quickly the target coefficients disappear as measurement
+directions weaken. Qualification asks whether the method's residual disappears
+fast enough to take advantage of that decay. If the source supplies more
+regularity than the filter can use, the unused part is not a defect in the
+target; it is saturation of the method.
+
+The contrast between Tikhonov and Landweber can be proved with two scalar
+inequalities. Tikhonov has
+\(r_\lambda(\mu)=\lambda/(\mu+\lambda)\). As the theorem below shows, the
+factor \(\mu^\nu\) can contribute at most one power of \(\lambda\). By
+contrast, take \(0\lt\eta\leq\lVert T\rVert^{-1}\) and regard
+\(\lambda_t=(\eta t)^{-1}\) as the regularization scale of Landweber
+iteration. Then, for every fixed \(\nu\gt0\),
+
+$$
+\begin{aligned}
+\sup_\mu \mu^\nu(1-\eta\mu)^t
+&\leq \sup_{\mu\geq0}\mu^\nu e^{-\eta t\mu}\\
+&=\left(\frac{\nu}{e\eta t}\right)^\nu
+=\left(\frac{\nu}{e}\right)^\nu\lambda_t^\nu.
+\end{aligned}
+$$
+
+So Landweber can exploit every finite source order in this bias calculation;
+its cost is computational, because decreasing \(\lambda_t\) means taking more
+matrix--vector products. Spectral cutoff also has arbitrary finite
+qualification:
+\(\mu^\nu\mathbf 1\{\mu\lt\lambda\}\leq\lambda^\nu\).
+But that does not make either method uniformly superior. Cutoff is
+discontinuous when an estimated eigenvalue crosses the threshold, and a long
+Landweber run eventually admits the same weak, noisy directions that direct
+inversion does. Qualification compares bias potential, not total error,
+operator-perturbation robustness, or compute.
 
 :::: {.theorem #thm-ridge-source-bias}
 [Theorem (Tikhonov source bias and saturation)]{.box-title}
@@ -259,6 +476,46 @@ which proves the second. Extra source smoothness beyond \(a=1\) therefore cannot
 ::::
 
 The failure witness is concrete. Place \(w\) in the top eigendirection. For \(r+s\gt1\), the bias is asymptotically proportional to \(\lambda\mu_1^{r+s-1}\), not \(\lambda^{r+s}\). Saturation is not a defect in the proof; it is achieved by an allowed target.
+
+The exponent \(s\) also explains why apparently conflicting rate statements
+can both be correct. With \(s=0\), the theorem measures reconstruction in the
+native parameter-space norm \(\mathcal H\). With \(s=1/2\),
+
+$$
+\lVert T^{1/2}(f_\lambda-f^\dagger)\rVert_{\mathcal H}
+=\lVert A(f_\lambda-f^\dagger)\rVert_{\mathcal Y},
+$$
+
+so it measures error after the forward map, which is the population prediction
+norm when \(A=S\). Prediction is less sensitive to weak directions because the
+additional \(T^{1/2}\) restores one factor of \(\sqrt{\mu}\). A result in
+prediction norm can therefore converge faster than a result in RKHS norm
+without contradicting it. Whenever a paper reports “the rate,” the first audit
+question should be: in which norm?
+
+It is equally important to read a source condition coefficient by coefficient.
+If \(f^\dagger=T^rw\), then
+
+$$
+\langle f^\dagger,e_j\rangle=\mu_j^r\langle w,e_j\rangle.
+$$
+
+The target is required to become small specifically where inversion becomes
+dangerous. This is stronger and more informative than saying that
+\(f^\dagger\) has several classical derivatives. A differential smoothness
+class implies a power source condition only after one proves a link between
+the differential basis and the eigenstructure generated jointly by the
+kernel, domain, and sampling measure. Change \(P_X\), and the same pointwise
+function can have different source coordinates.
+
+There is also a quantifier hidden inside saturation. Qualification one does
+not say that every very smooth target has exactly order-\(\lambda\) bias.
+Special targets may lie in favorable spectral subspaces and converge faster.
+It says that a uniform guarantee over the entire source ball cannot improve
+beyond that power. The one-eigendirection witness proves precisely this
+worst-case claim. This distinction matters experimentally: a benchmark whose
+target occupies only the leading eigenspace cannot reveal saturation, even
+when the method has it.
 
 ## Paper module: source, capacity, and minimax rates {#inverse-paper-rates}
 
@@ -327,6 +584,25 @@ $$
 
 gives \(\lambda\asymp n^{-b/(bc+1)}\) and risk
 \(n^{-bc/(bc+1)}\). This calculation explains the exponent; the theorem additionally requires operator concentration, noise control, and a lower-bound construction.
+
+The balance has an intuitive counting interpretation. Define the crossover
+index \(j_\lambda\) by \(\mu_{j_\lambda}\approx\lambda\). Directions
+\(j\ll j_\lambda\) pass almost as if unregularized and contribute roughly one
+effective degree of freedom each. Directions \(j\gg j_\lambda\) are attenuated
+and contribute approximately \(\mu_j/\lambda\). Polynomial decay gives
+\(j_\lambda\asymp\lambda^{-1/b}\), and the attenuated tail has the same order,
+so \(\mathcal N(\lambda)\asymp\lambda^{-1/b}\). Regularization therefore sets
+an effective spectral resolution: smaller \(\lambda\) resolves more
+directions, which reduces approximation bias and raises the stochastic price.
+
+This statistical calculation must not be substituted into the deterministic
+theorem by writing \(\delta=n^{-1/2}\). In learning, \(T_n-T\) is random as
+well as the right-hand side, the relevant stochastic term is shaped by
+effective dimension rather than only an ambient noise norm, and the final
+quantity here is excess prediction risk. The two analyses share a spectral
+bias--noise architecture, but their probability models and norms differ.
+Rosasco et al.'s operator perturbations provide the bridge; concentration is
+what turns that bridge into an \(n\)-dependent theorem [@rosinverse2004].
 
 **Failure boundary.** Universality alone supplies neither \(b\) nor \(c\). An eigenvalue upper bound can support an upper rate, but the matching lower rate needs a lower eigenvalue condition and an explicitly defined distribution class. If the target is outside the source class or the noise lacks the required moments, the theorem does not transfer by analogy. General spectral methods and statistical inverse problems require their own qualification and link assumptions; [@blanchard2018] develops that broader setting.
 
@@ -469,7 +745,58 @@ Apply four fitted-value filters: interpolation, ridge with \(\lambda=0.05\), cut
 | cutoff | \(1,1,0,0\) | \(0.079375\) | \(4.318\) |
 | Landweber | \(1,0.8926,0.2776,0.0198\) | \(0.051689\) | \(5.727\) |
 
+The complete computation belongs here because the filters are the example.
+Each row uses the same eigensystem, observations, target, and metrics:
+
+```python
+import numpy as np
+
+mu = np.array([1.0, 0.25, 0.04, 0.0025])
+signal = np.array([2.0, 1.0, 0.5, 0.25])
+noise = np.array([0.05, -0.05, 0.05, -0.05])
+observed = signal + noise
+
+ridge_lambda = 0.05
+step_size = 0.8
+steps = 10
+
+filters = {
+    "interpolation": np.ones_like(mu),
+    "ridge": mu / (mu + ridge_lambda),
+    "cutoff": (mu >= ridge_lambda).astype(float),
+    "Landweber": 1.0 - (1.0 - step_size * mu) ** steps,
+}
+
+expected = {
+    "interpolation": (0.002500, 81.288),
+    "ridge": (0.042202, 8.105),
+    "cutoff": (0.079375, 4.318),
+    "Landweber": (0.051689, 5.727),
+}
+
+for name, retained in filters.items():
+    fitted = retained * observed
+    prediction_mse = np.mean((fitted - signal) ** 2)
+    inverse_coordinates = fitted / mu
+    inverse_norm = np.linalg.norm(inverse_coordinates)
+
+    expected_mse, expected_norm = expected[name]
+    np.testing.assert_allclose(prediction_mse, expected_mse, atol=5e-7)
+    np.testing.assert_allclose(inverse_norm, expected_norm, atol=5e-4)
+    print(name, retained, prediction_mse, inverse_norm)
+```
+
 Interpolation wins this one low-noise prediction comparison, yet its inverse norm is ten to nineteen times larger. A small change in the fourth observation is divided by \(0.0025\). The example therefore rejects two shortcuts: the smallest training or oracle prediction error need not identify the most stable inverse, and coefficient norm alone does not identify the best predictor.
+
+Now read the same table as the chapter's argument in miniature. The fourth
+direction has the smallest \(\widehat\mu_j\). Interpolation retains all of it,
+so the alternating noise is divided by \(0.0025\). Cutoff discards it
+completely, accepting visible bias in exchange for a short inverse vector.
+Ridge and Landweber make intermediate decisions rather than sharing an
+identical filter. Calling early stopping “the same as ridge” would erase the
+difference between \(0.4444\) and \(0.2776\) in the third direction and
+between \(0.0476\) and \(0.0198\) in the fourth. They instantiate the same
+bias--noise principle, not the same estimator.
 :::
 
 ## Parameter choice, Krylov methods, and computation {#inverse-parameter-choice}
@@ -482,6 +809,24 @@ The regularization path is incomplete until its selection rule is specified.
 - Lepskiĭ-type rules compare scales and require a stochastic envelope.
 - Marginal likelihood selects a variance ratio under a probabilistic model, not an arbitrary downstream loss.
 
+The discrepancy principle is worth spelling out because it makes “stop before
+fitting noise” operational. For a path \(f_t^\delta\) whose data residual
+\(\lVert Af_t^\delta-y^\delta\rVert_{\mathcal Y}\) decreases with \(t\), fix
+\(\tau\gt1\) and choose the first index satisfying
+
+$$
+\lVert Af_t^\delta-y^\delta\rVert_{\mathcal Y}\leq\tau\delta.
+$$
+
+Earlier iterates underfit more than the declared noise permits; much later
+iterates expend computation fitting a residual that cannot be distinguished
+from noise. The rule needs a credible bound \(\delta\), monotone residuals in
+the norm being tested, and a compatible exact solution. If
+\(\operatorname{dist}(y^\delta,\overline{\operatorname{ran}A})\gt\tau\delta\),
+the stopping set can be empty. If \(\delta\) is badly overestimated, the rule
+stops too early. A parameter rule is therefore part of the assumptions, not
+an afterthought attached to a convergence plot.
+
 Conjugate gradients add another complication. At step \(t\), the estimate lies in
 
 $$
@@ -489,7 +834,34 @@ $$
 =\operatorname{span}\{g_n,T_ng_n,\ldots,T_n^{t-1}g_n\}.
 $$
 
-Its residual polynomial is data dependent. Fast reduction of the linear-system residual does not imply stable reconstruction, because the polynomial can begin resolving noisy weak directions. Preconditioning changes both the Krylov space and the implicit regularizer. It must be reported as part of the estimator.
+Saad's projection view makes the computational structure precise: a Krylov
+method searches an affine copy of this space and chooses its iterate through a
+Galerkin or minimum-residual condition [@saad1996iterative]. Consequently,
+there is a polynomial \(p_{t-1}\), of degree at most \(t-1\), such that
+
+$$
+f_t=p_{t-1}(T_n)g_n.
+$$
+
+This looks like spectral filtering, but unlike ridge or fixed-step Landweber,
+the polynomial coefficients depend on the observed Krylov recurrences. The
+method adapts strongly to separated eigenvalues and may solve dominant
+spectral clusters in very few products. The same adaptivity complicates the
+regularization story: fast reduction of the linear-system residual does not
+imply stable reconstruction, because the polynomial can begin resolving noisy
+weak directions. Classical CG optimality concerns an energy norm for a fixed
+positive-definite linear system; it is not, by itself, a statistical risk
+theorem.
+
+Preconditioning changes the operator that generates the Krylov space, its
+spectrum, and the norm in which residuals may be reported. That can accelerate
+the solve while also changing which directions are revealed first. A
+preconditioner must therefore be reported as part of the estimator, along with
+whether termination used the true residual, a preconditioned residual,
+validation loss, or a noise-aware rule. The [[ch:large-scale-kernels|large-scale
+kernels chapter]] develops the resulting matrix--vector-product and
+preconditioning tradeoffs; the present chapter supplies the statistical
+reason that “solve to machine precision” is sometimes the wrong objective.
 
 :::: {.algorithm #algo-inverse-comparison}
 [Algorithm (auditable spectral-regularizer comparison)]{.box-title}
@@ -530,9 +902,22 @@ The same framework appears in conditional mean operators, instrumental-variable 
 - A minimax exponent is meaningful only with its model class and norm.
 - Finite precision adds an implicit cutoff that can dominate the mathematical filter.
 
+A reliable diagnostic is to narrate one weak eigendirection from beginning to
+end. State its signal coefficient, its noise coefficient, the multiplier
+applied by the estimator, and the norm in which the resulting error is
+measured. Then vary the regularization parameter or stopping time. If the
+explanation cannot say when that direction enters the solution, it has not yet
+explained the regularizer. Aggregate curves such as training loss and residual
+norm can conceal this event because strong directions dominate them long after
+a weak direction has begun amplifying noise. Spectral plots are not decorative
+in inverse learning; they expose the mechanism that the scalar score averages
+away.
+
 ## Summary and further reading {#inverse-summary}
 
-Inverse learning begins with a typed operator equation. Spectral filters stabilize it by replacing division by \(\mu\) with a controlled function \(g_\lambda(\mu)\). Rosasco et al. identify sampling as random operator discretization [@rosinverse2004]. Caponnetto and De Vito couple source and capacity assumptions to obtain matching rate exponents [@caponnetto2007]. Raskutti et al. derive a computable early-stopping rule from empirical eigenvalues and local complexity [@raskutti2014early]. The transferable lesson is not that every method is secretly ridge. It is that bias, stochastic variance, qualification, identifiability, and numerical stability must be audited in the same spectral coordinates.
+Inverse learning begins with a typed operator equation. Spectral filters stabilize it by replacing division by \(\mu\) with a controlled function \(g_\lambda(\mu)\). Rosasco et al. identify sampling as random operator discretization [@rosinverse2004]. Caponnetto and De Vito couple source and capacity assumptions to obtain matching rate exponents [@caponnetto2007]. Raskutti et al. derive a computable early-stopping rule from empirical eigenvalues and local complexity [@raskutti2014early]. Saad's Krylov construction explains why iterative solvers are polynomial approximants, while the inverse viewpoint explains why their stopping rule can be statistical rather than merely numerical [@saad1996iterative].
+
+The transferable lesson is not that every method is secretly ridge. It is that bias, stochastic variance, qualification, identifiability, and numerical stability must be audited in the same spectral coordinates. The next chapter, [[ch:kernel-interpolation-and-approximation|kernel interpolation and approximation]], changes the question from recovering a noisy operator solution to controlling how well kernel spaces approximate functions and scattered data. The bridge is the bias term: here it measured what a filter suppresses; there it becomes an approximation problem in its own right.
 
 ## Exercises {#exercises}
 

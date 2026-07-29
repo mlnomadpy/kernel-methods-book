@@ -4,12 +4,15 @@ title: Online Kernel Learning
 status: author-mapped-pending-independent-verification
 private_source_sha256: null
 references:
+  - bach2024learning
+  - lattimore2020bandit
   - rosenblatt1958
   - novikoff1962
   - aizerman1964
   - friess1998
   - freund1999voted
   - kivinen2004
+  - crammer2006pa
   - shawe2004
   - scholkopf2002
 sections:
@@ -66,6 +69,42 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: online-regret
+    title: Regret before algorithms
+    contribution: source-guided-synthesis-with-original-failure-witness
+    sources: [bach2024learning, lattimore2020bandit]
+    locators:
+      - source: bach2024learning
+        manuscript_locator: ch-online.md#online-regret
+        source_locator: Chapter 11, introduction and Section 11.1
+        status: author-checked-book-source
+      - source: lattimore2020bandit
+        manuscript_locator: ch-online.md#online-regret
+        source_locator: Chapter 1, environment classes, competitor classes, and regret
+        status: author-checked-book-source
+    verified_by: Codex definition and scope audit
+    verified_on: 2026-07-29
+    permission: original exposition with framework attribution
+  - id: online-rkhs-ogd
+    title: Online gradient descent in an RKHS
+    contribution: complete-original-Hilbert-space-proof-and-source-guided-synthesis
+    sources: [bach2024learning, lattimore2020bandit, kivinen2004]
+    locators:
+      - source: bach2024learning
+        manuscript_locator: ch-online.md#online-rkhs-ogd
+        source_locator: Sections 11.1.1 and 11.1.3
+        status: author-checked-book-source
+      - source: lattimore2020bandit
+        manuscript_locator: ch-online.md#online-rkhs-ogd
+        source_locator: Chapter 28, follow-the-regularized-leader and mirror descent
+        status: author-checked-book-source
+      - source: kivinen2004
+        manuscript_locator: ch-online.md#online-rkhs-ogd
+        source_locator: online regularized risk minimization in RKHS
+        status: primary-kernel-source
+    verified_by: Codex line-by-line proof audit
+    verified_on: 2026-07-29
+    permission: original RKHS specialization and proof
   - id: kernel-perceptron
     title: The kernel perceptron
     contribution: adapted-and-expanded
@@ -107,9 +146,9 @@ sections:
         manuscript_locator: ch-online.md#kernel-perceptron
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+    verified_by: visible manuscript code and checks/ch-online-ex1.py
+    verified_on: 2026-07-29
+    permission: original exposition and executable example with source attribution
   - id: novikoff
     title: Novikoff's mistake bound
     contribution: adapted-and-expanded
@@ -151,9 +190,9 @@ sections:
         manuscript_locator: ch-online.md#novikoff
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+    verified_by: complete manuscript proof and checks/ch-online-ex2.py
+    verified_on: 2026-07-29
+    permission: original proof exposition with theorem attribution
   - id: kernel-adatron
     title: The kernel adatron
     contribution: adapted-and-expanded
@@ -195,9 +234,9 @@ sections:
         manuscript_locator: ch-online.md#kernel-adatron
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
+    verified_by: visible manuscript code and checks/ch-online-ex3.py
+    verified_on: 2026-07-29
+    permission: original derivation and executable example with source attribution
   - id: online-svr
     title: Online support vector regression
     contribution: adapted-and-expanded
@@ -451,6 +490,54 @@ sections:
         manuscript_locator: ch-online.md#exercises
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level primary-source locators
+    contribution: provenance-index-only
+    sources:
+      - aizerman1964
+      - crammer2006pa
+      - freund1999voted
+      - friess1998
+      - novikoff1962
+      - rosenblatt1958
+      - scholkopf2002
+      - shawe2004
+    locators:
+      - source: aizerman1964
+        manuscript_locator: ch-online.md#kernel-perceptron
+        source_locator: Automation and Remote Control 25:821-837, Sections 2-4, potential-function representation and nonlinear inner-product substitution
+        status: author-located-pending-independent-verification
+      - source: crammer2006pa
+        manuscript_locator: ch-online.md#norma-passive-aggressive
+        source_locator: JMLR 7:551-585, Sections 2-5, Equations (2)-(8), Algorithms 1-3
+        status: author-located-pending-independent-verification
+      - source: freund1999voted
+        manuscript_locator: ch-online.md#voted-averaged
+        source_locator: Machine Learning 37(3):277-296, Sections 2-4, voted-perceptron algorithm and Theorems 1-2
+        status: author-located-pending-independent-verification
+      - source: friess1998
+        manuscript_locator: ch-online.md#kernel-adatron
+        source_locator: ICML 1998, pp. 188-196, Sections 2-4, kernel-adatron update and convergence analysis
+        status: author-located-pending-independent-verification
+      - source: novikoff1962
+        manuscript_locator: ch-online.md#novikoff
+        source_locator: Proceedings of the Symposium on the Mathematical Theory of Automata 12:615-622, perceptron convergence theorem and mistake-bound proof
+        status: author-located-pending-independent-verification
+      - source: rosenblatt1958
+        manuscript_locator: ch-online.md#kernel-perceptron
+        source_locator: Psychological Review 65(6):386-408, Sections II-IV, perceptron organization and learning procedure
+        status: author-located-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-online.md#kernel-adatron
+        source_locator: Chapters 2, 7, and 10, kernel expansions, SVM optimization, implementation, and reduced-set control
+        status: author-located-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-online.md#novikoff
+        source_locator: Chapter 4, margin and sample-compression generalization bounds
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only

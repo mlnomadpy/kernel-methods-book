@@ -1,0 +1,18 @@
+# SHA-256 checksums
+
+Generated after download on 2026-07-29.
+
+```text
+5e7840c545d24aaf21a1ea5fbddd76e78153de0a9a952f56810a8618a9fc9e06  bach-learning-theory-from-first-principles.pdf
+40d976c83c18cce1900eff8c41bd5ad408c102b813af39d05ff85678ccf8d76e  boyd-vandenberghe-convex-optimization.pdf
+673d2b4ef67fb3e50537b94d682523e0e0afabd5b5eab6a53cca55b5a8567f5b  chung-spectral-graph-theory.pdf
+66e5b76379a9b01714e99a1c939e93cde89f023fee73bd195e2b5d4d646f0267  hennig-osborne-kersting-probabilistic-numerics.pdf
+b71acb03034d73ca0ea148c9c6a91c34a88dd8c7ab8471af38035b34399bad9f  lattimore-szepesvari-bandit-algorithms.pdf
+244a9aa77b08a51c0a9f26dfd1f9ed0330e72132538060c103018a0f306c4721  muandet-et-al-kernel-mean-embeddings.pdf
+52f8843f135c969f31fd93d52ac380d96ac9cdbd53c5df2214b02f80d4455598  peters-janzing-scholkopf-elements-causal-inference.pdf
+d7f38aea7ddc989fb14c0b531f04f0197b3d0c51c34e640b0da8da561f4a7160  peyre-cuturi-computational-optimal-transport.pdf
+20355ed64b3df27c4477850dd5fcff8bfc25f56dcde043dbd08d1e5d5582db25  rasmussen-williams-gpml.pdf
+39431828579ea31513eb6de8d6a4bee3d524d8a4f398537d5a0b3900dba92361  roberts-yaida-hanin-deep-learning-theory-draft.pdf
+cc79e7bda06e0469e69e89215e5e489a630a1cabf6de5d1b2a8de7eb9c0582fa  saad-iterative-methods-for-sparse-linear-systems-first-edition.pdf
+94b195c3d5f73878039453d8fc771494df0c140fd6978fd0c6d29178a56023b5  sutton-barto-reinforcement-learning-draft.pdf
+```

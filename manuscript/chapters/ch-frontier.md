@@ -36,24 +36,13 @@ bibliography:
   - chizat2019
   - chizat2018meanfield
   - mei2018meanfield
-  - yang2021tp
   - ghorbani2020
   - abbe2022staircase
   - abbe2023leap
-  - bach2017barron
-  - neal1996
-  - lee2018nngp
-  - matthews2018
-  - cho2009
-  - mairal2016
-  - tsai2019transformer
-  - katharopoulos2020
-  - choromanski2021performer
-  - borovitskiy2020matern
-  - borovitskiy2021graph
   - havlicek2019quantum
-  - chaudhuri2011private
   - vonoswald2023icl
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # The Frontier: Feature Learning and Beyond
 
@@ -61,9 +50,19 @@ bibliography:
 
 ## Module I: fixed tangent features or learned features? {#two-limits}
 
+The [[ch:kernels-and-deep-learning|kernels and deep learning chapter]]
+developed Gaussian-process and tangent-kernel limits; the
+[[ch:reproducing-kernel-banach-and-variation-spaces|RKBS and variation-space
+chapter]] showed how learning atom measures differs from fitting coefficients
+in a fixed RKHS. The frontier begins exactly at that fork. Before comparing
+models, we must specify which representation is frozen, which object moves,
+and which limiting theorem is actually being invoked.
+
 Width alone does not determine whether a network learns features. The architecture, parameterization, output scale, initialization, learning-rate scaling, loss, time horizon, and order of limits all matter. We therefore compare two explicit models rather than using “infinite width” as a synonym for “kernel”.
 
-### Exact tangent dynamics {#lazy-regime}
+<span id="lazy-regime"></span>
+
+**Exact tangent dynamics.**
 
 Let \(f_\theta:\mathcal X\to\mathbb R\) be differentiable, let \(X=(x_1,\ldots,x_n)\), and define \(u_i(t)=f_{\theta_t}(x_i)\). For the unnormalized squared loss
 
@@ -111,7 +110,9 @@ Restricting to \(X\) gives the first display. Under the constant-kernel assumpti
 
 Jacot, Gabriel, and Hongler establish deterministic infinite-width NTK recursions and training dynamics under their sequential-width, fully connected, Lipschitz-activation setting [@jacot2018, Theorems 1 and 2]. The statement is not a theorem about arbitrary finite networks. Convolutional extensions require their own architectural construction [@arora2019cntk, Sections 3 and 4].
 
-### The lazy regime is a scaling limit {#lazy-scale}
+<span id="lazy-scale"></span>
+
+**The lazy regime is a scaling limit.**
 
 Consider a scaled differentiable model \(F_\alpha(w)=\alpha h(w)\). Holding the target fixed while increasing \(\alpha\) can make an \(O(\alpha^{-1})\) parameter displacement produce an \(O(1)\) output change. If the derivative of \(h\) is locally Lipschitz and the linearized tangent operator is sufficiently nondegenerate, the nonlinear and linearized trajectories remain close on a fixed time interval. Chizat, Oyallon, and Bach give the finite-horizon statement as Theorem 2.2 and separate assumptions for infinite-horizon convergence [@chizat2019, Theorems 2.2 and 2.3].
 
@@ -132,7 +133,9 @@ Small \(D_\theta\) without small \(D_K\) is not evidence for lazy training, beca
 
 <figure class="viz" data-widget="frontier-regime-map"><table><thead><tr><th>Representation</th><th>What moves?</th><th>Correct analysis</th></tr></thead><tbody><tr><td>Frozen NTK or encoder</td><td>Coefficients</td><td>Fixed-kernel estimation</td></tr><tr><td>Mean-field network</td><td>Neuron measure</td><td>Nonlinear measure flow</td></tr><tr><td>Tuned circuit, prompt, or adapter</td><td>Feature geometry</td><td>Data-dependent kernel selection</td></tr></tbody></table><figcaption>The decisive axis is representation movement, not model size. Frozen encoders and tangent kernels delegate learning to coefficients; transported particles and tuned feature maps require a different analysis.</figcaption></figure>
 
-### Mean-field feature learning {#parametrization}
+<span id="parametrization"></span>
+
+**Mean-field feature learning.**
 
 For a two-layer network, write
 
@@ -164,7 +167,9 @@ A feature-learning claim is accompanied by a *regime certificate* if it records:
 Without this certificate, “the network behaves like a kernel” is not a mathematical claim.
 ::::
 
-### What the separation results do and do not say {#curse}
+<span id="curse"></span>
+
+**What the separation results do and do not say.**
 
 Rotation-invariant kernels cannot automatically exploit an unknown low-dimensional direction. On spherical single-index targets, spectral mass is organized by polynomial degree; learning a degree-\(k\) component can require a sample scale polynomial in \(d^k\). The precise statements depend on the input distribution, target decomposition, loss, regularization, and algorithm. Ghorbani et al. analyze the separation between kernel methods and feature learning for polynomial scaling regimes [@ghorbani2020, Theorems 1 and 2]. Abbe et al. identify staircase-like and leap-complexity structures for particular neural training models [@abbe2022staircase, Sections 2–3; @abbe2023leap, Definition 1 and main theorem].
 
@@ -181,7 +186,9 @@ is PSD because it is the Hilbert–Schmidt inner product of density matrices
 
 The certificate is exact only for the ideal kernel. A useful quantum-kernel claim must answer three separate questions.
 
-### Evaluation and trainability {#quantum-evaluation}
+<span id="quantum-evaluation"></span>
+
+**Evaluation and trainability.**
 
 **Evaluation.** If a circuit estimates each overlap from a finite number \(S\) of shots, the reported matrix \(\widehat K\) is random. Independent entrywise estimates need not form a PSD matrix, even though \(K\) is PSD. Symmetrization repairs asymmetry, not indefiniteness. Projection onto the PSD cone creates a different estimator and must be reported.
 
@@ -189,7 +196,9 @@ The certificate is exact only for the ideal kernel. A useful quantum-kernel clai
 
 **Evaluation complexity.** A hard-to-simulate state preparation does not by itself imply a learning advantage. One must state the classical comparison class, the cost of loading data, shots per entry, number of Gram entries, error tolerance, and downstream solver cost.
 
-### Generalization is controlled by the learned Gram geometry {#quantum-generalization}
+<span id="quantum-generalization"></span>
+
+**Generalization is controlled by the learned Gram geometry.**
 
 Once \(\widehat K\) is supplied to an SVM or ridge estimator, ordinary kernel capacity and margin arguments apply conditionally on that matrix. A huge Hilbert space is not automatically a useful inductive bias. Near-identity Gram matrices can interpolate yet generalize poorly; nearly constant Gram matrices cannot separate labels. The relevant diagnostics are alignment computed on training data only, effective dimension, eigengaps, margin, and stability under shot noise.
 
@@ -206,6 +215,30 @@ $$\widehat K=\begin{pmatrix}1&0.9&0.9\\0.9&1&0.1\\0.9&0.1&1\end{pmatrix}.$$
 
 Its eigenvalues are approximately \((-0.2238,0.9000,2.3238)\). The exact feature map is valid, but the estimated matrix is indefinite. Clipping the negative eigenvalue gives a PSD matrix at Frobenius distance \(0.2238\), and changes the entrywise estimates. The right report contains the shot count, confidence intervals, minimum eigenvalue before repair, repair rule, and sensitivity of the final predictor.
 
+```python
+import numpy as np
+
+estimated = np.array([
+    [1.0, 0.9, 0.9],
+    [0.9, 1.0, 0.1],
+    [0.9, 0.1, 1.0],
+])
+
+eigenvalues, eigenvectors = np.linalg.eigh(estimated)
+clipped = np.maximum(eigenvalues, 0.0)
+repaired = (eigenvectors * clipped) @ eigenvectors.T
+repair_distance = np.linalg.norm(repaired - estimated, ord="fro")
+
+np.testing.assert_allclose(
+    eigenvalues,
+    [-0.22377392, 0.9, 2.32377392],
+    atol=5e-8,
+)
+np.testing.assert_allclose(repair_distance, 0.22377392, atol=5e-8)
+np.testing.assert_allclose(repaired, repaired.T, atol=1e-14)
+assert np.linalg.eigvalsh(repaired)[0] >= -1e-14
+```
+
 **Failure demonstrated.** Kernel validity does not survive arbitrary independent entrywise estimation.
 :::::
 
@@ -217,7 +250,9 @@ $$k_\eta(x,x')=k_0(E_\eta(x),E_\eta(x')).$$
 
 For the linear choice, \(k_\eta(x,x')=E_\eta(x)^\top E_\eta(x')\). This is an ordinary fixed kernel only after the encoder version, prompt/template, layer, pooling rule, normalization, and numerical precision are frozen.
 
-### A leakage-safe frozen-feature protocol {#foundation-protocol}
+<span id="foundation-protocol"></span>
+
+**A leakage-safe frozen-feature protocol.**
 
 1. **Freeze before labels.** Record the encoder checksum and preprocessing before inspecting test labels.
 2. **Split raw entities first.** Deduplicate people, documents, molecules, sites, or time windows before embedding. Otherwise near-duplicate leakage survives any downstream split.
@@ -229,7 +264,9 @@ For the linear choice, \(k_\eta(x,x')=E_\eta(x)^\top E_\eta(x')\). This is an or
 
 The construction in von Oswald et al. shows that a particular linear self-attention layer can implement a gradient-descent update for linear regression [@vonoswald2023icl, Proposition 1]. It does not prove that arbitrary pretrained transformers implement gradient descent, nor that every embedding kernel inherits that mechanism. The distinction exemplifies the protocol: an architectural possibility is not an empirical guarantee for an unspecified model.
 
-### Leakage changes the object being evaluated {#foundation-leakage}
+<span id="foundation-leakage"></span>
+
+**Leakage changes the object being evaluated.**
 
 Suppose a prompt, layer, or projection \(T_y\) is chosen using all labels, including test labels, and the reported kernel is
 
@@ -312,6 +349,13 @@ learning” from a label into a falsifiable regime claim.
 ## Summary and further reading {#summary-and-further-reading}
 
 The frontier is not one method. It is a set of boundary disputes about what remains fixed while learning occurs. NTK theory is strongest when its parameterization and limit are explicit. Mean-field theory supplies a different state space in which features genuinely move. Quantum kernels inherit exact PSD structure but not automatic trainability, generalization, or computational advantage. Foundation-model kernels are mathematically ordinary frozen-feature kernels whose scientific validity depends on unusually careful split and contamination protocols. The durable habit is to attach every claim to a regime certificate and every empirical advantage to a leakage-safe comparison.
+
+The next chapter, [[ch:distribution-shift-robustness-and-conformal-prediction|distribution
+shift, robustness, and conformal prediction]], asks what remains valid when the
+deployment distribution changes. That is the necessary sequel: learned and
+pretrained representations can improve in-distribution accuracy while making
+the geometry's dependence on data provenance, contamination, and shift harder
+to see.
 
 For the tangent-kernel limit, see [@jacot2018, Theorems 1–2]. For lazy scaling, see [@chizat2019, Theorems 2.2–2.3]. For mean-field limits, see [@chizat2018meanfield, Sections 2–3] and [@mei2018meanfield, Theorems 1–2]. For separation results, see [@ghorbani2020, Theorems 1–2]. For the original quantum feature-map experiment, see [@havlicek2019quantum, main text and Methods]. For the scoped in-context gradient construction, see [@vonoswald2023icl, Proposition 1].
 

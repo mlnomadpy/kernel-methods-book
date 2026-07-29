@@ -34,12 +34,24 @@ bibliography:
   - zhang2009rkbs
   - wang2024sparserkbs
   - parhi2021banach
+  - scholkopf2001
+  - bach2017barron
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Reproducing-Kernel Banach and Variation Spaces
 
 <p class="lead">A kernel ridge solution is finite, but it is rarely sparse. Its centers are fixed at the observations, and a squared Hilbert norm spreads energy across correlated directions. A shallow neural network asks for something different: choose the directions and offsets of its atoms, and often choose only a few. Replacing the Hilbert norm can deliver that geometry, but it also removes orthogonality, the Riesz identification of a space with its dual, and the familiar linear coefficient formula. This chapter rebuilds the theory without smuggling those conveniences back in. Smooth reproducing-kernel Banach spaces produce finite representations in the dual. Nonsmooth RKBS and measure spaces produce sparse extreme solutions through weak-star compactness and convex geometry. A Radon-domain variation norm then turns the infinite search over ridge functions into a finite-width neural ridge spline, under assumptions that make the width bound true.</p>
 
 ## Three representer questions, not one {#rkbs-three-questions}
+
+The [[ch:kernels-and-rkhs|RKHS chapter]] proved a primal finite expansion by
+orthogonal projection, and the [[ch:vector-and-operator-valued-kernels|operator-valued
+chapter]] extended that logic while retaining Hilbert geometry. This chapter
+asks what survives when the squared norm and its inner product are removed.
+The answer is not one generalized formula but three different representer
+claims with different locations, compactness arguments, and notions of
+sparsity.
 
 The phrase “representer theorem” hides three different conclusions.
 
@@ -77,6 +89,12 @@ The standard proof uses:
 - the Pythagorean identity;
 - the linear gradient of \(\tfrac12\lVert f\rVert_{\mathcal H}^2\).
 
+This is the classical fixed-kernel representer mechanism formalized for broad
+regularized risks by Schölkopf, Herbrich, and Smola [@scholkopf2001]. Naming it
+here prevents a common mistake later: their theorem does not authorize a
+finite expansion when atom locations or feature parameters are themselves
+optimization variables.
+
 A general Banach space \(\mathcal B\) has an annihilator
 
 $$
@@ -95,7 +113,9 @@ This identity lives in the dual and is the backbone of smooth Banach representer
 
 ## Paper module I: the RKBS construction of Zhang, Xu, and Zhang {#rkbs-module-zhang}
 
-### Exact dual-pair setting {#rkbs-dual-pair}
+<span id="rkbs-dual-pair"></span>
+
+**Exact dual-pair setting.**
 
 Zhang, Xu, and Zhang define an RKBS more narrowly than “any Banach space with bounded point evaluation” [@zhang2009rkbs]. Let \(\mathcal X\) be an arbitrary set. A real version of their construction consists of:
 
@@ -125,7 +145,9 @@ The kernel need not be symmetric or positive definite in the Hilbert-space sense
 
 That final sentence is a structural warning. In a general dual pair, \(K(x,y)\) is a bilinear pairing of two feature maps rather than an inner product of one feature map with itself.
 
-### Semi-inner products and the duality map {#rkbs-duality}
+<span id="rkbs-duality"></span>
+
+**Semi-inner products and the duality map.**
 
 A normed space can admit a semi-inner product \([\cdot,\cdot]_{\mathcal B}\) that is linear in the first argument and satisfies
 
@@ -152,7 +174,9 @@ $$
 
 It maps into \(\ell_q^d\), is nonlinear unless \(p=2\), and satisfies \(J_q(J_p(x))=x\). Uniform convexity gives uniqueness of best approximants; uniform Fréchet differentiability gives a well-behaved unique semi-inner product. These are genuine assumptions, not Banach-space defaults.
 
-### The dual representer theorem {#rkbs-smooth-representer}
+<span id="rkbs-smooth-representer"></span>
+
+**The dual representer theorem.**
 
 Let \(E:\mathcal B\to\mathbb R^n\) be a bounded linear information map, not necessarily point evaluation. Consider
 
@@ -293,7 +317,9 @@ Finite measurements do not by themselves guarantee a finite atomic solution. One
 
 ## Paper module II: sparse representers in RKBS {#rkbs-module-wang}
 
-### The paper's question and exact assumptions {#rkbs-wang-setting}
+<span id="rkbs-wang-setting"></span>
+
+**The paper's question and exact assumptions.**
 
 Wang, Xu, and Yan ask when an RKBS promotes a genuinely sparse kernel expansion, rather than only a finite dual representation [@wang2024sparserkbs]. Their main setting is a real dual Banach space \(\mathcal B\) with predual \(\mathcal B_\ast\), weak-star continuous linearly independent measurements \(\nu_1,\ldots,\nu_n\in\mathcal B_\ast\), and
 
@@ -323,7 +349,9 @@ For a suitable dual certificate \(\widehat\nu\in\operatorname{span}\{\nu_i\}\), 
 
 A1 makes the exposed face atomic. A2 prevents cancellation from hiding coefficient mass.
 
-### Sparse extreme-point theorem and derivation {#rkbs-wang-theorem}
+<span id="rkbs-wang-theorem"></span>
+
+**Sparse extreme-point theorem and derivation.**
 
 Define the finite matrix
 
@@ -389,7 +417,9 @@ A2 and the norming-certificate identity give the displayed coefficient sum. \(\s
 
 The proof reconstructs the rank argument, but the passage from the RKBS problem to the finite \(\ell_1\) problem depends entirely on A1 and A2. The paper shows that \(\ell_1(\mathbb N)\) and certain measure RKBSs satisfy them. It also shows why \(\ell_p(\mathbb N)\), \(1\lt p\lt\infty\), does not inherit this sparse conclusion: its norm is curved, its norming faces are not coordinate faces, and A2 fails.
 
-### Worked sparse certificate {#rkbs-worked-l1}
+<span id="rkbs-worked-l1"></span>
+
+**Worked sparse certificate.**
 
 Return to the constraints
 
@@ -434,7 +464,9 @@ An RKHS squared norm spreads a solution across correlated directions because ene
 
 <figure class="viz" data-figure="rkbs-sparsity-path" data-alt="A regularization path plots training root-mean-square error against the number of active atoms. Larger atomic penalties move left toward smaller supports while increasing residual error."><figcaption>Atomic regularization does not produce sparsity for free. Its path exposes the exact exchange: increasing \(\lambda\) removes active atoms, eventually paying in fit. The useful operating point is a frontier choice, not the sparsest endpoint by default.</figcaption></figure>
 
-### Regularization and its boundary {#rkbs-wang-regularization}
+<span id="rkbs-wang-regularization"></span>
+
+**Regularization and its boundary.**
 
 For
 
@@ -448,7 +480,9 @@ This does not say that every minimizer is sparse. A convex solution set may cont
 
 ## Paper module III: neural networks as ridge splines {#variation-ridge-splines}
 
-### Radon-domain variation space {#rkbs-parhi-setting}
+<span id="rkbs-parhi-setting"></span>
+
+**Radon-domain variation space.**
 
 Parhi and Nowak seek a function-space problem whose solutions are finite-width single-hidden-layer networks [@parhi2021banach]. For integer \(m\ge2\), let \(R\) denote the Radon transform, let \(\Lambda^{d-1}\) be the ramp filter, and define
 
@@ -482,7 +516,9 @@ $$
 
 The last condition is the analogue of the polynomial side constraints in spline interpolation.
 
-### Finite-width theorem and proof skeleton {#rkbs-parhi-theorem}
+<span id="rkbs-parhi-theorem"></span>
+
+**Finite-width theorem and proof skeleton.**
 
 :::: {.theorem #thm-rkbs-ridge-spline}
 [Theorem (finite-width polynomial ridge-spline minimizer)]{.box-title}
@@ -511,6 +547,12 @@ $$
 
 This is Theorem 1 of Parhi and Nowak [@parhi2021banach].
 
+Bach's convex-neural-network analysis gives a complementary variation-norm
+view in which infinitely many hidden units become a convex measure
+optimization before finite approximations are considered [@bach2017barron].
+The shared insight is convexity in the measure. The exact atom class, domain,
+and norm differ and must not be identified without a mapping theorem.
+
 **Assumptions.** Growth-restricted native space, continuous linear surjective measurements, identification on the polynomial null space, and strictly convex coercive lower-semicontinuous data fit.
 
 **Proof status.** Proof skeleton reconstructed below; the stable right-inverse and Banach-space construction are cited to the primary paper.
@@ -527,7 +569,9 @@ The difficult step is not Carathéodory alone. The proof:
 
 The width bound subtracts \(\dim\mathcal N_m\) because that many measurements are needed to identify the unpenalized polynomial component.
 
-### From variation norm to path norm and weight decay {#rkbs-parhi-regularizer}
+<span id="rkbs-parhi-regularizer"></span>
+
+**From variation norm to path norm and weight decay.**
 
 For a finite network
 
@@ -551,7 +595,9 @@ $$
 
 For \(m=2\), these correspond to a ReLU path-type penalty and balanced weight decay. The equivalence concerns global minimizers. It does not prove that gradient descent finds one, and it does not say that every parameterization of the same function has the same cost before balancing.
 
-### A one-knot ridge-spline calculation {#rkbs-worked-ridge-spline}
+<span id="rkbs-worked-ridge-spline"></span>
+
+**A one-knot ridge-spline calculation.**
 
 Take \(d=1\), \(m=2\), and exact data
 
@@ -575,7 +621,9 @@ Therefore \(\lVert s''\rVert_{\mathrm{TV}}=2\). To see optimality, any admissibl
 
 Here \(N=3\), \(\dim\mathcal N_2=2\), and the theorem predicts a minimizer with at most one atom. The hand calculation reaches that bound exactly.
 
-### Failure boundary and afterlife {#rkbs-parhi-boundary}
+<span id="rkbs-parhi-boundary"></span>
+
+**Failure boundary and afterlife.**
 
 - If \(V\) is not injective on \(\mathcal N_m\), the polynomial part can drift without penalty.
 - If point evaluation is not continuous on \(\mathcal F_m\), scattered-data fitting is not covered.
@@ -612,7 +660,9 @@ For a finite dictionary \(\{\varphi_j\}_{j=1}^M\), atomic regularization becomes
 
 The outer master problem can be convex while the oracle is nonconvex. A small restricted-master gap is not a global certificate unless the oracle has found, or bounded, the most violating atom.
 
-## One comparison table {#rkbs-comparison}
+<span id="rkbs-comparison"></span>
+
+**One comparison table.**
 
 | Geometry | Finite object | Sparsity mechanism | Main assumptions | Main computational obstacle |
 |---|---|---|---|---|
@@ -656,6 +706,12 @@ representer theorem that leaves a hard nonlinear inverse map.
 ## Summary and further reading {#rkbs-summary}
 
 The RKBS foundation uses a dual pair of pointwise function spaces, and smooth semi-inner-product geometry puts the representer in the dual [@zhang2009rkbs]. Sparse RKBS theory instead studies weak-star compact solution sets and their extreme points; kernel sparsity follows only when data-dependent norming faces are atomic and the selected sections carry exact \(\ell_1\) geometry [@wang2024sparserkbs]. Radon-domain variation spaces turn total-variation measure minimizers into finite sums of truncated-power ridge atoms plus a polynomial null-space term, with width controlled by the number of measurements [@parhi2021banach]. These are related representer principles, but their assumptions, conclusions, and algorithms are not interchangeable.
+
+The [[ch:the-frontier|frontier chapter]] can now ask a sharper question: when a
+modern system is said to learn features, is it moving coefficients in a fixed
+Hilbert space, transporting a measure of atoms under a variation norm, or
+selecting a new representation with no fixed-space theorem? The geometry
+developed here turns that phrase into an auditable mathematical distinction.
 
 ## Exercises {#exercises}
 
