@@ -26,7 +26,11 @@ jobs:
           # The five matrix-heavy reference checks finish reliably on hosted
           # runners when they do not compete four-at-a-time for BLAS threads.
           NUMERICAL_CHECK_WORKERS: "2"
-          NUMERICAL_CHECK_TIMEOUT_MS: "60000"
+          # The 20,000-dimensional benign-overfitting simulation is fast with
+          # Accelerate/OpenBLAS locally but can exceed one minute on the hosted
+          # runner's shared BLAS backend. Keep the computation unchanged and
+          # give that single reference check enough wall-clock headroom.
+          NUMERICAL_CHECK_TIMEOUT_MS: "180000"
       - name: Install browser
         run: npx playwright install --with-deps chromium
       - name: Run browser and accessibility gates
