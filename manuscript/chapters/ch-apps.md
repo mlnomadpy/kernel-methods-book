@@ -65,8 +65,15 @@ bibliography:
   - kernelbook-code-ch-apps-ex1
   - kernelbook-code-ch-apps-ex2
   - sonnenburg2010shogun
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 ---
 # Applications and Practice
+
+The [[ch:the-frontier|frontier chapter]] catalogued emerging kernel
+representations. Practice turns each representation claim into a decision
+record: what object the kernel certifies, what estimator is fitted, what
+uncertainty is reported, and what deployment test could falsify the choice.
 
 <p class="lead">A protein sequence arrives with one question attached: which structural family does it belong to? Two members of the same superfamily can share as little as a fifth of their amino acids, so counting matches gets you nowhere, and the object is a variable-length string, not a vector any classifier expects. The same shape recurs for a document to be filed by topic and a molecule whose toxicity must be read off its bonds. Every chapter so far has built one piece of the answer: a construction that turns structure into an inner product, a convex learner that fits once the inner product is fixed, a theorem that says when the fit will generalize. This closing chapter assembles them the way a practitioner does. We walk three classic applications end to end, distill the choices that decide whether a kernel method works in practice, from picking a kernel for your data type to model selection, normalization, and the spectrum diagnostics that separate under from overfitting, and close with a map of the software that puts all of this a few lines of code away. The aim is not new theory but judgment: given a problem, which of the book's kernels do you reach for, how do you tune it honestly, and when do you trade the exact solve for an approximation?</p>
 
@@ -86,7 +93,7 @@ A defensible project is therefore a loop rather than a one-way training script. 
 
 The kernels for structured data earn their keep where the raw objects, protein sequences, documents, molecules, are not vectors at all. In each the kernel is the only bridge from the object to the RKHS machinery, and in each a specific kernel plus a plain support vector machine set the state of the art for years.
 
-### Remote protein homology with string and mismatch kernels {#protein-homology}
+**Remote protein homology with string and mismatch kernels.** {#protein-homology}
 
 The task is detection of distant evolutionary relatives. Two proteins in the same structural superfamily can share as little as a fifth of their amino acids, so a raw identity count fails, and the goal is to decide, for a query sequence, whether it belongs to a given family despite that low overlap. The discriminative formulation, following Jaakkola, Diekhans, and Haussler (2000), trains a support vector machine to separate family members from non-members, which turns the problem into the design of a kernel between variable-length strings over the twenty-letter amino-acid alphabet.
 
@@ -96,7 +103,7 @@ A complementary route lets a generative model design the features. The Fisher ke
 
 The pipeline is identical in either case: build the Gram matrix over the training sequences, normalize it, train one SVM per family, score held-out sequences. On the standard SCOP benchmark, in which each of thirty-three families is held out in turn and performance is measured by the ROC and ROC50 scores (the area under the ROC curve, and under its first fifty false positives), the string kernels match or exceed the SVM-Fisher method while being computed directly from sequence with no model to fit (Leslie et al. 2004; Jaakkola et al. 2000). Alignment kernels scoring pairs by their optimal local alignment (Saigo et al. 2004) push detection further still, and all are convolution kernels in the sense of Haussler (1999). The lesson that carried into practice: a cheap, exact, sequence-derived kernel can beat an expensive model-based one, and the string kernels became the default for biological sequence classification.
 
-### Text categorization with the vector-space and string kernels {#text-categorization}
+**Text categorization with the vector-space and string kernels.** {#text-categorization}
 
 Assigning topic labels to documents was the problem on which support vector machines first proved themselves in the discrete world. The classical representation is the bag of words: fix a vocabulary and represent a document by its (TF-IDF weighted) term counts, ignoring word order. The kernel is the inner product in this space, which once the vectors are length-normalized is exactly the cosine similarity of the vector-space model. The SVM is the right learner because of the geometry the earlier chapters built: the feature space has tens of thousands of dimensions, almost all irrelevant to any given category, and the margin bounds of [[ch:support-vector-machines|the support vector machine chapter]] guarantee that a large-margin separator there generalizes from few examples with no explicit feature selection.
 
@@ -112,7 +119,7 @@ Joachims (1998) established this on the Reuters-21578 benchmark, where the SVM w
 
 The numbers are those reported by Joachims (1998) on the Reuters-21578 \"ModApte\" split; the SVM improves on the strongest classical baseline, the nearest-neighbor rule, by about four points and on naive Bayes by more than fourteen. Word order can be recovered without leaving the framework: the string subsequence kernel of Lodhi et al. (2002) works directly on character sequences, scoring documents by their shared (possibly gapped) substrings, competitive with the word kernels while needing no tokenization, and latent semantic kernels (Cristianini et al. 2002) fold a low-rank semantic smoothing into the same inner product. Both are developed in [[ch:kernels-for-text|the chapter on kernels for text]]. The takeaway is that for text a normalized linear kernel on a good weighting is a strong baseline that is hard to beat, with the string kernels held in reserve for when subword structure matters.
 
-### Molecular property prediction with graph kernels {#molecular-prediction}
+**Molecular property prediction with graph kernels.** {#molecular-prediction}
 
 A small molecule is naturally a labeled graph: atoms are vertices labeled by element, bonds are edges labeled by type. Predicting a property (mutagenicity, toxicity, activity) from that graph is the cheminformatics problem, and graph kernels are the bridge to the SVM. The difficulty is fundamental: Gärtner et al. (2003) showed that a kernel able to separate any two non-isomorphic graphs is as hard to compute as graph isomorphism, so every practical graph kernel compares tractable substructures. The marginalized graph kernel counts label sequences along random walks, a marginalized kernel in the sense of [[ch:generative-and-marginalization-kernels|the generative-kernels chapter]]; the shortest-path kernel of Borgwardt and Kriegel (2005) compares multisets of shortest-path lengths; and the Weisfeiler-Lehman subtree kernel of Shervashidze et al. (2011), comparing iteratively refined subtree patterns, is the scalable modern default. All belong to [[ch:graph-kernels|the chapter on kernels for and on graphs]].
 
@@ -122,7 +129,7 @@ The application that named the field is Ralaivola et al. (2005), who built margi
 
 The applications share a skeleton, and that skeleton is the recipe: choose a kernel, normalize the inputs and the kernel, select the hyperparameters by nested cross-validation, and diagnose the fit. We take these in turn and collect them into one algorithm.
 
-### Choosing a kernel for your data {#choosing-a-kernel}
+**Choosing a kernel for your data.** {#choosing-a-kernel}
 
 The first decision is the least mechanical, and the book has been a catalog of answers to it. The following guide maps a data type to a sensible first kernel and to the chapter that builds it. It is a starting point, not a verdict: the honest test is always the cross-validated error of the section that follows.
 
@@ -140,7 +147,7 @@ The first decision is the least mechanical, and the book has been a catalog of a
 
 Two rules of thumb cut across the table. On vectors in doubt, start with the Gaussian kernel and one well-tuned bandwidth: it is universal, and its single length scale is easy to search. On structured data, spend your effort on the kernel, not the classifier, since the SVM downstream is interchangeable. And if you truly cannot choose, do not: multiple kernel learning turns the choice into a convex problem, as [[ch:multiple-kernel-learning|its chapter]] develops.
 
-### Normalization and centering {#normalization}
+**Normalization and centering.** {#normalization}
 
 A kernel is a statement about similarity, and that statement is only as trustworthy as the units it is made in. Three normalizations recur, and skipping them is the most common way a sound method underperforms.
 
@@ -158,7 +165,7 @@ $$\tilde K = H K H,\qquad H = I-\tfrac1n\mathbf{1}\mathbf{1}^\top,$$
 
 which subtracts the feature-space mean without ever computing it, and it is the first step of kernel PCA in [[ch:kernel-pca|its chapter]]. Supervised machines often skip it: the constraint \(\sum_i\alpha_i y_i=0\) in the SVM dual already makes the solution invariant to a constant offset of the kernel, the conditional-positive-definiteness invariance of [[ch:kernel-families|the kernel-families chapter]].
 
-### The model-selection loop {#model-selection}
+**The model-selection loop.** {#model-selection}
 
 With the kernel and its normalizations fixed, a kernel machine still has a small grid of dials: the kernel hyperparameters (the Gaussian bandwidth \(\sigma\), the polynomial degree) and the regularization (the SVM penalty \(C\), the ridge \(\lambda\)). These are not learned by the convex fit but chosen by estimating out-of-sample error. The most common methodological error in applied kernel work is to let one cross-validation both choose the hyperparameters and estimate the final error: reusing the selection folds to report performance is optimistic, because the grid was tuned to those very folds. The fix is nested cross-validation, an inner loop that selects and an outer loop that scores, so no data point ever helps choose the model later graded on it. Chapelle et al. (2002) give gradient-based alternatives to the grid; the grid remains the robust default.
 
@@ -186,6 +193,30 @@ The worked example makes the inner loop concrete on a dataset small enough to ch
 ::::: {.example #example-44-1}
 [Example (a model-selection loop by hand)]{.box-title}
 
+```python
+import numpy as np
+
+x = np.arange(6.0)
+y = np.sin(x)
+x = (x - x.mean()) / x.std()
+folds = [np.array([0, 2, 4]), np.array([1, 3, 5])]
+
+def kernel(a, b, sigma):
+    return np.exp(-((a[:, None] - b[None, :]) ** 2) / (2.0 * sigma**2))
+
+def predict(train, test, sigma):
+    K = kernel(x[train], x[train], sigma)
+    alpha = np.linalg.solve(K + 0.1 * np.eye(train.size), y[train])
+    return kernel(x[test], x[train], sigma) @ alpha
+
+for sigma in [0.5, 2.0]:
+    errors = [
+        np.mean((predict(folds[0], folds[1], sigma) - y[folds[1]])**2),
+        np.mean((predict(folds[1], folds[0], sigma) - y[folds[0]])**2),
+    ]
+    print(sigma, errors, np.mean(errors))
+```
+
 :::: wex
 ::: wex-setup
 Six points on a line, \(x_{\text{raw}}=(0,1,2,3,4,5)\), with regression target \(y=\sin(x_{\text{raw}})=(0,\,0.8415,\,0.9093,\,0.1411,\,-0.7568,\,-0.9589)\). We standardize the inputs (mean \(2.5\), standard deviation \(1.7078\)) to \(x=(-1.4639,\,-0.8783,\,-0.2928,\,0.2928,\,0.8783,\,1.4639)\), fit kernel ridge regression with the RBF kernel \(k(x,x')=e^{-(x-x')^2/2\sigma^2}\) and fixed ridge \(\lambda=0.1\), and select the bandwidth by 2-fold cross-validation over \(\sigma\in\{0.5,\,2.0\}\). The interleaved folds are \(A=\{0,2,4\}\) and \(B=\{1,3,5\}\). The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-apps-ex1].
@@ -200,7 +231,7 @@ Six points on a line, \(x_{\text{raw}}=(0,1,2,3,4,5)\), with regression target \
 ::::
 :::::
 
-### Diagnosing under and overfitting through the spectrum {#spectrum-diagnosis}
+**Diagnosing under and overfitting through the spectrum.** {#spectrum-diagnosis}
 
 When a fit disappoints, the eigenvalues of the Gram matrix say why. Mercer's theorem in [[ch:mercer-and-rates|its chapter]] reads the spectrum of \(K\) as the energy the kernel places along each eigen-direction, and how fast the eigenvalues decay is the effective number of directions the model can use. A useful scalar summary at ridge level \(\lambda\) is the effective dimension
 
@@ -222,10 +253,32 @@ The same six standardized points. We form the RBF Gram matrix at the two bandwid
 4.  [Match the diagnosis to the fit.]{.wex-op} The narrow kernel's high effective dimension is why it nearly interpolated the six points in the previous example, and why its train error collapsed while its CV error did not. A wide kernel with \(d_{\text{eff}}=2.43\) would risk the opposite failure, too few directions to bend to the target, which is underfitting.
 
 **Reading.** The spectrum turns a vague worry about capacity into a number. A fast-decaying spectrum (small \(d_{\text{eff}}\)) means a simple model prone to underfitting: narrow the bandwidth or lower the ridge to expose more directions. A slow-decaying spectrum (large \(d_{\text{eff}}\)) with a train-versus-validation gap means overfitting: widen the bandwidth or raise the ridge. Both knobs act on the same quantity, \(d_{\text{eff}}\), and matching it to the data is the whole game.
+
+```python
+import numpy as np
+
+x = np.arange(6.0)
+x = (x - x.mean()) / x.std()
+
+def rbf(sigma):
+    distance = x[:, None] - x[None, :]
+    return np.exp(-(distance**2) / (2.0 * sigma**2))
+
+for sigma in [2.0, 0.5]:
+    eigenvalues = np.linalg.eigvalsh(rbf(sigma))
+    effective_dimension = np.sum(eigenvalues / (eigenvalues + 0.1))
+    print(sigma, eigenvalues[::-1], effective_dimension)
+
+assert np.isclose(
+    np.sum(np.linalg.eigvalsh(rbf(2.0)) /
+           (np.linalg.eigvalsh(rbf(2.0)) + 0.1)),
+    2.43, atol=0.01
+)
+```
 ::::
 :::::
 
-### Exact, Nystrom, or random features {#exact-nystrom-rff}
+**Exact, Nystrom, or random features.** {#exact-nystrom-rff}
 
 Everything above assumes the \(n\times n\) Gram matrix can be formed and factored, at \(O(n^2)\) memory and \(O(n^3)\) time. That is fine up to roughly \(n\sim 10^4\); beyond it the exact solve, not the statistics, becomes the bottleneck. [[ch:large-scale-kernels|The large-scale chapter]] develops two escapes, and the choice follows the data type.
 
@@ -307,9 +360,19 @@ The most expensive practical errors happen before the solver starts: choosing a 
 
 At deployment, a good validation score is incomplete evidence. Record the spectrum and condition diagnostics, uncertainty calibration, influential training points, shift monitors, compute budget, and a retraining trigger. Approximation choice is part of the model card because Nyström landmarks, random-feature seeds, and dictionary eviction rules decide which geometry survives.
 
+Positive definiteness and representer reduction are theorem-level facts;
+cross-validation scores are empirical evidence from a declared resampling
+design; GP intervals are model-based uncertainty unless calibrated externally;
+and operational validation measures deployed loss, group behavior, resource
+budget, and shift sensitivity. A model card must label each quantity by this
+role rather than collecting them under the vague heading “performance.”
+
 ## Summary and further reading {#summary-and-further-reading}
 
 The reusable lesson of the applications is a workflow, not a favorite kernel. Encode the object's structure, normalize the induced geometry, diagnose spectrum and conditioning, choose a compute route, select the full pipeline by nested validation, and audit the deployed decision. Sequence applications such as [@leslie2002] and [@leslie2004] and the Fisher-kernel route of [@jaakkola2000] differ in representation but share that evidence chain. A kernel method becomes a strong practical result only when its similarity, optimization, approximation, validation, uncertainty, and failure conditions are reported as one system.
+
+[[ch:accountable-kernels|The accountability chapter]] turns that record into
+uncertainty, influence, drift, and audit procedures.
 
 ## Exercises {#exercises}
 

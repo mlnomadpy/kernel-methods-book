@@ -3,10 +3,10 @@
   "chapter": "ch-text",
   "anchor": "example-23-4",
   "source_file": "manuscript/chapters/ch-text.md",
-  "source_sha256": "433b7981f2518c57a8152cfff9baa06ae002e3a8eb4d89a644b7f2ff27a09376",
+  "source_sha256": "18e1de4b16f366fedb4a992ff954f0b17d39aaccbe8b73403a5689b7868a59b9",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/additional-example-checks.py"
+    "checks/ch-text-ex3.py"
   ],
   "numeric_literals": [
     "2",
@@ -22,9 +22,16 @@
     "0.263",
     "6",
     "1.069",
-    "7.913"
+    "7.913",
+    "1.0",
+    "3.0",
+    "4.0",
+    "2.0",
+    "8.0",
+    "0.0",
+    "-1"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Computes the document mean embeddings, cosine similarities, optimal-transport costs, and indefiniteness diagnostic displayed in the box.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

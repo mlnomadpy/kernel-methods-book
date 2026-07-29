@@ -111,6 +111,10 @@ for m in range(1, 11):
     deep[m] = sig_inner(SXm, SYm, m)
     print(f"  m={m:2d}   k^(m)(X,Y) = {deep[m]:.10f}")
 full = deep[10]
+assert np.allclose(SX[1], SY[1])
+assert np.isclose(kXY, 3.5)
+assert np.isclose(kXX, 4.5) and np.isclose(kYY, 4.5)
+assert np.linalg.eigvalsh(np.array([[kXX, kXY], [kXY, kYY]])).min() >= -1e-12
 
 # ---- Goursat PDE (Salvi et al. 2021):  d^2U/dsdt = <Xdot,Ydot> U ------------
 # Piecewise-linear => <Xdot,Ydot> is constant on each cell (p,q) and equals
@@ -143,5 +147,6 @@ for sub in [1, 2, 4, 8, 16, 32, 64, 128]:
     print(f"  sub={sub:4d}   U(S,T) = {goursat(dX, dY, sub):.10f}")
 print(f"\ndeep truncated kernel (m=10)      = {full:.10f}")
 print(f"Goursat PDE (sub=128)             = {goursat(dX, dY, 128):.10f}")
+assert abs(goursat(dX, dY, 128) - full) < 2e-5
 print("The finite-difference PDE solution converges from above to the full")
 print("signature inner product; for this pair, depth truncation approaches from below.")

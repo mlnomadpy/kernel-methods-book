@@ -61,7 +61,11 @@ for (const chapter of chapters) {
       if (!existingChecks.includes(check)) existingChecks.push(check);
     }
     const conventionalCheck = "checks/" + chapter.src + "-ex" + ordinal + ".py";
-    if (fs.existsSync(conventionalCheck) && !existingChecks.includes(conventionalCheck)) {
+    // A conventional ordinal is only a fallback. Once an artifact or an
+    // explicit in-book reference supplies a check, adding another file by
+    // ordinal can silently bind a box to a different computation after
+    // chapters are reordered or examples are inserted.
+    if (existingChecks.length === 0 && fs.existsSync(conventionalCheck)) {
       existingChecks.push(conventionalCheck);
     }
     const numericLiterals = [...body.matchAll(/(?<![A-Za-z_])[-+]?\d+(?:\.\d+)?(?:e[-+]?\d+)?/gi)]

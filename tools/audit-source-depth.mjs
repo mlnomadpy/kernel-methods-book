@@ -61,7 +61,8 @@ const chapters = orderedIds.map((id, index) => {
   const text = fs.readFileSync(file, "utf8");
   const yaml = frontmatter(text);
   const bibliography = listField(yaml, "bibliography");
-  const citations = uniqueMatches(text, /@([A-Za-z0-9_:.+-]+)/g);
+  const citationText = text.replace(/```[\s\S]*?```/g, "");
+  const citations = uniqueMatches(citationText, /@([A-Za-z0-9_:.+-]+)/g);
   const formalResults = (text.match(/:{3,}\s*\{\.(?:theorem|proposition|lemma|corollary)\b/g) ?? []).length;
   const proofs = (text.match(/:{3,}\s*\{\.proof\b/g) ?? []).length;
   const examples = (text.match(/:{3,}\s*\{\.example\b/g) ?? []).length;
@@ -77,7 +78,14 @@ const chapters = orderedIds.map((id, index) => {
   if (bibliography.length < 5 && sections >= 8) flags.push("thin-bibliography");
   if (formalResults >= 3 && proofs / formalResults < 0.34) flags.push("thin-proof-chain");
   if (examples === 0) flags.push("no-worked-example");
-  if (uncitedBibliography.length) flags.push("frontmatter-only-sources");
+  // A bibliography can intentionally include further reading that is not attached
+  // to a load-bearing claim. "Frontmatter-only" therefore means exactly what the
+  // label says: the chapter declares sources but contains no in-text citation.
+  // Keep partially unused entries in `uncitedBibliography` for editorial review,
+  // but do not turn them into a false claim-provenance failure.
+  if (bibliography.length > 0 && citations.length === 0) {
+    flags.push("frontmatter-only-sources");
+  }
   if (undeclaredCitations.length) flags.push("undeclared-citations");
   if (evidenceUnits < 2 && sections >= 8) flags.push("thin-evidence");
 
@@ -109,6 +117,12 @@ const summary = {
   noWorkedExample: chapters.filter((chapter) => chapter.flags.includes("no-worked-example")).length,
   frontmatterOnlySources: chapters.filter((chapter) =>
     chapter.flags.includes("frontmatter-only-sources")).length,
+  chaptersWithUnusedBibliography: chapters.filter((chapter) =>
+    chapter.uncitedBibliography.length > 0).length,
+  unusedBibliographyEntries: chapters.reduce(
+    (total, chapter) => total + chapter.uncitedBibliography.length,
+    0,
+  ),
   undeclaredCitations: chapters.filter((chapter) =>
     chapter.flags.includes("undeclared-citations")).length,
 };

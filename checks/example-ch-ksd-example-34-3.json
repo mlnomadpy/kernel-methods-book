@@ -3,7 +3,7 @@
   "chapter": "ch-ksd",
   "anchor": "example-34-3",
   "source_file": "manuscript/chapters/ch-ksd.md",
-  "source_sha256": "b24b204a8f78dde024fdbf7986afb236f9b7c61d67d05da588a66dc07f4bcd97",
+  "source_sha256": "a9df331e6b12489c1d2423924666726bb4f64756b0fbb9b2be4f69786c240fd9",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-ksd-ex3.py"
@@ -24,7 +24,20 @@
     "3",
     "220.2",
     "+1",
-    "6"
+    "6",
+    "1.0",
+    "2.0",
+    "-0.5",
+    "10.0",
+    "20.0",
+    "30.0",
+    "40.0",
+    "50.0",
+    "4.0e-19",
+    "7.0e-20",
+    "0.0",
+    "1.0e-12",
+    "12"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

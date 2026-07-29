@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-generative
 slug: generative-and-marginalization-kernels
 title: Kernels from Generative Models
@@ -56,6 +58,18 @@ On the two-element set \(\mathcal X=\{x_1,x_2\}\) put all the mass off the diago
 $$\begin{pmatrix}0 & 0.5\\ 0.5 & 0\end{pmatrix},$$
 
 whose eigenvalues are \(\pm 0.5\). The negative eigenvalue means \(P\) is not positive semidefinite, so this perfectly good probability distribution is not a P-kernel. A distribution that rewards pairs for being *different* cannot be an inner product, which always rewards an object for agreeing with itself.
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+gram = np.array([[0.0, 0.5], [0.5, 0.0]])
+eigenvalues = np.linalg.eigvalsh(gram)
+
+assert np.allclose(eigenvalues, [-0.5, 0.5])
+assert eigenvalues[0] < 0
+```
 ::::
 
 What rescues the construction in general is a hidden variable, and the mechanism is worth isolating because it recurs in every kernel of this chapter.
@@ -159,6 +173,57 @@ Alphabet \(\Sigma=\{A,B\}\), hidden states \(\{1,2\}\). Emissions \(P(A\mid 1)=0
 
 **Reading.** The direct enumeration and the forward recursion return the identical value \(0.074040\), the recursion doing in two length-two updates what the enumeration does by touching all \(|A|^n=4\) paths. On a realistic protein model with dozens of states and sequences of length hundreds, the enumeration is impossible and the recursion is routine.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+from itertools import product
+
+# emission P(symbol | state)
+E = {1: {"A": 0.8, "B": 0.2},
+     2: {"A": 0.3, "B": 0.7}}
+# initial P_M(a)
+pi = {1: 0.6, 2: 0.4}
+# transition P_M(a | b): trans[b][a]
+trans = {1: {1: 0.7, 2: 0.3},
+         2: {1: 0.4, 2: 0.6}}
+states = [1, 2]
+
+s, t = "AB", "AA"
+n = len(s)
+
+# (a) brute-force enumeration of all hidden paths
+print("path        P(s|h)   P(t|h)   P_M(h)     term")
+total = 0.0
+for h in product(states, repeat=n):
+    ps = 1.0
+    pt = 1.0
+    pm = pi[h[0]]
+    for i in range(n):
+        ps *= E[h[i]][s[i]]
+        pt *= E[h[i]][t[i]]
+        if i >= 1:
+            pm *= trans[h[i - 1]][h[i]]
+    term = ps * pt * pm
+    total += term
+    print(f"{str(h):10}  {ps:6.3f}   {pt:6.3f}   {pm:6.4f}   {term:.6f}")
+print(f"\nkappa(s,t) by enumeration = {total:.6f}")
+
+# (b) forward-style recursion
+kappa = {a: E[a][s[0]] * E[a][t[0]] * pi[a] for a in states}
+print(f"\nkappa_1,1 = {kappa[1]:.6f}   kappa_1,2 = {kappa[2]:.6f}")
+for k in range(1, n):
+    new = {}
+    for a in states:
+        inner = sum(trans[b][a] * kappa[b] for b in states)
+        new[a] = E[a][s[k]] * E[a][t[k]] * inner
+    kappa = new
+    print(f"kappa_{k+1},1 = {kappa[1]:.6f}   kappa_{k+1},2 = {kappa[2]:.6f}")
+rec = sum(kappa[a] for a in states)
+print(f"\nkappa(s,t) by recursion   = {rec:.6f}")
+assert abs(total - rec) < 1e-12
+print("agree:", abs(total - rec) < 1e-12)
+```
 :::::
 
 ## The pair hidden Markov model kernel {#pair-hmm}
@@ -273,6 +338,47 @@ Model: symbols drawn iid from \(\Sigma=\{A,B\}\) with unnormalized weights \(\th
 
 **Reading.** The score turns each string into the vector of how much it would push the emission probability of each symbol up or down, and the Fisher kernel compares those pushes: \(s\) and \(t\) disagree (\(K=-0.5\)), while \(s\) and \(u\) agree strongly (\(K=1.5\)). Up to the centering term, this two-symbol model's Fisher kernel is the \(1\)-spectrum kernel, the count of shared symbols; enlarging the model to \(k\)-mer transitions recovers the \((k{+}1)\)-spectrum kernel, the sequence Fisher kernel derived in full in [[ch:string-kernels|the string-kernels chapter]].
 ::::
+
+**Reproduce the calculation.**
+
+```python
+def counts(x):
+    return x.count("A"), x.count("B")
+
+def score(x):
+    nA, nB = counts(x)
+    n = len(x)
+    return (nA - n / 2.0, nB - n / 2.0)
+
+def dot(a, b):
+    return a[0] * b[0] + a[1] * b[1]
+
+seqs = {"s": "AAB", "t": "ABB", "u": "AAA"}
+for name, x in seqs.items():
+    nA, nB = counts(x)
+    print(f"{name} = {x:4}  (n_A,n_B)=({nA},{nB})  g = {score(x)}")
+
+g = {k: score(v) for k, v in seqs.items()}
+print()
+print(f"K(s,s) = {dot(g['s'], g['s']):.4f}")
+print(f"K(t,t) = {dot(g['t'], g['t']):.4f}")
+print(f"K(s,t) = {dot(g['s'], g['t']):.4f}")
+print(f"K(s,u) = {dot(g['s'], g['u']):.4f}")
+
+# single-symbol Fisher information under the uniform model:
+# per-symbol score is (1[x=A]-1/2, 1[x=B]-1/2); average g g' over x uniform.
+import itertools
+I = [[0.0, 0.0], [0.0, 0.0]]
+for x, p in [("A", 0.5), ("B", 0.5)]:
+    gx = (1.0 * (x == "A") - 0.5, 1.0 * (x == "B") - 0.5)
+    for a in range(2):
+        for b in range(2):
+            I[a][b] += p * gx[a] * gx[b]
+det = I[0][0] * I[1][1] - I[0][1] * I[1][0]
+print()
+print(f"I_1 = {I}")
+print(f"det(I_1) = {det:.4f}  (singular -> rank 1, why I is set to identity)")
+```
 :::::
 
 Two further points connect the example to practice. First, the true information matrix is usually replaced by its empirical version \(\hat I_M=\tfrac1\ell\sum_{i=1}^\ell g(\theta_0,x_i)g(\theta_0,x_i)^\top\), the sample covariance of the scores, so whitening by \(\hat I_M^{-1}\) is exactly whitening the Fisher vectors; the invariance this buys can come at the cost of amplifying noise along parameters the data barely constrain. Second, for a hidden Markov model the score with respect to the emission and transition parameters is not a hard \(k\)-mer count but an expected state-occupancy and transition count, and each such expectation is delivered in one pass of the forward-backward algorithm, the same dynamic program that ran the marginalization kernels above. The Fisher kernel thereby reuses the entire generative apparatus, differentiating where the marginalized kernels summed. When the generative model additionally carries the class label as a latent variable, the leading Fisher coordinates become the class posteriors minus the priors, so a linear classifier on the Fisher features reconstructs the Bayes rule, which is why the Fisher kernel is asymptotically no worse than the model's own MAP labeling (Jaakkola and Haussler 1999).

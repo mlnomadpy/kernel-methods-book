@@ -9,6 +9,7 @@ references:
   - raskutti2014early
   - steinwart2012
   - blanchard2018
+  - saad1996iterative
 sections:
   - id: inverse-formulation
     title: The two inverse problems hidden in regression
@@ -41,10 +42,28 @@ sections:
         status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
+  - id: inverse-naive-inversion
+    title: "The first failed attempt: divide by every eigenvalue"
+    contribution: original-diagonal-failure-derivation
+    permission: original prose and derivation from the singular system
+    sources:
+      - rosinverse2004
+      - blanchard2018
+    locators:
+      - source: rosinverse2004
+        manuscript_locator: ch-inverse.md#inverse-naive-inversion
+        source_locator: Sections 2 and 3, inverse-problem formulation
+        status: concept checked; instability witness is author-derived
+      - source: blanchard2018
+        manuscript_locator: ch-inverse.md#inverse-naive-inversion
+        source_locator: Sections 2.1 and 2.5
+        status: concept checked; diagonal derivation is author-derived
+    verified_by: null
+    verified_on: null
   - id: inverse-filter-catalog
     title: Spectral filters and what they preserve
-    contribution: newly-synthesized-with-common-notation
-    permission: original prose and comparison
+    contribution: newly-synthesized-with-common-notation-and-proved-noise-balance
+    permission: original prose, comparison, theorem, and proof
     sources:
       - rosinverse2004
       - blanchard2018
@@ -152,6 +171,7 @@ sections:
       - rosinverse2004
       - raskutti2014early
       - blanchard2018
+      - saad1996iterative
     locators:
       - source: rosinverse2004
         manuscript_locator: ch-inverse.md#inverse-parameter-choice
@@ -165,6 +185,10 @@ sections:
         manuscript_locator: ch-inverse.md#inverse-parameter-choice
         source_locator: Sections 2.5 and 3
         status: author-checked-against-primary-source
+      - source: saad1996iterative
+        manuscript_locator: ch-inverse.md#inverse-parameter-choice
+        source_locator: Chapter 5 projection framework; Chapter 6, Section 6.2 Krylov subspaces
+        status: author-checked-against-local-book-text
     verified_by: null
     verified_on: null
   - id: inverse-comparisons
@@ -222,6 +246,7 @@ sections:
       - caponnetto2007
       - raskutti2014early
       - blanchard2018
+      - saad1996iterative
     locators:
       - source: rosinverse2004
         manuscript_locator: ch-inverse.md#inverse-summary
@@ -239,6 +264,10 @@ sections:
         manuscript_locator: ch-inverse.md#inverse-summary
         source_locator: Sections 2 to 4
         status: author-checked-against-primary-source
+      - source: saad1996iterative
+        manuscript_locator: ch-inverse.md#inverse-summary
+        source_locator: Chapter 6, Sections 6.1 and 6.2
+        status: author-checked-against-local-book-text
     verified_by: null
     verified_on: null
   - id: exercises

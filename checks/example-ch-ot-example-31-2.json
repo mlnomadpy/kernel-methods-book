@@ -3,7 +3,7 @@
   "chapter": "ch-ot",
   "anchor": "example-31-2",
   "source_file": "manuscript/chapters/ch-ot.md",
-  "source_sha256": "635094efd09fc75d5973df99f114fa1e65ee49f16958582d508465688143211c",
+  "source_sha256": "78c50fa9a3645d5ae463e857934c73f750a2172d69b3eb0d755d59e790512c46",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-ot-ex2.py"
@@ -54,7 +54,11 @@
     "0.0002",
     "0.0154",
     "0.2843",
-    "0.6997"
+    "0.6997",
+    "0.0",
+    "1.0",
+    "2.0",
+    "2000"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

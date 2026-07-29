@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-signature
 slug: signature-and-time-series-kernels
 title: Signature and Sequence-Path Kernels
@@ -32,6 +33,7 @@ bibliography:
   - salvi2021
   - cuturi2011
   - haussler1999
+narrative_link_policy: exact
 ---
 # Signature and Sequence-Path Kernels
 
@@ -82,7 +84,9 @@ $$1+d+d^2+\cdots+d^m=\frac{d^{m+1}-1}{d-1},$$
 
 which grows fast in the depth \(m\) but is fixed once \(m\) is chosen, so a learner can form it explicitly and hand it to any linear method. The remaining question is how to compute it, and the answer runs through the algebra of the signature.
 
-### One straight segment: the tensor exponential {#segment-exponential}
+<span id="segment-exponential"></span>
+
+**One straight segment: the tensor exponential.**
 
 The signature is easy to evaluate on a straight line, and every piecewise-linear path is a concatenation of straight lines, so the segment case is the whole computation in miniature. On a segment with constant increment \(\Delta\), parametrize \(X_t=x_0+t\Delta\) for \(t\in[0,1]\), so \(dX_t=\Delta\,dt\). The level-\(k\) tensor pulls the constant \(\Delta^{\otimes k}\) out of the integral and leaves the volume of the ordered simplex,
 
@@ -183,7 +187,9 @@ Write \(\Delta^i=X_b^i-X_a^i\) for the increments, so \(S^i=\Delta^i\). By the p
 
 The shuffle identity says the linear span of signature coordinates is closed under multiplication: it is an algebra. Combined with reparametrization invariance and a point-separation argument, this makes linear functionals of the signature dense in the continuous functions on (unparametrized, tree-reduced) paths, a Stone-Weierstrass statement. The upshot for learning is that a *linear* model on a high-enough truncated signature can approximate any continuous function of the path, so the nonlinearity of the problem has been moved entirely into the fixed feature map, which is the same bargain the kernel trick strikes elsewhere in the book.
 
-### Uniqueness up to tree-like equivalence {#uniqueness}
+<span id="uniqueness"></span>
+
+**Uniqueness up to tree-like equivalence.**
 
 How much of the path does the signature remember? Not the parametrization, by design. It also forgets any excursion that retraces itself, a segment walked out and immediately back, because the two directions of travel cancel in the integrals. These retracings are called tree-like pieces, and they are the only ambiguity.
 
@@ -234,6 +240,30 @@ Two paths in \(\mathbb{R}^2\), each three points. \(X:(0,0)\to(1,0)\to(1,1)\), \
 5.  [Normalise.]{.wex-op} The self-kernels are \(k^{\le2}(X,X)=k^{\le2}(Y,Y)=1+2+\big(\tfrac14+1+0+\tfrac14\big)=4.5\), so the normalised kernel is \(3.5/4.5=7/9\approx0.7778\).
 
 **Reading.** The two paths agree in displacement (level-1 term \(2\), the full self-value) but the opposite areas pull the level-2 term down to \(\tfrac12\) instead of \(\tfrac32\), and the similarity drops from \(1\) to \(7/9\). A depth-1 signature kernel would have called them identical; depth \(2\) is the first that feels the orientation. The reproducing script also sums the full untruncated kernel, \(\langle S(X),S(Y)\rangle\approx3.5592\), whose higher levels add only \(0.06\) on top of the depth-2 value.
+
+The executable core accumulates both nonconstant levels segment by segment.
+Its Gram check is the finite feature-map certificate for the truncated kernel.
+
+```python
+import numpy as np
+
+def depth_two(points):
+    level1 = np.zeros(2)
+    level2 = np.zeros((2, 2))
+    for delta in np.diff(np.asarray(points, float), axis=0):
+        level2 += np.outer(level1, delta) + np.outer(delta, delta) / 2
+        level1 += delta
+    return np.concatenate(([1.], level1, level2.ravel()))
+
+X = depth_two([(0, 0), (1, 0), (1, 1)])
+Y = depth_two([(0, 0), (0, 1), (1, 1)])
+features = np.stack([X, Y])
+gram = np.matmul(features, features.T)
+assert np.allclose(X[1:3], Y[1:3])
+assert np.isclose(np.dot(X, Y), 3.5)
+assert np.linalg.eigvalsh(gram).min() > -1e-12
+print(gram)
+```
 ::::
 :::::
 
@@ -307,7 +337,9 @@ On the two tiny paths of the worked example above, refining this solver reproduc
 
 The signature comes from analysis. A completely different and older tradition compares sequences by warping one onto the other, stretching and compressing the time axis to line up their features. This is the world of dynamic time warping (DTW), long the default similarity for speech and gesture. It is intuitive and often accurate, but as a kernel it has a fatal flaw, and understanding the flaw motivates the repair.
 
-### Why dynamic time warping is not a kernel {#dtw-not-pd}
+<span id="dtw-not-pd"></span>
+
+**Why dynamic time warping is not a kernel.**
 
 An *alignment* of two sequences \(x=(x_1,\dots,x_n)\) and \(y=(y_1,\dots,y_m)\) is a monotone path of matched index pairs from \((1,1)\) to \((n,m)\), moving at each step down, right, or diagonally, so every entry of each sequence is matched to at least one entry of the other. Dynamic time warping picks the single cheapest alignment under a local cost, usually the squared distance,
 
@@ -383,6 +415,86 @@ Real sequences \(x=(1,2,3)\) and \(y=(1,3)\), local similarity \(\kappa(a,b)=e^{
 
 **Reading.** The corner \(1.7451\) is the sum of the products of local similarities over all five alignments from \((1,1)\) to \((3,2)\); enumerating those five alignments and adding their products reproduces the same number, confirming that the recursion is a soft aggregation over alignments rather than the single best one. With \(\kappa\equiv1\) the corner would read \(5\), the count of alignments.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+from math import exp
+
+x = [1.0, 2.0, 3.0]
+y = [1.0, 3.0]
+sigma = 1.0
+
+
+def kap(a, b):
+    return exp(-(a - b) ** 2 / (2 * sigma ** 2))
+
+
+n, m = len(x), len(y)
+
+print("=== local similarity matrix kappa(x_i, y_j) ===")
+K = np.zeros((n, m))
+for i in range(n):
+    for j in range(m):
+        K[i, j] = kap(x[i], y[j])
+        print(f"  kappa(x{i+1}={x[i]:.0f}, y{j+1}={y[j]:.0f}) = {K[i,j]:.6f}")
+
+# ---- forward DP (sum over alignments) --------------------------------------
+
+M = np.zeros((n + 1, m + 1))
+M[0, 0] = 1.0
+for i in range(1, n + 1):
+    for j in range(1, m + 1):
+        M[i, j] = kap(x[i - 1], y[j - 1]) * (M[i - 1, j] + M[i - 1, j - 1] + M[i, j - 1])
+
+print("\n=== GA dynamic-programming table M (rows i=0..3, cols j=0..2) ===")
+for i in range(n + 1):
+    print("  " + "  ".join(f"{M[i,j]:9.6f}" for j in range(m + 1)))
+print(f"\nk_GA(x,y) = M[{n},{m}] = {M[n,m]:.6f}")
+
+# ---- brute-force check: enumerate every alignment path ----------------------
+
+def alignments(n, m):
+    """All monotone paths of matched pairs from (1,1) to (n,m), moves
+    (1,0),(0,1),(1,1). Yields tuples of (i,j) pairs (1-indexed)."""
+    def rec(i, j):
+        if (i, j) == (n, m):
+            yield [(i, j)]
+            return
+        for di, dj in ((1, 0), (0, 1), (1, 1)):
+            ni, nj = i + di, j + dj
+            if ni <= n and nj <= m:
+                for tail in rec(ni, nj):
+                    yield [(i, j)] + tail
+    yield from rec(1, 1)
+
+
+paths = list(alignments(n, m))
+brute = 0.0
+for pth in paths:
+    prod = 1.0
+    for (i, j) in pth:
+        prod *= K[i - 1, j - 1]
+    brute += prod
+print(f"\nnumber of alignments enumerated = {len(paths)}")
+print(f"brute-force sum over alignments = {brute:.6f}")
+print(f"matches DP value?                 {np.isclose(brute, M[n,m])}")
+
+# count of alignments (kappa == 1 everywhere) is the Delannoy-type path count
+Mone = np.zeros((n + 1, m + 1)); Mone[0, 0] = 1
+for i in range(1, n + 1):
+    for j in range(1, m + 1):
+        Mone[i, j] = Mone[i-1, j] + Mone[i-1, j-1] + Mone[i, j-1]
+print(f"path count (all kappa=1)          = {Mone[n,m]:.0f}")
+
+# ---- Cuturi's PD-guaranteeing local kernel: kappa/(1+kappa) = (1/2) Gaussian --
+print("\n=== check Cuturi's identity kappa/(1+kappa) = (1/2) e^{-d^2/2sigma^2} ===")
+for a, b in [(1, 1), (1, 3), (2, 3)]:
+    g = exp(-(a - b) ** 2 / (2 * sigma ** 2))
+    ka = g / (2 - g)                      # kappa built so that kappa/(1+kappa)=g/2
+    print(f"  d^2={(a-b)**2}:  kappa/(1+kappa) = {ka/(1+ka):.6f}   (1/2)Gaussian = {g/2:.6f}")
+```
 ::::::
 
 ### Why the global alignment kernel is positive definite {#ga-pd}
@@ -421,7 +533,7 @@ Reparametrization invariance removes speed information, so include time as an ad
 
 ## Summary and further reading {#summary-and-further-reading}
 
-Use signatures when order matters but sampling speed should not: Chen's identity makes a path compositional, truncation gives a finite feature budget, and the PDE recovers the full kernel without enumerating tensors. Use global alignment when local timing deformations themselves are the object of comparison. The algebra begins with [@chen1958], the analytic theory with [@lyons1998], and uniqueness modulo tree-like pieces with [@hambly2010]; scalable approximations should always be compared against a low-depth exact calculation.
+Use signatures when order matters but sampling speed should not: Chen's identity makes a path compositional, truncation gives a finite feature budget, and the PDE recovers the full kernel without enumerating tensors. Use global alignment when local timing deformations themselves are the object of comparison. The algebra begins with [@chen1958], the analytic theory with [@lyons1998], and uniqueness modulo tree-like pieces with [@hambly2010], with a modern account in [@chevyrev2016]. Truncated and full signature kernels are developed in [@kiraly2019; @salvi2021], random-feature scaling in [@toth2020], and positive alignment in [@cuturi2011] through the convolution closure of [@haussler1999]. Scalable approximations should always be compared against a low-depth exact calculation.
 
 ## Exercises {#exercises}
 

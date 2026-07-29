@@ -122,6 +122,27 @@ exercises:
       minimization: the feasible set is not a Cartesian product. The three feasible nonzero
       actions have risk \(1.4\), while \(000\) has risk \(1.8\).
   - number: 8
+    kind: proof
+    status: draft
+    prompt: >-
+      Reproduce the stability theorem. If a chain feature map is the sum of \(T\) local feature
+      vectors of norm at most \(r\), derive one worst-case bound on \(R\). Repeat when the local
+      feature differences are mutually orthogonal, and explain why loss normalization alone does
+      not normalize the score geometry.
+    answer: >-
+      Let \(S\) and \(S'\) differ in one example, and let \(w_S,w_{S'}\) minimize the two
+      \(\lambda\)-strongly convex objectives. Applying strong convexity in both directions and
+      adding the inequalities cancels the \(n-1\) shared losses. If every structured hinge is
+      \(2R\)-Lipschitz in \(w\), the remaining two terms give
+      \(\lambda\|w_S-w_{S'}\|^2\le 4R\|w_S-w_{S'}\|/n\), hence
+      \(\|w_S-w_{S'}\|\le 4R/(\lambda n)\). A test hinge therefore changes by at most
+      \(8R^2/(\lambda n)\). For a chain,
+      \(\|\Psi(x,y)-\Psi(x,y')\|\le\sum_{t=1}^T\|\psi_t(x,y)-\psi_t(x,y')\|\le 2Tr\), so one
+      worst-case choice is \(R=2Tr\). If the local differences are mutually orthogonal, their
+      squared norms add and \(R\le 2r\sqrt T\). Dividing Hamming loss by \(T\) changes the loss
+      scale, but not these feature-difference norms; the score geometry must be normalized
+      separately.
+  - number: 9
     kind: challenge
     status: draft
     prompt: >-

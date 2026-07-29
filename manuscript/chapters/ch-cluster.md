@@ -1,5 +1,7 @@
 ---
+narrative_link_policy: exact
 id: ch-cluster
+example_code_policy: visible-for-executable
 slug: kernel-clustering
 title: Kernel Clustering and Spectral Methods
 part: V · Spectral Geometry and Unlabeled Structure
@@ -46,6 +48,8 @@ bibliography:
 # Kernel Clustering and Spectral Methods
 
 <p class="lead">Two interlocking rings of points have an obvious grouping to the eye: an inner ring and an outer one. Yet K-means, which carves space with flat cell boundaries, slices a straight line through both and splits each ring in half. Clustering must partition a dataset into coherent groups with no labels to guide it, judging coherence entirely by how similar the points look, and when the natural groups are not convex blobs the straight-line method reads the geometry wrong. Measuring that similarity through a kernel is the fix: a flat boundary in feature space pulls back to a curved boundary that bends to follow the shape the data actually take. This chapter carries the clustering objective into a reproducing-kernel Hilbert space, giving kernel K-means and, through a spectral relaxation of the same combinatorial cost, the family of spectral clustering algorithms.</p>
+
+The eigendecomposition in [[ch:kernel-pca|Kernel PCA]] established how centered Gram matrices expose high-variance feature-space directions without constructing features. Spectral clustering inherits the same kernel eigenvectors but gives them a different job: rather than reconstructing variance, it relaxes a discrete partition objective and rounds the resulting embedding into groups. Keeping those objectives distinct prevents a common mistake: treating every leading eigenspace as evidence for the same notion of structure.
 
 ## The K-means algorithm {#k-means}
 
@@ -422,6 +426,23 @@ $$
     The relaxed optimum \(\lambda_2 = 0.0314\) sits just below the true \(\operatorname{Ncut} = 0.0328\): the eigenvalue lower-bounds the cut it approximates.
 
 **Reading.** The normalized Laplacian is assembled from the affinity alone, its second eigenvalue is small exactly because a light cut exists, and the sign of the matching eigenvector reproduces the two triangles without ever enumerating partitions. The gap between \(\lambda_2 = 0.0314\) and \(\operatorname{Ncut} = 0.0328\) is the price of relaxing a discrete indicator to a real eigenvector.
+
+```python
+import numpy as np
+W = np.zeros((6, 6))
+for i, j in [(0,1),(0,2),(1,2),(3,4),(3,5),(4,5)]:
+    W[i, j] = W[j, i] = 1
+W[2, 3] = W[3, 2] = .1
+degree = W.sum(1)
+invroot = np.diag(1/np.sqrt(degree))
+Lsym = np.eye(6)-np.linalg.multi_dot([invroot, W, invroot])
+values, vectors = np.linalg.eigh(Lsym)
+fiedler = np.matmul(invroot, vectors[:, 1])
+if fiedler[0] < 0: fiedler = -fiedler
+ncut = .1/degree[:3].sum()+.1/degree[3:].sum()
+assert np.array_equal(np.sign(fiedler).astype(int), [1,1,1,-1,-1,-1])
+print(values[1], ncut, fiedler/np.max(abs(fiedler)))
+```
 ::::
 :::::
 

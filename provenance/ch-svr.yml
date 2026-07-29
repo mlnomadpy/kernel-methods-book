@@ -12,6 +12,7 @@ references:
   - scholkopf2000nu
   - koenker1978quantile
   - takeuchi2006quantile
+  - newey1987expectiles
 sections:
   - id: epsilon-insensitive-loss
     title: The \(\varepsilon\)-insensitive loss and where sparsity comes from
@@ -583,6 +584,18 @@ sections:
         manuscript_locator: ch-svr.md#exercises
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for support-vector regression targets
+    contribution: source-index
+    sources: [vapnik1995, vapnik1998, drucker1997svr, newey1987expectiles]
+    locators:
+      - {source: vapnik1995, manuscript_locator: "ch-svr.md#summary", source_locator: "The Nature of Statistical Learning Theory, Chapter 5, Sections 5.5--5.6", status: author-mapped-pending-independent-verification}
+      - {source: vapnik1998, manuscript_locator: "ch-svr.md#summary", source_locator: "Statistical Learning Theory, Section 10.6", status: author-mapped-pending-independent-verification}
+      - {source: drucker1997svr, manuscript_locator: "ch-svr.md#summary", source_locator: "NIPS 9, pp. 155--161; Sections 2--3, Equations (1)--(6)", status: author-mapped-pending-independent-verification}
+      - {source: newey1987expectiles, manuscript_locator: "ch-svr.md#expectile-regression", source_locator: "Econometrica 55(4), pp. 819--847; Section 2 and Theorem 1", status: author-mapped-pending-independent-verification}
     verified_by: null
     verified_on: null
     permission: citation-only

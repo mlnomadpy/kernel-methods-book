@@ -48,16 +48,16 @@ sections:
     locators:
       - source: boser1992
         manuscript_locator: ch05.md#hinge-loss-and-large-margin
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3, optimal-margin hyperplanes and the kernelized training formulation"
+        status: author-checked-primary locator; independent verification pending
       - source: cortes1995
         manuscript_locator: ch05.md#hinge-loss-and-large-margin
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Sections 2-3, soft-margin objective, slack variables, and dual constraints"
+        status: author-checked-primary locator; independent verification pending
       - source: vapnik1995
         manuscript_locator: ch05.md#hinge-loss-and-large-margin
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Chapters 4-5, capacity control and structural risk minimization"
+        status: author-mapped book locator; independent verification pending
       - source: vapnik1998
         manuscript_locator: ch05.md#hinge-loss-and-large-margin
         source_locator: null
@@ -104,8 +104,8 @@ sections:
         status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: scholkopf2002
         manuscript_locator: ch05.md#hinge-loss-and-large-margin
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: "Chapter 7, support-vector classification in RKHS form"
+        status: author-mapped book locator; independent verification pending
       - source: shawe2004
         manuscript_locator: ch05.md#hinge-loss-and-large-margin
         source_locator: null

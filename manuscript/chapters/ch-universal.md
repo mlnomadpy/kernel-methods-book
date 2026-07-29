@@ -1,5 +1,7 @@
 ---
+narrative_link_policy: exact
 id: ch-universal
+example_code_policy: visible-for-executable
 slug: universality-capacity-and-consistency
 title: 'Universality, Capacity, and Consistency'
 part: 'IV · Generalization, Approximation, and Limits'
@@ -47,6 +49,8 @@ bibliography:
 # Universality, Capacity, and Consistency
 
 <p class="lead">Ten million labeled examples cannot rescue a learner whose hypothesis class is blind to the truth: if every function it can represent misclassifies a region of positive probability, more data only makes it confident about the wrong answer. So before any argument about noise or sample size there is a prior question, and it is a question about the kernel: which targets can the RKHS approach at all? This chapter answers it three ways. Universality makes the qualitative answer precise, an RKHS dense in the continuous functions, and we prove it for the Gaussian kernel and refute it for polynomials. Consistency cashes the license: SVMs with a universal kernel and a properly scheduled penalty converge to the Bayes risk for every distribution. Capacity then presents the bill, because a space dense enough to approximate everything must be measured by covering numbers and eigenvalue decay before it yields a rate, and no rate is uniform over everything the space can reach.</p>
+
+The native-space analysis in [[ch:kernel-interpolation-and-approximation|Kernel Interpolation and Approximation Theory]] bounded recovery error under the assumption that the target has controlled RKHS norm. Universality asks what happens before that assumption is granted: whether the closure of the RKHS is large enough to approximate the target at all. Thus interpolation supplies the quantitative within-space error, while this chapter isolates the representation bias created by choosing the space.
 
 ## The approximation question learning cannot skip {#univ-approximation-question}
 
@@ -302,6 +306,20 @@ K=\begin{pmatrix}2 & 1 & 0\\ 1 & 2 & 1\\ 0 & 1 & 2\end{pmatrix},
 $$
 
 a valid positive definite kernel matrix since it is symmetric and diagonally dominant with positive diagonal. Its eigenvalues solve \(\det(K-\mu I)=0\), which factors through the tridiagonal structure into \(\mu=2\) and \(\mu=2\pm\sqrt 2\), so the spectrum is \(3.4142\), \(2.0000\), \(0.5858\), summing to the trace \(6\). The empirical operator \(T=K/3\) has eigenvalues \(\hat\mu_1=1.1381\), \(\hat\mu_2=0.6667\), \(\hat\mu_3=0.1953\). The effective dimension is \(\mathcal N(\lambda)=\sum_{j=1}^{3}\hat\mu_j/(\hat\mu_j+\lambda)\). At \(\lambda=1\) the three ratios are \(0.5323\), \(0.4000\), \(0.1634\), so \(\mathcal N(1)=1.0957\): heavy regularization leaves about one active direction. At \(\lambda=0.1\) the ratios are \(0.9192\), \(0.8696\), \(0.6613\), so \(\mathcal N(0.1)=2.4501\): the weak third direction is now half open. As \(\lambda\to 0\), \(\mathcal N(\lambda)\to 3\), the rank, which is this finite model's version of infinite capacity: every direction, however weak, is eventually paid for.
+
+```python
+import numpy as np
+
+K = np.array([[2.,1.,0.], [1.,2.,1.], [0.,1.,2.]])
+mu = np.linalg.eigvalsh(K/3)[::-1]
+def effective_dimension(ridge):
+    return np.sum(mu/(mu+ridge))
+
+assert np.allclose(mu, [(2+np.sqrt(2))/3, 2/3, (2-np.sqrt(2))/3])
+assert np.allclose(effective_dimension(1), 1.0957, atol=5e-5)
+assert np.allclose(effective_dimension(.1), 2.4501, atol=5e-5)
+print(mu, [effective_dimension(t) for t in (1, .1, .01)])
+```
 :::
 
 The three-point computation is the whole chapter in miniature. The rank bound plays the role of universality's absence: no \(\lambda\), however small, can push \(\mathcal N(\lambda)\) past \(3\), just as no schedule can push a polynomial kernel's approximation past its finite-dimensional slice. The climb of \(\mathcal N(\lambda)\) as \(\lambda\) falls plays the role of capacity: each released direction must be estimated from data, and in the population versions of these formulas the climb never ends for a universal kernel, because a dense RKHS forces infinitely many nonzero eigenvalues. Consistency schedules and minimax rates are both answers to the same question this table poses in microcosm: how fast may \(\lambda_n\) fall so that the directions released are the directions the sample can afford?
@@ -316,6 +334,8 @@ The three-point computation is the whole chapter in miniature. The rank bound pl
 - Fast eigenvalue decay is not free. It lowers variance at fixed \(\lambda\) but shrinks the space of cheaply approximable targets; under misspecification a heavier-tailed kernel with polynomial decay often dominates in practice.
 - Strict positive definiteness on finite sets is not universality. Every strictly positive definite kernel interpolates any finite dataset exactly, which says nothing about density in \(C(\mathcal X)\); the equivalence between the two properties is a special feature of radial kernels on \(\mathbb R^d\), not a general fact.
 - The no-free-lunch theorem forbids guarantees, not performance. It constructs a worst-case distribution for each rule; it does not predict slow convergence on any particular dataset, and it is misused when quoted against reporting empirical learning curves.
+
+Density and consistency are possibility results; they do not show that any learner can achieve a proposed rate, or that a finite feature approximation retains enough information. [[ch:limits-and-lower-bounds-for-kernel-learning|Limits and Lower Bounds for Kernel Learning]] turns that unresolved pressure into testing reductions and packings, distinguishing statistical impossibility from limitations caused by rank, sketches, or optimization.
 
 ## Summary and further reading {#univ-summary}
 

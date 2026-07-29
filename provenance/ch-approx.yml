@@ -302,6 +302,69 @@ sections:
         status: exact-page-section-or-theorem-locator-pending-independent-verification
     verified_by: null
     verified_on: null
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - aronszajn1950
+      - caponnetto2007
+      - fasshauer2007
+      - micchelli1986
+      - narcowich2005
+      - rasmussen2006
+      - schaback1995
+      - schoenberg1938
+      - steinwart2008
+      - wahba1990
+      - wendland2005
+    locators:
+      - source: aronszajn1950
+        manuscript_locator: ch-approx.md#approx-native-space
+        source_locator: Transactions of the AMS 68(3):337-404, Sections 1-4 and Theorems 1-4
+        status: author-located-pending-independent-verification
+      - source: caponnetto2007
+        manuscript_locator: ch-approx.md#approx-fill-distance
+        source_locator: Definition 1; Theorems 1-2; Section 4
+        status: author-located-pending-independent-verification
+      - source: fasshauer2007
+        manuscript_locator: ch-approx.md#approx-stability
+        source_locator: Chapters 11-15, native spaces, interpolation, power functions, and stability
+        status: author-located-pending-independent-verification
+      - source: micchelli1986
+        manuscript_locator: ch-approx.md#approx-schoenberg
+        source_locator: Constructive Approximation 2:11-22, Sections 2-3 and principal interpolation theorems
+        status: author-located-pending-independent-verification
+      - source: narcowich2005
+        manuscript_locator: ch-approx.md#approx-escape
+        source_locator: Mathematics of Computation 74:743-763, Sections 2-4 and scattered-zero Sobolev estimates
+        status: author-located-pending-independent-verification
+      - source: rasmussen2006
+        manuscript_locator: ch-approx.md#approx-power-function
+        source_locator: Chapter 2, Sections 2.2 and 2.7, Equations (2.22)-(2.24)
+        status: author-located-pending-independent-verification
+      - source: schaback1995
+        manuscript_locator: ch-approx.md#approx-stability
+        source_locator: Advances in Computational Mathematics 3:251-264, Sections 2-4
+        status: author-located-pending-independent-verification
+      - source: schoenberg1938
+        manuscript_locator: ch-approx.md#approx-schoenberg
+        source_locator: Theorems 1-2, pp. 524-527
+        status: author-located-pending-independent-verification
+      - source: steinwart2008
+        manuscript_locator: ch-approx.md#approx-native-space
+        source_locator: Chapter 4, Sections 4.4-4.5, RKHS embeddings and Gaussian RKHS structure
+        status: author-located-pending-independent-verification
+      - source: wahba1990
+        manuscript_locator: ch-approx.md#approx-minimum-norm
+        source_locator: Chapters 1-2, spline, RKHS, and Bayesian formulations
+        status: author-located-pending-independent-verification
+      - source: wendland2005
+        manuscript_locator: ch-approx.md#approx-fill-distance
+        source_locator: Chapters 10-12 and 14, native spaces, interpolation, and error estimates
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

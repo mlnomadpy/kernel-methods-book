@@ -413,9 +413,28 @@ sections:
         status: author-checked-against-primary-source
     verified_by: null
     verified_on: null
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - wang2024dependentrff
+    locators:
+      - source: wang2024dependentrff
+        manuscript_locator: ch-randomized.md#rand-rff-risk
+        source_locator: ICML 2024, PMLR 235:50118-50142, Sections 3-4 and principal minimax-rate theorems for exponentially and polynomially mixing data
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: exact section citations with theorem or section locators where verified
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-27
+release_evidence:
+  controlled_quantity: regularized spectral error versus matrix and solution error
+  manuscript_example: ch-randomized.md#example-rand-currencies
+  executable_check: checks/ch-randomized-ex1.py
+  artifact: checks/example-ch-randomized-example-rand-currencies.json
+  status: machine-checked-author-artifact

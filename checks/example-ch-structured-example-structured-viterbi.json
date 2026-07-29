@@ -3,7 +3,7 @@
   "chapter": "ch-structured",
   "anchor": "example-structured-viterbi",
   "source_file": "manuscript/chapters/ch-structured.md",
-  "source_sha256": "8b36c248bb0399a24fe78ca170a0fe31aca67eab537e7a9bfe5c3aa355e9d3c4",
+  "source_sha256": "b5c4700fc14522c2f1976c90c9eac9e6f790851bb9554af1e8990bef402162d8",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-structured-ex1.py"
@@ -13,9 +13,22 @@
     "1",
     "000",
     "111",
-    "2.2"
+    "2.2",
+    "0.8",
+    "0.2",
+    "0.1",
+    "0.9",
+    "0.7",
+    "0.3",
+    "0.6",
+    "0.0",
+    "3",
+    "-1",
+    "2.8",
+    "4.6",
+    "1e-12"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The visible in-book code and referenced executable check validate the numerical construction; this manifest binds both to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

@@ -3,7 +3,7 @@
   "chapter": "ch-cme",
   "anchor": "example-33-1",
   "source_file": "manuscript/chapters/ch-cme.md",
-  "source_sha256": "5dffd1bcae3d30f075052a45cf5fe4b1aed21dc07317f92bd8bcced329d5fe61",
+  "source_sha256": "271bbfa160e4d2f21e5b7b2c728da211d22c9209c4b6b7a479ff76a2ab965392",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-cme-ex1.py"
@@ -42,9 +42,12 @@
     "0.7164",
     "1.28",
     "0.85",
-    "0.7708"
+    "0.7708",
+    "8522",
+    "5e-5",
+    "7164"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The deterministic check validates regularized embedding weights, their non-unit sum, and two conditional queries; executable source is visible in the chapter.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

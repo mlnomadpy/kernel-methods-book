@@ -3,7 +3,7 @@
   "chapter": "ch-online",
   "anchor": "example-10-1",
   "source_file": "manuscript/chapters/ch-online.md",
-  "source_sha256": "cc693eb0084a112dd5fde1e57588188409a8cf736412274a164dc452c02a8191",
+  "source_sha256": "df55be3558bf1102a9c9a7d85cf50878388533f754f9e056cd55b8241618eecc",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-online-ex1.py"
@@ -23,9 +23,14 @@
     "6",
     "14",
     "3",
+    "-2.0",
+    "-1.0",
+    "1.0",
+    "2.0",
+    "20",
     "8"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The visible in-book code and referenced executable check validate the numerical construction; this manifest binds both to the canonical example.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

@@ -3,10 +3,10 @@
   "chapter": "ch02",
   "anchor": "example-3-3",
   "source_file": "manuscript/chapters/ch02.md",
-  "source_sha256": "76976ab0a18d965beb46855fc0183c9aa199dd848b8e31f738eb7f49e3827c99",
+  "source_sha256": "33cca9d2ce9a445d5d8d65611766f955ec99ff9f9dd613e394ac60ef54057028",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/additional-example-checks.py"
+    "checks/ch02-ex2.py"
   ],
   "numeric_literals": [
     "2",
@@ -18,7 +18,7 @@
     "6",
     "5"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Solves the displayed interpolation system and verifies prediction and RKHS-norm identities through kernel and explicit-feature representations.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

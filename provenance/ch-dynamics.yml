@@ -8,6 +8,7 @@ references:
   - eleftheriadis2017gpssm
   - farahmand2016policy
   - song2013cme
+  - sutton2016rldraft
 sections:
   - id: dynamics-setting
     title: Sequential objects and error decomposition
@@ -89,11 +90,16 @@ sections:
     contribution: original-proof-and-derivation
     sources:
       - farahmand2016policy
+      - sutton2016rldraft
     locators:
       - source: farahmand2016policy
         manuscript_locator: ch-dynamics.md#kernel-bellman
         source_locator: "Sections 2.1-2.3 and 4, Definitions 4-6, pp. 4-17"
         status: source-locator-checked-against-primary-paper
+      - source: sutton2016rldraft
+        manuscript_locator: ch-dynamics.md#kernel-bellman
+        source_locator: "Chapters 3 and 6, Bellman equations and temporal-difference learning"
+        status: author-checked-against-local-book-text
     verified_by: null
     verified_on: null
     permission: citation-only
@@ -143,7 +149,7 @@ sections:
     permission: citation-only
   - id: dynamics-worked-example
     title: A worked two-state failure witness
-    contribution: original-worked-example
+    contribution: original-visible-executable-worked-example
     sources:
       - farahmand2016policy
     locators:

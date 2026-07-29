@@ -7,6 +7,8 @@ references:
   - belkin2003
   - belkin2006manifold
   - vonluxburg2007
+  - scholkopf2001
+  - smola2003
 sections:
   - id: manifold-identifiability
     title: The identifiability barrier
@@ -23,12 +25,16 @@ sections:
   - id: manifold-paper-eigenmaps
     title: "Paper module I: Laplacian eigenmaps as discrete geometry"
     contribution: reconstructed-primary-paper-module
-    sources: [belkin2003]
+    sources: [belkin2003, smola2003]
     locators:
       - source: belkin2003
         manuscript_locator: ch-manifold.md#manifold-paper-eigenmaps
         source_locator: "Sections 2-3, graph construction, locality-preserving objective, and generalized eigenproblem"
         status: checked-against-primary-paper-record-and-equations
+      - source: smola2003
+        manuscript_locator: ch-manifold.md#manifold-paper-eigenmaps
+        source_locator: "Sections 2-3, graph spectra and regularization by graph-frequency penalties"
+        status: citation-mapped-pending-independent-verification
     verified_by: Codex source-and-derivation audit
     verified_on: 2026-07-24
     permission: original reconstruction with citation
@@ -63,12 +69,16 @@ sections:
   - id: manifold-paper-regularization
     title: "Paper module II: manifold regularization"
     contribution: reconstructed-primary-paper-module
-    sources: [belkin2006manifold]
+    sources: [belkin2006manifold, scholkopf2001]
     locators:
       - source: belkin2006manifold
         manuscript_locator: ch-manifold.md#manifold-paper-regularization
         source_locator: "Equation (4), Theorem 2, and Section 3.4"
         status: checked-against-jmlr-pdf
+      - source: scholkopf2001
+        manuscript_locator: ch-manifold.md#manifold-paper-regularization
+        source_locator: "Representer theorem for objectives depending on finitely many evaluations and an RKHS norm penalty"
+        status: citation-mapped-pending-independent-verification
     verified_by: Codex source-and-proof audit
     verified_on: 2026-07-24
     permission: original reconstruction with citation

@@ -37,6 +37,8 @@ references:
   - rathore2025adasap
   - hoffbauer2025kernelmatmul
   - adlam2023millionkernels
+  - kernelbook-code-ch13-ex1
+  - kernelbook-code-ch13-ex2
 sections:
   - id: the-scaling-problem
     title: The scaling problem
@@ -1874,6 +1876,74 @@ sections:
         manuscript_locator: ch13.md#exercises
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source and executable-artifact locators
+    contribution: provenance-index-only
+    sources:
+      - abedsoltan2023eigenpro3
+      - adlam2023millionkernels
+      - drineas2005
+      - hoffbauer2025kernelmatmul
+      - kernelbook-code-ch13-ex1
+      - kernelbook-code-ch13-ex2
+      - lin2025latentkronecker
+      - rahimi2007
+      - rathore2024askotch
+      - rathore2025adasap
+      - williams2001
+      - wu2024alternatinggp
+    locators:
+      - source: abedsoltan2023eigenpro3
+        manuscript_locator: ch13.md#eigenpro3
+        source_locator: PMLR 202:61-78, Sections 3-5, Equations (15)-(23), Algorithms 1-2
+        status: author-located-pending-independent-verification
+      - source: adlam2023millionkernels
+        manuscript_locator: ch13.md#eigenpro3
+        source_locator: arXiv:2303.05420, Sections 3-4, distributed preconditioned conjugate-gradient method and scaling experiments
+        status: author-located-pending-independent-verification
+      - source: drineas2005
+        manuscript_locator: ch13.md#summary-and-further-reading
+        source_locator: JMLR 6:2153-2175, Sections 2-4, Algorithms 1-2 and Theorems 1-3
+        status: author-located-pending-independent-verification
+      - source: hoffbauer2025kernelmatmul
+        manuscript_locator: ch13.md#fast-kernel-products
+        source_locator: AAAI 39(16):17223-17230, Sections 3-4
+        status: author-located-pending-independent-verification
+      - source: kernelbook-code-ch13-ex1
+        manuscript_locator: ch13.md#leverage-sampling
+        source_locator: checks/ch13-ex1.py; checks/example-ch13-example-37-1.json
+        status: machine-check-path-mapped-pending-independent-verification
+      - source: kernelbook-code-ch13-ex2
+        manuscript_locator: ch13.md#falkon-preconditioner
+        source_locator: checks/ch13-ex2.py; checks/example-ch13-example-37-2.json
+        status: machine-check-path-mapped-pending-independent-verification
+      - source: lin2025latentkronecker
+        manuscript_locator: ch13.md#fast-kernel-products
+        source_locator: ICML 2025, PMLR 267:37730-37744, Sections 3-4
+        status: author-located-pending-independent-verification
+      - source: rahimi2007
+        manuscript_locator: ch13.md#summary-and-further-reading
+        source_locator: NIPS 2007 paper, Sections 3-4 and Claim 1
+        status: author-located-pending-independent-verification
+      - source: rathore2024askotch
+        manuscript_locator: ch13.md#subblock-sketch-solvers
+        source_locator: arXiv:2407.10070, Sections 3-4 and Algorithms 1-2
+        status: author-located-pending-independent-verification
+      - source: rathore2025adasap
+        manuscript_locator: ch13.md#subblock-sketch-solvers
+        source_locator: NeurIPS 2025 paper, Sections 3-4 and Algorithm 2 (ADASAP)
+        status: author-located-pending-independent-verification
+      - source: williams2001
+        manuscript_locator: ch13.md#summary-and-further-reading
+        source_locator: NIPS 2001 paper, Sections 2-3
+        status: author-located-pending-independent-verification
+      - source: wu2024alternatinggp
+        manuscript_locator: ch13.md#subblock-sketch-solvers
+        source_locator: AISTATS 2024, PMLR 238:2620-2628, Sections 3-4
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only

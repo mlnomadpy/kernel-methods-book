@@ -7,12 +7,15 @@ references:
   - zhang2009rkbs
   - wang2024sparserkbs
   - parhi2021banach
+  - scholkopf2001
+  - bach2017barron
 sections:
   - id: rkbs-three-questions
     title: Three representer questions, not one
     contribution: author-derived-framework
     sources:
       - zhang2009rkbs
+      - scholkopf2001
       - wang2024sparserkbs
       - parhi2021banach
     locators: []
@@ -29,6 +32,10 @@ sections:
         manuscript_locator: ch-rkbs.md#rkbs-hilbert-structure
         source_locator: Sections 1, 4, and 5
         status: author-checked-against-primary-paper-pending-independent-verification
+      - source: scholkopf2001
+        manuscript_locator: ch-rkbs.md#rkbs-hilbert-structure
+        source_locator: Theorem 1
+        status: author-checked-against-primary-paper
     verified_by: null
     verified_on: null
     permission: citation-only
@@ -180,6 +187,7 @@ sections:
     contribution: primary-paper-reconstruction
     sources:
       - parhi2021banach
+      - bach2017barron
     locators:
       - source: parhi2021banach
         manuscript_locator: ch-rkbs.md#variation-ridge-splines
@@ -211,6 +219,10 @@ sections:
         manuscript_locator: ch-rkbs.md#rkbs-parhi-theorem
         source_locator: Theorem 1 and Section 4
         status: author-checked-against-primary-paper-pending-independent-verification
+      - source: bach2017barron
+        manuscript_locator: ch-rkbs.md#rkbs-parhi-theorem
+        source_locator: Sections 2 and 3
+        status: conceptual-comparison-author-checked
     verified_by: null
     verified_on: null
     permission: citation-only

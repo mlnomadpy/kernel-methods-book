@@ -3,7 +3,7 @@
   "chapter": "ch-signature",
   "anchor": "example-26-2",
   "source_file": "manuscript/chapters/ch-signature.md",
-  "source_sha256": "611ed1c0ffa02f4adae6735c5dabff3e77090b2cc165660c245287f9ed2a816a",
+  "source_sha256": "b89657b8bec14eade92a3738bd1854326ebe70e55a7db06a94551aff9d963ddc",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-signature-ex2.py"
@@ -29,7 +29,13 @@
     "4",
     "+0.0821",
     "1.7451",
-    "5"
+    "5",
+    "1.0",
+    "2.0",
+    "3.0",
+    "6",
+    "9.6",
+    "0.0"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

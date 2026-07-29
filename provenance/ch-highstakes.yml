@@ -10,23 +10,38 @@ references:
   - rajpaul2015rv
   - haywood2014corot7
   - allen2012findchirp
+  - almosallam2016gpz
   - fujimaki2005telemetry
   - peng2018orbit
   - deringer2021gpr
   - bartok2010gap
   - bartok2013soap
+  - bartok2018silicon
+  - rupp2012coulomb
+  - ramakrishnan2014qm9
+  - faber2017errors
+  - faber2018fchl
+  - christensen2020fchl
   - chmiela2017gdml
   - vandermause2020flare
   - jinnouchi2019onthefly
   - sacks1989dace
   - shahriari2016
+  - frazier2018
   - shields2021bo
   - xue2016adaptive
   - lookman2019active
+  - kennedy2001calibration
+  - lawrence2010coyote
+  - campsvalls2005hyper
   - campsvalls2006composite
   - campsvalls2016gpsurvey
   - verrelst2012retrieval
   - verrelst2013uncertainty
+  - verrelst2016emulation
+  - perezsuay2017fair
+  - kernelbook-code-ch-highstakes-ex1
+  - kernelbook-code-ch-highstakes-ex5
 sections:
   - id: why-these-domains
     title: Why these domains demand accountable models
@@ -117,3 +132,15 @@ sections:
     verified_by: deterministic-checks
     verified_on: 2026-07-25
     permission: original
+  - id: executable-artifact-index
+    title: Exact executable records cited by the chapter
+    contribution: source-index
+    sources: [kernelbook-code-ch-highstakes-ex1, kernelbook-code-ch-highstakes-ex5]
+    locators:
+      - {source: kernelbook-code-ch-highstakes-ex1, manuscript_locator: "ch-highstakes.md#example-56-1", source_locator: "checks/example-ch-highstakes-example-56-1.json; checks/ch-highstakes-ex1.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-highstakes-ex5, manuscript_locator: "ch-highstakes.md#example-highstakes-spatial", source_locator: "checks/example-ch-highstakes-example-highstakes-spatial.json; checks/ch-highstakes-ex5.py", status: executable-artifact}
+    verified_by:
+      - checks/ch-highstakes-ex1.py
+      - checks/ch-highstakes-ex5.py
+    verified_on: 2026-07-29
+    permission: citation-only

@@ -480,6 +480,17 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for support and novelty estimation
+    contribution: source-index
+    sources: [scholkopf2000nu, scholkopf2001oneclass, tax2004]
+    locators:
+      - {source: scholkopf2000nu, manuscript_locator: "ch-oneclass.md#summary", source_locator: "Neural Computation 12(5), pp. 1207--1245; Section 4 and Proposition 4", status: author-mapped-pending-independent-verification}
+      - {source: scholkopf2001oneclass, manuscript_locator: "ch-oneclass.md#summary", source_locator: "Neural Computation 13(7), pp. 1443--1471; Section 2 and Proposition 3", status: author-mapped-pending-independent-verification}
+      - {source: tax2004, manuscript_locator: "ch-oneclass.md#summary", source_locator: "Machine Learning 54, pp. 45--66; Sections 2--3", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

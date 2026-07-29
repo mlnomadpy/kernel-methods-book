@@ -17,654 +17,71 @@ references:
   - feydy2019sinkhorn
   - dudley1969
 sections:
-  - id: two-geometries
-    title: Two ways to measure the distance between distributions
-    contribution: adapted-and-expanded
-    sources: &a1
-      - kantorovich1942
-      - villani2009
-      - sejdinovic2013
-      - gretton2012
-      - sriperumbudur2012
-      - fournier2015
+  - id: claim-level-evidence-index
+    title: Claim-level primary and executable evidence index
+    contribution: author-mapped-evidence-index
+    sources:
       - cuturi2013sinkhorn
-      - peyre2019cot
-      - sinkhorn1967
-      - genevay2018
-      - feydy2019sinkhorn
       - dudley1969
+      - feydy2019sinkhorn
+      - fournier2015
+      - genevay2018
+      - gretton2012
+      - kantorovich1942
+      - peyre2019cot
+      - sejdinovic2013
+      - sinkhorn1967
+      - sriperumbudur2012
+      - villani2009
     locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
       - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Section 2, Eqs. (2)–(4), and Algorithm 1, entropic OT and Sinkhorn scaling
+        status: author-located-pending-independent-verification
       - source: dudley1969
-        manuscript_locator: ch-ot.md#two-geometries
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: monge-kantorovich
-    title: The Monge and Kantorovich problems
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#monge-kantorovich
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: duality
-    title: Kantorovich duality and the IPM connection
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#duality
-        source_locator: Theorem 5.10(i); Particular Case 5.4
-        status: exact-theorem-locator-author-verified
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#duality
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: one-d
-    title: "The one-dimensional case: transport by sorting"
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#one-d
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: sample-complexity
-    title: "Sample complexity: the price of geometry"
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: Theorem 1, specialized to p=1
-        status: exact-theorem-locator-author-verified
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#sample-complexity
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: entropic-ot
-    title: Entropic regularization and the Sinkhorn algorithm
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#entropic-ot
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: sinkhorn-divergences
-    title: "Sinkhorn divergences: debiasing and the bridge to MMD"
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Theorem 1, pp. 41–43, bounded-Lipschitz metric and empirical convergence
+        status: author-located-pending-independent-verification
       - source: feydy2019sinkhorn
         manuscript_locator: ch-ot.md#sinkhorn-divergences
         source_locator: Equation (4) and Theorem 1
-        status: exact-result-locator-author-verified
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#sinkhorn-divergences
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: ot-vs-mmd
-    title: When to prefer optimal transport, when to prefer MMD
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        status: author-located-pending-independent-verification
       - source: fournier2015
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-ot.md#sample-complexity
+        source_locator: Theorem 1, specialized to p=1
+        status: author-located-pending-independent-verification
       - source: genevay2018
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#ot-vs-mmd
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: summary
-    title: Summary
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-ot.md#sinkhorn-statistics
+        source_locator: Section 2, Eqs. (1)–(4), Sinkhorn loss and debiased divergence
+        status: author-located-pending-independent-verification
       - source: gretton2012
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#summary
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-    permission: citation-only
-  - id: common-mistakes-and-practical-implications
-    title: Common mistakes and practical implications
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: peyre2019cot
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#common-mistakes-and-practical-implications
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: summary-and-further-reading
-    title: Summary and further reading
-    contribution: newly synthesized
-    permission: original prose; cited ideas remain attributed to their primary sources
-    sources:
-      - kantorovich1942
-      - villani2009
-      - sejdinovic2013
-    locators:
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Section 2.2, Lemma 4, and Section 6, MMD estimators and two-sample test
+        status: author-located-pending-independent-verification
       - source: kantorovich1942
         manuscript_locator: ch-ot.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#summary-and-further-reading
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-    verified_by: null
-    verified_on: null
-  - id: exercises
-    title: Exercises
-    contribution: adapted-and-expanded
-    sources: *a1
-    locators:
-      - source: kantorovich1942
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: villani2009
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sejdinovic2013
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: gretton2012
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: sriperumbudur2012
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: fournier2015
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: cuturi2013sinkhorn
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        source_locator: pp. 199–201, mass-translocation linear program
+        status: author-located-pending-independent-verification
       - source: peyre2019cot
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Sections 2.1, 4.1, and 4.2, Eqs. (2.1), (4.2), (4.14), Kantorovich OT and entropic regularization
+        status: author-located-pending-independent-verification
+      - source: sejdinovic2013
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Sections 2–3, Proposition 14 and Theorem 22, distance-induced kernels and MMD equivalence
+        status: author-located-pending-independent-verification
       - source: sinkhorn1967
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: genevay2018
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: feydy2019sinkhorn
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
-      - source: dudley1969
-        manuscript_locator: ch-ot.md#exercises
-        source_locator: null
-        status: exact-page-section-or-theorem-locator-pending-independent-verification
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Theorem 1, pp. 343–348, diagonal scaling to a doubly stochastic matrix
+        status: author-located-pending-independent-verification
+      - source: sriperumbudur2012
+        manuscript_locator: ch-ot.md#summary-and-further-reading
+        source_locator: Sections 2–3, Theorems 1–2, empirical estimation of integral probability metrics
+        status: author-located-pending-independent-verification
+      - source: villani2009
+        manuscript_locator: ch-ot.md#kantorovich-plan
+        source_locator: Theorem 5.10(i); Particular Case 5.4
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only
@@ -674,3 +91,21 @@ mapping_author:
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-20
+release_evidence:
+  manuscript_example: ch-ot.md#example-31-1
+  executable_check: checks/ch-ot-ex1.py
+  artifact: checks/example-ch-ot-example-31-1.json
+  status: machine-checked-author-artifact
+source_locator_index:
+  kantorovich1942: Coupling relaxation and linear transport formulation
+  villani2009: Chapters 1 and 5, transport duality and Wasserstein geometry
+  sejdinovic2013: Main equivalence theorem for energy distances and MMD
+  gretton2012: Sections 2-3, empirical MMD
+  sriperumbudur2012: Main finite-sample IPM results
+  fournier2015: Theorem 1, empirical Wasserstein rates
+  cuturi2013sinkhorn: Sections 2-3, entropic transport and Sinkhorn iterations
+  peyre2019cot: Chapters 4-5, computational entropic transport
+  sinkhorn1967: Matrix-scaling theorem
+  genevay2018: Main sample-complexity results for regularized transport
+  feydy2019sinkhorn: Theorems 1-2, Sinkhorn divergence limits and positivity
+  dudley1969: Weak convergence and probability metrics

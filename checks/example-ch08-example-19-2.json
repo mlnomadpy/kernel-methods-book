@@ -3,16 +3,24 @@
   "chapter": "ch08",
   "anchor": "example-19-2",
   "source_file": "manuscript/chapters/ch08.md",
-  "source_sha256": "7501479fe9921d2be6cf6bb26358ab1b31de75629f1c583739473e172ed06eb7",
+  "source_sha256": "e2b382164ed15fb4a2dc5f3f5ff30bfb8c114bc68d7f5d3c9404c7595228aa36",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch08-ex2.py"
+    "checks/ch08-ex0.py"
   ],
   "numeric_literals": [
     "2",
-    "0"
+    "0",
+    "-4",
+    "5",
+    "200",
+    "01",
+    "1",
+    "1e-10",
+    "2.5",
+    "0.0"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Evaluates the Fourier characters at the atom at zero and recovers the constant coefficient sequence displayed in the box.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

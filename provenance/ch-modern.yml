@@ -18,6 +18,7 @@ references:
   - caponnetto2007
   - spigler2020
   - cui2021
+  - neyshabur2018
 sections:
   - id: interpolation
     title: The interpolation revolution
@@ -676,9 +677,53 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - belkin2018understand
+      - belkin2019dd
+      - cheng2013
+      - elkaroui2010
+      - hastie2019
+      - neyshabur2018
+    locators:
+      - source: belkin2018understand
+        manuscript_locator: ch-modern.md#summary-and-further-reading
+        source_locator: ICML 2018 paper, Sections 2-4, interpolation and kernel-learning experiments
+        status: author-located-pending-independent-verification
+      - source: belkin2019dd
+        manuscript_locator: ch-modern.md#summary-and-further-reading
+        source_locator: PNAS 116(32):15849-15854, Figures 1-3 and interpolation-threshold discussion
+        status: author-located-pending-independent-verification
+      - source: cheng2013
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: Random Matrices Theory and Applications 2(4):1350010, Sections 2-3 and main spectral-limit theorems
+        status: author-located-pending-independent-verification
+      - source: elkaroui2010
+        manuscript_locator: ch-modern.md#random-matrix-diagnostics
+        source_locator: Annals of Statistics 38(1):1-50, Section 2 and Theorems 2.1-2.2
+        status: author-located-pending-independent-verification
+      - source: hastie2019
+        manuscript_locator: ch-modern.md#summary-and-further-reading
+        source_locator: Annals of Statistics 50(2):949-986, Sections 2-3 and Theorems 1-3
+        status: author-located-pending-independent-verification
+      - source: neyshabur2018
+        manuscript_locator: ch-modern.md#pac-bayes-certificates
+        source_locator: ICLR 2018 paper, Sections 2-3 and Theorem 1
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-20
+release_evidence:
+  controlled_quantity: prediction risk across the interpolation threshold
+  manuscript_example: ch-modern.md#example-42-1
+  executable_check: checks/ch-modern-ex1.py
+  artifact: checks/example-ch-modern-example-42-1.json
+  status: machine-checked-author-artifact

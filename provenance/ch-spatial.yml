@@ -8,6 +8,7 @@ references:
   - stein1999
   - lindgren2011spde
   - gneiting2002space
+  - rasmussen2006
 sections:
   - id: spatial-random-fields
     title: Random fields, covariance, and variograms
@@ -147,6 +148,7 @@ sections:
       - stein1999
       - lindgren2011spde
       - gneiting2002space
+      - rasmussen2006
     locators:
       - source: matern1960
         manuscript_locator: ch-spatial.md#spatial-practice
@@ -164,6 +166,10 @@ sections:
         manuscript_locator: ch-spatial.md#spatial-practice
         source_locator: "Sections 4 and 6"
         status: author-checked-against-primary-source
+      - source: rasmussen2006
+        manuscript_locator: ch-spatial.md#spatial-practice
+        source_locator: "Sections 2.2 and 2.7, Gaussian-process prediction and decision theory"
+        status: locator-pending-independent-verification
     verified_by: null
     verified_on: null
   - id: spatial-summary

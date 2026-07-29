@@ -29,6 +29,9 @@ bibliography:
   - stein1999
   - lindgren2011spde
   - gneiting2002space
+  - rasmussen2006
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Spatial and Spatiotemporal Kernel Models
 
@@ -97,6 +100,14 @@ Three small-scale effects must also be separated:
   variance component.
 
 Calling all three a nugget obscures what is being predicted.
+
+The previous chapter's null-space lesson now becomes a mean-model lesson.
+[[ch:smoothing-splines-and-additive-rkhs|Smoothing splines]] separated an
+unpenalized trend from a penalized fluctuation. Universal kriging makes the
+same algebraic split, but gives the fluctuation a second-order stochastic
+meaning. Confusing those meanings produces a common error: a numerically valid
+kernel solve is reported as a calibrated spatial probability model even
+though neither the trend nor the covariance has survived spatial validation.
 
 ## Kriging as constrained kernel projection {#kriging}
 
@@ -233,7 +244,7 @@ the posterior mean and variance after integrating a diffuse linear trend.
 Without Gaussianity, they remain best linear unbiased quantities, not a full
 posterior law.
 
-### RKHS projection and what variance means {#kriging-rkhs}
+**RKHS projection and what variance means.** {#kriging-rkhs}
 
 If \(C\) is an RKHS kernel and observations are noise free, simple kriging
 chooses coefficients minimizing
@@ -256,7 +267,8 @@ ball. Kriging variance is a model-based mean-square error under a covariance
 model. Neither establishes frequentist coverage after estimating covariance
 parameters.
 
-## Worked example: the price of an unknown mean {#example-spatial-validation}
+:::: {.example #example-spatial-validation}
+[Example (the price of an unknown mean)]{.box-title}
 
 Take two noiseless observations at \(s_1=0\) and \(s_2=2\), predict at
 \(s_0=1\), and use the exponential covariance
@@ -315,6 +327,35 @@ mean. It also forces weights to sum to one, while simple kriging shrinks toward
 its known mean. If the zero-mean assumption is false, the smaller simple
 kriging variance is not evidence of a better predictor.
 
+The following code solves both systems without an explicit inverse and checks
+the unbiasedness constraint and the displayed variances. That distinction
+matters: the ordinary predictor spends variance to protect against an unknown
+constant mean, whereas the simple predictor spends no such budget because its
+zero mean is an assumption.
+
+```python
+import numpy as np
+
+K = np.array([[1.0, np.exp(-2.0)], [np.exp(-2.0), 1.0]])
+k0 = np.full(2, np.exp(-1.0))
+y = np.array([0.0, 2.0])
+
+augmented = np.block([[K, np.ones((2, 1))],
+                      [np.ones((1, 2)), np.zeros((1, 1))]])
+solution = np.linalg.solve(augmented, np.r_[k0, 1.0])
+w_ok, eta = solution[:2], solution[2]
+w_sk = np.linalg.solve(K, k0)
+var_ok = 1.0 - w_ok @ k0 - eta
+var_sk = 1.0 - k0 @ w_sk
+
+assert np.allclose(w_ok, [0.5, 0.5])
+assert np.isclose(w_ok.sum(), 1.0)
+assert np.isclose(w_ok @ y, 1.0)
+assert np.isclose(var_ok, 0.8319074)
+assert np.isclose(var_sk, np.tanh(1.0))
+print(w_ok, w_sk, var_ok, var_sk)
+```
+
 For validation, a random split of a dense monitoring network often places a
 nearby station beside each held-out site. A spatial block split asks the harder
 and operationally relevant question represented here: what happens when the
@@ -323,6 +364,7 @@ target is separated from every training location?
 **Verification scope.** Every displayed weight and variance follows from the
 two-by-two system. The example verifies algebra, not covariance-model
 adequacy.
+::::
 
 ## Anisotropy, nonstationarity, and identifiability {#spatial-anisotropy}
 
@@ -493,7 +535,7 @@ convergence for \(\alpha=1,2\) when the finite-element spaces become dense in
 the relevant \(H^1\) space; Theorem 4 propagates convergence through the
 integer recursion [@lindgren2011spde].
 
-### What sparsity costs {#spatial-spde-boundary}
+**What sparsity costs.** {#spatial-spde-boundary}
 
 The SPDE route does not turn a dense Matérn calculation into an exact sparse
 copy.
@@ -641,7 +683,7 @@ would equal \(C(1,0)C(0,1)\approx0.1839\). The difference is a numerical
 signature of the interaction, not a validity test. Validity comes from the
 theorem.
 
-### Failure boundary and model comparison {#spatiotemporal-boundary}
+**Failure boundary and model comparison.** {#spatiotemporal-boundary}
 
 The Gneiting class is stationary and fully symmetric:
 
@@ -664,7 +706,7 @@ Random pointwise cross-validation tends to favor whichever model interpolates
 dense neighborhoods. Held-out spatial regions and future time windows are
 needed to test the interaction that matters.
 
-## Multivariate fields and change of support {#multivariate-spatial}
+**Multivariate fields and change of support.** {#multivariate-spatial}
 
 For \(p\) jointly observed variables, a matrix-valued covariance must make the
 entire block Gram matrix positive semidefinite. A linear model of
@@ -709,7 +751,7 @@ centroid is accurate only when the covariance and mean vary little across the
 support. Quadrature resolution should be refined until both integrated
 covariances and final predictions stabilize.
 
-## Estimation, validation, and computational choices {#spatial-workflow}
+**Estimation, validation, and computational choices.** {#spatial-workflow}
 
 Covariance parameters are often estimated by Gaussian likelihood or restricted
 maximum likelihood. The distinction matters because flexible trends absorb
@@ -748,6 +790,17 @@ precision models reduce cost by preserving different objects. They should not
 be compared only by wall time. Prediction, likelihood, uncertainty, and
 residual dependence can respond differently to the same approximation.
 
+This is where the chapter's narrative closes its loop. A covariance
+certificate made the finite matrix legal; the kriging constraint made the
+trend estimable; the SPDE or structured approximation made the computation
+feasible. None of those steps decides whether the result transfers across
+geography. A blocked residual that grows with distance is evidence against the
+operational model even when likelihood optimization converged. Conversely, a
+slightly worse random-split score can accompany a better blocked score because
+the latter measures the actual interpolation gap. Model selection should use
+the same support, separation distance, and forecast horizon that define the
+deployment decision.
+
 ## Common mistakes and operational implications {#spatial-practice}
 
 - Treating latitude and longitude as planar coordinates over a large region.
@@ -766,6 +819,16 @@ residual dependence can respond differently to the same approximation.
 Spatial kernels are useful when geometry, support, and deployment are
 specified before model selection. Uncertainty maps and residual dependence
 plots are diagnostics, not decoration.
+
+The Gaussian-process formulas in
+[[ch:gaussian-processes-and-rvm|the GP chapter]] give the corresponding
+conditional distribution when joint Gaussianity is assumed [@rasmussen2006].
+The next reliability question is stronger: whether intervals remain useful
+when the spatial covariance or deployment distribution is wrong. That is the
+handoff to
+[[ch:distribution-shift-robustness-and-conformal-prediction|the reliability
+chapter]], where model-based variance and empirical coverage are deliberately
+kept apart.
 
 ## Summary and further reading {#spatial-summary}
 

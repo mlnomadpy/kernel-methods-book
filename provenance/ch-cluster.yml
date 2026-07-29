@@ -9,6 +9,7 @@ references:
   - scholkopf2002
   - shawe2004
   - shimalik2000
+  - kernelbook-code-ch-cluster-ex1
   - vonluxburg2007
   - fiedler1973
   - hagen1992
@@ -525,6 +526,39 @@ sections:
         manuscript_locator: ch-cluster.md#exercises
         source_locator: null
         status: exact-page-section-or-theorem-locator-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source and executable-artifact locators
+    contribution: provenance-index-only
+    sources:
+      - dhillon2004
+      - kernelbook-code-ch-cluster-ex1
+      - ng2002
+      - scholkopf2002
+      - shimalik2000
+    locators:
+      - source: dhillon2004
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: KDD 2004, pp. 551-556, Sections 2-4 and Theorems 1-3
+        status: author-located-pending-independent-verification
+      - source: kernelbook-code-ch-cluster-ex1
+        manuscript_locator: ch-cluster.md#normalized-laplacian
+        source_locator: checks/ch-cluster-ex1.py; checks/example-ch-cluster-example-14-1.json
+        status: machine-check-path-mapped-pending-independent-verification
+      - source: ng2002
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: NIPS 14:849-856, Section 2 and Algorithm 1
+        status: author-located-pending-independent-verification
+      - source: scholkopf2002
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: Chapter 14, kernel PCA and spectral feature-space methods
+        status: author-located-pending-independent-verification
+      - source: shimalik2000
+        manuscript_locator: ch-cluster.md#summary-and-further-reading
+        source_locator: IEEE TPAMI 22(8):888-905, Sections 2-3 and Equations (1)-(7)
+        status: author-located-pending-independent-verification
     verified_by: null
     verified_on: null
     permission: citation-only

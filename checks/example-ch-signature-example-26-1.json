@@ -3,7 +3,7 @@
   "chapter": "ch-signature",
   "anchor": "example-26-1",
   "source_file": "manuscript/chapters/ch-signature.md",
-  "source_sha256": "4ac83d8f16e2e678aa845869087738e85c0c450fe73b6b2dcc2ad85ca786dedc",
+  "source_sha256": "f97210e75162f535a3f2923f6e6a6c9944f090693e92f2a26d9a1d617b4dd2aa",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-signature-ex1.py"
@@ -26,9 +26,10 @@
     "9",
     "7778",
     "5592",
-    "0.06"
+    "0.06",
+    "-1e-12"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The deterministic check validates the depth-two features, positive-semidefinite Gram matrix, kernel value, and convergence toward the full signature kernel; executable source is visible in the chapter.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

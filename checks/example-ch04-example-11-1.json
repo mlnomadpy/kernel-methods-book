@@ -3,7 +3,7 @@
   "chapter": "ch04",
   "anchor": "example-11-1",
   "source_file": "manuscript/chapters/ch04.md",
-  "source_sha256": "341a20ad14abda5a19231bdc99f277dbc8ff419c1df8f82e514f9b5feaa4dafa",
+  "source_sha256": "e5b0290a0e7e513a334783d5202dc3d6098e296859dae2b95586a868c45f3225",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch04-ex1.py"
@@ -43,7 +43,10 @@
     "1.0823",
     "0.771",
     "0.785",
-    "0.8"
+    "0.8",
+    "200000",
+    "80",
+    "03"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

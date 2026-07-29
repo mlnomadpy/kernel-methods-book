@@ -27,12 +27,28 @@ fisher = np.array([[0.25, -0.25], [-0.25, 0.25]])
 close(float(np.linalg.det(fisher)), 0.0, 1e-14)
 
 
-# ch-inverse, three spectral filter directions.
-eigenvalues = np.array([10.0, 1.0, 0.01])
-ridge = 0.1
-filters = eigenvalues / (eigenvalues + ridge)
-assert np.allclose(filters, [0.990, 0.909, 0.091], atol=5e-4)
-close(1.0 / eigenvalues[-1], 100.0)
+# ch-inverse, the complete four-direction filter audit printed in the chapter.
+inverse_eigenvalues = np.array([1.0, 0.25, 0.04, 0.0025])
+inverse_signal = np.array([2.0, 1.0, 0.5, 0.25])
+inverse_observed = inverse_signal + np.array([0.05, -0.05, 0.05, -0.05])
+inverse_filters = {
+    "interpolation": np.ones_like(inverse_eigenvalues),
+    "ridge": inverse_eigenvalues / (inverse_eigenvalues + 0.05),
+    "cutoff": (inverse_eigenvalues >= 0.05).astype(float),
+    "Landweber": 1.0 - (1.0 - 0.8 * inverse_eigenvalues) ** 10,
+}
+inverse_expected = {
+    "interpolation": (0.002500, 81.288),
+    "ridge": (0.042202, 8.105),
+    "cutoff": (0.079375, 4.318),
+    "Landweber": (0.051689, 5.727),
+}
+for inverse_name, inverse_filter in inverse_filters.items():
+    inverse_fitted = inverse_filter * inverse_observed
+    inverse_mse = np.mean((inverse_fitted - inverse_signal) ** 2)
+    inverse_norm = np.linalg.norm(inverse_fitted / inverse_eigenvalues)
+    close(float(inverse_mse), inverse_expected[inverse_name][0], 5e-7)
+    close(float(inverse_norm), inverse_expected[inverse_name][1], 5e-4)
 
 
 # ch-text, embedding means, cosine similarities, and two transport costs.

@@ -466,6 +466,34 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - coxcox2000
+      - torgerson1952
+      - williams2002
+      - young1938
+    locators:
+      - source: coxcox2000
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: Multidimensional Scaling, 2nd ed., Chapters 2-3
+        status: author-located-pending-independent-verification
+      - source: torgerson1952
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: Psychometrika 17(4):401-419, Sections 2-4
+        status: author-located-pending-independent-verification
+      - source: williams2002
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: Machine Learning 46:11-19, Sections 2-3 and Equations (3)-(6)
+        status: author-located-pending-independent-verification
+      - source: young1938
+        manuscript_locator: ch-mds.md#summary-and-further-reading
+        source_locator: Psychometrika 3(1):19-22, complete note
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

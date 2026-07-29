@@ -3,7 +3,7 @@
   "chapter": "ch-krein",
   "anchor": "example-28-2",
   "source_file": "manuscript/chapters/ch-krein.md",
-  "source_sha256": "051246c9fda0384b23581e521f6cb70ffbc42d95c472ad34a3a8018b3259e7f5",
+  "source_sha256": "4a9c488d1eed49c9a01ff41789decb6b3c5bf33cd1085f8290af00d8ab2b25dd",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-krein-ex2.py"
@@ -40,7 +40,13 @@
     "-0.154",
     "0.446",
     "-0.450",
-    "0.317"
+    "0.317",
+    "-1.0",
+    "1.0",
+    "3.0",
+    "0.2",
+    "0.0",
+    "-1e-12"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

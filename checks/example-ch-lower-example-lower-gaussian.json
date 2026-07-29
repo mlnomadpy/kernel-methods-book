@@ -3,7 +3,7 @@
   "chapter": "ch-lower",
   "anchor": "example-lower-gaussian",
   "source_file": "manuscript/chapters/ch-lower.md",
-  "source_sha256": "b3768081af1bb177ba7ab5fb379407e85b5c46a54ab1553dee6d255bc2d4f174",
+  "source_sha256": "cb50d191382bd897f2daf0f083af050021cecd5f8e4b65dcdc69bb215b76e741",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-lower-ex1.py"
@@ -17,7 +17,9 @@
     "4",
     "2",
     "32",
-    "009153"
+    "009153",
+    "0.009152913",
+    "1e-7"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

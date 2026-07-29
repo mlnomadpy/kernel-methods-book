@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-ksd
 slug: kernel-stein-discrepancy
 title: Kernel Stein Discrepancy and Stein Methods
@@ -286,6 +288,54 @@ $$ \widehat{\mathrm{KSD}}^2_V(B) = \frac{51.6797}{9} = 5.7422, \qquad \widehat{\
 
 **Reading.** The manifestly non-negative V-statistic reports \(0.045\) for the fitting sample against \(5.74\) for the shifted one, a hundredfold gap that flags B as inconsistent with \(p\). The unbiased U-statistic sharpens the contrast, dipping slightly negative for A (its target is \(0\), so finite-sample noise puts it just below, exactly as the unbiased MMD does under its null) while staying firmly positive at \(3.28\) for B. Every entry was computed from the score \(s_p(x) = -x\) alone, never from the constant \(1/\sqrt{2\pi}\).
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+h = 1.0
+
+def score(x):                       # s_p for N(0,1)
+    return -x
+
+def stein_kernel_matrix(xs):
+    """u_p(x_i, x_j) built from RBF derivatives; returns the n x n matrix."""
+    xs = np.asarray(xs, dtype=float)
+    X = xs[:, None]
+    Y = xs[None, :]
+    g = X - Y                                   # x - x'
+    k = np.exp(-(g ** 2) / (2 * h ** 2))        # k(x,x')
+    dk_x = -(g / h ** 2) * k                    # d_x  k
+    dk_y = (g / h ** 2) * k                     # d_x' k
+    dk_xy = (1.0 / h ** 2 - g ** 2 / h ** 4) * k   # d_x d_x' k
+    sx = score(X)
+    sy = score(Y)
+    u = sx * sy * k + sx * dk_y + sy * dk_x + dk_xy
+    # cross-check against the hand-derived closed form for N(0,1), h=1
+    closed = (X * Y + 1.0 - 2.0 * g ** 2) * np.exp(-(g ** 2) / 2.0)
+    assert np.allclose(u, closed), "four-term u_p disagrees with closed form"
+    return u
+
+def ksd_stats(xs):
+    U = stein_kernel_matrix(xs)
+    n = len(xs)
+    V = U.sum() / n ** 2
+    off = U.sum() - np.trace(U)
+    Ust = off / (n * (n - 1))
+    return U, V, Ust
+
+for name, xs in [("A (fits N(0,1))", [-1.0, 0.0, 1.0]),
+                 ("B (shifted to +3)", [2.0, 3.0, 4.0])]:
+    U, V, Ust = ksd_stats(xs)
+    print(f"--- sample {name}: x = {xs} ---")
+    print("Stein kernel matrix u_p(x_i,x_j) =")
+    print(np.round(U, 4))
+    print("diagonal u_p(x_i,x_i) =", np.round(np.diag(U), 4))
+    print(f"V-statistic  KSD^2_V = {V:.4f}")
+    print(f"U-statistic  KSD^2_U = {Ust:.4f}")
+    print()
+```
 :::::
 
 ## Empirical KSD: U-statistics and V-statistics {#empirical-ksd}
@@ -424,6 +474,41 @@ $$ \hat\phi = (-1.1654,\ -1.4754,\ -1.1571), \qquad x^{\text{new}} = x + 0.1\,\h
 
 **Reading.** Every particle moved left toward the target's center: the cloud mean drops from \(2.0000\) to \(1.8734\) in a single step. The driving term did the transport while the repulsion split the outer two apart by equal and opposite amounts. This one-step calculation does not prove that repeated finite-particle updates converge to \(\mathcal N(0,1)\). As with the test, the update touched \(p\) only through the score \(s_p(x) = -x\).
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+h = 1.0
+eps = 0.1
+x = np.array([1.0, 2.0, 3.0])       # initial particles
+n = len(x)
+
+def score(v):
+    return -v
+
+# kernel matrix K[j,i] = k(x_j, x_i) and gradient of first argument
+diff = x[:, None] - x[None, :]                  # diff[j,i] = x_j - x_i
+K = np.exp(-(diff ** 2) / (2 * h ** 2))         # K[j,i] = k(x_j, x_i)
+gradK = (x[None, :] - x[:, None]) / h ** 2 * K  # (x_i - x_j) k, indexed [j,i]
+
+# driving and repulsion parts of phi(x_i), averaging over j
+drive = (K * score(x)[:, None]).sum(axis=0) / n     # D_i
+repel = gradK.sum(axis=0) / n                        # R_i
+phi = drive + repel                                  # phi(x_i)
+x_new = x + eps * phi
+
+print("kernel matrix K[j,i] = k(x_j, x_i) =")
+print(np.round(K, 4))
+print("driving   D_i =", np.round(drive, 4))
+print("repulsion R_i =", np.round(repel, 4))
+print("phi(x_i)      =", np.round(phi, 4))
+print("x (old)       =", np.round(x, 4))
+print("x (new)       =", np.round(x_new, 4))
+print(f"mean before   = {x.mean():.4f}")
+print(f"mean after    = {x_new.mean():.4f}")
+```
 :::::
 
 ## Choosing the kernel, and a bridge to quadrature {#kernel-choice}
@@ -476,6 +561,47 @@ Take \(P=\mathcal N(0,1)\), the unit-bandwidth Gaussian base kernel, and the fiv
 
 **Reading.** This witness separates two hazards. At finite \(n\), dropping the diagonal can hide isolated tail points when a light-tailed kernel kills every cross interaction. Asymptotically in \(d\ge3\), Gorham and Mackey's Theorem 6 shows a stronger population failure: even the KSD itself can miss a carefully constructed non-tight sequence. Neither issue is repaired by zero-identification alone.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import math
+
+
+def stein_kernel(x: float, y: float) -> float:
+    gap = x - y
+    return (x * y + 1.0 - 2.0 * gap * gap) * math.exp(-0.5 * gap * gap)
+
+
+points = (10.0, 20.0, 30.0, 40.0, 50.0)
+n = len(points)
+matrix = [[stein_kernel(x, y) for y in points] for x in points]
+
+max_off_diagonal = max(
+    abs(matrix[i][j])
+    for i in range(n)
+    for j in range(n)
+    if i != j
+)
+u_statistic = sum(
+    matrix[i][j]
+    for i in range(n)
+    for j in range(n)
+    if i != j
+) / (n * (n - 1))
+v_statistic = sum(sum(row) for row in matrix) / (n * n)
+expected_diagonal_v = sum(x * x + 1.0 for x in points) / (n * n)
+
+assert max_off_diagonal < 4.0e-19
+assert abs(u_statistic) < 7.0e-20
+assert math.isclose(v_statistic, 220.2, rel_tol=0.0, abs_tol=1.0e-12)
+assert math.isclose(v_statistic, expected_diagonal_v, rel_tol=0.0, abs_tol=1.0e-12)
+assert all(math.isfinite(value) for row in matrix for value in row)
+
+print(f"max |off diagonal| = {max_off_diagonal:.6e}")
+print(f"U-statistic = {u_statistic:.6e}")
+print(f"V-statistic = {v_statistic:.12f}")
+```
 :::::
 
 The same Stein-kernel machinery has a second life beyond testing and sampling. If \(u_p\) is a kernel whose functions integrate to a known value against \(p\), one can build control variates that cancel the variance of a Monte Carlo estimator: the control functionals of Oates, Girolami, and Chopin (2017) fit an RKHS function in the range of the Stein operator to an integrand, subtract it, and are left with an estimator of far lower variance, sometimes converging faster than the Monte Carlo rate. It is the same object read a third way. The Stein operator that annihilates \(p\) in expectation gives, at once, a discrepancy for testing, a transport direction for sampling, and a zero-mean correction for integration.
@@ -485,6 +611,8 @@ The same Stein-kernel machinery has a second life beyond testing and sampling. I
 
 The score that drives the KSD is the same quantity estimated by score matching (Hyvärinen, 2005), and the population KSD with a translation-invariant kernel is a smoothed version of the Fisher divergence \(\mathbb{E}_q\lVert s_q - s_p\rVert^2\); the Stein operator is what lets us evaluate it without ever forming \(s_q\). Like the mean-embedding chapter, this material postdates the standard textbooks, so the primary sources are articles: the kernel Stein discrepancy and its goodness-of-fit test are due independently to Liu, Lee, and Jordan (2016) and Chwialkowski, Strathmann, and Gretton (2016), building on the computable Stein discrepancies of Gorham and Mackey (2015); the convergence-control theory and the case for the inverse multiquadric kernel are from Gorham and Mackey (2017); Stein variational gradient descent is from Liu and Wang (2016); and the control-functional variance reduction is from Oates, Girolami, and Chopin (2017). The survey of Muandet, Fukumizu, Sriperumbudur, and Schölkopf (2017) places all of this within the wider theory of kernel mean embeddings.
 :::
+
+Stein witnesses can reject an unnormalized model and SVGD can move particles toward it, but neither operation identifies how an intervention would change a system: observational fit is not causal identification. [[ch:causal-inference-with-kernels|Causal Inference with Kernels]] inherits the operator and conditional-embedding machinery while adding the assumptions, such as independence structure, instruments, or structural equations, needed to turn distributional evidence into a causal claim.
 
 ## Summary {#summary}
 

@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-strings2
 slug: efficient-string-and-tree-kernels
 title: Efficient String and Tree Kernels
@@ -126,6 +128,88 @@ Take \(s=\)\"gatta\" and \(t=\)\"cata\". Cells where \(s_i=t_j\) are shaded; the
 
 **Reading.** The kernel value \(\kappa(\text{"gatta"},\text{"cata"})=14\) is read straight off the bottom-right cell, and the whole table cost \(5\times4\) constant-time updates, matching the \(O(|s|\,|t|)\) bound.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+def all_subseq_table(s, t):
+    n, m = len(s), len(t)
+    D = [[0] * (m + 1) for _ in range(n + 1)]
+    for j in range(m + 1):
+        D[0][j] = 1
+    for i in range(1, n + 1):
+        D[i][0] = 1
+        for j in range(1, m + 1):
+            val = D[i - 1][j]
+            for k in range(1, j + 1):
+                if t[k - 1] == s[i - 1]:
+                    val += D[i - 1][k - 1]
+            D[i][j] = val
+    return D
+
+
+def all_subseq_rolling(s, t):
+    """Same recurrence with one retained row and a cumulative match sum."""
+    if len(t) > len(s):
+        s, t = t, s
+    previous = [1] * (len(t) + 1)
+    for a in s:
+        current = [1] + [0] * len(t)
+        cumulative = 0
+        for j, b in enumerate(t, start=1):
+            if a == b:
+                cumulative += previous[j - 1]
+            current[j] = previous[j] + cumulative
+        previous = current
+    return previous[-1]
+
+
+def brute_common_subsequences(s, t):
+    """Count common subsequences (including empty) by direct enumeration."""
+    from itertools import combinations
+    def subseqs(x):
+        bag = {}
+        for r in range(len(x) + 1):
+            for idx in combinations(range(len(x)), r):
+                u = "".join(x[i] for i in idx)
+                bag[u] = bag.get(u, 0) + 1
+        return bag
+    bs, bt = subseqs(s), subseqs(t)
+    return sum(bs[u] * bt[u] for u in bs if u in bt)
+
+
+s, t = "gatta", "cata"
+D = all_subseq_table(s, t)
+
+print("rows index prefixes of s =", s, " cols index prefixes of t =", t)
+header = "     eps " + "  ".join(t)
+print(header)
+labels = ["eps"] + list(s)
+for i, row in enumerate(D):
+    print(f"{labels[i]:>4}", "  ".join(f"{v:2d}" for v in row))
+
+print()
+print("k('gatt','cata')  = D[4][4] =", D[4][4])
+print("k('gatta','cata') = D[5][4] =", D[5][4])
+print("brute force k('gatt','cata')  =", brute_common_subsequences("gatt", "cata"))
+print("brute force k('gatta','cata') =", brute_common_subsequences("gatta", "cata"))
+
+# Exhaustively certify the rolling-state invariant on every binary string up
+# to length four, including empty and repeated-symbol boundary cases.
+from itertools import product
+binary_strings = [
+    "".join(chars)
+    for length in range(5)
+    for chars in product("ab", repeat=length)
+]
+for left in binary_strings:
+    for right in binary_strings:
+        full = all_subseq_table(left, right)[-1][-1]
+        rolling = all_subseq_rolling(left, right)
+        brute = brute_common_subsequences(left, right)
+        assert full == rolling == brute, (left, right, full, rolling, brute)
+print("exhaustive full/rolling/brute agreement: 31 x 31 binary-string pairs")
+```
 ::::::
 
 ## The fixed-length subsequences kernel {#fixed-length}
@@ -251,6 +335,183 @@ Length \(p=2\), decay \(\lambda\). The level-1 suffix table has \(\lambda^2\) at
 
 **Reading.** The self-kernels are \(\kappa_2(\text{"cat"},\text{"cat"})=\kappa_2(\text{"car"},\text{"car"})=2\lambda^4+\lambda^6\), so the normalised kernel is \(\hat\kappa=\lambda^4/(2\lambda^4+\lambda^6)=(2+\lambda^2)^{-1}\). At \(\lambda=\tfrac12\) this is \(0.0625/0.140625=0.4444\), independent of any long-range structure the two three-letter words do not have.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+from collections import defaultdict
+
+
+def padd(*polys):
+    out = defaultdict(int)
+    for p in polys:
+        for k, v in p.items():
+            out[k] += v
+    return {k: v for k, v in out.items() if v != 0}
+
+
+def pscale(p, coeff, shift):
+    """Multiply polynomial p by coeff * lambda^shift."""
+    return {k + shift: v * coeff for k, v in p.items()}
+
+
+def pstr(p):
+    if not p:
+        return "0"
+    terms = []
+    for k in sorted(p):
+        c = p[k]
+        if k == 0:
+            terms.append(f"{c}")
+        elif c == 1:
+            terms.append(f"lam^{k}")
+        else:
+            terms.append(f"{c}*lam^{k}")
+    return " + ".join(terms)
+
+
+def peval(p, lam):
+    return sum(c * lam ** k for k, c in p.items())
+
+
+def gap_kernel(s, t, p, lam=0.5):
+    n, m = len(s), len(t)
+    # kS_1 table (1-indexed via dicts)
+    kS = {}
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            kS[(i, j)] = {2: 1} if s[i - 1] == t[j - 1] else {}
+    tables = {1: dict(kS)}
+    for level in range(2, p + 1):
+        DP = {}
+        for k in range(0, n + 1):
+            for l in range(0, m + 1):
+                if k == 0 or l == 0:
+                    DP[(k, l)] = {}
+                else:
+                    DP[(k, l)] = padd(
+                        tables[level - 1].get((k, l), {}),
+                        pscale(DP[(k - 1, l)], 1, 1),
+                        pscale(DP[(k, l - 1)], 1, 1),
+                        pscale(DP[(k - 1, l - 1)], -1, 2),
+                    )
+        kSp = {}
+        for k in range(1, n + 1):
+            for l in range(1, m + 1):
+                if s[k - 1] == t[l - 1]:
+                    kSp[(k, l)] = pscale(DP[(k - 1, l - 1)], 1, 2)
+                else:
+                    kSp[(k, l)] = {}
+        tables[level] = kSp
+        last_DP = DP
+    kernel = {}
+    for k in range(1, n + 1):
+        for l in range(1, m + 1):
+            kernel = padd(kernel, tables[p][(k, l)])
+    return kernel, last_DP, tables
+
+
+def gap_kernel_numeric_full(s, t, p, lam):
+    """Full auxiliary tables in floating-point arithmetic."""
+    n, m = len(s), len(t)
+    suffix = [
+        [lam ** 2 if s[i] == t[j] else 0.0 for j in range(m)]
+        for i in range(n)
+    ]
+    if p == 1:
+        return sum(map(sum, suffix))
+    for _level in range(2, p + 1):
+        dp = [[0.0] * (m + 1) for _ in range(n + 1)]
+        next_suffix = [[0.0] * m for _ in range(n)]
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                dp[i][j] = (
+                    suffix[i - 1][j - 1]
+                    + lam * dp[i - 1][j]
+                    + lam * dp[i][j - 1]
+                    - lam ** 2 * dp[i - 1][j - 1]
+                )
+                if s[i - 1] == t[j - 1]:
+                    next_suffix[i - 1][j - 1] = lam ** 2 * dp[i - 1][j - 1]
+        suffix = next_suffix
+    return sum(map(sum, suffix))
+
+
+def gap_kernel_numeric_rolling(s, t, p, lam):
+    """Two-row auxiliary table while retaining the level suffix table."""
+    n, m = len(s), len(t)
+    suffix = [
+        [lam ** 2 if s[i] == t[j] else 0.0 for j in range(m)]
+        for i in range(n)
+    ]
+    if p == 1:
+        return sum(map(sum, suffix))
+    for _level in range(2, p + 1):
+        previous = [0.0] * (m + 1)
+        next_suffix = [[0.0] * m for _ in range(n)]
+        for i in range(1, n + 1):
+            current = [0.0] * (m + 1)
+            for j in range(1, m + 1):
+                current[j] = (
+                    suffix[i - 1][j - 1]
+                    + lam * previous[j]
+                    + lam * current[j - 1]
+                    - lam ** 2 * previous[j - 1]
+                )
+                if s[i - 1] == t[j - 1]:
+                    next_suffix[i - 1][j - 1] = lam ** 2 * previous[j - 1]
+            previous = current
+        suffix = next_suffix
+    return sum(map(sum, suffix))
+
+
+lam = 0.5
+p = 2
+s, t = "cat", "car"
+kst, DP2, tabs = gap_kernel(s, t, p, lam)
+
+print("DP_2 table  (rows s =", s, ", cols t =", t, ")")
+print("      " + "         ".join(list(t)))
+for k in range(1, len(s) + 1):
+    row = []
+    for l in range(1, len(t) + 1):
+        row.append(pstr(DP2[(k, l)]))
+    print(f"{s[k-1]:>3}  " + "   |   ".join(row))
+
+print()
+print("DP_2 numeric at lambda = 0.5:")
+for k in range(1, len(s) + 1):
+    print(f"{s[k-1]:>3} ", [round(peval(DP2[(k, l)], lam), 6) for l in range(1, len(t) + 1)])
+
+print()
+print("k_2('cat','car')  =", pstr(kst), " = ", round(peval(kst, lam), 6))
+kss, _, _ = gap_kernel("cat", "cat", 2, lam)
+ktt, _, _ = gap_kernel("car", "car", 2, lam)
+print("k_2('cat','cat')  =", pstr(kss), " = ", round(peval(kss, lam), 6))
+print("k_2('car','car')  =", pstr(ktt), " = ", round(peval(ktt, lam), 6))
+norm = peval(kst, lam) / (peval(kss, lam) * peval(ktt, lam)) ** 0.5
+print("normalized k_hat  = k / sqrt(kss*ktt) =", round(norm, 6))
+print("closed form (2+lam^2)^-1 =", round(1.0 / (2 + lam ** 2), 6))
+
+# Verify that rolling the auxiliary table is cell-order equivalent to storing
+# it in full across varied lengths, decay factors, and repeated symbols.
+from itertools import product
+test_strings = [
+    "".join(chars)
+    for length in range(1, 5)
+    for chars in product("ab", repeat=length)
+]
+cases = 0
+for left in test_strings:
+    for right in test_strings:
+        for level in range(1, min(len(left), len(right)) + 1):
+            for decay in (0.2, 0.5, 0.9, 1.0):
+                full = gap_kernel_numeric_full(left, right, level, decay)
+                rolling = gap_kernel_numeric_rolling(left, right, level, decay)
+                assert abs(full - rolling) <= 1e-12 * max(1.0, abs(full))
+                cases += 1
+print("full/rolling gap-DP agreement:", cases, "parameterized cases")
+```
 ::::::
 
 ### Variants: character weightings, gap counts, and soft matching {#gap-variants}
@@ -361,6 +622,61 @@ Let \(S\) be a root with two children, a leaf and a \"cherry\" (a node with two 
 
 **Reading.** Summing the co-rooted kernel over all node pairs gives the all-subtree kernel \(\kappa(S,T)=\kappa_r(S,T)+\kappa_r(\text{cherry},T)=1+1=2\): the cherry pattern is shared once as the whole of \(T\) matched to \(S\)'s root and once as \(T\) matched to \(S\)'s internal cherry.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+def kr(A, B):
+    if len(A) != len(B) or len(A) == 0:
+        return 0
+    prod = 1
+    for a, b in zip(A, B):
+        prod *= (kr(a, b) + 1)
+    return prod
+
+
+def N(A):
+    if len(A) == 0:
+        return 0
+    prod = 1
+    for c in A:
+        prod *= (N(c) + 1)
+    return prod
+
+
+def subtrees(A):
+    out = [A]
+    for c in A:
+        out.extend(subtrees(c))
+    return out
+
+
+def all_subtree(A, B):
+    return sum(kr(u, v) for u in subtrees(A) for v in subtrees(B))
+
+
+leaf = ()
+cherry = (leaf, leaf)          # node with two leaf children
+S = (leaf, cherry)             # root: leaf + cherry     (5 nodes)
+T = (leaf, leaf)               # root with two leaves    (3 nodes)
+
+print("S has", len(subtrees(S)), "nodes; T has", len(subtrees(T)), "nodes")
+print("co-rooted kernel kr(S,T) =", kr(S, T))
+print("co-rooted kernel kr(S,S) =", kr(S, S), " (= N(S) =", N(S), ")")
+print("co-rooted kernel kr(T,T) =", kr(T, T), " (= N(T) =", N(T), ")")
+print("N(cherry) =", N(cherry))
+print("all-subtree kernel k(S,T) =", all_subtree(S, T))
+print("all-subtree kernel k(S,S) =", all_subtree(S, S))
+print("all-subtree kernel k(T,T) =", all_subtree(T, T))
+
+# breakdown of the all-subtree sum for S,T
+print("nonzero co-rooted pairs contributing to k(S,T):")
+for u in subtrees(S):
+    for v in subtrees(T):
+        val = kr(u, v)
+        if val:
+            print("   kr(", u, ",", v, ") =", val)
+```
 ::::::
 
 The all-subtree kernel promotes the feature set from co-rooted subtrees to all subtrees, and its value can be assembled from the co-rooted kernel by the identity \(\kappa(T_1,T_2)=\sum_{v_1\in T_1,\,v_2\in T_2}\kappa_r(\tau(v_1),\tau(v_2))\), since any subtree is co-rooted in the complete subtree at some node. A direct recursion is cheaper than that double sum. Partitioning the subtrees into those co-rooted with both roots and those sitting inside a child, with an inclusion-exclusion correction for the subtrees counted in two children, gives the dynamic program of Shawe-Taylor and Cristianini (2004).

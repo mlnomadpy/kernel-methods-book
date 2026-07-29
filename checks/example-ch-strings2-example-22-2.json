@@ -3,7 +3,7 @@
   "chapter": "ch-strings2",
   "anchor": "example-22-2",
   "source_file": "manuscript/chapters/ch-strings2.md",
-  "source_sha256": "0f7b4b8ab4da924d323bc558b98972c83a3b286f16aeeadb6ce10a0bae771bd1",
+  "source_sha256": "597402910cd4efb233b9f48cf705aec7a4f8547828acb398f41b11f46fa2c408",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-strings2-ex2.py"
@@ -19,7 +19,13 @@
     "-1",
     "0.0625",
     "0.140625",
-    "0.4444"
+    "0.4444",
+    "0.5",
+    "0.0",
+    "1.0",
+    "0.2",
+    "0.9",
+    "1e-12"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

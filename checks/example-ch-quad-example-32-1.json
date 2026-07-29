@@ -3,7 +3,7 @@
   "chapter": "ch-quad",
   "anchor": "example-32-1",
   "source_file": "manuscript/chapters/ch-quad.md",
-  "source_sha256": "6e9d75dbe24d613e8d695048d74c9affdc3250b0cdea3a7042ba2597252336a2",
+  "source_sha256": "00ab64ff9b1cefa9a8819198f199f76d45c93960dda98d0d52d6230e1dcfa1b0",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-quad-ex1.py"
@@ -29,9 +29,13 @@
     "0.003079",
     "0.055490",
     "0.001583",
-    "34"
+    "34",
+    "-1.0",
+    "0.0",
+    "1.0",
+    "1e-6"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The deterministic check validates the optimal weights, both squared errors, and the strict improvement; the complete executable core is rendered in the chapter.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

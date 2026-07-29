@@ -328,9 +328,43 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - fisher1936
+      - mika1999kfd
+      - rosipal2001
+      - shawe2004
+    locators:
+      - source: fisher1936
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: Annals of Eugenics 7(2):179-188, pp. 179-184 and Equations (1)-(7)
+        status: author-located-pending-independent-verification
+      - source: mika1999kfd
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: Neural Networks for Signal Processing IX, pp. 41-48, Sections 2-3 and kernel Fisher generalized eigenproblem
+        status: author-located-pending-independent-verification
+      - source: rosipal2001
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: JMLR 2:97-123, Sections 2-4 and kernel PLS algorithms
+        status: author-located-pending-independent-verification
+      - source: shawe2004
+        manuscript_locator: ch-discriminant.md#summary-and-further-reading
+        source_locator: Chapter 6, Section 6.5 and Algorithms 6.39, 6.42, and 6.45
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine
   website: https://www.tahabouhsine.com
   affiliation: AzettaAI
 mapping_date: 2026-07-20
+release_evidence:
+  controlled_quantity: between-class separation relative to regularized within-class scatter
+  manuscript_example: ch-discriminant.md#example-16-1
+  executable_check: checks/ch-discriminant-ex1.py
+  artifact: checks/example-ch-discriminant-example-16-1.json
+  status: machine-checked-author-artifact

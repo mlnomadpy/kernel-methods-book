@@ -3,7 +3,7 @@
   "chapter": "ch-accountable",
   "anchor": "example-55-3",
   "source_file": "manuscript/chapters/ch-accountable.md",
-  "source_sha256": "dc07f54a6460a28a7c9c520ed97c60b15fad60585c37d58f70f1cb195ba45f8d",
+  "source_sha256": "a93aaad808d0b907174c9ed5fa7d8ee200c0df27241c1da2259a91d94e94b881",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-accountable-ex3.py"
@@ -32,7 +32,11 @@
     "0.963",
     "+0.0270",
     "0.056",
-    "2019"
+    "2019",
+    "-3.0",
+    "3.0",
+    "1.0",
+    "0.001"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

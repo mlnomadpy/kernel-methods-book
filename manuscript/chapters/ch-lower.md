@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-lower
 slug: limits-and-lower-bounds-for-kernel-learning
 title: Limits and Lower Bounds for Kernel Learning
@@ -43,10 +44,11 @@ bibliography:
   - avron2017rff
   - yang2017sketch
   - nesterov2004
+narrative_link_policy: exact
 ---
 # Limits and Lower Bounds for Kernel Learning
 
-<p class="lead">An upper bound says that one route works. It does not say that the route is optimal, that its assumptions are necessary, or that another algorithm cannot do better. Kernel learning makes this ambiguity especially dangerous because four different bottlenecks can wear the same exponent: the data may contain too little information, the chosen feature map may have too little rank, the sketch may erase a statistically important direction, or the solver may have taken too few oracle calls. This chapter develops the tools that separate those obstructions. We begin by reducing estimation to hypothesis testing, grow two alternatives into Fano and Assouad packings, and then recover minimax lower bounds for source-and-capacity classes. We next examine random features, Nyström approximations, sketches, and first-order kernel solves without exchanging one error currency for another. The final sections explain adaptation limits and build small failure witnesses that can be checked by hand.</p>
+<p class="lead">Chapter [[ch:learning-theory|Learning Theory in RKHS Balls]] established routes by which a learner can succeed. An upper bound, however, does not say that its route is optimal, that its assumptions are necessary, or that another algorithm cannot do better. Kernel learning makes this ambiguity especially dangerous because four different bottlenecks can wear the same exponent: the data may contain too little information, the chosen feature map may have too little rank, the sketch may erase a statistically important direction, or the solver may have taken too few oracle calls. This chapter develops the tools that separate those obstructions. We begin by reducing estimation to hypothesis testing, grow two alternatives into Fano and Assouad packings, and then recover minimax lower bounds for source-and-capacity classes. We next examine random features, Nyström approximations, sketches, and first-order kernel solves without exchanging one error currency for another. The final sections explain adaptation limits and build small failure witnesses that can be checked by hand.</p>
 
 ## What an upper bound leaves unanswered {#lower-upper-incomplete}
 
@@ -374,6 +376,24 @@ $$
 \approx0.009153.
 $$
 
+The arithmetic is executable and deterministic:
+
+```python
+import numpy as np
+
+n = 8
+delta = 1 / 4
+separation = (2 * delta) ** 2
+kl = n * (2 * delta) ** 2 / 2
+tv_bound = np.sqrt(kl / 2)
+risk_bound = (1 / 32) * (1 - 1 / np.sqrt(2))
+np.testing.assert_allclose(
+    [separation, kl, tv_bound, risk_bound],
+    [1 / 4, 1, 1 / np.sqrt(2), 0.009152913],
+    rtol=1e-7,
+)
+```
+
 The bound is conservative because Pinsker discards the exact Gaussian testing error. Its value is conceptual: even a rank-one RKHS has a nonzero finite-sample noise floor.
 :::
 
@@ -530,7 +550,9 @@ This elementary statement is not a complete adaptation theorem. It identifies th
 
 No-free-lunch claims require equal care. Without restrictions on the target or distribution, density of an RKHS gives no uniform rate. Without a lower spectral condition, an effective-dimension upper bound cannot certify hardness. Without restrictions on feature sampling, an i.i.d. RFF lower bound says nothing about optimized features. “No method can do better” is valid only after the estimator class and information interface have been quantified.
 
-## Failure witnesses and diagnostic protocol {#lower-failures}
+<span id="lower-failures"></span>
+
+**Failure witnesses and diagnostic protocol.**
 
 Every lower-bound argument should be tested against a witness that breaks one of its hypotheses.
 
@@ -554,7 +576,9 @@ A useful lower-bound audit records:
 | proof bridge | How does testing, packing, rank, or polynomial approximation imply the target loss? |
 | failure boundary | Which stronger access or narrower class escapes the result? |
 
-## Practice: constructing a lower bound responsibly {#lower-practice}
+<span id="lower-practice"></span>
+
+**Practice: constructing a lower bound responsibly.**
 
 Start from the desired impossibility statement, not from a favorite inequality.
 
@@ -596,7 +620,7 @@ Lower bounds complete an upper-bound story by identifying what no admissible pro
 
 Randomized computation adds representation restrictions. Rank, feature, landmark, and sketch lower bounds must name what is preserved and what access is allowed. Optimization lower bounds add an oracle model: the familiar square-root dependence on condition number is a statement about first-order access to a worst-case quadratic, not about every implementation of every kernel solve. Adaptation limits are testing limits between nested classes, and no-free-lunch statements are meaningful only with explicit quantifiers.
 
-For statistical reductions and packing methods, see [@tsybakov2009]. For source-and-capacity rates and qualification, see [@caponnetto2007; @dicker2015]. For feature and sketch barriers, see [@bach2017quadrature; @avron2017rff; @yang2017sketch]. For first-order oracle complexity, see [@nesterov2004].
+For statistical reductions and packing methods, see [@tsybakov2009]. For source-and-capacity rates and qualification, see [@caponnetto2007; @dicker2015]. For feature and sketch barriers, see [@bach2017quadrature; @avron2017rff; @yang2017sketch]. For first-order oracle complexity, see [@nesterov2004]. Chapter [[ch:applications-and-practice|Applications and Practice]] turns this lower-bound ledger into a model-selection discipline: a claimed practical optimum is credible only when its upper and lower evidence use the same loss, access model, and deployment population.
 
 ## Exercises {#exercises}
 

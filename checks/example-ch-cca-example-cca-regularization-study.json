@@ -3,7 +3,7 @@
   "chapter": "ch-cca",
   "anchor": "example-cca-regularization-study",
   "source_file": "manuscript/chapters/ch-cca.md",
-  "source_sha256": "a14b6dfd9c68d8c3973cc904c4c75f8a63711e9a5184b7b167554ca31a82a2e6",
+  "source_sha256": "b5b39c1bef7b2891d25cc046c8d5b06726bb326ef21677cf5e2272d26f1fa626",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-cca-ex2.py"
@@ -20,7 +20,14 @@
     "0.414535",
     "0.424547",
     "0.395060",
-    "0.027"
+    "0.027",
+    "1",
+    "0",
+    "2",
+    "36",
+    "400",
+    "1e-6",
+    "03"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

@@ -3,10 +3,10 @@
   "chapter": "ch-oneclass",
   "anchor": "example-7-3",
   "source_file": "manuscript/chapters/ch-oneclass.md",
-  "source_sha256": "88e2dab13b7298f6240a19654edf9d63e0e3c8e2c165abc7455f2614a8af1bac",
+  "source_sha256": "4583f11a4d56b817fdd1d3c85df36fba589116fef7cbb04c478e857fb4b544c2",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch-oneclass-ex3.py"
+    "checks/ch-oneclass-ex2.py"
   ],
   "numeric_literals": [
     "0",
@@ -38,7 +38,13 @@
     "0.1",
     "0.7",
     "3",
-    "0.0"
+    "0.0",
+    "4",
+    "5",
+    "10",
+    "6",
+    "7",
+    "25"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

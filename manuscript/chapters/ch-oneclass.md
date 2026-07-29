@@ -1,4 +1,5 @@
 ---
+narrative_link_policy: exact
 id: ch-oneclass
 slug: one-class-and-novelty
 title: One-Class SVMs and Novelty Detection
@@ -35,6 +36,7 @@ bibliography:
   - bendavid2002
   - parzen1962
   - vert2006oneclass
+example_code_policy: visible-for-executable
 ---
 # One-Class SVMs and Novelty Detection
 
@@ -117,6 +119,15 @@ The diagonal of the Gram matrix is \(k(x_i,x_i)=\|x_i\|^2=(0,4,8,4,2)\).
 2.  [Read off the center.]{.wex-op} \(c=\sum_i\alpha_i x_i=0.25\,[(0,0)+(2,0)+(2,2)+(0,2)]=(1,1)\), a convex combination of the corners.
 3.  [Read off the radius.]{.wex-op} The optimal dual value is \(\sum_i\alpha_i\|x_i\|^2-\|c\|^2=4-2=2\), so \(R^2=2\) and \(R=\sqrt2\approx 1.4142\).
 4.  [Classify the points.]{.wex-op} The squared distances to \(c\) are \((2,2,2,2,0)\). The four corners sit exactly on the boundary (\(\alpha_i\gt 0\), support vectors); the center \(x_5\) is strictly inside with \(\alpha_5=0\).
+
+```python
+import numpy as np
+X = np.array([[0,0], [2,0], [2,2], [0,2], [1,1]], float)
+alpha = np.array([.25, .25, .25, .25, 0])
+center = alpha @ X
+distance2 = np.sum((X-center)**2, axis=1)
+np.testing.assert_allclose([*center, *distance2], [1, 1, 2, 2, 2, 2, 0])
+```
 
 **Reading.** The dual weights are supported entirely on the boundary. Four points define the disc and the fifth is redundant, exactly the sparsity that makes the solution cheap to store and to test against.
 :::::
@@ -201,6 +212,15 @@ The Gram diagonal is \(k(x_i,x_i)=\|x_i\|^2=(4,4,1,1)\).
 3.  [Refit with the negative.]{.wex-op} The signed dual returns \(\alpha=(1.25,1.25,0,1.5)\), which meets \(\sum_i y_i\alpha_i=1.25+1.25+0-1.5=1\). The center moves to \(c=\sum_i y_i\alpha_i x_i=(0,1.5)\), lifted away from the outlier below.
 4.  [Read the new sphere.]{.wex-op} The optimal value is \(R^2=6.25\), so \(R=2.5\). The squared distances to the new center are \((6.25,6.25,0.25,6.25)\): the two far targets and the negative all sit exactly on the boundary, while \(x_3\) is strictly inside. The negative now lands on the sphere and is excluded.
 
+```python
+import numpy as np
+X = np.array([[-2,0], [2,0], [0,1], [0,-1]], float)
+y, alpha = np.array([1,1,1,-1]), np.array([1.25,1.25,0,1.5])
+center = (y*alpha) @ X
+distance2 = np.sum((X-center)**2, axis=1)
+np.testing.assert_allclose([*center, *distance2], [0, 1.5, 6.25, 6.25, .25, 6.25])
+```
+
 **Reading.** One labelled outlier moved the center from \((0,0)\) to \((0,1.5)\) and grew the radius from \(2\) to \(2.5\), just enough to expel it. The negative carries weight \(\alpha_4=1.5\) with a minus sign, the only new ingredient, and it earns a place on the boundary exactly as a support vector does.
 :::::
 ::::::
@@ -274,6 +294,16 @@ with a Gaussian kernel \(k(x,x')=e^{-(x-x')^2/c}\), width \(c=1\). Solve the \(\
       0.5                                    0.200                                  0.3244                                 0.70        0.30
 2.  [Check the sandwich.]{.wex-op} In every row the fraction of outliers is at most \(\nu\) and the fraction of support vectors is at least \(\nu\): \(0\le 0.2\le 0.6\), then \(0.1\le 0.4\le 0.6\), then \(0.3\le 0.5\le 0.7\).
 3.  [Watch the boundary tighten.]{.wex-op} At \(\nu=0.2\) no point is excluded. Raising \(\nu\) lowers the ceiling \(1/(\nu m)\), forcing more weight to the bound: at \(\nu=0.4\) the leftmost point \(x=0.0\) becomes an outlier, and at \(\nu=0.5\) the extremes \(x=0.0,\,2.1\) and the straggler \(x=4.2\) are excluded.
+
+```python
+import numpy as np
+nu = np.array([.2, .4, .5])
+ceiling = 1 / (10 * nu)
+sv_fraction = np.array([.6, .6, .7])
+outlier_fraction = np.array([0., .1, .3])
+np.testing.assert_allclose(ceiling, [.5, .25, .2])
+assert np.all(outlier_fraction <= nu) and np.all(nu <= sv_fraction)
+```
 
 **Reading.** One number \(\nu\) squeezes the answer from both sides. It is an upper bound on how much data you throw away and a lower bound on how many points define the region, so setting \(\nu\) is the same as declaring, in advance, the outlier rate you are willing to tolerate.
 :::::
@@ -357,6 +387,17 @@ a Gaussian window of bandwidth \(h=1\), so \(Z=1/(\sqrt{2\pi}\,h)=0.3989\). Esti
 2.  [Threshold it.]{.wex-op} Take the level \(\tau=0.15\). The three cluster points clear it and are accepted; the straggler at \(x=5\), with \(\hat p_h=0.1009\lt 0.15\), falls below and is flagged novel, an empirical outlier fraction of \(1/4=0.25\).
 3.  [Trace the level set.]{.wex-op} Solving \(\hat p_h(x)=0.15\) on the line gives two crossings, \(x=-0.2527\) and \(x=2.2773\). The accepted region is the single interval \([-0.2527,\,2.2773]\), the super-level set \(\{\hat p_h\ge 0.15\}\), whose two endpoints are the density contour.
 4.  [Match the one-class test.]{.wex-op} The one-class boundary \(\tfrac1m\sum_i k(x_i,x)=\rho\) with \(\rho=\tau/Z=0.376\) crosses at \(x=-0.2527\) and \(x=2.2773\), identical to the density contour. Thresholding \(\hat p_h\) and thresholding the kernel sum draw the same boundary.
+
+```python
+import numpy as np
+x = np.array([0., 1., 2., 5.])
+Z = 1 / np.sqrt(2*np.pi)
+density = Z * np.exp(-.5*(x[:,None]-x[None,:])**2).mean(axis=1)
+np.testing.assert_allclose(density, [.1737, .2208, .1748, .1009], atol=5e-5)
+accepted = density >= .15
+assert accepted.tolist() == [True, True, True, False]
+np.testing.assert_allclose(.15/Z, .376, rtol=2e-3)
+```
 
 **Reading.** The one-class decision is a thresholded Parzen estimate to the last digit: the offset \(\rho=0.376\) is the density level \(\tau=0.15\) divided by the window constant \(Z\), and the estimated support is the density super-level set \(\{\hat p_h\ge 0.15\}\). Novelty detection is level-set estimation.
 :::::

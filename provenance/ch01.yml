@@ -401,6 +401,20 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-locator-index
+    title: Exact locators for positive kernels and RKHS
+    contribution: source-index
+    sources: [aronszajn1950, mercer1909, kolmogorov1941, wahba1990, scholkopf2002, shawe2004]
+    locators:
+      - {source: aronszajn1950, manuscript_locator: "ch01.md#moore-aronszajn-theorem", source_locator: "Transactions of the AMS 68(3), pp. 337--404; Part I, Sections 2--4", status: author-mapped-pending-independent-verification}
+      - {source: mercer1909, manuscript_locator: "ch01.md#mercer-theorem", source_locator: "Philosophical Transactions A 209, pp. 415--446; Sections 2--3", status: author-mapped-pending-independent-verification}
+      - {source: kolmogorov1941, manuscript_locator: "ch01.md#moore-aronszajn-theorem", source_locator: "Doklady Akademii Nauk SSSR 30, pp. 301--305", status: author-mapped-pending-independent-verification}
+      - {source: wahba1990, manuscript_locator: "ch01.md#rkhs-norm-as-smoothness", source_locator: "Spline Models for Observational Data, Chapters 1--2", status: author-mapped-pending-independent-verification}
+      - {source: scholkopf2002, manuscript_locator: "ch01.md#mercer-theorem", source_locator: "Learning with Kernels, Sections 2.2--2.3 and Theorem 2.2", status: author-mapped-pending-independent-verification}
+      - {source: shawe2004, manuscript_locator: "ch01.md#mercer-theorem", source_locator: "Kernel Methods for Pattern Analysis, Sections 3.1--3.3", status: author-mapped-pending-independent-verification}
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine

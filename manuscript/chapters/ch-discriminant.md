@@ -1,5 +1,6 @@
 ---
 id: ch-discriminant
+example_code_policy: visible-for-executable
 slug: kernel-discriminants-and-projections
 title: Kernel Discriminants and Projections
 part: V · Spectral Geometry and Unlabeled Structure
@@ -37,6 +38,7 @@ bibliography:
   - baudat2000
   - rosipal2001
   - wold1975
+narrative_link_policy: exact
 ---
 # Kernel Discriminants and Projections
 
@@ -124,7 +126,9 @@ Two facts about \(B\) drive everything that follows. First, if \(B\) is only pos
 
 Fisher (1936) asked for the one-dimensional projection of a two-class dataset that best separates the classes. Good separation means two things at once: the projected class means should be far apart, and each class should be tightly concentrated around its own mean. Fisher captured both in a single ratio, and Mika et al. (1999) carried the construction into a kernel feature space, where the projection becomes nonlinear in the input.
 
-### Between-class and within-class scatter {#kfd-scatter}
+<span id="kfd-scatter"></span>
+
+**Between-class and within-class scatter.**
 
 Both goals, distant class means and tight classes, become quadratic forms in the projection direction, so we build one scatter matrix for each and read Fisher's criterion off their ratio. Work in the feature space with map \(\phi\). Write the two classes as index sets of sizes \(\ell_+\) and \(\ell_-\), and let the class means in feature space be
 
@@ -201,6 +205,21 @@ $$N=\begin{pmatrix}1&-1&-1&1\\-1&1&1&-1\\-1&1&1&-1\\1&-1&-1&1\end{pmatrix},$$
 4.  [Project the training points.]{.wex-op} The projections \(t=K\alpha=(1,\,1,\,-1,\,-1)\) place both \(+\) points at \(+1\) and both \(-\) points at \(-1\); the objective value is \(\alpha^\top M\alpha/\alpha^\top(N+I)\alpha=4\).
 
 **Reading.** The discriminant sends the two classes to cleanly separated points \(\pm 1\) with the threshold at \(0\), and the whole computation used only the Gram matrix. The singular \(N\) makes concrete why the \(+\mu I\) term is not a numerical convenience but a necessity.
+
+```python
+import numpy as np
+K = np.array([[1,0,-1,0],[0,1,0,-1],
+              [-1,0,1,0],[0,-1,0,1.]], float)
+N = np.array([[1,-1,-1,1],[-1,1,1,-1],
+              [-1,1,1,-1],[1,-1,-1,1.]], float)
+direction = np.array([1.,1.,-1.,-1.])
+alpha = np.linalg.solve(N + np.eye(4), direction)
+scores = np.matmul(K, alpha)
+assert np.linalg.matrix_rank(N) == 1
+assert np.allclose(alpha, direction)
+assert np.allclose(scores, [2,2,-2,-2])
+print(alpha/np.linalg.norm(alpha), scores/2)
+```
 :::::
 ::::::
 
@@ -245,6 +264,21 @@ $$K=\begin{pmatrix}4&0&-4\\0&1&-1\\-4&-1&5\end{pmatrix},\qquad y=(1,-1,0).$$
 4.  [Add the second component.]{.wex-op} With \(k=2\), \(\alpha=(0.5,\,-0.75,\,0.25)\) and \(K\alpha=(1,\,-1,\,0)\) recovers the target exactly.
 
 **Reading.** The predictive direction here is the one of smaller variance. Truncating PCR at the single leading component discards precisely the direction that carries the signal; only keeping the second eigenvector recovers the response. This is the concrete failure mode that motivates partial least squares.
+
+```python
+import numpy as np
+X = np.array([[2.,0.], [0.,1.], [-2.,-1.]])
+y = np.array([1.,-1.,0.])
+H = np.eye(3)-np.ones((3, 3))/3
+Kc = np.linalg.multi_dot([H, np.matmul(X, X.T), H])
+values, vectors = np.linalg.eigh(Kc)
+order = np.argsort(values)[::-1]
+values, vectors = values[order], vectors[:, order]
+for kept in (1, 2):
+    V = vectors[:, :kept]
+    alpha = np.matmul(V, np.matmul(V.T, y)/values[:kept])
+    print(kept, np.matmul(Kc, alpha))
+```
 :::::
 ::::::
 
@@ -252,7 +286,9 @@ $$K=\begin{pmatrix}4&0&-4\\0&1&-1\\-4&-1&5\end{pmatrix},\qquad y=(1,-1,0).$$
 
 Partial least squares fixes PCR's blind spot by choosing directions using the target from the start. Instead of the directions of maximum variance, it extracts the directions of maximum covariance with the response, then deflates and repeats. It originated in the chemometrics work of Wold (1975), where high-dimensional and highly correlated predictors are the norm, and it was kernelized by Rosipal and Trejo (2001). Because covariance couples inputs to outputs, PLS aligns its features with what actually predicts \(y\).
 
-### Directions of maximum covariance {#max-covariance}
+<span id="max-covariance"></span>
+
+**Directions of maximum covariance.**
 
 The building block is the direction pair that maximizes covariance between two views of the data. For paired data with cross-covariance \(C_{xy}\), the problem
 
@@ -294,6 +330,22 @@ with columns of \(X\) and entries of \(y\) each summing to zero.
 4.  [Deflate the inputs.]{.wex-op} \(X_2=X(I-u_1p_1^\top)=\left(\begin{smallmatrix}0&0\\1.5&0\\-1.5&0\end{smallmatrix}\right)\); the check \(X_2^\top\tau_1=(0,0)\) confirms the new residual is orthogonal to the extracted score.
 
 **Reading.** One step selects the direction of maximum covariance with \(y\), fits a regression weight along it, and subtracts what it explained. The residual \(X_2\) is orthogonal to the score just used, so the next component is extracted from a genuinely new subspace: this orthogonality is what makes the deflation loop terminate cleanly and the coefficients accumulate independently.
+
+```python
+import numpy as np
+X = np.array([[1.,2.], [1.,-1.], [-2.,-1.]])
+y = np.array([1.,-1.,0.])
+u = np.matmul(X.T, y)
+u /= np.linalg.norm(u)
+score = np.matmul(X, u)
+XtX = np.matmul(X.T, X)
+denom = np.dot(u, np.matmul(XtX, u))
+loading = np.matmul(XtX, u)/denom
+coefficient = np.dot(y, score)/denom
+X2 = np.matmul(X, np.eye(2)-np.outer(u, loading))
+assert np.allclose(np.matmul(X2.T, score), 0)
+print(u, score, loading, coefficient, X2)
+```
 :::::
 ::::::
 

@@ -8,41 +8,50 @@ ch01:
   metrics: [widgets, chrefs]
   reason: Replaced legacy interactive figures with publication-grade static plates and added an audited cross-chapter bridge.
 ch02:
-  metrics: [widgets]
-  reason: Replaced a redundant interactive figure with its publication-grade static plate.
+  metrics: [widgets, proofs, chrefs]
+  reason: Replaced a redundant interactive figure, completed the representer proof chain, and added exact narrative links.
 ch03:
-  metrics: [widgets]
-  reason: Replaced a redundant interactive figure with its publication-grade static plate.
+  metrics: [widgets, chrefs]
+  reason: Replaced a redundant interactive figure and added an exact inherited-result link.
+ch05:
+  metrics: [chrefs]
+  reason: Added the exact handoff from classification margins to support-vector regression.
+ch-solve:
+  metrics: [proofs]
+  reason: Converted the solver convergence argument into an explicit proof block.
 ch04:
-  metrics: [widgets]
-  reason: Replaced the legacy interactive figure with a publication-grade static plate.
+  metrics: [widgets, chrefs]
+  reason: Replaced the legacy interactive figure and added an exact inherited-result link.
 ch07:
-  metrics: [widgets]
-  reason: Replaced the legacy interactive figure with a publication-grade static plate.
+  metrics: [widgets, chrefs]
+  reason: Replaced the legacy interactive figure and added exact spectral predecessor and successor links.
 ch08:
   metrics: [widgets]
   reason: Replaced legacy interactive figures with publication-grade static plates.
 ch11:
-  metrics: [widgets, chrefs]
-  reason: Replaced a redundant interactive figure with its static plate and added an audited approximation bridge.
+  metrics: [widgets, chrefs, examples]
+  reason: Replaced a redundant interactive figure, added an approximation bridge, and added the signed unbiased-MMD example.
 ch12:
   metrics: [widgets, chrefs]
   reason: Replaced the legacy interactive figure with a static plate and added an audited randomized-approximation bridge.
 ch-online:
-  metrics: [headings]
-  reason: Added the planned NORMA and passive-aggressive coverage.
+  metrics: [headings, statements, proofs, exercises, chrefs]
+  reason: Added NORMA and passive-aggressive coverage, a proved regret chain, synchronized exercises, and narrative links.
 ch-strings2:
   metrics: [statements, proofs]
   reason: Added the audited recurrence-correctness and rolling-memory theorems with complete proofs.
 ch14:
-  metrics: [statements, examples, widgets, chrefs]
-  reason: Added the audited deterministic finite-width failure experiment, replaced the legacy widget with a static plate, and added an audited theory bridge.
+  metrics: [statements, examples, proofs, widgets, chrefs]
+  reason: Added finite-width evidence, complete NNGP and fixed-NTK-flow proofs, a static plate, and a theory bridge.
 ch06:
   metrics: [statements, examples, proofs, exercises, widgets, chrefs]
   reason: Added audited population KPCA perturbation theory, pre-image boundaries, denoising failure evidence, a static publication plate, and a cross-chapter bridge.
 ch-cca:
-  metrics: [statements, examples, proofs, exercises]
-  reason: Added audited population KCCA operators, consistency schedules, repeated-root analysis, and held-out regularization evidence.
+  metrics: [statements, examples, proofs, exercises, chrefs]
+  reason: Added population KCCA operators, consistency schedules, repeated-root analysis, held-out evidence, and narrative links.
+ch-discriminant:
+  metrics: [chrefs]
+  reason: Added exact predecessor and successor links around discriminant subspace geometry.
 ch-cme:
   metrics: [proofs, exercises, chrefs]
   reason: Added audited range/source/capacity conditions, regression equivalence, and repeated-update stability.
@@ -56,11 +65,11 @@ ch-frontier:
   metrics: [statements, examples, algorithms, proofs, exercises, widgets, chrefs]
   reason: Reconstructed the frontier catalogue into deep regime-specific modules and an evidence ledger.
 ch-prelim:
-  metrics: [headings, statements, examples, exercises, chrefs]
-  reason: Expanded the planned measure theory, matrix concentration, conditioning, convex duality, and exercises.
+  metrics: [headings, statements, examples, proofs, exercises, chrefs]
+  reason: Expanded measure theory, matrix concentration, conditioning, convex duality, exercises, and foundational proofs.
 ch00:
-  metrics: [chrefs]
-  reason: Replaced the obsolete part-by-part legacy roadmap during the prerequisite-driven reorder.
+  metrics: [examples, chrefs]
+  reason: Replaced the obsolete roadmap and added the executable Gram-compatibility failure witness.
 ch13:
   metrics: [headings, algorithms, widgets, chrefs]
   reason: Added the planned matrix-free, EigenPro, mixed-precision, distributed, federated, and streaming coverage and replaced legacy widgets with publication-grade static plates.
@@ -68,14 +77,26 @@ ch-svr:
   metrics: [algorithms, chrefs]
   reason: Added expectile regression, noncrossing quantile families, and a distributional-prediction workflow.
 ch-testing:
-  metrics: [statements, algorithms]
-  reason: Added block and streaming tests, dependent-data calibration, robustness, multiplicity, and conditional two-sample coverage.
+  metrics: [statements, algorithms, chrefs]
+  reason: Added block and streaming tests, calibration coverage, and the handoff from detection to transport.
 ch-bo:
-  metrics: [algorithms]
-  reason: Added active design, safe and constrained optimization, multi-fidelity search, and asynchronous execution.
+  metrics: [algorithms, chrefs]
+  reason: Added active-design variants and the handoff to dynamical decision problems.
 ch-modern:
-  metrics: [algorithms]
-  reason: Added PAC-Bayes reporting, compression and stability, random-matrix diagnostics, and negative checks.
+  metrics: [algorithms, chrefs]
+  reason: Added PAC-Bayes and random-matrix diagnostics plus exact predecessor and successor links.
+ch-cluster:
+  metrics: [chrefs]
+  reason: Added the inherited KPCA eigenspace link.
+ch09:
+  metrics: [chrefs]
+  reason: Added exact incoming feature-map and outgoing dynamic-programming links.
+ch-krein:
+  metrics: [proofs, chrefs]
+  reason: Added the feasible-direction nonconcavity proof and the outgoing reliability handoff.
+ch-quad:
+  metrics: [chrefs]
+  reason: Added the handoff from quadrature uncertainty to conditional operators.
 ch-apps:
   metrics: [chrefs]
   reason: Added spatial, scientific, dynamics, shift, survival, and reproducibility case studies.
@@ -98,5 +119,5 @@ ch-geom:
   metrics: [chrefs]
   reason: Added a bridge from equivariant constructions to invariance design.
 ch-gp:
-  metrics: [chrefs]
-  reason: Added an audited bridge from Gaussian-process inference to the large-scale linear-algebra chapter.
+  metrics: [statements, examples, proofs, chrefs]
+  reason: Added a deeper GP evidence chain, six executable examples, an additional proof, and the scaling bridge.

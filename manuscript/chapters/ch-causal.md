@@ -1,4 +1,5 @@
 ---
+example_code_policy: visible-for-executable
 id: ch-causal
 slug: causal-inference-with-kernels
 title: Causal Inference with Kernels
@@ -52,6 +53,7 @@ bibliography:
   - miao2018
   - mastouri2021
   - muandet2021cme
+narrative_link_policy: exact
 ---
 # Causal Inference with Kernels
 
@@ -171,6 +173,49 @@ Gaussian kernels with bandwidth set by the median heuristic, which equals \(1\) 
 4.  [Confirm the statistic is not vacuous.]{.wex-op} Had \(Z\) instead tracked \(X\) inside each stratum, breaking conditional independence, the identical computation returns \(T_{\mathrm{CI}} = 0.097\), so the test does discriminate.
 
 **Reading.** The endpoints of a chain are marginally dependent but conditionally independent given the middle variable, and the kernel statistic reports exactly that, dropping from \(0.0844\) to numerical zero once \(Y\) is partialled out. Note the honest limit: the fork \(X \leftarrow Y \to Z\) and the reversed chain \(Z \to Y \to X\) imply the same conditional independence, so this test constrains the graph without orienting every edge.
+
+Here is the executable core. The construction deliberately includes a
+conditional-dependence witness, because a tiny statistic is meaningful only
+if the same pipeline reacts when the null is false.
+
+```python
+import numpy as np
+
+X = np.array([0, 0, 1, 1, 2, 2, 3, 3.], float)
+Y = np.array([0, 0, 0, 0, 1, 1, 1, 1.], float)
+Z = np.array([0, 1, 0, 1, 2, 3, 2, 3.], float)
+n = len(X)
+H = np.eye(n) - np.ones((n, n)) / n
+
+def gram(a):
+    a = np.atleast_2d(a).T if a.ndim == 1 else a
+    d2 = np.maximum(
+        np.sum(a*a, 1)[:, None] + np.sum(a*a, 1)[None, :]
+        - 2*np.matmul(a, a.T), 0
+    )
+    sigma = np.median(np.sqrt(d2[np.triu_indices(n, 1)]))
+    return np.exp(-d2 / (2*sigma**2))
+
+def centered(a):
+    return np.linalg.multi_dot([H, gram(a), H])
+
+Kx, Ky, Kz = centered(X), centered(Y), centered(Z)
+hsic_xz = np.trace(np.matmul(Kx, Kz)) / n**2
+ridge = 1e-3
+Ry = ridge * np.linalg.solve(Ky + ridge*np.eye(n), np.eye(n))
+Kxy = centered(np.column_stack([X, Y]))
+residual_xy = np.linalg.multi_dot([Ry, Kxy, Ry])
+residual_z = np.linalg.multi_dot([Ry, Kz, Ry])
+t_null = np.trace(np.matmul(residual_xy, residual_z)) / n
+
+Z_dep = X.copy()
+residual_dep = np.linalg.multi_dot([Ry, centered(Z_dep), Ry])
+t_alt = np.trace(np.matmul(residual_xy, residual_dep)) / n
+assert np.isclose(hsic_xz, 0.0844, atol=5e-5)
+assert t_null < 1e-10
+assert np.isclose(t_alt, 0.097063, atol=1e-6)
+print(hsic_xz, t_null, t_alt)
+```
 ::::
 :::::
 
@@ -304,6 +349,52 @@ A confounded linear model, all variables centered, \(n=6\). Instrument \(z=(-1,-
 
 **Reading.** The confounder biases ordinary regression by \(1.2\), from the truth \(2\) up to \(3.2\). Routing the fit through the instrument, which is clean of the confounder, restores the causal slope. The kernel version replaces the two scalar regressions by two ridge regressions in feature space, so the same logic recovers a nonlinear structural function \(f\).
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+z = np.array([-1, -1, -1, 1, 1, 1], float)
+u = np.array([-1, 1, 0, -1, 1, 0], float)   # sample-uncorrelated with z
+x = z + u
+beta, gamma = 2.0, 3.0
+y = beta * x + gamma * u
+n = len(x)
+
+xc, yc, zc = x - x.mean(), y - y.mean(), z - z.mean()
+print("Cov_hat(z,u) = %.4f   (instrument uncorrelated with confounder)"
+      % (zc @ (u - u.mean()) / n))
+print("Cov_hat(x,u) = %.4f   (treatment IS confounded)"
+      % (xc @ (u - u.mean()) / n))
+
+# --- naive OLS slope (biased) ---
+b_ols = (xc @ yc) / (xc @ xc)
+varX = (xc @ xc) / n
+covXU = xc @ (u - u.mean()) / n
+print("Var_hat(X) = %.4f" % varX)
+print("beta_OLS  = %.4f  (= beta + gamma*Cov(X,U)/Var(X) = 2 + 3*%.4f/%.4f)"
+      % (b_ols, covXU, varX))
+print("OLS bias  = %.4f" % (b_ols - beta))
+
+# --- two-stage least squares = KIV with linear kernels ---
+a_hat = (zc @ xc) / (zc @ zc)          # stage 1: regress X on Z
+xhat = a_hat * zc                      # fitted treatment (the CME, linear case)
+b_2sls = (xhat @ yc) / (xhat @ xhat)   # stage 2: regress Y on fitted treatment
+print("stage-1 slope a_hat = %.4f" % a_hat)
+print("beta_2SLS = %.4f" % b_2sls)
+
+# --- full KIV matrix formula with linear kernels + tiny ridge ---
+lam, xi = 1e-6, 1e-6
+Kz = np.outer(zc, zc)                   # linear-kernel Gram of the instrument
+Kx = np.outer(xc, xc)                   # linear-kernel Gram of the treatment
+B = np.linalg.solve(Kz + n * lam * np.eye(n), Kz)   # stage-1 CME coefficients
+K2 = B.T @ Kx @ B                       # Gram of the estimated embeddings
+c = np.linalg.solve(K2 + n * xi * np.eye(n), yc)    # stage-2 ridge weights
+alpha = B @ c                           # structural-function coefficients
+slope_kiv = alpha @ xc                  # f(x) = (sum_i alpha_i xc_i) * x
+print("beta_KIV(linear kernels, ridge->0) = %.4f" % slope_kiv)
+```
 :::::
 
 The two independent samples simplify propagation of stage-one error into stage two; they do not validate the instrument. An alternative avoids the nested regression: Muandet, Mehrjou, Lee, and Raj (2020), Sections 3 and 4, rewrite IV regression as a convex-concave saddle-point problem. Its identification still rests on the same moment restrictions and injectivity boundary.
@@ -405,6 +496,30 @@ $$
 
 **Sensitivity calculation.** In \(Y=\beta X+\delta Z+\gamma U\) with first-stage coefficient \(a=1\), the IV estimand is \(\beta+\delta\). Bounding \(|\delta|\le\rho\) gives the identified sensitivity interval \([\widehat\beta_{\mathrm{IV}}-\rho,\widehat\beta_{\mathrm{IV}}+\rho]\).
 ::::
+
+**Reproduce the calculation.**
+
+```python
+from itertools import product
+
+for z, u in product((-1, 1), repeat=2):
+    x = z + u
+    observed = 2 * z + 5 * u
+    model_1 = 2 * x + 3 * u
+    model_2 = 3 * x - z + 2 * u
+    assert model_1 == observed == model_2
+
+# Under intervention, the retained exogenous terms have mean zero.
+do_x = 1.25
+intervention_mean_1 = 2 * do_x
+intervention_mean_2 = 3 * do_x
+assert intervention_mean_1 == 2.5
+assert intervention_mean_2 == 3.75
+
+beta_iv, rho = 2.0, 0.4
+sensitivity_interval = (beta_iv - rho, beta_iv + rho)
+assert sensitivity_interval == (1.6, 2.4)
+```
 :::::
 
 ## What kernels buy, and what they do not {#assumptions}
@@ -430,9 +545,12 @@ For **Causal Inference with Kernels**, name the task first: testing, mean-effect
 
 ## Summary and further reading {#summary-and-further-reading}
 
-Gretton et al. [@gretton2005hsic] provide the embedding view of dependence, Fukumizu et al. [@fukumizu2008] the conditional operator, and Zhang et al. [@zhang2011kcit] the conditional-null test. Newey and Powell [@newey2003] establish the nonparametric-IV completeness boundary, Singh et al. [@singh2019kiv] develop KIV, Miao et al. [@miao2018] give proximal identification, Mastouri et al. [@mastouri2021] construct kernel bridge estimators, and Muandet et al. [@muandet2021cme] develop counterfactual mean embeddings.
+Gretton et al. [@gretton2005hsic] provide the embedding view of dependence, Fukumizu et al. [@fukumizu2008] the conditional operator, and Zhang et al. [@zhang2011kcit] the conditional-null test. Characteristicness and two-sample calibration delimit what those embeddings identify [@sriperumbudur2010; @gretton2012], while conditional embeddings and their review connect the operator view to regression [@song2013cme; @muandet2017]. Constraint-based discovery requires the causal and graphical assumptions stated by [@spirtes2000; @pearl2009]. Newey and Powell [@newey2003] and Darolles et al. [@darolles2011] establish the nonparametric-IV inverse-problem boundary; the classical instrument assumptions are explicit in [@angrist1996]. Singh et al. [@singh2019kiv] and Muandet et al. [@muandet2020dualiv] develop primal and dual kernel IV estimators. Miao et al. [@miao2018] give proximal identification, Mastouri et al. [@mastouri2021] construct kernel bridge estimators, and Muandet et al. [@muandet2021cme] develop counterfactual mean embeddings. The next chapter on [[ch:distribution-regression|distribution regression]] changes the sampling unit from a person to a distribution and makes the resulting two-stage sampling error explicit.
 
 ## Exercises {#exercises}
+
+For the neighboring problem in which each input is itself an empirical
+distribution, see the two-stage sampling analysis of [@szabo2016dr].
 
 1.  [warm-up]{.ex-tag} The worked example certified \(X \perp Z \mid Y\) for data generated by the chain \(X\to Y\to Z\). Show that the fork \(X \leftarrow Y \to Z\) and the reversed chain \(Z\to Y\to X\) imply the same single conditional independence and no other. Conclude that a conditional-independence test alone cannot orient the edges among these three variables, and name one extra source of information, from the modeling assumptions or the data-collection design, that would break the tie.
 2.  [computation]{.ex-tag} Verify the residual-maker identity \(I - \tilde K_Z(\tilde K_Z + \varepsilon I)^{-1} = \varepsilon(\tilde K_Z + \varepsilon I)^{-1}\) used in KCIT. Then describe the two limits of \(R_Z\): what operator does it approach as \(\varepsilon \to 0\), and what as \(\varepsilon \to \infty\), and explain why each extreme destroys the test, one by removing too much and the other by partialling out nothing.

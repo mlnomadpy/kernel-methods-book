@@ -52,6 +52,8 @@ bibliography:
   - kernelbook-code-ch-bo-ex2
   - kernelbook-code-ch-bo-ex3
   - kandasamy2017multifidelity
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 ---
 # Kernelized Bandits and Bayesian Optimization
 
@@ -121,6 +123,44 @@ Decision set \(D=\{0,\,0.5,\,1,\,1.5,\,2\}\); squared-exponential kernel \(k(x,x
 4.  [Score and query again.]{.wex-op} Now \(\mu+2\sigma=(0.199,\,1.283,\,0.338,\,1.118,\,-0.077)\) peaks at \(x=0.5\): with the middle pinned down, the rule *exploits* the promising left shoulder. Observe \(y=f(0.5)=0.9975\), exactly the optimum.
 
 **Reading.** Two queries suffice here: round 1 spends its budget reducing uncertainty where the belief is blank, round 2 cashes that in, and the simple regret drops to \(0\). The swing is entirely driven by the \(\sigma\) term shrinking after the first observation, which is the exploration-exploitation tradeoff playing out in numbers.
+
+The visible implementation uses one solve for the posterior mean and all
+candidate variances, then checks the complete query sequence. The fixed
+exploration weight is illustrative; it is not the confidence schedule used by
+the regret theorem later in the chapter.
+
+```python
+import numpy as np
+
+grid = np.array([0., .5, 1., 1.5, 2.])
+lengthscale, noise, kappa = .5, .01, 2.
+objective = lambda x: np.sin(3*x)
+kernel = lambda a, b: np.exp(-(a-b)**2 / (2*lengthscale**2))
+
+def choose(x_obs, y_obs):
+    x_obs, y_obs = np.asarray(x_obs), np.asarray(y_obs)
+    A = kernel(x_obs[:, None], x_obs[None, :]) + noise*np.eye(len(x_obs))
+    cross = kernel(x_obs[:, None], grid[None, :])
+    alpha = np.linalg.solve(A, y_obs)
+    projection = np.linalg.solve(A, cross)
+    mean = cross.T @ alpha
+    var = 1 - np.sum(cross * projection, axis=0)
+    score = mean + kappa*np.sqrt(np.maximum(var, 0))
+    return float(grid[np.argmax(score)])
+
+x_obs = [0., 2.]
+y_obs = list(objective(np.asarray(x_obs)))
+queries = []
+for _ in range(2):
+    x_next = choose(x_obs, y_obs)
+    queries.append(x_next)
+    x_obs.append(x_next)
+    y_obs.append(float(objective(x_next)))
+
+assert queries == [1., .5]
+assert np.isclose(max(y_obs), objective(.5))
+print(queries, max(y_obs))
+```
 ::::
 :::::
 
@@ -155,6 +195,24 @@ The formula is worth reading termwise. The first term \((\mu-f^+)\Phi(z)\) is ex
 
 ::::: {.example #example-41-2}
 [Example (expected improvement at a candidate)]{.box-title}
+
+```python
+import math
+import numpy as np
+
+grid = np.arange(0.0, 2.01, 0.5)
+xobs, yobs = np.array([0.0, 2.0]), np.sin(3.0 * np.array([0.0, 2.0]))
+k = lambda a, b: np.exp(-((a[:, None] - b[None, :]) ** 2) / (2.0 * 0.5**2))
+A = k(xobs, xobs) + 0.01 * np.eye(2)
+mean = k(grid, xobs) @ np.linalg.solve(A, yobs)
+variance = 1.0 - np.sum(k(grid, xobs) * np.linalg.solve(A, k(xobs, grid)).T, axis=1)
+sd = np.sqrt(variance)
+Phi = np.vectorize(lambda z: 0.5 * (1.0 + math.erf(z / np.sqrt(2.0))))
+phi = lambda z: np.exp(-z**2 / 2.0) / np.sqrt(2.0 * np.pi)
+z = (mean - yobs.max()) / sd
+ei = (mean - yobs.max()) * Phi(z) + sd * phi(z)
+print(grid, mean, sd, ei)
+```
 
 :::: wex
 ::: wex-setup
@@ -310,6 +368,29 @@ Since \(\beta_T\) grows only logarithmically and \(\gamma_T\) is sublinear, \(R_
 ::::: {.example #example-41-3}
 [Example (information gain of a short run)]{.box-title}
 
+```python
+import numpy as np
+
+order = np.array([0.0, 2.0, 1.0, 0.5])
+k = lambda a, b: np.exp(-((a[:, None] - b[None, :]) ** 2) / (2.0 * 0.5**2))
+K, noise_precision = k(order, order), 100.0
+information = 0.5 * np.linalg.slogdet(np.eye(4) + noise_precision * K)[1]
+variance = []
+for t, query in enumerate(order):
+    if t == 0:
+        variance.append(1.0)
+    else:
+        previous = order[:t]
+        cross = k(previous, np.array([query])).ravel()
+        variance.append(1.0 - cross @ np.linalg.solve(
+            k(previous, previous) + 0.01 * np.eye(t), cross
+        ))
+variance = np.asarray(variance)
+telescoping = 0.5 * np.sum(np.log(1.0 + noise_precision * variance))
+bound = 2.0 * information / np.log(1.0 + noise_precision)
+print(information, variance, telescoping, variance.sum(), bound)
+```
+
 :::: wex
 ::: wex-setup
 Take the four points GP-UCB acquired in the first example, in order \(x=(0,\,2,\,1,\,0.5)\), same kernel and \(\sigma^2=0.01\). We compute the information gain \(I=\tfrac12\ln\det(I+\sigma^{-2}K)\), verify the telescoping identity, and check the variance-sum bound of the proof. The values are independently reproducible from the chapter's computational reference [@kernelbook-code-ch-bo-ex3].
@@ -395,7 +476,9 @@ Noisy incumbents, safety constraints, and costs must enter the state explicitly.
 
 ## Summary and further reading {#summary-and-further-reading}
 
-Bayesian optimization turns posterior uncertainty into a spending rule for scarce experiments. GP-UCB adds an explicit optimism bonus, expected improvement prices the magnitude of beating the incumbent, and Thompson sampling randomizes through a posterior draw. Information gain links the kernel spectrum to cumulative regret, but the guarantee is conditional on the model and optimization assumptions that make the confidence band valid. Practical extensions change the decision set rather than the principle: safety restricts admissible queries, fidelity adds cost, and batches value diversity among simultaneous experiments. Surveys by [@shahriari2016] and [@frazier2018] give the wider landscape; the information-gain analysis begins with [@srinivas2010].
+Bayesian optimization turns posterior uncertainty into a spending rule for scarce experiments. GP-UCB adds an explicit optimism bonus, expected improvement prices the magnitude of beating the incumbent, and Thompson sampling randomizes through a posterior draw. Information gain links the kernel spectrum to cumulative regret, but the guarantee is conditional on the model and optimization assumptions that make the confidence band valid. Practical extensions change the decision set rather than the principle: safety restricts admissible queries, fidelity adds cost, and batches value diversity among simultaneous experiments.
+
+Surveys by [@shahriari2016] and [@frazier2018] give the wider landscape. Expected improvement descends from [@mockus1978] and efficient global optimization [@jones1998]; posterior randomization begins with [@thompson1933]. The information-gain analysis begins with [@srinivas2010], its agnostic confidence sequence is sharpened by [@chowdhury2017], and the information-theoretic view is developed by [@russo2018]. Practical model-fitting guidance comes from [@snoek2012], with refined information-gain rates in [@vakili2021]. Parallel policies [@desautels2014; @gonzalez2016] and structural dimension reduction [@kandasamy2015; @wang2016rembo] show exactly which new assumptions buy scale. The operational handoff is [[ch:accountable-kernels|accountable kernel decision-making]], where calibration, audit trails, and intervention costs determine whether an acquisition policy is fit for deployment.
 
 ## Exercises {#exercises}
 

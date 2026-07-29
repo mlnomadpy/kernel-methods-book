@@ -3,7 +3,7 @@
   "chapter": "ch-frontier",
   "anchor": "example-frontier-shot-noise",
   "source_file": "manuscript/chapters/ch-frontier.md",
-  "source_sha256": "419fd697aad71512df2d42893bb742d095dd2d88bbd875a85664ac9bb77afbe3",
+  "source_sha256": "78118ee551cadc4904bc3158b17b389e8526adb908211ad506facd13648cd998",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-frontier-ex1.py"
@@ -15,9 +15,18 @@
     "-0.2238",
     "0.9000",
     "2.3238",
-    "0.2238"
+    "0.2238",
+    "1.0",
+    "0.0",
+    "-0.22377392",
+    "2.32377392",
+    "5e-8",
+    "0.22377392",
+    "1e-14",
+    "0",
+    "-1e-14"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The executable check and visible NumPy code validate the noisy Gram eigenvalues, nearest PSD projection distance, symmetry, and repaired minimum-eigenvalue tolerance.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

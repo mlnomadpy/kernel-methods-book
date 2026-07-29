@@ -8,6 +8,8 @@ references:
   - burnaev2014conformal
   - gretton2012
   - sriperumbudur2012
+  - vovk2005conformal
+  - barber2021jackknife
 sections:
   - id: shift-taxonomy
     title: A taxonomy of distribution change
@@ -84,11 +86,21 @@ sections:
     contribution: adapted-proof-and-pedagogical-reconstruction
     sources:
       - burnaev2014conformal
+      - vovk2005conformal
+      - barber2021jackknife
     locators:
       - source: burnaev2014conformal
         manuscript_locator: ch-reliability.md#conformal-prediction
         source_locator: "Section 3 and Proposition 2, pp. 3-4"
         status: source-locator-checked-against-primary-paper
+      - source: vovk2005conformal
+        manuscript_locator: ch-reliability.md#conformal-prediction
+        source_locator: "Exchangeability, conformity scores, and finite-sample validity"
+        status: foundational conformal framework localized
+      - source: barber2021jackknife
+        manuscript_locator: ch-reliability.md#conformal-prediction
+        source_locator: "Sections 2-3, predictive-interval coverage and rank construction"
+        status: modern finite-sample interval construction localized
     verified_by: null
     verified_on: null
     permission: citation-only
@@ -111,6 +123,7 @@ sections:
     sources:
       - feng2023covshift
       - burnaev2014conformal
+      - vovk2005conformal
     locators:
       - source: feng2023covshift
         manuscript_locator: ch-reliability.md#conformal-under-shift
@@ -137,6 +150,10 @@ sections:
       - source: burnaev2014conformal
         manuscript_locator: ch-reliability.md#reliability-worked-example
         source_locator: "Section 3, finite-sample conformal validity"
+        status: conceptual-source-checked
+      - source: vovk2005conformal
+        manuscript_locator: ch-reliability.md#reliability-worked-example
+        source_locator: "Exchangeable-rank validity argument"
         status: conceptual-source-checked
     verified_by: null
     verified_on: null

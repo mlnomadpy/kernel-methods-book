@@ -3,7 +3,7 @@
   "chapter": "ch-ot",
   "anchor": "example-31-1",
   "source_file": "manuscript/chapters/ch-ot.md",
-  "source_sha256": "ba0c2ad77ed5c067771d27c0cc1c332e24bacc3eeb94d908c002100b03d8ac63",
+  "source_sha256": "d47b594b4545f8e2b5979f01e06190eb3b39b31207b355f141c2df6917515467",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch-ot-ex1.py"
@@ -23,9 +23,10 @@
     "2.1111",
     "-2.2222",
     "-1.3333",
-    "0.6667"
+    "0.6667",
+    "-1"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "The deterministic check validates sorted and crossed transport costs, the CDF identity, and the energy discrepancy; executable source is visible in the chapter.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

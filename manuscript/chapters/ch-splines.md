@@ -33,6 +33,9 @@ bibliography:
   - cravenwahba1979
   - wahba1990
   - green1984
+  - scholkopf2001
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 ---
 # Smoothing Splines and Additive RKHS Models
 
@@ -74,6 +77,14 @@ $$
 These directions are not weakly penalized. They are not penalized at all. As
 \(\lambda\to\infty\), the fit therefore approaches least squares in \(\mathcal N_m\),
 not the zero function. For \(m=2\), the limiting fit is affine.
+
+This is the semiparametric version of the projection argument inherited from
+[[ch:kernel-tricks|the representer-theorem chapter]]: observations can see only
+finitely many directions, but the usual RKHS proof must be repaired because
+\(J_m\) vanishes on an entire polynomial space. The repair is not to add a
+small penalty and hope. It is to carry the null space explicitly, identify it
+through the design, and apply the projection argument only to the penalized
+complement [@scholkopf2001].
 
 Choose a complementary Hilbert space
 
@@ -238,7 +249,7 @@ orthogonal complement of the observation representers is invisible to the
 data and visible to the penalty. That move extends immediately to derivative
 and integral data, provided the corresponding functionals are bounded.
 
-### What the theorem does not license {#spline-representer-boundary}
+**What the theorem does not license.** {#spline-representer-boundary}
 
 The assumptions mark real boundaries.
 
@@ -282,7 +293,8 @@ penalizes or fixes the trend.
 
 <figure class="viz" data-figure="spline-decomposition" data-alt="Three aligned panels show an affine null-space trend, a wavy penalized component, and their sum. The final spline overlays the affine trend to show which part remains when the rough component is strongly shrunk."><figcaption>A smoothing spline contains a free trend and a penalized departure. The trend determines the large-penalty limit and boundary extrapolation; the kernel component controls local curvature.</figcaption></figure>
 
-## Worked example: one curvature direction {#example-spline-nullspace}
+:::: {.example #example-spline-nullspace}
+[Example (one curvature direction)]{.box-title}
 
 Three observations make the null-space geometry visible without software. Take
 
@@ -348,6 +360,30 @@ At \(\lambda=0.01\), the curvature shrinkage factor is \(0.3165\) and
 \(\widehat y\approx(0.2278,0.5443,0.2278)^\top\). The smoother has eigenvalues
 \(1,1,0.3165\), so its effective degrees of freedom are \(2.3165\).
 
+The entire calculation is reproduced below. The code deliberately constructs
+the interpolant and integrates its squared second derivative numerically,
+rather than inserting the value \(48\), so it checks the bridge from the
+variational definition to the scalar shrinkage problem.
+
+```python
+import numpy as np
+
+lam = 0.01
+grid = np.linspace(0.0, 1.0, 200_001)
+s2 = np.where(grid <= 0.5, -24.0 * grid, -24.0 * (1.0 - grid))
+roughness = np.trapezoid(s2**2, grid)
+
+q = np.array([-1.0, 2.0, -1.0])
+shrinkage = 1.0 / (1.0 + 216.0 * lam)
+fitted = np.ones(3) / 3.0 + shrinkage * q / 3.0
+effective_df = 2.0 + shrinkage
+
+assert np.isclose(roughness, 48.0, atol=1e-8)
+assert np.allclose(fitted, [0.2278481, 0.5443038, 0.2278481])
+assert np.isclose(effective_df, 2.3164557)
+print(roughness, shrinkage, fitted, effective_df)
+```
+
 This example also exposes a selection failure. With \(n=3\), exactly two
 unpenalized directions, and only one penalized direction, the GCV score is
 constant for every finite \(\lambda\). There is not enough residual geometry to
@@ -357,6 +393,7 @@ that the design does not contain.
 **Verification scope.** The interpolation formula, roughness \(48\), shrinkage
 factor, fitted values, and degrees of freedom are hand-checkable consequences
 of (51.1). No probabilistic coverage claim is made.
+::::
 
 ## Paper module: Craven and Wahba's generalized cross-validation {#spline-gcv}
 
@@ -486,7 +523,7 @@ regime. The key spectral estimates imply
 \(\lambda\to0\) but \(n\lambda^{1/(2m)}\to\infty\): the estimator admits more
 detail with more data, but not so quickly that noise passes unfiltered.
 
-### Failure boundary and comparison of selectors {#spline-selection-boundary}
+**Failure boundary and comparison of selectors.** {#spline-selection-boundary}
 
 Equation (51.10) is not a distribution-free finite-sample guarantee. It does
 not cover arbitrary dependence, strong heteroscedasticity, adaptive choice
@@ -504,7 +541,7 @@ For serial or spatial residuals, random deletion leaves correlated neighbors in
 training. The result can look precise while selecting a curve that fails at the
 deployment horizon. The validation unit must match the dependence unit.
 
-## Penalized likelihood as repeated spline smoothing {#spline-penalized-irls}
+**Penalized likelihood as repeated spline smoothing.** {#spline-penalized-irls}
 
 Squared error is not the only observation model. For independent exponential
 family responses with linear predictor \(\eta_i=f(x_i)\), consider
@@ -639,7 +676,7 @@ design.
    condition estimates, and sensitivity to the interaction hierarchy.
 ::::
 
-## Bayesian interpretation and uncertainty {#spline-bayesian-view}
+**Bayesian interpretation and uncertainty.** {#spline-bayesian-view}
 
 Put a zero-mean Gaussian process prior on the penalized component \(g\) with
 covariance \(\sigma_g^2R\), retain \(p(x)^\top d\) as a diffuse trend, and use
@@ -663,7 +700,7 @@ the conformal methods in
 [[ch:distribution-shift-robustness-and-conformal-prediction]] provide a
 separate layer with separate assumptions.
 
-## Practice, diagnostics, and model choice {#spline-practice}
+**Practice, diagnostics, and model choice.** {#spline-practice}
 
 A defensible spline analysis reports more than a fitted line.
 
@@ -688,6 +725,14 @@ Use a spline when the roughness operator and null space express meaningful
 scientific behavior. Use a generic kernel when similarity is easier to specify
 than derivatives. Use both only after explaining which part of the geometry
 each contributes.
+
+That decision hands the reader to
+[[ch:spatial-and-spatiotemporal-kernels|the spatial-kernel chapter]], where the
+same saddle system reappears as universal kriging: the free spline trend
+becomes the spatial mean model, and the penalized Green kernel becomes a
+covariance or generalized covariance. The analogy is useful only if the
+semantics remain separate: roughness minimization is not, by itself, a random
+field model.
 
 ## Summary and further reading {#spline-summary}
 

@@ -3,7 +3,7 @@ slug: "accountable-kernels"
 title: "Accountable Kernels: Uncertainty, Explanation, and Audit"
 status: needs-verification
 private_source_sha256: null
-references: ["scholkopf2001", "kimeldorf1971", "cortes1995", "rasmussen2006", "vovk2005conformal", "lei2018conformal", "angelopoulos2021gentle", "barber2021jackknife", "kim2016critic", "koh2017influence", "basu2021fragile", "ghorbani2019shapley", "song2012bahsic", "gretton2012", "sriperumbudur2010", "gretton2005hsic", "gretton2008hsictest", "perezsuay2017fair", "mitchell2019cards", "gebru2021datasheets", "nist2023rmf", "frazier2018", "shahriari2016", "kennedy2001calibration"]
+references: ["scholkopf2001", "kimeldorf1971", "cortes1995", "rasmussen2006", "vovk2005conformal", "lei2018conformal", "angelopoulos2021gentle", "barber2021jackknife", "kim2016critic", "koh2017influence", "basu2021fragile", "ghorbani2019shapley", "song2012bahsic", "gretton2012", "sriperumbudur2010", "gretton2005hsic", "gretton2008hsictest", "perezsuay2017fair", "mitchell2019cards", "gebru2021datasheets", "nist2023rmf", "frazier2018", "shahriari2016", "kennedy2001calibration", "kernelbook-code-ch-accountable-ex1", "kernelbook-code-ch-accountable-ex2", "kernelbook-code-ch-accountable-ex3", "kernelbook-code-ch-accountable-ex4", "kernelbook-code-ch-accountable-ex5", "kernelbook-code-ch-accountable-audit"]
 sections:
   - id: "a-property-not-a-wrapper"
     title: "Accountability is a property of the model, not a wrapper"
@@ -90,4 +90,36 @@ sections:
     locators: []
     verified_by: null
     verified_on: null
+    permission: citation-only
+  - id: "claim-locator-index"
+    title: "Exact source and executable-artifact index"
+    contribution: source-index
+    sources: ["rasmussen2006", "vovk2005conformal", "lei2018conformal", "angelopoulos2021gentle", "barber2021jackknife", "koh2017influence", "basu2021fragile", "gretton2012", "sriperumbudur2010", "gretton2005hsic", "gretton2008hsictest", "perezsuay2017fair", "kernelbook-code-ch-accountable-ex1", "kernelbook-code-ch-accountable-ex2", "kernelbook-code-ch-accountable-ex3", "kernelbook-code-ch-accountable-ex4", "kernelbook-code-ch-accountable-ex5", "kernelbook-code-ch-accountable-audit"]
+    locators:
+      - {source: rasmussen2006, manuscript_locator: "ch-accountable.md#uncertainty-you-can-report", source_locator: "Section 2.2, Equations (2.22)--(2.24)", status: author-mapped}
+      - {source: vovk2005conformal, manuscript_locator: "ch-accountable.md#conformal", source_locator: "Chapter 2, Sections 2.1--2.3", status: author-mapped}
+      - {source: lei2018conformal, manuscript_locator: "ch-accountable.md#conformal", source_locator: "Section 2.2 and Theorem 2.1", status: author-mapped}
+      - {source: angelopoulos2021gentle, manuscript_locator: "ch-accountable.md#conformal", source_locator: "Section 2, Algorithms 1--2", status: author-mapped}
+      - {source: barber2021jackknife, manuscript_locator: "ch-accountable.md#conformal", source_locator: "Theorem 1", status: author-mapped}
+      - {source: koh2017influence, manuscript_locator: "ch-accountable.md#influence-loo", source_locator: "Section 2, Equations (1)--(5)", status: author-mapped}
+      - {source: basu2021fragile, manuscript_locator: "ch-accountable.md#influence-loo", source_locator: "Sections 3--4", status: author-mapped}
+      - {source: gretton2012, manuscript_locator: "ch-accountable.md#drift", source_locator: "Sections 2 and 5; Theorem 7", status: author-mapped}
+      - {source: sriperumbudur2010, manuscript_locator: "ch-accountable.md#prop-accountable-mmd-monitor", source_locator: "Definition 7", status: author-mapped}
+      - {source: gretton2005hsic, manuscript_locator: "ch-accountable.md#independence-fairness", source_locator: "Section 2 and Theorem 4", status: author-mapped}
+      - {source: gretton2008hsictest, manuscript_locator: "ch-accountable.md#prop-accountable-hsic", source_locator: "Sections 2--3", status: author-mapped}
+      - {source: perezsuay2017fair, manuscript_locator: "ch-accountable.md#independence-fairness", source_locator: "Section 3, Equations (4)--(7)", status: author-mapped}
+      - {source: kernelbook-code-ch-accountable-ex1, manuscript_locator: "ch-accountable.md#example-55-1", source_locator: "checks/example-ch-accountable-example-55-1.json; checks/ch-accountable-ex1.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-accountable-ex2, manuscript_locator: "ch-accountable.md#example-55-2", source_locator: "checks/example-ch-accountable-example-55-2.json; checks/ch-accountable-ex2.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-accountable-ex3, manuscript_locator: "ch-accountable.md#example-55-3", source_locator: "checks/example-ch-accountable-example-55-3.json; checks/ch-accountable-ex3.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-accountable-ex4, manuscript_locator: "ch-accountable.md#example-55-4", source_locator: "checks/example-ch-accountable-example-55-4.json; checks/ch-accountable-ex4.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-accountable-ex5, manuscript_locator: "ch-accountable.md#example-55-5", source_locator: "checks/example-ch-accountable-example-55-5.json; checks/ch-accountable-ex5.py", status: executable-artifact}
+      - {source: kernelbook-code-ch-accountable-audit, manuscript_locator: "ch-accountable.md#example-accountable-audit-fixture", source_locator: "checks/example-ch-accountable-example-accountable-audit-fixture.json; checks/ch-accountable-audit.py", status: executable-artifact}
+    verified_by:
+      - checks/ch-accountable-audit.py
+      - checks/ch-accountable-ex1.py
+      - checks/ch-accountable-ex2.py
+      - checks/ch-accountable-ex3.py
+      - checks/ch-accountable-ex4.py
+      - checks/ch-accountable-ex5.py
+    verified_on: "2026-07-29"
     permission: citation-only

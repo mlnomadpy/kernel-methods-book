@@ -35,7 +35,10 @@ reviewers:
   specialist: null
 provenance: provenance/ch-structured.yml
 verification_date: null
+example_code_policy: visible-for-executable
+narrative_link_policy: exact
 bibliography:
+  - bach2024learning
   - taskar2003m3n
   - tsochantaridis2005structured
   - joachims2009struct
@@ -54,7 +57,7 @@ bibliography:
 ---
 # Structured Prediction with Kernels
 
-<p class="lead">A classifier chooses one label. A sequence tagger must choose a whole path of labels whose neighboring decisions agree; a matching system must choose a globally feasible set of pairs; a parser must choose a tree. Scoring each component independently can produce an object that is locally plausible and globally impossible. Structured prediction moves the combinatorial object inside the learning problem. Kernels still provide geometry, but geometry alone is no longer the bottleneck: training repeatedly calls a decoder, the surrogate may disagree with the task loss, and an approximate oracle can change the optimization problem being solved. This chapter follows that chain without skipping a link, from joint features and operator-valued scores to structured margins, finite reduction, cutting planes, calibration boundaries, decoding gaps, and an executable sequence-labeling example.</p>
+<p class="lead">A classifier chooses one label. A sequence tagger must choose a whole path of labels whose neighboring decisions agree; a matching system must choose a globally feasible set of pairs; a parser must choose a tree. Scoring each component independently can produce an object that is locally plausible and globally impossible. Structured prediction begins exactly where [[ch:support-vector-machines|the SVM chapter]] and [[ch:ranking-and-ordinal-regression|the ranking chapter]] stop: the margin now compares one feasible object with every competing object, and finding the worst competitor is itself an algorithm. Kernels still provide geometry, but geometry alone is no longer the bottleneck. Training repeatedly calls a decoder, the surrogate may disagree with the task loss, and an approximate oracle can change the optimization problem being solved. We will keep one three-position sequence in view while following that chain from a failed componentwise predictor to joint features, a structured hinge, finite reduction, cutting planes, calibration boundaries, and visible executable code.</p>
 
 ## The prediction object and its two geometries {#structured-setting}
 
@@ -114,6 +117,60 @@ $$
 $$
 
 so the score decomposes over nodes and edges. Dynamic programming is possible because of this factorization, not because the joint kernel is positive semidefinite.
+
+The distinction becomes concrete in the running example. There are three positions and
+two labels, \(0\) and \(1\). Emission scores prefer the componentwise sequence \(010\),
+but a transition reward of \(0.6\) favors adjacent equal labels. Choosing the largest
+emission independently gives a score of \(2.4\); the feasible *joint* maximizer is
+\(000\), with score \(2.8\). Nothing is wrong with any local decision. The failure is
+that local maximization has discarded the transition features.
+
+This is the first pressure inherited from the ordinary kernel machine. The representer
+theorem in [[ch:kernel-tricks|the kernel-trick chapter]] can reduce a variational problem
+to coefficients, and the hinge construction in [[ch:support-vector-machines|the SVM
+chapter]] can compare two labels. Neither result tells us how to search an exponential
+output set. The new object is therefore not merely a more elaborate loss: it is a
+**learning-and-inference contract**. We must specify both the score geometry and the
+algorithm that maximizes it.
+
+For this tiny chain, the joint feature map can be written without abstraction. Give
+each position-label pair one coordinate and each transition type one coordinate:
+
+$$
+\Psi(y)
+=
+\left(
+\mathbf 1\{y_t=c\}_{t\in\{1,2,3\},\,c\in\{0,1\}},
+\;
+\sum_{t=2}^3\mathbf 1\{(y_{t-1},y_t)=(a,b)\}_{a,b\in\{0,1\}}
+\right).
+$$
+
+The first six coordinates record which label occurs at each position. The final four
+count \(00,01,10,11\) transitions. Put the six emission scores and four transition
+scores into \(w\); then \(\langle w,\Psi(y)\rangle\) is exactly the chain score used
+throughout the chapter. Learning \(w\) means learning how much each local event should
+contribute, while Viterbi exploits the fact that those contributions factor along the
+chain.
+
+The associated joint kernel has a direct interpretation:
+
+$$
+k_J(y,y')
+=
+\sum_{t=1}^3\mathbf 1\{y_t=y'_t\}
++
+\sum_{a,b}
+N_{ab}(y)N_{ab}(y'),
+$$
+
+where \(N_{ab}(y)\) counts \(a\!\to b\) transitions. The first term counts positional
+label agreement; the second compares transition profiles. This kernel is PSD because
+it is the inner product of the displayed feature vectors. It is also cheap to
+evaluate. Yet neither fact gives the maximizing sequence: tractable decoding follows
+from the additive score factorization. This one calculation separates the chapter's
+three claims: valid geometry, learnable weights, and efficient inference. That distinction matters before larger
+output spaces make them easy to blur.
 
 ## The operator-valued view {#structured-operator-view}
 
@@ -223,6 +280,37 @@ $$
 loss augmentation adds one local cost to every wrong label. For exact-match loss
 \(\mathbf 1\{y\ne y'\}\), one global bit records whether any discrepancy has occurred. For F-scores, intersection-over-union, or matching-specific losses, the required state may expand dramatically or destroy the original factorization.
 
+Why can we not train by repeatedly calling the ordinary decoder? Because the most
+dangerous competitor is not necessarily the currently highest-scoring one. A wrong
+structure with slightly lower model score but very large task loss can violate the
+desired margin more severely. The training oracle must maximize *loss plus score* so
+that the required score gap grows with the cost of the mistake. In the running example,
+ordinary decoding prefers \(000\), but loss augmentation prefers \(111\). Reusing the
+ordinary decoder would never expose the constraint associated with \(111\), even
+though it defines the hinge value.
+
+That distinction also prevents a common implementation bug. A decoder API that accepts
+only model potentials is not yet a loss-augmented oracle. For Hamming loss, the repair
+is local: add a unit cost to each incorrect label before running Viterbi. For exact
+match, an additional state must remember whether the path has departed from the truth.
+For a nondecomposable F-score, the dynamic program may need to track a sufficient
+count such as the number of predicted positives and true positives. The state space,
+and therefore the computational cost, is determined jointly by the score
+factorization and the loss.
+
+The contract should be tested, not inferred from a function name. On a small structure,
+enumerate every feasible output and compare:
+
+1. the score-only maximizer with the ordinary decoder;
+2. the loss-plus-score maximizer with the loss-augmented decoder;
+3. the reported maximum values, not only the returned structures;
+4. deterministic behavior under ties.
+
+Agreement on the returned label alone is insufficient: two implementations can select
+the same maximizer while disagreeing on its value because a constant truth score was
+subtracted in one place but not another. That offset does not affect the argmax, but it
+does affect the hinge, slack, stopping test, and dual objective.
+
 <figure class="viz" data-widget="structured-decoding-gap"><figcaption>Three operations that are easy to conflate: ordinary prediction ranks candidates by model score, loss augmentation changes those scores during training, and structured decoding enforces global feasibility. Local winners need not assemble into the maximizing valid structure.</figcaption></figure>
 
 ## The structured hinge {#structured-hinge}
@@ -249,6 +337,22 @@ H_i(w)
 $$
 
 The term with \(y=y_i\) is zero when \(\Delta_i(y_i)=0\), so \(H_i(w)\ge0\).
+It extends the binary maximum-margin construction [@cortes1995] and its multiclass
+score-vector generalization [@crammer2001] by replacing the finite label comparison
+with a loss-weighted comparison over feasible structures.
+
+For the running sequence, take the truth to be \(010\) and use Hamming loss. Ordinary
+decoding returns \(000\), which makes one error. Loss augmentation instead asks for the
+sequence maximizing
+
+$$
+f(y)+\Delta(010,y).
+$$
+
+It returns \(111\) with augmented value \(4.6\). Subtracting the truth score \(2.4\)
+gives hinge \(2.2\). The same model has therefore produced three different objects:
+the truth \(010\), the deployed prediction \(000\), and the training adversary \(111\).
+Keeping those objects separate is the central discipline of the chapter.
 
 ::: {.proposition #prop-structured-upper-bound}
 [Proposition (structured hinge upper-bounds task loss)]{.box-title}
@@ -377,6 +481,14 @@ $$
 
 expands into four evaluations of \(k_J\). The reduction is finite but may still be exponentially large. The cutting-plane method constructs only the constraints that matter.
 
+The contrast with the ordinary representer theorem is worth making explicit. In binary
+classification, one training example contributes one evaluation functional and hence
+one kernel section. Here, example \(i\) contributes a feature *difference* for every
+competitor \(y\). The theorem removes the infinite dimension of \(\mathcal H\), but it
+does not remove the combinatorics of \(\mathcal Y(x_i)\). That second reduction must
+come from factorized inference, constraint generation, or approximation. “Kernelized”
+and “computationally tractable” remain different claims.
+
 ## The margin program and its restricted form {#structured-margin-program}
 
 Introduce one slack \(\xi_i\) per example:
@@ -402,6 +514,72 @@ Check the equivalence with two candidate outputs whose violations are \(0.3\) an
 Dropping \(\xi_i\geq0\) would reward an already-correct example with negative slack and
 change the loss. This calculation is the scalar oracle for the restricted master.
 
+The dual reveals what the cutting plane is actually constructing. Attach a
+nonnegative multiplier \(\alpha_{iy}\) to each margin constraint, while keeping the
+nonnegative slack domain explicit. The Lagrangian is
+
+$$
+\mathcal L(w,\xi,\alpha)
+=
+\frac{\lambda}{2}\|w\|^2
++
+\frac1n\sum_i\xi_i
++
+\sum_{i,y}\alpha_{iy}
+\left[
+\Delta_i(y)-\xi_i-\langle w,\delta\Psi_i(y)\rangle
+\right].
+$$
+
+Minimizing over \(w\) gives
+
+$$
+w
+=
+\frac1\lambda
+\sum_{i,y}\alpha_{iy}\delta\Psi_i(y).
+$$
+
+This is more informative than merely restating the representer theorem: the coefficient
+of a feature difference is a dual weight on a violated structured comparison.
+Minimizing over the restricted domain \(\xi_i\ge0\) is finite exactly when
+
+$$
+\sum_y\alpha_{iy}\le\frac1n.
+$$
+
+The inequality, rather than equality, is the dual trace of the explicit
+\(\xi_i\ge0\) constraint. Substitution yields
+
+$$
+\begin{aligned}
+\max_{\alpha\ge0}\quad&
+\sum_{i,y}\alpha_{iy}\Delta_i(y)
+-
+\frac{1}{2\lambda}
+\left\|
+\sum_{i,y}\alpha_{iy}\delta\Psi_i(y)
+\right\|_{\mathcal H}^2\\
+\text{subject to}\quad&
+\sum_y\alpha_{iy}\le\frac1n
+\qquad\text{for every }i.
+\end{aligned}
+$$
+
+The quadratic term is computable from four joint-kernel evaluations for each pair of
+feature differences. A working-set method begins with almost all
+\(\alpha_{iy}=0\), then gives a new coordinate permission to become nonzero whenever
+the separation oracle finds a violated comparison. In this sense, constraint
+generation in the primal and column generation in the dual are the same act viewed
+from opposite sides.
+
+The dual also exposes two distinct notions of sparsity. Only some training examples
+may carry nonzero total dual mass, echoing ordinary support vectors. Within an active
+example, only some competing structures may receive nonzero weights. Neither kind of
+sparsity is guaranteed to make prediction cheap: decoding a new input still maximizes
+over its full feasible output set. Training sparsity and inference complexity answer
+different questions.
+
 For working sets \(W_i\subseteq\mathcal Y(x_i)\), the restricted problem keeps only those constraints. Let its exact minimizer be \((w_W,\xi_W)\), and define the most violated value
 
 The numerical diagnostic is therefore not only the restricted optimizer residual. After
@@ -423,6 +601,17 @@ The violation is \(v_i(w_W)-\xi_{W,i}\).
 The one-slack cutting-plane contract and its iteration analysis follow the structural-SVM
 development of Joachims, Finley, and Yu [@joachims2009struct, Sections 3--4]. The theorem below
 states the oracle and tolerance conventions locally because changing either changes the claim.
+The working-set logic inherits the decomposition principle used for large ordinary
+SVMs [@joachims1999], but the structured separation oracle now generates a whole
+output constraint rather than selecting a scalar training point.
+
+That difference changes the cost model. In an ordinary decomposition method, checking
+one candidate point requires a kernel score and a KKT test. In a structured method,
+checking one training case can require a complete dynamic program, matching solve, or
+integer optimization. Report wall time per oracle call, the number of calls, and the
+restricted-QP time separately. Otherwise an apparently slow optimizer may really be a
+fast optimizer wrapped around an expensive decoder, and changing QP software will not
+address the bottleneck.
 
 :::: {.algorithm #algo-structured-cutting-plane}
 [Algorithm (exact \(n\)-slack cutting plane)]{.box-title}
@@ -509,6 +698,31 @@ The preceding proof therefore yields an \(\varepsilon+\eta\) objective certifica
 
 Heuristic beam search usually provides no such \(\eta\). In that case, “no violated constraint found” is not a certificate. The algorithm has optimized a dynamically restricted surrogate whose relation to the intended structured hinge is unknown.
 
+Two approximations that are often grouped together have opposite logical behavior.
+
+| Oracle behavior | Search domain | What a returned value proves | Main failure |
+|---|---|---|---|
+| undergenerating search | \(\mathcal C(x)\subset\mathcal Y(x)\) | a lower bound on the true maximum violation | stopping can miss an omitted constraint |
+| overgenerating relaxation | \(\mathcal Y(x)\subset\overline{\mathcal Y}(x)\) | an upper bound when the relaxation objective dominates the integral problem | the returned object may be fractional or infeasible |
+| certified additive approximation | full problem with error \(\eta\) | maximum is within declared score units | certificate may scale badly with structure size |
+| heuristic local search | implicit neighborhood | only that no improving move was found | neither separation nor stopping is certified |
+
+Suppose beam search examines four of eight sequences in the running example and omits
+\(111\). It may report \(000\) as the largest augmented competitor with value \(3.8\),
+while exact enumeration finds value \(4.6\). The resulting hinge is understated by
+\(0.8\). If the cutting-plane tolerance is \(0.1\), a restricted solver can appear
+fully converged even though the missing oracle error is eight times the stopping
+tolerance. Increasing QP accuracy cannot repair the absent structure.
+
+An overgenerating relaxation can be useful in the opposite way. If a relaxed maximizer
+has augmented value no larger than the current slack plus tolerance, then no integral
+structure can violate the constraint more: the upper bound certifies separation.
+But when the relaxed optimum is fractional and violated, rounding it may reduce the
+value, so the rounded structure need not provide the violated integral constraint that
+the optimizer expects. A correct implementation records both values and labels them:
+the relaxed upper bound for certification and the feasible rounded value for adding a
+constraint.
+
 ::: {.proposition #prop-structured-oracle-gap}
 [Proposition (additive oracle error propagates additively)]{.box-title}
 
@@ -579,6 +793,131 @@ Each summand is minimized by a marginal mode. Strict propriety recovers the requ
 :::
 
 This proposition fails as stated when outputs obey a global constraint. Coordinatewise marginal modes can be infeasible. It also does not establish consistency for exact-match loss, whose Bayes action is the joint mode, not the vector of marginal modes.
+
+## From an empirical margin to population task risk {#structured-generalization}
+
+The upper-bound proposition was pointwise on the training sample. Calibration was a
+population statement about conditional risk minimizers. Between them lies the finite
+sample question: if we minimize the regularized empirical hinge, how far can its
+population hinge risk move when one training structure changes?
+
+This question belongs to the same approximation–estimation–optimization ledger
+developed in [[ch:learning-theory|the learning-theory chapter]]. Structured prediction
+adds one important scaling issue. A feature difference may grow with the size of the
+output. For a length-\(T\) chain built by summing bounded local features,
+\(\|\delta\Psi\|\) can grow like \(T\) unless the score is normalized or a sharper
+orthogonality argument is available. A statement that suppresses this dependence can
+look sample-efficient while becoming vacuous on long sequences.
+
+::: {.theorem #thm-structured-stability}
+[Theorem (expected stability bound for the regularized structured hinge)]{.box-title}
+
+Let \(S=(Z_1,\ldots,Z_n)\) be IID, and let
+
+$$
+\widehat w_S
+\in
+\arg\min_w
+\left\{
+\frac{\lambda}{2}\|w\|_{\mathcal H}^2
++
+\frac1n\sum_{i=1}^n H_{Z_i}(w)
+\right\}.
+$$
+
+Assume
+
+$$
+\sup_{z}\sup_{y\in\mathcal Y(x)}
+\|\Psi(x,y_z)-\Psi(x,y)\|_{\mathcal H}
+\le R,
+$$
+
+where \(y_z\) is the observed output in \(z=(x,y_z)\), and assume the
+relevant hinge risks are integrable. Then changing one observation changes the loss
+on any test structure by at most
+
+$$
+\beta=\frac{2R^2}{\lambda n}.
+$$
+
+Consequently, with
+\(\mathcal H_{\mathrm{pop}}(w)=\mathbb E_Z H_Z(w)\),
+
+$$
+\mathbb E_S\!\left[
+\mathcal H_{\mathrm{pop}}(\widehat w_S)
+-
+\frac1n\sum_{i=1}^nH_{Z_i}(\widehat w_S)
+\right]
+\le
+\frac{2R^2}{\lambda n}.
+$$
+
+If deployment uses exact score decoding over the same feasible set and the task loss
+is nonnegative and vanishes at the truth, then
+
+$$
+\mathbb E_S R_\Delta(\widehat w_S)
+\le
+\mathbb E_S\!\left[\frac1n\sum_iH_{Z_i}(\widehat w_S)\right]
++
+\frac{2R^2}{\lambda n}.
+$$
+
+**Assumptions.** IID sampling, positive quadratic regularization, uniformly bounded
+feature differences, integrable losses, and exact deployment decoding for the last
+inequality. **Proof status.** Complete. This is an expectation bound, not a
+high-probability calibration theorem.
+:::
+
+::: {.proof}
+[Proof]{.box-title}
+
+Every hinge \(H_z\) is \(R\)-Lipschitz because it is a maximum of affine functions
+whose slopes are \(-\delta\Psi_z(y)\). Let \(S\) and \(S'\) differ in one observation,
+and write \(w=\widehat w_S\), \(w'=\widehat w_{S'}\). Strong convexity and optimality
+give
+
+$$
+F_S(w')-F_S(w)\ge\frac{\lambda}{2}\|w'-w\|^2,
+\qquad
+F_{S'}(w)-F_{S'}(w')\ge\frac{\lambda}{2}\|w'-w\|^2.
+$$
+
+Adding cancels the \(n-1\) common losses. The two remaining loss differences are each
+at most \(R\|w-w'\|\), so
+
+$$
+\lambda\|w-w'\|^2
+\le
+\frac{2R}{n}\|w-w'\|.
+$$
+
+Thus \(\|w-w'\|\le 2R/(\lambda n)\), and for any test structure \(z\),
+
+$$
+|H_z(w)-H_z(w')|
+\le
+R\|w-w'\|
+\le
+\frac{2R^2}{\lambda n}.
+$$
+
+The replace-one identity for IID samples turns this uniform stability inequality into
+the expected generalization-gap bound. Finally, the pointwise structured-hinge
+upper bound gives \(R_\Delta(w)\le\mathcal H_{\mathrm{pop}}(w)\) under exact decoding.
+Combining the two inequalities proves the last display. [\(\square\)]{.qed}
+:::
+
+The theorem shows what a finite-sample guarantee does and does not repair. Increasing
+\(\lambda\) improves the stability term but increases regularization bias. Normalizing
+the sequence score can control \(R\), but it also changes the meaning of the margin.
+Most importantly, the last inequality disappears when deployment uses an uncertified
+decoder: the proof of the task-loss upper bound evaluated the hinge at the *actual
+score maximizer*. Bach's structured-prediction development makes the same
+surrogate–generalization–computation separation explicit [@bach2024learning,
+Chapter 13].
 
 ## A failure witness: marginally best, jointly impossible {#structured-failure-witness}
 
@@ -658,6 +997,72 @@ $$
 
 Replacing \(e_t(b)\) by
 \(e_t(b)+\mathbf1\{b\ne y_t^\star\}\) performs Hamming loss augmentation without changing the state graph. The deterministic check enumerates all eight sequences and verifies the ordinary optimum \(000\), augmented optimum \(111\), hinge \(2.2\), and upper-bound inequality.
+
+The complete check is shown below. The enumerated baseline is deliberate: it tests the
+dynamic program against the definition rather than merely running the same recurrence
+twice.
+
+```python
+from itertools import product
+
+emission = (
+    {0: 0.8, 1: 0.2},
+    {0: 0.1, 1: 0.9},
+    {0: 0.7, 1: 0.3},
+)
+truth = (0, 1, 0)
+
+def transition(previous, current):
+    return 0.6 if previous == current else 0.0
+
+def score(sequence):
+    node_score = sum(emission[t][label] for t, label in enumerate(sequence))
+    edge_score = sum(
+        transition(sequence[t - 1], sequence[t])
+        for t in range(1, len(sequence))
+    )
+    return node_score + edge_score
+
+def hamming(sequence):
+    return sum(label != target for label, target in zip(sequence, truth))
+
+def viterbi(loss_augmented=False):
+    values = {
+        label: emission[0][label] + (label != truth[0] if loss_augmented else 0)
+        for label in (0, 1)
+    }
+    paths = {label: (label,) for label in (0, 1)}
+    for t in range(1, len(truth)):
+        candidates = {}
+        for label in (0, 1):
+            candidates[label] = max(
+                (
+                    values[previous]
+                    + transition(previous, label)
+                    + emission[t][label]
+                    + (label != truth[t] if loss_augmented else 0),
+                    paths[previous] + (label,),
+                )
+                for previous in (0, 1)
+            )
+        values = {label: value for label, (value, _) in candidates.items()}
+        paths = {label: path for label, (_, path) in candidates.items()}
+    best_label = max(values, key=lambda label: (values[label], paths[label]))
+    return paths[best_label], values[best_label]
+
+sequences = list(product((0, 1), repeat=3))
+ordinary = max((score(y), y) for y in sequences)
+augmented = max((score(y) + hamming(y), y) for y in sequences)
+
+assert viterbi() == ordinary[::-1] == ((0, 0, 0), 2.8)
+assert viterbi(True) == augmented[::-1] == ((1, 1, 1), 4.6)
+
+hinge = augmented[0] - score(truth)
+decoded_loss = hamming(ordinary[1])
+assert abs(hinge - 2.2) < 1e-12
+assert decoded_loss == 1
+assert decoded_loss <= hinge
+```
 :::
 
 The example is tiny for a reason: every claim is hand-checkable. On a chain with \(T\) positions and \(L\) labels, the same recurrence costs \(O(TL^2)\) time and \(O(TL)\) memory with backpointers, or \(O(L)\) score memory if only the optimum value is needed.
@@ -691,6 +1096,29 @@ R_\Delta(\widehat y_{\mathrm{deploy}})-R_\Delta^\star
 $$
 
 This is a bookkeeping identity only after each term is defined through intermediate predictors. It is not a theorem that every term is nonnegative or separately observable.
+
+The intermediate predictors turn vague debugging into controlled comparisons. Hold
+the learned score fixed and replace only the deployment decoder: the change in task
+risk measures a deployment-decoding effect, not estimation. Hold the working set fixed
+and tighten the QP tolerance: the change isolates numerical optimization inside the
+restricted problem. Replace beam separation with exact enumeration on short
+structures: the difference measures training-oracle error on a regime where ground
+truth is available. Finally, increase the sample size while keeping the model,
+regularization convention, and exact oracle fixed: only then does an empirical
+learning curve speak primarily to estimation.
+
+| Question | Controlled comparison | Required diagnostic |
+|---|---|---|
+| Did the restricted QP converge? | same working set, tighter inner tolerance | primal feasibility and duality gap |
+| Did separation succeed? | approximate versus exact oracle on small cases | maximum augmented-score gap |
+| Did the candidate set erase the answer? | full versus restricted feasible set | gold and high-loss-candidate recall |
+| Did approximate deployment change decisions? | exact versus deployed decoder at fixed \(w\) | task loss and score gap |
+| Did more data help? | nested samples with the same full pipeline | held-out task risk with uncertainty |
+
+Reporting only final task accuracy collapses all five questions. A worse score may come
+from insufficient data, a poorly calibrated surrogate, an unfinished QP, a missed
+training constraint, or a beam that cannot represent the correct output. Those causes
+suggest different repairs; the experiment must keep them distinguishable.
 
 If deployment uses a restricted candidate set \(\mathcal C(x)\subsetneq\mathcal Y(x)\), then even the best learned score cannot return a Bayes action outside \(\mathcal C(x)\). Candidate recall is therefore part of the statistical system. Measure:
 
@@ -738,9 +1166,17 @@ Common mistakes are predictable:
 
 ## Summary and further reading {#structured-summary}
 
-Structured prediction adds a combinatorial decision layer to kernel learning. A joint feature map produces a valid joint kernel and, for finite output sets, an equivalent operator-valued score RKHS. The structured hinge is convex, upper-bounds empirical task loss under exact decoding, and admits a representer reduction to training feature differences. Its exponentially constrained program can be solved by cutting planes: with finite output sets, exact restricted solves, and exact separation, the algorithm terminates and carries an additive objective certificate. Approximate inference preserves that certificate only when its additive error is itself certified.
+Structured prediction adds a combinatorial decision layer to kernel learning. A joint feature map produces a valid joint kernel and, for finite output sets, an equivalent operator-valued score RKHS. The structured hinge is convex, upper-bounds task loss under exact decoding, and admits a representer reduction to training feature differences. Strong convexity and bounded feature differences also give an expected stability bound of order \(R^2/(\lambda n)\), but the feature radius can grow with structure size and the task-risk step still requires exact deployment decoding. Its exponentially constrained empirical program can be solved by cutting planes: with finite output sets, exact restricted solves, and exact separation, the algorithm terminates and carries an additive objective certificate. Approximate inference preserves that certificate only when its additive error is itself certified.
 
-The statistical boundary is just as important. Fisher consistency is a statement about a specific surrogate, task loss, score space, and decoder. Results for binary hinge or ordinary multiclass classification [@bartlett2006; @zhang2004] do not automatically establish consistency for arbitrary structured losses. The primary structured-prediction line runs from maximum-margin Markov networks [@taskar2003m3n] and structural SVMs [@tsochantaridis2005structured] through cutting-plane training [@joachims2009struct], approximate inference [@finley2008approx], and calibrated structured surrogates [@osokin2017structured]. General RKHS and SVM foundations are available in [@scholkopf2002; @shawe2004; @steinwart2008], while the operator-valued interpretation follows [@micchelli2005vv]. Convex-programming details and duality conventions follow [@boyd2004].
+The statistical boundary is just as important. Fisher consistency is a statement about a specific surrogate, task loss, score space, and decoder. Results for binary hinge or ordinary multiclass classification [@bartlett2006; @zhang2004] do not automatically establish consistency for arbitrary structured losses. The primary structured-prediction line runs from maximum-margin Markov networks [@taskar2003m3n] and structural SVMs [@tsochantaridis2005structured] through cutting-plane training [@joachims2009struct], approximate inference [@finley2008approx], and calibrated structured surrogates [@osokin2017structured]. Bach connects multicategory surrogates, structured losses, generalization, and computation in one learning-theory treatment [@bach2024learning, Chapter 13]. General RKHS and SVM foundations are available in [@scholkopf2002; @shawe2004; @steinwart2008], while the operator-valued interpretation follows [@micchelli2005vv]. Convex-programming details and duality conventions follow [@boyd2004].
+
+The unresolved pressure is computational. A representer theorem gave finite
+coefficients, but the constraint set can still be exponential; a cutting plane exposed
+only the constraints it needed, but each separation step still called an inference
+algorithm. [[ch:solving-the-svm|The solver chapter]] now studies working sets, KKT
+residuals, and decomposition methods directly. [[ch:online-kernel-learning|The online
+chapter]] will ask what remains when examples arrive sequentially and the expansion
+itself must be budgeted.
 
 ## Exercises {#exercises}
 
@@ -751,4 +1187,5 @@ The statistical boundary is just as important. Fisher consistency is a statement
 5. [computation]{.ex-tag} Suppose a restricted cutting-plane solution has slacks \((0.4,0.7)\), returned oracle values \((0.45,0.72)\), certified additive oracle errors \((0.03,0.05)\), and \(n=2\). If the algorithm stops at returned violation tolerance \(0.05\), give valid full-program slacks and the resulting additive objective certificate.
 6. [synthesis]{.ex-tag} Compare joint-feature and operator-valued views of structured scores. Give the map between them, one setting where each notation is preferable, and one assumption needed before an infinite output space can be treated similarly.
 7. [proof]{.ex-tag} Prove the Hamming-loss consistency proposition for an unconstrained product output space. Then use the even-parity distribution in the failure witness to show exactly which step fails under a global feasibility constraint.
-8. [challenge]{.ex-tag} Design a cutting-plane experiment with approximate loss-augmented inference. Specify an oracle diagnostic, an optimization certificate, a deployment-decoder sensitivity analysis, and a condition under which you would refuse to claim that the exact structured hinge was optimized.
+8. [proof]{.ex-tag} Reproduce the stability theorem. If a chain feature map is the sum of \(T\) local feature vectors of norm at most \(r\), derive one worst-case bound on \(R\). Repeat when the local feature differences are mutually orthogonal, and explain why loss normalization alone does not normalize the score geometry.
+9. [challenge]{.ex-tag} Design a cutting-plane experiment with approximate loss-augmented inference. Specify an oracle diagnostic, an optimization certificate, a deployment-decoder sensitivity analysis, and a condition under which you would refuse to claim that the exact structured hinge was optimized.

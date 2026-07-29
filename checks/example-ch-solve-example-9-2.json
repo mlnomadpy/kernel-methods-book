@@ -3,10 +3,10 @@
   "chapter": "ch-solve",
   "anchor": "example-9-2",
   "source_file": "manuscript/chapters/ch-solve.md",
-  "source_sha256": "9bdd63a6edede352f555b3a96b6827768086289aff4913a2bfb9fb8cda7ab503",
+  "source_sha256": "684549c4d0415199fa06c89b54007ca9d720cf822f5d01183363cbe95d1892a3",
   "verification_status": "executable-reference",
   "executable_checks": [
-    "checks/ch-solve-ex2.py"
+    "checks/ch-solve-ex1.py"
   ],
   "numeric_literals": [
     "1",
@@ -38,9 +38,10 @@
     "1.0",
     "6",
     "0.9",
-    "1.5"
+    "1.5",
+    "8"
   ],
-  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "scope": "Computes the analytic two-variable SMO update, clipping bounds, partner coefficient, and threshold displayed in the box.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

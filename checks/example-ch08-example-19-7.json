@@ -3,7 +3,7 @@
   "chapter": "ch08",
   "anchor": "example-19-7",
   "source_file": "manuscript/chapters/ch08.md",
-  "source_sha256": "f4e6c1d90c480ba0f10dd68ec6958a2f360332c49684b163891af61db46c485a",
+  "source_sha256": "5726618ebdc545408edeb4faf387a53f81205e9d93cec5cb37d12dbc83ca5b95",
   "verification_status": "executable-reference",
   "executable_checks": [
     "checks/ch08-ex2.py"
@@ -40,7 +40,13 @@
     "1.4571",
     "1.6996",
     "1.8008",
-    "3"
+    "3",
+    "4",
+    "-2.0",
+    "2.0",
+    "0.0",
+    "5",
+    "8.4"
   ],
   "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
   "prepared_for": {

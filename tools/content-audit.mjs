@@ -10,6 +10,9 @@ const bibliography = JSON.parse(read("bibliography.web.json"));
 const retainedBibliography = fs.existsSync(path.join(root, "bibliography-retained.yml"))
   ? parseYaml(read("bibliography-retained.yml")).retained || {}
   : {};
+const bibliographyLinkExceptions = fs.existsSync(path.join(root, "bibliography-unresolved.yml"))
+  ? parseYaml(read("bibliography-unresolved.yml")).records || {}
+  : {};
 const glossary = JSON.parse(read("glossary.json"));
 const chapters = book.parts.flatMap((part) => part.chapters.map((chapter) => ({ ...chapter, part: part.part })));
 const slugs = new Set(chapters.map((chapter) => chapter.slug));
@@ -113,10 +116,18 @@ for (const key of Object.keys(retainedBibliography)) {
   if (!bibliography[key]) errors.push(`retained bibliography key is missing: ${key}`);
   if (!retainedBibliography[key]?.reason) errors.push(`retained bibliography key lacks a reason: ${key}`);
 }
-for (const [key, entry] of Object.entries(bibliography)) if (!entry.url) missingLinks.push(key);
+for (const [key, exception] of Object.entries(bibliographyLinkExceptions)) {
+  if (!bibliography[key]) errors.push(`bibliography link exception is missing from bibliography: ${key}`);
+  if (!exception?.reason) errors.push(`bibliography link exception lacks a reason: ${key}`);
+  if (bibliography[key]?.url) errors.push(`bibliography link exception has a URL and should be removed: ${key}`);
+}
+for (const [key, entry] of Object.entries(bibliography)) {
+  if (!entry.url && !bibliographyLinkExceptions[key]) missingLinks.push(key);
+}
 
 console.log(`Audited ${chapters.length} canonical chapters and ${Object.keys(bibliography).length} bibliography entries.`);
 console.log(`Intentionally retained unused bibliography entries: ${Object.keys(retainedBibliography).length}.`);
+console.log(`Bibliography link exceptions: ${Object.keys(bibliographyLinkExceptions).length}.`);
 for (const warning of warnings) console.warn(`WARN ${warning}`);
 if (missingLinks.length) console.warn(`WARN ${missingLinks.length} bibliography entries have no DOI/URL; see the bibliography metadata backlog.`);
 if (errors.length) {

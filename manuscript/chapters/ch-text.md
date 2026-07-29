@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-text
 slug: kernels-for-text
 title: Kernels for Text
@@ -38,6 +40,8 @@ bibliography:
 # Kernels for Text
 
 <p class="lead">Natural language text is, after tabular data, the most common thing we ask a machine to analyse, and it arrives in a form that no dot product will accept: a stream of words. This chapter builds the bridge that the information retrieval community discovered decades ago and that turns out to be a kernel all along. We start from the bag of words and the vector space model, weight the coordinates with tf-idf so that informative terms count and function words do not, and read the resulting document similarity as a kernel. We then confront the model's central weakness, that documents sharing no words are declared perfectly dissimilar even when they discuss the same topic, and repair it three ways: a hand-built proximity matrix, the generalised vector space model that learns term relatedness from co-occurrence, and the latent semantic kernel that finds concepts by a singular value decomposition. Throughout, one theme recurs, the duality between representing a document by its terms and representing a term by the documents it lives in, and it is exactly the primal-dual duality of kernel methods seen through a new window. The whole development is concrete: a corpus of four tiny documents carries every idea, and every number is computed.</p>
+
+The sparse occurrence maps of [[ch:efficient-string-and-tree-kernels|Efficient String and Tree Kernels]] showed how discrete objects become inner products of count features without expanding the full vocabulary. Text retrieval inherits that construction at the word level, then adds a statistical question the raw counts leave unanswered: which shared coordinates are informative, and which are merely common? Tf-idf and semantic smoothing below are successive answers to that weighting problem.
 
 ## From documents to vectors: the bag of words {#bag-of-words}
 
@@ -153,6 +157,57 @@ Document-term matrix \(D\) of raw term frequencies:
 
 **Reading.** The kernel sees \(d_1\) and \(d_2\) as related and \(d_1\) and \(d_3\) as completely unrelated, because \(K_{13}=0\): the two documents share no term. Yet both are about pets. The vector space kernel cannot possibly know this, and \(d_4\) sits in its own orthogonal corner. Fixing the \(K_{13}=0\) blind spot is the task of the rest of the chapter.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+
+terms = ["cat", "kitten", "dog", "puppy", "car", "engine"]
+docs = {
+    "d1": "cat kitten",
+    "d2": "cat kitten kitten dog dog puppy",
+    "d3": "dog puppy",
+    "d4": "car car engine",
+}
+names = list(docs)
+N, T = len(names), len(terms)
+idx = {t: j for j, t in enumerate(terms)}
+
+# --- raw document-term matrix (rows = documents, cols = terms) ---
+D = np.zeros((N, T))
+for i, n in enumerate(names):
+    for w in docs[n].split():
+        D[i, idx[w]] += 1.0
+print("terms =", terms)
+print("document-term matrix D (raw tf) =\n", D)
+
+# --- document frequency and idf ---
+df = (D > 0).sum(axis=0)
+idf = np.log(N / df)
+print("df  =", df.astype(int))
+print("idf = ln(N/df) =", idf)
+
+# --- tf-idf weighted document vectors ---
+W = D * idf          # row i, col t -> tf(t,d_i) * idf(t)
+print("tf-idf weighted vectors W =\n", W)
+
+# --- vector space kernel Gram matrix on tf-idf vectors ---
+K = W @ W.T
+print("tf-idf Gram matrix K = W W^T =\n", K)
+
+# --- cosine-normalised kernel ---
+d = np.sqrt(np.diag(K))
+Kn = K / np.outer(d, d)
+print("normalised (cosine) kernel Khat =\n", Kn)
+
+# raw (unweighted) kernel to show d1,d3 share no terms
+Kraw = D @ D.T
+print("raw bag-of-words Gram D D^T =\n", Kraw)
+print("raw <d1,d3> =", Kraw[0, 2], " (no shared terms)")
+```
 :::::
 
 ## Semantic smoothing with a proximity matrix {#semantic-smoothing}
@@ -201,6 +256,19 @@ on \(\{\text{cat},\text{kitten},\text{dog},\text{puppy}\}\), and a separate \(2\
 
 **Reading.** Documents \(d_1\) and \(d_3\) share not one word, yet the corpus statistics make them \(0.692\)-similar, because the hub document taught the model that their vocabularies belong together. Meanwhile pets and vehicles stay apart. Co-occurrence has manufactured exactly the semantic link the raw kernel was missing.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+A = np.array([[1, 1, 0, 0, 0, 0], [1, 2, 2, 1, 0, 0],
+              [0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 2, 1]], dtype=float)
+P = A.T @ A
+K = A @ P @ A.T
+cosine = K / np.sqrt(np.outer(np.diag(K), np.diag(K)))
+assert K[0, 2] > 0 and round(cosine[0, 2], 3) == 0.692
+```
 ::::::
 
 ## Latent semantic kernels {#lsi}
@@ -276,6 +344,75 @@ $$v_1=(0.348,\,0.615,\,0.615,\,0.348,\,0,\,0),\qquad v_2=(0,\,0,\,0,\,0,\,0.894,
 
 **Reading.** Two documents with disjoint vocabularies come out perfectly aligned, because once the corpus is summarised by its two real concepts both documents are seen to be entirely about pets. The vehicle document remains orthogonal. The rank-2 projection has extracted the meaning the surface words hid: this is the payoff that a hand-built proximity matrix promised and that the SVD delivers automatically.
 ::::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+np.set_printoptions(precision=4, suppress=True)
+
+terms = ["cat", "kitten", "dog", "puppy", "car", "engine"]
+docs = {
+    "d1": "cat kitten",
+    "d2": "cat kitten kitten dog dog puppy",
+    "d3": "dog puppy",
+    "d4": "car car engine",
+}
+names = list(docs)
+N, T = len(names), len(terms)
+idx = {t: j for j, t in enumerate(terms)}
+
+A = np.zeros((N, T))
+for i, n in enumerate(names):
+    for w in docs[n].split():
+        A[i, idx[w]] += 1.0
+print("document-term matrix A =\n", A)
+
+# --- SVD ---
+U, s, Vt = np.linalg.svd(A, full_matrices=False)
+V = Vt.T
+# sign convention: largest-magnitude entry of each concept direction positive
+for j in range(V.shape[1]):
+    if V[np.argmax(np.abs(V[:, j])), j] < 0:
+        V[:, j] *= -1
+        U[:, j] *= -1
+print("singular values s =", s)
+print("right singular vectors V (columns = term-concept directions) =\n", np.round(V, 4))
+
+# --- truncate to rank 2 ---
+k = 2
+V2 = V[:, :k]
+print("concept directions V_2 =\n", np.round(V2, 4))
+
+# document coordinates in concept space
+P = A @ V2
+print("document coordinates A V_2 =\n", np.round(P, 4))
+
+# latent semantic kernel Gram matrix
+Klsi = P @ P.T
+print("rank-2 latent kernel K^LSI =\n", np.round(Klsi, 4))
+
+# cosine version
+dd = np.sqrt(np.diag(Klsi))
+Kn = Klsi / np.outer(dd, dd)
+print("cosine latent similarity =\n", np.round(Kn, 4))
+
+print("raw <d1,d3> =", (A @ A.T)[0, 2])
+print("latent <d1,d3> =", round(Klsi[0, 2], 4),
+      " cosine =", round(Kn[0, 2], 4))
+print("latent cosine <d1,d4> =", round(Kn[0, 3], 4), " (pets vs vehicles)")
+
+# --- GVSM: proximity P = A^T (co-occurrence via documents) ---
+Gterm = A.T @ A                       # term-term co-occurrence matrix
+Kg = A @ Gterm @ A.T                  # GVSM Gram = A A^T A A^T
+ddg = np.sqrt(np.diag(Kg))
+Kgn = Kg / np.outer(ddg, ddg)
+print("term-term co-occurrence A^T A =\n", Gterm)
+print("GVSM Gram A(A^T A)A^T =\n", Kg)
+print("GVSM cosine <d1,d3> =", round(Kgn[0, 2], 4),
+      " raw GVSM <d1,d3> =", Kg[0, 2])
+```
 :::::::
 
 ## Semantic diffusion kernels {#diffusion}
@@ -352,6 +489,124 @@ Three short documents, no two of which share a word:
 
 **Reading.** Documents \(A\) and \(B\) share no word, yet both the embedding cosine kernel (\(0.968\)) and the Word Mover's Distance (\(1.069\)) recognise them as near, while placing the vehicle document \(C\) far away (cosine \(0.263\), distance \(7.913\)). The bag-of-words kernel returned \(0\) for both pairs and could not tell the two topics apart. Learned word geometry supplies the semantic link that orthogonal term axes destroyed.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+from scipy.optimize import linprog
+
+np.set_printoptions(precision=4, suppress=True)
+
+# --- toy 2-D embedding table (a miniature word2vec/GloVe) ---
+emb = {
+    "cat":    np.array([1.0, 3.0]),
+    "kitten": np.array([1.0, 4.0]),
+    "dog":    np.array([2.0, 3.0]),
+    "puppy":  np.array([2.0, 4.0]),
+    "car":    np.array([8.0, 0.0]),
+}
+terms = list(emb)                       # dictionary order
+idx = {t: j for j, t in enumerate(terms)}
+E = np.stack([emb[t] for t in terms])   # T x 2 embedding matrix
+print("embedding matrix E (rows = words) =\n", E)
+
+docs = {
+    "A": "cat kitten kitten",
+    "B": "dog puppy",
+    "C": "car",
+}
+names = list(docs)
+T = len(terms)
+
+
+def bow(doc):
+    v = np.zeros(T)
+    for w in doc.split():
+        v[idx[w]] += 1.0
+    return v
+
+
+# --- (1) raw bag-of-words kernel ---
+BOW = np.stack([bow(docs[n]) for n in names])   # 3 x T raw counts
+print("\nraw bag-of-words count vectors (cols =", terms, ") =\n", BOW)
+Kbow = BOW @ BOW.T
+print("raw bag-of-words kernel BOW BOW^T =\n", Kbow)
+print("raw BoW  <A,B> =", Kbow[0, 1], "   <A,C> =", Kbow[0, 2],
+      "  (both zero: no shared words)")
+
+# --- normalised bag-of-words (nBOW) distributions ---
+P = BOW / BOW.sum(axis=1, keepdims=True)         # each row sums to 1
+print("\nnBOW distributions (rows sum to 1) =\n", P)
+
+# --- (2) embedding-space document kernel ---
+# document mean embedding mu_i = sum_t P[i,t] * e_t  (a mean embedding)
+MU = P @ E
+print("mean word-embedding of each document (mu) =\n", MU)
+Klin = MU @ MU.T
+print("embedding linear kernel <mu_i,mu_j> =\n", Klin)
+dn = np.sqrt(np.diag(Klin))
+Kcos = Klin / np.outer(dn, dn)
+print("embedding cosine kernel =\n", Kcos)
+print("embedding cosine  A~B =", round(Kcos[0, 1], 4),
+      "   A~C =", round(Kcos[0, 2], 4))
+
+
+# --- (3) Word Mover's Distance via optimal transport (linear program) ---
+def wmd(i, j, verbose=False):
+    """1-Wasserstein distance between nBOW(i) and nBOW(j), Euclidean ground
+    cost on word vectors, solved as an OT linear program."""
+    a_idx = np.where(P[i] > 0)[0]
+    b_idx = np.where(P[j] > 0)[0]
+    a = P[i, a_idx]
+    b = P[j, b_idx]
+    # ground cost matrix C[p,q] = ||e_p - e_q||
+    C = np.linalg.norm(E[a_idx][:, None, :] - E[b_idx][None, :, :], axis=2)
+    na, nb = len(a_idx), len(b_idx)
+    c = C.reshape(-1)
+    # equality constraints: row sums = a, col sums = b
+    A_eq = np.zeros((na + nb, na * nb))
+    for p in range(na):
+        A_eq[p, p * nb:(p + 1) * nb] = 1.0
+    for q in range(nb):
+        A_eq[na + q, q::nb] = 1.0
+    b_eq = np.concatenate([a, b])
+    res = linprog(c, A_eq=A_eq, b_eq=b_eq, bounds=[(0, None)] * (na * nb))
+    Topt = res.x.reshape(na, nb)
+    if verbose:
+        print("  ground cost C =\n", C)
+        print("  optimal transport plan T =\n", Topt)
+    return res.fun, Topt, a_idx, b_idx
+
+
+print("\n--- WMD(A,B): a genuine mass-splitting transport ---")
+dAB, Tab, ai, bi = wmd(0, 1, verbose=True)
+print("  rows(words) =", [terms[k] for k in ai],
+      " cols(words) =", [terms[k] for k in bi])
+print("WMD(A,B) =", round(dAB, 4))
+
+dAC, _, _, _ = wmd(0, 2)
+dBC, _, _, _ = wmd(1, 2)
+print("WMD(A,C) =", round(dAC, 4))
+print("WMD(B,C) =", round(dBC, 4))
+
+# full 3x3 WMD distance matrix
+Dwmd = np.zeros((3, 3))
+for i in range(3):
+    for j in range(i + 1, 3):
+        d, _, _, _ = wmd(i, j)
+        Dwmd[i, j] = Dwmd[j, i] = d
+print("\nWMD distance matrix (A,B,C) =\n", Dwmd)
+
+# --- WMD is a distance, not a PD kernel: -WMD is indefinite ---
+Kneg = -Dwmd
+w = np.linalg.eigvalsh(Kneg)
+print("eigenvalues of the negative-distance kernel K = -WMD =", np.round(w, 4))
+print("trace(K) =", round(float(np.trace(Kneg)), 4),
+      " -> eigenvalues sum to 0; signs are mixed, so K is NOT PSD")
+print("min eig =", round(float(w.min()), 4),
+      "  max eig =", round(float(w.max()), 4))
+```
 :::::
 
 ::: {.remark}
@@ -381,6 +636,8 @@ Text becomes geometry through the bag of words, and the vector space kernel is t
 ## Common mistakes and practical implications {#common-mistakes-and-practical-implications}
 
 Fit the vocabulary, document frequencies, and latent semantic basis on training or background text only; recomputing them on the test corpus leaks its geometry. Cosine normalization is undefined for an empty vector, so specify tokenization, stop-word handling, and the fallback for documents with no retained terms. An arbitrary term-similarity matrix need not be positive semidefinite: factor it as \(PP^\top\), repair its spectrum explicitly, or use an indefinite method. Tune the SVD rank against held-out data rather than treating more components as automatically better. When comparing contextual embeddings, tf-idf, and transport, keep preprocessing, dimensionality, and computational budget visible.
+
+Document vectors flatten syntax into a bag, and even latent semantic smoothing still represents each observation as one fixed vector. Relational data do not admit that reduction: their vertices, edges, and repeated substructures are part of the object being compared. [[ch:graph-kernels|Kernels for and on Graphs]] inherits the count-and-inner-product idea but confronts the resulting expressiveness-versus-computation barrier directly.
 
 ## Summary and further reading {#summary-and-further-reading}
 

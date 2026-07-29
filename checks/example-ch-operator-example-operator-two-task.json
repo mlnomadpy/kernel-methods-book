@@ -3,9 +3,11 @@
   "chapter": "ch-operator",
   "anchor": "example-operator-two-task",
   "source_file": "manuscript/chapters/ch-operator.md",
-  "source_sha256": "a8fbb703ac271b99b0fa0b2de11c01f87207cc9b7b864f6ba4876769eb31456f",
-  "verification_status": "conceptual-audit",
-  "executable_checks": [],
+  "source_sha256": "5921a66b6aa249c2924bdeaf6505545ce8829e77e142c6907b35b65780c7578d",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-operator-ex1.py"
+  ],
   "numeric_literals": [
     "1",
     "2",
@@ -20,9 +22,17 @@
     "0",
     "6",
     "0.1667",
-    "0.5926"
+    "0.5926",
+    "0.25",
+    "0.75",
+    "0.5",
+    "1.0",
+    "0.0",
+    "16.0",
+    "27.0",
+    "19.0"
   ],
-  "scope": "The example explains limiting coupling regimes symbolically and displays no computed dataset result.",
+  "scope": "The chapter-local executable check validates output-matrix positivity, the observed block solve, and both displayed predictions from the visible NumPy code.",
   "prepared_for": {
     "author": "Taha Bouhsine",
     "website": "https://www.tahabouhsine.com",

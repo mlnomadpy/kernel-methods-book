@@ -1,4 +1,6 @@
 ---
+narrative_link_policy: exact
+example_code_policy: visible-for-executable
 id: ch-distreg
 slug: distribution-regression
 title: Distribution Regression and Functional Data
@@ -173,6 +175,48 @@ $$ \mathbf K=\begin{pmatrix}1&0.7218&0.4857&0.4006\\0.7218&1&0.7317&0.4561\\0.48
 
 **Reading.** Stage one has turned four bags of numbers into four points whose pairwise similarities form the matrix \(\mathbf K\). The kernel behaves geometrically: it is \(1\) on the diagonal, decays monotonically as the generating means pull apart (from \(0.7218\) for neighbours to \(0.4006\) for the extremes), and its positive spectrum certifies that any downstream kernel machine may use it. Every number here came from bag samples through the base kernel alone; the embeddings \(\widehat\mu_i\) were never formed.
 :::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+bags = [
+    np.array([-0.4, 0.1, 0.3]),   # bag 1, mean 0
+    np.array([ 0.7, 1.0, 1.3]),   # bag 2, mean 1
+    np.array([ 1.5, 2.1, 2.4]),   # bag 3, mean 2
+    np.array([ 2.7, 3.0, 3.3]),   # bag 4, mean 3
+]
+L = len(bags)
+sigma = 1.0
+gamma = 1.0
+
+for i, b in enumerate(bags):
+    print(f"bag {i+1} = {b.tolist()}  empirical mean = {round(float(b.mean()), 4)}")
+print("sigma =", sigma, " gamma =", gamma)
+
+def kbase(a, b):
+    return np.exp(-(a - b) ** 2 / (2 * sigma ** 2))
+
+# G_ij = average pairwise base kernel between bag i and bag j
+G = np.array([[kbase(bags[i][:, None], bags[j][None, :]).mean()
+               for j in range(L)] for i in range(L)])
+print("G (embedding inner products) =\n", np.round(G, 4))
+print("diag(G) (self-similarities) =", np.round(np.diag(G), 4))
+
+# D_ij = biased empirical MMD^2 = ||mu_hat_i - mu_hat_j||^2
+D = np.array([[G[i, i] + G[j, j] - 2 * G[i, j]
+               for j in range(L)] for i in range(L)])
+print("D (biased MMD^2 between bags) =\n", np.round(D, 4))
+
+# Gaussian-on-MMD kernel on distributions
+K = np.exp(-D / (2 * gamma ** 2))
+print("K (Gaussian-on-MMD Gram) =\n", np.round(K, 4))
+
+eig = np.linalg.eigvalsh(K)
+print("eigenvalues of K =", np.round(eig, 4))
+print("min eigenvalue =", round(float(eig.min()), 4), "(>= 0 so K is PSD)")
+```
 ::::::
 
 ## The two-stage estimator {#two-stage-estimator}
@@ -213,6 +257,54 @@ $$ \mathbf K_{\mathrm{tr}}=\begin{pmatrix}1&0.7218&0.4006\\0.7218&1&0.4561\\0.40
 
 **Reading.** From three labelled bags the estimator predicts the held-out label as \(1.87\), close to the truth \(2.0\). It falls a little short for two reasons that are exactly the two error sources of the model: the ridge penalty shrinks the fit toward zero (a stage-two effect that shrinks with more bags and smaller \(\lambda\)), and each bag has only three points, so the embedding \(\widehat\mu_3\) is a noisy stand-in for \(\mu_{P_3}\) (a stage-one effect that shrinks as the bags grow). The naive baseline, blind to which distribution each bag came from, does far worse.
 ::::
+
+**Reproduce the calculation.**
+
+```python
+import numpy as np
+
+bags = [
+    np.array([-0.4, 0.1, 0.3]),   # bag 1, mean 0
+    np.array([ 0.7, 1.0, 1.3]),   # bag 2, mean 1
+    np.array([ 1.5, 2.1, 2.4]),   # bag 3, mean 2  (held out)
+    np.array([ 2.7, 3.0, 3.3]),   # bag 4, mean 3
+]
+L = len(bags)
+sigma = 1.0
+gamma = 1.0
+lam = 0.05                        # ridge penalty; system uses n*lam
+train = [0, 1, 3]
+test = 2
+y = np.array([0.0, 1.0, 3.0])     # labels of the training bags (true means)
+y_test_true = 2.0
+n = len(train)
+
+def kbase(a, b):
+    return np.exp(-(a - b) ** 2 / (2 * sigma ** 2))
+
+G = np.array([[kbase(bags[i][:, None], bags[j][None, :]).mean()
+               for j in range(L)] for i in range(L)])
+D = np.array([[G[i, i] + G[j, j] - 2 * G[i, j]
+               for j in range(L)] for i in range(L)])
+K = np.exp(-D / (2 * gamma ** 2))
+
+Ktr = K[np.ix_(train, train)]
+kstar = K[test, train]
+print("gamma =", gamma, " lam =", lam, " n =", n, " n*lam =", round(n * lam, 4))
+print("K_tr (training Gram) =\n", np.round(Ktr, 4))
+print("k_* (test-vs-train kernel) =", np.round(kstar, 4))
+
+alpha = np.linalg.solve(Ktr + n * lam * np.eye(n), y)
+print("alpha =", np.round(alpha, 4))
+
+pred = float(kstar @ alpha)
+print("prediction f(P*) =", round(pred, 4))
+print("true label of held-out bag =", y_test_true)
+print("naive constant baseline (mean of training labels) =",
+      round(float(y.mean()), 4))
+print("abs error two-stage =", round(abs(pred - y_test_true), 4))
+print("abs error naive      =", round(abs(float(y.mean()) - y_test_true), 4))
+```
 :::::
 
 ## Consistency and the two error sources {#consistency}

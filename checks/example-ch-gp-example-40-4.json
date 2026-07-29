@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "chapter": "ch-gp",
+  "anchor": "example-40-4",
+  "source_file": "manuscript/chapters/ch-gp.md",
+  "source_sha256": "0d87ce93d576fb23e9742f56dcb45bdd329580fb606d014ceef75d5d2d72e5a9",
+  "verification_status": "executable-reference",
+  "executable_checks": [
+    "checks/ch-gp-depth.py"
+  ],
+  "numeric_literals": [
+    "2",
+    "1.0",
+    "-1.0",
+    "0.01",
+    "100.0",
+    "-100.0",
+    "201.0",
+    "1",
+    "-1",
+    "0",
+    "3",
+    "2.01",
+    "201",
+    "100",
+    "-100",
+    "4"
+  ],
+  "scope": "The referenced executable check validates the numerical construction; this manifest binds it to the canonical example.",
+  "prepared_for": {
+    "author": "Taha Bouhsine",
+    "website": "https://www.tahabouhsine.com",
+    "affiliation": "AzettaAI"
+  },
+  "independent_review_required": true
+}

@@ -1,5 +1,7 @@
 ---
+narrative_link_policy: exact
 id: ch-mds
+example_code_policy: visible-for-executable
 slug: data-visualization-and-mds
 title: Data Visualization and Kernel MDS
 part: V · Spectral Geometry and Unlabeled Structure
@@ -161,6 +163,20 @@ $$\tilde x_1=(-2,\ 1.5),\quad \tilde x_2=(2,\ 1.5),\quad \tilde x_3=(2,\ -1.5),\
 5.  [Check the distances.]{.wex-op} These four points span a rectangle of width \(4\) and height \(3\); recomputing all pairwise distances reproduces \(D\) exactly, with maximum error \(0\).
 
 **Reading.** The two positive eigenvalues \(16=4^2\) and \(9=3^2\) are the squared side lengths, and the two zero eigenvalues certify that no third dimension is needed. Double-centering recovered the configuration up to the rotation and reflection that distances can never fix, which is exactly the freedom a visualization is allowed.
+
+```python
+import numpy as np
+D = np.array([[0,4,5,3], [4,0,3,5], [5,3,0,4], [3,5,4,0.]], float)
+J = np.eye(4)-np.ones((4, 4))/4
+B = -0.5*np.linalg.multi_dot([J, D**2, J])
+values, vectors = np.linalg.eigh(B)
+order = np.argsort(values)[::-1]
+values, vectors = values[order], vectors[:, order]
+X = vectors[:, :2]*np.sqrt(values[:2])
+recovered = np.sqrt(np.sum((X[:, None]-X[None, :])**2, axis=-1))
+assert np.allclose(recovered, D)
+print(values, X)
+```
 ::::
 :::::
 
@@ -192,6 +208,18 @@ $$Y^{\text{PCA}}:\ (-0.6923,\,1.0586),\ (-0.5293,\,-0.3462),\ (-1.9341,\,-0.5092
 4.  [Read off and align the MDS embedding.]{.wex-op} \(Y^{\text{MDS}}=V_2\Lambda_2^{1/2}\) is identical to \(Y^{\text{PCA}}\); the per-axis sign alignment is \((+,+)\) and the maximum coordinate difference is \(0\).
 
 **Reading.** The distance matrix carries the same information as the centered coordinates: run PCA on the points or MDS on their distances and the plot is the same, up to the sign of each axis that neither method can pin down. The two zero eigenvalues beyond the second again confirm the data was two-dimensional all along.
+
+```python
+import numpy as np
+X = np.array([[1,0], [2,1], [3,0], [0,2], [1,3.]], float)
+Xc = X-X.mean(0)
+G = np.matmul(Xc, Xc.T)
+D2 = np.sum((X[:, None]-X[None, :])**2, axis=-1)
+J = np.eye(len(X))-np.ones((len(X), len(X)))/len(X)
+B = -0.5*np.linalg.multi_dot([J, D2, J])
+assert np.allclose(B, G)
+print(np.linalg.eigvalsh(G)[::-1])
+```
 ::::
 :::::
 
@@ -261,6 +289,23 @@ $$K_{\mathrm{Iso}}=\begin{pmatrix}1.8716&0.9358&0&-0.9358&-1.8716\\0.9358&0.4679
 5.  [Compare with ordinary MDS.]{.wex-op} Double-centering the Euclidean chords instead gives eigenvalues \((2.7660,\,0.5758,\,0,\,0,\,0)\): two positive values, so the raw distances force the plot into two dimensions, the bowed arc.
 
 **Reading.** Swapping Euclidean distance for graph geodesic distance is the whole of Isomap, and it turns a two-dimensional bow into a one-dimensional line: the geodesic kernel \(K_{\mathrm{Iso}}\) has rank one where the Euclidean double-centering has rank two. Isomap is classical MDS, hence kernel PCA, on the kernel that the neighborhood graph supplies.
+
+```python
+import numpy as np
+angles = np.deg2rad([0,40,80,120,160])
+points = np.c_[np.cos(angles), np.sin(angles)]
+euclidean = np.sqrt(np.sum((points[:, None]-points[None, :])**2, axis=-1))
+geodesic = np.full((5, 5), np.inf); np.fill_diagonal(geodesic, 0)
+for i in range(4): geodesic[i, i+1] = geodesic[i+1, i] = euclidean[i, i+1]
+for k in range(5): geodesic = np.minimum(geodesic, geodesic[:, [k]]+geodesic[[k], :])
+J = np.eye(5)-np.ones((5, 5))/5
+Kiso = -0.5*np.linalg.multi_dot([J, geodesic**2, J])
+values, vectors = np.linalg.eigh(Kiso)
+y = vectors[:, -1]*np.sqrt(values[-1])
+if y[0] > y[-1]: y = -y
+assert np.all(np.diff(y) > 0)
+print(values[::-1], y)
+```
 :::
 ::::
 
@@ -324,6 +369,20 @@ $$L^{\dagger}=\begin{pmatrix}0.5467&0.2133&0.08&-0.32&-0.52\\0.2133&0.5467&0.08&
 5.  [Match the embeddings.]{.wex-op} The top two eigenvectors of \(K\) equal the two bottom nonzero eigenvectors of \(L\) to machine precision, maximum coordinate difference \(0\) after sign alignment. Kernel PCA scales axis \(j\) by \(\sqrt{1/\lambda_{j+1}}\), here \((1.3883,\,0.6578)\), the only difference from the raw eigenmap.
 
 **Reading.** Inverting the Laplacian's spectrum turns its smallest nonzero eigenvectors into a kernel's largest, so the Laplacian-eigenmap embedding and kernel PCA on \(L^{\dagger}\) diagonalize the same operator and share their axes. The pseudo-inverse Laplacian is the kernel that was hiding inside Belkin and Niyogi's construction.
+
+```python
+import numpy as np
+W = np.array([[0,1,1,0,0], [1,0,1,0,0], [1,1,0,1,0],
+              [0,0,1,0,1], [0,0,0,1,0.]], float)
+L = np.diag(W.sum(1))-W
+lambda_L, U_L = np.linalg.eigh(L)
+lambda_K, U_K = np.linalg.eigh(np.linalg.pinv(L))
+lap_axes, kernel_axes = U_L[:, 1:3], U_K[:, ::-1][:, :2]
+alignment = abs(np.matmul(lap_axes.T, kernel_axes))
+assert np.allclose(alignment, np.eye(2))
+assert np.allclose(lambda_K[::-1][:2], 1/lambda_L[1:3])
+print(lambda_L, lambda_K[::-1], alignment)
+```
 ::::
 :::::
 

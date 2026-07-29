@@ -1,5 +1,7 @@
 ---
+narrative_link_policy: exact
 id: ch-vc
+example_code_policy: visible-for-executable
 slug: vc-theory-and-generalization
 title: VC Theory and Generalization
 part: 'IV · Generalization, Approximation, and Limits'
@@ -163,6 +165,20 @@ Let \(\mathcal{F}\) label a point \(+1\) when it lies inside a chosen interval \
 4.  [Read off the VC dimension.]{.wex-op} Two points can be shattered, three cannot, so \(h=2\).
 
 **Reading.** The growth function is the exact polynomial \(S_{\mathcal{F}}(m)=\tfrac{m(m+1)}2+1\), quadratic rather than exponential, and the VC dimension is \(2\). The single un-realizable pattern \((+1,-1,+1)\) is the entire reason the class is learnable at all.
+
+```python
+from itertools import product
+def interval_labels(m):
+    labels = {(-1,)*m}
+    for left in range(m):
+        for right in range(left,m):
+            labels.add(tuple(1 if left<=i<=right else -1 for i in range(m)))
+    return labels
+assert len(interval_labels(2)) == 4
+assert len(interval_labels(3)) == 7
+assert (1,-1,1) not in interval_labels(3)
+print([len(interval_labels(m)) for m in range(1,6)])
+```
 :::
 ::::
 
@@ -178,6 +194,20 @@ Let \(\mathcal{F}=\{x\mapsto\operatorname{sgn}(w^\top x+b)\}\) be the oriented a
 4.  [Read off the VC dimension.]{.wex-op} Some three points are shattered, no four points are, so \(h=3\), matching the general formula \(h=N+1\) for hyperplanes in \(\mathbb{R}^N\).
 
 **Reading.** Halfplanes in \(\mathbb{R}^2\) have VC dimension \(3\), one more than the input dimension. Both failure configurations, convex and non-convex, block the fourth point, which is why the count stops at three.
+
+```python
+import numpy as np
+square = np.array([[0,0],[1,0],[1,1],[0,1.]],float)
+labels = np.array([1,-1,1,-1.])
+# Opposite positive corners and opposite negative corners have intersecting
+# convex hulls, so no affine separator exists.
+positive_midpoint = square[labels==1].mean(axis=0)
+negative_midpoint = square[labels==-1].mean(axis=0)
+assert np.allclose(positive_midpoint, negative_midpoint)
+triangle = np.array([[0,0],[1,0],[0,1.]])
+assert np.linalg.matrix_rank(np.column_stack([triangle,np.ones(3)])) == 3
+print(positive_midpoint)
+```
 :::
 ::::
 
@@ -263,6 +293,19 @@ Take the interval class above, VC dimension \(h=2\), with a separable training s
 4.  [Compare the halfplane class.]{.wex-op} With \(h=3\), Sauer gives \(S_{\mathcal{F}}(2m)\le\sum_{i=0}^{3}\binom{2000}{i}=1{,}333{,}335{,}001\), so \(\ln S_{\mathcal{F}}(2m)\le21.0109\) and the term is \(\sqrt{\tfrac{8}{1000}(21.0109+4.382)}=0.4507\).
 
 **Reading.** A zero-error classifier of VC dimension \(2\) still only certifies a true error below \(0.389\) at a thousand examples, and raising the capacity to \(h=3\) loosens the certificate to \(0.451\). The bound is honest but conservative: it is a worst-case guarantee over all distributions, and one more VC dimension costs real confidence. The dependence \(\sqrt{h/m}\) is what makes small capacity valuable.
+
+```python
+from math import comb, log, sqrt
+n, delta = 1000, .05
+def confidence(h):
+    growth = sum(comb(2*n,i) for i in range(h+1))
+    return sqrt(8/n*(log(growth)+log(4/delta)))
+c2, c3 = confidence(2), confidence(3)
+assert round(c2,3) == .389
+assert round(c3,3) == .451
+assert c3 > c2
+print(c2,c3)
+```
 :::
 ::::
 

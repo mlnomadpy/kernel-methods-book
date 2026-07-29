@@ -480,6 +480,34 @@ sections:
     verified_by: null
     verified_on: null
     permission: citation-only
+  - id: claim-level-citation-index
+    title: Claim-level source locators
+    contribution: provenance-index-only
+    sources:
+      - bartlett2002
+      - vapnik1995
+      - vapnik1998
+      - vapnikchervonenkis1971
+    locators:
+      - source: bartlett2002
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: JMLR 3:463-482, Sections 2-4, especially Theorems 8 and 12
+        status: author-located-pending-independent-verification
+      - source: vapnik1995
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: Chapters 3-5, growth functions, VC dimension, and structural risk minimization
+        status: author-located-pending-independent-verification
+      - source: vapnik1998
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: Chapters 3-4, uniform convergence and VC capacity
+        status: author-located-pending-independent-verification
+      - source: vapnikchervonenkis1971
+        manuscript_locator: ch-vc.md#summary-and-further-reading
+        source_locator: Theory of Probability and Its Applications 16(2):264-280, Sections 2-4 and Theorems 1-2
+        status: author-located-pending-independent-verification
+    verified_by: null
+    verified_on: null
+    permission: citation-only
 mapping_method: section citations, with chapter-bibliography fallback where a section has no inline citation
 mapping_author:
   name: Taha Bouhsine
