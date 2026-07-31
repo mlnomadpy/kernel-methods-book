@@ -205,7 +205,7 @@ $$ K=\begin{pmatrix} 1 & 0.606531 & 0.135335\\ 0.606531 & 1 & 0.606531\\ 0.13533
 
 **Reading.** Reweighting the very same three nodes drops the squared worst-case error from \(0.004662\) to \(0.003079\), a fall of \(0.001583\), about \(34\%\), at zero extra evaluations of \(f\). The gain is pure geometry: the uniform rule places \(\mu_{Q_w}\) somewhere in the node span, while \(w^\star\) places it at the foot of the perpendicular from \(\mu_P\).
 
-The executable calculation is short enough to inspect in full. It uses a
+[[lst:lst-quadrature-optimal-weights]] is short enough to inspect in full. It uses a
 linear solve, evaluates both rules from the same quadratic form, and asserts
 the claimed improvement rather than relying on rounded output.
 
@@ -231,6 +231,7 @@ assert np.isclose(e2_optimal, 0.003079, atol=1e-6)
 assert e2_optimal < e2_uniform
 print(optimal, e2_uniform, e2_optimal)
 ```
+{#lst-quadrature-optimal-weights caption="Verify optimal quadrature weights and their worst-case error"}
 ::::
 :::::
 

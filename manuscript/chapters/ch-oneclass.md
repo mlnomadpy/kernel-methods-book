@@ -84,6 +84,7 @@ The center lies in the convex hull of the training images, hence in their span, 
 The squared radius of the smallest enclosing hypersphere equals the optimal value of
 
 $$\max_{\alpha}\ \sum_i\alpha_i\,k(x_i,x_i)-\sum_{i,j}\alpha_i\alpha_j\,k(x_i,x_j)\quad\text{s.t.}\quad \sum_i\alpha_i=1,\ \alpha_i\ge 0.$$
+{#eq-svdd-hard-dual}
 
 Its center is \(c=\sum_i\alpha_i\phi_i\), and a point \(x_i\) lies exactly on the sphere if and only if \(\alpha_i\gt 0\). Such points are the support vectors.
 
@@ -139,7 +140,7 @@ Requiring the ball to swallow every point makes it hostage to a single outlier. 
 
 $$\min_{R,c,\xi}\ R^2+C\sum_i\xi_i\quad\text{s.t.}\quad \|\phi_i-c\|^2\le R^2+\xi_i,\ \xi_i\ge 0.$$
 
-The derivation is unchanged except that the multiplier on the slack constraint, \(\beta_i=C-\alpha_i\ge 0\), now caps each dual variable at \(C\). The dual is the SVDD objective above with the box constraint \(0\le\alpha_i\le C\) in place of \(\alpha_i\ge 0\). A point with nonzero slack lies outside the sphere and, by complementarity, sits at the ceiling \(\alpha_i=C\); the radius is still read from any non-bound support vector, one with \(0\lt\alpha_i\lt C\).
+The derivation is unchanged except that the multiplier on the slack constraint, \(\beta_i=C-\alpha_i\ge 0\), now caps each dual variable at \(C\). The dual keeps the objective of [[eq:eq-svdd-hard-dual]] but replaces \(\alpha_i\ge 0\) by the box constraint \(0\le\alpha_i\le C\). A point with nonzero slack lies outside the sphere and, by complementarity, sits at the ceiling \(\alpha_i=C\); the radius is still read from any non-bound support vector, one with \(0\lt\alpha_i\lt C\).
 
 Setting \(C=1/(\nu\ell)\) reparametrizes the trade-off in the way that will matter below. Since \(\sum_i\alpha_i=1\) and each \(\alpha_i\le 1/(\nu\ell)\), the constant \(\nu\in(0,1]\) turns out to bound the fraction of excluded points directly. We collect the resulting procedure.
 

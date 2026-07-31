@@ -1,0 +1,32 @@
+.code-listing {
+  margin: 1.4em 0;
+  border-top: 0.14em solid #315f78;
+  background: #f1f4f3;
+}
+
+.listing-caption {
+  display: block;
+  margin: 0;
+  padding: 0.55em 0.7em;
+  border: 1px solid #cfd6d5;
+  border-top: 0;
+  color: #58666d;
+  font-family: sans-serif;
+  font-size: 0.78em;
+  line-height: 1.4;
+}
+
+.listing-caption strong {
+  color: #984a34;
+}
+
+.code-listing pre {
+  margin: 0;
+  padding: 0.9em;
+  border: 1px solid #cfd6d5;
+  border-top: 0;
+  overflow-x: auto;
+  background: #f1f4f3;
+  font-size: 0.82em;
+  line-height: 1.45;
+}

@@ -64,8 +64,8 @@ $$
 +\lambda J_m(f),
 \qquad
 J_m(f)=\int_0^1\{f^{(m)}(t)\}^2\,dt,
-\tag{51.1}
 $$
+{#eq-splines-1}
 
 over \(W_2^m(I)\), with \(\lambda\gt0\). The penalty is a seminorm because
 
@@ -109,8 +109,8 @@ $$
 R_m(s,t)=
 \int_0^1
 \frac{(s-u)_+^{m-1}(t-u)_+^{m-1}}{\{(m-1)!\}^2}\,du.
-\tag{51.2}
 $$
+{#eq-splines-2}
 
 This explicit construction is important. The kernel is manufactured by the
 differential penalty and the boundary convention. Changing either changes the
@@ -161,8 +161,8 @@ $$
 \{\ell(f)-y\}^{\top}W\{\ell(f)-y\}
 +\lambda\lVert g\rVert_{\mathcal H}^2,
 \qquad f=p+g\in\mathcal N\oplus\mathcal H.
-\tag{51.3}
 $$
+{#eq-splines-3}
 
 Assume:
 
@@ -177,8 +177,8 @@ Then the minimizer exists, is unique as an element of
 $$
 \widehat f
 =\sum_{a=1}^q d_a p_a+\sum_{i=1}^n c_i r_i.
-\tag{51.4}
 $$
+{#eq-splines-4}
 
 For squared pointwise loss with \(W=n^{-1}I\), the coefficients may be chosen to
 satisfy
@@ -193,8 +193,8 @@ P^\top&0
 \begin{pmatrix}y\\0\end{pmatrix},
 \qquad
 K_{ij}=R(x_i,x_j).
-\tag{51.5}
 $$
+{#eq-splines-5}
 
 **Proof status.** Complete below. This is a modernized specialization of
 Section 5, Lemma 5.1 and Theorem 5.1 of [@kimeldorf1971].
@@ -220,8 +220,8 @@ $$
 +\lVert g_\perp\rVert_{\mathcal H}^2.
 $$
 
-Every minimizer must therefore have \(g_\perp=0\), proving the finite form
-(51.4).
+Every minimizer must therefore have \(g_\perp=0\), proving the finite form in
+[[eq:eq-splines-4]].
 
 For pointwise squared loss, write the fitted vector as \(Pd+Kc\). The finite
 objective is
@@ -234,7 +234,7 @@ At a minimum, variation in \(d\) gives
 \(P^\top(y-Pd-Kc)=0\). Variation in the represented function \(g\), or
 equivalently in a coefficient representation modulo the null space of \(K\),
 gives \(y-Pd-Kc=n\lambda c\). Combining these equations yields
-\((K+n\lambda I)c+Pd=y\) and \(P^\top c=0\), which is (51.5).
+\((K+n\lambda I)c+Pd=y\) and \(P^\top c=0\), which is the block system in [[eq:eq-splines-5]].
 
 The quadratic objective is coercive on \(\mathcal H\), and the full-rank
 condition on \(P\) controls \(\mathcal N\). Thus a minimizer exists. If two
@@ -244,7 +244,7 @@ components; full rank of \(P\) would then force identical null-space
 coefficients. [\(\square\)]{.qed}
 ::::
 
-The difficult move is not solving (51.5). It is recognizing that the
+The difficult move is not solving [[eq:eq-splines-5]]. It is recognizing that the
 orthogonal complement of the observation representers is invisible to the
 data and visible to the penalty. That move extends immediately to derivative
 and integral data, provided the corresponding functionals are bounded.
@@ -266,9 +266,9 @@ It was a typed reduction for bounded observations and a fixed roughness space.
 
 ## Green functions, natural boundaries, and KRR {#green-spline-krr}
 
-The kernel in (51.2) is a one-sided integrated Green kernel for the anchored
-space \(\mathcal H_m\). Once the null-space term is restored, the solution of
-(51.1) is a polynomial of degree \(2m-1\) between adjacent knots. For \(m=2\),
+The kernel in [[eq:eq-splines-2]] is a one-sided integrated Green kernel for the anchored
+space \(\mathcal H_m\). Once the null-space term is restored, the minimizer
+defined by [[eq:eq-splines-1]] is a polynomial of degree \(2m-1\) between adjacent knots. For \(m=2\),
 the first variation in a knot-free interval gives
 
 $$
@@ -338,7 +338,7 @@ $$
 f_\theta(x)=\frac13+\theta z(x),
 $$
 
-and (51.1) reduces exactly to
+and [[eq:eq-splines-1]] reduces exactly to
 
 $$
 2(\theta-\tfrac13)^2+432\lambda\theta^2.
@@ -353,8 +353,8 @@ $$
 \widehat y=
 \frac13\mathbf1+
 \frac{1}{3(1+216\lambda)}q.
-\tag{51.6}
 $$
+{#eq-splines-6}
 
 At \(\lambda=0.01\), the curvature shrinkage factor is \(0.3165\) and
 \(\widehat y\approx(0.2278,0.5443,0.2278)^\top\). The smoother has eigenvalues
@@ -392,7 +392,7 @@ that the design does not contain.
 
 **Verification scope.** The interpolation formula, roughness \(48\), shrinkage
 factor, fitted values, and degrees of freedom are hand-checkable consequences
-of (51.1). No probabilistic coverage claim is made.
+of [[eq:eq-splines-1]]. No probabilistic coverage claim is made.
 ::::
 
 ## Paper module: Craven and Wahba's generalized cross-validation {#spline-gcv}
@@ -432,8 +432,8 @@ residual obtained by refitting after deleting observation \(i\) is
 $$
 y_i-\widehat y_i^{(-i)}
 =\frac{y_i-\widehat y_i}{1-A_{\lambda,ii}}.
-\tag{51.7}
 $$
+{#eq-splines-7}
 
 **Assumptions.** Quadratic loss, fixed \(\lambda\), fixed design and weights,
 and a well-posed deleted-data fit. **Proof status.** Complete below; the
@@ -458,7 +458,7 @@ z=\frac{\widehat y_i-A_{\lambda,ii}y_i}
 {1-A_{\lambda,ii}},
 $$
 
-and subtracting from \(y_i\) yields (51.7). The argument is valid because the
+and subtracting from \(y_i\) yields the leave-one-out identity in [[eq:eq-splines-7]]. The argument is valid because the
 zero residual attached to the provisional observation gives the same normal
 equations as deletion. [\(\square\)]{.qed}
 :::
@@ -469,8 +469,8 @@ $$
 \operatorname{CV}(\lambda)
 =\frac1n\sum_{i=1}^n
 \left\{\frac{y_i-\widehat y_i}{1-A_{\lambda,ii}}\right\}^2.
-\tag{51.8}
 $$
+{#eq-splines-8}
 
 Craven and Wahba replace the individual leverages by their average:
 
@@ -479,8 +479,8 @@ $$
 =
 \frac{n^{-1}\lVert(I-A_\lambda)y\rVert^2}
 {\bigl[n^{-1}\operatorname{tr}(I-A_\lambda)\bigr]^2}.
-\tag{51.9}
 $$
+{#eq-splines-9}
 
 The replacement is not an arbitrary shortcut. Section 3 of
 [@cravenwahba1979] diagonalizes the symmetric smoother and applies ordinary
@@ -509,8 +509,8 @@ $$
 \frac{\mathbb E R(\bar\lambda_n)}
 {\mathbb E R(\lambda_n^\star)}
 \longrightarrow1.
-\tag{51.10}
 $$
+{#eq-splines-10}
 
 **Proof status.** Proof skeleton only. The exact result is Theorem 4.3 of
 [@cravenwahba1979].
@@ -525,7 +525,7 @@ detail with more data, but not so quickly that noise passes unfiltered.
 
 **Failure boundary and comparison of selectors.** {#spline-selection-boundary}
 
-Equation (51.10) is not a distribution-free finite-sample guarantee. It does
+[[eq:eq-splines-10]] is not a distribution-free finite-sample guarantee. It does
 not cover arbitrary dependence, strong heteroscedasticity, adaptive choice
 among many model structures, or a design with too little penalized residual
 space. The criteria answer different questions:
@@ -548,8 +548,8 @@ family responses with linear predictor \(\eta_i=f(x_i)\), consider
 
 $$
 -\frac1n\sum_{i=1}^n\ell_i(\eta_i)+\frac\lambda2J(f).
-\tag{51.11}
 $$
+{#eq-splines-11}
 
 At an iterate \(\eta^{(r)}\), let
 
@@ -568,8 +568,8 @@ $$
 \frac{1}{2n}\sum_iw_i^{(r)}
 \{z_i^{(r)}-f(x_i)\}^2
 +\frac\lambda2J(f).
-\tag{51.12}
 $$
+{#eq-splines-12}
 
 Thus iteratively reweighted least squares changes the local responses and
 weights, while the representer span and null space remain fixed. The quadratic
@@ -578,7 +578,7 @@ inside the RKHS penalty is the chapter's explicit synthesis.
 
 This extension has its own boundary. The matrix called a smoother now depends
 on the current fitted values and therefore on \(y\). The fixed-matrix LOOCV
-identity (51.7) is no longer exact without an influence approximation. If
+the identity in [[eq:eq-splines-7]] is no longer exact without an influence approximation. If
 weights vanish, explode, or become negative because the local model is
 ill-conditioned, the quadratic step can cease to identify a stable update.
 
@@ -589,8 +589,8 @@ and difficult to explain. Smoothing-spline ANOVA decomposes
 
 $$
 f(x)=\mu+\sum_j f_j(x_j)+\sum_{j\lt k}f_{jk}(x_j,x_k)+\cdots.
-\tag{51.13}
 $$
+{#eq-splines-13}
 
 Let \(\mu_j\) be a declared reference measure for coordinate \(j\). Define a
 centering operator
@@ -606,8 +606,8 @@ $$
 k_j^\circ(x,z)
 =k_j(x,z)-\int k_j(x,u)d\mu_j(u)-\int k_j(v,z)d\mu_j(v)
 +\iint k_j(v,u)d\mu_j(v)d\mu_j(u).
-\tag{51.14}
 $$
+{#eq-splines-14}
 
 The main-effect RKHS has kernel \(k_j^\circ\), and the \(j,k\) interaction has
 kernel \(k_j^\circ k_k^\circ\). Expanding
@@ -652,7 +652,7 @@ The product-measure assumption is not harmless. With strongly dependent
 covariates, empirical and population centering produce different decompositions,
 and an interaction may be weakly identified where the design has little joint
 support. Interpretability is a property of the declared measure and constraints,
-not merely of the formula (51.13).
+not merely of the formula in [[eq:eq-splines-13]].
 
 :::: {.algorithm #algo-spline-anova-fit}
 [Algorithm (auditable additive RKHS fit)]{.box-title}
@@ -681,7 +681,7 @@ design.
 Put a zero-mean Gaussian process prior on the penalized component \(g\) with
 covariance \(\sigma_g^2R\), retain \(p(x)^\top d\) as a diffuse trend, and use
 independent Gaussian noise of variance \(\sigma_\varepsilon^2\). The posterior
-mean solves (51.1) after the ratio
+mean solves [[eq:eq-splines-1]] after the ratio
 \(n\lambda=\sigma_\varepsilon^2/\sigma_g^2\) is matched to the coefficient
 convention. Section 7 of [@kimeldorf1971] establishes the corresponding
 minimum-variance linear prediction interpretation.
@@ -751,10 +751,10 @@ data-dependent weights invalidate naive reuse of fixed-smoother diagnostics
 ## Exercises {#exercises}
 
 1. [warm-up]{.ex-tag} For \(J_m(f)=\int_0^1\{f^{(m)}(t)\}^2dt\), identify the null space and explain both the large-\(\lambda\) limit and the rank condition required of its design matrix.
-2. [proof]{.ex-tag} Starting from repeated integration, verify that (51.2) reproduces evaluation on the anchored space \(\mathcal H_m\).
+2. [proof]{.ex-tag} Starting from repeated integration, verify that [[eq:eq-splines-2]] reproduces evaluation on the anchored space \(\mathcal H_m\).
 3. [proof]{.ex-tag} Extend the proof of Theorem 51.1 to bounded derivative or integral observations \(\ell_i\), and state exactly what fails if one \(\ell_i\) is unbounded.
-4. [computation]{.ex-tag} Reproduce every quantity in the three-point worked example, including \(J_2(s)=48\), the shrinkage factor in (51.6), the fitted values at \(\lambda=0.01\), and the effective degrees of freedom.
-5. [proof]{.ex-tag} Prove the exact leave-one-out identity (51.7) directly from the normal equations or a rank-one update, and identify the instability as \(A_{ii}\to1\).
+4. [computation]{.ex-tag} Reproduce every quantity in the three-point worked example, including \(J_2(s)=48\), the shrinkage factor in [[eq:eq-splines-6]], the fitted values at \(\lambda=0.01\), and the effective degrees of freedom.
+5. [proof]{.ex-tag} Prove the exact leave-one-out identity [[eq:eq-splines-7]] directly from the normal equations or a rank-one update, and identify the instability as \(A_{ii}\to1\).
 6. [synthesis]{.ex-tag} Explain why GCV is constant in the three-point example. Construct a four-point contrast with two penalized eigenvalues and write its GCV score in the smoother eigenbasis.
-7. [challenge]{.ex-tag} Derive the two-factor centered ANOVA kernel from (51.14), prove the marginal constraints, and explain how dependent covariates alter the interpretation.
+7. [challenge]{.ex-tag} Derive the two-factor centered ANOVA kernel from [[eq:eq-splines-14]], prove the marginal constraints, and explain how dependent covariates alter the interpretation.
 8. [exploration]{.ex-tag} Design a comparison among a natural cubic spline, RBF KRR, and a Matérn GP for boundary extrapolation. Specify null-space or mean assumptions, tuning protocol, uncertainty scores, conditioning diagnostics, and one failure test.

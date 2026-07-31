@@ -402,6 +402,7 @@ J(w)
 \frac1n\sum_{i=1}^{n}H_i(w),
 \qquad \lambda\gt0.
 $$
+{#eq-structured-normalized-objective}
 
 Each \(H_i\) is a pointwise maximum of affine functions, hence convex. If
 \(\widetilde y_i(w)\) is any exact maximizer, then
@@ -646,7 +647,7 @@ $$
 
 where \(J^\star\) is the full structured-hinge optimum.
 
-**Assumptions.** Finite output sets, exact restricted solves, exact loss-augmented maximization, common additive violation tolerance, and the normalized objective above. **Proof status.** Complete.
+**Assumptions.** Finite output sets, exact restricted solves, exact loss-augmented maximization, common additive violation tolerance, and the normalized objective in [[eq:eq-structured-normalized-objective]]. **Proof status.** Complete.
 :::
 
 ::: {.proof}

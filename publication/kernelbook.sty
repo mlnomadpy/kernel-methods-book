@@ -9,21 +9,20 @@
 \geometry{letterpaper, top=1in, bottom=1in, inner=1.1in, outer=0.9in,
   headsep=16pt, footskip=28pt}
 \usepackage{mathtools}
-% Libertinus supplies the book's mathematical voice. LuaTeX's assembly of its
-% horizontal brace extenders can render as solid bars in long annotations, so
-% use Latin Modern only for those four extensible glyphs.
-\setmathfont{LibertinusMath-Regular.otf}[
-  Path=publication/fonts/]
-\setmathfont{Latin Modern Math}[range={\overbrace,\underbrace,\overbracket,\underbracket}]
-% Libertinus Math has no separately shipped bold font. Register the closely
-% related XITS face after the brace override as the complete bold math version
-% requested by \boldsymbol.
+% Latin Modern Math is the OpenType continuation of Knuth's Computer Modern:
+% the conventional mathematical voice of the literature and the closest print
+% counterpart to KaTeX's default Computer Modern rendering on the web. Use it
+% as one coherent face, including large operators and extensible delimiters.
+\setmathfont{Latin Modern Math}
+% Latin Modern has no bold math face. Register XITS only for the explicit bold
+% math version requested by \boldsymbol; ordinary mathematics remains Latin
+% Modern throughout.
 \setmathfont{XITSMath-Regular.otf}[
   Path=publication/fonts/,
   BoldFont=XITSMath-Bold.otf,
   version=bold]
 % Role-based print typography, shared with the web edition. Source Serif 4 is
-% designed for sustained reading; STIX remains the mathematical/display voice;
+% designed for sustained reading; Latin Modern is the mathematical voice;
 % IBM Plex handles compact scholarly apparatus. Files are vendored so the
 % edition is reproducible on machines that do not have these families installed.
 \setmainfont{Source Serif 4}[
@@ -40,6 +39,22 @@
   BoldFont=stix-two-text-latin-600-normal.ttf,
   BoldItalicFont=stix-two-text-latin-600-italic.ttf,
   Scale=MatchLowercase]
+% The compact web subsets above deliberately contain only basic Latin. Names in
+% the bibliography require a handful of Latin Extended glyphs, so use the
+% matching STIX text cut as a deterministic per-character fallback instead of
+% allowing LuaLaTeX to emit blank boxes.
+\newfontfamily\kbextended{STIX Two Text Extended}[
+  Path=publication/fonts/,
+  UprightFont=stix-two-text-latin-ext-400-normal.ttf,
+  Scale=MatchLowercase]
+\usepackage{newunicodechar}
+\newunicodechar{č}{{\kbextended č}}
+\newunicodechar{Ž}{{\kbextended Ž}}
+\newunicodechar{ń}{{\kbextended ń}}
+\newunicodechar{ĭ}{{\kbextended ĭ}}
+\newunicodechar{ł}{{\kbextended ł}}
+\newunicodechar{ě}{{\kbextended ě}}
+\newunicodechar{ć}{{\kbextended ć}}
 \setsansfont{IBM Plex Sans}[
   Path=publication/fonts/,
   UprightFont=ibm-plex-sans-latin-400-normal.ttf,
@@ -52,6 +67,7 @@
   BoldFont=ibm-plex-mono-latin-600-normal.ttf,
   Scale=MatchLowercase]
 \usepackage{booktabs}
+\usepackage{needspace}
 \usepackage{microtype}
 \usepackage{xurl}          % allow URLs to break anywhere (bibliography)
 \usepackage{xcolor}
@@ -203,6 +219,23 @@
 \setkomafont{captionlabel}{\kbdisplay\small\bfseries\color{KernelAccent}}
 \setcapindent{0pt}
 \setlength{\abovecaptionskip}{9pt}
+
+% ── Executable listings ──────────────────────────────────────────────────────
+% Code is a numbered publication object. Its caption states the mathematical
+% job before the implementation begins; the language is quiet apparatus, not a
+% competing title. The environment sets \@currentlabel so ordinary \ref links
+% resolve to the same chapter-scoped number as the HTML and EPUB editions.
+\newenvironment{kblisting}[4]{%
+  \par\addvspace{12pt}\Needspace{6\baselineskip}%
+  \phantomsection\def\@currentlabel{#1}\label{#4}%
+  {\color{KernelSpectral}\rule{\linewidth}{0.8pt}\par\nobreak\vspace{5pt}}%
+  \noindent{\sffamily\footnotesize\color{KernelMuted}%
+    {\kbdisplay\bfseries\color{KernelAccent}Listing #1.}\enspace #2%
+    \hfill{\kbmono\scriptsize\color{KernelSpectral}\MakeUppercase{#3}}\par}%
+  \nobreak\vspace{3pt}\ignorespaces
+}{%
+  \par\addvspace{9pt}%
+}
 
 % ── Chapter lead paragraph (the narrative hook) ───────────────────────────────
 % A readable chapter abstract: slightly larger text and a short closing rule.

@@ -61,6 +61,23 @@ local function extract_title(blocks)
   return nil
 end
 
+local function extract_class_span(blocks, class_name)
+  local first = blocks[1]
+  if first and (first.t == "Para" or first.t == "Plain") then
+    for i, inl in ipairs(first.content) do
+      if inl.t == "Span" and inl.classes:includes(class_name) then
+        local value = inlines_to_latex(inl.content)
+        first.content:remove(i)
+        if pandoc.utils.stringify(first.content):gsub("%s", "") == "" then
+          blocks:remove(1)
+        end
+        return value
+      end
+    end
+  end
+  return nil
+end
+
 -- Manuscript titles conventionally read "Theorem (Representer theorem)".
 -- amsthm already supplies "Theorem 3.7", so pass only the parenthesized name as
 -- its optional note. A free-form title remains a note rather than being lost.
@@ -76,6 +93,17 @@ local function theorem_note(title, kind)
 end
 
 function Div(el)
+  if el.classes:includes("code-listing") then
+    local caption = extract_class_span(el.content, "listing-caption") or "Executable check"
+    local number = el.attributes["data-number"] or ""
+    local language = el.attributes["data-language"] or "Code"
+    local identifier = el.identifier or ""
+    table.insert(el.content, 1, pandoc.RawBlock("latex",
+      "\\begin{kblisting}{" .. number .. "}{" .. caption .. "}{" .. language .. "}{" .. identifier .. "}"))
+    table.insert(el.content, pandoc.RawBlock("latex", "\\end{kblisting}"))
+    return el.content
+  end
+
   for kind, env in pairs(box_env) do
     if el.classes:includes(kind) then
       local title = extract_title(el.content) or default_label[kind]

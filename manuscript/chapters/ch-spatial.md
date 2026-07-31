@@ -141,8 +141,8 @@ where \(p(s)\in\mathbb R^q\), \(P_{ia}=p_a(s_i)\), and
 
 $$
 P^\top w=p_0.
-\tag{52.1}
 $$
+{#eq-spatial-1}
 
 :::: {.theorem #thm-universal-kriging}
 [Theorem (universal kriging system and variance)]{.box-title}
@@ -167,24 +167,24 @@ P^\top&0
 \begin{pmatrix}w\\\eta\end{pmatrix}
 =
 \begin{pmatrix}k_0\\p_0\end{pmatrix}.
-\tag{52.2}
 $$
+{#eq-spatial-2}
 
 Its mean-squared prediction error is
 
 $$
 \sigma_K^2(s_0)
 =C_{00}-w^\top k_0-p_0^\top\eta.
-\tag{52.3}
 $$
+{#eq-spatial-3}
 
 Equivalently, with \(B=P^\top K^{-1}P\),
 
 $$
 w=K^{-1}k_0+
 K^{-1}PB^{-1}(p_0-P^\top K^{-1}k_0)
-\tag{52.4}
 $$
+{#eq-spatial-4}
 
 and
 
@@ -194,8 +194,8 @@ $$
 (p_0-P^\top K^{-1}k_0)^\top
 B^{-1}
 (p_0-P^\top K^{-1}k_0).
-\tag{52.5}
 $$
+{#eq-spatial-5}
 
 **Proof status.** Complete below. The projection and covariance analysis are
 classical; see [@stein1999].
@@ -211,14 +211,14 @@ $$
 =\beta^\top(P^\top w-p_0),
 $$
 
-which vanishes for every \(\beta\) exactly under (52.1). The prediction-error
+which vanishes for every \(\beta\) exactly under [[eq:eq-spatial-1]]. The prediction-error
 variance is
 
 $$
 V(w)=C_{00}-2w^\top k_0+w^\top Kw.
 $$
 
-Minimize \(V(w)\) subject to (52.1). The Lagrangian
+Minimize \(V(w)\) subject to [[eq:eq-spatial-1]]. The Lagrangian
 
 $$
 \mathcal L(w,\eta)
@@ -227,19 +227,19 @@ $$
 $$
 
 has first-order equations \(Kw+P\eta=k_0\) and
-\(P^\top w=p_0\), giving (52.2). Positive definiteness of \(K\) makes
+\(P^\top w=p_0\), giving [[eq:eq-spatial-2]]. Positive definiteness of \(K\) makes
 \(V\) strictly convex, so the constrained minimizer is unique.
 
 Multiplying \(Kw+P\eta=k_0\) by \(w^\top\) gives
 \(w^\top Kw=w^\top k_0-p_0^\top\eta\). Substitution in \(V(w)\)
-yields (52.3). Solving the first block equation for \(w\), substituting into
-the constraint, and solving for \(\eta\) gives (52.4). Substituting (52.4) into
-(52.3) yields (52.5). The matrix \(B\) is positive definite because \(K\) is
+yields [[eq:eq-spatial-3]]. Solving the first block equation for \(w\), substituting into
+the constraint, and solving for \(\eta\) gives [[eq:eq-spatial-4]]. Substituting [[eq:eq-spatial-4]] into
+[[eq:eq-spatial-3]] yields [[eq:eq-spatial-5]]. The matrix \(B\) is positive definite because \(K\) is
 positive definite and \(P\) has full column rank. [\(\square\)]{.qed}
 ::::
 
 Ordinary kriging is the case \(p(s)=1\). Simple kriging treats the mean as
-known and omits the constraint. Under joint Gaussianity, (52.4) and (52.5) are
+known and omits the constraint. Under joint Gaussianity, [[eq:eq-spatial-4]] and [[eq:eq-spatial-5]] are
 the posterior mean and variance after integrating a diffuse linear trend.
 Without Gaussianity, they remain best linear unbiased quantities, not a full
 posterior law.
@@ -288,7 +288,7 @@ k_0=
 $$
 
 For ordinary kriging, symmetry and \(1^\top w=1\) give
-\(w=(1/2,1/2)^\top\). With the multiplier convention in (52.2),
+\(w=(1/2,1/2)^\top\). With the multiplier convention in [[eq:eq-spatial-2]],
 
 $$
 \eta=e^{-1}-\frac{1+e^{-2}}2\approx-0.1998.
@@ -408,8 +408,8 @@ C_\nu(h)=
 (\kappa\lVert h\rVert)^\nu
 K_\nu(\kappa\lVert h\rVert),
 \qquad \nu,\kappa\gt0.
-\tag{52.6}
 $$
+{#eq-spatial-6}
 
 Its spectral density is proportional to
 
@@ -423,8 +423,8 @@ $$
 (\kappa^2-\Delta)^{\alpha/2}x=\mathcal W,
 \qquad
 \alpha=\nu+\frac d2,
-\tag{52.7}
 $$
+{#eq-spatial-7}
 
 where \(\mathcal W\) is Gaussian spatial white noise. Fourier transformation
 multiplies by
@@ -439,8 +439,8 @@ finite-element basis functions:
 
 $$
 x_h(s)=\sum_{j=1}^m\psi_j(s)w_j.
-\tag{52.8}
 $$
+{#eq-spatial-8}
 
 For piecewise-linear basis functions on a triangulation, define the mass and
 stiffness matrices
@@ -451,8 +451,8 @@ C_{ij}=\int_{\mathcal D}\psi_i\psi_j,
 G_{ij}=\int_{\mathcal D}\nabla\psi_i^\top\nabla\psi_j,
 \qquad
 K_\kappa=\kappa^2C+G.
-\tag{52.9}
 $$
+{#eq-spatial-9}
 
 :::: {.theorem #thm-spde-fem-precision}
 [Theorem (finite-element precision for \(\alpha=2\))]{.box-title}
@@ -462,7 +462,7 @@ $$
 Let \(\mathcal D\) be a bounded Lipschitz domain with the Neumann boundary
 condition used in the finite-element construction. Let
 \(\psi_1,\ldots,\psi_m\in H^1(\mathcal D)\) be linearly independent local
-basis functions, and suppose \(C\) and \(K_\kappa\) in (52.9) are nonsingular.
+basis functions, and suppose \(C\) and \(K_\kappa\) in [[eq:eq-spatial-9]] are nonsingular.
 The Galerkin approximation to
 
 $$
@@ -473,8 +473,8 @@ has Gaussian coefficient vector \(w\) with precision
 
 $$
 Q=K_\kappa^\top C^{-1}K_\kappa.
-\tag{52.10}
 $$
+{#eq-spatial-10}
 
 Replacing \(C\) by the diagonal lumped mass matrix
 \(\widetilde C\), with
@@ -482,10 +482,10 @@ Replacing \(C\) by the diagonal lumped mass matrix
 
 $$
 \widetilde Q=K_\kappa^\top\widetilde C^{-1}K_\kappa.
-\tag{52.11}
 $$
+{#eq-spatial-11}
 
-**Proof status.** Complete derivation below. Equation (52.10) is Theorem 2(a)
+**Proof status.** Complete derivation below. The precision formula in [[eq:eq-spatial-10]] is Theorem 2(a)
 and equations (7)-(10) of [@lindgren2011spde].
 ::::
 
@@ -523,9 +523,9 @@ $$
 =K_\kappa^{-1}C K_\kappa^{-\top},
 $$
 
-whose inverse is (52.10). Local basis functions make \(C\), \(G\), and
+whose inverse is [[eq:eq-spatial-10]]. Local basis functions make \(C\), \(G\), and
 \(K_\kappa\) sparse, but \(C^{-1}\) is generally dense. Replacing \(C\) by
-the diagonal \(\widetilde C\) preserves locality in (52.11), which completes
+the diagonal \(\widetilde C\) preserves locality in [[eq:eq-spatial-11]], which completes
 the derivation. [\(\square\)]{.qed}
 ::::
 
@@ -596,8 +596,8 @@ C(h,u)=
 \varphi\left(
 \frac{\lVert h\rVert^2}{\psi(u^2)}
 \right)
-\tag{52.12}
 $$
+{#eq-spatial-12}
 
 is a stationary covariance function on \(\mathbb R^d\times\mathbb R\).
 
@@ -630,17 +630,17 @@ $$
 \exp\left\{
 -\frac{\lVert\omega\rVert^2}{4a}\psi(u^2)
 \right\}.
-\tag{52.13}
 $$
+{#eq-spatial-13}
 
 Because \(u\mapsto u^2\) is conditionally negative definite and \(\psi\) is a
 Bernstein function, \(u\mapsto\psi(u^2)\) is conditionally negative
-definite. Schoenberg's theorem then makes (52.13) a temporal covariance for
+definite. Schoenberg's theorem then makes [[eq:eq-spatial-13]] a temporal covariance for
 every \(\omega\). The partial-Fourier criterion used in the paper implies that
 the original function is a covariance on space-time.
 
 Nonnegative integration over \(a\) preserves positive definiteness, yielding
-(52.12). Nonintegrable edge cases follow by multiplying by an integrable
+[[eq:eq-spatial-12]]. Nonintegrable edge cases follow by multiplying by an integrable
 completely monotone factor and passing to the pointwise limit, as in the
 paper's appendix. [\(\square\)]{.qed}
 ::::
@@ -655,8 +655,8 @@ C(h,u)=
 -\frac{c\lVert h\rVert^{2\gamma}}
 {(1+a\lvert u\rvert^{2\alpha})^{\beta\gamma}}
 \right],
-\tag{52.14}
 $$
+{#eq-spatial-14}
 
 with \(a,c\ge0\), \(0\lt\alpha,\gamma\le1\),
 \(0\le\beta\le1\), and \(\tau\ge\beta d/2\). The parameter
@@ -742,8 +742,8 @@ Then
 $$
 \operatorname{Cov}(Z_A,Z_B)
 =\int_A\int_Bw_A(s)C(s,t)w_B(t)\,ds\,dt.
-\tag{52.15}
 $$
+{#eq-spatial-15}
 
 Point data, pixel averages, and administrative totals are therefore different
 linear functionals of the same field. Replacing a region average by its
@@ -847,10 +847,10 @@ validation at the distance and horizon where the prediction will be used.
 ## Exercises {#exercises}
 
 1. [warm-up]{.ex-tag} Prove the conditional negative-definiteness statement for \(\gamma(h)=C(0)-C(h)\), and explain why the coefficient constraint is essential.
-2. [proof]{.ex-tag} Derive equations (52.2)-(52.5) for universal kriging, including the invertibility argument for \(P^\top K^{-1}P\).
+2. [proof]{.ex-tag} Derive the universal-kriging system in [[eq:eq-spatial-2]] and its equivalent mean-squared-error forms through [[eq:eq-spatial-5]], including the invertibility argument for \(P^\top K^{-1}P\).
 3. [computation]{.ex-tag} Reproduce the two-site worked example, then add independent measurement noise variance \(0.1\) and recompute simple and ordinary kriging weights and variances.
 4. [proof]{.ex-tag} Prove that a fixed linear anisotropy map preserves positive definiteness, including the singular-map case, and state what becomes unidentifiable.
 5. [proof]{.ex-tag} Starting from the weak SPDE equations, derive \(Q=K_\kappa^\top C^{-1}K_\kappa\). Explain precisely why sparse \(C\) does not imply sparse \(C^{-1}\), and what mass lumping changes.
-6. [synthesis]{.ex-tag} Verify the nonseparability calculation following (52.14), then design a covariance witness that distinguishes a fully symmetric Gneiting model from directional advection.
-7. [challenge]{.ex-tag} Derive (52.15) for two region averages, propose a convergent quadrature calculation, and describe a counterexample where centroid substitution is badly biased.
+6. [synthesis]{.ex-tag} Verify the nonseparability calculation following [[eq:eq-spatial-14]], then design a covariance witness that distinguishes a fully symmetric Gneiting model from directional advection.
+7. [challenge]{.ex-tag} Derive [[eq:eq-spatial-15]] for two region averages, propose a convergent quadrature calculation, and describe a counterexample where centroid substitution is badly biased.
 8. [exploration]{.ex-tag} Design a blocked evaluation comparing dense Matérn kriging, a Matérn SPDE approximation, and a Gneiting space-time model. Specify trend treatment, deployment blocks, mesh or solver budgets, uncertainty scores, residual diagnostics, and failure criteria.
