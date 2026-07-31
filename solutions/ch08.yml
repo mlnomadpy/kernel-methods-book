@@ -83,14 +83,7 @@ exercises:
   - number: 6
     kind: exploration
     status: draft
-    prompt: Open the interactive figure above. It draws frequencies \(\omega_1,\dots,\omega_D\) from the
-      Gaussian's Bochner measure and averages the matching cosine features, which is exactly the
-      random Fourier feature construction of Rahimi and Recht (2007). Increase the number of
-      features \(D\) and watch the sampled kernel tighten onto the true Gaussian profile. Report
-      roughly how large \(D\) must be before the approximation is visually indistinguishable from
-      the target, and explain, using the fact that
-      \(\varphi(x-y)=\mathbb{E}_{\omega\sim\mu}\cos(\omega^\top(x-y))\), why the average sharpens as
-      \(D\) grows.
+    prompt: "Implement the random Fourier approximation suggested by the spectral densities in [[fig:bochner-kernel-spectrum-atlas]]. Draw frequencies \\(\\omega_1,\\dots,\\omega_D\\) from the Gaussian's Bochner measure and average the matching cosine features, as in Rahimi and Recht (2007). Increase \\(D\\), plot the sampled kernel against the true Gaussian profile, and report roughly how large \\(D\\) must be before the two are visually indistinguishable. Explain, using \\(\\varphi(x-y)=\\mathbb{E}_{\\omega\\sim\\mu}\\cos(\\omega^\\top(x-y))\\), why the average sharpens as \\(D\\) grows."
     answer: "A valid report should record the random seed and the smallest D at which the sampled curve
       stays within a chosen visual or numerical tolerance; there is no universal threshold because
       it depends on the plotted domain, seed, and tolerance. The mechanism is Monte Carlo: each

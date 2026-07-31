@@ -67,6 +67,16 @@
   BoldFont=ibm-plex-mono-latin-600-normal.ttf,
   Scale=MatchLowercase]
 \usepackage{booktabs}
+% Insert the vector TikZ front panel into the reader PDF. The full wrap remains
+% a separate printer artifact; pdfpages crops only its front-cover region.
+\usepackage{pdfpages}
+% Pandoc emits \maketitle before the Markdown body, so a raw include in the
+% manuscript would put the cover after the title/colophon. The begin-document
+% hook runs first and makes the cropped TikZ panel the actual PDF page one.
+\AtBeginDocument{%
+  \includepdf[pages=1,trim=10.775in 0.125in 0.125in 0.125in,clip,%
+    pagecommand={\thispagestyle{empty}}]{.build/publication/cover/cover.pdf}%
+}
 \usepackage{needspace}
 \usepackage{microtype}
 \usepackage{xurl}          % allow URLs to break anywhere (bibliography)

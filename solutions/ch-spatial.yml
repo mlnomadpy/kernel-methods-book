@@ -16,8 +16,7 @@ exercises:
   - number: 2
     kind: proof
     status: draft
-    prompt: >-
-      Derive equations (52.2)-(52.5) for universal kriging, including the invertibility argument for \(P^\top K^{-1}P\).
+    prompt: "Derive the universal-kriging system in [[eq:eq-spatial-2]] and its equivalent mean-squared-error forms through [[eq:eq-spatial-5]], including the invertibility argument for \\(P^\\top K^{-1}P\\)."
     answer: >-
       Unbiasedness for every trend coefficient requires \(P^\top w=p_0\). Minimize \(C_{00}-2w^\top k_0+w^\top Kw\) under this constraint. The Lagrangian first-order equations are \(Kw+P\eta=k_0\) and \(P^\top w=p_0\), giving (52.2). Since \(w^\top Kw=w^\top k_0-p_0^\top\eta\), substitution gives (52.3). Solving \(w=K^{-1}(k_0-P\eta)\) and imposing the constraint yields \(\eta=(P^\top K^{-1}P)^{-1}(P^\top K^{-1}k_0-p_0)\), hence (52.4) and (52.5). For nonzero \(v\), \(v^\top P^\top K^{-1}Pv=(Pv)^\top K^{-1}(Pv)>0\) because \(P\) has full column rank and \(K^{-1}\) is positive definite. Thus the middle matrix is invertible.
   - number: 3
@@ -44,15 +43,13 @@ exercises:
   - number: 6
     kind: synthesis
     status: draft
-    prompt: >-
-      Verify the nonseparability calculation following (52.14), then design a covariance witness that distinguishes a fully symmetric Gneiting model from directional advection.
+    prompt: "Verify the nonseparability calculation following [[eq:eq-spatial-14]], then design a covariance witness that distinguishes a fully symmetric Gneiting model from directional advection."
     answer: >-
       For the displayed specialization, \(C(1,0)=e^{-1}=0.367879\), \(C(0,1)=1/2\), and \(C(1,1)=e^{-1/2}/2=0.303265\). A normalized separable covariance would satisfy \(C(1,1)=C(1,0)C(0,1)=0.183940\), so the inequality witnesses interaction. To test directional advection, choose an oriented spatial lag \(h\) along the prevailing flow and compare empirical covariance at \((h,u)\) and \((-h,u)\), or equivalently \((h,u)\) and \((h,-u)\). Every fully symmetric Gneiting model predicts equality. An advected field \(Z(s,t)=Y(s-vt)\) instead has covariance \(C_Y(h-vu)\), whose peak shifts with the sign of \(u\). A reproducible test should use paired lag bins, uncertainty for empirical covariance, and held-out directional forecasts.
   - number: 7
     kind: challenge
     status: draft
-    prompt: >-
-      Derive (52.15) for two region averages, propose a convergent quadrature calculation, and describe a counterexample where centroid substitution is badly biased.
+    prompt: "Derive [[eq:eq-spatial-15]] for two region averages, propose a convergent quadrature calculation, and describe a counterexample where centroid substitution is badly biased."
     answer: >-
       By bilinearity of covariance and Fubini's theorem, assuming the covariance-weight integrals are absolutely integrable, \(\operatorname{Cov}(Z_A,Z_B)=\int_A\int_Bw_A(s)C(s,t)w_B(t)\,ds\,dt\). Approximate each integral with normalized positive quadrature weights, giving \(\sum_{r,q}a_rb_qC(s_r,t_q)\). Refine nodes until the integrated covariance and downstream kriging prediction change below declared tolerances. Centroid substitution fails when \(A\) and \(B\) are large relative to a short covariance range: most point pairs are weakly correlated even if the centroids coincide or are close, so \(C(\bar s_A,\bar s_B)\) can greatly exceed the average covariance. It also fails near sharp nonstationary boundaries.
   - number: 8

@@ -10,6 +10,15 @@ import { mergeBookObjectReferences, numberBookObjects } from "../src/lib/numberi
 const root = process.cwd();
 const format = process.argv[2];
 if (!new Set(["pdf", "epub"]).has(format)) throw new Error("Usage: node tools/build-publication.mjs pdf|epub");
+if (format === "pdf") {
+  // The reader PDF begins with the same vector TikZ front used by the print
+  // wrap. Build that canonical cover before Pandoc/LuaLaTeX so book.tex can
+  // include its cropped front panel as page one without rasterization.
+  execFileSync(process.execPath, [path.join(root, "tools", "build-cover.mjs")], {
+    cwd: root,
+    stdio: "inherit",
+  });
+}
 const book = parseYaml(fs.readFileSync(path.join(root, "book.yml"), "utf8"));
 const publication = JSON.parse(fs.readFileSync(path.join(root, "publication.json"), "utf8"));
 const publicationAuthors = (publication.authors || [])

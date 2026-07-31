@@ -88,19 +88,7 @@ exercises:
   - number: 6
     kind: exploration
     status: draft
-    prompt: "Open the interactive figure above in the section on random feature kernels. It plots a
-      target dot-product kernel against the estimate produced by a finite bank of \\(D\\) random
-      features, the same object a width-\\(D\\) hidden layer computes. Start at small \\(D\\), where
-      the estimate is visibly rough and rattles around the smooth target curve, then raise \\(D\\)
-      and watch the estimate settle onto its infinite-width limit. Answer three questions from what
-      you see: (a) roughly how does the size of the wiggle around the target shrink as you multiply
-      \\(D\\) by four, and does that match the \\(1/\\sqrt{m}\\) rate you proved above? (b) the
-      target curve itself never moves as \\(D\\) grows, only the estimate tightens onto it; which
-      fact about frozen random features does that illustrate, as opposed to what would happen if the
-      layer were being trained? (c) in the language of the chapter, in what precise sense is each
-      additional random feature one more Monte Carlo sample of the population inner product
-      \\(\\mathbb{E}_{\\mathbf{w}}[\\sigma(\\mathbf{w}^\\top \\mathbf{x})\\sigma(\\mathbf{w}^\\top
-      \\mathbf{y})]\\)?"
+    prompt: "Inspect the width-dependent kernel error in [[fig:finite-vs-infinite-width]]. (a) Read off how the error changes when width is multiplied by four, and determine whether that matches the \\(1/\\sqrt{m}\\) rate proved in the preceding exercise. (b) Explain why falling kernel-sampling error represents a frozen random feature map approaching a fixed population kernel, whereas falling feature movement is the separate condition needed for lazy training. (c) In the language of the chapter, state precisely why each additional random feature is one more Monte Carlo sample of the population inner product \\(\\mathbb{E}_{\\mathbf{w}}[\\sigma(\\mathbf{w}^\\top \\mathbf{x})\\sigma(\\mathbf{w}^\\top \\mathbf{y})]\\)."
     answer: Multiplying D by four should reduce typical wiggle amplitude by about one half, consistent
       with D^{-1/2}, although a single draw need not be monotone. The unchanged target curve shows
       that frozen random features approximate a fixed population kernel; training hidden features

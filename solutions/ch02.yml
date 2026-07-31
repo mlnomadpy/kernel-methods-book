@@ -99,17 +99,7 @@ exercises:
   - number: 7
     kind: exploration
     status: draft
-    prompt: "Open the interactive figure above in the section on the two purposes of the embedding. Two
-      classes, an inner blob surrounded by a ring, cannot be separated by any straight line in the
-      plane. Raise the lift by hand and watch the third coordinate \\(x_1^2 + x_2^2\\) push the
-      outer ring up while the inner blob stays low, until a single flat plane slices them apart.
-      Answer three questions from what you see: (a) what does that separating plane correspond to
-      back in the original plane \\(\\mathcal{X}\\)? (b) the inner product in the lifted space is
-      \\(\\langle \\Phi(x), \\Phi(x')\\rangle = x_1 x_1' + x_2 x_2' + (x_1^2 + x_2^2)(x_1'^2 +
-      x_2'^2)\\), written entirely in the raw coordinates, so which theorem of this chapter lets you
-      run a linear separator in the lifted space without ever storing the extra coordinate? (c) as
-      you shrink the gap between the rings, does the lift still separate them, and what would that
-      say about the limits of a fixed feature map?"
+    prompt: "Open [[fig:feature-lift]] in the section on the two purposes of the embedding. Two classes, an inner blob surrounded by a ring, cannot be separated by any straight line in the plane. Raise the lift by hand and watch the third coordinate \\(x_1^2 + x_2^2\\) push the outer ring up while the inner blob stays low, until a single flat plane slices them apart. Answer three questions from what you see: (a) what does that separating plane correspond to back in the original plane \\(\\mathcal{X}\\)? (b) the inner product in the lifted space is \\(\\langle \\Phi(x), \\Phi(x')\\rangle = x_1 x_1' + x_2 x_2' + (x_1^2 + x_2^2)(x_1'^2 + x_2'^2)\\), written entirely in the raw coordinates, so which theorem of this chapter lets you run a linear separator in the lifted space without ever storing the extra coordinate? (c) as you shrink the gap between the rings, does the lift still separate them, and what would that say about the limits of a fixed feature map?"
     answer: "A separating plane in (x_1,x_2,x_1^2+x_2^2) pulls back to a quadratic decision boundary in
       the original plane; in the radially symmetric setup it is a circle or annulus threshold. The
       representer theorem and kernel trick permit the lifted linear separator to be evaluated using
