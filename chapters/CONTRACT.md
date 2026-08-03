@@ -16,6 +16,43 @@ Every file declares `id`, `slug`, `title`, `part`, `order`, `tier`,
 - Start with one `#` title and one raw `<p class="lead">...</p>` motivation.
 - Give every `##` and `###` heading an explicit kebab-case anchor.
 - Link chapters with `[[ch:slug]]` or `[[ch:slug|custom text]]`.
+- Number every displayed equation, figure, and table through the build pipeline.
+  Give an object a stable semantic label whenever prose refers to it, and use
+  the semantic reference token instead of phrases such as "the equation above":
+
+  ```markdown
+  $$
+  (K+n\lambda I)\alpha = y.
+  $$
+  {#eq-krr-system}
+
+  Equation [[eq:eq-krr-system]] exposes the regularized linear system.
+  Figure [[fig:feature-lift]] shows the induced geometry, while
+  Table [[tbl:margin-losses]] compares the losses.
+  ```
+
+  Figure labels come from their unique `data-figure` or `data-widget` key.
+  Place `{#tbl-kebab-case}` immediately after a Markdown table to label it.
+  Custom link text is optional: `[[eq:eq-krr-system|the normal equations]]`.
+  Never write manual `\tag{...}` numbers; chapter-scoped numbers are generated
+  consistently for the web, PDF, and EPUB editions.
+- Treat executable code as a numbered listing. Every fenced block receives an
+  automatic chapter-scoped caption. When prose refers to a listing, give it a
+  durable caption immediately after the closing fence:
+
+  ````markdown
+  ```python
+  alpha = jax.scipy.linalg.solve(K + ridge * eye, y, assume_a="pos")
+  ```
+  {#lst-krr-solve caption="Solve the regularized Gram system without forming an inverse"}
+
+  Listing [[lst:lst-krr-solve]] is the finite computation earned by the
+  representer theorem.
+  ````
+
+  Captions explain the listing's mathematical job; they are not filenames or
+  generic labels such as "code example." Keep the displayed snippet minimal,
+  complete, and locally understandable.
 - Cite sources with Pandoc citations such as `[@aronszajn1950]`. Narrative
   author-year text is retained in migrated chapters until its review pass.
 - Use `\(...\)` for inline math and `$$...$$` for display math. Avoid raw angle

@@ -75,8 +75,10 @@ for (const chapter of chapters) {
   )];
   if (!matches.length) continue;
   const file = "solutions/" + chapter.src + ".yml";
-  const existing = fs.existsSync(file)
-    ? parseYaml(fs.readFileSync(file, "utf8"))
+  const fileExists = fs.existsSync(file);
+  const original = fileExists ? fs.readFileSync(file, "utf8") : "";
+  const existing = fileExists
+    ? parseYaml(original)
     : {
         chapter: chapter.src,
         review_status: "draft",
@@ -88,11 +90,24 @@ for (const chapter of chapters) {
         },
         exercises: [],
       };
-  if (!fs.existsSync(file)) createdFiles += 1;
+  if (!fileExists) createdFiles += 1;
   existing.exercises ||= [];
+  const metadataUpdates = [];
+  let addedEntry = false;
   for (const match of matches) {
     const number = Number(match[1]);
-    if (existing.exercises.some((entry) => entry.number === number)) continue;
+    const current = existing.exercises.find((entry) => entry.number === number);
+    if (current) {
+      // The manuscript is canonical for exercise wording. Depth edits often
+      // sharpen a prompt after its answer has been authored; keep that answer
+      // and review status intact while synchronizing the metadata checked by
+      // CI. This makes the generator safe to rerun after editorial revisions.
+      const prompt = compact(match[3]);
+      if (current.kind !== match[2] || current.prompt !== prompt) {
+        metadataUpdates.push({ number, kind: match[2], prompt });
+      }
+      continue;
+    }
     existing.exercises.push({
       number,
       kind: match[2],
@@ -100,10 +115,27 @@ for (const chapter of chapters) {
       prompt: compact(match[3]),
       answer: draft(match[2], match[3], chapter),
     });
+    addedEntry = true;
     createdAnswers += 1;
   }
   existing.exercises.sort((a, b) => a.number - b.number);
-  fs.writeFileSync(file, stringifyYaml(existing, { lineWidth: 100 }));
+  if (!fileExists || addedEntry) {
+    fs.writeFileSync(file, stringifyYaml(existing, { lineWidth: 100 }));
+  } else if (metadataUpdates.length) {
+    // Preserve hand-authored answer formatting. Re-serializing an entire YAML
+    // file to change one prompt creates hundreds of meaningless line-wrap
+    // changes, so patch only the canonical kind/prompt fields in place.
+    let updated = original;
+    for (const { number, kind, prompt } of metadataUpdates) {
+      const entry = new RegExp(
+        `(^  - number: ${number}\\n    kind: )[^\\n]+(\\n    status: [^\\n]+\\n)    prompt: [\\s\\S]*?(?=\\n    answer:)`,
+        "m",
+      );
+      if (!entry.test(updated)) throw new Error(`${chapter.src}: cannot patch exercise ${number}`);
+      updated = updated.replace(entry, `$1${kind}$2    prompt: ${JSON.stringify(prompt)}`);
+    }
+    fs.writeFileSync(file, updated);
+  }
 }
 
 console.log(

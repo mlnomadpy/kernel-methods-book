@@ -14,6 +14,11 @@ import fs from "node:fs";
 import path from "node:path";
 import katex from "katex";
 import { readCanonicalChapter, readYaml, renderCanonicalMarkdown } from "./manuscript.js";
+import {
+  expandBookObjectReferences,
+  mergeBookObjectReferences,
+  numberBookObjects,
+} from "./numbering.js";
 
 const ROOT = path.resolve(process.cwd());
 
@@ -549,7 +554,10 @@ export function buildBook() {
   const chapters = [];
   let ncites = 0;
 
-  chs.forEach((ch, i) => {
+  // Number mathematical objects before expanding prose references. This
+  // prepass creates a book-wide registry, so a chapter can refer safely to an
+  // equation, figure, or table introduced in another chapter.
+  const prepared = chs.map((ch, i) => {
     const canonical = readCanonicalChapter(ch.src);
     if (canonical.metadata.slug !== ch.slug || canonical.metadata.title !== ch.title) {
       throw new Error(`Canonical metadata mismatch for ${ch.src}`);
@@ -559,10 +567,27 @@ export function buildBook() {
     body = decorateStaticFigures(body);
     const isPrelim = ch.src === "ch-prelim";
     const chLabel = isPrelim ? "P" : String(i);
-
-    body = expandChrefs(body, cmap);
+    // Finalize semantic containers before inserting numbered-equation divs.
+    // transformProofs intentionally matches proof boxes before they contain
+    // nested divs; reversing this order made its first equation look like the
+    // end of the proof and invalidated the remainder of the chapter DOM.
     body = decorateBoxes(body, chLabel);
     body = transformProofs(body);
+    const numbered = numberBookObjects(body, {
+      chapterLabel: chLabel,
+      chapterSlug: ch.slug,
+      chapterTitle: ch.title,
+    });
+    return { canonical, body: numbered.body, numbered, isPrelim, chLabel };
+  });
+  const objectReferences = mergeBookObjectReferences(prepared.map((item) => item.numbered.refs));
+
+  chs.forEach((ch, i) => {
+    const { canonical, isPrelim, chLabel } = prepared[i];
+    let body = prepared[i].body;
+
+    body = expandChrefs(body, cmap);
+    body = expandBookObjectReferences(body, objectReferences, ch.slug);
     // per-tag class on exercise pills so CSS can color them
     body = body.replace(
       /class="ex-tag">([a-z-]+)</g,

@@ -1,0 +1,543 @@
+% Chapter-specific TikZ signatures for the print edition.
+%
+% These are not interchangeable ornaments.  Each small diagram names the
+% chapter's central object before the prose begins: a margin, a spectrum, a
+% coupling, a posterior, a causal graph, and so on.  A shared canvas, line
+% weight, and semantic palette make sixty-two distinct thresholds feel like one
+% book rather than a collection of posters.
+
+\usetikzlibrary{arrows.meta,calc}
+\tikzset{
+  kb/artline/.style={draw=KernelBlue,line width=.62pt},
+  kb/artsoft/.style={draw=KernelBlue!34,line width=.45pt},
+  kb/artghost/.style={draw=KernelRule,line width=.38pt},
+  kb/artaccent/.style={draw=KernelAccent,line width=.78pt},
+  kb/artarrow/.style={-{Stealth[length=1.45mm,width=1.05mm]},draw=KernelSpectral,line width=.58pt},
+  kb/artdot/.style={fill=KernelBlue},
+  kb/arthot/.style={fill=KernelAccent},
+  kb/artpanel/.style={fill=KernelBlue!4,draw=KernelRule,line width=.35pt},
+}
+
+\newcommand{\kbchapterartid}{ch00}
+\newcommand{\kbchapterartset}[1]{\gdef\kbchapterartid{#1}}
+\newcommand{\kbartlabelright}[1]{%
+  \node[anchor=east,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (11.25,1.68) {#1};}
+\newcommand{\kbartlabelleft}[1]{%
+  \node[anchor=west,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (0,1.68) {#1};}
+\newcommand{\kbartlabelbottom}[1]{%
+  \node[anchor=east,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (11.25,.05) {#1};}
+\newcommand{\kbartlabelcenter}[1]{%
+  \node[anchor=south,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (5.625,1.55) {#1};}
+\newcommand{\kbartlabelvertical}[1]{%
+  \node[anchor=south,rotate=90,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (11.12,.10) {#1};}
+\let\kbartlabel\kbartlabelright
+\newcommand{\kbartDeclare}[2]{\expandafter\def\csname kbart@#1\endcsname{#2}}
+
+% A quiet fallback for future chapters.  Existing chapters must all dispatch to
+% a named semantic drawing; the build test checks that mapping separately.
+\newcommand{\kbartfallback}{%
+  \draw[kb/artghost] (0,.12)--(11.25,.12);
+  \foreach \x in {.4,2.1,3.8,5.5,7.2,8.9,10.6}{\fill[kb/artdot] (\x,.12) circle (.7pt);}
+  \draw[kb/artline] (0,.74)..controls(2.2,1.48)and(4.2,.58)..(6.0,1.12)
+    ..controls(8.2,1.76)and(9.7,.76)..(11.25,1.18);}
+
+\newcommand{\kbchapterart}{%
+  \begin{tikzpicture}[x=1cm,y=1cm]
+    \useasboundingbox (0,0) rectangle (11.25,1.78);
+    % The fixed canvas is also a hard clipping boundary. A future semantic
+    % drawing may evolve internally, but it cannot invade the title, margin,
+    % lead paragraph, or running furniture.
+    \clip (0,0) rectangle (11.25,1.78);
+    \ifcsname kbart@\kbchapterartid\endcsname
+      \csname kbart@\kbchapterartid\endcsname
+    \else
+      \kbartfallback
+    \fi
+  \end{tikzpicture}%
+}
+
+% ── Safe editorial composition ───────────────────────────────────────────────
+% Chapter art remains chapter-specific, but its container is intentionally
+% invariant. The former collection of split, rail, number-field, and art-first
+% layouts allowed long titles and lead paragraphs to interact with scaled
+% minipages. This single bounded composition has one predictable height across
+% all sixty-two chapters.
+\newcommand{\kbchaptercompose}[2]{%
+  \begingroup
+  \let\kbartlabel\kbartlabelright
+  {\raggedright\kbdisplay\bfseries\fontsize{27}{32}\selectfont #2\par}%
+  \vspace{12pt}%
+  \noindent\makebox[\linewidth][c]{\resizebox{.96\linewidth}{!}{\kbchapterart}}\par
+  \endgroup}
+
+% ── Reference and the language of kernels ────────────────────────────────────
+\kbartDeclare{ch-prelim}{
+  \foreach \x in {0,.55,...,3.3}\draw[kb/artghost] (\x,.18)--(\x,1.48);
+  \foreach \y in {.18,.61,1.04,1.47}\draw[kb/artghost] (0,\y)--(3.3,\y);
+  \draw[kb/artarrow] (4.05,.25)--(5.35,1.42) node[above,text=KernelBlue] {$e_1$};
+  \draw[kb/artarrow] (4.05,.25)--(6.05,.25) node[right,text=KernelBlue] {$e_2$};
+  \draw[kb/artline] (6.75,.35)..controls(7.55,1.55)and(8.55,1.55)..(9.35,.35);
+  \draw[kb/artaccent] (7.10,.62)--(8.98,.62);
+  \kbartlabel{TOOLKIT}}
+
+\kbartDeclare{ch00}{
+  \foreach \x/\y in {.35/.35,1.55/1.22,2.85/.66,4.15/1.40,5.55/.42,7.05/1.05,8.55/.28,10.15/1.25}{\fill[kb/artdot](\x,\y)circle(1.15pt);}
+  \draw[kb/artsoft] (.35,.35)--(1.55,1.22)--(2.85,.66)--(4.15,1.40)--(5.55,.42)--(7.05,1.05)--(8.55,.28)--(10.15,1.25);
+  \draw[kb/artaccent] (2.85,.66)--(7.05,1.05);
+  \kbartlabel{RELATIONS}}
+
+\kbartDeclare{ch01}{
+  \foreach \i/\op in {0/15,1/23,2/31,3/39,4/47,5/55}\foreach \j in {0,...,2}{\fill[KernelBlue!\op] ({.14+.34*\i},{.28+.34*\j}) rectangle ++(.28,.28);}
+  \draw[kb/artarrow] (2.55,.78)--(3.65,.78);
+  \foreach \c/\h in {4.05/.65,5.15/1.05,6.25/1.36,7.35/1.05,8.45/.65}{\draw[kb/artline] (\c-.72,.24)..controls(\c-.35,\h)and(\c+.35,\h)..(\c+.72,.24);}
+  \node[text=KernelBlue] at (10.15,.76) {$\mathcal H_k$};
+  \kbartlabel{GRAM $\to$ RKHS}}
+
+\kbartDeclare{ch02}{
+  \draw[kb/artghost] (0,.23)--(3.25,.23);
+  \foreach \x in {.35,.85,1.35}\fill[kb/arthot](\x,.23)circle(1.15pt);
+  \foreach \x in {2.15,2.65,3.15}\fill[kb/artdot](\x,.23)circle(1.15pt);
+  \foreach \x/\tx/\ty in {.35/4.15/.42,.85/4.72/.72,1.35/5.30/.95,2.15/7.12/1.02,2.65/7.70/.72,3.15/8.28/.44}\draw[kb/artsoft](\x,.27)..controls(3.2,.7)and(\tx-.4,\ty)..(\tx,\ty);
+  \draw[kb/artaccent] (6.20,.16)--(6.20,1.52);
+  \kbartlabel{LIFT + REPRESENT}}
+
+% ── Fixed-kernel estimators ──────────────────────────────────────────────────
+\kbartDeclare{ch03}{
+  \draw[kb/artline] (0,.42)..controls(2.0,1.46)and(3.1,.35)..(5.1,.91)..controls(7.0,1.48)and(8.7,.45)..(11.0,1.16);
+  \foreach \x/\y in {.45/.70,1.52/1.08,2.55/.86,3.65/.54,4.72/.88,5.85/1.28,7.05/1.05,8.22/.66,9.42/.85,10.55/1.31}{\draw[kb/artsoft](\x,\y)--(\x,{.42+.065*\x});\fill[kb/arthot](\x,\y)circle(.95pt);}
+  \kbartlabel{FIT + SMOOTH}}
+
+\kbartDeclare{ch05}{
+  \draw[kb/artsoft] (0,.28)--(11.0,1.38);
+  \draw[kb/artaccent] (0,.72)--(10.8,.72);
+  \draw[kb/artsoft] (0,1.16)--(11.0,.06);
+  \foreach \x/\y in {.55/.34,1.45/.48,2.45/.50,3.35/.62,7.10/.96,8.15/1.08,9.20/1.18,10.15/1.32}{\fill[kb/artdot](\x,\y)circle(1.1pt);}
+  \draw[KernelAccent,line width=1pt] (3.35,.62) circle (2.4pt) (7.10,.96) circle (2.4pt);
+  \kbartlabel{MAXIMUM MARGIN}}
+
+\kbartDeclare{ch-svr}{
+  \draw[kb/artsoft] (0,.33)..controls(2.1,1.30)and(3.7,.28)..(5.5,.96)..controls(7.4,1.55)and(9.0,.44)..(11.0,1.08);
+  \draw[kb/artsoft,dashed] (0,.60)..controls(2.1,1.57)and(3.7,.55)..(5.5,1.23)..controls(7.4,1.82)and(9.0,.71)..(11.0,1.35);
+  \draw[kb/artsoft,dashed] (0,.06)..controls(2.1,1.03)and(3.7,.01)..(5.5,.69)..controls(7.4,1.28)and(9.0,.17)..(11.0,.81);
+  \foreach \x/\y in {.55/.48,2.05/1.40,3.48/.43,5.15/.85,6.55/1.42,8.05/.64,9.65/.61}{\fill[kb/arthot](\x,\y)circle(.95pt);}
+  \kbartlabel{$\varepsilon$-TUBE}}
+
+\kbartDeclare{ch-oneclass}{
+  \draw[kb/artline] (4.2,.86) ellipse (3.45 and .65);
+  \draw[kb/artsoft] (4.2,.86) ellipse (2.70 and .46);
+  \foreach \x/\y in {1.85/.82,2.65/1.08,3.25/.64,4.05/.98,4.78/.58,5.42/1.17,6.18/.78}{\fill[kb/artdot](\x,\y)circle(1pt);}
+  \fill[kb/arthot] (9.25,1.23) circle (1.35pt);
+  \draw[kb/artaccent,dashed] (7.70,.86)--(9.20,1.20);
+  \kbartlabel{NOVELTY}}
+
+\kbartDeclare{ch-ranking}{
+  \foreach \x/\h/\lab in {.35/.30/1,2.15/.56/2,3.95/.82/3,5.75/1.08/4,7.55/1.34/5}{\draw[kb/artline](\x,.18)--++(1.15,0)--++(0,{\h-.18});\node[text=KernelBlue,font=\scriptsize]at(\x+.55,\h+.18){\lab};}
+  \draw[kb/artarrow] (.90,.30)--(7.95,1.34);
+  \kbartlabel{ORDER}}
+
+\kbartDeclare{ch-structured}{
+  \foreach \x/\y/\n in {.35/.86/a,2.25/1.38/b,2.25/.35/c,4.25/1.22/d,4.25/.52/e,6.25/.86/f,8.25/1.38/g,8.25/.35/h}{\node[circle,fill=KernelBlue,inner sep=1.65pt](\n)at(\x,\y){};}
+  \draw[kb/artarrow](a)--(b);\draw[kb/artarrow](a)--(c);\draw[kb/artarrow](b)--(d);\draw[kb/artarrow](c)--(e);\draw[kb/artarrow](d)--(f);\draw[kb/artarrow](e)--(f);\draw[kb/artaccent,-{Stealth[length=1.45mm]}](f)--(g);
+  \kbartlabel{STRUCTURED OUTPUT}}
+
+% ── Optimization and scaling ─────────────────────────────────────────────────
+\kbartDeclare{ch-solve}{
+  \foreach \i in {0,...,7}\foreach \j in {0,...,3}{\draw[kb/artghost]({.12+.32*\i},{.20+.32*\j})rectangle++(.28,.28);}
+  \fill[KernelAccent!24] (.76,.52) rectangle (1.36,1.12);
+  \draw[kb/artaccent] (.76,.52) rectangle (1.36,1.12);
+  \draw[kb/artarrow] (3.10,.82)--(5.10,.82);
+  \draw[kb/artline] (5.45,.28)..controls(6.55,1.44)and(7.45,1.44)..(8.55,.28);
+  \fill[kb/arthot](6.55,.94)circle(1.2pt);\fill[kb/arthot](7.45,.94)circle(1.2pt);
+  \kbartlabel{WORKING SET}}
+
+\kbartDeclare{ch-online}{
+  \draw[kb/artghost] (0,.25)--(11.0,.25);
+  \foreach \x/\h in {.45/.42,1.35/.66,2.25/.54,3.15/.90,4.05/.78,4.95/1.18,5.85/.98,6.75/1.42,7.65/1.08,8.55/1.36}{\draw[kb/artarrow](\x,.25)--(\x,\h);\fill[kb/arthot](\x,\h)circle(.9pt);}
+  \draw[kb/artline] (.15,.44)..controls(2.0,.78)and(3.7,.64)..(5.2,1.02)..controls(6.8,1.38)and(8.8,1.12)..(10.3,1.47);
+  \kbartlabel{UPDATE $t\mapsto t+1$}}
+
+\kbartDeclare{ch13}{
+  \foreach \i/\op in {0/8,1/11,2/14,3/17,4/20,5/23,6/26,7/29,8/32,9/35,10/38,11/41,12/44}\foreach \j in {0,...,4}{\fill[KernelBlue!\op]({.10+.25*\i},{.16+.25*\j})rectangle++(.21,.21);}
+  \draw[kb/artarrow] (3.70,.78)--(5.15,.78);
+  \foreach \i in {0,...,3}{\draw[kb/artline]({5.55+.55*\i},.20)--({5.55+.55*\i},1.45);}
+  \draw[kb/artaccent] (5.35,.32)--(7.55,1.34);
+  \draw[kb/artsoft] (7.85,.25)..controls(8.75,1.36)and(9.65,1.36)..(10.55,.25);
+  \kbartlabel{COMPRESS}}
+
+\kbartDeclare{ch-randomized}{
+  \foreach \x/\y in {.25/.28,.25/.70,.25/1.12}{\fill[kb/artdot](\x,\y)circle(.9pt);}
+  \foreach \ang in {-18,-7,5,16,28}{\draw[kb/artsoft](.35,.70)--++({4*cos(\ang)},{4*sin(\ang)});}
+  \foreach \x in {5.0,5.8,6.6,7.4,8.2}{\draw[kb/artline](\x,.22)--(\x,{.45+mod(7*\x,10)/10});}
+  \draw[kb/artarrow] (8.65,.78)--(10.15,.78);
+  \fill[kb/arthot](10.45,.78)circle(2pt);
+  \kbartlabel{RANDOM FEATURES}}
+
+% ── Generalization, approximation, and limits ────────────────────────────────
+\kbartDeclare{ch04}{
+  \draw[kb/artsoft] (2.25,.86) ellipse (2.05 and .68);
+  \draw[kb/artline] (2.25,.86) ellipse (1.35 and .45);
+  \fill[kb/arthot](2.65,1.02)circle(1pt);
+  \draw[kb/artarrow](4.65,.86)--(6.10,.86);
+  \draw[kb/artaccent] (6.55,.35)--(6.55,1.38)--(9.35,1.38);
+  \draw[kb/artline] (6.55,.52)..controls(7.45,.86)and(8.35,1.05)..(9.35,1.24);
+  \kbartlabel{COMPLEXITY $\Rightarrow$ RISK}}
+
+\kbartDeclare{ch-vc}{
+  \foreach \x/\y in {.55/.40,1.35/1.15,2.25/.55,3.10/1.28}{\fill[kb/artdot](\x,\y)circle(1.15pt);}
+  \foreach \i/\s in {0/1,1/-1,2/1,3/-1}{\fill[KernelAccent]({5.0+.68*\i},{.84+.32*\s})circle(1.1pt);}
+  \draw[kb/artline] (4.70,.28)--(7.45,1.46);
+  \node[text=KernelBlue]at(9.25,.80){$2^d$};
+  \kbartlabel{SHATTER}}
+
+\kbartDeclare{ch07}{
+  \foreach \i/\h/\op in {0/1.38/72,1/1.08/65,2/.82/58,3/.60/51,4/.43/44,5/.30/37,6/.20/30}{\fill[KernelBlue!\op]({.25+.48*\i},.18)rectangle++(.30,\h);}
+  \draw[kb/artarrow] (4.15,.82)--(5.25,.82);
+  \foreach \c/\op in {6.0/75,7.0/58,8.0/42,9.0/28}{\draw[KernelBlue!\op,line width=.65pt](\c-.65,.22)..controls(\c-.30,1.35)and(\c+.30,1.35)..(\c+.65,.22);}
+  \kbartlabel{MERCER SPECTRUM}}
+
+\kbartDeclare{ch-inverse}{
+  \draw[kb/artghost] (0,.20)--(4.2,.20) (0,.20)--(0,1.55);
+  \draw[kb/artline] (0,.20)..controls(.55,.25)and(1.0,1.40)..(4.0,1.48);
+  \draw[kb/artaccent] (1.12,.20)--(1.12,1.48);
+  \draw[kb/artarrow] (4.70,.82)--(6.05,.82);
+  \foreach \x/\h in {6.45/1.28,7.08/.96,7.71/.62,8.34/.36,8.97/.20}{\draw[kb/artline](\x,.20)--(\x,\h);}
+  \kbartlabel{SPECTRAL FILTER}}
+
+\kbartDeclare{ch-approx}{
+  \foreach \c/\h in {.55/.62,2.05/.96,3.55/1.35,5.05/1.08,6.55/.75,8.05/1.20,9.55/.86}{\draw[kb/artsoft](\c-.72,.18)..controls(\c-.28,\h)and(\c+.28,\h)..(\c+.72,.18);\fill[kb/arthot](\c,.18)circle(.9pt);}
+  \draw[kb/artline] (0,.42)..controls(1.7,1.15)and(3.0,.60)..(4.8,1.20)..controls(6.5,1.58)and(8.4,.58)..(10.65,1.05);
+  \kbartlabel{INTERPOLATE}}
+
+\kbartDeclare{ch-universal}{
+  \draw[kb/artghost] (0,.24)--(11.0,.24);
+  \draw[kb/artsoft] (0,.52)--(2.2,.52)--(2.2,.88)--(4.3,.88)--(4.3,.62)--(6.6,.62)--(6.6,1.22)--(8.7,1.22)--(8.7,.92)--(11,.92);
+  \draw[kb/artline] (0,.45)..controls(2.2,.68)and(3.4,1.06)..(5.3,.74)..controls(7.1,.44)and(8.7,1.42)..(11,.96);
+  \kbartlabel{DENSE IN $C(\mathcal X)$}}
+
+\kbartDeclare{ch-lower}{
+  \fill[KernelAccent!10] (0,.18) rectangle (11.0,.52);
+  \draw[kb/artaccent] (0,.52)--(11.0,.52);
+  \draw[kb/artline] (0,1.42)..controls(2.2,.72)and(4.4,.58)..(6.1,.55)..controls(8.0,.52)and(9.5,.52)..(11,.52);
+  \foreach \x in {1.0,3.1,5.2,7.3,9.4}{\draw[kb/artarrow](\x,1.48)--(\x,.66);}
+  \kbartlabel{LOWER BOUND}}
+
+\kbartDeclare{ch-modern}{
+  \draw[kb/artghost] (0,.18)--(11,.18);
+  \draw[kb/artline] (0,1.35)..controls(1.8,.30)and(3.4,.30)..(4.55,.92)..controls(5.15,1.38)and(5.70,1.42)..(6.25,.88)..controls(7.35,.18)and(8.75,.32)..(11,.58);
+  \draw[kb/artaccent,dashed] (5.38,.18)--(5.38,1.50);
+  \kbartlabel{DOUBLE DESCENT}}
+
+% ── Spectral geometry and unlabeled structure ────────────────────────────────
+\kbartDeclare{ch06}{
+  \foreach \x/\y in {.45/.44,.85/.72,1.25/.55,1.65/1.02,2.05/.82,2.45/1.28,2.85/1.02,3.25/1.42,3.65/1.18,4.05/1.52}{\fill[KernelBlue!55](\x,\y)circle(.9pt);}
+  \draw[kb/artaccent,-{Stealth[length=1.6mm]}] (.35,.30)--(4.35,1.55);
+  \draw[kb/artarrow] (4.85,.88)--(6.15,.88);
+  \draw[kb/artline] (6.45,.34)..controls(7.65,1.35)and(8.85,1.35)..(10.15,.42);
+  \kbartlabel{PRINCIPAL AXIS}}
+
+\kbartDeclare{ch-cluster}{
+  \foreach \cx/\cy/\col in {1.25/.62/KernelBlue,4.55/1.12/KernelAccent,7.95/.58/KernelSpectral}{\foreach \a in {0,60,...,300}{\fill[\col!75]({\cx+.42*cos(\a)},{\cy+.28*sin(\a)})circle(.95pt);}\draw[\col!45,line width=.5pt](\cx,\cy)ellipse(.65 and .45);}
+  \draw[kb/artsoft,dashed] (1.9,.70)--(3.9,1.02) (5.2,1.02)--(7.3,.66);
+  \kbartlabel{SPECTRAL CLUSTERS}}
+
+\kbartDeclare{ch-cca}{
+  \draw[kb/artpanel] (0,.20) rectangle (3.45,1.48);
+  \draw[kb/artpanel] (7.55,.20) rectangle (11.0,1.48);
+  \foreach \x/\y in {.45/.42,1.15/1.16,1.85/.70,2.65/1.28}{\fill[kb/artdot](\x,\y)circle(1pt);}
+  \foreach \x/\y in {8.0/1.18,8.7/.48,9.45/1.00,10.25/.62}{\fill[kb/arthot](\x,\y)circle(1pt);}
+  \draw[kb/artarrow] (3.45,.84)--(5.10,.84);\draw[kb/artarrow] (7.55,.84)--(5.90,.84);
+  \fill[KernelSpectral] (5.5,.84) circle (2.2pt);
+  \kbartlabel{SHARED VIEW}}
+
+\kbartDeclare{ch-discriminant}{
+  \foreach \x/\y in {.45/.45,1.05/.70,1.55/.38,2.05/.82}{\fill[kb/arthot](\x,\y)circle(1pt);}
+  \foreach \x/\y in {3.0/1.05,3.55/1.30,4.05/.92,4.55/1.42}{\fill[kb/artdot](\x,\y)circle(1pt);}
+  \draw[kb/artaccent,-{Stealth[length=1.5mm]}] (.25,.18)--(5.05,1.55);
+  \foreach \x in {6.3,7.0,7.7,8.4,9.1}{\draw[kb/artsoft](\x,.22)--({\x-.8},1.48);}
+  \kbartlabel{SEPARATING PROJECTION}}
+
+\kbartDeclare{ch-mds}{
+  \foreach \i/\op in {0/18,1/28,2/42,3/56,4/68}\foreach \j in {0,...,3}{\fill[KernelBlue!\op]({.12+.32*\i},{.25+.32*\j})rectangle++(.27,.27);}
+  \draw[kb/artarrow] (2.05,.82)--(3.55,.82);
+  \foreach \x/\y in {4.1/.38,4.8/1.14,5.75/.65,6.55/1.38,7.55/.48,8.65/1.04,9.65/.72}{\fill[kb/artdot](\x,\y)circle(1.15pt);}
+  \draw[kb/artsoft] (4.1,.38)--(5.75,.65)--(7.55,.48)--(9.65,.72);
+  \kbartlabel{DISTANCE $\to$ MAP}}
+
+\kbartDeclare{ch-manifold}{
+  \draw[kb/artline] (0,.40)..controls(2.0,1.55)and(3.2,.25)..(5.05,.95)..controls(6.8,1.58)and(8.4,.40)..(10.65,1.12);
+  \foreach \x/\y/\c in {.35/.61/KernelAccent,1.35/1.01/KernelBlue,2.42/.92/KernelBlue,3.55/.55/KernelBlue,4.72/.84/KernelBlue,5.82/1.19/KernelBlue,7.00/1.20/KernelBlue,8.22/.79/KernelBlue,9.42/.80/KernelBlue,10.35/1.06/KernelAccent}{\fill[\c](\x,\y)circle(1.1pt);}
+  \kbartlabel{GRAPH SMOOTHNESS}}
+
+% ── Designing kernels ────────────────────────────────────────────────────────
+\kbartDeclare{ch08}{
+  \foreach \s/\op in {0/75,1.35/58,2.70/42}{\draw[KernelBlue!\op,line width=.62pt]({\s},.22)..controls({\s+.5},1.42)and({\s+1.0},1.42)..({\s+1.5},.22);}
+  \draw[kb/artarrow] (4.55,.80)--(6.00,.80);
+  \draw[kb/artline] (6.35,.24)..controls(7.2,1.42)and(8.0,.30)..(8.85,1.18)..controls(9.55,1.55)and(10.2,.72)..(10.85,.36);
+  \kbartlabel{SHIFT + SPECTRUM}}
+
+\kbartDeclare{ch-invariance}{
+  \draw[kb/artsoft] (2.0,.86) circle (.66);
+  \foreach \a in {0,60,...,300}{\fill[kb/artdot]({2+.66*cos(\a)},{.86+.66*sin(\a)})circle(.9pt);}
+  \draw[kb/artarrow] (3.05,.86)--(5.15,.86);
+  \fill[kb/arthot](5.55,.86)circle(2pt);
+  \draw[kb/artarrow] (5.95,.86)--(8.10,.86);
+  \draw[kb/artline] (8.45,.32)..controls(9.15,1.36)and(9.85,1.36)..(10.55,.32);
+  \kbartlabel{ORBIT $\to$ QUOTIENT}}
+
+\kbartDeclare{ch-splines}{
+  \draw[kb/artghost] (0,.22)--(11,.22);
+  \foreach \x in {.6,2.2,3.8,5.4,7.0,8.6,10.2}{\draw[kb/artsoft](\x,.17)--(\x,.35);\fill[kb/arthot](\x,.22)circle(.9pt);}
+  \draw[kb/artline] (0,.48)..controls(1.2,1.45)and(2.4,.90)..(3.8,.72)..controls(5.4,.48)and(6.4,1.52)..(8.0,1.23)..controls(9.3,.98)and(10.0,.45)..(11,1.02);
+  \kbartlabel{KNOTS + NULL SPACE}}
+
+\kbartDeclare{ch-spatial}{
+  \foreach \x in {0,.55,...,4.4}\draw[kb/artghost](\x,.22)--(\x,1.48);
+  \foreach \y in {.22,.64,1.06,1.48}\draw[kb/artghost](0,\y)--(4.4,\y);
+  \foreach \r/\op in {.22/78,.46/58,.72/38}\draw[KernelAccent!\op,line width=.6pt](2.15,.85)circle(\r);
+  \draw[kb/artarrow] (5.05,.85)--(6.30,.85);
+  \foreach \t/\h in {0/.42,1/.70,2/1.25,3/.88,4/1.42,5/1.05}{\fill[kb/artdot]({6.7+.7*\t},\h)circle(1pt);}
+  \draw[kb/artline](6.7,.42)--(7.4,.70)--(8.1,1.25)--(8.8,.88)--(9.5,1.42)--(10.2,1.05);
+  \kbartlabel{SPACE $\times$ TIME}}
+
+\kbartDeclare{ch09}{
+  \foreach \i/\c in {0/KernelBlue,1/KernelBlue,2/KernelAccent,3/KernelBlue,4/KernelSpectral,5/KernelBlue,6/KernelAccent}{\node[draw=\c,fill=\c!8,minimum width=.68cm,minimum height=.46cm,font=\scriptsize,text=\c]at({.45+1.12*\i},.94){$x_{\i}$};}
+  \draw[kb/artarrow] (.45,.36)--(7.17,.36);
+  \draw[kb/artline] (8.3,.28)..controls(9.0,1.38)and(9.8,1.38)..(10.5,.28);
+  \kbartlabel{SEQUENCE}}
+
+\kbartDeclare{ch-strings2}{
+  \draw[kb/artline] (.35,.84)--(2.0,1.35)--(3.65,.84)--(2.0,.35)--cycle;
+  \draw[kb/artsoft] (2.0,1.35)--(2.0,.35) (.35,.84)--(3.65,.84);
+  \draw[kb/artarrow] (4.15,.84)--(5.45,.84);
+  \draw[kb/artline] (6.0,.84)--(7.0,1.35) (6.0,.84)--(7.0,.84) (6.0,.84)--(7.0,.35);
+  \draw[kb/artline] (7.0,1.35)--(8.1,1.55) (7.0,1.35)--(8.1,1.12) (7.0,.35)--(8.1,.55) (7.0,.35)--(8.1,.15);
+  \kbartlabel{SUBSTRINGS + TREES}}
+
+\kbartDeclare{ch-text}{
+  \foreach \i in {0,...,7}\foreach \j in {0,...,3}{\draw[kb/artghost]({.12+.34*\i},{.22+.34*\j})rectangle++(.28,.28);}
+  \foreach \x/\y in {.12/.22,.80/.90,1.48/.56,2.16/1.24,2.50/.22}{\fill[KernelAccent!55](\x,\y)rectangle++(.28,.28);}
+  \draw[kb/artarrow] (3.15,.82)--(4.55,.82);
+  \foreach \x/\y in {5.1/.35,5.8/1.20,6.65/.72,7.55/1.42,8.45/.52,9.40/1.02}{\fill[kb/artdot](\x,\y)circle(1.05pt);}
+  \kbartlabel{SPARSE WORD GEOMETRY}}
+
+\kbartDeclare{ch10}{
+  \foreach \x/\y/\n in {.45/.84/a,1.55/1.38/b,1.65/.32/c,2.85/1.02/d,3.65/.48/e}{\node[circle,fill=KernelBlue,inner sep=1.7pt](\n)at(\x,\y){};}
+  \draw[kb/artsoft](a)--(b)--(d)--(e)--(c)--(a) (b)--(c);
+  \draw[kb/artarrow] (4.25,.84)--(5.55,.84);
+  \foreach \x/\y/\n in {6.05/.84/f,7.15/1.28/g,7.35/.38/h,8.55/.90/i,9.55/.46/j}{\node[circle,fill=KernelAccent,inner sep=1.7pt](\n)at(\x,\y){};}
+  \draw[kb/artsoft](f)--(g)--(i)--(j)--(h)--(f) (g)--(h);
+  \kbartlabel{GRAPH KERNEL}}
+
+\kbartDeclare{ch-generative}{
+  \fill[kb/arthot](.45,.84)circle(2pt);
+  \draw[kb/artarrow](.65,.84)--(2.10,.84);
+  \draw[kb/artpanel](2.25,.35)rectangle(3.65,1.33);
+  \node[text=KernelBlue]at(2.95,.84){$p_\theta$};
+  \foreach \x/\y in {4.45/.38,5.05/1.18,5.65/.66,6.25/1.35}{\draw[kb/artarrow](3.65,.84)--(\x,\y);\fill[kb/artdot](\x,\y)circle(.9pt);}
+  \draw[kb/artarrow](6.75,.84)--(8.10,.84);
+  \draw[kb/artline](8.35,.26)..controls(9.05,1.42)and(9.85,1.42)..(10.55,.26);
+  \kbartlabel{MODEL-INDUCED}}
+
+\kbartDeclare{ch-signature}{
+  \draw[kb/artline] (.25,.28)..controls(1.25,1.45)and(2.15,.22)..(3.25,1.18)..controls(4.05,1.55)and(4.75,.55)..(5.45,.88);
+  \draw[kb/artaccent] (.25,.28)--(3.25,1.18)--(5.45,.88)--cycle;
+  \draw[kb/artarrow](5.95,.84)--(7.15,.84);
+  \node[text=KernelBlue]at(8.45,.92){$1,\;S^1,\;S^2,\ldots$};
+  \kbartlabel{ITERATED PATH}}
+
+\kbartDeclare{ch-geom}{
+  \draw[kb/artline] (1.65,.84) --++(60:.66)--++(180:.66)--cycle;
+  \draw[kb/artarrow] (2.65,.84) arc[start angle=180,end angle=0,radius=1.05];
+  \begin{scope}[shift={(4.75,.84)},rotate=48]\draw[kb/artline] (0,0)--++(60:.66)--++(180:.66)--cycle;\end{scope}
+  \draw[kb/artarrow] (5.55,.84)--(7.15,.84);
+  \draw[kb/artsoft] (7.65,.84) circle (.62);
+  \fill[kb/arthot](7.65,.84)circle(1.25pt);
+  \kbartlabel{EQUIVARIANCE}}
+
+\kbartDeclare{ch-operator}{
+  \foreach \x/\y/\a in {.45/.42/25,1.25/.84/55,2.05/.54/15,2.85/1.22/70}{\draw[kb/artarrow](\x,\y)--++({.65*cos(\a)},{.65*sin(\a)});}
+  \draw[kb/artarrow](3.75,.84)--(5.05,.84);
+  \foreach \i in {0,...,3}\foreach \j in {0,...,2}{\draw[kb/artghost]({5.4+.43*\i},{.28+.43*\j})rectangle++(.36,.36);}
+  \draw[kb/artarrow](7.35,.84)--(8.55,.84);
+  \foreach \y/\a in {.42/30,.84/60,1.26/15}{\draw[kb/artaccent](8.85,\y)--++({.72*cos(\a)},{.72*sin(\a)});}
+  \kbartlabel{OPERATOR-VALUED}}
+
+\kbartDeclare{ch-krein}{
+  \draw[kb/artghost] (0,.84)--(6.0,.84) (3.0,.15)--(3.0,1.55);
+  \draw[kb/artline] (.35,.30)..controls(1.25,.30)and(2.2,.58)..(2.72,.84);
+  \draw[kb/artaccent] (3.28,.84)..controls(3.8,1.10)and(4.75,1.38)..(5.65,1.38);
+  \node[text=KernelBlue]at(7.25,1.13){$\mathcal K_+$};\node[text=KernelAccent]at(8.65,.52){$\mathcal K_-$};
+  \draw[kb/artsoft] (6.65,.84)--(9.25,.84);
+  \kbartlabel{SIGNED GEOMETRY}}
+
+% ── Distributions as objects ─────────────────────────────────────────────────
+\kbartDeclare{ch11}{
+  \foreach \x/\y in {.35/.42,.75/.94,1.20/.56,1.65/1.20,2.10/.72}{\fill[kb/artdot](\x,\y)circle(.9pt);}
+  \foreach \x/\y in {3.05/.92,3.55/.38,4.05/1.25,4.55/.68}{\fill[kb/arthot](\x,\y)circle(.9pt);}
+  \draw[kb/artarrow](4.95,.84)--(6.25,.84);
+  \fill[kb/artdot](7.05,1.15)circle(1.7pt);\fill[kb/arthot](9.15,.55)circle(1.7pt);
+  \draw[kb/artaccent,<->] (7.15,1.08)--(9.05,.62);
+  \kbartlabel{MEAN EMBEDDINGS}}
+
+\kbartDeclare{ch-testing}{
+  \foreach \x/\y in {.35/.45,.90/.88,1.45/.55,2.0/1.12,2.55/.72}{\fill[kb/artdot](\x,\y)circle(.9pt);}
+  \foreach \x/\y in {4.0/.98,4.55/.45,5.1/1.24,5.65/.70,6.2/1.08}{\fill[kb/arthot](\x,\y)circle(.9pt);}
+  \draw[kb/artaccent,<->](2.65,.85)--(3.90,.85);
+  \draw[kb/artarrow](6.75,.84)--(8.05,.84);
+  \draw[kb/artline](8.35,.24)--(8.35,1.42)--(10.75,1.42);
+  \fill[KernelAccent!22](9.55,.24)rectangle(10.0,1.20);
+  \kbartlabel{TEST STATISTIC}}
+
+\kbartDeclare{ch-ot}{
+  \foreach \i in {0,...,4}{\fill[kb/artdot](.45,{.28+.30*\i})circle(1pt);\fill[kb/arthot](8.65,{.28+.30*\i})circle(1pt);}
+  \foreach \a/\b/\op in {0/1/30,0/3/65,1/2/48,2/2/70,3/4/55,4/0/38,4/4/62}{\draw[KernelSpectral!\op,line width=.58pt](.55,{.28+.30*\a})--(8.55,{.28+.30*\b});}
+  \kbartlabel{COUPLING $\pi$}}
+
+\kbartDeclare{ch-quad}{
+  \fill[KernelBlue!6] (0,.18)--(0,.42)..controls(2.0,1.44)and(3.8,.30)..(5.7,1.20)..controls(7.8,1.52)and(9.3,.48)..(11,.92)--(11,.18)--cycle;
+  \draw[kb/artline](0,.42)..controls(2.0,1.44)and(3.8,.30)..(5.7,1.20)..controls(7.8,1.52)and(9.3,.48)..(11,.92);
+  \foreach \x/\w in {.65/.32,2.15/.48,3.85/.22,5.55/.55,7.25/.34,9.05/.46,10.35/.28}{\draw[KernelAccent,line width=.9pt](\x,.18)--(\x,{.42+.06*\x});\fill[kb/arthot](\x,{.42+.06*\x})circle(.9pt);}
+  \kbartlabel{WEIGHED NODES}}
+
+% ── Conditional, Stein, and causal inference ─────────────────────────────────
+\kbartDeclare{ch-cme}{
+  \foreach \x/\lab in {.35/x_1,1.35/x_2,2.35/x_3}{\node[draw=KernelBlue,circle,inner sep=2pt,text=KernelBlue,font=\scriptsize]at(\x,.84){$\lab$};}
+  \foreach \x/\y in {5.0/.34,5.0/.84,5.0/1.34,6.1/.54,6.1/1.14,7.2/.38,7.2/.92,7.2/1.42}{\fill[kb/arthot](\x,\y)circle(.9pt);}
+  \draw[kb/artarrow](2.75,.84)--(4.45,.84);
+  \draw[kb/artarrow](7.65,.84)--(9.05,.84);
+  \node[text=KernelBlue]at(9.65,.84){$\mu_{Y\mid x}$};
+  \kbartlabel{CONDITION}}
+
+\kbartDeclare{ch-ksd}{
+  \foreach \x/\y/\a in {.45/.35/50,1.45/.55/65,2.45/.42/38,3.45/.82/85,4.45/.62/42,5.45/1.08/110,6.45/.88/135,7.45/1.25/150,8.45/1.02/165}{\draw[kb/artarrow](\x,\y)--++({.55*cos(\a)},{.55*sin(\a)});}
+  \draw[kb/artsoft] (5.3,.86) ellipse (4.65 and .65);
+  \fill[kb/arthot](5.3,.86)circle(1.5pt);
+  \kbartlabel{STEIN FLOW}}
+
+\kbartDeclare{ch-causal}{
+  \node[circle,fill=KernelBlue,inner sep=1.8pt](x)at(.55,.84){};
+  \node[circle,fill=KernelBlue,inner sep=1.8pt](z)at(3.0,1.32){};
+  \node[circle,fill=KernelAccent,inner sep=1.8pt](t)at(3.0,.36){};
+  \node[circle,fill=KernelBlue,inner sep=1.8pt](y)at(5.55,.84){};
+  \draw[kb/artarrow](x)--(z);\draw[kb/artarrow](x)--(t);\draw[kb/artarrow](z)--(y);\draw[kb/artarrow](t)--(y);
+  \draw[KernelAccent,line width=1.2pt] (2.75,.12)--(3.25,.60);
+  \draw[kb/artarrow](6.15,.84)--(7.65,.84);
+  \node[text=KernelAccent]at(8.65,.84){$\operatorname{do}(T=t)$};
+  \kbartlabel{INTERVENE}}
+
+\kbartDeclare{ch-distreg}{
+  \foreach \cx/\cy in {.8/.62,2.45/1.05,4.05/.55,5.75/1.25}{\draw[kb/artsoft](\cx,\cy)ellipse(.55 and .28);\foreach \a in {0,90,180,270}{\fill[kb/artdot]({\cx+.36*cos(\a)},{\cy+.18*sin(\a)})circle(.7pt);}}
+  \draw[kb/artarrow](6.45,.84)--(7.65,.84);
+  \draw[kb/artline](8.0,.35)..controls(8.75,1.35)and(9.45,.55)..(10.45,1.22);
+  \fill[kb/arthot](8.55,.84)circle(1pt);\fill[kb/arthot](9.75,.84)circle(1pt);
+  \kbartlabel{BAGS $\to$ RESPONSE}}
+
+% ── Gaussian processes and sequential decisions ──────────────────────────────
+\kbartDeclare{ch-gp}{
+  \fill[KernelBlue!7] (0,.48)..controls(2.2,1.65)and(4.0,.25)..(6.1,1.12)..controls(8.0,1.62)and(9.5,.42)..(11,1.02)--(11,.58)..controls(9.5,.02)and(8.0,1.18)..(6.1,.68)..controls(4.0,-.12)and(2.2,1.15)..(0,.10)--cycle;
+  \draw[kb/artline](0,.29)..controls(2.2,1.40)and(4.0,.06)..(6.1,.90)..controls(8.0,1.40)and(9.5,.22)..(11,.80);
+  \foreach \x/\y in {.65/.55,2.25/1.22,3.85/.36,5.55/.78,7.25/1.27,9.15/.48}{\fill[kb/arthot](\x,\y)circle(1pt);}
+  \kbartlabel{POSTERIOR}}
+
+\kbartDeclare{ch-bo}{
+  \draw[kb/artsoft](0,.38)..controls(2.0,1.45)and(3.65,.22)..(5.45,1.02)..controls(7.15,1.55)and(9.0,.38)..(11,1.10);
+  \draw[kb/artaccent](0,.18)..controls(1.35,.22)and(2.1,1.32)..(3.1,.38)..controls(4.0,.18)and(4.7,.26)..(5.4,.28);
+  \fill[kb/arthot](2.05,1.10)circle(1.35pt);
+  \draw[kb/artarrow](2.05,.18)--(2.05,.96);
+  \node[text=KernelBlue,font=\scriptsize]at(7.75,.84){explore $\leftrightarrow$ exploit};
+  \kbartlabel{ACQUIRE NEXT}}
+
+% ── Dynamics and scientific learning ─────────────────────────────────────────
+\kbartDeclare{ch-dynamics}{
+  % A renderer-safe phase-flow plate: piecewise trajectories keep all PDF
+  % transforms affine and local while still showing nearby initial states
+  % evolving toward a common controlled region.
+  \foreach \dy/\op in {-.12/34,0/52,.12/70}{
+    \draw[KernelBlue!\op,line width=.58pt]
+      (.18,{.52+\dy})--(1.18,{.92+\dy})--(2.18,{.68+\dy})--(3.18,{1.18+\dy})--(4.12,{.84+\dy});}
+  \draw[kb/artarrow] (3.72,.98)--(4.22,.82);
+  \draw[kb/artarrow](5.25,.84)--(6.55,.84);
+  \draw[kb/artline](6.85,.30)--(7.35,1.12)--(8.00,.58)--(8.65,1.28)--(9.30,1.42)--(9.85,.48)--(10.55,.84);
+  \fill[kb/arthot](8.65,1.28)circle(1.1pt);
+  \kbartlabel{STATE $\to$ ACTION}}
+
+\kbartDeclare{ch-scientific}{
+  \foreach \x in {0,.48,...,2.88}\foreach \y in {.22,.62,1.02,1.42}{\draw[kb/artghost](\x,\y)--++(.42,0);}
+  \draw[kb/artarrow](3.55,.84)--(4.85,.84);
+  \draw[kb/artpanel](5.05,.34)rectangle(6.55,1.34);\node[text=KernelBlue]at(5.80,.84){$\mathcal G$};
+  \draw[kb/artarrow](6.75,.84)--(8.05,.84);
+  \foreach \x/\y/\a in {8.4/.42/25,9.1/.82/55,9.8/.55/15,10.4/1.15/70}{\draw[kb/artaccent](\x,\y)--++({.5*cos(\a)},{.5*sin(\a)});}
+  \kbartlabel{LEARN AN OPERATOR}}
+
+% ── Learning the representation ──────────────────────────────────────────────
+\kbartDeclare{ch12}{
+  \foreach \c/\h/\op in {.65/.62/38,2.05/.92/55,3.45/1.28/72}{\draw[KernelBlue!\op,line width=.62pt](\c-.62,.20)..controls(\c-.28,\h)and(\c+.28,\h)..(\c+.62,.20);}
+  \draw[kb/artarrow](4.25,.84)--(5.65,.84);
+  \draw[kb/artline](6.0,.26)..controls(6.65,1.38)and(7.45,.58)..(8.2,1.18)..controls(8.9,1.46)and(9.6,.55)..(10.35,.92);
+  \node[text=KernelAccent]at(7.95,.28){$\sum_m\beta_m k_m$};
+  \kbartlabel{MIX KERNELS}}
+
+\kbartDeclare{ch14}{
+  \foreach \i in {0,...,3}\foreach \j in {0,...,2}{\fill[kb/artdot]({.25+.52*\i},{.38+.42*\j})circle(.8pt);}
+  \foreach \i in {0,...,4}\foreach \j in {0,...,3}{\draw[kb/artsoft]({2.65+.45*\i},{.25+.38*\j})--({3.1+.45*\i},{.25+.38*mod(\j+1,4)});}
+  \draw[kb/artarrow](5.10,.84)--(6.35,.84);
+  \foreach \i/\op in {0/15,1/25,2/35,3/45,4/55,5/65}\foreach \j in {0,...,2}{\fill[KernelBlue!\op]({6.65+.30*\i},{.35+.30*\j})rectangle++(.25,.25);}
+  \kbartlabel{INFINITE WIDTH}}
+
+\kbartDeclare{ch-dkl}{
+  \foreach \i/\n in {0/x,1/h_1,2/h_2}{\node[draw=KernelBlue,fill=KernelBlue!5,minimum width=.78cm,minimum height=.42cm,font=\scriptsize](\n)at({.45+1.35*\i},.84){$\n$};}
+  \draw[kb/artarrow](x)--(h_1);\draw[kb/artarrow](h_1)--(h_2);
+  \draw[kb/artarrow](h_2)--(5.05,.84);
+  \draw[kb/artline](5.35,.25)..controls(6.0,1.42)and(6.8,1.42)..(7.45,.25);
+  \draw[kb/artarrow](7.80,.84)--(9.05,.84);
+  \node[text=KernelAccent]at(9.65,.84){GP};
+  \kbartlabel{LEARN $\Phi_\theta$}}
+
+\kbartDeclare{ch-rkbs}{
+  \draw[kb/artline] (2.0,.18)--(3.65,.84)--(2.0,1.50)--(.35,.84)--cycle;
+  \foreach \x/\y in {1.15/.84,2.0/.48,2.55/1.02,2.85/.84}{\fill[kb/arthot](\x,\y)circle(1pt);}
+  \draw[kb/artarrow](4.15,.84)--(5.45,.84);
+  \foreach \c/\h in {6.0/.72,7.25/1.25,8.5/.88,9.75/.52}{\draw[kb/artline](\c-.55,.20)..controls(\c-.2,\h)and(\c+.2,\h)..(\c+.55,.20);}
+  \kbartlabel{SPARSE ATOMS}}
+
+\kbartDeclare{ch-frontier}{
+  \draw[kb/artghost] (0,.22)--(11,.22);
+  \foreach \x/\y in {.4/.44,1.25/.72,2.1/.58,2.95/1.02,3.8/.82}{\fill[kb/artdot](\x,\y)circle(1pt);}
+  \draw[kb/artarrow](4.35,.84)--(5.65,.84);
+  \foreach \x/\tx/\ty in {6.0/6.35/.58,7.0/7.20/1.20,8.0/8.02/.70,9.0/8.82/1.38,10.0/9.65/.88}{\draw[kb/artsoft](\x,.25)..controls(\x,.62)and(\tx,\ty)..(\tx,\ty);\fill[kb/arthot](\tx,\ty)circle(1pt);}
+  \kbartlabel{GEOMETRY MOVES}}
+
+% ── Reliable practice ────────────────────────────────────────────────────────
+\kbartDeclare{ch-reliability}{
+  \draw[kb/artsoft] (2.0,.84) ellipse (1.65 and .58);
+  \draw[kb/artaccent] (5.15,.84) ellipse (1.65 and .58);
+  \draw[kb/artarrow](3.65,.84)--(4.05,.84);
+  \draw[kb/artline] (7.15,.84)--(10.45,.84);
+  \draw[kb/artaccent] (7.75,.58)--(7.75,1.10) (9.85,.58)--(9.85,1.10);
+  \fill[kb/arthot](8.75,.84)circle(1.1pt);
+  \kbartlabel{SHIFT + COVERAGE}}
+
+\kbartDeclare{ch-apps}{
+  \fill[kb/arthot](5.5,.84)circle(2.1pt);
+  \foreach \a/\lab in {0/1,45/2,90/3,135/4,180/5,225/6,270/7,315/8}{\draw[kb/artsoft](5.5,.84)--++({2.15*cos(\a)},{.70*sin(\a)});\fill[kb/artdot]({5.5+2.15*cos(\a)},{.84+.70*sin(\a)})circle(1pt);}
+  \kbartlabel{DOMAIN CLINIC}}
+
+\kbartDeclare{ch-accountable}{
+  \draw[kb/artline] (.35,.28)--(2.2,1.38)--(4.05,.28)--cycle;
+  \node[text=KernelBlue,font=\scriptsize]at(2.2,.82){$\sigma$};
+  \draw[kb/artarrow](4.55,.84)--(5.75,.84);
+  \foreach \i in {0,...,3}{\draw[kb/artghost](6.05,{.38+.30*\i})--(9.85,{.38+.30*\i});\draw[kb/artaccent](6.05,{.38+.30*\i})--(6.35,{.38+.30*\i});}
+  \kbartlabel{EXPLAIN + AUDIT}}
+
+\kbartDeclare{ch-highstakes}{
+  \draw[kb/artsoft] (2.0,.84) circle (.58);
+  \draw[kb/artline] (2.0,.84) ellipse (2.05 and .68);
+  \fill[kb/arthot](3.82,1.03)circle(1.2pt);
+  \draw[kb/artarrow](4.45,.84)--(5.85,.84);
+  \draw[kb/artline](6.15,.84)--(6.70,.84)--(7.05,.35)--(7.55,1.40)--(8.05,.48)--(8.55,1.16)--(9.15,.84)--(10.45,.84);
+  \kbartlabel{SCIENCE + SPACE}}

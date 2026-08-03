@@ -28,4 +28,14 @@ fs.copyFileSync(
   path.join(buildDir, "cover.pdf"),
   path.join(releaseDir, "kernels-the-geometry-of-learning-cover-print.pdf"),
 );
+// EPUB readers need a raster/vector image rather than a print-cover PDF. Keep
+// the TikZ spread as the only design source and crop its front panel at 144 dpi
+// (2 pixels per PostScript point) into the EPUB asset. The crop excludes both
+// bleed strips, the back cover, and the provisional spine.
+execFileSync("pdftocairo", [
+  "-png", "-singlefile", "-r", "144",
+  "-x", "1552", "-y", "18", "-W", "1224", "-H", "1584",
+  path.join(buildDir, "cover.pdf"),
+  path.join(root, "publication", "cover"),
+], { cwd: root, stdio: "inherit" });
 console.log("Built release/kernels-the-geometry-of-learning-cover-print.pdf.");

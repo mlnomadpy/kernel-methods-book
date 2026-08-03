@@ -12,6 +12,7 @@ PRINT.mkdir(parents=True, exist_ok=True)
 
 FILES = [
     "stix-two-text-latin-400-normal",
+    "stix-two-text-latin-ext-400-normal",
     "stix-two-text-latin-400-italic",
     "stix-two-text-latin-600-normal",
     "stix-two-text-latin-600-italic",

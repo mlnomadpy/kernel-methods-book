@@ -9,21 +9,20 @@
 \geometry{letterpaper, top=1in, bottom=1in, inner=1.1in, outer=0.9in,
   headsep=16pt, footskip=28pt}
 \usepackage{mathtools}
-% Libertinus supplies the book's mathematical voice. LuaTeX's assembly of its
-% horizontal brace extenders can render as solid bars in long annotations, so
-% use Latin Modern only for those four extensible glyphs.
-\setmathfont{LibertinusMath-Regular.otf}[
-  Path=publication/fonts/]
-\setmathfont{Latin Modern Math}[range={\overbrace,\underbrace,\overbracket,\underbracket}]
-% Libertinus Math has no separately shipped bold font. Register the closely
-% related XITS face after the brace override as the complete bold math version
-% requested by \boldsymbol.
+% Latin Modern Math is the OpenType continuation of Knuth's Computer Modern:
+% the conventional mathematical voice of the literature and the closest print
+% counterpart to KaTeX's default Computer Modern rendering on the web. Use it
+% as one coherent face, including large operators and extensible delimiters.
+\setmathfont{Latin Modern Math}
+% Latin Modern has no bold math face. Register XITS only for the explicit bold
+% math version requested by \boldsymbol; ordinary mathematics remains Latin
+% Modern throughout.
 \setmathfont{XITSMath-Regular.otf}[
   Path=publication/fonts/,
   BoldFont=XITSMath-Bold.otf,
   version=bold]
 % Role-based print typography, shared with the web edition. Source Serif 4 is
-% designed for sustained reading; STIX remains the mathematical/display voice;
+% designed for sustained reading; Latin Modern is the mathematical voice;
 % IBM Plex handles compact scholarly apparatus. Files are vendored so the
 % edition is reproducible on machines that do not have these families installed.
 \setmainfont{Source Serif 4}[
@@ -40,6 +39,22 @@
   BoldFont=stix-two-text-latin-600-normal.ttf,
   BoldItalicFont=stix-two-text-latin-600-italic.ttf,
   Scale=MatchLowercase]
+% The compact web subsets above deliberately contain only basic Latin. Names in
+% the bibliography require a handful of Latin Extended glyphs, so use the
+% matching STIX text cut as a deterministic per-character fallback instead of
+% allowing LuaLaTeX to emit blank boxes.
+\newfontfamily\kbextended{STIX Two Text Extended}[
+  Path=publication/fonts/,
+  UprightFont=stix-two-text-latin-ext-400-normal.ttf,
+  Scale=MatchLowercase]
+\usepackage{newunicodechar}
+\newunicodechar{č}{{\kbextended č}}
+\newunicodechar{Ž}{{\kbextended Ž}}
+\newunicodechar{ń}{{\kbextended ń}}
+\newunicodechar{ĭ}{{\kbextended ĭ}}
+\newunicodechar{ł}{{\kbextended ł}}
+\newunicodechar{ě}{{\kbextended ě}}
+\newunicodechar{ć}{{\kbextended ć}}
 \setsansfont{IBM Plex Sans}[
   Path=publication/fonts/,
   UprightFont=ibm-plex-sans-latin-400-normal.ttf,
@@ -52,6 +67,17 @@
   BoldFont=ibm-plex-mono-latin-600-normal.ttf,
   Scale=MatchLowercase]
 \usepackage{booktabs}
+% Insert the vector TikZ front panel into the reader PDF. The full wrap remains
+% a separate printer artifact; pdfpages crops only its front-cover region.
+\usepackage{pdfpages}
+% Pandoc emits \maketitle before the Markdown body, so a raw include in the
+% manuscript would put the cover after the title/colophon. The begin-document
+% hook runs first and makes the cropped TikZ panel the actual PDF page one.
+\AtBeginDocument{%
+  \includepdf[pages=1,trim=10.775in 0.125in 0.125in 0.125in,clip,%
+    pagecommand={\thispagestyle{empty}}]{.build/publication/cover/cover.pdf}%
+}
+\usepackage{needspace}
 \usepackage{microtype}
 \usepackage{xurl}          % allow URLs to break anywhere (bibliography)
 \usepackage{xcolor}
@@ -155,8 +181,17 @@
 \renewcommand*{\subsectionformat}{{\color{KernelAccent}\thesubsection}\enskip}
 \renewcommand*{\subsubsectionformat}{{\color{KernelAccent}\thesubsubsection}\enskip}
 
+% Sixty-two semantic chapter signatures live separately so the typography file
+% remains legible. The build sets the signature id immediately before each
+% chapter command; future chapters receive a safe fallback until assigned.
+\input{publication/chapter-art.tex}
+
+% The Reference division and Parts I--XII each have their own conceptual plate.
+% They are deliberately separate from the chapter-signature system above.
+\input{publication/part-art.tex}
+
 % Chapter opener: a full-width accent hairline, a sans "CHAPTER N" tag, then
-% the serif title with a deep sink before the text starts.
+% the serif title and the compact geometric signature.
 \newif\ifkbpreliminaries
 \kbpreliminariesfalse
 \newcommand{\kbpreliminariesmode}{%
@@ -170,19 +205,24 @@
   \renewcommand{\thechapter}{\arabic{chapter}}%
   \renewcommand*{\chaptermarkformat}{\thechapter\autodot\enskip}}
 \renewcommand\chapterlinesformat[3]{%
-  \parindent0pt\raggedright
-  {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}%
-  \vspace{14pt}%
-  \ifstr{#2}{}{}{%
-    {\sffamily\scriptsize\bfseries\color{KernelSpectral}\textls[105]{%
-      \ifkbpreliminaries\MakeUppercase{Reference chapter}%
-      \else\MakeUppercase{Chapter}\space#2\fi}\par}%
-    \vspace{10pt}}%
-  {\kbdisplay\bfseries\fontsize{27}{32}\selectfont #3\par}%
-  \vspace{4pt}%
+  \parindent0pt\raggedright\noindent
+  % Keep the rule, navigation tag, title, and bounded semantic plate together;
+  % without this indivisible block TeX may strand the rule/tag on the preceding
+  % page even though the illustration itself has a fixed height.
+  \begin{minipage}{\textwidth}
+    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}%
+    \vspace{14pt}%
+    \ifstr{#2}{}{}{%
+      {\sffamily\scriptsize\bfseries\color{KernelSpectral}\textls[105]{%
+        \ifkbpreliminaries\MakeUppercase{Reference chapter}%
+        \else\MakeUppercase{Chapter}\space#2\fi}\par}%
+      \vspace{10pt}}%
+    \kbchaptercompose{#2}{#3}%
+    \vspace{2pt}%
+  \end{minipage}%
 }
 \renewcommand*{\chapterformat}{\thechapter}
-\RedeclareSectionCommand[beforeskip=52pt, afterskip=30pt]{chapter}
+\RedeclareSectionCommand[beforeskip=40pt, afterskip=23pt]{chapter}
 
 % ── Running heads (scrlayer-scrpage) ──────────────────────────────────────────
 % Verso: chapter. Recto: current section. Page numbers at the outer edge, all
@@ -204,6 +244,23 @@
 \setcapindent{0pt}
 \setlength{\abovecaptionskip}{9pt}
 
+% ── Executable listings ──────────────────────────────────────────────────────
+% Code is a numbered publication object. Its caption states the mathematical
+% job before the implementation begins; the language is quiet apparatus, not a
+% competing title. The environment sets \@currentlabel so ordinary \ref links
+% resolve to the same chapter-scoped number as the HTML and EPUB editions.
+\newenvironment{kblisting}[4]{%
+  \par\addvspace{12pt}\Needspace{6\baselineskip}%
+  \phantomsection\def\@currentlabel{#1}\label{#4}%
+  {\color{KernelSpectral}\rule{\linewidth}{0.8pt}\par\nobreak\vspace{5pt}}%
+  \noindent{\sffamily\footnotesize\color{KernelMuted}%
+    {\kbdisplay\bfseries\color{KernelAccent}Listing #1.}\enspace #2%
+    \hfill{\kbmono\scriptsize\color{KernelSpectral}\MakeUppercase{#3}}\par}%
+  \nobreak\vspace{3pt}\ignorespaces
+}{%
+  \par\addvspace{9pt}%
+}
+
 % ── Chapter lead paragraph (the narrative hook) ───────────────────────────────
 % A readable chapter abstract: slightly larger text and a short closing rule.
 % The former inline rail could detach from the paragraph during Pandoc output,
@@ -215,9 +272,9 @@
    \end{addmargin}\vspace{16pt}}
 
 % ── Part openers ──────────────────────────────────────────────────────────────
-% \kbpart{numeral}{title}{intro}: a right-hand opener page carrying the part
+% \kbpart{numeral}{title}{intro}{art-id}: a right-hand opener page carrying the part
 % numeral, title, and the part's own introduction, recorded in TOC + bookmarks.
-\newcommand{\kbpart}[3]{%
+\newcommand{\kbpart}[4]{%
   \cleardoublepage
   \thispagestyle{empty}%
   \phantomsection
@@ -233,24 +290,15 @@
     \begin{addmargin}[0pt]{1.0cm}
       {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #3\par}
     \end{addmargin}
-    \vspace{43pt}
-    \begin{center}
-      \begin{tikzpicture}[x=1cm,y=1cm]
-        \draw[KernelRule,line width=.45pt] (0,0) -- (7.5,0);
-        \foreach \c/\h/\op in {.7/.7/30,1.9/1.05/45,3.2/1.4/62,4.5/1.15/50,5.8/.85/38,6.8/.58/28}{
-          \draw[KernelBlue!\op,line width=.65pt,samples=42,smooth,domain=0:7.5]
-            plot (\x,{\h*exp(-1.2*(\x-\c)^2)});
-          \fill[KernelRed] (\c,0) circle (.9pt);
-        }
-      \end{tikzpicture}
-    \end{center}
+    \vspace{37pt}
+    \begin{center}\kbpartart{#4}\end{center}
     \vfill
     {\hfill\kbdisplay\fontsize{74}{74}\selectfont\color{KernelBlue!10}#1\par}}
   \cleardoublepage
 }
 
 % The preliminary material is a reference division, not "Part 0".
-\newcommand{\kbpartreference}[2]{%
+\newcommand{\kbpartreference}[3]{%
   \cleardoublepage
   \thispagestyle{empty}%
   \phantomsection
@@ -266,17 +314,8 @@
     \begin{addmargin}[0pt]{1.0cm}
       {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #2\par}
     \end{addmargin}
-    \vspace{43pt}
-    \begin{center}
-      \begin{tikzpicture}[x=1cm,y=1cm]
-        \draw[KernelRule,line width=.45pt] (0,0) -- (7.5,0);
-        \foreach \c/\h/\op in {.7/.7/30,1.9/1.05/45,3.2/1.4/62,4.5/1.15/50,5.8/.85/38,6.8/.58/28}{
-          \draw[KernelBlue!\op,line width=.65pt,samples=42,smooth,domain=0:7.5]
-            plot (\x,{\h*exp(-1.2*(\x-\c)^2)});
-          \fill[KernelRed] (\c,0) circle (.9pt);
-        }
-      \end{tikzpicture}
-    \end{center}
+    \vspace{37pt}
+    \begin{center}\kbpartart{#3}\end{center}
     \vfill
     {\hfill\kbdisplay\itshape\fontsize{58}{62}\selectfont\color{KernelBlue!9}%
       \(k(\,\cdot\,,x)\)\par}}

@@ -318,6 +318,47 @@
     });
   }
 
+  // ---- executable listings ---------------------------------------------------------
+  function initListings() {
+    function legacyCopy(text) {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      var ok = document.execCommand("copy");
+      area.remove();
+      return ok ? Promise.resolve() : Promise.reject(new Error("copy failed"));
+    }
+    $$(".code-listing .listing-copy").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var listing = button.closest(".code-listing");
+        var code = listing && $("pre code", listing);
+        if (!code) return;
+        var copy = navigator.clipboard && navigator.clipboard.writeText
+          ? navigator.clipboard.writeText(code.textContent)
+          : legacyCopy(code.textContent);
+        copy.then(function () {
+          button.textContent = "Copied";
+          button.dataset.copied = "true";
+          window.setTimeout(function () {
+            button.textContent = "Copy";
+            delete button.dataset.copied;
+          }, 1400);
+        }).catch(function () {
+          button.textContent = "Select code";
+          var range = document.createRange();
+          range.selectNodeContents(code);
+          var selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        });
+      });
+    });
+  }
+
   // ---- details: open a targeted proof; open everything for print ---------------------
   function initDetails() {
     // following a link into a collapsed proof should reveal it
@@ -344,7 +385,7 @@
   function boot() {
     initTheme(); initDrawer(); initSearch();
     wireCites(); wireSpy(); initAnchors(); initToc();
-    initProgress(); initBacktop(); initKeys(); initTables(); initDetails();
+    initProgress(); initBacktop(); initKeys(); initTables(); initListings(); initDetails();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();

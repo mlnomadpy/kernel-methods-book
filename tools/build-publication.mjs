@@ -4,10 +4,21 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import matter from "gray-matter";
 import { parse as parseYaml } from "yaml";
+import { readCanonicalChapter, renderCanonicalMarkdown } from "../src/lib/manuscript.js";
+import { mergeBookObjectReferences, numberBookObjects } from "../src/lib/numbering.js";
 
 const root = process.cwd();
 const format = process.argv[2];
 if (!new Set(["pdf", "epub"]).has(format)) throw new Error("Usage: node tools/build-publication.mjs pdf|epub");
+if (format === "pdf") {
+  // The reader PDF begins with the same vector TikZ front used by the print
+  // wrap. Build that canonical cover before Pandoc/LuaLaTeX so book.tex can
+  // include its cropped front panel as page one without rasterization.
+  execFileSync(process.execPath, [path.join(root, "tools", "build-cover.mjs")], {
+    cwd: root,
+    stdio: "inherit",
+  });
+}
 const book = parseYaml(fs.readFileSync(path.join(root, "book.yml"), "utf8"));
 const publication = JSON.parse(fs.readFileSync(path.join(root, "publication.json"), "utf8"));
 const publicationAuthors = (publication.authors || [])
@@ -27,6 +38,115 @@ const chapterMap = new Map(chapters.map((chapter, index) => [chapter.slug, {
   label: chapter.src === "ch-prelim" ? "Preliminaries" : `Chapter ${index}`,
   title: chapter.title,
 }]));
+const chapterNumber = new Map(chapters.map((chapter, index) => [
+  chapter.slug,
+  chapter.src === "ch-prelim" ? "P" : String(index),
+]));
+
+// Use exactly the same semantic object registry as the web build. This keeps
+// Equation/Figure/Table references stable across HTML, PDF, and EPUB even when
+// chapters are reordered.
+const publicationObjectReferences = mergeBookObjectReferences(chapters.map((chapter, index) => {
+  const body = renderCanonicalMarkdown(readCanonicalChapter(chapter.src).markdown);
+  return numberBookObjects(body, {
+    chapterLabel: chapter.src === "ch-prelim" ? "P" : String(index),
+    chapterSlug: chapter.slug,
+    chapterTitle: chapter.title,
+  }).refs;
+}));
+
+function expandPublicationObjectReferences(source, currentSlug) {
+  return source.replace(
+    /\[\[(eq|fig|tbl|lst):([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g,
+    (whole, type, label, custom) => {
+      const aliases = type === "fig" ? [label, `fig-${label}`] : [label];
+      const record = aliases.map((key) => publicationObjectReferences.get(key)).find(Boolean);
+      if (!record) throw new Error(`${currentSlug}: unknown ${type} reference '${label}'`);
+      const text = custom || `${record.kind} ${record.number}`;
+      if (format === "pdf" && !custom) return `${record.kind} \\ref{${record.id}}`;
+      const href = record.chapterSlug === currentSlug
+        ? `#${record.id}`
+        : `#${record.id}`;
+      return `[${text}](${href})`;
+    },
+  );
+}
+
+function nearestMarkdownSection(source, offset, chapterTitle) {
+  const headings = [...source.slice(0, offset).matchAll(/^#{2,3}\s+(.+?)(?:\s+\{#[^}]+\})?\s*$/gm)];
+  return (headings.at(-1)?.[1] || chapterTitle || "Executable check")
+    .replace(/[*_`]/g, "")
+    .trim();
+}
+
+function publicationListingLanguage(language) {
+  const labels = { py: "Python", python: "Python", sh: "Shell", bash: "Shell", json: "JSON", yaml: "YAML", yml: "YAML", text: "Output" };
+  return labels[language] || language.replace(/(^|-)([a-z])/g, (_, space, letter) => `${space ? " " : ""}${letter.toUpperCase()}`);
+}
+
+function numberPublicationListings(source, chapter) {
+  let count = 0;
+  return source.replace(
+    /^```([a-z0-9-]+)[ \t]*\n([\s\S]*?)^```[ \t]*(?:\n\{#(lst-[a-z0-9-]+)\s+caption="([^"]+)"\})?/gm,
+    (whole, language, code, explicitId, explicitCaption, offset) => {
+      count += 1;
+      const number = `${chapterNumber.get(chapter.slug)}.${count}`;
+      const id = explicitId || `lst-${chapter.slug}-${count}`;
+      const caption = explicitCaption || `${nearestMarkdownSection(source, offset, chapter.title)}: executable check`;
+      const languageLabel = publicationListingLanguage(language);
+      const displayedCaption = format === "pdf" ? caption : `Listing ${number}. ${caption}`;
+      return (
+        `::: {#${id} .code-listing data-number="${number}" data-language="${languageLabel}"}\n` +
+        `[${displayedCaption}]{.listing-caption}\n\n` +
+        `\`\`\`${language}\n${code}\`\`\`\n` +
+        `:::`
+      );
+    },
+  );
+}
+
+function numberPublicationEquations(source, chapter) {
+  const protectedCode = [];
+  source = source.replace(/(^|\n)([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?\n\2\3(?=\n|$)/g,
+    (value) => {
+      const token = `\u0000KBPUBCODE${protectedCode.length}\u0000`;
+      protectedCode.push([token, value]);
+      return token;
+    });
+  let count = 0;
+  source = source.replace(
+    /\$\$([\s\S]*?)\$\$(?:[ \t]*\n[ \t]*\{#(eq-[a-z0-9-]+)\})?/g,
+    (whole, math, explicitId, offset) => {
+      count += 1;
+      const number = `${chapterNumber.get(chapter.slug)}.${count}`;
+      const id = explicitId || `eq-${chapter.slug}-${count}`;
+      const lineStart = source.lastIndexOf("\n", offset) + 1;
+      const before = source.slice(lineStart, offset);
+      const indent = /^[ \t]*$/.test(before) ? before : "";
+      if (format === "pdf") {
+        const equationBody = math.trim().split("\n").map((line) => `${indent}${line}`).join("\n");
+        // Raw amsmath is used here because Pandoc's TeX-math reader rejects
+        // \tag/\label inside $$...$$ and would emit literal dollar signs.
+        // The equation counter is already chapter-scoped, including the P
+        // namespace of the reference chapter.
+        return (
+          `\\begin{equation}\n` +
+          `${indent}\\label{${id}}\n` +
+          `${equationBody}\n` +
+          `${indent}\\end{equation}`
+        );
+      }
+      return (
+        `::: {#${id} .numbered-equation}\n` +
+        `${indent}$$${math}$$\n` +
+        `${indent}[(${number})](#${id}){.equation-number}\n` +
+        `${indent}:::`
+      );
+    },
+  );
+  for (const [token, value] of protectedCode) source = source.split(token).join(value);
+  return source;
+}
 
 // Exercise and proof list items often carry a column-0 `$$…$$` display-math
 // block. Pandoc reads the un-indented block as ending the list, so every
@@ -98,13 +218,18 @@ function convertInlineMath(s) {
 // delimiter-based *pipe table* here, while the
 // dash rule still marks the original column positions; pipe tables are immune
 // to the width change, so `+pipe_tables` can then parse them safely.
-function convertSimpleTablesToPipe(md) {
+function convertSimpleTablesToPipe(md, chapter) {
   const lines = md.split("\n");
   const out = [];
   const ruleRe = /^\s*-{3,}(?:\s+-{3,})+\s*$/;   // >=2 dash groups: a table rule
   let i = 0;
+  let tableNumber = 0;
+  let sectionTitle = chapter.title;
   while (i < lines.length) {
+    const heading = lines[i].match(/^#{2,3}\s+(.+?)(?:\s+\{#[^}]+\})?\s*$/);
+    if (heading) sectionTitle = heading[1].replace(/[*_`]/g, "").trim();
     if (ruleRe.test(lines[i])) {
+      tableNumber += 1;
       const ncol = (lines[i].match(/-{3,}/g) || []).length;
       const indent = lines[i].match(/^\s*/)[0];   // keep the table at its list/div depth
       // The migrated cells are separated by runs of 2+ spaces but are NOT padded
@@ -135,6 +260,17 @@ function convertSimpleTablesToPipe(md) {
       while (j < lines.length && lines[j].trim() !== "" && !ruleRe.test(lines[j]) && !fenceRe.test(lines[j]))
         rows.push(toCells(lines[j++]));
       if (j < lines.length && ruleRe.test(lines[j])) j++;   // consume a closing rule if present
+      // A semantic table label may follow after the blank line Pandoc requires.
+      let marker = j;
+      while (marker < lines.length && lines[marker].trim() === "") marker++;
+      const explicit = lines[marker]?.trim().match(/^\{#(tbl-[a-z0-9-]+)\}$/)?.[1];
+      if (explicit) {
+        j = marker + 1;
+        while (j < lines.length && lines[j].trim() === "") j++;
+      }
+      const id = explicit || `tbl-${chapter.slug}-${tableNumber}`;
+      const number = `${chapterNumber.get(chapter.slug)}.${tableNumber}`;
+      const caption = `${format === "epub" ? `Table ${number}. ` : ""}${sectionTitle} {#${id}}`;
       const pipe = (cells) => indent + "| " + cells.join(" | ") + " |";
       // Size columns by their widest cell so wide math (e.g. a quotient kernel)
       // gets enough room instead of overflowing a narrow equal-width column into
@@ -146,7 +282,7 @@ function convertSimpleTablesToPipe(md) {
       });
       const sep = indent + "| " + widths.map((w) => "-".repeat(w)).join(" | ") + " |";
       if (out.length && out[out.length - 1].trim() !== "") out.push("");
-      out.push(pipe(header), sep, ...rows.map(pipe), "");
+      out.push(pipe(header), sep, ...rows.map(pipe), `: ${caption}`, "");
       i = j;
       continue;
     }
@@ -157,7 +293,7 @@ function convertSimpleTablesToPipe(md) {
 
 function publicationMarkdown(chapter) {
   let source = matter(fs.readFileSync(path.join(root, "manuscript", "chapters", `${chapter.src}.md`), "utf8")).content;
-  source = convertSimpleTablesToPipe(source);
+  source = convertSimpleTablesToPipe(source, chapter);
   source = indentDisplayMathInLists(source);
   // The manuscript writes straight quotes as `\"`. The markdown escape
   // suppresses smart typography, so the print edition shows typewriter quotes.
@@ -193,13 +329,18 @@ function publicationMarkdown(chapter) {
         caption = cap ? cap[1] : "";
       }
       caption = caption.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+      const figureRecord = publicationObjectReferences.get(widget);
+      if (!figureRecord) throw new Error(`${chapter.src}: no number registered for figure ${widget}`);
+      const publicationCaption = format === "epub"
+        ? `Figure ${figureRecord.number}. ${caption}`
+        : caption;
       // PDF and web/EPUB plates are generated from the same Python figure.
       const pdfPlate = path.join(root, record.print);
       const webPlate = path.join(root, record.web);
       if (format === "pdf" && fs.existsSync(pdfPlate))
-        return `\n\n![${caption}](${record.print})\n\n`;
+        return `\n\n![${publicationCaption}](${record.print}){#${figureRecord.id}}\n\n`;
       if (format === "epub" && fs.existsSync(webPlate))
-        return `\n\n![${caption}](${record.web})\n\n`;
+        return `\n\n![${publicationCaption}](${record.web}){#${figureRecord.id}}\n\n`;
       return `> **Interactive figure (${widget}).** ${caption} The interactive version is available in the web edition.`;
     });
   // Static-first figures use the same id for the SVG web/EPUB asset and PDF
@@ -215,12 +356,17 @@ function publicationMarkdown(chapter) {
         .replace(/\s+/g, " ")
         .trim();
       if (!caption) throw new Error(`${chapter.src}: static figure ${figure} needs a figcaption`);
+      const figureRecord = publicationObjectReferences.get(figure);
+      if (!figureRecord) throw new Error(`${chapter.src}: no number registered for figure ${figure}`);
+      const publicationCaption = format === "epub"
+        ? `Figure ${figureRecord.number}. ${caption}`
+        : caption;
       const pdfPlate = path.join(root, record.print);
       const webPlate = path.join(root, record.web);
       if (format === "pdf" && fs.existsSync(pdfPlate))
-        return `\n\n![${caption}](${record.print})\n\n`;
+        return `\n\n![${publicationCaption}](${record.print}){#${figureRecord.id}}\n\n`;
       if (format === "epub" && fs.existsSync(webPlate))
-        return `\n\n![${caption}](${record.web})\n\n`;
+        return `\n\n![${publicationCaption}](${record.web}){#${figureRecord.id}}\n\n`;
       throw new Error(`${chapter.src}: static figure ${figure} is missing its ${format} plate`);
     },
   );
@@ -228,19 +374,30 @@ function publicationMarkdown(chapter) {
     const target = chapterMap.get(slug);
     return custom || (target ? `${target.label}, ${target.title}` : slug);
   });
+  source = numberPublicationListings(source, chapter);
+  source = numberPublicationEquations(source, chapter);
+  source = expandPublicationObjectReferences(source, chapter.slug);
   // A few proof exercises use raw LaTeX \ref commands inside inline math.
   // Prefix those labels just like Markdown fragment links and heading ids.
   source = source.replace(/\\ref\{([a-z][a-z0-9-]*)\}/g,
-    (_, id) => `\\ref{${chapter.slug}-${id}}`);
+    (_, id) => /^(?:eq|fig|tbl|lst)-/.test(id) ? `\\ref{${id}}` : `\\ref{${chapter.slug}-${id}}`);
   source = convertInlineMath(source);
   source = source.replace(/\\lt(?![A-Za-z])/g, "<").replace(/\\gt(?![A-Za-z])/g, ">");
   // Chapter-local web anchors are intentionally preserved there. Prefix them
   // only in the single-file formats, where repeated ids such as `summary` and
   // `exercises` would otherwise collide.
   source = source.replace(/\]\(#([a-z][a-z0-9-]*)\)/g,
-    (_, id) => `](#${chapter.slug}-${id})`);
+    (_, id) => /^(?:eq|fig|tbl|lst)-/.test(id) ? `](#${id})` : `](#${chapter.slug}-${id})`);
   source = source.replace(/\{([^}\n]*?)#([a-z][a-z0-9-]*)([^}\n]*)\}/g,
-    (_, before, id, after) => `{${before}#${chapter.slug}-${id}${after}}`);
+    (_, before, id, after) => /^(?:eq|fig|tbl|lst)-/.test(id)
+      ? `{${before}#${id}${after}}`
+      : `{${before}#${chapter.slug}-${id}${after}}`);
+  // Raw HTML anchor spans are also chapter-local. Pandoc preserves their ids,
+  // so keep them in lockstep with the Markdown fragment links above.
+  source = source.replace(/\bid="([a-z][a-z0-9-]*)"/g,
+    (_, id) => /^(?:eq|fig|tbl|lst)-/.test(id)
+      ? `id="${id}"`
+      : `id="${chapter.slug}-${id}"`);
   source = source.replace(/\(([^)]+)\.html(?:#[^)]+)?\)/g, "($1.html)");
   return source.trim();
 }
@@ -270,8 +427,9 @@ function partOpener(part) {
   const [numeral, ...rest] = part.part.split("·").map((s) => s.trim());
   const title = rest.join(" · ") || numeral;
   if (part.chapters[0]?.src === "ch-prelim")
-    return `\\kbpartreference{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
-  return `\\kbpart{${texEscape(numeral)}}{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
+    return `\\kbpartreference{${texEscape(title)}}{${texEscape(part.intro || "")}}{reference}`;
+  const artId = `part-${numeral.toLowerCase()}`;
+  return `\\kbpart{${texEscape(numeral)}}{${texEscape(title)}}{${texEscape(part.intro || "")}}{${artId}}`;
 }
 
 const header = `---
@@ -305,7 +463,10 @@ const pdfMainmatter = book.parts.flatMap((part) => {
   return [
     partOpener(part),
     ...(isReference ? ["\\kbpreliminariesmode"] : []),
-    ...part.chapters.map(publicationMarkdown),
+    ...part.chapters.flatMap((chapter) => [
+      `\\kbchapterartset{${texEscape(chapter.src)}}`,
+      publicationMarkdown(chapter),
+    ]),
     ...(isReference ? ["\\kbmainmattermode"] : []),
   ];
 });
@@ -380,7 +541,8 @@ if (format === "pdf") {
 }
 if (format === "epub") common.push(
   "--toc",
-  "--epub-cover-image", path.join(root, "publication", "cover.svg"),
+  "--epub-cover-image", path.join(root, "publication", "cover.png"),
+  "--css", path.join(root, "publication", "epub.css"),
 );
 // LuaLaTeX needs a writable font cache. CI and sandboxed agent environments do
 // not expose the user-level TeX cache, so keep the cache project-local and
@@ -406,6 +568,15 @@ if (format === "pdf") {
   // Keep the surrounding engine conditional intact: empty branches are valid
   // TeX and this is robust to Pandoc changing the order of Babel's options.
   const generatedTex = fs.readFileSync(texPath, "utf8")
+    // Pandoc wraps \maketitle in its own frontmatter/mainmatter transition.
+    // The TikZ cover already occupies page one and our canonical Markdown
+    // starts frontmatter explicitly, so remove that duplicate wrapper. This
+    // lets the colophon use the cover verso instead of forcing a blank leaf and
+    // an obsolete second title composition.
+    .replace(
+      /\\begin\{document\}\s*\\frontmatter\s*\\maketitle\s*\\mainmatter/,
+      "\\begin{document}\n\\maketitle",
+    )
     .replace(
       /^\\usepackage\[[^\]]*\]\{babel\}\s*$/gm,
       "% Babel omitted: monolingual LTR publication",
@@ -417,6 +588,10 @@ if (format === "pdf") {
       "% Babel language declaration omitted",
     );
   fs.writeFileSync(texPath, generatedTex);
+  execFileSync(process.execPath, [path.join(root, "tools", "check-publication-tex.mjs"), texPath], {
+    cwd: root,
+    stdio: "inherit",
+  });
   execFileSync("latexmk", [
     "-lualatex",
     ...(process.env.PDF_DEBUG ? [] : ["-silent"]),
@@ -435,6 +610,16 @@ if (format === "pdf") {
       TEXMFCACHE: texCache,
     },
   });
+  execFileSync(process.execPath, [
+    path.join(root, "tools", "check-publication-tex.mjs"),
+    texPath,
+    "--log",
+    path.join(buildDir, "book.log"),
+  ], { cwd: root, stdio: "inherit" });
   fs.copyFileSync(path.join(buildDir, "book.pdf"), outputPath);
+  execFileSync(process.execPath, [
+    path.join(root, "tools", "check-chapter-openers.mjs"),
+    outputPath,
+  ], { cwd: root, stdio: "inherit" });
 }
 console.log(`Built ${path.relative(root, outputPath)}.`);

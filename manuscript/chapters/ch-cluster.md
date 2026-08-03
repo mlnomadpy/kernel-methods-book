@@ -233,8 +233,9 @@ The key observation is that these constraints force an orthonormality relation. 
 $$
 D^{1/2} A^\top A \, D^{1/2} = I,
 $$
+{#eq-clustering-assignment-orthonormality}
 
-because \(A^\top A\) is the diagonal matrix of cluster sizes and \(D\) inverts exactly those sizes (again a short exercise). Now set \(Z = A D^{1/2} \in \mathbb{R}^{n \times k}\). The objective is \(\operatorname{trace}(Z^\top K Z)\) and the identity above reads \(Z^\top Z = I\). The *relaxation* consists of dropping the rigid constraints \((\star)\) and \((\star\star)\) on \(A\) and \(D\) and keeping only this orthonormality, letting \(Z\) range over all real matrices with orthonormal columns:
+because \(A^\top A\) is the diagonal matrix of cluster sizes and \(D\) inverts exactly those sizes (again a short exercise). Now set \(Z = A D^{1/2} \in \mathbb{R}^{n \times k}\). The objective is \(\operatorname{trace}(Z^\top K Z)\), and [[eq:eq-clustering-assignment-orthonormality]] becomes \(Z^\top Z = I\). The *relaxation* consists of dropping the rigid constraints \((\star)\) and \((\star\star)\) on \(A\) and \(D\) and keeping only this orthonormality, letting \(Z\) range over all real matrices with orthonormal columns:
 
 $$
 \max_{Z \in \mathbb{R}^{n \times k}} \ \operatorname{trace}\!\big(Z^\top K Z \big) \quad \text{s.t.} \quad Z^\top Z = I.

@@ -94,15 +94,7 @@ exercises:
   - number: 7
     kind: exploration
     status: draft
-    prompt: "Open the interactive SVM figure above and drag the training points. Begin with two
-      well-separated clouds and note which points light up as support vectors, those sitting on or
-      inside the margin band, and which drop out with \\(\\alpha_i = 0\\). Now drag a single point
-      across the boundary into the opposing cloud and watch it become a margin error pinned against
-      the top of the box. Next sweep the \\(C\\) control: raise \\(C\\) (weaken regularization) and
-      describe how the band narrows and the support set shrinks toward the borderline points; lower
-      \\(C\\) and watch the band widen and gather more support vectors. Finally switch the kernel
-      from linear to Gaussian and observe how the boundary bends around each cloud. Match each
-      behaviour you see to one of the three KKT regimes."
+    prompt: "Open [[fig:svm-margin]] and drag the training points. Begin with two well-separated clouds and note which points light up as support vectors, those sitting on or inside the margin band, and which drop out with \\(\\alpha_i = 0\\). Now drag a single point across the boundary into the opposing cloud and watch it become a margin error pinned against the top of the box. Next sweep the \\(C\\) control: raise \\(C\\) (weaken regularization) and describe how the band narrows and the support set shrinks toward the borderline points; lower \\(C\\) and watch the band widen and gather more support vectors. Finally switch the kernel from linear to Gaussian and observe how the boundary bends around each cloud. Match each behaviour you see to one of the three KKT regimes."
     answer: "Expected observation: well-separated clouds leave only the closest boundary points with
       interior nonzero coefficients; points beyond the margin have alpha=0. A dragged point placed
       inside or across the wrong margin becomes a capped coefficient and positive-slack error.

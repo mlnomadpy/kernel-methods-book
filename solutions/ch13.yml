@@ -119,17 +119,7 @@ exercises:
   - number: 7
     kind: exploration
     status: draft
-    prompt: "Open the interactive figure above in the random Fourier features section. It plots the
-      Gaussian kernel \\(\\kappa(\\mathbf{x} - \\mathbf{y})\\) against its random-feature estimate
-      as a function of the gap \\(\\mathbf{x} - \\mathbf{y}\\), and reports the running RMSE to the
-      true kernel. (a) Start at a small feature count \\(D\\): the estimate is jagged and the RMSE
-      is large. Raise \\(D\\) and watch the finite average settle onto the smooth exact kernel while
-      the RMSE falls. (b) The estimate is an average of \\(D\\) i.i.d. bounded terms, so from that
-      fact alone, what rate should the RMSE follow in \\(D\\), and by what factor must you raise
-      \\(D\\) to halve the error? (c) Redraw at fixed \\(D\\): the curve wiggles differently because
-      the frequencies are resampled. What does that resampling illustrate about the gap between the
-      pointwise variance of a single estimate and the uniform, distribution-free guarantee of the
-      Rahimi and Recht theorem?"
+    prompt: "Reproduce the random-feature side of the scaling comparison in [[fig:scaling-cost-frontier]] with a one-dimensional Gaussian kernel. Plot \\(\\kappa(\\mathbf{x}-\\mathbf{y})\\) against its random-feature estimate as a function of the gap and report the RMSE. (a) Raise the feature count \\(D\\) and watch the finite average settle onto the exact kernel. (b) Since the estimate averages \\(D\\) i.i.d. bounded terms, derive the RMSE rate in \\(D\\) and determine how much \\(D\\) must grow to halve the error. (c) Resample at fixed \\(D\\) and explain what the changed curve shows about pointwise estimator variance versus the uniform, distribution-free guarantee of the Rahimi and Recht theorem."
     answer: The random-feature estimate is an average of D independent bounded terms, so pointwise
       standard deviation and typical RMSE scale as D^{-1/2}. Halving error therefore requires about
       four times as many features. At fixed D, redrawing frequencies changes the finite Monte Carlo
