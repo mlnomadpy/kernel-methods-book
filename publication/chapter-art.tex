@@ -20,9 +20,22 @@
 
 \newcommand{\kbchapterartid}{ch00}
 \newcommand{\kbchapterartset}[1]{\gdef\kbchapterartid{#1}}
-\newcommand{\kbartlabel}[1]{%
+\newcommand{\kbartlabelright}[1]{%
   \node[anchor=east,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
     at (11.25,1.68) {#1};}
+\newcommand{\kbartlabelleft}[1]{%
+  \node[anchor=west,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (0,1.68) {#1};}
+\newcommand{\kbartlabelbottom}[1]{%
+  \node[anchor=east,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (11.25,.05) {#1};}
+\newcommand{\kbartlabelcenter}[1]{%
+  \node[anchor=south,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (5.625,1.55) {#1};}
+\newcommand{\kbartlabelvertical}[1]{%
+  \node[anchor=south,rotate=90,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]
+    at (11.12,.10) {#1};}
+\let\kbartlabel\kbartlabelright
 \newcommand{\kbartDeclare}[2]{\expandafter\def\csname kbart@#1\endcsname{#2}}
 
 % A quiet fallback for future chapters.  Existing chapters must all dispatch to
@@ -43,6 +56,164 @@
     \fi
   \end{tikzpicture}%
 }
+
+% ── Editorial compositions ───────────────────────────────────────────────────
+% The semantic drawings above are only one layer of identity.  These layouts
+% deliberately change the scale, reading direction, title alignment, label
+% anchor, and surrounding field so adjacent chapters never present the same
+% silhouette.  Structural typography remains stable enough to navigate.
+\newcommand{\kbchaptertitlefull}[1]{%
+  {\raggedright\kbdisplay\bfseries\fontsize{27}{32}\selectfont #1\par}}
+\newcommand{\kbchaptertitlesplit}[1]{%
+  {\raggedright\kbdisplay\bfseries\fontsize{24}{29}\selectfont #1\par}}
+\newcommand{\kbchapterlayoutDeclare}[2]{%
+  \expandafter\def\csname kblayoutid@#1\endcsname{#2}}
+
+% A classical title followed by a wide conceptual horizon.
+\newcommand{\kblayouthorizon}[2]{%
+  \let\kbartlabel\kbartlabelright
+  \kbchaptertitlefull{#2}\vspace{14pt}%
+  \resizebox{\textwidth}{!}{\kbchapterart}\par}
+
+% The chapter announces its mathematical object before naming it.
+\newcommand{\kblayoutartfirst}[2]{%
+  \let\kbartlabel\kbartlabelleft
+  \resizebox{\textwidth}{!}{\kbchapterart}\par\vspace{12pt}%
+  \kbchaptertitlefull{#2}}
+
+% Title and object face one another across a narrow editorial gutter.
+\newcommand{\kblayoutsplitright}[2]{%
+  \let\kbartlabel\kbartlabelbottom
+  \noindent\begin{minipage}[c]{.57\textwidth}
+    \kbchaptertitlesplit{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.38\textwidth}
+    \resizebox{\linewidth}{!}{\kbchapterart}
+  \end{minipage}\par}
+
+\newcommand{\kblayoutsplitleft}[2]{%
+  \let\kbartlabel\kbartlabelvertical
+  \noindent\begin{minipage}[c]{.39\textwidth}
+    \resizebox{\linewidth}{!}{\kbchapterart}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.56\textwidth}
+    \kbchaptertitlesplit{#2}
+  \end{minipage}\par}
+
+% A centered atlas plate for chapters whose object is geometric or spatial.
+\newcommand{\kblayoutatlas}[2]{%
+  \let\kbartlabel\kbartlabelcenter
+  \begin{center}
+    {\kbdisplay\bfseries\fontsize{26}{31}\selectfont #2\par}%
+    \vspace{14pt}%
+    \colorbox{KernelBlue!4}{\parbox{.88\textwidth}{%
+      \centering\vspace{8pt}\resizebox{.94\linewidth}{!}{\kbchapterart}\vspace{7pt}}}%
+  \end{center}}
+
+% The chapter number becomes a pale coordinate field, not a badge.
+\newcommand{\kblayoutnumberfield}[2]{%
+  \let\kbartlabel\kbartlabelbottom
+  \noindent\makebox[0pt][l]{%
+    \raisebox{-17pt}[0pt][0pt]{\kbdisplay\fontsize{82}{82}\selectfont\color{KernelBlue!8}#1}}%
+  \begin{addmargin}[1.38cm]{0pt}
+    \kbchaptertitlefull{#2}\vspace{13pt}%
+    \resizebox{.92\linewidth}{!}{\kbchapterart}\par
+  \end{addmargin}}
+
+% A bounded plate suits algorithms, operators, and diagnostic machinery.
+\newcommand{\kblayoutplate}[2]{%
+  \let\kbartlabel\kbartlabelleft
+  \noindent\fcolorbox{KernelRule}{KernelBlue!3}{%
+    \parbox{.955\textwidth}{%
+      \vspace{10pt}\hspace{10pt}%
+      \parbox{.91\linewidth}{\kbchaptertitlefull{#2}\vspace{11pt}%
+      \resizebox{\linewidth}{!}{\kbchapterart}}%
+      \vspace{9pt}}}\par}
+
+% A strong vertical rail turns long, process-oriented titles into a sequence.
+\newcommand{\kblayoutrail}[2]{%
+  \let\kbartlabel\kbartlabelvertical
+  \noindent{\color{KernelAccent}\rule{2.2pt}{2.20cm}}\hspace{12pt}%
+  \begin{minipage}[b]{.92\textwidth}\color{KernelInk}
+    \kbchaptertitlefull{#2}\vspace{11pt}%
+    \resizebox{.96\linewidth}{!}{\kbchapterart}
+  \end{minipage}\par}
+
+\newcommand{\kbchaptercompose}[2]{%
+  \begingroup
+  \ifcsname kblayoutid@\kbchapterartid\endcsname
+    \edef\kbselectedlayout{\csname kblayoutid@\kbchapterartid\endcsname}%
+  \else
+    \def\kbselectedlayout{horizon}%
+  \fi
+  \csname kblayout\kbselectedlayout\endcsname{#1}{#2}%
+  \endgroup}
+
+% Every assignment is deliberate: split layouts are reserved for short titles;
+% long titles get the full measure, spatial subjects get atlas plates, and
+% process/algorithm chapters get rails or bounded machinery plates.
+\kbchapterlayoutDeclare{ch-prelim}{atlas}
+\kbchapterlayoutDeclare{ch00}{horizon}
+\kbchapterlayoutDeclare{ch01}{splitleft}
+\kbchapterlayoutDeclare{ch02}{splitright}
+\kbchapterlayoutDeclare{ch03}{artfirst}
+\kbchapterlayoutDeclare{ch05}{numberfield}
+\kbchapterlayoutDeclare{ch-svr}{plate}
+\kbchapterlayoutDeclare{ch-oneclass}{atlas}
+\kbchapterlayoutDeclare{ch-ranking}{rail}
+\kbchapterlayoutDeclare{ch-structured}{horizon}
+\kbchapterlayoutDeclare{ch-solve}{plate}
+\kbchapterlayoutDeclare{ch-online}{splitright}
+\kbchapterlayoutDeclare{ch13}{numberfield}
+\kbchapterlayoutDeclare{ch-randomized}{rail}
+\kbchapterlayoutDeclare{ch04}{splitleft}
+\kbchapterlayoutDeclare{ch-vc}{artfirst}
+\kbchapterlayoutDeclare{ch07}{horizon}
+\kbchapterlayoutDeclare{ch-inverse}{plate}
+\kbchapterlayoutDeclare{ch-approx}{atlas}
+\kbchapterlayoutDeclare{ch-universal}{splitright}
+\kbchapterlayoutDeclare{ch-lower}{numberfield}
+\kbchapterlayoutDeclare{ch-modern}{artfirst}
+\kbchapterlayoutDeclare{ch06}{splitleft}
+\kbchapterlayoutDeclare{ch-cluster}{atlas}
+\kbchapterlayoutDeclare{ch-cca}{plate}
+\kbchapterlayoutDeclare{ch-discriminant}{splitright}
+\kbchapterlayoutDeclare{ch-mds}{artfirst}
+\kbchapterlayoutDeclare{ch-manifold}{rail}
+\kbchapterlayoutDeclare{ch08}{horizon}
+\kbchapterlayoutDeclare{ch-invariance}{atlas}
+\kbchapterlayoutDeclare{ch-splines}{artfirst}
+\kbchapterlayoutDeclare{ch-spatial}{plate}
+\kbchapterlayoutDeclare{ch09}{splitleft}
+\kbchapterlayoutDeclare{ch-strings2}{splitright}
+\kbchapterlayoutDeclare{ch-text}{numberfield}
+\kbchapterlayoutDeclare{ch10}{atlas}
+\kbchapterlayoutDeclare{ch-generative}{horizon}
+\kbchapterlayoutDeclare{ch-signature}{rail}
+\kbchapterlayoutDeclare{ch-geom}{splitleft}
+\kbchapterlayoutDeclare{ch-operator}{plate}
+\kbchapterlayoutDeclare{ch-krein}{artfirst}
+\kbchapterlayoutDeclare{ch11}{horizon}
+\kbchapterlayoutDeclare{ch-testing}{numberfield}
+\kbchapterlayoutDeclare{ch-ot}{atlas}
+\kbchapterlayoutDeclare{ch-quad}{splitleft}
+\kbchapterlayoutDeclare{ch-cme}{plate}
+\kbchapterlayoutDeclare{ch-ksd}{artfirst}
+\kbchapterlayoutDeclare{ch-causal}{splitright}
+\kbchapterlayoutDeclare{ch-distreg}{rail}
+\kbchapterlayoutDeclare{ch-gp}{atlas}
+\kbchapterlayoutDeclare{ch-bo}{numberfield}
+\kbchapterlayoutDeclare{ch-dynamics}{rail}
+\kbchapterlayoutDeclare{ch-scientific}{plate}
+\kbchapterlayoutDeclare{ch12}{splitleft}
+\kbchapterlayoutDeclare{ch14}{horizon}
+\kbchapterlayoutDeclare{ch-dkl}{splitright}
+\kbchapterlayoutDeclare{ch-rkbs}{artfirst}
+\kbchapterlayoutDeclare{ch-frontier}{numberfield}
+\kbchapterlayoutDeclare{ch-reliability}{atlas}
+\kbchapterlayoutDeclare{ch-apps}{splitleft}
+\kbchapterlayoutDeclare{ch-accountable}{plate}
+\kbchapterlayoutDeclare{ch-highstakes}{rail}
 
 % ── Reference and the language of kernels ────────────────────────────────────
 \kbartDeclare{ch-prelim}{

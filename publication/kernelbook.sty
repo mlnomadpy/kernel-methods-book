@@ -235,18 +235,21 @@
   \renewcommand{\thechapter}{\arabic{chapter}}%
   \renewcommand*{\chaptermarkformat}{\thechapter\autodot\enskip}}
 \renewcommand\chapterlinesformat[3]{%
-  \parindent0pt\raggedright
-  {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}%
-  \vspace{14pt}%
-  \ifstr{#2}{}{}{%
-    {\sffamily\scriptsize\bfseries\color{KernelSpectral}\textls[105]{%
-      \ifkbpreliminaries\MakeUppercase{Reference chapter}%
-      \else\MakeUppercase{Chapter}\space#2\fi}\par}%
-    \vspace{10pt}}%
-  {\kbdisplay\bfseries\fontsize{27}{32}\selectfont #3\par}%
-  \vspace{13pt}%
-  \kbchapterart\par
-  \vspace{2pt}%
+  \parindent0pt\raggedright\noindent
+  % Keep the rule, navigation tag, title, and semantic plate together. Several
+  % asymmetric compositions are taller than the former strip; without this
+  % indivisible block TeX may strand the rule/tag on the preceding page.
+  \begin{minipage}{\textwidth}
+    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}%
+    \vspace{14pt}%
+    \ifstr{#2}{}{}{%
+      {\sffamily\scriptsize\bfseries\color{KernelSpectral}\textls[105]{%
+        \ifkbpreliminaries\MakeUppercase{Reference chapter}%
+        \else\MakeUppercase{Chapter}\space#2\fi}\par}%
+      \vspace{10pt}}%
+    \kbchaptercompose{#2}{#3}%
+    \vspace{2pt}%
+  \end{minipage}%
 }
 \renewcommand*{\chapterformat}{\thechapter}
 \RedeclareSectionCommand[beforeskip=40pt, afterskip=23pt]{chapter}
