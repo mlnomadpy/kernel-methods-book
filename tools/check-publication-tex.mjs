@@ -18,6 +18,18 @@ if (!fs.existsSync(texPath)) {
 
 const book = parseYaml(fs.readFileSync(path.join(root, "book.yml"), "utf8"));
 const chapters = book.parts.flatMap((part) => part.chapters);
+const chapterArtPath = path.join(root, "publication", "chapter-art.tex");
+if (!fs.existsSync(chapterArtPath)) errors.push("missing publication/chapter-art.tex");
+else {
+  const chapterArt = fs.readFileSync(chapterArtPath, "utf8");
+  const declaredArt = [...chapterArt.matchAll(/\\kbartDeclare\{([^}]+)\}/g)].map((match) => match[1]);
+  const duplicateArt = [...new Set(declaredArt.filter((id, index) => declaredArt.indexOf(id) !== index))];
+  const missingArt = chapters.map((chapter) => chapter.src).filter((src) => !declaredArt.includes(src));
+  const orphanArt = declaredArt.filter((src) => !chapters.some((chapter) => chapter.src === src));
+  if (duplicateArt.length) errors.push(`duplicate chapter-art ids: ${duplicateArt.join(", ")}`);
+  if (missingArt.length) errors.push(`chapters without individual art: ${missingArt.join(", ")}`);
+  if (orphanArt.length) errors.push(`chapter art without a book.yml chapter: ${orphanArt.join(", ")}`);
+}
 let expectedDisplays = 0;
 for (const chapter of chapters) {
   const file = path.join(root, "manuscript", "chapters", `${chapter.src}.md`);
@@ -29,6 +41,12 @@ for (const chapter of chapters) {
 }
 
 const tex = fs.readFileSync(texPath, "utf8");
+for (const chapter of chapters) {
+  const artSelections = tex.match(new RegExp(`\\\\kbchapterartset\\{${chapter.src}\\}`, "g")) || [];
+  if (artSelections.length !== 1) {
+    errors.push(`${chapter.src}: expected one chapter-art selection in generated TeX, found ${artSelections.length}`);
+  }
+}
 const begins = (tex.match(/\\begin\{equation\}/g) || []).length;
 const ends = (tex.match(/\\end\{equation\}/g) || []).length;
 const equationLabels = (tex.match(/\\label\{eq-[a-z0-9-]+\}/g) || []).length;
@@ -58,4 +76,4 @@ if (errors.length) {
   for (const error of errors) console.error(`ERROR ${error}`);
   process.exit(1);
 }
-console.log(`Publication TeX passed: ${begins} native equation environments with one label each${logPath ? ", no missing glyphs or references" : ""}.`);
+console.log(`Publication TeX passed: ${begins} native equation environments with one label each, ${chapters.length} individual chapter designs${logPath ? ", no missing glyphs or references" : ""}.`);

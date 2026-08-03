@@ -181,35 +181,10 @@
 \renewcommand*{\subsectionformat}{{\color{KernelAccent}\thesubsection}\enskip}
 \renewcommand*{\subsubsectionformat}{{\color{KernelAccent}\thesubsubsection}\enskip}
 
-% A small version of the cover's visual argument.  Chapter openings do not get
-% a wasteful display leaf; the motif instead acts as a compact threshold before
-% the narrative begins.  The highlighted trajectory is the same observation
-% moving from input space to feature geometry.
-\newcommand{\kbchapterlandscape}{%
-  \begin{tikzpicture}[x=1cm,y=1cm,baseline]
-    \fill[KernelBlue!4]
-      (0,.58) .. controls (2.1,1.16) and (3.25,.65) .. (5.20,1.16)
-      .. controls (7.05,1.62) and (9.00,.82) .. (11.25,1.30)
-      -- (11.72,1.71) .. controls (9.10,1.25) and (7.18,2.03) .. (5.16,1.57)
-      .. controls (3.18,1.10) and (2.08,1.57) .. (0,1.00) -- cycle;
-    \foreach \dy/\op in {0/62,.14/42,.28/25}{
-      \draw[KernelBlue!\op,line width=.5pt]
-        (0,{.58+\dy}) .. controls (2.1,{1.16+\dy}) and (3.25,{.65+\dy}) ..
-        (5.20,{1.16+\dy}) .. controls (7.05,{1.62+\dy}) and (9.00,{.82+\dy}) ..
-        (11.25,{1.30+\dy});
-    }
-    \draw[KernelMuted!34,line width=.35pt] (0,.06) -- (11.25,.06);
-    \foreach \x/\tx/\ty in {.35/.67/.79,2.08/2.33/1.02,4.02/4.27/.99,6.10/6.16/1.39,8.22/8.14/1.27,10.72/10.48/1.14}{
-      \draw[KernelBlue!25,line width=.4pt]
-        (\x,.10) .. controls (\x,.38) and (\tx-.15,{\ty-.24}) .. (\tx,\ty);
-      \fill[KernelAccent] (\x,.06) circle (.75pt);
-      \fill[KernelBlue] (\tx,\ty) circle (.65pt);
-    }
-    \fill[white] (6.16,1.39) circle (2.25pt);
-    \draw[KernelAccent,line width=.75pt] (6.16,1.39) circle (1.35pt);
-    \fill[KernelAccent] (6.16,1.39) circle (.55pt);
-  \end{tikzpicture}%
-}
+% Sixty-two semantic chapter signatures live separately so the typography file
+% remains legible. The build sets the signature id immediately before each
+% chapter command; future chapters receive a safe fallback until assigned.
+\input{publication/chapter-art.tex}
 
 % The larger part-opening landscape makes the book's organizing idea explicit:
 % observed points are lifted by comparison into a structured geometry.
@@ -270,7 +245,7 @@
     \vspace{10pt}}%
   {\kbdisplay\bfseries\fontsize{27}{32}\selectfont #3\par}%
   \vspace{13pt}%
-  \kbchapterlandscape\par
+  \kbchapterart\par
   \vspace{2pt}%
 }
 \renewcommand*{\chapterformat}{\thechapter}

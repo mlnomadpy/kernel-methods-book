@@ -462,7 +462,10 @@ const pdfMainmatter = book.parts.flatMap((part) => {
   return [
     partOpener(part),
     ...(isReference ? ["\\kbpreliminariesmode"] : []),
-    ...part.chapters.map(publicationMarkdown),
+    ...part.chapters.flatMap((chapter) => [
+      `\\kbchapterartset{${texEscape(chapter.src)}}`,
+      publicationMarkdown(chapter),
+    ]),
     ...(isReference ? ["\\kbmainmattermode"] : []),
   ];
 });
