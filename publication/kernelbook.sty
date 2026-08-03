@@ -206,9 +206,9 @@
   \renewcommand*{\chaptermarkformat}{\thechapter\autodot\enskip}}
 \renewcommand\chapterlinesformat[3]{%
   \parindent0pt\raggedright\noindent
-  % Keep the rule, navigation tag, title, and semantic plate together. Several
-  % asymmetric compositions are taller than the former strip; without this
-  % indivisible block TeX may strand the rule/tag on the preceding page.
+  % Keep the rule, navigation tag, title, and bounded semantic plate together;
+  % without this indivisible block TeX may strand the rule/tag on the preceding
+  % page even though the illustration itself has a fixed height.
   \begin{minipage}{\textwidth}
     {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}%
     \vspace{14pt}%

@@ -39,25 +39,15 @@ if (!fs.existsSync(chapterArtPath)) errors.push("missing publication/chapter-art
 else {
   const chapterArt = fs.readFileSync(chapterArtPath, "utf8");
   const declaredArt = [...chapterArt.matchAll(/\\kbartDeclare\{([^}]+)\}/g)].map((match) => match[1]);
-  const declaredLayouts = [...chapterArt.matchAll(/\\kbchapterlayoutDeclare\{([^}]+)\}\{([^}]+)\}/g)]
-    .map((match) => ({ src: match[1], layout: match[2] }));
   const duplicateArt = [...new Set(declaredArt.filter((id, index) => declaredArt.indexOf(id) !== index))];
   const missingArt = chapters.map((chapter) => chapter.src).filter((src) => !declaredArt.includes(src));
   const orphanArt = declaredArt.filter((src) => !chapters.some((chapter) => chapter.src === src));
   if (duplicateArt.length) errors.push(`duplicate chapter-art ids: ${duplicateArt.join(", ")}`);
   if (missingArt.length) errors.push(`chapters without individual art: ${missingArt.join(", ")}`);
   if (orphanArt.length) errors.push(`chapter art without a book.yml chapter: ${orphanArt.join(", ")}`);
-  const missingLayouts = chapters.map((chapter) => chapter.src)
-    .filter((src) => !declaredLayouts.some((entry) => entry.src === src));
-  const duplicateLayouts = declaredLayouts.map((entry) => entry.src)
-    .filter((src, index, all) => all.indexOf(src) !== index);
-  const validLayouts = new Set(["horizon", "artfirst", "splitright", "splitleft", "atlas", "numberfield", "plate", "rail"]);
-  const invalidLayouts = declaredLayouts.filter((entry) => !validLayouts.has(entry.layout));
-  const usedLayouts = new Set(declaredLayouts.map((entry) => entry.layout));
-  if (missingLayouts.length) errors.push(`chapters without individual layout: ${missingLayouts.join(", ")}`);
-  if (duplicateLayouts.length) errors.push(`duplicate chapter-layout ids: ${[...new Set(duplicateLayouts)].join(", ")}`);
-  if (invalidLayouts.length) errors.push(`invalid chapter layouts: ${invalidLayouts.map((entry) => `${entry.src}/${entry.layout}`).join(", ")}`);
-  if (usedLayouts.size !== validLayouts.size) errors.push(`chapter layouts use ${usedLayouts.size} of ${validLayouts.size} composition families`);
+  if (!/\\clip \(0,0\) rectangle \(11\.25,1\.78\)/.test(chapterArt)) {
+    errors.push("chapter art is missing its hard clipping boundary");
+  }
 }
 let expectedDisplays = 0;
 for (const chapter of chapters) {
@@ -109,4 +99,4 @@ if (errors.length) {
   for (const error of errors) console.error(`ERROR ${error}`);
   process.exit(1);
 }
-console.log(`Publication TeX passed: ${begins} native equation environments, ${expectedPartArt.length} individual part plates, ${chapters.length} individual chapter designs across 8 compositions${logPath ? ", no missing glyphs or references" : ""}.`);
+console.log(`Publication TeX passed: ${begins} native equation environments, ${expectedPartArt.length} individual part plates, ${chapters.length} clipped chapter designs in one safe composition${logPath ? ", no missing glyphs or references" : ""}.`);

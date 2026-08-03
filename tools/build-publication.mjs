@@ -617,5 +617,9 @@ if (format === "pdf") {
     path.join(buildDir, "book.log"),
   ], { cwd: root, stdio: "inherit" });
   fs.copyFileSync(path.join(buildDir, "book.pdf"), outputPath);
+  execFileSync(process.execPath, [
+    path.join(root, "tools", "check-chapter-openers.mjs"),
+    outputPath,
+  ], { cwd: root, stdio: "inherit" });
 }
 console.log(`Built ${path.relative(root, outputPath)}.`);
