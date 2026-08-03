@@ -186,39 +186,9 @@
 % chapter command; future chapters receive a safe fallback until assigned.
 \input{publication/chapter-art.tex}
 
-% The larger part-opening landscape makes the book's organizing idea explicit:
-% observed points are lifted by comparison into a structured geometry.
-\newcommand{\kbpartlandscape}{%
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    \foreach \u in {0,...,8}
-      \draw[KernelRule!48,line width=.22pt] ({\u*.92},1.02) -- ({\u*.92+1.02},2.32);
-    \fill[KernelBlue!5]
-      (0,1.02) .. controls (1.52,1.56) and (2.48,1.16) .. (3.92,1.72)
-      .. controls (5.26,2.21) and (6.65,1.44) .. (8.04,1.91)
-      -- (8.78,2.61) .. controls (6.91,2.19) and (5.39,2.84) .. (3.89,2.31)
-      .. controls (2.40,1.77) and (1.48,2.13) .. (0,1.62) -- cycle;
-    \foreach \dy/\op in {0/70,.18/48,.36/30,.54/18}{
-      \draw[KernelBlue!\op,line width=.62pt]
-        (0,{1.02+\dy}) .. controls (1.52,{1.56+\dy}) and (2.48,{1.16+\dy}) ..
-        (3.92,{1.72+\dy}) .. controls (5.26,{2.21+\dy}) and (6.65,{1.44+\dy}) ..
-        (8.04,{1.91+\dy});
-    }
-    \draw[KernelMuted!44,line width=.45pt] (0,.12) -- (8.04,.12);
-    \foreach \x/\tx/\ty in {.32/.62/1.31,1.55/1.81/1.50,2.82/3.04/1.49,4.10/4.15/1.81,5.33/5.31/2.02,6.60/6.52/1.82,7.78/7.59/1.77}{
-      \draw[KernelBlue!30,line width=.5pt]
-        (\x,.17) .. controls (\x,.55) and (\tx-.18,{\ty-.34}) .. (\tx,\ty);
-      \fill[KernelAccent] (\x,.12) circle (.9pt);
-      \fill[KernelBlue] (\tx,\ty) circle (.8pt);
-    }
-    \fill[white] (5.31,2.02) circle (2.7pt);
-    \draw[KernelAccent,line width=.85pt] (5.31,2.02) circle (1.6pt);
-    \fill[KernelAccent] (5.31,2.02) circle (.65pt);
-    \node[anchor=west,text=KernelMuted] at (0,-.18)
-      {\kbmono\fontsize{6.8}{8}\selectfont INPUT DATA};
-    \node[anchor=east,text=KernelSpectral] at (8.04,2.79)
-      {\kbmono\fontsize{6.8}{8}\selectfont FEATURE GEOMETRY};
-  \end{tikzpicture}%
-}
+% The Reference division and Parts I--XII each have their own conceptual plate.
+% They are deliberately separate from the chapter-signature system above.
+\input{publication/part-art.tex}
 
 % Chapter opener: a full-width accent hairline, a sans "CHAPTER N" tag, then
 % the serif title and the compact geometric signature.
@@ -302,9 +272,9 @@
    \end{addmargin}\vspace{16pt}}
 
 % ── Part openers ──────────────────────────────────────────────────────────────
-% \kbpart{numeral}{title}{intro}: a right-hand opener page carrying the part
+% \kbpart{numeral}{title}{intro}{art-id}: a right-hand opener page carrying the part
 % numeral, title, and the part's own introduction, recorded in TOC + bookmarks.
-\newcommand{\kbpart}[3]{%
+\newcommand{\kbpart}[4]{%
   \cleardoublepage
   \thispagestyle{empty}%
   \phantomsection
@@ -321,14 +291,14 @@
       {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #3\par}
     \end{addmargin}
     \vspace{37pt}
-    \begin{center}\kbpartlandscape\end{center}
+    \begin{center}\kbpartart{#4}\end{center}
     \vfill
     {\hfill\kbdisplay\fontsize{74}{74}\selectfont\color{KernelBlue!10}#1\par}}
   \cleardoublepage
 }
 
 % The preliminary material is a reference division, not "Part 0".
-\newcommand{\kbpartreference}[2]{%
+\newcommand{\kbpartreference}[3]{%
   \cleardoublepage
   \thispagestyle{empty}%
   \phantomsection
@@ -345,7 +315,7 @@
       {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #2\par}
     \end{addmargin}
     \vspace{37pt}
-    \begin{center}\kbpartlandscape\end{center}
+    \begin{center}\kbpartart{#3}\end{center}
     \vfill
     {\hfill\kbdisplay\itshape\fontsize{58}{62}\selectfont\color{KernelBlue!9}%
       \(k(\,\cdot\,,x)\)\par}}

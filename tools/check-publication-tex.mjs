@@ -18,6 +18,22 @@ if (!fs.existsSync(texPath)) {
 
 const book = parseYaml(fs.readFileSync(path.join(root, "book.yml"), "utf8"));
 const chapters = book.parts.flatMap((part) => part.chapters);
+const expectedPartArt = book.parts.map((part) => {
+  const numeral = part.part.split("·")[0].trim();
+  return part.chapters[0]?.src === "ch-prelim" ? "reference" : `part-${numeral.toLowerCase()}`;
+});
+const partArtPath = path.join(root, "publication", "part-art.tex");
+if (!fs.existsSync(partArtPath)) errors.push("missing publication/part-art.tex");
+else {
+  const partArt = fs.readFileSync(partArtPath, "utf8");
+  const declaredPartArt = [...partArt.matchAll(/\\kbpartDeclare\{([^}]+)\}/g)].map((match) => match[1]);
+  const missingPartArt = expectedPartArt.filter((id) => !declaredPartArt.includes(id));
+  const duplicatePartArt = declaredPartArt.filter((id, index) => declaredPartArt.indexOf(id) !== index);
+  const orphanPartArt = declaredPartArt.filter((id) => !expectedPartArt.includes(id));
+  if (missingPartArt.length) errors.push(`parts without individual art: ${missingPartArt.join(", ")}`);
+  if (duplicatePartArt.length) errors.push(`duplicate part-art ids: ${[...new Set(duplicatePartArt)].join(", ")}`);
+  if (orphanPartArt.length) errors.push(`part art without a book.yml part: ${orphanPartArt.join(", ")}`);
+}
 const chapterArtPath = path.join(root, "publication", "chapter-art.tex");
 if (!fs.existsSync(chapterArtPath)) errors.push("missing publication/chapter-art.tex");
 else {
@@ -54,6 +70,10 @@ for (const chapter of chapters) {
 }
 
 const tex = fs.readFileSync(texPath, "utf8");
+for (const artId of expectedPartArt) {
+  const partSelections = tex.match(new RegExp(`\\\\kbpart(?:reference)?\\{[^\\n]+\\}\\{[^\\n]+\\}\\{${artId}\\}`, "g")) || [];
+  if (partSelections.length !== 1) errors.push(`${artId}: expected one part-art selection in generated TeX, found ${partSelections.length}`);
+}
 for (const chapter of chapters) {
   const artSelections = tex.match(new RegExp(`\\\\kbchapterartset\\{${chapter.src}\\}`, "g")) || [];
   if (artSelections.length !== 1) {
@@ -89,4 +109,4 @@ if (errors.length) {
   for (const error of errors) console.error(`ERROR ${error}`);
   process.exit(1);
 }
-console.log(`Publication TeX passed: ${begins} native equation environments with one label each, ${chapters.length} individual chapter designs across 8 compositions${logPath ? ", no missing glyphs or references" : ""}.`);
+console.log(`Publication TeX passed: ${begins} native equation environments, ${expectedPartArt.length} individual part plates, ${chapters.length} individual chapter designs across 8 compositions${logPath ? ", no missing glyphs or references" : ""}.`);

@@ -427,8 +427,9 @@ function partOpener(part) {
   const [numeral, ...rest] = part.part.split("·").map((s) => s.trim());
   const title = rest.join(" · ") || numeral;
   if (part.chapters[0]?.src === "ch-prelim")
-    return `\\kbpartreference{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
-  return `\\kbpart{${texEscape(numeral)}}{${texEscape(title)}}{${texEscape(part.intro || "")}}`;
+    return `\\kbpartreference{${texEscape(title)}}{${texEscape(part.intro || "")}}{reference}`;
+  const artId = `part-${numeral.toLowerCase()}`;
+  return `\\kbpart{${texEscape(numeral)}}{${texEscape(title)}}{${texEscape(part.intro || "")}}{${artId}}`;
 }
 
 const header = `---

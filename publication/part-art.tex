@@ -1,0 +1,207 @@
+% Distinct conceptual plates for the Reference division and Parts I--XII.
+% Each plate summarizes the intellectual move of its division; the shared
+% palette and line discipline provide continuity without repeating one image.
+
+\tikzset{
+  kb/partline/.style={draw=KernelBlue,line width=.72pt},
+  kb/partsoft/.style={draw=KernelBlue!34,line width=.48pt},
+  kb/partghost/.style={draw=KernelRule,line width=.4pt},
+  kb/partaccent/.style={draw=KernelAccent,line width=.9pt},
+  kb/partarrow/.style={-{Stealth[length=1.8mm,width=1.25mm]},draw=KernelSpectral,line width=.66pt},
+  kb/partpanel/.style={fill=KernelBlue!4,draw=KernelRule,line width=.4pt},
+  kb/partdot/.style={fill=KernelBlue},
+  kb/parthot/.style={fill=KernelAccent},
+}
+\newcommand{\kbpartDeclare}[2]{\expandafter\def\csname kbpartart@#1\endcsname{#2}}
+\newcommand{\kbpartart}[1]{%
+  \begin{tikzpicture}[x=1cm,y=1cm]
+    \useasboundingbox (0,0) rectangle (9,3.15);
+    \ifcsname kbpartart@#1\endcsname
+      \csname kbpartart@#1\endcsname
+    \else
+      \node[text=KernelAccent] at (4.5,1.55) {MISSING PART DESIGN: #1};
+    \fi
+  \end{tikzpicture}%
+}
+\newcommand{\kbpartlabel}[2]{%
+  \node[anchor=#1,text=KernelSpectral,font=\kbmono\fontsize{6.8}{8}\selectfont] #2}
+
+% Reference: a small clinic of the instruments the rest of the book names.
+\kbpartDeclare{reference}{
+  \draw[kb/partpanel] (.10,.38) rectangle (2.55,2.72);
+  \foreach \x in {.28,.67,1.06,1.45,1.84,2.23}\draw[kb/partghost](\x,.62)--(\x,2.43);
+  \foreach \y in {.62,1.07,1.52,1.97,2.42}\draw[kb/partghost](.28,\y)--(2.23,\y);
+  \draw[kb/partaccent] (.28,.62)--(2.23,2.42);
+  \draw[kb/partpanel] (3.15,.38) rectangle (5.60,2.72);
+  \draw[kb/partarrow] (3.48,.72)--(4.72,2.27) node[above,text=KernelBlue] {$e_1$};
+  \draw[kb/partarrow] (3.48,.72)--(5.22,.72) node[right,text=KernelBlue] {$e_2$};
+  \draw[kb/partpanel] (6.20,.38) rectangle (8.65,2.72);
+  \foreach \i/\h in {0/1.55,1/1.15,2/.83,3/.55,4/.34}{\fill[KernelBlue!55]({6.48+.37*\i},.64)rectangle++(.23,\h);}
+  \draw[kb/partaccent] (6.40,.64)--(8.42,.64);
+  \kbpartlabel{west}{at (.10,.10) {MATRICES}};
+  \kbpartlabel{center}{at (4.38,.10) {SPACES}};
+  \kbpartlabel{east}{at (8.65,.10) {BOUNDS}};}
+
+% I: pairwise relations become a legal Gram matrix and then a function space.
+\kbpartDeclare{part-i}{
+  \foreach \x/\y/\n in {.25/.72/a,.70/2.25/b,1.35/1.42/c,2.05/2.58/d,2.45/.55/e}{\node[circle,fill=KernelBlue,inner sep=1.7pt](\n)at(\x,\y){};}
+  \draw[kb/partsoft](a)--(b)--(c)--(d)--(e)--(a) (b)--(d);
+  \draw[kb/partaccent](a)--(d);
+  \draw[kb/partarrow](2.72,1.55)--(3.55,1.55);
+  \foreach \i/\op in {0/15,1/24,2/34,3/45,4/58}\foreach \j in {0,...,4}{\fill[KernelBlue!\op]({3.82+.27*\i},{.88+.27*\j})rectangle++(.23,.23);}
+  \draw[kb/partarrow](5.42,1.55)--(6.20,1.55);
+  \foreach \c/\h/\op in {6.55/.62/38,7.25/1.02/55,7.95/1.42/72}{\draw[KernelBlue!\op,line width=.68pt](\c-.50,.44)..controls(\c-.22,\h)and(\c+.22,\h)..(\c+.50,.44);}
+  \node[text=KernelBlue]at(7.35,2.56){$\mathcal H_k$};
+  \kbpartlabel{west}{at (.18,.18) {RELATIONS}};
+  \kbpartlabel{center}{at (4.48,.18) {GRAM}};
+  \kbpartlabel{east}{at (8.50,.18) {FUNCTION SPACE}};}
+
+% II: the geometry is fixed; the loss chooses the estimator.
+\kbpartDeclare{part-ii}{
+  \draw[kb/partline] (.20,1.53)..controls(1.15,2.62)and(2.00,.48)..(2.95,1.72);
+  \node[text=KernelBlue]at(1.54,2.78){$k$ fixed};
+  \draw[kb/partarrow](3.15,1.58)--(4.10,1.58);
+  \node[circle,fill=KernelAccent,inner sep=2.4pt](hub)at(4.42,1.58){};
+  \foreach \x/\y/\lab in {6.05/2.55/RIDGE,7.98/2.02/MARGIN,7.98/.74/TUBE,6.05/.35/RANK}{
+    \draw[kb/partarrow](hub)--(\x-.35,\y);
+    \node[draw=KernelBlue!48,fill=KernelBlue!4,minimum width=1.45cm,minimum height=.48cm,text=KernelSpectral,font=\kbmono\fontsize{6.6}{8}\selectfont]at(\x,\y){\lab};}
+  \draw[kb/partaccent](5.28,1.58)circle(.45);
+  \kbpartlabel{west}{at (.18,.18) {ONE GEOMETRY}};
+  \kbpartlabel{east}{at (8.72,.18) {MANY LOSSES}};}
+
+% III: exact kernel algebra is turned into scalable machinery.
+\kbpartDeclare{part-iii}{
+  \foreach \i/\op in {0/10,1/16,2/22,3/29,4/36,5/44,6/53,7/63}\foreach \j in {0,...,6}{\fill[KernelBlue!\op]({.18+.25*\i},{.70+.25*\j})rectangle++(.21,.21);}
+  \draw[kb/partarrow](2.52,1.55)--(3.33,1.55);
+  \draw[kb/partpanel](3.60,.55)rectangle(5.18,2.54);
+  \foreach \y/\lab in {.91/CG,1.55/SMO,2.19/PC}{\node[draw=KernelBlue!45,minimum width=1.05cm,minimum height=.35cm,text=KernelBlue,font=\kbmono\scriptsize]at(4.39,\y){\lab};}
+  \draw[kb/partarrow](5.45,1.55)--(6.25,1.55);
+  \foreach \x/\h in {6.52/1.82,6.95/1.35,7.38/.93,7.81/.58}{\draw[kb/partline](\x,.57)--(\x,\h);}
+  \draw[kb/partaccent](6.38,.65)--(8.03,2.18);
+  \draw[kb/partsoft,dashed](6.35,2.38)--(8.35,.72);
+  \kbpartlabel{west}{at (.18,.20) {EXACT $K$}};
+  \kbpartlabel{center}{at (4.39,.20) {SOLVE}};
+  \kbpartlabel{east}{at (8.50,.20) {SKETCH / APPROXIMATE}};}
+
+% IV: four error currencies meet spectra, capacity, and lower bounds.
+\kbpartDeclare{part-iv}{
+  \draw[kb/partpanel](.18,.42)rectangle(3.08,2.67);
+  \foreach \y/\lab/\op in {.72/NUM/30,1.22/OPT/45,1.72/EST/60,2.22/APP/75}{\draw[KernelBlue!\op,line width=4.2pt](.48,\y)--({.92+.52*\op/25},\y);\node[anchor=west,text=KernelMuted,font=\kbmono\scriptsize]at(2.18,\y){\lab};}
+  \draw[kb/partarrow](3.38,1.55)--(4.24,1.55);
+  \foreach \i/\h in {0/1.55,1/1.14,2/.82,3/.56,4/.36,5/.22}{\fill[KernelBlue!58]({4.52+.32*\i},.60)rectangle++(.22,\h);}
+  \draw[kb/partarrow](6.57,1.55)--(7.27,1.55);
+  \fill[KernelAccent!12](7.50,.56)rectangle(8.67,.91);
+  \draw[kb/partaccent](7.50,.91)--(8.67,.91);
+  \draw[kb/partline](7.50,2.38)..controls(7.86,1.16)and(8.28,.96)..(8.67,.91);
+  \kbpartlabel{west}{at (.18,.17) {ERROR BUDGET}};
+  \kbpartlabel{center}{at (5.44,.17) {SPECTRUM}};
+  \kbpartlabel{east}{at (8.67,.17) {LIMIT}};}
+
+% V: eigenstructure becomes coordinates, clusters, and a manifold graph.
+\kbpartDeclare{part-v}{
+  \foreach \i/\h in {0/1.85,1/1.35,2/.94,3/.63,4/.40}{\fill[KernelBlue!60]({.25+.35*\i},.56)rectangle++(.22,\h);}
+  \draw[kb/partarrow](2.15,1.52)--(3.00,1.52);
+  \foreach \x/\y in {3.38/.78,3.88/2.08,4.48/1.14,5.05/2.35,5.55/.72}{\fill[kb/partdot](\x,\y)circle(1.15pt);}
+  \draw[kb/partaccent,-{Stealth[length=1.7mm]}](3.22,.48)--(5.72,2.48);
+  \draw[kb/partarrow](6.00,1.52)--(6.75,1.52);
+  \foreach \cx/\cy/\col in {7.15/.82/KernelBlue,7.92/2.08/KernelAccent,8.46/.92/KernelSpectral}{\draw[\col!55,line width=.48pt](\cx,\cy)circle(.38);\foreach \a in {0,120,240}{\fill[\col]({\cx+.25*cos(\a)},{\cy+.25*sin(\a)})circle(.8pt);}}
+  \draw[kb/partsoft,dashed](7.37,1.04)--(7.72,1.78)--(8.21,1.13);
+  \kbpartlabel{west}{at (.18,.16) {SPECTRUM}};
+  \kbpartlabel{center}{at (4.48,.16) {COORDINATES}};
+  \kbpartlabel{east}{at (8.68,.16) {STRUCTURE}};}
+
+% VI: structured domains enter a kernel-design factory.
+\kbpartDeclare{part-vi}{
+  \node[circle,fill=KernelAccent,inner sep=2.3pt](factory)at(4.55,1.56){};
+  \foreach \x/\y/\lab in {.45/2.45/SEQ,.48/.62/TEXT,2.08/2.58/GRAPH,2.08/.50/PATH}{
+    \node[draw=KernelBlue!48,fill=KernelBlue!4,minimum width=1.12cm,minimum height=.42cm,text=KernelBlue,font=\kbmono\scriptsize](\lab)at(\x,\y){\lab};
+    \draw[kb/partarrow](\lab)--(factory);}
+  \foreach \x/\y/\lab in {7.05/2.50/INV,8.38/1.56/OP,7.05/.56/KREIN}{
+    \node[draw=KernelAccent!55,fill=KernelAccent!5,minimum width=1.10cm,minimum height=.42cm,text=KernelAccent,font=\kbmono\scriptsize](o\lab)at(\x,\y){\lab};
+    \draw[kb/partarrow](factory)--(o\lab);}
+  \draw[kb/partline](3.88,1.56)circle(.52);
+  \node[text=KernelBlue]at(4.55,2.49){$k_\theta$};
+  \kbpartlabel{west}{at (.15,.12) {DOMAIN ATLAS}};
+  \kbpartlabel{east}{at (8.70,.12) {DESIGN CONSTRAINTS}};}
+
+% VII: empirical distributions become points, distances, and weighted rules.
+\kbpartDeclare{part-vii}{
+  \foreach \x/\y in {.22/.76,.55/1.28,.92/.58,1.30/1.68,1.68/.94}{\fill[kb/partdot](\x,\y)circle(1pt);}
+  \foreach \x/\y in {.35/2.35,.78/2.68,1.28/2.22,1.75/2.52}{\fill[kb/parthot](\x,\y)circle(1pt);}
+  \draw[kb/partarrow](2.12,1.55)--(3.05,1.55);
+  \fill[kb/partdot](3.58,2.10)circle(1.8pt);\fill[kb/parthot](4.68,.96)circle(1.8pt);
+  \draw[kb/partaccent,<->](3.73,2.00)--(4.53,1.06);
+  \node[text=KernelBlue]at(4.12,2.60){$\mu_P-\mu_Q$};
+  \draw[kb/partarrow](5.15,1.55)--(6.05,1.55);
+  \foreach \i in {0,...,4}{\fill[kb/partdot](6.34,{.65+.37*\i})circle(.9pt);\fill[kb/parthot](8.25,{.65+.37*\i})circle(.9pt);}
+  \foreach \a/\b in {0/1,1/3,2/2,3/4,4/0}{\draw[kb/partsoft](6.43,{.65+.37*\a})--(8.16,{.65+.37*\b});}
+  \kbpartlabel{west}{at (.15,.14) {SAMPLES}};
+  \kbpartlabel{center}{at (4.15,.14) {EMBED}};
+  \kbpartlabel{east}{at (8.55,.14) {COMPARE / TRANSPORT}};}
+
+% VIII: conditioning, Stein operators, and interventions share operator logic.
+\kbpartDeclare{part-viii}{
+  \foreach \x/\lab in {.22/x_1,1.05/x_2,1.88/x_3}{\node[draw=KernelBlue,circle,inner sep=2.2pt,text=KernelBlue,font=\scriptsize]at(\x,1.56){$\lab$};}
+  \draw[kb/partarrow](2.30,1.56)--(3.15,1.56);
+  \draw[kb/partsoft](4.10,1.56)ellipse(.78 and 1.02);
+  \foreach \x/\y/\a in {3.65/.98/58,3.72/1.72/12,4.20/.70/98,4.38/1.62/145,4.48/2.20/190}{\draw[kb/partarrow](\x,\y)--++({.42*cos(\a)},{.42*sin(\a)});}
+  \draw[kb/partarrow](5.10,1.56)--(5.95,1.56);
+  \node[circle,fill=KernelBlue,inner sep=1.8pt](x)at(6.35,1.56){};
+  \node[circle,fill=KernelBlue,inner sep=1.8pt](z)at(7.35,2.35){};
+  \node[circle,fill=KernelAccent,inner sep=1.8pt](t)at(7.35,.75){};
+  \node[circle,fill=KernelBlue,inner sep=1.8pt](y)at(8.45,1.56){};
+  \draw[kb/partarrow](x)--(z);\draw[kb/partarrow](x)--(t);\draw[kb/partarrow](z)--(y);\draw[kb/partarrow](t)--(y);
+  \draw[KernelAccent,line width=1.2pt](7.12,.51)--(7.58,.99);
+  \kbpartlabel{west}{at (.15,.13) {CONDITION}};
+  \kbpartlabel{center}{at (4.10,.13) {STEIN FLOW}};
+  \kbpartlabel{east}{at (8.62,.13) {INTERVENE}};}
+
+% IX: uncertainty is used to choose the next observation.
+\kbpartDeclare{part-ix}{
+  \fill[KernelBlue!7](.08,.83)..controls(1.55,2.74)and(2.75,.38)..(4.30,1.92)..controls(5.45,2.63)and(6.62,.63)..(7.74,1.55)--(7.74,.96)..controls(6.62,.10)and(5.45,2.05)..(4.30,1.28)..controls(2.75,-.12)and(1.55,2.10)..(.08,.35)--cycle;
+  \draw[kb/partline](.08,.59)..controls(1.55,2.42)and(2.75,.13)..(4.30,1.60)..controls(5.45,2.34)and(6.62,.35)..(7.74,1.25);
+  \foreach \x/\y in {.62/.95,1.85/2.18,3.02/.62,4.45/1.66,5.82/1.85}{\fill[kb/parthot](\x,\y)circle(1pt);}
+  \draw[kb/partaccent](6.55,.18)..controls(6.95,.30)and(7.24,1.02)..(7.55,.32);
+  \draw[kb/partarrow](7.10,.22)--(7.10,.83);
+  \fill[kb/parthot](7.10,.96)circle(1.3pt);
+  \kbpartlabel{west}{at (.15,.10) {POSTERIOR}};
+  \kbpartlabel{east}{at (8.62,.10) {ACQUIRE NEXT}};}
+
+% X: trajectories become operators and then predictive scientific fields.
+\kbpartDeclare{part-x}{
+  \foreach \r/\op in {.22/68,.48/48,.75/30}{\draw[KernelBlue!\op,line width=.60pt,-{Stealth[length=1.35mm]}](1.60,1.56)arc[start angle=12,end angle=337,x radius={1.10+\r},y radius={.42+\r/3}];}
+  \draw[kb/partarrow](3.12,1.56)--(3.95,1.56);
+  \draw[kb/partpanel](4.18,.66)rectangle(5.60,2.46);\node[text=KernelBlue]at(4.89,1.56){$\mathcal G$};
+  \draw[kb/partarrow](5.82,1.56)--(6.62,1.56);
+  \foreach \x/\y/\a in {6.88/.72/32,7.48/1.20/56,8.02/.82/16,8.42/1.78/76}{\draw[kb/partaccent](\x,\y)--++({.48*cos(\a)},{.48*sin(\a)});}
+  \draw[kb/partghost](6.70,.48)grid[xstep=.45,ystep=.45](8.62,2.55);
+  \kbpartlabel{west}{at (.15,.12) {DYNAMICS}};
+  \kbpartlabel{center}{at (4.89,.12) {OPERATOR}};
+  \kbpartlabel{east}{at (8.65,.12) {SCIENTIFIC FIELD}};}
+
+% XI: fixed bases are mixed, composed, and finally allowed to move.
+\kbpartDeclare{part-xi}{
+  \foreach \c/\h/\op in {.55/.70/35,1.42/1.12/52,2.29/1.50/70}{\draw[KernelBlue!\op,line width=.65pt](\c-.43,.45)..controls(\c-.18,\h)and(\c+.18,\h)..(\c+.43,.45);}
+  \draw[kb/partarrow](2.82,1.55)--(3.60,1.55);
+  \foreach \i/\n in {0/a,1/b,2/c}{\node[draw=KernelBlue,fill=KernelBlue!4,minimum width=.58cm,minimum height=.42cm,font=\scriptsize](\n)at({3.88+.84*\i},1.55){$h_\i$};}
+  \draw[kb/partarrow](a)--(b);\draw[kb/partarrow](b)--(c);
+  \draw[kb/partarrow](5.85,1.55)--(6.60,1.55);
+  \foreach \x/\tx/\ty in {6.86/7.05/.75,7.30/7.42/2.14,7.74/7.78/1.06,8.18/8.06/2.38,8.62/8.36/1.42}{\draw[kb/partsoft](\x,.42)..controls(\x,.82)and(\tx,\ty)..(\tx,\ty);\fill[kb/parthot](\tx,\ty)circle(1pt);}
+  \kbpartlabel{west}{at (.15,.14) {MIX}};
+  \kbpartlabel{center}{at (4.72,.14) {COMPOSE}};
+  \kbpartlabel{east}{at (8.68,.14) {LEARN THE GEOMETRY}};}
+
+% XII: changed distributions trigger coverage and accountable action.
+\kbpartDeclare{part-xii}{
+  \draw[kb/partsoft](1.00,1.60)ellipse(.88 and .72);
+  \draw[kb/partaccent](2.65,1.60)ellipse(.88 and .72);
+  \draw[kb/partarrow](1.88,1.60)--(1.98,1.60);
+  \draw[kb/partarrow](3.63,1.60)--(4.40,1.60);
+  \draw[kb/partline](4.70,1.60)--(6.40,1.60);
+  \draw[kb/partaccent](5.05,1.26)--(5.05,1.94) (6.05,1.26)--(6.05,1.94);
+  \fill[kb/parthot](5.55,1.60)circle(1.2pt);
+  \draw[kb/partarrow](6.67,1.60)--(7.35,1.60);
+  \foreach \i/\op in {0/80,1/62,2/44,3/28}{\draw[KernelBlue!\op,line width=.72pt](7.58,{.88+.48*\i})--(8.55,{.88+.48*\i});\draw[kb/partaccent](7.38,{.88+.48*\i})--(7.55,{.88+.48*\i});}
+  \kbpartlabel{west}{at (.15,.17) {SHIFT}};
+  \kbpartlabel{center}{at (5.55,.17) {COVER}};
+  \kbpartlabel{east}{at (8.68,.17) {AUDIT}};}
