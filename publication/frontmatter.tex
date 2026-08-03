@@ -35,49 +35,12 @@
 
 \renewcommand{\maketitle}{%
   \begingroup
-    \pagecolor{KernelIvory}\color{KernelInk}
     \thispagestyle{empty}
-    \raggedright
-    \vspace*{0.55cm}
-    {\sffamily\scriptsize\color{KernelMuted}\textls[105]{\MakeUppercase{\kbtagline}}\par}
-    \vspace{0.38cm}
-    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
-    \vspace{1.55cm}
-    {\kbdisplay\color{KernelInk}\fontsize{43}{48}\selectfont\mdseries \@title\par}
-    \vspace{0.34cm}
-    {\kbdisplay\color{KernelBlue}\fontsize{22}{29}\selectfont\itshape \@subtitle\par}
-    \vspace{0.85cm}
-    {\kbdisplay\color{KernelMuted}\fontsize{13}{19}\selectfont
-      \kbpositioning\par}
-    \vspace{1.45cm}
-    \begin{center}
-      \begin{tikzpicture}[x=.82cm,y=.82cm]
-        \draw[KernelRule,line width=.45pt] (0,0) -- (8.25,0);
-        \foreach \c/\h/\op in {0.5/1.10/35,1.7/1.52/48,3.0/1.95/62,4.3/2.18/78,5.6/1.86/64,6.9/1.40/49,7.8/.95/35}{
-          \draw[KernelBlue!\op,line width=.72pt,samples=52,smooth,domain=0:8.25]
-            plot (\x,{\h*exp(-1.22*(\x-\c)^2)});
-          \fill[KernelRed] (\c,0) circle (1.1pt);
-        }
-        \node[anchor=west,text=KernelMuted,font=\kbmono\scriptsize] at (0,-.38)
-          {kernel sections \(k(\,\cdot\,,x_i)\)};
-      \end{tikzpicture}
-    \end{center}
-    \vspace{0.85cm}
-    {\centering\kbdisplay\color{KernelInk}\fontsize{16.5}{24}\selectfont
-      \(k(x,z)=\langle\Phi(x),\Phi(z)\rangle_{\mathcal H}\)\par}
-    \vspace{0.25cm}
-    {\centering\kbdisplay\color{KernelBlue}\fontsize{15.5}{23}\selectfont
-      \(k(x,z)=\displaystyle\sum_{j\geq1}\lambda_j\phi_j(x)\phi_j(z)\)\par}
-    \vfill
-    {\color{KernelBlue}\rule{\textwidth}{0.75pt}\par}
-    \vspace{0.42cm}
-    {\kbdisplay\color{KernelInk}\fontsize{17}{21}\selectfont \@author\par}
-    \vspace{0.16cm}
-    {\kbdisplay\scriptsize\color{KernelMuted}2026\par}
-    \clearpage
-    \nopagecolor\color{KernelInk}
-    \thispagestyle{empty}%
+    % The exterior TikZ panel is the sole visual cover. Page two is publication
+    % apparatus only, so the opening no longer reads as two competing covers.
+    \color{KernelInk}
     \kbcolophonpage
+    \clearpage
   \endgroup
 }
 \makeatother

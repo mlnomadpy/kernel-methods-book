@@ -181,8 +181,72 @@
 \renewcommand*{\subsectionformat}{{\color{KernelAccent}\thesubsection}\enskip}
 \renewcommand*{\subsubsectionformat}{{\color{KernelAccent}\thesubsubsection}\enskip}
 
+% A small version of the cover's visual argument.  Chapter openings do not get
+% a wasteful display leaf; the motif instead acts as a compact threshold before
+% the narrative begins.  The highlighted trajectory is the same observation
+% moving from input space to feature geometry.
+\newcommand{\kbchapterlandscape}{%
+  \begin{tikzpicture}[x=1cm,y=1cm,baseline]
+    \fill[KernelBlue!4]
+      (0,.58) .. controls (2.1,1.16) and (3.25,.65) .. (5.20,1.16)
+      .. controls (7.05,1.62) and (9.00,.82) .. (11.25,1.30)
+      -- (11.72,1.71) .. controls (9.10,1.25) and (7.18,2.03) .. (5.16,1.57)
+      .. controls (3.18,1.10) and (2.08,1.57) .. (0,1.00) -- cycle;
+    \foreach \dy/\op in {0/62,.14/42,.28/25}{
+      \draw[KernelBlue!\op,line width=.5pt]
+        (0,{.58+\dy}) .. controls (2.1,{1.16+\dy}) and (3.25,{.65+\dy}) ..
+        (5.20,{1.16+\dy}) .. controls (7.05,{1.62+\dy}) and (9.00,{.82+\dy}) ..
+        (11.25,{1.30+\dy});
+    }
+    \draw[KernelMuted!34,line width=.35pt] (0,.06) -- (11.25,.06);
+    \foreach \x/\tx/\ty in {.35/.67/.79,2.08/2.33/1.02,4.02/4.27/.99,6.10/6.16/1.39,8.22/8.14/1.27,10.72/10.48/1.14}{
+      \draw[KernelBlue!25,line width=.4pt]
+        (\x,.10) .. controls (\x,.38) and (\tx-.15,{\ty-.24}) .. (\tx,\ty);
+      \fill[KernelAccent] (\x,.06) circle (.75pt);
+      \fill[KernelBlue] (\tx,\ty) circle (.65pt);
+    }
+    \fill[white] (6.16,1.39) circle (2.25pt);
+    \draw[KernelAccent,line width=.75pt] (6.16,1.39) circle (1.35pt);
+    \fill[KernelAccent] (6.16,1.39) circle (.55pt);
+  \end{tikzpicture}%
+}
+
+% The larger part-opening landscape makes the book's organizing idea explicit:
+% observed points are lifted by comparison into a structured geometry.
+\newcommand{\kbpartlandscape}{%
+  \begin{tikzpicture}[x=1cm,y=1cm]
+    \foreach \u in {0,...,8}
+      \draw[KernelRule!48,line width=.22pt] ({\u*.92},1.02) -- ({\u*.92+1.02},2.32);
+    \fill[KernelBlue!5]
+      (0,1.02) .. controls (1.52,1.56) and (2.48,1.16) .. (3.92,1.72)
+      .. controls (5.26,2.21) and (6.65,1.44) .. (8.04,1.91)
+      -- (8.78,2.61) .. controls (6.91,2.19) and (5.39,2.84) .. (3.89,2.31)
+      .. controls (2.40,1.77) and (1.48,2.13) .. (0,1.62) -- cycle;
+    \foreach \dy/\op in {0/70,.18/48,.36/30,.54/18}{
+      \draw[KernelBlue!\op,line width=.62pt]
+        (0,{1.02+\dy}) .. controls (1.52,{1.56+\dy}) and (2.48,{1.16+\dy}) ..
+        (3.92,{1.72+\dy}) .. controls (5.26,{2.21+\dy}) and (6.65,{1.44+\dy}) ..
+        (8.04,{1.91+\dy});
+    }
+    \draw[KernelMuted!44,line width=.45pt] (0,.12) -- (8.04,.12);
+    \foreach \x/\tx/\ty in {.32/.62/1.31,1.55/1.81/1.50,2.82/3.04/1.49,4.10/4.15/1.81,5.33/5.31/2.02,6.60/6.52/1.82,7.78/7.59/1.77}{
+      \draw[KernelBlue!30,line width=.5pt]
+        (\x,.17) .. controls (\x,.55) and (\tx-.18,{\ty-.34}) .. (\tx,\ty);
+      \fill[KernelAccent] (\x,.12) circle (.9pt);
+      \fill[KernelBlue] (\tx,\ty) circle (.8pt);
+    }
+    \fill[white] (5.31,2.02) circle (2.7pt);
+    \draw[KernelAccent,line width=.85pt] (5.31,2.02) circle (1.6pt);
+    \fill[KernelAccent] (5.31,2.02) circle (.65pt);
+    \node[anchor=west,text=KernelMuted] at (0,-.18)
+      {\kbmono\fontsize{6.8}{8}\selectfont INPUT DATA};
+    \node[anchor=east,text=KernelSpectral] at (8.04,2.79)
+      {\kbmono\fontsize{6.8}{8}\selectfont FEATURE GEOMETRY};
+  \end{tikzpicture}%
+}
+
 % Chapter opener: a full-width accent hairline, a sans "CHAPTER N" tag, then
-% the serif title with a deep sink before the text starts.
+% the serif title and the compact geometric signature.
 \newif\ifkbpreliminaries
 \kbpreliminariesfalse
 \newcommand{\kbpreliminariesmode}{%
@@ -205,10 +269,12 @@
       \else\MakeUppercase{Chapter}\space#2\fi}\par}%
     \vspace{10pt}}%
   {\kbdisplay\bfseries\fontsize{27}{32}\selectfont #3\par}%
-  \vspace{4pt}%
+  \vspace{13pt}%
+  \kbchapterlandscape\par
+  \vspace{2pt}%
 }
 \renewcommand*{\chapterformat}{\thechapter}
-\RedeclareSectionCommand[beforeskip=52pt, afterskip=30pt]{chapter}
+\RedeclareSectionCommand[beforeskip=40pt, afterskip=23pt]{chapter}
 
 % ── Running heads (scrlayer-scrpage) ──────────────────────────────────────────
 % Verso: chapter. Recto: current section. Page numbers at the outer edge, all
@@ -276,17 +342,8 @@
     \begin{addmargin}[0pt]{1.0cm}
       {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #3\par}
     \end{addmargin}
-    \vspace{43pt}
-    \begin{center}
-      \begin{tikzpicture}[x=1cm,y=1cm]
-        \draw[KernelRule,line width=.45pt] (0,0) -- (7.5,0);
-        \foreach \c/\h/\op in {.7/.7/30,1.9/1.05/45,3.2/1.4/62,4.5/1.15/50,5.8/.85/38,6.8/.58/28}{
-          \draw[KernelBlue!\op,line width=.65pt,samples=42,smooth,domain=0:7.5]
-            plot (\x,{\h*exp(-1.2*(\x-\c)^2)});
-          \fill[KernelRed] (\c,0) circle (.9pt);
-        }
-      \end{tikzpicture}
-    \end{center}
+    \vspace{37pt}
+    \begin{center}\kbpartlandscape\end{center}
     \vfill
     {\hfill\kbdisplay\fontsize{74}{74}\selectfont\color{KernelBlue!10}#1\par}}
   \cleardoublepage
@@ -309,17 +366,8 @@
     \begin{addmargin}[0pt]{1.0cm}
       {\fontsize{11.2}{17}\selectfont\color{KernelMuted} #2\par}
     \end{addmargin}
-    \vspace{43pt}
-    \begin{center}
-      \begin{tikzpicture}[x=1cm,y=1cm]
-        \draw[KernelRule,line width=.45pt] (0,0) -- (7.5,0);
-        \foreach \c/\h/\op in {.7/.7/30,1.9/1.05/45,3.2/1.4/62,4.5/1.15/50,5.8/.85/38,6.8/.58/28}{
-          \draw[KernelBlue!\op,line width=.65pt,samples=42,smooth,domain=0:7.5]
-            plot (\x,{\h*exp(-1.2*(\x-\c)^2)});
-          \fill[KernelRed] (\c,0) circle (.9pt);
-        }
-      \end{tikzpicture}
-    \end{center}
+    \vspace{37pt}
+    \begin{center}\kbpartlandscape\end{center}
     \vfill
     {\hfill\kbdisplay\itshape\fontsize{58}{62}\selectfont\color{KernelBlue!9}%
       \(k(\,\cdot\,,x)\)\par}}

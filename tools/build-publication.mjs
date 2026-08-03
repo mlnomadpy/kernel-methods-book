@@ -564,6 +564,15 @@ if (format === "pdf") {
   // Keep the surrounding engine conditional intact: empty branches are valid
   // TeX and this is robust to Pandoc changing the order of Babel's options.
   const generatedTex = fs.readFileSync(texPath, "utf8")
+    // Pandoc wraps \maketitle in its own frontmatter/mainmatter transition.
+    // The TikZ cover already occupies page one and our canonical Markdown
+    // starts frontmatter explicitly, so remove that duplicate wrapper. This
+    // lets the colophon use the cover verso instead of forcing a blank leaf and
+    // an obsolete second title composition.
+    .replace(
+      /\\begin\{document\}\s*\\frontmatter\s*\\maketitle\s*\\mainmatter/,
+      "\\begin{document}\n\\maketitle",
+    )
     .replace(
       /^\\usepackage\[[^\]]*\]\{babel\}\s*$/gm,
       "% Babel omitted: monolingual LTR publication",

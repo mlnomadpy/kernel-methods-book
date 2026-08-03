@@ -72,7 +72,7 @@
       yshift=\KBBleed]current page.south west);
   \node[anchor=north west,text=KernelMuted,font=\sffamily\scriptsize]
     at ([xshift=.72in,yshift=10.28in]F)
-    {A MATHEMATICAL MONOGRAPH ON KERNEL METHODS};
+    {A UNIFIED THEORY OF LEARNING THROUGH SIMILARITY};
   \draw[KernelBlue,line width=.75pt]
     ([xshift=.72in,yshift=9.88in]F) -- ([xshift=7.78in,yshift=9.88in]F);
   \node[anchor=north west,text=KernelInk]
@@ -86,6 +86,14 @@
     {\kbmono\fontsize{8.4}{12}\selectfont\addfontfeatures{LetterSpace=5}
       FOUNDATIONS, ALGORITHMS, AND THE FRONTIERS\\[-1pt]
       OF MACHINE INTELLIGENCE};
+
+  % The thesis of the book links the title to the diagram below.  It gives the
+  % reader a sentence to carry through the visual argument rather than leaving
+  % the geometry as unexplained decoration.
+  \node[anchor=north west,text=KernelInk]
+    at ([xshift=.76in,yshift=6.63in]F)
+    {\fontsize{11.5}{15}\selectfont
+      Similarity becomes geometry.\enspace Geometry becomes learning.};
 
   % The cover's argument in one composition: observations in the input space
   % are lifted into a smooth feature-space landscape whose overlapping level
@@ -119,6 +127,12 @@
       \fill[KernelRed] (\x,.28) circle (1.35pt);
       \fill[KernelBlue] (\tx,\ty) circle (1.05pt);
     }
+    % One observation is followed deliberately from datum to representation.
+    % Its halo establishes a focal point and gives the warm accent a semantic
+    % role rather than scattering it evenly across the composition.
+    \fill[KernelIvory] (5.34,2.72) circle (3.2pt);
+    \draw[KernelRed,line width=.9pt] (5.34,2.72) circle (2.0pt);
+    \fill[KernelRed] (5.34,2.72) circle (.9pt);
     \node[anchor=west,text=KernelMuted] at (.18,-.06)
       {\kbmono\fontsize{7.2}{9}\selectfont INPUT DATA};
     \node[anchor=east,text=KernelBlue] at (8.55,3.72)
